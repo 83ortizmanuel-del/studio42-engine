@@ -1,0 +1,35 @@
+{
+  "cliente_id": "la-petite-melina",
+  "nombre_comercial": "La Petite Melina",
+  "logo_url": "https://lapetitemelina.netlify.app/favicon.ico",
+  "color_acento": "#D97706",
+  "google_maps_review_url": "https://maps.google.com",
+  "whatsapp_contacto": "34672294962",
+  "configuracion": {
+    "mostrar_escudo": true
+  },
+  "diagnostico": {
+    "titulo_solucion": "Atención Dulce y Directa",
+    "descripcion_solucion": "Consulta nuestro catálogo de repostería artesanal, haz tu pedido y ayúdanos con tu valoración."
+  },
+  "botones_nicho": [
+    {
+      "label": "Ver Catálogo de Repostería",
+      "subtexto": "Galletas y tartas artesanales",
+      "icono": "🍪",
+      "url": "https://lapetitemelina.netlify.app"
+    },
+    {
+      "label": "Hacer Pedido Personalizado",
+      "subtexto": "Atención directa por WhatsApp",
+      "icono": "📲",
+      "url": "https://wa.me/34672294962?text=Hola,%20quiero%20hacer%20un%20pedido%20personalizado"
+    },
+    {
+      "label": "Consultar Clave WiFi",
+      "subtexto": "Acceso a red del local",
+      "icono": "📶",
+      "url": "https://wa.me/34672294962?text=Hola,%20¿cuál%20es%20la%20clave%20del%20WiFi?"
+    }
+  ]
+}
