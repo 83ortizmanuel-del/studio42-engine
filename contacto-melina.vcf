@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Garcia;Melina;;;
+FN:Melina Garcia 
+ORG:Studio 42 - Identidad Inteligente
+TITLE:Directora de Branding & Diseño
+TEL;TYPE=CELL,VOICE:+34617472814
+EMAIL;TYPE=PREF,INTERNET:melina@studio42.es
+URL:https://studio42.es/?ref=melina
+ADR;TYPE=WORK:;;Calle Carmen Medrano 5;Logroño;La Rioja;;España
+END:VCARD
