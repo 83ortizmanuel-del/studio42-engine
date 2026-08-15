@@ -1,0 +1,26 @@
+{
+  "cliente_id": "prueba-barberia",
+  "nombre_comercial": "Barbería La Sucursal",
+  "logo_url": "https://studio42.es/assets/logo.png",
+  "color_acento": "#D97706",
+  "google_maps_review_url": "https://maps.google.com",
+  "whatsapp_contacto": "34600000000",
+  "diagnostico": {
+    "titulo_solucion": "Atención Preferente sin Esperas",
+    "descripcion_solucion": "Optimiza tu tiempo. Si hoy has disfrutado de tu corte, apóyanos con tu valoración de 5 estrellas."
+  },
+  "botones_nicho": [
+    {
+      "label": "Pedir Cita Prioritaria",
+      "subtexto": "Reserva directa por WhatsApp",
+      "icono": "📅",
+      "url": "https://wa.me/34600000000?text=Hola,%20quiero%20cita"
+    },
+    {
+      "label": "Ver Catálogo de Cortes",
+      "subtexto": "Estilos y precios actualizados",
+      "icono": "💈",
+      "url": "https://wa.me/34600000000?text=Hola,%20quiero%20ver%20precios"
+    }
+  ]
+}
