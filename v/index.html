@@ -25,7 +25,7 @@
     <!-- BLOQUE PRINCIPAL: DIAGNÓSTICO Y ACCIÓN -->
     <main class="max-w-md w-full mx-auto space-y-6 my-auto">
         
-        <!-- Tarjeta Solución del Closer -->
+        <!-- Tarjeta Solución -->
         <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl text-center">
             <h2 id="diag-title" class="text-xl font-bold text-amber-400 mb-2">Cargando solución...</h2>
             <p id="diag-desc" class="text-gray-300 text-sm leading-relaxed">Por favor, espera un momento mientras preparamos tu experiencia personalizada.</p>
@@ -46,7 +46,7 @@
 
         <!-- BOTONES DINÁMICOS DE OPERATIVIDAD -->
         <div id="buttons-container" class="space-y-3">
-            <!-- La IA inyectará aquí los botones del negocio -->
+            <!-- Los botones se inyectarán dinámicamente aquí -->
         </div>
 
     </main>
@@ -64,10 +64,14 @@
         async function loadClientData() {
             try {
                 // Obtiene la subcarpeta del cliente desde la URL
-                const pathSegments = window.location.pathname.split('/').filter(p => p);
-                const clientFolder = pathSegments[pathSegments.length - 1] || 'cliente-prueba';
+                const pathSegments = window.location.pathname
+                    .split('/')
+                    .filter(p => p && p.toLowerCase() !== 'v');
+                    
+                const clientFolder = pathSegments[0] || 'prueba-barberia';
                 
-                const response = await fetch(`./${clientFolder}/cliente.json`);
+                // Petición al JSON del cliente
+                const response = await fetch(`/v/${clientFolder}/cliente.json`);
                 if (!response.ok) throw new Error("No se encontraron datos");
                 
                 const data = await response.json();
@@ -89,34 +93,38 @@
                 }
 
                 // 4. Cargar Diagnóstico / Solución
-                document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion;
-                document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion;
+                if (data.diagnostico) {
+                    document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion || "";
+                    document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion || "";
+                }
 
                 // 5. Guardar URLs principales
-                googleReviewUrl = data.google_maps_review_url;
-                whatsappNumber = data.whatsapp_contacto;
+                googleReviewUrl = data.google_maps_review_url || "https://maps.google.com";
+                whatsappNumber = data.whatsapp_contacto || "";
 
-                // 6. Generar Botones Operativos
+                // 6. Generar TODOS los Botones Operativos
                 const btnContainer = document.getElementById('buttons-container');
                 btnContainer.innerHTML = '';
                 
-                data.botones_nicho.forEach(btn => {
-                    const link = document.createElement('a');
-                    link.href = btn.url;
-                    link.target = "_blank";
-                    link.className = "flex items-center justify-between bg-gray-800 hover:bg-gray-700 text-white font-medium p-4 rounded-xl transition-all border border-gray-700 shadow-md group";
-                    link.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <span class="text-2xl">${btn.icono || '⚡'}</span>
-                            <div class="text-left">
-                                <div class="text-sm font-semibold group-hover:text-amber-400 transition-colors">${btn.label}</div>
-                                <div class="text-xs text-gray-400">${btn.subtexto || ''}</div>
+                if (Array.isArray(data.botones_nicho)) {
+                    data.botones_nicho.forEach(btn => {
+                        const link = document.createElement('a');
+                        link.href = btn.url || '#';
+                        link.target = "_blank";
+                        link.className = "flex items-center justify-between bg-gray-800 hover:bg-gray-700 text-white font-medium p-4 rounded-xl transition-all border border-gray-700 shadow-md group";
+                        link.innerHTML = `
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl">${btn.icono || '⚡'}</span>
+                                <div class="text-left">
+                                    <div class="text-sm font-semibold group-hover:text-amber-400 transition-colors">${btn.label}</div>
+                                    <div class="text-xs text-gray-400">${btn.subtexto || ''}</div>
+                                </div>
                             </div>
-                        </div>
-                        <span class="text-gray-400 group-hover:translate-x-1 transition-transform">➔</span>
-                    `;
-                    btnContainer.appendChild(link);
-                });
+                            <span class="text-gray-400 group-hover:translate-x-1 transition-transform">➔</span>
+                        `;
+                        btnContainer.appendChild(link);
+                    });
+                }
 
             } catch (error) {
                 console.error("Error al cargar la landing:", error);
@@ -134,7 +142,7 @@
             if (stars >= 4) {
                 feedback.innerText = "¡Muchas gracias! Redirigiendo a Google Maps...";
                 setTimeout(() => {
-                    window.location.href = googleReviewUrl || "https://maps.google.com";
+                    window.location.href = googleReviewUrl;
                 }, 1000);
             } else {
                 feedback.innerText = "Lamentamos que tu experiencia no haya sido perfecta. Conectando con Gerencia...";
