@@ -13,8 +13,8 @@
 </head>
 <body class="bg-gray-950 text-white min-h-screen flex flex-col justify-between p-4 sm:p-6">
 
-    <!-- CABECERA CON LOGO Y NOMBRE -->
-    <header class="text-center pt-6 pb-4">
+    <!-- 1. CABECERA CON LOGO Y NOMBRE -->
+    <header class="text-center pt-6 pb-2">
         <div id="logo-container" class="flex justify-center mb-4 hidden">
             <img id="client-logo" src="" alt="Logo" class="h-20 w-auto object-contain drop-shadow-md">
         </div>
@@ -22,17 +22,16 @@
         <div id="accent-bar" class="w-16 h-1 bg-amber-500 mx-auto rounded-full mt-2"></div>
     </header>
 
-    <!-- BLOQUE PRINCIPAL: DIAGNÓSTICO Y ACCIÓN -->
-    <main class="max-w-md w-full mx-auto space-y-6 my-auto">
+    <!-- BLOQUE PRINCIPAL -->
+    <main class="max-w-md w-full mx-auto space-y-5 my-auto">
         
-        <!-- Tarjeta Solución -->
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl text-center">
-            <h2 id="diag-title" class="text-xl font-bold text-amber-400 mb-2">Cargando solución...</h2>
-            <p id="diag-desc" class="text-gray-300 text-sm leading-relaxed">Por favor, espera un momento mientras preparamos tu experiencia personalizada.</p>
+        <!-- 2. BOTONERA DE ACCIÓN INMEDIATA (FRICCIÓN CERO) -->
+        <div id="buttons-container" class="space-y-3">
+            <!-- Los botones se inyectarán dinámicamente aquí -->
         </div>
 
-        <!-- ESCUDO ANTI-CRÍTICAS (RESEÑAS) -->
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl text-center space-y-3">
+        <!-- 3. ESCUDO ANTI-CRÍTICAS (RESEÑAS INTELIGENTES) -->
+        <div id="shield-container" class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl text-center space-y-3">
             <p class="text-sm font-semibold text-gray-300">¿Cómo ha sido tu experiencia hoy?</p>
             <div id="star-rating" class="flex justify-center space-x-2 text-3xl">
                 <button onclick="handleRating(1)" class="hover:scale-125 transition-transform">⭐</button>
@@ -44,9 +43,10 @@
             <p id="rating-feedback" class="text-xs text-gray-400 italic hidden"></p>
         </div>
 
-        <!-- BOTONES DINÁMICOS DE OPERATIVIDAD -->
-        <div id="buttons-container" class="space-y-3">
-            <!-- Los botones se inyectarán dinámicamente aquí -->
+        <!-- 4. TARJETA DE DIAGNÓSTICO / MENSAJE CLAVE -->
+        <div id="diag-container" class="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-4 text-center">
+            <h2 id="diag-title" class="text-base font-bold text-amber-400 mb-1">Cargando solución...</h2>
+            <p id="diag-desc" class="text-gray-400 text-xs leading-relaxed">Por favor, espera un momento mientras preparamos tu experiencia personalizada.</p>
         </div>
 
     </main>
@@ -56,65 +56,53 @@
         <p>Tecnología desplegada por <span class="font-bold text-amber-500">Studio 42</span></p>
     </footer>
 
-    <!-- LÓGICA DE CARGA DINÁMICA DEFINITIVA -->
+    <!-- LÓGICA DE CARGA DINÁMICA MEJORADA -->
     <script>
         let googleReviewUrl = "";
         let whatsappNumber = "";
 
         async function loadClientData() {
             try {
-                // 1. Obtener la ruta completa de la URL y limpiar barras vacías
-                const pathParts = window.location.pathname.split('/').filter(p => p.length > 0);
+                // Obtener nombre del cliente desde la URL
+                const pathSegments = window.location.pathname.split('/').filter(p => p && p.toLowerCase() !== 'v');
+                const clientFolder = pathSegments[0] || 'prueba-barberia';
                 
-                // 2. Tomar el último segmento de la URL como nombre del cliente
-                let clientFolder = pathParts[pathParts.length - 1];
-                
-                // Si la URL es solo studio42.es/v/, asigna por defecto prueba-barberia
-                if (!clientFolder || clientFolder === 'v') {
-                    clientFolder = 'prueba-barberia';
+                // Petición directa al cliente.json
+                let response = await fetch('./cliente.json');
+                if (!response.ok) {
+                    response = await fetch(`/v/${clientFolder}/cliente.json`);
                 }
 
-                // 3. Petición directa y limpia al archivo cliente.json
-                const jsonUrl = `/v/${clientFolder}/cliente.json`;
-                console.log("Solicitando JSON desde:", jsonUrl);
+                if (!response.ok) throw new Error("No se pudo cargar el archivo JSON.");
 
-                const response = await fetch(jsonUrl);
-                if (!response.ok) throw new Error(`HTTP Error ${response.status} en ${jsonUrl}`);
-                
                 const data = await response.json();
 
-                // 4. Inyectar datos en la interfaz
+                // 1. Cargar Nombre y Título
                 document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
                 document.getElementById('client-name').innerText = data.nombre_comercial;
 
+                // 2. Cargar Logo
                 if (data.logo_url && data.logo_url.trim() !== "") {
                     const logoImg = document.getElementById('client-logo');
                     logoImg.src = data.logo_url;
                     document.getElementById('logo-container').classList.remove('hidden');
                 }
 
+                // 3. Aplicar Color de Acento
                 if (data.color_acento) {
                     document.getElementById('accent-bar').style.backgroundColor = data.color_acento;
                 }
 
-                if (data.diagnostico) {
-                    document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion || "";
-                    document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion || "";
-                }
-
-                googleReviewUrl = data.google_maps_review_url || "https://maps.google.com";
-                whatsappNumber = data.whatsapp_contacto || "";
-
-                // 5. Renderizar Botones
+                // 4. Renderizar Botones (Acción Inmediata)
                 const btnContainer = document.getElementById('buttons-container');
                 btnContainer.innerHTML = '';
-                
+
                 if (Array.isArray(data.botones_nicho)) {
                     data.botones_nicho.forEach(btn => {
                         const link = document.createElement('a');
                         link.href = btn.url || '#';
                         link.target = "_blank";
-                        link.className = "flex items-center justify-between bg-gray-800 hover:bg-gray-700 text-white font-medium p-4 rounded-xl transition-all border border-gray-700 shadow-md group";
+                        link.className = "flex items-center justify-between bg-gray-900 hover:bg-gray-800 text-white font-medium p-4 rounded-xl transition-all border border-gray-800 shadow-lg group";
                         link.innerHTML = `
                             <div class="flex items-center space-x-3">
                                 <span class="text-2xl">${btn.icono || '⚡'}</span>
@@ -129,6 +117,22 @@
                     });
                 }
 
+                // 5. Configurar o Ocultar el Escudo Anti-Críticas
+                if (data.configuracion && data.configuracion.mostrar_escudo === false) {
+                    document.getElementById('shield-container').classList.add('hidden');
+                }
+
+                // 6. Cargar Diagnóstico
+                if (data.diagnostico && data.diagnostico.titulo_solucion) {
+                    document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion;
+                    document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion || "";
+                } else {
+                    document.getElementById('diag-container').classList.add('hidden');
+                }
+
+                googleReviewUrl = data.google_maps_review_url || "https://maps.google.com";
+                whatsappNumber = data.whatsapp_contacto || "";
+
             } catch (error) {
                 console.error("Error al cargar la landing:", error);
                 document.getElementById('client-name').innerText = "Studio 42";
@@ -137,7 +141,7 @@
             }
         }
 
-        // Escudo Anti-Críticas
+        // Función del Escudo Anti-Críticas
         function handleRating(stars) {
             const feedback = document.getElementById('rating-feedback');
             feedback.classList.remove('hidden');
@@ -159,4 +163,5 @@
         loadClientData();
     </script>
 </body>
+</html>
 </html>
