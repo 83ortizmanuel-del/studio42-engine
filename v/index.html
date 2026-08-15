@@ -100,10 +100,19 @@
                 document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
                 document.getElementById('client-name').innerText = data.nombre_comercial;
 
-                // 2. Cargar Logo con detección de ruta local/remota
+               // 2. Cargar Logo con detección de ruta local/remota
                 if (data.logo_url && data.logo_url.trim() !== "") {
                     const logoImg = document.getElementById('client-logo');
                     let logoPath = data.logo_url;
+                    
+                    // Si no es una URL externa (http/https), le asigna la ruta de la carpeta del cliente
+                    if (!logoPath.startsWith('http://') && !logoPath.startsWith('https://')) {
+                        logoPath = `/v/${clientFolder}/${logoPath.replace(/^\//, '')}`;
+                    }
+                    
+                    logoImg.src = logoPath;
+                    document.getElementById('logo-container').classList.remove('hidden');
+                }
                     
                     // Si no es una URL externa (http/https), le asigna la ruta de la carpeta del cliente
                     if (!logoPath.startsWith('http://') && !logoPath.startsWith('https://')) {
