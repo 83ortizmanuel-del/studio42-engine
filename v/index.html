@@ -63,15 +63,12 @@
 
         async function loadClientData() {
             try {
-                // Obtiene la subcarpeta del cliente desde la URL
-                const pathSegments = window.location.pathname
-                    .split('/')
-                    .filter(p => p && p.toLowerCase() !== 'v');
-                    
-                const clientFolder = pathSegments[0] || 'prueba-barberia';
+                // Obtiene la ruta limpia de la URL
+                let path = window.location.pathname;
+                if (!path.endsWith('/')) path += '/';
                 
-                // Petición al JSON del cliente
-                const response = await fetch(`/v/${clientFolder}/cliente.json`);
+                // Hace la petición directamente a la subcarpeta actual
+                const response = await fetch(path + 'cliente.json');
                 if (!response.ok) throw new Error("No se encontraron datos");
                 
                 const data = await response.json();
