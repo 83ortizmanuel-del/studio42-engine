@@ -4,165 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Cargando Experiencia... | Studio 42</title>
-    <!-- Tailwind CSS por CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-zinc-950 text-white min-h-screen flex flex-col justify-between selection:bg-[#C57A36] selection:text-white">
+<body class="bg-gray-950 text-white min-h-screen flex flex-col justify-between p-4 sm:p-6">
 
-    <!-- CABECERA CON LOGO Y NOMBRE DEL COMERCIO -->
-    <header class="py-6 px-6 text-center border-b border-zinc-800/80 bg-zinc-900/60 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-md mx-auto flex items-center justify-center gap-3">
-            <img id="client-logo" src="" alt="Logo" class="h-10 w-auto object-contain hidden">
-            <h1 id="client-name" class="text-xl font-extrabold tracking-tight text-zinc-100">Cargando negocio...</h1>
+    <!-- CABECERA CON LOGO Y NOMBRE -->
+    <header class="text-center pt-6 pb-4">
+        <div id="logo-container" class="flex justify-center mb-4 hidden">
+            <img id="client-logo" src="" alt="Logo" class="h-20 w-auto object-contain drop-shadow-md">
         </div>
+        <h1 id="client-name" class="text-3xl font-extrabold tracking-tight text-white mb-1">Cargando...</h1>
+        <div id="accent-bar" class="w-16 h-1 bg-amber-500 mx-auto rounded-full mt-2"></div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="max-w-md mx-auto px-5 py-6 flex-grow w-full">
+    <!-- BLOQUE PRINCIPAL: DIAGNÓSTICO Y ACCIÓN -->
+    <main class="max-w-md w-full mx-auto space-y-6 my-auto">
         
-        <!-- MÓDULO DE SOLUCIÓN / DIAGNÓSTICO OPERATIVO -->
-        <div class="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-5 mb-6 shadow-xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-24 h-24 bg-[#C57A36]/10 rounded-full blur-2xl pointer-events-none"></div>
-            <span class="inline-block bg-[#C57A36]/15 text-[#C57A36] text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full mb-2">
-                Atención Preferente
-            </span>
-            <h2 id="solution-title" class="text-lg font-bold mb-1.5 text-zinc-100">Cargando información...</h2>
-            <p id="solution-desc" class="text-zinc-400 text-xs font-normal leading-relaxed"></p>
+        <!-- Tarjeta Solución del Closer -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl text-center">
+            <h2 id="diag-title" class="text-xl font-bold text-amber-400 mb-2">Cargando solución...</h2>
+            <p id="diag-desc" class="text-gray-300 text-sm leading-relaxed">Por favor, espera un momento mientras preparamos tu experiencia personalizada.</p>
         </div>
 
-        <!-- MÓDULO ESCUDO ANTI-CRÍTICAS (RESEÑAS GOOGLE MAPS) -->
-        <div id="review-module" class="bg-zinc-900 border-2 border-[#C57A36]/60 rounded-2xl p-6 mb-6 text-center shadow-2xl relative">
-            <h3 class="text-base font-bold mb-1 text-zinc-100">¿Qué tal tu experiencia hoy?</h3>
-            <p class="text-zinc-400 text-xs mb-5">Tu opinión nos ayuda a mejorar y seguir dándote el mejor servicio.</p>
-            
-            <!-- ESTRELLAS DE VALORACIÓN -->
-            <div class="flex justify-center gap-3 mb-4">
-                <button onclick="procesarVoto(5)" class="text-3xl hover:scale-125 active:scale-95 transition-transform duration-150">⭐</button>
-                <button onclick="procesarVoto(4)" class="text-3xl hover:scale-125 active:scale-95 transition-transform duration-150">⭐</button>
-                <button onclick="procesarVoto(3)" class="text-3xl hover:scale-125 active:scale-95 transition-transform duration-150">⭐</button>
-                <button onclick="procesarVoto(2)" class="text-3xl hover:scale-125 active:scale-95 transition-transform duration-150">⭐</button>
-                <button onclick="procesarVoto(1)" class="text-3xl hover:scale-125 active:scale-95 transition-transform duration-150">⭐</button>
+        <!-- ESCUDO ANTI-CRÍTICAS (RESEÑAS) -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl text-center space-y-3">
+            <p class="text-sm font-semibold text-gray-300">¿Cómo ha sido tu experiencia hoy?</p>
+            <div id="star-rating" class="flex justify-center space-x-2 text-3xl">
+                <button onclick="handleRating(1)" class="hover:scale-125 transition-transform">⭐</button>
+                <button onclick="handleRating(2)" class="hover:scale-125 transition-transform">⭐</button>
+                <button onclick="handleRating(3)" class="hover:scale-125 transition-transform">⭐</button>
+                <button onclick="handleRating(4)" class="hover:scale-125 transition-transform">⭐</button>
+                <button onclick="handleRating(5)" class="hover:scale-125 transition-transform">⭐</button>
             </div>
-
-            <!-- FILTRO PRIVADO (FORMULARIO 1 A 3 ESTRELLAS) -->
-            <div id="private-feedback" class="hidden text-left bg-zinc-950 p-4 rounded-xl border border-amber-500/30 mt-4 animate-fade-in">
-                <p class="text-xs text-amber-400 font-semibold mb-2">⚠️ Lamentamos no haber cumplido tus expectativas. Cuéntanos qué ocurrió para solucionarlo directamente con Gerencia:</p>
-                <textarea id="feedback-text" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-3 text-xs text-white mb-3 focus:outline-none focus:border-[#C57A36] transition" rows="3" placeholder="Escribe tu mensaje aquí..."></textarea>
-                <button onclick="enviarQuejaPrivada()" class="w-full bg-[#C57A36] hover:bg-[#d88941] text-white text-xs font-bold py-3 rounded-lg uppercase tracking-wider transition shadow-lg">Enviar mensaje privado</button>
-            </div>
+            <p id="rating-feedback" class="text-xs text-gray-400 italic hidden"></p>
         </div>
 
-        <!-- BOTONES ADAPTADOS AL NICHO (GENERADOS DINÁMICAMENTE POR IA) -->
-        <div id="custom-buttons-container" class="space-y-3.5">
-            <!-- Los botones se inyectan dinámicamente desde cliente.json -->
+        <!-- BOTONES DINÁMICOS DE OPERATIVIDAD -->
+        <div id="buttons-container" class="space-y-3">
+            <!-- La IA inyectará aquí los botones del negocio -->
         </div>
 
     </main>
 
-    <!-- FOOTER CORPORATIVO STUDIO 42 -->
-    <footer class="py-5 px-6 text-center text-xs text-zinc-500 border-t border-zinc-900/80">
-        <p>© <span id="year"></span> <span id="footer-client-name"></span></p>
-        <p class="text-[10px] text-zinc-600 mt-1">Identidad Inteligente & SEO Local por <span class="text-[#C57A36] font-semibold">Studio 42</span></p>
+    <!-- PIE DE PÁGINA TECNOLÓGICO -->
+    <footer class="text-center py-6 text-xs text-gray-500">
+        <p>Tecnología desplegada por <span class="font-bold text-amber-500">Studio 42</span></p>
     </footer>
 
-    <!-- LÓGICA DE CONTROL DEL MOTOR DE LA LANDING PAGE -->
+    <!-- LÓGICA DE CARGA DINÁMICA -->
     <script>
-        let googleMapsUrl = "";
-        let whatsappContacto = "";
+        let googleReviewUrl = "";
+        let whatsappNumber = "";
 
-        // Carga dinámica del archivo de configuración del cliente
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById('year').innerText = new Date().getFullYear();
+        async function loadClientData() {
+            try {
+                // Obtiene la subcarpeta del cliente desde la URL
+                const pathSegments = window.location.pathname.split('/').filter(p => p);
+                const clientFolder = pathSegments[pathSegments.length - 1] || 'cliente-prueba';
+                
+                const response = await fetch(`./${clientFolder}/cliente.json`);
+                if (!response.ok) throw new Error("No se encontraron datos");
+                
+                const data = await response.json();
 
-            // Carga de configuración JSON
-            fetch('cliente.json')
-                .then(res => {
-                    if (!res.ok) throw new Error("No se encontró el archivo cliente.json");
-                    return res.json();
-                })
-                .then(data => {
-                    // Carga de datos de la empresa
-                    document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
-                    document.getElementById('client-name').innerText = data.nombre_comercial;
-                    document.getElementById('footer-client-name').innerText = data.nombre_comercial;
-                    
-                    if(data.logo_url) {
-                        const logoImg = document.getElementById('client-logo');
-                        logoImg.src = data.logo_url;
-                        logoImg.classList.remove('hidden');
-                    }
+                // 1. Cargar Nombre y Título
+                document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
+                document.getElementById('client-name').innerText = data.nombre_comercial;
 
-                    googleMapsUrl = data.google_maps_review_url || "#";
-                    whatsappContacto = data.whatsapp_contacto || "";
-
-                    // Diagnóstico/Solución generada por el Closer/IA
-                    if(data.diagnostico) {
-                        document.getElementById('solution-title').innerText = data.diagnostico.titulo_solucion || "Bienvenido";
-                        document.getElementById('solution-desc').innerText = data.diagnostico.descripcion_solucion || "";
-                    }
-
-                    // Renderizado de botones dinámicos adaptados al nicho
-                    const container = document.getElementById('custom-buttons-container');
-                    container.innerHTML = '';
-
-                    if(data.botones_nicho && Array.isArray(data.botones_nicho)) {
-                        data.botones_nicho.forEach(btn => {
-                            const a = document.createElement('a');
-                            a.href = btn.url;
-                            a.target = "_blank";
-                            a.className = "flex items-center justify-between w-full bg-zinc-900/80 border border-zinc-800 hover:border-[#C57A36] text-white p-4 rounded-xl transition-all duration-300 shadow-md group active:scale-[0.98]";
-                            a.innerHTML = `
-                                <div class="flex items-center gap-3.5">
-                                    <span class="text-2xl">${btn.icono || '🚀'}</span>
-                                    <div class="text-left">
-                                        <div class="font-bold text-sm text-zinc-100 group-hover:text-[#C57A36] transition">${btn.label}</div>
-                                        <div class="text-xs text-zinc-400 font-light">${btn.subtexto || ''}</div>
-                                    </div>
-                                </div>
-                                <span class="text-zinc-500 group-hover:text-[#C57A36] group-hover:translate-x-1 transition-all">→</span>
-                            `;
-                            container.appendChild(a);
-                        });
-                    }
-                })
-                .catch(err => {
-                    console.error("Error al cargar cliente.json:", err);
-                    document.getElementById('solution-title').innerText = "Bienvenido a Studio 42";
-                    document.getElementById('solution-desc').innerText = "Estamos configurando tu espacio digital inteligente.";
-                });
-        });
-
-        // LÓGICA DEL ESCUDO ANTI-CRÍTICAS
-        function procesarVoto(estrellas) {
-            if (estrellas >= 4) {
-                // 4 y 5 Estrellas: Redirección directa a la ficha pública de Google Maps
-                if (googleMapsUrl && googleMapsUrl !== "#") {
-                    window.location.href = googleMapsUrl;
-                } else {
-                    alert("¡Gracias por tu valoración positiva!");
+                // 2. Cargar Logo si existe
+                if (data.logo_url && data.logo_url.trim() !== "") {
+                    const logoImg = document.getElementById('client-logo');
+                    logoImg.src = data.logo_url;
+                    document.getElementById('logo-container').classList.remove('hidden');
                 }
-            } else {
-                // 1 a 3 Estrellas: Se activa la contención e interacción privada
-                document.getElementById('private-feedback').classList.remove('hidden');
-                document.getElementById('private-feedback').scrollIntoView({ behavior: 'smooth' });
+
+                // 3. Aplicar Color de Acento si existe
+                if (data.color_acento) {
+                    document.getElementById('accent-bar').style.backgroundColor = data.color_acento;
+                }
+
+                // 4. Cargar Diagnóstico / Solución
+                document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion;
+                document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion;
+
+                // 5. Guardar URLs principales
+                googleReviewUrl = data.google_maps_review_url;
+                whatsappNumber = data.whatsapp_contacto;
+
+                // 6. Generar Botones Operativos
+                const btnContainer = document.getElementById('buttons-container');
+                btnContainer.innerHTML = '';
+                
+                data.botones_nicho.forEach(btn => {
+                    const link = document.createElement('a');
+                    link.href = btn.url;
+                    link.target = "_blank";
+                    link.className = "flex items-center justify-between bg-gray-800 hover:bg-gray-700 text-white font-medium p-4 rounded-xl transition-all border border-gray-700 shadow-md group";
+                    link.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">${btn.icono || '⚡'}</span>
+                            <div class="text-left">
+                                <div class="text-sm font-semibold group-hover:text-amber-400 transition-colors">${btn.label}</div>
+                                <div class="text-xs text-gray-400">${btn.subtexto || ''}</div>
+                            </div>
+                        </div>
+                        <span class="text-gray-400 group-hover:translate-x-1 transition-transform">➔</span>
+                    `;
+                    btnContainer.appendChild(link);
+                });
+
+            } catch (error) {
+                console.error("Error al cargar la landing:", error);
+                document.getElementById('client-name').innerText = "Studio 42";
+                document.getElementById('diag-title').innerText = "Experiencia no configurada";
+                document.getElementById('diag-desc').innerText = "Esta antena NFC aún no tiene asignado un archivo cliente.json activo.";
             }
         }
 
-        function enviarQuejaPrivada() {
-            const texto = document.getElementById('feedback-text').value;
-            if(!texto.trim()) return alert("Por favor, escribe un breve comentario.");
-            
-            const mensajeWa = encodeURIComponent(`[Atención Reclamación Privada - Studio 42]:\n${texto}`);
-            if (whatsappContacto) {
-                window.location.href = `https://wa.me/${whatsappContacto}?text=${mensajeWa}`;
+        // Función del Escudo Anti-Críticas
+        function handleRating(stars) {
+            const feedback = document.getElementById('rating-feedback');
+            feedback.classList.remove('hidden');
+
+            if (stars >= 4) {
+                feedback.innerText = "¡Muchas gracias! Redirigiendo a Google Maps...";
+                setTimeout(() => {
+                    window.location.href = googleReviewUrl || "https://maps.google.com";
+                }, 1000);
             } else {
-                alert("Gracias por tu comentario. Ha sido enviado a la gerencia del establecimiento.");
+                feedback.innerText = "Lamentamos que tu experiencia no haya sido perfecta. Conectando con Gerencia...";
+                setTimeout(() => {
+                    const msg = encodeURIComponent(`Hola, quiero dejar una sugerencia sobre mi experiencia (Calificación: ${stars}/5 estrellas).`);
+                    window.location.href = `https://wa.me/${whatsappNumber}?text=${msg}`;
+                }, 1200);
             }
         }
+
+        loadClientData();
     </script>
 </body>
 </html>
