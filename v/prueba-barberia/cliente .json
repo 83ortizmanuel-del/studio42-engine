@@ -1,26 +1,26 @@
 {
-  "cliente_id": "prueba-barberia",
+  "cliente_id": "barberia-la-sucursal",
   "nombre_comercial": "Barbería La Sucursal",
-  "logo_url": "https://studio42.es/assets/logo.png",
+  "logo_url": "https://studio42.es/v/barberia-la-sucursal/logo.png",
   "color_acento": "#D97706",
-  "google_maps_review_url": "https://maps.google.com",
-  "whatsapp_contacto": "34600000000",
+  "google_maps_review_url": "https://g.page/r/CUENTA_GOOGLE/review",
+  "whatsapp_contacto": "34672294962",
   "diagnostico": {
     "titulo_solucion": "Atención Preferente sin Esperas",
-    "descripcion_solucion": "Optimiza tu tiempo. Si hoy has disfrutado de tu corte, apóyanos con tu valoración de 5 estrellas."
+    "descripcion_solucion": "Accede a la agenda de forma directa, evita colas en el local y asegura tu turno en el momento."
   },
   "botones_nicho": [
     {
       "label": "Pedir Cita Prioritaria",
       "subtexto": "Reserva directa por WhatsApp",
       "icono": "📅",
-      "url": "https://wa.me/34600000000?text=Hola,%20quiero%20cita"
+      "url": "https://wa.me/34672294962?text=Hola,%20quiero%20reservar%20cita%20prioritaria"
     },
     {
-      "label": "Ver Catálogo de Cortes",
-      "subtexto": "Estilos y precios actualizados",
+      "label": "Ver Catálogo y Precios",
+      "subtexto": "Cortes, barba y tratamientos",
       "icono": "💈",
-      "url": "https://wa.me/34600000000?text=Hola,%20quiero%20ver%20precios"
+      "url": "https://wa.me/34672294962?text=Hola,%20quiero%20consultar%20los%20precios"
     }
   ]
 }
