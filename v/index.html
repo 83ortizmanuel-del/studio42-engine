@@ -63,21 +63,25 @@
 
         async function loadClientData() {
             try {
-                // Obtener slug del cliente
-                const pathParts = window.location.pathname.split('/').filter(p => p && p.toLowerCase() !== 'v');
-                let clientFolder = pathParts[0] || 'la-petite-melina';
+                // Parseo preciso del slug desde la URL actual
+                const pathParts = window.location.pathname.split('/').filter(Boolean);
                 
-                if (clientFolder.includes('.')) {
+                // Busca la posición de "v" y toma el siguiente segmento como la carpeta del cliente
+                const vIndex = pathParts.findIndex(p => p.toLowerCase() === 'v');
+                let clientFolder = (vIndex !== -1 && pathParts[vIndex + 1]) ? pathParts[vIndex + 1] : pathParts[pathParts.length - 1];
+
+                // Si por alguna razón no detecta carpeta o lee un archivo, usa la predeterminada
+                if (!clientFolder || clientFolder === 'v' || clientFolder.includes('.')) {
                     clientFolder = 'la-petite-melina';
                 }
 
-                // Obtención del JSON
-                let response = await fetch(`./cliente.json`);
-                if (!response.ok) {
-                    response = await fetch(`/v/${clientFolder}/cliente.json`);
-                }
+                console.log("Cargando cliente desde la carpeta:", clientFolder);
 
-                if (!response.ok) throw new Error("No se pudo cargar el archivo cliente.json");
+                // Construcción de la URL absoluta al cliente.json
+                const targetJsonUrl = `/v/${clientFolder}/cliente.json`;
+                
+                const response = await fetch(targetJsonUrl);
+                if (!response.ok) throw new Error(`HTTP ${response.status} en ${targetJsonUrl}`);
 
                 const data = await response.json();
 
@@ -85,7 +89,7 @@
                 document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
                 document.getElementById('client-name').innerText = data.nombre_comercial;
 
-                // 2. Logo con manejo inteligente de rutas
+                // 2. Carga de Logo
                 if (data.logo_url && data.logo_url.trim() !== "") {
                     const logoImg = document.getElementById('client-logo');
                     let src = data.logo_url.trim();
@@ -127,12 +131,12 @@
                     });
                 }
 
-                // 5. Ocultar o mostrar Escudo
+                // 5. Configurar o ocultar el Escudo
                 if (data.configuracion && data.configuracion.mostrar_escudo === false) {
                     document.getElementById('shield-container').classList.add('hidden');
                 }
 
-                // 6. Diagnóstico
+                // 6. Cargar Diagnóstico
                 if (data.diagnostico && data.diagnostico.titulo_solucion) {
                     document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion;
                     document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion || "";
