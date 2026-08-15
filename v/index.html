@@ -56,80 +56,54 @@
         <p>Tecnología desplegada por <span class="font-bold text-amber-500">Studio 42</span></p>
     </footer>
 
-    <!-- LÓGICA DE CARGA ROBUSTA -->
+    <!-- LÓGICA DE CARGA DEFINITIVA -->
     <script>
         let googleReviewUrl = "";
         let whatsappNumber = "";
 
         async function loadClientData() {
             try {
-                // Obtener el slug del cliente parseando la URL
+                // Obtener slug del cliente
                 const pathParts = window.location.pathname.split('/').filter(p => p && p.toLowerCase() !== 'v');
-                let clientFolder = pathParts[0] || 'prueba-barberia';
+                let clientFolder = pathParts[0] || 'la-petite-melina';
                 
-                // Si la parte tomada es un archivo o vacía, asignar por defecto
                 if (clientFolder.includes('.')) {
-                    clientFolder = 'prueba-barberia';
+                    clientFolder = 'la-petite-melina';
                 }
 
-                // Intentos de búsqueda progresivos
-                const possiblePaths = [
-                    `/v/${clientFolder}/cliente.json`,
-                    `./cliente.json`,
-                    `cliente.json`
-                ];
-
-                let response = null;
-                for (const path of possiblePaths) {
-                    try {
-                        const res = await fetch(path);
-                        if (res.ok) {
-                            response = res;
-                            break;
-                        }
-                    } catch (e) {
-                        // Continúa al siguiente intento
-                    }
+                // Obtención del JSON
+                let response = await fetch(`./cliente.json`);
+                if (!response.ok) {
+                    response = await fetch(`/v/${clientFolder}/cliente.json`);
                 }
 
-                if (!response) throw new Error("No se pudo localizar el archivo cliente.json");
+                if (!response.ok) throw new Error("No se pudo cargar el archivo cliente.json");
 
                 const data = await response.json();
 
-                // 1. Cargar Nombre
+                // 1. Nombre y Título
                 document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
                 document.getElementById('client-name').innerText = data.nombre_comercial;
 
-               // 2. Cargar Logo con detección de ruta local/remota
+                // 2. Logo con manejo inteligente de rutas
                 if (data.logo_url && data.logo_url.trim() !== "") {
                     const logoImg = document.getElementById('client-logo');
-                    let logoPath = data.logo_url;
+                    let src = data.logo_url.trim();
                     
-                    // Si no es una URL externa (http/https), le asigna la ruta de la carpeta del cliente
-                    if (!logoPath.startsWith('http://') && !logoPath.startsWith('https://')) {
-                        logoPath = `/v/${clientFolder}/${logoPath.replace(/^\//, '')}`;
+                    if (!src.startsWith('http://') && !src.startsWith('https://')) {
+                        src = `/v/${clientFolder}/${src.replace(/^\//, '')}`;
                     }
                     
-                    logoImg.src = logoPath;
+                    logoImg.src = src;
                     document.getElementById('logo-container').classList.remove('hidden');
-                }
-                    
-                    // Si no es una URL externa (http/https), le asigna la ruta de la carpeta del cliente
-                    if (!logoPath.startsWith('http://') && !logoPath.startsWith('https://')) {
-                        logoPath = `/v/${clientFolder}/${logoPath.replace(/^\//, '')}`;
-                    }
-                    
-                    logoImg.src = logoPath;
-                    document.getElementById('logo-container').classList.remove('hidden');
-                }
                 }
 
-                // 3. Aplicar Color de Acento
+                // 3. Color de Acento
                 if (data.color_acento) {
                     document.getElementById('accent-bar').style.backgroundColor = data.color_acento;
                 }
 
-                // 4. Renderizar Botones Operativos (Arriba)
+                // 4. Renderizar Botones (Arriba)
                 const btnContainer = document.getElementById('buttons-container');
                 btnContainer.innerHTML = '';
 
@@ -153,12 +127,12 @@
                     });
                 }
 
-                // 5. Configurar o Ocultar el Escudo
+                // 5. Ocultar o mostrar Escudo
                 if (data.configuracion && data.configuracion.mostrar_escudo === false) {
                     document.getElementById('shield-container').classList.add('hidden');
                 }
 
-                // 6. Cargar Diagnóstico
+                // 6. Diagnóstico
                 if (data.diagnostico && data.diagnostico.titulo_solucion) {
                     document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion;
                     document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion || "";
