@@ -1,0 +1,35 @@
+{
+  "cliente_id": "la-petite-melina",
+  "nombre_comercial": "La Petite Melina",
+  "logo_url": "logo.jpg",
+  "color_acento": "#D97706",
+  "google_maps_review_url": "https://maps.google.com",
+  "whatsapp_contacto": "34672294962",
+  "configuracion": {
+    "mostrar_escudo": true
+  },
+  "diagnostico": {
+    "titulo_solucion": "Repostería Artesanal sin Esperas ni Dudas",
+    "descripcion_solucion": "Accede al instante a nuestra carta de sabores, consulta alérgenos y encarga tus pedidos personalizados en un clic."
+  },
+  "botones_nicho": [
+    {
+      "label": "Ver Catálogo de Sabores y Precios",
+      "subtexto": "Galletas, tartas y especialidades",
+      "icono": "🍪",
+      "url": "https://lapetitemelina.netlify.app"
+    },
+    {
+      "label": "Hacer Pedido Personalizado",
+      "subtexto": "Atención rápida por WhatsApp",
+      "icono": "📲",
+      "url": "https://wa.me/34672294962?text=Hola%20Melina,%20quiero%20hacer%20un%20pedido%20personalizado"
+    },
+    {
+      "label": "Consultar Alérgenos e Ingredientes",
+      "subtexto": "Información detallada sobre nuestros productos",
+      "icono": "🌾",
+      "url": "https://wa.me/34672294962?text=Hola,%20quisiera%20consultar%20la%20lista%20de%20al%C3%A9rgenos"
+    }
+  ]
+}
