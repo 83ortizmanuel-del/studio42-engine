@@ -56,34 +56,47 @@
         <p>Tecnología desplegada por <span class="font-bold text-amber-500">Studio 42</span></p>
     </footer>
 
-    <!-- LÓGICA DE CARGA DEFINITIVA -->
+    <!-- LÓGICA DE CARGA ULTRA-ROBUSTA -->
     <script>
         let googleReviewUrl = "";
         let whatsappNumber = "";
 
+        async function fetchJsonWithFallback(folder) {
+            // Lista de posibles rutas para encontrar el cliente.json
+            const possibleUrls = [
+                `./cliente.json`,
+                `/v/${folder}/cliente.json`,
+                `v/${folder}/cliente.json`
+            ];
+
+            for (const url of possibleUrls) {
+                try {
+                    const res = await fetch(url);
+                    if (res.ok) {
+                        return await res.json();
+                    }
+                } catch (e) {
+                    console.warn(`No se pudo cargar desde ${url}, probando siguiente...`);
+                }
+            }
+            throw new Error("No se pudo localizar cliente.json en ninguna ruta.");
+        }
+
         async function loadClientData() {
             try {
-                // Parseo preciso del slug desde la URL actual
-                const pathParts = window.location.pathname.split('/').filter(Boolean);
+                // Obtener el slug de la carpeta desde la URL
+                const pathClean = window.location.pathname.replace(/\/$/, "");
+                const parts = pathClean.split('/').filter(Boolean);
                 
-                // Busca la posición de "v" y toma el siguiente segmento como la carpeta del cliente
-                const vIndex = pathParts.findIndex(p => p.toLowerCase() === 'v');
-                let clientFolder = (vIndex !== -1 && pathParts[vIndex + 1]) ? pathParts[vIndex + 1] : pathParts[pathParts.length - 1];
-
-                // Si por alguna razón no detecta carpeta o lee un archivo, usa la predeterminada
-                if (!clientFolder || clientFolder === 'v' || clientFolder.includes('.')) {
+                let clientFolder = parts[parts.length - 1];
+                
+                if (!clientFolder || clientFolder.toLowerCase() === 'v' || clientFolder.includes('.')) {
                     clientFolder = 'la-petite-melina';
                 }
 
-                console.log("Cargando cliente desde la carpeta:", clientFolder);
+                console.log("Detectada carpeta de cliente:", clientFolder);
 
-                // Construcción de la URL absoluta al cliente.json
-                const targetJsonUrl = `/v/${clientFolder}/cliente.json`;
-                
-                const response = await fetch(targetJsonUrl);
-                if (!response.ok) throw new Error(`HTTP ${response.status} en ${targetJsonUrl}`);
-
-                const data = await response.json();
+                const data = await fetchJsonWithFallback(clientFolder);
 
                 // 1. Nombre y Título
                 document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
