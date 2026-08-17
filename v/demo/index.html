@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio 42 | Demo Comercial EngineAI 1.0</title>
+    <title>Studio 42 | Demo Comercial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,20 +32,19 @@
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between p-4 sm:p-6 selection:bg-[#C57A36] selection:text-white">
 
-    <!-- CABECERA DE IMPACTO DE MARCA CON LOGO -->
-    <header class="text-center pt-4 pb-2">
-        <div class="inline-flex items-center gap-2 bg-[#C57A36]/10 border border-[#C57A36]/30 text-[#C57A36] text-[10px] font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">
+    <!-- CABECERA CON LOGO PROTAGONISTA Y SIN TEXTO REPETIDO -->
+    <header class="text-center pt-2 pb-2">
+        <div class="inline-flex items-center gap-2 bg-[#C57A36]/10 border border-[#C57A36]/30 text-[#C57A36] text-[10px] font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-widest">
             <span class="w-1.5 h-1.5 rounded-full bg-[#C57A36] animate-ping"></span>
-            EngineAI Analytics 1.0 • Latencia: <span id="load-time">0.06s</span>
+            Respuesta Antifrágil • Latencia: <span id="load-time">0.06s</span>
         </div>
 
-        <!-- LOGO OFICIAL STUDIO 42 -->
-        <div id="logo-container" class="flex justify-center mb-2">
-            <img id="studio-logo" src="logo.png" alt="Studio 42 Logo" class="h-16 w-auto object-contain drop-shadow-md" onerror="this.style.display='none'">
+        <!-- LOGO DESTACADO (TAMAÑO AUMENTADO) -->
+        <div id="logo-container" class="flex justify-center my-3">
+            <img id="studio-logo" src="logo.png" alt="Studio 42" class="h-24 sm:h-28 w-auto object-contain drop-shadow-xl" onerror="this.onerror=null; this.src='logo.jpg';">
         </div>
 
-        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white mb-1">STUDIO <span class="text-[#C57A36]">42</span></h1>
-        <p class="text-xs text-zinc-400 font-light tracking-wide uppercase">Demostración Phygital en Vivo</p>
+        <p class="text-xs text-zinc-400 font-medium tracking-widest uppercase mt-2">Tecnología Phygital en Vivo</p>
         <div class="w-16 h-1 bg-[#C57A36] mx-auto rounded-full mt-3"></div>
     </header>
 
@@ -55,7 +54,7 @@
         <!-- DEMO EN VIVO: SIMULADOR DE ESCUDO -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-2xl text-center space-y-3 relative overflow-hidden glow-effect">
             <div class="absolute top-0 right-0 bg-[#C57A36] text-zinc-950 font-black text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-bl-lg shadow-sm">
-                Simulador Vivo
+                Demostración
             </div>
 
             <div class="flex items-center justify-center space-x-2 pt-1">
@@ -80,50 +79,52 @@
             <div id="demo-feedback" class="hidden rounded-xl p-3 text-xs text-center font-medium transition-all duration-300"></div>
         </div>
 
-        <!-- MUESTRAS TECNOLÓGICAS DE VENTA RÁPIDA -->
-        <div class="space-y-2">
-            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 px-1">Soluciones Phygitales Incluidas</p>
+        <!-- ACCIONES COMERCIALES DIRECTAS -->
+        <div class="space-y-2.5">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 px-1">Opciones Disponibles</p>
             
+            <!-- ACCIÓN PRINCIPAL: SOLICITAR INSTALACIÓN -->
             <a href="https://wa.me/34672294962?text=Hola%20Manuel,%20quiero%20activar%20el%20Ecosistema%20Phygital%20en%20mi%20local" target="_blank" 
                class="flex items-center justify-between bg-[#C57A36] hover:bg-[#b06a2e] text-zinc-950 font-extrabold p-4 rounded-xl transition-all shadow-lg group">
                 <div class="flex items-center space-x-3">
                     <span class="text-2xl">⚡</span>
                     <div class="text-left">
                         <div class="text-sm font-black">Activar Ecosistema en Mi Local</div>
-                        <div class="text-[10px] text-zinc-900 font-semibold">Instalación presencial en 24h</div>
+                        <div class="text-[10px] text-zinc-900 font-semibold">Instalación y configuración presencial</div>
                     </div>
                 </div>
                 <span class="text-zinc-950 text-base font-black group-hover:translate-x-1 transition-transform">➔</span>
             </a>
 
+            <!-- ACCIÓN SECUNDARIA: VER WEB -->
             <a href="https://studio42.es" target="_blank" 
                class="flex items-center justify-between bg-zinc-900 hover:bg-zinc-800 text-white font-medium p-3.5 rounded-xl transition-all border border-zinc-800 group">
                 <div class="flex items-center space-x-3">
-                    <span class="text-xl">📊</span>
+                    <span class="text-xl">🌐</span>
                     <div class="text-left">
-                        <div class="text-xs font-semibold group-hover:text-[#C57A36] transition-colors">EngineAI Analytics Dashboard</div>
-                        <div class="text-[10px] text-zinc-400 font-light">Auditoría de tráfico físico y métricas</div>
+                        <div class="text-xs font-semibold group-hover:text-[#C57A36] transition-colors">Visitar Web Oficial de Studio 42</div>
+                        <div class="text-[10px] text-zinc-400 font-light">Ecosistemas digitales y soluciones locales</div>
                     </div>
                 </div>
                 <span class="text-zinc-500 group-hover:text-[#C57A36] group-hover:translate-x-1 transition-all">➔</span>
             </a>
         </div>
 
-        <!-- BOTÓN VCARD COMERCIAL -->
+        <!-- BOTÓN VCARD -->
         <button onclick="downloadCloserVCard()" class="w-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 font-semibold py-3 px-4 rounded-xl border border-zinc-800/80 text-xs flex items-center justify-center gap-2 transition-all uppercase tracking-widest">
-            <span>📇</span> Guardar Contacto Directo de Studio 42
+            <span>📇</span> Guardar Contacto de Studio 42
         </button>
 
     </main>
 
-    <!-- FOOTER COMERCIAL -->
+    <!-- FOOTER -->
     <footer class="text-center py-4 text-xs text-zinc-500">
-        <p class="text-[10px] text-zinc-600 font-light">Impulsado por Studio 42 EngineAI Analytics 1.0 • Servidores Serverless Antifrágiles</p>
+        <p class="text-[10px] text-zinc-600 font-light">Tecnología Desplegada por Studio 42</p>
     </footer>
 
-    <!-- LÓGICA DE LA DEMO Y VCARD -->
+    <!-- LÓGICA -->
     <script>
-        // 📌 INSERTA AQUÍ TU ENLACE REAL DE RESEÑAS DE GOOGLE DE STUDIO 42
+        // 📌 CONFIGURA AQUÍ TU ENLACE REAL DE RESEÑAS DE GOOGLE DE STUDIO 42
         const studio42ReviewUrl = "https://maps.google.com";
 
         window.addEventListener('load', () => {
@@ -140,28 +141,28 @@
                 feedback.classList.add('bg-emerald-950/90', 'text-emerald-200', 'border', 'border-emerald-800');
                 feedback.innerHTML = `
                     <p class="font-bold mb-0.5">⭐ ¡5 Estrellas activadas!</p>
-                    <p class="font-light">Redirigiendo a la ficha oficial de Studio 42 en Google Maps...</p>
+                    <p class="font-light">Redirigiendo a las reseñas oficiales de Studio 42 en Google Maps...</p>
                 `;
                 setTimeout(() => {
                     window.location.href = studio42ReviewUrl;
                 }, 1200);
 
             } else {
-                feedback.classList.add('bg-red-950/90', 'text-red-200', 'border', 'border-red-800');
+                feedback.classList.add('bg-red-950/90', 'text-red-200', 'border-red-800');
                 feedback.innerHTML = `
                     <p class="font-bold mb-0.5">🛑 Escudo Activado (${stars} Estrellas)</p>
-                    <p class="font-light">La crítica NO toca Google. Se envía un mensaje privado inmediato al WhatsApp de gerencia.</p>
+                    <p class="font-light">La crítica NO se publica en Google. Se deriva a un chat privado directo con gerencia.</p>
                 `;
             }
         }
 
         function downloadCloserVCard() {
-            const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Manuel Alejandro - Studio 42\nORG:Studio 42 EngineAI\nTITLE:Especialista en Identidad Phygital\nTEL;TYPE=CELL:+34672294962\nURL:https://studio42.es\nEND:VCARD`;
+            const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Manuel Alejandro - Studio 42\nORG:Studio 42\nTITLE:Especialista Phygital\nTEL;TYPE=CELL:+34672294962\nURL:https://studio42.es\nEND:VCARD`;
             const blob = new Blob([vcard], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Studio42_Manuel_Contacto.vcf`;
+            a.download = `Studio42_Contacto.vcf`;
             a.click();
         }
     </script>
