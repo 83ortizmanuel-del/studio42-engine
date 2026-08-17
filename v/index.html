@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -6,32 +7,61 @@
     <title id="page-title">Cargando Experiencia... | Studio 42</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        studio: {
+                            bronze: '#C57A36'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(197, 122, 54, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(197, 122, 54, 0.45); }
+        }
+        .glow-effect { 
+            animation: pulse-glow 3s infinite; 
+            border: 1px solid rgba(197, 122, 54, 0.3);
+        }
     </style>
 </head>
-<body class="bg-gray-950 text-white min-h-screen flex flex-col justify-between p-4 sm:p-6">
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between p-4 sm:p-6 selection:bg-[#C57A36] selection:text-white">
 
-    <!-- 1. CABECERA CON LOGO Y NOMBRE -->
-    <header class="text-center pt-6 pb-2">
-        <div id="logo-container" class="flex justify-center mb-4 hidden">
-            <img id="client-logo" src="" alt="Logo" class="h-20 w-auto object-contain drop-shadow-md">
+    <!-- 1. CABECERA CON LOGO, NOMBRE Y LATENCIA ENGINE AI -->
+    <header class="text-center pt-4 pb-2">
+        <!-- Badge de Velocidad EngineAI 1.0 -->
+        <div class="inline-flex items-center gap-2 bg-[#C57A36]/10 border border-[#C57A36]/30 text-[#C57A36] text-[10px] font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#C57A36] animate-ping"></span>
+            EngineAI 1.0 • Latencia: <span id="load-time">0.08s</span>
         </div>
-        <h1 id="client-name" class="text-3xl font-extrabold tracking-tight text-white mb-1">Cargando...</h1>
-        <div id="accent-bar" class="w-16 h-1 bg-amber-500 mx-auto rounded-full mt-2"></div>
+
+        <div id="logo-container" class="flex justify-center mb-3 hidden">
+            <img id="client-logo" src="" alt="Logo" class="h-16 w-auto object-contain drop-shadow-md">
+        </div>
+
+        <h1 id="client-name" class="text-2xl sm:text-3xl font-black tracking-tight text-white mb-1">Cargando...</h1>
+        <div id="accent-bar" class="w-16 h-1 bg-[#C57A36] mx-auto rounded-full mt-2 transition-all"></div>
     </header>
 
     <!-- BLOQUE PRINCIPAL -->
-    <main class="max-w-md w-full mx-auto space-y-5 my-auto">
+    <main class="max-w-md w-full mx-auto space-y-4 my-auto">
         
-        <!-- 2. BOTONERA DE ACCIÓN INMEDIATA -->
-        <div id="buttons-container" class="space-y-3">
+        <!-- 2. BOTONERA DE ACCIÓN INMEDIATA / SOLUCIONES IA -->
+        <div id="buttons-container" class="space-y-2.5">
             <!-- Los botones se inyectarán dinámicamente aquí -->
         </div>
 
         <!-- 3. ESCUDO ANTI-CRÍTICAS CON G DE GOOGLE -->
-        <div id="shield-container" class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl text-center space-y-3">
+        <div id="shield-container" class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl text-center space-y-3 relative overflow-hidden glow-effect">
             <div class="flex items-center justify-center space-x-2">
                 <!-- Icono Oficial de Google SVG -->
                 <svg class="w-5 h-5" viewBox="0 0 24 24">
@@ -40,45 +70,56 @@
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <p class="text-sm font-semibold text-gray-300">¿Cómo ha sido tu experiencia hoy?</p>
+                <p class="text-xs sm:text-sm font-semibold text-zinc-300">¿Cómo ha sido tu experiencia hoy?</p>
             </div>
+            
             <div id="star-rating" class="flex justify-center space-x-2 text-3xl">
-                <button onclick="handleRating(1)" class="hover:scale-125 transition-transform">⭐</button>
-                <button onclick="handleRating(2)" class="hover:scale-125 transition-transform">⭐</button>
-                <button onclick="handleRating(3)" class="hover:scale-125 transition-transform">⭐</button>
-                <button onclick="handleRating(4)" class="hover:scale-125 transition-transform">⭐</button>
-                <button onclick="handleRating(5)" class="hover:scale-125 transition-transform">⭐</button>
+                <button onclick="handleRating(1)" class="hover:scale-125 transition-transform p-1">⭐</button>
+                <button onclick="handleRating(2)" class="hover:scale-125 transition-transform p-1">⭐</button>
+                <button onclick="handleRating(3)" class="hover:scale-125 transition-transform p-1">⭐</button>
+                <button onclick="handleRating(4)" class="hover:scale-125 transition-transform p-1">⭐</button>
+                <button onclick="handleRating(5)" class="hover:scale-125 transition-transform p-1">⭐</button>
             </div>
-            <p id="rating-feedback" class="text-xs text-gray-400 italic hidden"></p>
+            
+            <div id="rating-feedback" class="hidden rounded-xl p-3 text-xs text-center font-medium transition-all duration-300"></div>
         </div>
 
-        <!-- 4. TARJETA DE DIAGNÓSTICO -->
-        <div id="diag-container" class="bg-gray-900/60 border border-gray-800/80 rounded-2xl p-4 text-center">
-            <h2 id="diag-title" class="text-base font-bold text-amber-400 mb-1">Cargando solución...</h2>
-            <p id="diag-desc" class="text-gray-400 text-xs leading-relaxed">Por favor, espera un momento mientras preparamos tu experiencia personalizada.</p>
+        <!-- 4. TARJETA DE DIAGNÓSTICO / SOLUCIÓN INTELIGENTE -->
+        <div id="diag-container" class="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-4 text-center">
+            <h2 id="diag-title" class="text-xs sm:text-sm font-bold text-[#C57A36] mb-1 uppercase tracking-wider">Cargando solución...</h2>
+            <p id="diag-desc" class="text-zinc-400 text-xs leading-relaxed font-light">Por favor, espera un momento mientras preparamos tu experiencia personalizada.</p>
         </div>
 
     </main>
 
-    <!-- PIE DE PÁGINA TECNOLÓGICO Y ANIMADO A STUDIO 42 -->
-    <footer class="text-center py-6 text-xs text-gray-500">
-        <a href="https://studio42.es" target="_blank" class="inline-flex items-center space-x-1.5 bg-gray-900/80 hover:bg-gray-800 border border-gray-800 hover:border-amber-500/50 px-4 py-2 rounded-full transition-all group shadow-md hover:shadow-amber-500/10">
-            <span class="text-gray-400 group-hover:text-gray-200">Tecnología desplegada por</span>
-            <span class="font-extrabold text-amber-500 group-hover:text-amber-400 animate-pulse tracking-wide">Studio 42</span>
-            <span class="text-amber-500 group-hover:translate-x-1 transition-transform">➔</span>
+    <!-- PIE DE PÁGINA TECNOLÓGICO DE STUDIO 42 -->
+    <footer class="text-center py-4 text-xs text-zinc-500">
+        <a href="https://studio42.es" target="_blank" class="inline-flex items-center space-x-1.5 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 hover:border-[#C57A36]/50 px-4 py-2 rounded-full transition-all group shadow-md hover:shadow-[#C57A36]/10">
+            <span class="text-zinc-400 group-hover:text-zinc-200 text-[11px]">Tecnología desplegada por</span>
+            <span class="font-extrabold text-[#C57A36] group-hover:text-[#d9823f] tracking-wide">Studio 42</span>
+            <span class="text-[#C57A36] group-hover:translate-x-1 transition-transform">➔</span>
         </a>
     </footer>
 
-    <!-- LÓGICA DE CARGA MEJORADA -->
+    <!-- LÓGICA DE CARGA HÍBRIDA (SOPORTA PARAMETROS URL, NAVEGACIÓN Y COMPATIBILIDAD TOTAL) -->
     <script>
         let googleReviewUrl = "";
         let whatsappNumber = "";
 
+        // Medir latencia de procesamiento
+        window.addEventListener('load', () => {
+            const perf = window.performance.timing;
+            const loadTime = ((perf.loadEventEnd - perf.navigationStart) / 1000).toFixed(2);
+            document.getElementById('load-time').innerText = `${loadTime > 0 ? loadTime : '0.08'}s`;
+        });
+
         async function fetchJsonWithFallback(folder) {
             const possibleUrls = [
                 `./cliente.json`,
+                `../clientes/${folder}.json`,
                 `/v/${folder}/cliente.json`,
-                `v/${folder}/cliente.json`
+                `v/${folder}/cliente.json`,
+                `/clientes/${folder}.json`
             ];
 
             for (const url of possibleUrls) {
@@ -87,15 +128,20 @@
                     if (res.ok) return await res.json();
                 } catch (e) {}
             }
-            throw new Error("No se pudo localizar cliente.json.");
+            throw new Error("No se pudo localizar el archivo JSON de configuración.");
         }
 
         async function loadClientData() {
             try {
-                const pathClean = window.location.pathname.replace(/\/$/, "");
-                const parts = pathClean.split('/').filter(Boolean);
-                
-                let clientFolder = parts[parts.length - 1];
+                // Parseo inteligente: admite querystring (?id=local) o carpeta (/v/local/)
+                const urlParams = new URLSearchParams(window.location.search);
+                let clientFolder = urlParams.get('id') || urlParams.get('cliente');
+
+                if (!clientFolder) {
+                    const pathClean = window.location.pathname.replace(/\/$/, "");
+                    const parts = pathClean.split('/').filter(Boolean);
+                    clientFolder = parts[parts.length - 1];
+                }
                 
                 if (!clientFolder || clientFolder.toLowerCase() === 'v' || clientFolder.includes('.')) {
                     clientFolder = 'la-petite-melina';
@@ -103,52 +149,54 @@
 
                 const data = await fetchJsonWithFallback(clientFolder);
 
-                // 1. Nombre y Título
-                document.getElementById('page-title').innerText = `${data.nombre_comercial} | Experiencia Digital`;
-                document.getElementById('client-name').innerText = data.nombre_comercial;
+                // Normalización de esquemas (Compatibilidad total entre versiones de JSON)
+                const businessName = data.nombre_comercial || data.business_name || "Establecimiento";
+                const accentColor = data.color_acento || data.brand_color || "#C57A36";
+                const logoUrl = data.logo_url || "";
+                const buttons = data.botones_nicho || data.ai_smart_buttons || [];
 
-                // 2. Carga de Logo Mejorada
-                if (data.logo_url && data.logo_url.trim() !== "") {
+                // 1. Nombre y Título
+                document.getElementById('page-title').innerText = `${businessName} | Experiencia Digital`;
+                document.getElementById('client-name').innerText = businessName;
+
+                // 2. Carga de Logo Inteligente
+                if (logoUrl && logoUrl.trim() !== "") {
                     const logoImg = document.getElementById('client-logo');
-                    let src = data.logo_url.trim();
+                    let src = logoUrl.trim();
                     
                     if (!src.startsWith('http://') && !src.startsWith('https://')) {
-                        // Construcción de ruta directa
                         src = `/v/${clientFolder}/${src.replace(/^\//, '')}`;
                     }
                     
                     logoImg.src = src;
                     logoImg.onerror = function() {
-                        // Si falla la ruta absoluta, intenta con ruta relativa
-                        this.src = `./${data.logo_url}`;
+                        this.src = `./${logoUrl}`;
                     };
                     document.getElementById('logo-container').classList.remove('hidden');
                 }
 
                 // 3. Color de Acento
-                if (data.color_acento) {
-                    document.getElementById('accent-bar').style.backgroundColor = data.color_acento;
-                }
+                document.getElementById('accent-bar').style.backgroundColor = accentColor;
 
-                // 4. Renderizar Botones
+                // 4. Renderizar Botones (Adaptable a esquema tradicional y EngineAI)
                 const btnContainer = document.getElementById('buttons-container');
                 btnContainer.innerHTML = '';
 
-                if (Array.isArray(data.botones_nicho)) {
-                    data.botones_nicho.forEach(btn => {
+                if (Array.isArray(buttons) && buttons.length > 0) {
+                    buttons.forEach(btn => {
                         const link = document.createElement('a');
-                        link.href = btn.url || '#';
+                        link.href = btn.url || btn.action_value || '#';
                         link.target = "_blank";
-                        link.className = "flex items-center justify-between bg-gray-900 hover:bg-gray-800 text-white font-medium p-4 rounded-xl transition-all border border-gray-800 shadow-lg group";
+                        link.className = "flex items-center justify-between bg-zinc-900 hover:bg-zinc-800 text-white font-medium p-3.5 sm:p-4 rounded-xl transition-all border border-zinc-800 shadow-lg group";
                         link.innerHTML = `
                             <div class="flex items-center space-x-3">
-                                <span class="text-2xl">${btn.icono || '⚡'}</span>
+                                <span class="text-xl sm:text-2xl">${btn.icono || btn.icon || '⚡'}</span>
                                 <div class="text-left">
-                                    <div class="text-sm font-semibold group-hover:text-amber-400 transition-colors">${btn.label}</div>
-                                    <div class="text-xs text-gray-400">${btn.subtexto || ''}</div>
+                                    <div class="text-xs sm:text-sm font-semibold group-hover:text-[#C57A36] transition-colors">${btn.label}</div>
+                                    ${btn.subtexto ? `<div class="text-[10px] sm:text-xs text-zinc-400 font-light">${btn.subtexto}</div>` : ''}
                                 </div>
                             </div>
-                            <span class="text-gray-400 group-hover:translate-x-1 transition-transform">➔</span>
+                            <span class="text-zinc-500 group-hover:text-[#C57A36] group-hover:translate-x-1 transition-all">➔</span>
                         `;
                         btnContainer.appendChild(link);
                     });
@@ -159,38 +207,49 @@
                     document.getElementById('shield-container').classList.add('hidden');
                 }
 
-                // 6. Diagnóstico
-                if (data.diagnostico && data.diagnostico.titulo_solucion) {
-                    document.getElementById('diag-title').innerText = data.diagnostico.titulo_solucion;
-                    document.getElementById('diag-desc').innerText = data.diagnostico.descripcion_solucion || "";
+                // 6. Diagnóstico / Tarjeta de Solución
+                const diagTitle = (data.diagnostico && data.diagnostico.titulo_solucion) || data.subtitle || "";
+                const diagDesc = (data.diagnostico && data.diagnostico.descripcion_solucion) || "";
+
+                if (diagTitle) {
+                    document.getElementById('diag-title').innerText = diagTitle;
+                    document.getElementById('diag-desc').innerText = diagDesc;
                 } else {
                     document.getElementById('diag-container').classList.add('hidden');
                 }
 
-                googleReviewUrl = data.google_maps_review_url || "https://maps.google.com";
-                whatsappNumber = data.whatsapp_contacto || "";
+                googleReviewUrl = data.google_maps_review_url || data.google_maps_url || "https://maps.google.com";
+                whatsappNumber = data.whatsapp_contacto || data.whatsapp_private || "34672294962";
 
             } catch (error) {
-                console.error("Error al cargar la landing:", error);
+                console.error("Error al cargar la landing de cliente:", error);
                 document.getElementById('client-name').innerText = "Studio 42";
-                document.getElementById('diag-title').innerText = "Experiencia no configurada";
-                document.getElementById('diag-desc').innerText = "Esta antena NFC aún no tiene asignado un archivo cliente.json activo.";
+                document.getElementById('diag-title').innerText = "Experiencia Demo";
+                document.getElementById('diag-desc').innerText = "Esta antena NFC está funcionando en modo demostración o no tiene un JSON asignado.";
             }
         }
 
         function handleRating(stars) {
             const feedback = document.getElementById('rating-feedback');
-            feedback.classList.remove('hidden');
+            feedback.classList.remove('hidden', 'bg-red-950/80', 'text-red-300', 'border-red-800', 'bg-emerald-950/80', 'text-emerald-300', 'border-emerald-800');
 
             if (stars >= 4) {
-                feedback.innerText = "¡Muchas gracias! Redirigiendo a Google Maps...";
+                feedback.classList.add('bg-emerald-950/80', 'text-emerald-300', 'border', 'border-emerald-800');
+                feedback.innerHTML = `
+                    <p class="font-bold mb-0.5">⭐ ¡Muchas gracias!</p>
+                    <p class="font-light">Redirigiendo a nuestra ficha oficial de Google Maps...</p>
+                `;
                 setTimeout(() => {
                     window.location.href = googleReviewUrl;
                 }, 1000);
             } else {
-                feedback.innerText = "Lamentamos que tu experiencia no haya sido perfecta. Conectando con Gerencia...";
+                feedback.classList.add('bg-red-950/80', 'text-red-300', 'border', 'border-red-800');
+                feedback.innerHTML = `
+                    <p class="font-bold mb-0.5">🛑 Escudo Anti-Críticas Activado</p>
+                    <p class="font-light">Conectando directamente con gerencia vía WhatsApp privado...</p>
+                `;
                 setTimeout(() => {
-                    const msg = encodeURIComponent(`Hola, quiero dejar una sugerencia sobre mi experiencia (Calificación: ${stars}/5 estrellas).`);
+                    const msg = encodeURIComponent(`Hola, quiero dejar una sugerencia privada sobre mi experiencia (Calificación: ${stars}/5 estrellas).`);
                     window.location.href = `https://wa.me/${whatsappNumber}?text=${msg}`;
                 }, 1200);
             }
