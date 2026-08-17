@@ -32,14 +32,19 @@
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col justify-between p-4 sm:p-6 selection:bg-[#C57A36] selection:text-white">
 
-    <!-- CABECERA DE IMPACTO DE MARCA -->
+    <!-- CABECERA DE IMPACTO DE MARCA CON LOGO -->
     <header class="text-center pt-4 pb-2">
         <div class="inline-flex items-center gap-2 bg-[#C57A36]/10 border border-[#C57A36]/30 text-[#C57A36] text-[10px] font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-widest">
             <span class="w-1.5 h-1.5 rounded-full bg-[#C57A36] animate-ping"></span>
             EngineAI Analytics 1.0 • Latencia: <span id="load-time">0.06s</span>
         </div>
 
-        <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white mb-1">STUDIO <span class="text-[#C57A36]">42</span></h1>
+        <!-- LOGO OFICIAL STUDIO 42 -->
+        <div id="logo-container" class="flex justify-center mb-2">
+            <img id="studio-logo" src="logo.png" alt="Studio 42 Logo" class="h-16 w-auto object-contain drop-shadow-md" onerror="this.style.display='none'">
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white mb-1">STUDIO <span class="text-[#C57A36]">42</span></h1>
         <p class="text-xs text-zinc-400 font-light tracking-wide uppercase">Demostración Phygital en Vivo</p>
         <div class="w-16 h-1 bg-[#C57A36] mx-auto rounded-full mt-3"></div>
     </header>
@@ -118,8 +123,8 @@
 
     <!-- LÓGICA DE LA DEMO Y VCARD -->
     <script>
-        // ENLACE DIRECTO A LA FICHA DE RESEÑAS DE GOOGLE DE STUDIO 42
-        const studio42ReviewUrl = "https://g.page/r/CZ3tccYEN0cqEBM/review";
+        // 📌 INSERTA AQUÍ TU ENLACE REAL DE RESEÑAS DE GOOGLE DE STUDIO 42
+        const studio42ReviewUrl = "https://maps.google.com";
 
         window.addEventListener('load', () => {
             const perf = window.performance.timing;
@@ -135,9 +140,8 @@
                 feedback.classList.add('bg-emerald-950/90', 'text-emerald-200', 'border', 'border-emerald-800');
                 feedback.innerHTML = `
                     <p class="font-bold mb-0.5">⭐ ¡5 Estrellas activadas!</p>
-                    <p class="font-light">Redirigiendo directamente a la ficha oficial de Studio 42 en Google...</p>
+                    <p class="font-light">Redirigiendo a la ficha oficial de Studio 42 en Google Maps...</p>
                 `;
-
                 setTimeout(() => {
                     window.location.href = studio42ReviewUrl;
                 }, 1200);
@@ -146,7 +150,7 @@
                 feedback.classList.add('bg-red-950/90', 'text-red-200', 'border', 'border-red-800');
                 feedback.innerHTML = `
                     <p class="font-bold mb-0.5">🛑 Escudo Activado (${stars} Estrellas)</p>
-                    <p class="font-light">La crítica NO toca Google. Se envía un mensaje privado inmediato al WhatsApp del dueño para solucionarlo internamente.</p>
+                    <p class="font-light">La crítica NO toca Google. Se envía un mensaje privado inmediato al WhatsApp de gerencia.</p>
                 `;
             }
         }
