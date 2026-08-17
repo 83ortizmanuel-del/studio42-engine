@@ -4,7 +4,7 @@
 ## Objetivo
 Establecer los pasos exactos para transformar el diagnóstico comercial de un establecimiento en un ecosistema Phygital activo, almacenado en GitHub, propagado por Netlify y grabado en el soporte físico (NFC/QR).
 
----
+---Google Form] ➔ [IA + Prompt Maestro] ➔ [Genera JSON] ➔ [Guardar en GitHub]
 
 ## 🛠️ Fase 1: Generación de la Ficha Neural (.json)
 
