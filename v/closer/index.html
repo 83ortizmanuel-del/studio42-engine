@@ -8,17 +8,34 @@
 </head>
 <body class="bg-zinc-950 text-white min-h-screen flex items-center justify-center p-4">
 
-    <div class="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-2xl space-y-6">
+    <div class="w-full max-w-md bg-zinc-900 border border-zinc-800/80 rounded-3xl p-6 shadow-2xl space-y-6">
         
-        <!-- HEADER CON LOGO DE STUDIO 42 -->
-        <div class="border-b border-zinc-800 pb-4 flex items-center justify-between">
-            <div>
-                <h1 class="text-xl font-bold text-white tracking-tight">Diagnóstico Phygital</h1>
-                <p class="text-xs text-zinc-400 mt-0.5">Acceso exclusivo Closer Studio 42</p>
+        <!-- NUEVA CABECERA RESTRUCTURADA Y MODERNA -->
+        <header class="relative border-b border-zinc-800/80 pb-6 text-center space-y-3">
+            <!-- Contenedor del Logo con Resplandor (Glow) -->
+            <div class="relative inline-flex items-center justify-center">
+                <!-- Halo de luz decorativo de fondo -->
+                <div class="absolute inset-0 bg-[#C57A36]/20 blur-xl rounded-full"></div>
+                
+                <!-- Logo Principal Agrandado -->
+                <img src="logo.png" 
+                     alt="Studio 42" 
+                     class="relative h-20 w-auto object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-105" 
+                     onerror="this.style.display='none'; document.getElementById('altLogoText').classList.remove('hidden');">
+                
+                <!-- Respaldo de texto por si falla la imagen -->
+                <span id="altLogoText" class="hidden text-2xl font-black tracking-widest text-[#C57A36]">STUDIO 42</span>
             </div>
-            <!-- Carga el archivo 'logo.png' que subas a la raíz del repositorio de GitHub -->
-            <img src="logo.png" alt="Studio 42" class="h-10 w-auto object-contain" onerror="this.style.display='none'">
-        </div>
+
+            <!-- Titular e Identificador -->
+            <div>
+                <h1 class="text-2xl font-black text-white tracking-tight">Diagnóstico Phygital</h1>
+                <div class="inline-flex items-center gap-1.5 mt-1 px-3 py-1 rounded-full bg-zinc-800/60 border border-zinc-700/50">
+                    <span class="w-2 h-2 rounded-full bg-[#C57A36] animate-pulse"></span>
+                    <p class="text-[11px] font-medium text-zinc-300 tracking-wide uppercase">Acceso Exclusivo Closer</p>
+                </div>
+            </div>
+        </header>
 
         <!-- FORMULARIO DIRECTO A GOOGLE FORMS -->
         <form id="diagForm" action="https://docs.google.com/forms/d/e/1FAIpQLSeRvv4TRmNjFrgRDxQPiSHuxljuuj5x1xDlMhXqIoK87y7Tjg/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
@@ -37,35 +54,35 @@
                 <div>
                     <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">Nombre Comercial / Sector</label>
                     <input type="text" name="entry.1320206213" required placeholder="Ej: Óptica San José / Salud"
-                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none">
+                        class="w-full bg-zinc-800/80 border border-zinc-700/80 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none transition-colors">
                 </div>
 
                 <!-- 3. FRICCIONES O QUEJAS -->
                 <div>
                     <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">Fricción o quejas de los clientes</label>
                     <textarea name="entry.1434868797" rows="3" required placeholder="Fricciones detectadas en el comercio..."
-                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none"></textarea>
+                        class="w-full bg-zinc-800/80 border border-zinc-700/80 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none transition-colors"></textarea>
                 </div>
 
                 <!-- 4. ECOSISTEMA ACTUAL, BRANDING Y PALETA DE COLORES -->
                 <div>
                     <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">Branding, Paleta de Colores y Redes</label>
                     <textarea name="entry.891929652" rows="2" placeholder="Ej: Colores Hex (#FF0000, #000000), Instagram @comercio, Web actual..."
-                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none"></textarea>
+                        class="w-full bg-zinc-800/80 border border-zinc-700/80 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none transition-colors"></textarea>
                 </div>
 
                 <!-- 5. URL DEL LOGO DEL CLIENTE / OBSERVACIONES EXTRA -->
                 <div>
                     <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">URL del Logo / Observaciones Extra</label>
                     <input type="text" name="entry.1697455972" placeholder="Ej: Link al logo en Web/Drive/Instagram o notas..."
-                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none">
+                        class="w-full bg-zinc-800/80 border border-zinc-700/80 text-white text-sm rounded-xl p-3 focus:border-[#C57A36] focus:outline-none transition-colors">
                 </div>
 
             </div>
 
             <!-- BOTÓN DE ENVÍO -->
             <button type="submit" 
-                class="w-full mt-6 bg-[#C57A36] hover:bg-[#b06b2e] text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg active:scale-[0.99]">
+                class="w-full mt-6 bg-[#C57A36] hover:bg-[#b06b2e] text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg active:scale-[0.99] cursor-pointer">
                 Registrar Diagnóstico
             </button>
         </form>
