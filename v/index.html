@@ -32,12 +32,12 @@
 
         <!-- LOGO DESTACADO -->
         <div class="relative inline-flex items-center justify-center w-full my-3">
-            <div id="halo-glow" class="absolute inset-0 bg-[#C57A36]/25 blur-2xl rounded-full scale-90"></div>
+            <div id="halo-glow" class="absolute inset-0 bg-[#C57A36]/25 blur-2xl rounded-full scale-90 transition-colors duration-500"></div>
             <img id="cliente-logo" src="" alt="Logo" class="relative h-28 max-w-full w-auto object-contain drop-shadow-[0_12px_15px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:scale-105">
         </div>
 
         <h1 id="nombre-comercial" class="text-2xl font-black text-white tracking-tight uppercase mt-1"></h1>
-        <div id="linea-acento" class="w-16 h-1 bg-[#C57A36] mx-auto rounded-full mt-3"></div>
+        <div id="linea-acento" class="w-16 h-1 bg-[#C57A36] mx-auto rounded-full mt-3 transition-colors duration-500"></div>
     </header>
 
     <!-- BLOQUE PRINCIPAL -->
@@ -45,7 +45,7 @@
         
         <!-- DIAGNÓSTICO / SOLUCIÓN -->
         <div class="text-center px-2">
-            <h2 id="titulo-solucion" class="text-lg font-extrabold text-zinc-100 mb-1"></h2>
+            <h2 id="titulo-solucion" class="text-lg font-extrabold text-zinc-100 mb-1">Cargando...</h2>
             <p id="descripcion-solucion" class="text-xs text-zinc-400 leading-relaxed font-light"></p>
         </div>
 
@@ -89,36 +89,59 @@
         <p class="text-[10px] text-zinc-600 font-light">Tecnología Desplegada por Studio 42 Engine</p>
     </footer>
 
-    <!-- LÓGICA DEL MOTOR -->
+    <!-- LÓGICA DEL MOTOR (Actualizada con Fallback Inteligente) -->
     <script>
         let googleReviewUrl = "https://maps.google.com";
         let whatsappContacto = "";
 
         async function arrancarStudio42Engine() {
             const urlParams = new URLSearchParams(window.location.search);
-            const clienteId = urlParams.get('id') || 'cliente-id-la-pepita';
+            let clienteId = urlParams.get('id') || 'la-pepita-burger';
 
-            try {
-                const respuesta = await fetch(`${clienteId}.json`);
-                if (!respuesta.ok) throw new Error("JSON no encontrado");
-                
-                const data = await respuesta.json();
+            // Buscará de forma inteligente entre estas opciones para evitar errores 404
+            const variantesNombre = [
+                clienteId,
+                'la-pepita-burger',
+                'cliente-id-la-pepita',
+                'la-pepita'
+            ];
 
+            let data = null;
+
+            for (const nombre of variantesNombre) {
+                try {
+                    const respuesta = await fetch(`${nombre}.json`);
+                    if (respuesta.ok) {
+                        data = await respuesta.json();
+                        break; // JSON encontrado, rompemos el bucle
+                    }
+                } catch (e) {
+                    // Si falla, sigue intentando con el siguiente nombre
+                }
+            }
+
+            if (data) {
                 // 1. Cargar Datos Globales
                 googleReviewUrl = data.google_maps_review_url || googleReviewUrl;
                 whatsappContacto = data.whatsapp_contacto || "";
 
                 document.title = `${data.nombre_comercial} | Studio 42`;
                 document.getElementById('nombre-comercial').innerText = data.nombre_comercial;
-                document.getElementById('cliente-logo').src = data.logo_url;
+                
+                const logoImg = document.getElementById('cliente-logo');
+                logoImg.src = data.logo_url;
+                logoImg.onerror = function() {
+                    this.style.opacity = '0.5'; // Evita errores de imagen rota
+                };
 
                 // Color de acento opcional
-                if(data.color_acento) {
+                if (data.color_acento) {
                     document.getElementById('linea-acento').style.backgroundColor = data.color_acento;
+                    document.getElementById('halo-glow').style.backgroundColor = `${data.color_acento}40`;
                 }
 
                 // 2. Configuración de Escudo
-                if(data.configuracion && data.configuracion.mostrar_escudo === false) {
+                if (data.configuracion && data.configuracion.mostrar_escudo === false) {
                     document.getElementById('escudo-container').classList.add('hidden');
                 }
 
@@ -147,10 +170,10 @@
                     contenedor.innerHTML += btnHTML;
                 });
 
-            } catch (error) {
-                console.error("Error al cargar la landing:", error);
+            } else {
+                // Mensaje de error si ninguna variante funciona
                 document.getElementById('titulo-solucion').innerText = "⚠️ Cliente en Configuración";
-                document.getElementById('descripcion-solucion').innerText = `No se pudo obtener la información para el ID: ${clienteId}`;
+                document.getElementById('descripcion-solucion').innerText = `Por favor, sube el archivo JSON a la carpeta /v/`;
             }
         }
 
