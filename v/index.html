@@ -49,8 +49,13 @@
             <p id="descripcion-solucion" class="text-xs text-zinc-400 leading-relaxed font-light"></p>
         </div>
 
-        <!-- ESCUDO ANTI MALAS RESEÑAS -->
-        <div id="escudo-container" class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-2xl text-center space-y-3 relative overflow-hidden glow-effect">
+        <!-- BOTONES DINÁMICOS DEL NICHO (Movidos Arriba) -->
+        <div id="botones-container" class="space-y-2.5">
+            <!-- Inyectados por JS -->
+        </div>
+
+        <!-- ESCUDO ANTI MALAS RESEÑAS (Movido Abajo) -->
+        <div id="escudo-container" class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-2xl text-center space-y-3 relative overflow-hidden glow-effect mt-6">
             <div class="absolute top-0 right-0 bg-[#C57A36] text-zinc-950 font-black text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-bl-lg shadow-sm">
                 Tu Opinión Importa
             </div>
@@ -65,21 +70,26 @@
                 <p class="text-xs sm:text-sm font-semibold text-zinc-200">Valora tu experiencia:</p>
             </div>
             
-            <!-- ESTRELLAS INTERACTIVAS -->
-            <div class="flex justify-center space-x-2 text-3xl py-1">
-                <button onclick="testShield(1)" class="hover:scale-125 transition-transform p-1">⭐</button>
-                <button onclick="testShield(2)" class="hover:scale-125 transition-transform p-1">⭐</button>
-                <button onclick="testShield(3)" class="hover:scale-125 transition-transform p-1">⭐</button>
-                <button onclick="testShield(4)" class="hover:scale-125 transition-transform p-1">⭐</button>
-                <button onclick="testShield(5)" class="hover:scale-125 transition-transform p-1">⭐</button>
+            <!-- ESTRELLAS INTERACTIVAS (Vectores realistas estilo Google #FBBC04) -->
+            <div class="flex justify-center space-x-1.5 text-3xl py-1">
+                <button onclick="testShield(1)" class="focus:outline-none group">
+                    <svg class="w-10 h-10 text-[#FBBC04] drop-shadow-[0_2px_4px_rgba(251,188,4,0.3)] group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button onclick="testShield(2)" class="focus:outline-none group">
+                    <svg class="w-10 h-10 text-[#FBBC04] drop-shadow-[0_2px_4px_rgba(251,188,4,0.3)] group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button onclick="testShield(3)" class="focus:outline-none group">
+                    <svg class="w-10 h-10 text-[#FBBC04] drop-shadow-[0_2px_4px_rgba(251,188,4,0.3)] group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button onclick="testShield(4)" class="focus:outline-none group">
+                    <svg class="w-10 h-10 text-[#FBBC04] drop-shadow-[0_2px_4px_rgba(251,188,4,0.3)] group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
+                <button onclick="testShield(5)" class="focus:outline-none group">
+                    <svg class="w-10 h-10 text-[#FBBC04] drop-shadow-[0_2px_4px_rgba(251,188,4,0.3)] group-hover:scale-110 transition-transform fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </button>
             </div>
             
             <div id="demo-feedback" class="hidden rounded-xl p-3 text-xs text-center font-medium transition-all duration-300"></div>
-        </div>
-
-        <!-- BOTONES DINÁMICOS DEL NICHO -->
-        <div id="botones-container" class="space-y-2.5">
-            <!-- Inyectados por JS -->
         </div>
 
     </main>
@@ -89,7 +99,7 @@
         <p class="text-[10px] text-zinc-600 font-light">Tecnología Desplegada por Studio 42 Engine</p>
     </footer>
 
-    <!-- LÓGICA DEL MOTOR (Actualizada con Fallback Inteligente) -->
+    <!-- LÓGICA DEL MOTOR -->
     <script>
         let googleReviewUrl = "https://maps.google.com";
         let whatsappContacto = "";
@@ -98,7 +108,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             let clienteId = urlParams.get('id') || 'la-pepita-burger';
 
-            // Buscará de forma inteligente entre estas opciones para evitar errores 404
             const variantesNombre = [
                 clienteId,
                 'la-pepita-burger',
@@ -113,15 +122,13 @@
                     const respuesta = await fetch(`${nombre}.json`);
                     if (respuesta.ok) {
                         data = await respuesta.json();
-                        break; // JSON encontrado, rompemos el bucle
+                        break; 
                     }
                 } catch (e) {
-                    // Si falla, sigue intentando con el siguiente nombre
                 }
             }
 
             if (data) {
-                // 1. Cargar Datos Globales
                 googleReviewUrl = data.google_maps_review_url || googleReviewUrl;
                 whatsappContacto = data.whatsapp_contacto || "";
 
@@ -131,25 +138,21 @@
                 const logoImg = document.getElementById('cliente-logo');
                 logoImg.src = data.logo_url;
                 logoImg.onerror = function() {
-                    this.style.opacity = '0.5'; // Evita errores de imagen rota
+                    this.style.opacity = '0.5'; 
                 };
 
-                // Color de acento opcional
                 if (data.color_acento) {
                     document.getElementById('linea-acento').style.backgroundColor = data.color_acento;
                     document.getElementById('halo-glow').style.backgroundColor = `${data.color_acento}40`;
                 }
 
-                // 2. Configuración de Escudo
                 if (data.configuracion && data.configuracion.mostrar_escudo === false) {
                     document.getElementById('escudo-container').classList.add('hidden');
                 }
 
-                // 3. Cargar Diagnóstico
                 document.getElementById('titulo-solucion').innerText = data.diagnostico.titulo_solucion;
                 document.getElementById('descripcion-solucion').innerText = data.diagnostico.descripcion_solucion;
 
-                // 4. Renderizar Botones
                 const contenedor = document.getElementById('botones-container');
                 contenedor.innerHTML = '';
 
@@ -171,7 +174,6 @@
                 });
 
             } else {
-                // Mensaje de error si ninguna variante funciona
                 document.getElementById('titulo-solucion').innerText = "⚠️ Cliente en Configuración";
                 document.getElementById('descripcion-solucion').innerText = `Por favor, sube el archivo JSON a la carpeta /v/`;
             }
@@ -184,8 +186,11 @@
             if (stars >= 4) {
                 feedback.classList.add('bg-emerald-950/90', 'text-emerald-200', 'border', 'border-emerald-800');
                 feedback.innerHTML = `
-                    <p class="font-bold mb-0.5">⭐ ¡Gracias por tu valoración!</p>
-                    <p class="font-light">Redirigiendo a nuestra ficha oficial en Google Maps...</p>
+                    <div class="flex flex-col items-center justify-center space-y-1">
+                        <svg class="w-6 h-6 text-[#34A853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="font-bold mb-0.5">¡Gracias por tu valoración!</p>
+                        <p class="font-light text-[10px]">Redirigiendo a Google Maps...</p>
+                    </div>
                 `;
                 setTimeout(() => {
                     window.location.href = googleReviewUrl;
@@ -195,7 +200,7 @@
                 feedback.classList.add('bg-red-950/90', 'text-red-200', 'border', 'border-red-800');
                 feedback.innerHTML = `
                     <p class="font-bold mb-0.5">📩 Gracias por tus comentarios</p>
-                    <p class="font-light">Queremos mejorar. Te redirigimos con gerencia para atenderte en privado.</p>
+                    <p class="font-light text-[10px]">Queremos mejorar. Te redirigimos con gerencia para atenderte en privado.</p>
                 `;
                 setTimeout(() => {
                     const waUrl = whatsappContacto ? `https://wa.me/${whatsappContacto}?text=Hola,%20tuve%20un%20inconveniente%20con%20el%20servicio` : googleReviewUrl;
