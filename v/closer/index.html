@@ -10,27 +10,27 @@
 
     <div class="w-full max-w-md bg-zinc-900 border border-zinc-800/80 rounded-3xl p-6 shadow-2xl space-y-6">
         
-        <!-- NUEVA CABECERA RESTRUCTURADA Y MODERNA -->
-        <header class="relative border-b border-zinc-800/80 pb-6 text-center space-y-3">
-            <!-- Contenedor del Logo con Resplandor (Glow) -->
-            <div class="relative inline-flex items-center justify-center">
-                <!-- Halo de luz decorativo de fondo -->
-                <div class="absolute inset-0 bg-[#C57A36]/20 blur-xl rounded-full"></div>
+        <!-- CABECERA CON LOGO MAXIMIZADO -->
+        <header class="relative border-b border-zinc-800/80 pb-5 text-center space-y-2">
+            <!-- Contenedor del Logo XL con Halo Proporcionado -->
+            <div class="relative inline-flex items-center justify-center w-full py-2">
+                <!-- Resplandor Ajustado al Tamaño XL -->
+                <div class="absolute inset-0 bg-[#C57A36]/25 blur-2xl rounded-full scale-90"></div>
                 
-                <!-- Logo Principal Agrandado -->
+                <!-- Logo Agrandado (h-28) -->
                 <img src="logo.png" 
                      alt="Studio 42" 
-                     class="relative h-20 w-auto object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-105" 
+                     class="relative h-28 max-w-full w-auto object-contain drop-shadow-[0_12px_15px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:scale-105" 
                      onerror="this.style.display='none'; document.getElementById('altLogoText').classList.remove('hidden');">
                 
-                <!-- Respaldo de texto por si falla la imagen -->
-                <span id="altLogoText" class="hidden text-2xl font-black tracking-widest text-[#C57A36]">STUDIO 42</span>
+                <!-- Respaldo de texto si falla la carga -->
+                <span id="altLogoText" class="hidden text-3xl font-black tracking-widest text-[#C57A36]">STUDIO 42</span>
             </div>
 
             <!-- Titular e Identificador -->
-            <div>
+            <div class="space-y-1">
                 <h1 class="text-2xl font-black text-white tracking-tight">Diagnóstico Phygital</h1>
-                <div class="inline-flex items-center gap-1.5 mt-1 px-3 py-1 rounded-full bg-zinc-800/60 border border-zinc-700/50">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-800/60 border border-zinc-700/50">
                     <span class="w-2 h-2 rounded-full bg-[#C57A36] animate-pulse"></span>
                     <p class="text-[11px] font-medium text-zinc-300 tracking-wide uppercase">Acceso Exclusivo Closer</p>
                 </div>
