@@ -1,0 +1,41 @@
+{
+  "cliente_id": "la-pepita-burger",
+  "nombre_comercial": "La Pepita Burger Bar",
+  "logo_url": "https://www.lapepitaburgerbar.com/wp-content/uploads/2018/02/la-pepita-logo-movil.png",
+  "color_acento": "#D97706",
+  "google_maps_review_url": "https://search.google.com/local/writereview?placeid=lapepitaburger",
+  "whatsapp_contacto": "34000000000",
+  "configuracion": {
+    "mostrar_escudo": true
+  },
+  "diagnostico": {
+    "titulo_solucion": "Atención Instantánea y Menú Digital en Tu Mesa",
+    "descripcion_solucion": "Optimiza la experiencia en terraza solicitando servicio al momento, consultando alérgenos en el menú y conectándote al Wi-Fi sin esperas."
+  },
+  "botones_nicho": [
+    {
+      "label": "Llamar al Mesonero",
+      "subtexto": "Solicita atención directa en terraza",
+      "icono": "🔔",
+      "url": "https://wa.me/34000000000?text=Hola,%20necesito%20atenci%C3%B3n%20en%20la%20terraza"
+    },
+    {
+      "label": "Conectar al Wi-Fi",
+      "subtexto": "Obtén la clave de red para clientes",
+      "icono": "📶",
+      "url": "https://wa.me/34000000000?text=Hola,%20%C2%BFcu%C3%A1l%20es%20la%20clave%20del%20Wi-Fi?"
+    },
+    {
+      "label": "Menú y Alérgenos",
+      "subtexto": "Carta detallada con especificaciones",
+      "icono": "🍔",
+      "url": "https://www.lapepitaburgerbar.com/carta/"
+    },
+    {
+      "label": "Guía: Términos de la Carne",
+      "subtexto": "Elige el punto perfecto para tu hamburguesa",
+      "icono": "🥩",
+      "url": "https://www.lapepitaburgerbar.com/"
+    }
+  ]
+}
