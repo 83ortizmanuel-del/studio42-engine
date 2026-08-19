@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barbería de Fernando | Hub de Servicios y Arte</title>
-    <!-- Iconos de FontAwesome -->
+    <title id="page-title">Cargando Experiencia Phygital... | Studio 42</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --color-principal: #d4af37;
-            --color-secundario: #00e5ff;
-            --color-estrellas: #ffb400;
             --color-fondo: #0a0a0a; 
             --color-tarjeta: #141414; 
             --color-boton: #1f1f1f; 
@@ -19,274 +16,137 @@
             --color-critica: #ff3b30;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; }
+        .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); }
         
         .logo-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 22%; border: 2px solid var(--color-principal); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; }
         .logo-container img { width: 85%; height: 85%; object-fit: contain; }
         
         h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; }
-        .propietario { color: var(--color-texto-secundario); font-size: 1rem; margin-bottom: 20px; font-style: italic; }
+        .propietario { color: var(--color-texto-secundario); font-size: 0.95rem; margin-bottom: 20px; font-style: italic; }
         
         .section-title { text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-texto-secundario); margin: 15px 0 8px 5px; font-weight: 700; }
         
         .apps-menu { display: flex; flex-direction: column; gap: 12px; }
         .app-btn { display: flex; align-items: center; text-decoration: none; padding: 14px 18px; border-radius: 16px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; }
-        .app-btn:active { transform: scale(0.97); background-color: #2a2a2a; }
-        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; transition: all 0.3s ease; }
-        
-        /* Colores específicos de Iconos */
-        .icon-contact { background-color: rgba(0, 229, 255, 0.1); color: #00e5ff; }
-        .icon-booking { background-color: rgba(212, 175, 55, 0.1); color: #d4af37; }
-        .icon-insta { background-color: rgba(225, 48, 108, 0.1); color: #e1306c; }
-        
-        /* Colores para el Parking */
-        .icon-parking { background-color: rgba(142, 142, 147, 0.1); color: #8e8e93; }
-        .icon-parking-active { background-color: rgba(212, 175, 55, 0.15); color: var(--color-principal); }
+        .app-btn:active { transform: scale(0.97); }
+        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; background-color: rgba(212, 175, 55, 0.1); color: var(--color-principal); }
 
         .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; transition: color 0.3s ease; }
+        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
         .app-desc { font-size: 0.75rem; color: var(--color-texto-secundario); }
         .app-arrow { color: var(--color-texto-secundario); font-size: 0.85rem; opacity: 0.5; }
         
         .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
         .footer-brand span { color: var(--color-principal); font-weight: 700; }
 
-        /* OVERLAY DE BIENVENIDA Y AUDIO */
-        #overlay-entrada {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100vh;
-            background-color: rgba(10, 10, 10, 0.98);
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.6s ease;
-            backdrop-filter: blur(10px);
-            padding: 20px;
-        }
-
-        .btn-experiencia {
-            background: linear-gradient(135deg, var(--color-principal), #b38f24);
-            color: #000;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
-            transition: transform 0.2s;
-        }
-        .btn-experiencia:active { transform: scale(0.95); }
-
-        /* BOTÓN FLOTANTE MUTE / UNMUTE */
-        #btn-audio-toggle {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 999;
-            background: rgba(20, 20, 20, 0.85);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: var(--color-texto);
-            padding: 10px 16px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        }
-
-        /* CONTENEDOR OCULTO DE YOUTUBE */
-        #yt-player-container {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        /* ESTILOS DEL ESCUDO EVALUADOR */
-        .shield-box {
-            background-color: var(--color-boton);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 20px;
-            padding: 20px 15px;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .star-btn {
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-            padding: 0 4px;
-        }
-        .star-btn:hover { transform: scale(1.25); }
-
-        .feedback-message {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            line-height: 1.4;
-            display: none;
-        }
-        .feedback-success {
-            background-color: rgba(52, 168, 83, 0.15);
-            border: 1px solid #34A853;
-            color: #81c995;
-        }
-        .feedback-shield {
-            background-color: rgba(255, 59, 48, 0.15);
-            border: 1px solid var(--color-critica);
-            color: #ff857f;
-        }
+        /* OVERLAY DE ENTORNOS AUDIO/AMBIENTE */
+        #overlay-entrada { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: rgba(10, 10, 10, 0.98); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease; backdrop-filter: blur(10px); padding: 20px; }
+        .btn-experiencia { background: linear-gradient(135deg, var(--color-principal), #b38f24); color: #000; border: none; padding: 16px 32px; border-radius: 50px; font-size: 0.95rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+        #yt-player-container { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none; }
+        #btn-audio-toggle { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 999; background: rgba(20, 20, 20, 0.85); border: 1px solid rgba(212, 175, 55, 0.3); color: var(--color-texto); padding: 10px 16px; border-radius: 30px; font-size: 0.75rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- OVERLAY DE BIENVENIDA -->
+    <!-- OVERLAY DINÁMICO DE ENTRADA -->
     <div id="overlay-entrada">
         <div class="logo-container" style="margin-bottom: 20px;">
-            <img src="logo.png" alt="Logo">
+            <img id="overlay-logo" src="logo.png" alt="Logo">
         </div>
-        <h2 style="color: var(--color-principal); font-size: 1.4rem; margin-bottom: 8px; letter-spacing: 2px;">LA SUCURSAL</h2>
-        <p style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 30px;">Ambiente & Barbershop Experience</p>
-        <button onclick="iniciarExperiencia()" class="btn-experiencia">Entrar al Hub</button>
+        <h2 id="overlay-title" style="color: var(--color-principal); font-size: 1.4rem; margin-bottom: 8px; letter-spacing: 2px;">CARGANDO...</h2>
+        <p id="overlay-subtitle" style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 30px;">Experiencia Phygital</p>
+        <button onclick="iniciarExperiencia()" class="btn-experiencia">Ver Demo</button>
     </div>
 
-    <!-- REPRODUCTOR OCULTO DE YOUTUBE PARA EL AUDIO DE AMBIENTE -->
-    <div id="yt-player-container">
-        <div id="youtube-audio-player"></div>
-    </div>
-
-    <!-- BOTÓN MUTE / UNMUTE -->
-    <button id="btn-audio-toggle" onclick="toggleAudio()">
-        <span id="audio-status"><i class="fa-solid fa-volume-high"></i> Música ON</span>
-    </button>
+    <!-- REPRODUCTOR OCULTO DE AUDIO -->
+    <div id="yt-player-container"><div id="youtube-audio-player"></div></div>
+    <button id="btn-audio-toggle" onclick="toggleAudio()"><span id="audio-status"><i class="fa-solid fa-volume-high"></i> Audio ON</span></button>
 
     <div class="hub-container">
-        <!-- Logo -->
         <div class="logo-container">
-            <img src="logo.png" alt="Logo">
+            <img id="client-logo" src="logo.png" alt="Logo">
         </div>
 
-        <!-- Títulos -->
-        <h1>LA SUCURSAL</h1>
-        <div class="propietario">por Fernando Ambuila Ortíz</div>
+        <h1 id="client-name">NOMBRE DEL COMERCIO</h1>
+        <div id="client-subtitle" class="propietario">Subtítulo o Propietario</div>
 
-        <div class="apps-menu">
-            
-            <div class="section-title">Barbería</div>
-
-            <a href="https://lasucursalstoreart.com/appointment.php" target="_blank" class="app-btn">
-                <div class="app-icon icon-booking"><i class="fa-solid fa-calendar-check"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Reservar Cita</div>
-                    <div class="app-desc">Accede a nuestra agenda online</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <a href="contacto.vcf" download="Fernando_Contacto.vcf" class="app-btn">
-                <div class="app-icon icon-contact"><i class="fa-solid fa-address-card"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Guardar Contacto</div>
-                    <div class="app-desc">Teléfono y ubicación en tu agenda</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <!-- GESTOR DE PARKING -->
-            <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
-                <div class="app-icon icon-parking" id="parking-icon-container">
-                    <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
-                </div>
-                <div class="app-info">
-                    <div class="app-name" id="parking-name">¿Dónde aparqué?</div>
-                    <div class="app-desc" id="parking-desc">Guarda tu coche para volver</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <div class="section-title">Redes Sociales</div>
-
-            <a href="https://www.instagram.com/la_sucursal_the_barber/?hl=es" target="_blank" class="app-btn">
-                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Instagram Barbería</div>
-                    <div class="app-desc">Nuestros mejores cortes</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <a href="https://www.instagram.com/la_sucursal_store/?hl=es" target="_blank" class="app-btn">
-                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Instagram Tienda</div>
-                    <div class="app-desc">Conoce nuestra ropa de autor</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <div class="section-title">¿Qué tal tu experiencia?</div>
-
-            <!-- ESCUDO EVALUADOR DE ESTRELLAS -->
-            <div class="shield-box">
-                <p style="font-size: 0.85rem; font-weight: 600; color: #fff; margin-bottom: 8px;">Valora tu visita a La Sucursal:</p>
-                <div style="display: flex; justify-content: center; gap: 6px;">
-                    <button onclick="testShield(1)" class="star-btn">⭐</button>
-                    <button onclick="testShield(2)" class="star-btn">⭐</button>
-                    <button onclick="testShield(3)" class="star-btn">⭐</button>
-                    <button onclick="testShield(4)" class="star-btn">⭐</button>
-                    <button onclick="testShield(5)" class="star-btn">⭐</button>
-                </div>
-                <div id="demo-feedback" class="feedback-message"></div>
-            </div>
-
+        <div class="apps-menu" id="dynamic-menu">
+            <!-- Los botones se inyectan automáticamente desde el JSON dinámico generado por la IA -->
         </div>
 
         <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
     </div>
 
-    <!-- API DE YOUTUBE PARA EL AUDIO EN SEGUNDO PLANO -->
     <script src="https://www.youtube.com/iframe_api"></script>
-
     <script>
-        // ID DEL VÍDEO DE YOUTUBE DE AMBIENTE
-        const YOUTUBE_VIDEO_ID = 'ELi6WBkv774'; 
-        
-        // ENLACES DE REDIRECCIÓN DEL ESCUDO
-        const googleReviewUrl = "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI";
-        const whatsappFernandoUrl = "https://wa.me/34641607302?text=Hola%20Fernando,%20quiero%20comentar%20un%20detalle%20sobre%20mi%20visita%20para%20que%20me%20ayudes";
-
         let player;
         let isMuted = false;
+        let youtubeVideoId = '';
+
+        // Cargar datos dinámicos mediante JSON
+        async function cargarDatosJSON() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = urlParams.get('cod') || 'demo';
+
+            try {
+                const response = await fetch(`../${clienteCod}.json`);
+                if (!response.ok) throw new Error('JSON no encontrado');
+                const data = await response.json();
+
+                // Inyectar datos en la interfaz
+                document.getElementById('page-title').innerText = data.nombre + " | Studio 42";
+                document.getElementById('client-name').innerText = data.nombre;
+                document.getElementById('client-subtitle').innerText = data.subtitulo || '';
+                document.getElementById('client-logo').src = data.logo || 'logo.png';
+                document.getElementById('overlay-logo').src = data.logo || 'logo.png';
+                document.getElementById('overlay-title').innerText = data.nombre;
+
+                if (data.youtubeAudioId) {
+                    youtubeVideoId = data.youtubeAudioId;
+                }
+
+                // Renderizar Botones Dinámicos
+                const menuContainer = document.getElementById('dynamic-menu');
+                menuContainer.innerHTML = '';
+
+                data.secciones.forEach(sec => {
+                    if (sec.titulo) {
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'section-title';
+                        titleDiv.innerText = sec.titulo;
+                        menuContainer.appendChild(titleDiv);
+                    }
+
+                    sec.botones.forEach(btn => {
+                        const btnAnchor = document.createElement('a');
+                        btnAnchor.href = btn.url;
+                        btnAnchor.target = btn.url.startsWith('http') ? '_blank' : '_self';
+                        btnAnchor.className = 'app-btn';
+                        btnAnchor.innerHTML = `
+                            <div class="app-icon"><i class="${btn.icono}"></i></div>
+                            <div class="app-info">
+                                <div class="app-name">${btn.nombre}</div>
+                                <div class="app-desc">${btn.descripcion}</div>
+                            </div>
+                            <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        `;
+                        menuContainer.appendChild(btnAnchor);
+                    });
+                });
+
+            } catch (error) {
+                console.log("Cargando vista demo básica por defecto.");
+            }
+        }
 
         function onYouTubeIframeAPIReady() {
+            if (!youtubeVideoId) return;
             player = new YT.Player('youtube-audio-player', {
-                height: '0',
-                width: '0',
-                videoId: YOUTUBE_VIDEO_ID,
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': YOUTUBE_VIDEO_ID,
-                    'playsinline': 1
-                }
+                height: '0', width: '0', videoId: youtubeVideoId,
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': youtubeVideoId, 'playsinline': 1 }
             });
         }
 
@@ -296,7 +156,7 @@
             setTimeout(() => { overlay.style.display = 'none'; }, 600);
 
             if (player && player.playVideo) {
-                player.setVolume(25); // Volumen ambiente al 25%
+                player.setVolume(25);
                 player.playVideo();
                 document.getElementById("btn-audio-toggle").style.display = "block";
             }
@@ -305,10 +165,9 @@
         function toggleAudio() {
             const status = document.getElementById("audio-status");
             if (!player) return;
-
             if (isMuted) {
                 player.unMute();
-                status.innerHTML = '<i class="fa-solid fa-volume-high"></i> Música ON';
+                status.innerHTML = '<i class="fa-solid fa-volume-high"></i> Audio ON';
                 isMuted = false;
             } else {
                 player.mute();
@@ -317,106 +176,7 @@
             }
         }
 
-        // LÓGICA DEL ESCUDO EVALUADOR
-        function testShield(stars) {
-            const feedback = document.getElementById('demo-feedback');
-            feedback.style.display = 'block';
-            feedback.className = 'feedback-message';
-
-            if (stars >= 4) {
-                feedback.classList.add('feedback-success');
-                feedback.innerHTML = `
-                    <strong>⭐ ¡Gracias por tus ${stars} Estrellas!</strong><br>
-                    Redirigiendo a Google Maps para publicar tu reseña...
-                `;
-                setTimeout(() => {
-                    window.location.href = googleReviewUrl;
-                }, 1200);
-
-            } else {
-                feedback.classList.add('feedback-shield');
-                feedback.innerHTML = `
-                    <strong>🛑 Lo sentimos mucho (${stars} Estrellas)</strong><br>
-                    Lamentamos que tu experiencia no fuera de 5 estrellas. Te conectamos en privado con Fernando para solucionarlo de inmediato.
-                `;
-                setTimeout(() => {
-                    window.location.href = whatsappFernandoUrl;
-                }, 1800);
-            }
-        }
-
-        // GESTOR DE PARKING
-        function comprobarEstadoParkingBarberia() {
-            const lat = localStorage.getItem('barberia_lat');
-            const lng = localStorage.getItem('barberia_lng');
-
-            const icon = document.getElementById('parking-icon');
-            const iconContainer = document.getElementById('parking-icon-container');
-            const title = document.getElementById('parking-name');
-            const subtitle = document.getElementById('parking-desc');
-
-            if (!icon || !iconContainer || !title || !subtitle) return;
-
-            if (lat && lng) {
-                icon.className = "fa-solid fa-person-walking";
-                iconContainer.className = "app-icon icon-parking-active";
-                title.innerText = "Ir a mi coche (A pie)";
-                title.style.color = "var(--color-principal)";
-                subtitle.innerText = "Toca para abrir la ruta en el mapa";
-            } else {
-                icon.className = "fa-solid fa-location-crosshairs";
-                iconContainer.className = "app-icon icon-parking";
-                title.innerText = "¿Dónde aparqué?";
-                title.style.color = "var(--color-texto)";
-                subtitle.innerText = "Guarda tu coche para volver";
-            }
-        }
-
-        function gestionarParking(e) {
-            if (e) e.preventDefault(); 
-            
-            const lat = localStorage.getItem('barberia_lat');
-            const lng = localStorage.getItem('barberia_lng');
-
-            if (lat && lng) {
-                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
-                window.open(mapsUrl, '_blank');
-
-                setTimeout(() => {
-                    const yaLlego = confirm("🚙 Hemos abierto la ruta en Google Maps.\n\n¿Has llegado ya a tu vehículo y quieres BORRAR esta ubicación?\n\n• Pulsa ACEPTAR para borrar el coche.\n• Pulsa CANCELAR para mantenerlo guardado.");
-                    
-                    if (yaLlego) {
-                        localStorage.removeItem('barberia_lat');
-                        localStorage.removeItem('barberia_lng');
-                        comprobarEstadoParkingBarberia();
-                    }
-                }, 1000);
-
-            } else {
-                if (navigator.geolocation) {
-                    const subtitle = document.getElementById('parking-desc');
-                    if (subtitle) subtitle.innerText = "Obteniendo señal GPS...";
-
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            localStorage.setItem('barberia_lat', position.coords.latitude);
-                            localStorage.setItem('barberia_lng', position.coords.longitude);
-                            comprobarEstadoParkingBarberia();
-                            alert("📍 ¡Ubicación guardada con éxito! Ya puedes disfrutar de tu visita a La Sucursal.");
-                        },
-                        (error) => {
-                            alert("No pudimos obtener tu ubicación. Asegúrate de tener activado el GPS en el móvil.");
-                            comprobarEstadoParkingBarberia();
-                        },
-                        { enableHighAccuracy: true }
-                    );
-                } else {
-                    alert("Tu navegador no soporta geolocalización GPS.");
-                }
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", comprobarEstadoParkingBarberia);
+        document.addEventListener("DOMContentLoaded", cargarDatosJSON);
     </script>
 </body>
 </html>
