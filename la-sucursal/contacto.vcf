@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Fercho;La Sucursal;;;
+FN:Fernando - La Sucursal Barbería
+ORG:La Sucursal Barbería
+TITLE:Propietario / Barber & Stylist
+TEL;TYPE=CELL:+34643023681
+ADR;TYPE=WORK:;;Calle Carmen Medrano, 28;Logroño;La Rioja;26005;España
+URL:https://barberialasucursal.netlify.app/
+NOTE:Barbería profesional en Logroño. Pide tu cita en nuestra web.
+END:VCARD
