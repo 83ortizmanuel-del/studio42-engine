@@ -265,13 +265,11 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script>
-        // CONFIGURACIÓN DEL AUDIO DE YOUTUBE (Pegar aquí el ID del vídeo que quieras de ambiente)
-        const YOUTUBE_VIDEO_ID = '4VrczY2Axac'; 
+        // ID DEL VÍDEO DE YOUTUBE DE AMBIENTE
+        const YOUTUBE_VIDEO_ID = 'ELi6WBkv774'; 
         
-        // CONFIGURACIÓN DEL ENLACE DE GOOGLE DE LA SUCURSAL
+        // ENLACES DE REDIRECCIÓN DEL ESCUDO
         const googleReviewUrl = "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI";
-        
-        // CONFIGURACIÓN DE WHATSAPP PARA EL ESCUDO (Directo a Fernando)
         const whatsappFernandoUrl = "https://wa.me/34641607302?text=Hola%20Fernando,%20quiero%20comentar%20un%20detalle%20sobre%20mi%20visita%20para%20que%20me%20ayudes";
 
         let player;
@@ -286,7 +284,7 @@
                     'autoplay': 0,
                     'controls': 0,
                     'loop': 1,
-                    'playlist': ELi6WBkv774,
+                    'playlist': YOUTUBE_VIDEO_ID,
                     'playsinline': 1
                 }
             });
@@ -298,7 +296,7 @@
             setTimeout(() => { overlay.style.display = 'none'; }, 600);
 
             if (player && player.playVideo) {
-                player.setVolume(25); // Volumen ambiente suave
+                player.setVolume(25); // Volumen ambiente al 25%
                 player.playVideo();
                 document.getElementById("btn-audio-toggle").style.display = "block";
             }
