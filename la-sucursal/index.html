@@ -125,7 +125,7 @@
     <!-- OVERLAY DE BIENVENIDA -->
     <div id="overlay-entrada">
         <div class="logo-container" style="margin-bottom: 20px;">
-            <img src="logo.png" alt="Logo">
+            <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
         </div>
         <h2 style="color: var(--color-principal); font-size: 1.4rem; margin-bottom: 8px; letter-spacing: 2px;">LA SUCURSAL</h2>
         <p style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 30px;">Ambiente & Barbershop Experience</p>
@@ -133,7 +133,7 @@
     </div>
 
     <!-- REPRODUCTOR OCULTO DE YOUTUBE PARA EL AUDIO DE AMBIENTE -->
-    <div id="ELi6WBkv774">
+    <div id="yt-player-container">
         <div id="youtube-audio-player"></div>
     </div>
 
@@ -145,7 +145,7 @@
     <div class="hub-container">
         <!-- Logo -->
         <div class="logo-container">
-            <img src="logo.png" alt="Logo">
+            <img src="logo.png" alt="Logo La Sucursal">
         </div>
 
         <!-- Títulos -->
@@ -243,9 +243,8 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script>
-        // CONFIGURACIÓN DEL AUDIO DE YOUTUBE
-        // Cambia '4VrczY2Axac' por el ID del vídeo de YouTube de tu preferencia
-        const YOUTUBE_VIDEO_ID = '4VrczY2Axac'; 
+        // CONFIGURACIÓN DEL AUDIO DE YOUTUBE (ID de La Sucursal)
+        const YOUTUBE_VIDEO_ID = 'ELi6WBkv774'; 
         
         let player;
         let isMuted = false;
