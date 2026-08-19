@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbería de Fernando | Hub de Servicios y Arte</title>
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-principal: #d4af37;
+            --color-secundario: #00e5ff;
+            --color-estrellas: #ffb400;
+            --color-fondo: #0a0a0a; 
+            --color-tarjeta: #141414; 
+            --color-boton: #1f1f1f; 
+            --color-texto: #ffffff;
+            --color-texto-secundario: #8e8e93;
+            --color-critica: #ff3b30;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; }
+        
+        .logo-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 22%; border: 2px solid var(--color-principal); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; }
+        .logo-container img { width: 85%; height: 85%; object-fit: contain; }
+        
+        h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; }
+        .propietario { color: var(--color-texto-secundario); font-size: 1rem; margin-bottom: 20px; font-style: italic; }
+        
+        .section-title { text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-texto-secundario); margin: 15px 0 8px 5px; font-weight: 700; }
+        
+        .apps-menu { display: flex; flex-direction: column; gap: 12px; }
+        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 14px 18px; border-radius: 16px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; }
+        .app-btn:active { transform: scale(0.97); background-color: #2a2a2a; }
+        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; transition: all 0.3s ease; }
+        
+        /* Colores específicos de Iconos */
+        .icon-contact { background-color: rgba(0, 229, 255, 0.1); color: #00e5ff; }
+        .icon-booking { background-color: rgba(212, 175, 55, 0.1); color: #d4af37; }
+        .icon-insta { background-color: rgba(225, 48, 108, 0.1); color: #e1306c; }
+        .icon-review { background-color: rgba(255, 180, 0, 0.1); color: #ffb400; }
+        .icon-feedback { background-color: rgba(255, 59, 48, 0.1); color: var(--color-critica); }
+        
+        /* Colores para el Parking */
+        .icon-parking { background-color: rgba(142, 142, 147, 0.1); color: #8e8e93; }
+        .icon-parking-active { background-color: rgba(212, 175, 55, 0.15); color: var(--color-principal); }
+
+        .app-info { flex-grow: 1; }
+        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; transition: color 0.3s ease; }
+        .app-desc { font-size: 0.75rem; color: var(--color-texto-secundario); }
+        .app-arrow { color: var(--color-texto-secundario); font-size: 0.85rem; opacity: 0.5; }
+        
+        .stars-container { color: var(--color-estrellas); font-size: 0.75rem; margin-top: 3px; }
+        
+        .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
+        .footer-brand span { color: var(--color-principal); font-weight: 700; }
+
+        /* OVERLAY DE BIENVENIDA Y AUDIO */
+        #overlay-entrada {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: rgba(10, 10, 10, 0.98);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+
+        .btn-experiencia {
+            background: linear-gradient(135deg, var(--color-principal), #b38f24);
+            color: #000;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+            transition: transform 0.2s;
+        }
+        .btn-experiencia:active { transform: scale(0.95); }
+
+        /* BOTÓN FLOTANTE MUTE / UNMUTE */
+        #btn-audio-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--color-texto);
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        /* CONTENEDOR OCULTO DE YOUTUBE */
+        #yt-player-container {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- OVERLAY DE BIENVENIDA -->
+    <div id="overlay-entrada">
+        <div class="logo-container" style="margin-bottom: 20px;">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <h2 style="color: var(--color-principal); font-size: 1.4rem; margin-bottom: 8px; letter-spacing: 2px;">LA SUCURSAL</h2>
+        <p style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 30px;">Ambiente & Barbershop Experience</p>
+        <button onclick="iniciarExperiencia()" class="btn-experiencia">Entrar al Hub</button>
+    </div>
+
+    <!-- REPRODUCTOR OCULTO DE YOUTUBE PARA EL AUDIO DE AMBIENTE -->
+    <div id="ELi6WBkv774">
+        <div id="youtube-audio-player"></div>
+    </div>
+
+    <!-- BOTÓN MUTE / UNMUTE -->
+    <button id="btn-audio-toggle" onclick="toggleAudio()">
+        <span id="audio-status"><i class="fa-solid fa-volume-high"></i> Música ON</span>
+    </button>
+
+    <div class="hub-container">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo">
+        </div>
+
+        <!-- Títulos -->
+        <h1>LA SUCURSAL</h1>
+        <div class="propietario">por Fernando Ambuila Ortíz</div>
+
+        <div class="apps-menu">
+            
+            <div class="section-title">Barbería</div>
+
+            <a href="https://lasucursalstoreart.com/appointment.php" target="_blank" class="app-btn">
+                <div class="app-icon icon-booking"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Reservar Cita</div>
+                    <div class="app-desc">Accede a nuestra agenda online</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <a href="contacto.vcf" download="Fernando_Contacto.vcf" class="app-btn">
+                <div class="app-icon icon-contact"><i class="fa-solid fa-address-card"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Guardar Contacto</div>
+                    <div class="app-desc">Teléfono y ubicación en tu agenda</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- GESTOR DE PARKING -->
+            <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
+                <div class="app-icon icon-parking" id="parking-icon-container">
+                    <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
+                </div>
+                <div class="app-info">
+                    <div class="app-name" id="parking-name">¿Dónde aparqué?</div>
+                    <div class="app-desc" id="parking-desc">Guarda tu coche para volver</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <div class="section-title">Redes Sociales</div>
+
+            <a href="https://www.instagram.com/la_sucursal_the_barber/?hl=es" target="_blank" class="app-btn">
+                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Instagram Barbería</div>
+                    <div class="app-desc">Nuestros mejores cortes</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <a href="https://www.instagram.com/la_sucursal_store/?hl=es" target="_blank" class="app-btn">
+                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Instagram Tienda</div>
+                    <div class="app-desc">Conoce nuestra ropa de autor</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <div class="section-title">Tu Opinión Nos Importa</div>
+
+            <!-- ESCUDO ANTI-RESEÑAS NEGATIVAS (FILTRO PREVIO A GOOGLE) -->
+            <a href="https://wa.me/34641607302?text=Hola%20Fernando,%20quiero%20comentar%20un%20detalle%20sobre%20mi%20visita%20para%20mejorarlo" target="_blank" class="app-btn">
+                <div class="app-icon icon-feedback"><i class="fa-solid fa-comment-dots"></i></div>
+                <div class="app-info">
+                    <div class="app-name">¿Algo no salió perfecto?</div>
+                    <div class="app-desc">Atención directa con Fernando para solucionarlo</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- ENLACE A GOOGLE RESEÑAS -->
+            <a href="https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI" target="_blank" class="app-btn">
+                <div class="app-icon icon-review"><i class="fa-brands fa-google"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Déjanos 5 Estrellas en Google</div>
+                    <div class="stars-container">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+        </div>
+
+        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+    </div>
+
+    <!-- API DE YOUTUBE PARA EL AUDIO EN SEGUNDO PLANO -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        // CONFIGURACIÓN DEL AUDIO DE YOUTUBE
+        // Cambia '4VrczY2Axac' por el ID del vídeo de YouTube de tu preferencia
+        const YOUTUBE_VIDEO_ID = '4VrczY2Axac'; 
+        
+        let player;
+        let isMuted = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-audio-player', {
+                height: '0',
+                width: '0',
+                videoId: YOUTUBE_VIDEO_ID,
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': YOUTUBE_VIDEO_ID,
+                    'playsinline': 1
+                }
+            });
+        }
+
+        function iniciarExperiencia() {
+            const overlay = document.getElementById("overlay-entrada");
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 600);
+
+            if (player && player.playVideo) {
+                player.setVolume(25); // Volumen ambiente suave al 25%
+                player.playVideo();
+                document.getElementById("btn-audio-toggle").style.display = "block";
+            }
+        }
+
+        function toggleAudio() {
+            const status = document.getElementById("audio-status");
+            if (!player) return;
+
+            if (isMuted) {
+                player.unMute();
+                status.innerHTML = '<i class="fa-solid fa-volume-high"></i> Música ON';
+                isMuted = false;
+            } else {
+                player.mute();
+                status.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Mute';
+                isMuted = true;
+            }
+        }
+
+        // GESTOR DE PARKING
+        function comprobarEstadoParkingBarberia() {
+            const lat = localStorage.getItem('barberia_lat');
+            const lng = localStorage.getItem('barberia_lng');
+
+            const icon = document.getElementById('parking-icon');
+            const iconContainer = document.getElementById('parking-icon-container');
+            const title = document.getElementById('parking-name');
+            const subtitle = document.getElementById('parking-desc');
+
+            if (!icon || !iconContainer || !title || !subtitle) return;
+
+            if (lat && lng) {
+                icon.className = "fa-solid fa-person-walking";
+                iconContainer.className = "app-icon icon-parking-active";
+                title.innerText = "Ir a mi coche (A pie)";
+                title.style.color = "var(--color-principal)";
+                subtitle.innerText = "Toca para abrir la ruta en el mapa";
+            } else {
+                icon.className = "fa-solid fa-location-crosshairs";
+                iconContainer.className = "app-icon icon-parking";
+                title.innerText = "¿Dónde aparqué?";
+                title.style.color = "var(--color-texto)";
+                subtitle.innerText = "Guarda tu coche para volver";
+            }
+        }
+
+        function gestionarParking(e) {
+            if (e) e.preventDefault(); 
+            
+            const lat = localStorage.getItem('barberia_lat');
+            const lng = localStorage.getItem('barberia_lng');
+
+            if (lat && lng) {
+                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
+                window.open(mapsUrl, '_blank');
+
+                setTimeout(() => {
+                    const yaLlego = confirm("🚙 Hemos abierto la ruta en Google Maps.\n\n¿Has llegado ya a tu vehículo y quieres BORRAR esta ubicación?\n\n• Pulsa ACEPTAR para borrar el coche.\n• Pulsa CANCELAR para mantenerlo guardado.");
+                    
+                    if (yaLlego) {
+                        localStorage.removeItem('barberia_lat');
+                        localStorage.removeItem('barberia_lng');
+                        comprobarEstadoParkingBarberia();
+                    }
+                }, 1000);
+
+            } else {
+                if (navigator.geolocation) {
+                    const subtitle = document.getElementById('parking-desc');
+                    if (subtitle) subtitle.innerText = "Obteniendo señal GPS...";
+
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            localStorage.setItem('barberia_lat', position.coords.latitude);
+                            localStorage.setItem('barberia_lng', position.coords.longitude);
+                            comprobarEstadoParkingBarberia();
+                            alert("📍 ¡Ubicación guardada con éxito! Ya puedes disfrutar de tu visita a La Sucursal.");
+                        },
+                        (error) => {
+                            alert("No pudimos obtener tu ubicación. Asegúrate de tener activado el GPS en el móvil.");
+                            comprobarEstadoParkingBarberia();
+                        },
+                        { enableHighAccuracy: true }
+                    );
+                } else {
+                    alert("Tu navegador no soporta geolocalización GPS.");
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", comprobarEstadoParkingBarberia);
+    </script>
+</body>
+</html>
