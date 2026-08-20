@@ -1,55 +1,38 @@
 {
-  "nombre": "SISTEMA DE UBICACIÓN",
-  "subtitulo": "Red activa y encriptada",
-  "logo": "", 
+  "nombre": "Estás en modo incógnito",
+  "subtitulo": "Ahora puedes navegar de forma privada. Las demás personas que usen este dispositivo no verán tu actividad.",
+  "logo": "",
   "secciones": [
     {
-      "titulo": "Ruta y Movimiento",
+      "titulo": "ACCIONES SEGURAS DISPONIBLES:",
       "botones": [
         {
-          "nombre": "Compartir Estado Actual",
-          "descripcion": "Notifica salida o trayecto",
+          "nombre": "Compartir ruta",
+          "descripcion": "Inicia seguimiento en segundo plano",
           "icono": "fa-solid fa-location-arrow",
           "url": "javascript:lanzarEmergencia('ruta')",
-          "estiloIcono": "background-color: rgba(255, 255, 255, 0.1); color: #cccccc;"
-        }
-      ]
-    },
-    {
-      "titulo": "Asistencia Crítica",
-      "botones": [
-        {
-          "nombre": "Alerta Inmediata a Contacto",
-          "descripcion": "Envía tu GPS exacto por WhatsApp",
-          "icono": "fa-solid fa-paper-plane",
-          "url": "javascript:lanzarEmergencia('sos')",
-          "estiloIcono": "background-color: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255,255,255,0.3);" 
+          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
         },
         {
-          "nombre": "Llamada Directa 112",
-          "descripcion": "Centro de emergencias nacional",
+          "nombre": "Enviar alerta crítica",
+          "descripcion": "Aviso inmediato a tu contacto de seguridad",
+          "icono": "fa-solid fa-triangle-exclamation",
+          "url": "javascript:lanzarEmergencia('sos')",
+          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
+        },
+        {
+          "nombre": "Conectar con el 112",
+          "descripcion": "Llamada directa de emergencias",
           "icono": "fa-solid fa-phone",
           "url": "tel:112",
-          "estiloIcono": "background-color: rgba(255, 255, 255, 0.05); color: #cccccc;"
-        }
-      ]
-    },
-    {
-      "titulo": "Recursos",
-      "botones": [
-        {
-          "nombre": "Asesoramiento Confidencial",
-          "descripcion": "Línea 016 - Sin rastro en factura",
-          "icono": "fa-solid fa-user-shield",
-          "url": "tel:016",
-          "estiloIcono": "background-color: rgba(255, 255, 255, 0.05); color: #cccccc;"
+          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
         },
         {
-          "nombre": "Buscar Refugio Cercano",
-          "descripcion": "Farmacias y centros policiales",
-          "icono": "fa-solid fa-map",
-          "url": "https://www.google.com/maps/search/comisaría+de+policía+OR+farmacia+cerca+de+mi/",
-          "estiloIcono": "background-color: rgba(255, 255, 255, 0.05); color: #cccccc;"
+          "nombre": "Línea de apoyo (016)",
+          "descripcion": "Tu proveedor no guardará el registro",
+          "icono": "fa-solid fa-user-secret",
+          "url": "tel:016",
+          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
         }
       ]
     }
