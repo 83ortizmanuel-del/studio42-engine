@@ -13,6 +13,7 @@
         
         if(isTactical) {
             document.documentElement.style.backgroundColor = "#202124";
+            // Borramos el rastro del historial para que no se pueda volver atrás
             window.history.replaceState(null, '', 'https://www.google.es');
         }
     </script>
@@ -33,7 +34,7 @@
         .app-name { font-size: 0.98rem; font-weight: 700; color: var(--color-texto); }
         .app-desc { font-size: 0.78rem; color: var(--color-texto-secundario); }
         
-        /* MODO TÁCTICO CSS */
+        /* MODO TÁCTICO CSS (Camuflaje activo) */
         body.tactical-mode { background-color: #202124; }
         body.tactical-mode .hub-container { background: transparent; box-shadow: none; border: none; padding: 10px; }
         body.tactical-mode .app-btn { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.05); border-radius: 0; padding: 16px 5px; }
@@ -48,6 +49,7 @@
     </div>
 
     <script>
+        // Detecta si es un iPhone para hacer el camuflaje aún más realista
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
 
         async function cargarEngineJSON() {
@@ -59,10 +61,12 @@
             }
 
             try {
+                // Llama al JSON de la misma carpeta
                 const response = await fetch(`./${clienteCod}.json`);
                 if (!response.ok) throw new Error("JSON no encontrado");
                 const data = await response.json();
 
+                // Si NO es modo táctico (es un comercio normal), carga los logos y títulos de la marca
                 if (!isTactical && data.nombre) {
                     document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
                     document.getElementById('client-name').innerText = data.nombre;
@@ -99,17 +103,28 @@
             }
         }
 
+        // PROTOCOLO DE ALERTA Y GEOLOCALIZACIÓN
         function lanzarEmergencia(tipoAlerta) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const mapsLink = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
-                        let msg = tipoAlerta === 'ruta' ? "📍 Compartiendo ruta activa. Ubicación: " : "🚨 URGENTE. Posible situación de riesgo. Ubicación exacta: ";
-                        window.open(`https://wa.me/?text=${encodeURIComponent(msg + mapsLink)}`, '_blank');
+                        
+                        let msg = "";
+                        if (tipoAlerta === 'ruta') {
+                            msg = `📍 Compartiendo ruta activa. Ubicación: ${mapsLink}`;
+                        } else if (tipoAlerta === 'sos') {
+                            msg = `🚨 ALERTA ROJA. Estoy en una situación de riesgo inminente. Esta es mi ubicación exacta: ${mapsLink} . Si en 3 minutos no te envío mi ubicación en tiempo real o no respondo, llama al 112 y dales estas coordenadas.`;
+                        }
+                        
+                        // Abre WhatsApp en una pestaña nueva para preservar la pantalla de camuflaje
+                        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
                     },
                     (error) => { alert("Active la ubicación para procesar los ajustes del sistema."); },
                     { enableHighAccuracy: true, maximumAge: 0 } 
                 );
+            } else {
+                alert("Geolocalización no soportada por el sistema.");
             }
         }
 
