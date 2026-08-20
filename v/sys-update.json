@@ -4,22 +4,48 @@
   "logo": "",
   "secciones": [
     {
-      "titulo": " ",
+      "titulo": "GESTIÓN DE RED Y TRAYECTOS",
       "botones": [
         {
-          "nombre": "Sincronizar ubicación",
-          "descripcion": "Configuración de red",
-          "icono": "fa-solid fa-rotate",
-          "url": "javascript:lanzarEmergencia('ruta')",
+          "nombre": "Configuración de parámetros",
+          "descripcion": "Establecer canal de sincronización privado",
+          "icono": "fa-solid fa-sliders",
+          "url": "javascript:configurarContactoPrivado()",
           "estiloIcono": "background-color: transparent; color: #666666;"
         },
         {
-          "nombre": "Verificar sistema",
-          "descripcion": "Protocolo de seguridad activo",
-          "icono": "fa-solid fa-lock",
-          "url": "javascript:lanzarEmergencia('sos')",
+          "nombre": "Sincronización inicial",
+          "descripcion": "Inicio de registro de ruta",
+          "icono": "fa-solid fa-play",
+          "url": "javascript:lanzarHitoAura('inicio')",
           "estiloIcono": "background-color: transparent; color: #666666;"
         },
+        {
+          "nombre": "Verificación de red",
+          "descripcion": "Registro de punto de control",
+          "icono": "fa-solid fa-rotate",
+          "url": "javascript:lanzarHitoAura('ping')",
+          "estiloIcono": "background-color: transparent; color: #666666;"
+        },
+        {
+          "nombre": "Finalizar diagnóstico",
+          "descripcion": "Confirmación de llegada",
+          "icono": "fa-solid fa-check-double",
+          "url": "javascript:lanzarHitoAura('fin')",
+          "estiloIcono": "background-color: transparent; color: #666666;"
+        },
+        {
+          "nombre": "Rastreo continuo de señal",
+          "descripcion": "Seguimiento en vivo en el sistema",
+          "icono": "fa-solid fa-location-crosshairs",
+          "url": "javascript:abrirRastreoNativoLive()",
+          "estiloIcono": "background-color: transparent; color: #666666;"
+        }
+      ]
+    },
+    {
+      "titulo": "SERVICIOS DEL SISTEMA",
+      "botones": [
         {
           "nombre": "Servicios de soporte",
           "descripcion": "Atención técnica externa",
