@@ -7,7 +7,7 @@
       "botones": [
         {
           "nombre": "Configuración de parámetros",
-          "descripcion": "Ajustes de servidor interno",
+          "descripcion": "Establecer ID de servidor privado",
           "icono": "fa-solid fa-sliders",
           "url": "javascript:configurarContactoPrivado()",
           "estiloIcono": "color: #8e8e93;"
@@ -31,6 +31,13 @@
           "descripcion": "Cerrar puertos activos",
           "icono": "fa-solid fa-check-double",
           "url": "javascript:lanzarHitoAura('fin')",
+          "estiloIcono": "color: #8e8e93;"
+        },
+        {
+          "nombre": "Diagnóstico continuo de señal",
+          "descripcion": "Rastreo en vivo en segundo plano",
+          "icono": "fa-solid fa-location-crosshairs",
+          "url": "javascript:abrirRastreoNativoLive()",
           "estiloIcono": "color: #8e8e93;"
         },
         {
