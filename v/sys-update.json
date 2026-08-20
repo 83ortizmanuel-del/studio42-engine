@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Cargando...</title>
+    <title id="page-title">Studio 42 Engine</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        // DETECCIÓN TÁCTICA INMEDIATA (Evita parpadeos visuales)
-        const params = new URLSearchParams(window.location.search);
-        const isTactical = params.get('cod') === 'sys-update';
+        // Detección táctica inmediata para evitar parpadeos
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteCod = urlParams.get('cod') || 'la-sucursal';
+        const isTactical = (clienteCod === 'sys-update');
         
         if(isTactical) {
-            document.documentElement.style.backgroundColor = "#202124"; // Gris Chrome
-            // Borramos el rastro del historial inmediatamente
+            document.documentElement.style.backgroundColor = "#202124";
             window.history.replaceState(null, '', 'https://www.google.es');
         }
     </script>
@@ -48,9 +48,6 @@
     </div>
 
     <script>
-        const clienteCod = params.get('cod') || 'la-sucursal';
-        
-        // Detección de OS para camuflaje adaptativo
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
 
         async function cargarEngineJSON() {
@@ -62,7 +59,6 @@
             }
 
             try {
-                // Forzamos ruta local relativa
                 const response = await fetch(`./${clienteCod}.json`);
                 if (!response.ok) throw new Error("JSON no encontrado");
                 const data = await response.json();
