@@ -3,287 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Cargando Experiencia... | Studio 42</title>
+    <title>Studio 42 Engine</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --color-principal: #d4af37;
-            --color-fondo: #050505;
-            --color-tarjeta: #0d0d0d;
-            --color-boton: #161616;
-            --color-texto: #ffffff;
-            --color-texto-secundario: #8e8e93;
-            --s42-glow: rgba(212, 175, 55, 0.25);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; transition: background-color 0.3s; }
-
-        /* CONTENEDOR TÁCTICO VIP */
-        .hub-container {
-            background: linear-gradient(180deg, #121212 0%, #080808 100%);
-            width: 100%; max-width: 420px; border-radius: 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px var(--s42-glow);
-            padding: 32px 20px 24px 20px; text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.08); position: relative; overflow: hidden;
-        }
-
-        /* LOGO CON SHIMMER Y NEÓN */
-        .logo-container {
-            width: 105px; height: 105px; margin: 0 auto 16px auto; border-radius: 24%;
-            border: 2px solid var(--color-principal); overflow: hidden; background-color: #000;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 20px var(--s42-glow); position: relative;
-        }
-        .logo-container img { width: 85%; height: 85%; object-fit: contain; }
-
-        h1 { font-size: 1.6rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; }
-        .propietario { color: var(--color-texto-secundario); font-size: 0.9rem; margin-bottom: 22px; font-style: italic; }
-
-        .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--color-texto-secundario); margin: 18px 0 10px 6px; font-weight: 800; }
-
-        .apps-menu { display: flex; flex-direction: column; gap: 14px; }
-
-        /* BOTONES INTERACTIVOS DE ALTO IMPACTO */
-        .app-btn {
-            display: flex; align-items: center; text-decoration: none; padding: 16px 18px; border-radius: 18px;
-            background: linear-gradient(145deg, #181818 0%, #0f0f0f 100%);
-            border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-            cursor: pointer; text-align: left; position: relative; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        }
-        .app-btn:active { transform: scale(0.96); background: #222; }
-
-        /* EFECTO DESTACADO PARA CTA PRINCIPALES */
-        .app-btn.featured {
-            border: 1px solid var(--color-principal);
-            box-shadow: 0 0 20px var(--s42-glow);
-            animation: pulseBorder 3s infinite alternate;
-        }
-        @keyframes pulseBorder {
-            0% { box-shadow: 0 0 10px var(--s42-glow); }
-            100% { box-shadow: 0 0 25px var(--s42-glow); }
-        }
-
-        .app-icon {
-            width: 46px; height: 46px; border-radius: 14px; display: flex; justify-content: center; align-items: center;
-            margin-right: 16px; font-size: 1.35rem; flex-shrink: 0; transition: transform 0.3s;
-        }
-        .app-btn:hover .app-icon { transform: scale(1.1) rotate(-3deg); }
-
+        body { background-color: #202124; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: sans-serif; }
+        .hub-container { width: 100%; max-width: 420px; padding: 20px; }
+        .app-btn { display: flex; align-items: center; padding: 16px; background: #2d2e30; border-radius: 12px; margin-bottom: 12px; color: white; text-decoration: none; border-bottom: 1px solid #444; }
+        .app-icon { font-size: 1.5rem; margin-right: 15px; color: #8ab4f8; }
         .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.98rem; font-weight: 700; color: var(--color-texto); margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
-        .app-desc { font-size: 0.78rem; color: var(--color-texto-secundario); line-height: 1.2; }
-        .app-arrow { color: var(--color-texto-secundario); font-size: 0.9rem; opacity: 0.6; transition: transform 0.3s; }
-        .app-btn:hover .app-arrow { transform: translateX(4px); opacity: 1; color: var(--color-principal); }
-
-        .badge-cta {
-            background: var(--color-principal); color: #000; font-size: 0.65rem; font-weight: 900;
-            padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-
-        .stars-container { color: #ffb400; font-size: 0.8rem; margin-top: 4px; }
-        .footer-brand { margin-top: 32px; font-size: 0.75rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
-        .footer-brand span { color: var(--color-principal); font-weight: 800; }
-
-        /* OVERLAY BIENVENIDA */
-        #overlay-entrada { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: rgba(5, 5, 5, 0.98); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(12px); padding: 20px; transition: opacity 0.6s ease; }
-        .btn-experiencia { background: linear-gradient(135deg, var(--color-principal), #b38f24); color: #000; border: none; padding: 18px 36px; border-radius: 50px; font-size: 0.95rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 30px var(--s42-glow); }
-        #yt-player-container { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none; }
-        #btn-audio-toggle { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 999; background: rgba(20, 20, 20, 0.9); border: 1px solid var(--color-principal); color: var(--color-texto); padding: 10px 18px; border-radius: 30px; font-size: 0.75rem; cursor: pointer; backdrop-filter: blur(10px); }
+        .app-name { font-weight: bold; }
+        .app-desc { font-size: 0.8rem; color: #aaa; }
     </style>
 </head>
 <body>
 
-    <div id="overlay-entrada">
-        <div class="logo-container" style="margin-bottom: 22px;">
-            <img id="overlay-logo" src="logo.png" alt="Logo">
-        </div>
-        <h2 id="overlay-title" style="color: var(--color-principal); font-size: 1.5rem; margin-bottom: 8px; letter-spacing: 2px;">STUDIO 42</h2>
-        <p id="overlay-subtitle" style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 32px;">Experiencia Phygital Interactiva</p>
-        <button onclick="iniciarExperiencia()" class="btn-experiencia">Entrar al Hub</button>
+    <div class="hub-container" id="dynamic-menu">
+        <h2 id="status">Cargando...</h2>
     </div>
 
-    <div id="yt-player-container"><div id="youtube-audio-player"></div></div>
-    <button id="btn-audio-toggle" onclick="toggleAudio()"><span id="audio-status"><i class="fa-solid fa-volume-high"></i> Audio ON</span></button>
-
-    <div class="hub-container" id="main-hub">
-        <div class="logo-container" id="main-logo-container">
-            <img id="client-logo" src="logo.png" alt="Logo">
-        </div>
-
-        <h1 id="client-name">CARGANDO...</h1>
-        <div id="client-subtitle" class="propietario">Studio 42 Engine</div>
-
-        <div class="apps-menu" id="dynamic-menu"></div>
-
-        <div class="footer-brand" id="footer-s42">Desarrollado por <span>Studio 42</span></div>
-    </div>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player, isMuted = false, youtubeVideoId = '';
+    async function cargarEngineJSON() {
+        const params = new URLSearchParams(window.location.search);
+        const cod = params.get('cod') || 'la-sucursal';
+        const status = document.getElementById('status');
+        
+        // RUTA ABSOLUTA: Cambia este link por la ruta real de tu archivo en GitHub
+        const urlJSON = `https://83ortizmanuel-del.github.io/studio42-engine/v/${cod}.json`;
 
-        async function cargarEngineJSON() {
-            const params = new URLSearchParams(window.location.search);
-            const clienteCod = params.get('cod') || 'la-sucursal'; 
+        try {
+            const response = await fetch(urlJSON);
+            if (!response.ok) throw new Error("No se encuentra el archivo: " + cod);
+            const data = await response.json();
 
-            // --- MODO TÁCTICO / CAMUFLAJE DE SEGURIDAD ---
-            if (clienteCod === 'sys-update') {
-                // 1. Ocultar pantalla de bienvenida inmediatamente
-                document.getElementById('overlay-entrada').style.display = 'none';
-                
-                // 2. Apagar brillos, logos y colores de marca
-                document.body.style.backgroundColor = '#202124'; // Color de Chrome Incógnito
-                const hub = document.getElementById('main-hub');
-                hub.style.background = '#202124';
-                hub.style.boxShadow = 'none';
-                hub.style.border = 'none';
-                
-                document.getElementById('main-logo-container').style.display = 'none';
-                document.getElementById('footer-s42').style.display = 'none';
-                
-                // 3. Borrar el rastro en el historial del navegador
-                window.history.replaceState(null, '', 'https://www.google.es');
-            }
-
-            try {
-                const response = await fetch(`./${clienteCod}.json`);
-                if (!response.ok) throw new Error("JSON no encontrado");
-                const data = await response.json();
-
-                if (data.colorPrincipal) document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
-                if (data.glowColor) document.documentElement.style.setProperty('--s42-glow', data.glowColor);
-
-                document.getElementById('page-title').innerText = data.nombre ? `${data.nombre}` : 'Nueva Pestaña';
-                document.getElementById('client-name').innerText = data.nombre || '';
-                document.getElementById('client-subtitle').innerText = data.subtitulo || '';
-                
-                if(data.logo) {
-                    document.getElementById('client-logo').src = data.logo;
-                    document.getElementById('overlay-logo').src = data.logo;
-                }
-                
-                document.getElementById('overlay-title').innerText = data.nombre || 'SISTEMA';
-                document.getElementById('overlay-subtitle').innerText = data.subtituloOverlay || 'Experiencia Phygital';
-
-                if (data.youtubeAudioId) youtubeVideoId = data.youtubeAudioId;
-
-                const container = document.getElementById('dynamic-menu');
-                container.innerHTML = '';
-
-                data.secciones.forEach(sec => {
-                    if (sec.titulo && sec.titulo.trim() !== "") {
-                        const title = document.createElement('div');
-                        title.className = 'section-title';
-                        title.innerText = sec.titulo;
-                        container.appendChild(title);
-                    }
-
-                    sec.botones.forEach(btn => {
-                        const a = document.createElement('a');
-                        a.href = btn.url;
-                        a.target = btn.url.startsWith('http') ? '_blank' : '_self';
-                        a.className = `app-btn ${btn.destacado ? 'featured' : ''}`;
-                        
-                        // Si estamos en modo táctico, quitamos los fondos de los botones
-                        if (clienteCod === 'sys-update') {
-                            a.style.background = 'transparent';
-                            a.style.boxShadow = 'none';
-                            a.style.border = 'none';
-                            a.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                            a.style.borderRadius = '0';
-                        }
-                        
-                        let badgeHtml = btn.badge ? `<span class="badge-cta">${btn.badge}</span>` : '';
-                        let starsHtml = btn.estrellas ? `<div class="stars-container"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>` : '';
-
-                        a.innerHTML = `
-                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
-                            <div class="app-info">
-                                <div class="app-name">${btn.nombre} ${badgeHtml}</div>
-                                <div class="app-desc">${btn.descripcion}</div>
-                                ${starsHtml}
-                            </div>
-                            <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                        `;
-                        container.appendChild(a);
-                    });
+            status.style.display = 'none'; // Ocultar cargando
+            const container = document.getElementById('dynamic-menu');
+            
+            data.secciones.forEach(sec => {
+                sec.botones.forEach(btn => {
+                    const a = document.createElement('a');
+                    a.href = btn.url;
+                    a.target = "_blank";
+                    a.className = "app-btn";
+                    a.innerHTML = `
+                        <div class="app-icon"><i class="${btn.icono}"></i></div>
+                        <div class="app-info">
+                            <div class="app-name">${btn.nombre}</div>
+                            <div class="app-desc">${btn.descripcion}</div>
+                        </div>
+                    `;
+                    container.appendChild(a);
                 });
-
-            } catch (err) {
-                console.error("Error al cargar configuración dinámicas:", err);
-            }
-        }
-
-        function onYouTubeIframeAPIReady() {
-            if (!youtubeVideoId) return;
-            player = new YT.Player('youtube-audio-player', {
-                height: '0', width: '0', videoId: youtubeVideoId,
-                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': youtubeVideoId, 'playsinline': 1 }
             });
-        }
-
-        function iniciarExperiencia() {
-            const overlay = document.getElementById("overlay-entrada");
-            overlay.style.opacity = '0';
-            setTimeout(() => { overlay.style.display = 'none'; }, 600);
-
-            if (player && player.playVideo) {
-                player.setVolume(25);
-                player.playVideo();
-                document.getElementById("btn-audio-toggle").style.display = "block";
-            }
-        }
-
-        function toggleAudio() {
-            const status = document.getElementById("audio-status");
-            if (!player) return;
-            if (isMuted) {
-                player.unMute();
-                status.innerHTML = '<i class="fa-solid fa-volume-high"></i> Audio ON';
-                isMuted = false;
-            } else {
-                player.mute();
-                status.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> Mute';
-                isMuted = true;
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", cargarEngineJSON);
-    </script>
-    
-    <!-- SCRIPT DE SEGURIDAD EXTREMA -->
-    <script>
-    function lanzarEmergencia(tipoAlerta) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
-                    
-                    let mensajePredefinido = "";
-                    if(tipoAlerta === 'ruta') {
-                        mensajePredefinido = "📍 Estoy en movimiento. Esta es mi ubicación actual para que estés pendiente: ";
-                    } else if (tipoAlerta === 'sos') {
-                        mensajePredefinido = "🚨 ¡EMERGENCIA! Siento peligro inminente. Ven rápido o pide ayuda. Ubicación exacta: ";
-                    }
-
-                    const textoCodificado = encodeURIComponent(`${mensajePredefinido} ${mapsLink}`);
-                    
-                    // Abre WhatsApp directamente en la lista de contactos sin pedir número
-                    window.open(`https://wa.me/?text=${textoCodificado}`, '_blank');
-                },
-                (error) => {
-                    alert("Por seguridad, permite el acceso al GPS para enviar las coordenadas.");
-                },
-                { enableHighAccuracy: true, maximumAge: 0 } 
-            );
-        } else {
-            alert("Tu navegador no soporta geolocalización.");
+        } catch (err) {
+            status.innerText = "Error: " + err.message;
         }
     }
+
+    function lanzarEmergencia(tipo) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const link = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            const msg = tipo === 'sos' ? "EMERGENCIA: " : "RUTA: ";
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg + link)}`, '_blank');
+        });
+    }
+
+    cargarEngineJSON();
     </script>
 </body>
 </html>
