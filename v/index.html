@@ -3,87 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Studio 42 Engine</title>
+    <title id="page-title">Ajustes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
         const urlParams = new URLSearchParams(window.location.search);
         const clienteCod = urlParams.get('cod') || 'la-sucursal';
         const isTactical = (clienteCod === 'sys-update');
         
         if(isTactical) {
-            document.documentElement.style.backgroundColor = "#202124";
             window.history.replaceState(null, '', 'https://www.google.es');
         }
     </script>
     <style>
-        :root { --color-principal: #d4af37; --color-fondo: #050505; --color-texto: #ffffff; --color-texto-secundario: #8e8e93; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        :root { --color-fondo: #000000; --color-texto: #ffffff; --color-texto-secundario: #8e8e93; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding-bottom: 30px; }
         
-        .hub-container { width: 100%; max-width: 420px; text-align: center; position: relative; }
-        h1 { font-size: 1.6rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; }
-        .propietario { color: var(--color-texto-secundario); font-size: 0.9rem; margin-bottom: 22px; font-style: italic; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--color-texto-secundario); margin: 18px 0 10px 6px; font-weight: 800; }
-        .apps-menu { display: flex; flex-direction: column; gap: 14px; }
+        .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
         
-        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 18px; border-radius: 18px; background: #181818; border: 1px solid rgba(255, 255, 255, 0.06); text-align: left; cursor: pointer; }
-        .app-icon { width: 46px; height: 46px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 16px; font-size: 1.35rem; }
-        .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.98rem; font-weight: 700; color: var(--color-texto); }
-        .app-desc { font-size: 0.78rem; color: var(--color-texto-secundario); }
+        /* ESTILO IOS NATIVO */
+        .theme-ios h1 { font-size: 34px; font-weight: 700; text-align: left; padding: 40px 16px 10px 16px; letter-spacing: 0.3px; }
+        .theme-ios .section-title { text-transform: uppercase; font-size: 13px; color: #8e8e93; margin: 20px 0 8px 16px; font-weight: 400; }
+        .theme-ios .apps-menu { background: #1C1C1E; border-radius: 10px; margin: 0 16px; overflow: hidden; }
+        .theme-ios .app-btn { display: flex; align-items: center; text-decoration: none; padding: 12px 16px; border-bottom: 0.5px solid #38383A; cursor: pointer; }
+        .theme-ios .app-btn:last-child { border-bottom: none; }
         
-        /* MODO TÁCTICO CSS */
-        body.tactical-mode { background-color: #202124; }
-        body.tactical-mode .hub-container { background: transparent; box-shadow: none; border: none; padding: 10px; }
-        body.tactical-mode .app-btn { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.05); border-radius: 0; padding: 16px 5px; }
+        /* ESTILO ANDROID NATIVO */
+        .theme-android h1 { font-size: 24px; font-weight: 400; text-align: left; padding: 30px 16px 15px 16px; font-family: Roboto, sans-serif; }
+        .theme-android .section-title { font-size: 14px; color: #A8C7FA; margin: 20px 0 10px 16px; font-weight: 500; font-family: Roboto, sans-serif; }
+        .theme-android .apps-menu { background: transparent; display: flex; flex-direction: column; }
+        .theme-android .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 20px; cursor: pointer; }
 
-        /* LUZ PARPADEANTE AURA */
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            background-color: #E0D0EE;
-            border-radius: 50%;
-            box-shadow: 0 0 6px #E0D0EE;
-            animation: auraPulse 3s infinite ease-in-out;
-            display: inline-block;
-        }
+        /* ELEMENTOS COMUNES */
+        .app-icon { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.2rem; }
+        .app-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .app-name { font-size: 16px; color: var(--color-texto); }
+        .theme-ios .app-name { font-weight: 400; }
+        .theme-android .app-name { font-weight: 400; font-family: Roboto, sans-serif; }
+        .app-desc { font-size: 12px; color: var(--color-texto-secundario); margin-top: 2px; }
 
-        @keyframes auraPulse {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 9px #E0D0EE; }
-            100% { opacity: 0.2; transform: scale(0.8); }
-        }
+        /* LUZ PARPADEANTE AURA (Camuflada como un punto de estado) */
+        .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; }
+        .status-dot { width: 6px; height: 6px; background-color: #E0D0EE; border-radius: 50%; display: inline-block; animation: auraPulse 3s infinite ease-in-out; margin-left: 5px; }
+        @keyframes auraPulse { 0% { opacity: 0.2; } 50% { opacity: 1; box-shadow: 0 0 5px #E0D0EE; } 100% { opacity: 0.2; } }
     </style>
 </head>
 <body>
 
     <div class="hub-container" id="main-hub">
-        <h1 id="client-name"></h1>
+        <h1 id="client-name">Ajustes</h1>
         <div id="client-subtitle" class="propietario"></div>
-        <div class="apps-menu" id="dynamic-menu"></div>
+        <div id="dynamic-menu"></div>
     </div>
 
     <script>
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
-        
-        // REEMPLAZAR CON EL TOKEN DE TU BOT DE TELEGRAM
+        // Aplicar clase según el sistema operativo para el camuflaje visual
+        document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
+
         const TELEGRAM_TOKEN = "TU_BOT_TOKEN_AQUI"; 
 
-        async function cargarEngineJSON() {
-            if (isTactical) {
-                document.body.classList.add('tactical-mode');
-                document.getElementById('page-title').innerText = isIOS ? "Ajustes" : "Ajustes del Sistema";
-                document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del Sistema";
-            }
+        // Botón de pánico de salida rápida en el título
+        document.getElementById('client-name').addEventListener('click', function() {
+            window.location.replace("https://www.google.es");
+        });
 
+        async function cargarEngineJSON() {
             try {
                 const response = await fetch(`./${clienteCod}.json`);
-                if (!response.ok) throw new Error("JSON no encontrado");
                 const data = await response.json();
 
                 if (!isTactical && data.nombre) {
-                    document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
                     document.getElementById('client-name').innerText = data.nombre;
+                } else {
+                    document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del sistema";
                 }
 
                 document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
@@ -92,12 +85,15 @@
                 container.innerHTML = '';
 
                 data.secciones.forEach(sec => {
-                    if (sec.titulo && sec.titulo.trim() !== "") {
+                    if (sec.titulo) {
                         const title = document.createElement('div');
                         title.className = 'section-title';
                         title.innerText = sec.titulo;
                         container.appendChild(title);
                     }
+
+                    const menuBlock = document.createElement('div');
+                    menuBlock.className = 'apps-menu';
 
                     sec.botones.forEach(btn => {
                         const a = document.createElement('a');
@@ -110,34 +106,25 @@
                                 <div class="app-desc">${btn.descripcion}</div>
                             </div>
                         `;
-                        container.appendChild(a);
+                        menuBlock.appendChild(a);
                     });
+                    container.appendChild(menuBlock);
                 });
-            } catch (err) {
-                console.error("Error cargando configuración:", err);
-            }
+            } catch (err) { console.error(err); }
         }
 
-        // 1. CONFIGURACIÓN PRIVADA DE CONTACTO (LOCALSTORAGE)
+        // FUNCIONES DE SEGURIDAD (Las mismas que ya estaban blindadas)
         function configurarContactoPrivado() {
-            let actual = localStorage.getItem("aura_contacto_confianza") || "";
-            let contacto = prompt("Introduce el ID de Telegram o el teléfono con prefijo de tu contacto de confianza:", actual);
-            
-            if (contacto !== null && contacto.trim() !== "") {
+            let contacto = prompt("Identificador de red interno:");
+            if (contacto && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                alert("Configuración de red guardada en el dispositivo.");
+                alert("Código de red validado.");
             }
         }
 
-        // 2. ENVÍO DE HITOS / PINGS PREVENTIVOS CON GPS
         function lanzarHitoAura(estado) {
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
-
-            if (!destinoPrivado) {
-                alert("Active la sincronización configurando su parámetro de red primero.");
-                configurarContactoPrivado();
-                return;
-            }
+            if (!destinoPrivado) return; 
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -148,40 +135,25 @@
                         
                         let etiqueta = "📍 Registro de ruta";
                         if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto preventivo";
-                        if (estado === 'ping') etiqueta = "📍 Punto de control / Hito registrado";
+                        if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
                         if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
+                        if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. NECESITO AYUDA.";
 
-                        const textoMensaje = `${etiqueta}\nUbicación actual: ${mapaUrl}`;
-
-                        // Si es un Chat ID numérico de Telegram
-                        if (!destinoPrivado.startsWith("+") && !destinoPrivado.startsWith("34") && destinoPrivado.length < 13) {
-                            fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    chat_id: destinoPrivado,
-                                    text: textoMensaje
-                                })
-                            });
-                            alert("Sincronización de red completada.");
-                        } else {
-                            // Si guardó un número de teléfono estándar para WhatsApp
-                            window.open(`https://wa.me/${destinoPrivado}?text=${encodeURIComponent(textoMensaje)}`, '_blank');
-                        }
+                        fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                            method: "POST", headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ chat_id: destinoPrivado, text: `${etiqueta}\nUbicación: ${mapaUrl}` })
+                        });
+                        
+                        if (estado === 'sos') alert("Proceso de limpieza completado.");
+                        else alert("Ajuste de red aplicado.");
                     },
-                    (err) => { alert("Active la ubicación para procesar los ajustes del sistema."); },
-                    { enableHighAccuracy: true, maximumAge: 0 }
+                    (err) => {}, { enableHighAccuracy: true }
                 );
             }
         }
 
-        // 3. ENLACE A RASTREO CONTINUO NATIVO
         function abrirRastreoNativoLive() {
-            if (isIOS) {
-                window.location.href = "http://maps.apple.com/?showme=true";
-            } else {
-                window.location.href = "https://www.google.com/maps/share";
-            }
+            window.location.href = isIOS ? "http://maps.apple.com/?showme=true" : "https://www.google.com/maps/share";
         }
 
         document.addEventListener("DOMContentLoaded", cargarEngineJSON);
