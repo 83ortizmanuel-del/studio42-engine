@@ -26,7 +26,7 @@
         .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--color-texto-secundario); margin: 18px 0 10px 6px; font-weight: 800; }
         .apps-menu { display: flex; flex-direction: column; gap: 14px; }
         
-        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 18px; border-radius: 18px; background: #181818; border: 1px solid rgba(255, 255, 255, 0.06); text-align: left; }
+        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 18px; border-radius: 18px; background: #181818; border: 1px solid rgba(255, 255, 255, 0.06); text-align: left; cursor: pointer; }
         .app-icon { width: 46px; height: 46px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 16px; font-size: 1.35rem; }
         .app-info { flex-grow: 1; }
         .app-name { font-size: 0.98rem; font-weight: 700; color: var(--color-texto); }
@@ -65,6 +65,9 @@
 
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
+        
+        // REEMPLAZAR CON EL TOKEN DE TU BOT DE TELEGRAM
+        const TELEGRAM_TOKEN = "TU_BOT_TOKEN_AQUI"; 
 
         async function cargarEngineJSON() {
             if (isTactical) {
@@ -83,7 +86,6 @@
                     document.getElementById('client-name').innerText = data.nombre;
                 }
 
-                // Inyección del subtítulo con soporte de etiquetas HTML (luz Aura)
                 document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
 
                 const container = document.getElementById('dynamic-menu');
@@ -116,17 +118,69 @@
             }
         }
 
-        function lanzarEmergencia(tipoAlerta) {
+        // 1. CONFIGURACIÓN PRIVADA DE CONTACTO (LOCALSTORAGE)
+        function configurarContactoPrivado() {
+            let actual = localStorage.getItem("aura_contacto_confianza") || "";
+            let contacto = prompt("Introduce el ID de Telegram o el teléfono con prefijo de tu contacto de confianza:", actual);
+            
+            if (contacto !== null && contacto.trim() !== "") {
+                localStorage.setItem("aura_contacto_confianza", contacto.trim());
+                alert("Configuración de red guardada en el dispositivo.");
+            }
+        }
+
+        // 2. ENVÍO DE HITOS / PINGS PREVENTIVOS CON GPS
+        function lanzarHitoAura(estado) {
+            const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
+
+            if (!destinoPrivado) {
+                alert("Active la sincronización configurando su parámetro de red primero.");
+                configurarContactoPrivado();
+                return;
+            }
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const mapsLink = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
-                        let msg = tipoAlerta === 'ruta' ? "📍 Compartiendo ruta activa. Ubicación: " : "🚨 URGENTE. Posible situación de riesgo. Ubicación exacta: ";
-                        window.open(`https://wa.me/?text=${encodeURIComponent(msg + mapsLink)}`, '_blank');
+                    (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+                        
+                        let etiqueta = "📍 Registro de ruta";
+                        if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto preventivo";
+                        if (estado === 'ping') etiqueta = "📍 Punto de control / Hito registrado";
+                        if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
+
+                        const textoMensaje = `${etiqueta}\nUbicación actual: ${mapaUrl}`;
+
+                        // Si es un Chat ID numérico de Telegram
+                        if (!destinoPrivado.startsWith("+") && !destinoPrivado.startsWith("34") && destinoPrivado.length < 13) {
+                            fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    chat_id: destinoPrivado,
+                                    text: textoMensaje
+                                })
+                            });
+                            alert("Sincronización de red completada.");
+                        } else {
+                            // Si guardó un número de teléfono estándar para WhatsApp
+                            window.open(`https://wa.me/${destinoPrivado}?text=${encodeURIComponent(textoMensaje)}`, '_blank');
+                        }
                     },
-                    (error) => { alert("Active la ubicación para procesar los ajustes del sistema."); },
-                    { enableHighAccuracy: true, maximumAge: 0 } 
+                    (err) => { alert("Active la ubicación para procesar los ajustes del sistema."); },
+                    { enableHighAccuracy: true, maximumAge: 0 }
                 );
+            }
+        }
+
+        // 3. ENLACE A RASTREO CONTINUO NATIVO
+        function abrirRastreoNativoLive() {
+            if (isIOS) {
+                window.location.href = "http://maps.apple.com/?showme=true";
+            } else {
+                window.location.href = "https://www.google.com/maps/share";
             }
         }
 
