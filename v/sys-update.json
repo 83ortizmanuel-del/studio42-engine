@@ -1,72 +1,206 @@
-{
-  "nombre": "Ajustes",
-  "subtitulo": "Red sincronizada <span class=\"status-dot\"></span>",
-  "secciones": [
-    {
-      "titulo": "CONEXIONES DE RED",
-      "botones": [
-        {
-          "nombre": "Configuración de parámetros",
-          "descripcion": "Establecer ID de servidor privado",
-          "icono": "fa-solid fa-sliders",
-          "url": "javascript:configurarContactoPrivado()",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
-          "nombre": "Sincronización inicial",
-          "descripcion": "Iniciar puerto de conexión",
-          "icono": "fa-solid fa-play",
-          "url": "javascript:lanzarHitoAura('inicio')",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
-          "nombre": "Verificación de red",
-          "descripcion": "Probar estado del servidor",
-          "icono": "fa-solid fa-rotate",
-          "url": "javascript:lanzarHitoAura('ping')",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
-          "nombre": "Finalizar diagnóstico",
-          "descripcion": "Cerrar puertos activos",
-          "icono": "fa-solid fa-check-double",
-          "url": "javascript:lanzarHitoAura('fin')",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
-          "nombre": "Diagnóstico continuo de señal",
-          "descripcion": "Rastreo en vivo en segundo plano",
-          "icono": "fa-solid fa-location-crosshairs",
-          "url": "javascript:abrirRastreoNativoLive()",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
-          "nombre": "Forzar detención de procesos",
-          "descripcion": "Limpiar caché del sistema",
-          "icono": "fa-solid fa-triangle-exclamation",
-          "url": "javascript:lanzarHitoAura('sos')",
-          "estiloIcono": "color: #8e8e93;"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Ajustes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteCod = urlParams.get('cod') || 'sys-update';
+        const isTactical = (clienteCod === 'sys-update');
+        
+        if(isTactical) {
+            window.history.replaceState(null, '', 'https://www.google.es');
         }
-      ]
-    },
-    {
-      "titulo": "SERVICIOS DEL SISTEMA",
-      "botones": [
-        {
-          "nombre": "Servicios de soporte",
-          "descripcion": "Atención técnica externa",
-          "icono": "fa-solid fa-phone",
-          "url": "tel:112",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
-          "nombre": "Registro de actividad",
-          "descripcion": "Archivo de logs privado",
-          "icono": "fa-solid fa-file-shield",
-          "url": "tel:016",
-          "estiloIcono": "color: #8e8e93;"
+    </script>
+    <style>
+        :root { 
+            --color-fondo: #000000; 
+            --color-texto: #ffffff; 
+            --color-texto-secundario: #8e8e93; 
         }
-      ]
-    }
-  ]
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--color-fondo); 
+            color: var(--color-texto); 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            padding-bottom: 30px; 
+        }
+        
+        .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
+        
+        /* ESTILO IOS NATIVO */
+        .theme-ios h1 { font-size: 34px; font-weight: 700; text-align: left; padding: 40px 16px 10px 16px; letter-spacing: 0.3px; cursor: pointer; }
+        .theme-ios .section-title { text-transform: uppercase; font-size: 13px; color: #8e8e93; margin: 20px 0 8px 16px; font-weight: 400; }
+        .theme-ios .apps-menu { background: #1C1C1E; border-radius: 10px; margin: 0 16px; overflow: hidden; }
+        .theme-ios .app-btn { display: flex; align-items: center; text-decoration: none; padding: 12px 16px; border-bottom: 0.5px solid #38383A; cursor: pointer; }
+        .theme-ios .app-btn:last-child { border-bottom: none; }
+        
+        /* ESTILO ANDROID NATIVO */
+        .theme-android h1 { font-size: 24px; font-weight: 400; text-align: left; padding: 30px 16px 15px 16px; font-family: Roboto, sans-serif; cursor: pointer; }
+        .theme-android .section-title { font-size: 14px; color: #A8C7FA; margin: 20px 0 10px 16px; font-weight: 500; font-family: Roboto, sans-serif; }
+        .theme-android .apps-menu { background: transparent; display: flex; flex-direction: column; }
+        .theme-android .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 20px; cursor: pointer; }
+
+        /* ELEMENTOS COMUNES */
+        .app-icon { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.2rem; }
+        .app-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .app-name { font-size: 16px; color: var(--color-texto); }
+        .theme-ios .app-name { font-weight: 400; }
+        .theme-android .app-name { font-weight: 400; font-family: Roboto, sans-serif; }
+        .app-desc { font-size: 12px; color: var(--color-texto-secundario); margin-top: 2px; }
+
+        /* INDICADOR AURA */
+        .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; }
+        .status-dot { width: 6px; height: 6px; background-color: #E0D0EE; border-radius: 50%; display: inline-block; animation: auraPulse 3s infinite ease-in-out; margin-left: 5px; }
+        @keyframes auraPulse { 0% { opacity: 0.2; } 50% { opacity: 1; box-shadow: 0 0 5px #E0D0EE; } 100% { opacity: 0.2; } }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container" id="main-hub">
+        <h1 id="client-name">Ajustes</h1>
+        <div id="client-subtitle" class="propietario"></div>
+        <div id="dynamic-menu"></div>
+    </div>
+
+    <script>
+        document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
+
+        // REEMPLAZA ESTA CONSTANTE CON EL TOKEN REAL QUE TE DIO BOTFATHER
+        const TELEGRAM_TOKEN = "7123456789:AAFxxx_TU_TOKEN_REAL_AQUI"; 
+
+        // Redirección táctica instantánea a Google al tocar el título
+        document.getElementById('client-name').addEventListener('click', function() {
+            window.location.replace("https://www.google.es");
+        });
+
+        async function cargarEngineJSON() {
+            try {
+                const response = await fetch(`./${clienteCod}.json`);
+                if (!response.ok) throw new Error("No se pudo cargar el archivo de configuración.");
+                const data = await response.json();
+
+                if (!isTactical && data.nombre) {
+                    document.getElementById('client-name').innerText = data.nombre;
+                } else {
+                    document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del sistema";
+                }
+
+                document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
+
+                const container = document.getElementById('dynamic-menu');
+                container.innerHTML = '';
+
+                data.secciones.forEach(sec => {
+                    if (sec.titulo) {
+                        const title = document.createElement('div');
+                        title.className = 'section-title';
+                        title.innerText = sec.titulo;
+                        container.appendChild(title);
+                    }
+
+                    const menuBlock = document.createElement('div');
+                    menuBlock.className = 'apps-menu';
+
+                    sec.botones.forEach(btn => {
+                        const a = document.createElement('a');
+                        a.href = btn.url;
+                        a.className = "app-btn";
+                        a.innerHTML = `
+                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
+                            <div class="app-info">
+                                <div class="app-name">${btn.nombre}</div>
+                                <div class="app-desc">${btn.descripcion}</div>
+                            </div>
+                        `;
+                        menuBlock.appendChild(a);
+                    });
+                    container.appendChild(menuBlock);
+                });
+            } catch (err) { 
+                console.error("Error cargando el motor JSON:", err); 
+            }
+        }
+
+        // 1. CONFIGURACIÓN DEL CHAT ID
+        function configurarContactoPrivado() {
+            let contacto = prompt("Introduzca el ID de red de Telegram:");
+            if (contacto !== null && contacto.trim() !== "") {
+                localStorage.setItem("aura_contacto_confianza", contacto.trim());
+                alert("Código de servidor actualizado.");
+            }
+        }
+
+        // 2. ENVÍO SILENCIOSO A TELEGRAM CON CONTROL DE ERRORES Y GPS
+        function lanzarHitoAura(estado) {
+            if (!TELEGRAM_TOKEN || TELEGRAM_TOKEN.includes("TU_TOKEN_REAL_AQUI")) {
+                alert("Error de servidor: Configure el TOKEN del Bot en el código index.html");
+                return;
+            }
+
+            const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
+            if (!destinoPrivado) {
+                alert("Configure el parámetro de servidor primero.");
+                configurarContactoPrivado();
+                return;
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+                        
+                        let etiqueta = "📍 Registro de ruta";
+                        if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto preventivo";
+                        if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
+                        if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
+                        if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. NECESITO AYUDA.";
+
+                        const textoMensaje = `${etiqueta}\nUbicación: ${mapaUrl}`;
+
+                        try {
+                            const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ chat_id: destinoPrivado, text: textoMensaje })
+                            });
+
+                            const result = await resp.json();
+                            if (!result.ok) {
+                                console.error("Error API Telegram:", result);
+                                alert("Error al enviar. Verifique su ID de Telegram o presione INICIAR en el chat del Bot.");
+                                return;
+                            }
+                            
+                            if (estado === 'sos') alert("Proceso de limpieza completado.");
+                            else alert("Ajuste de red aplicado.");
+
+                        } catch (error) {
+                            console.error("Error de red:", error);
+                            alert("Error de conexión al procesar el informe.");
+                        }
+                    },
+                    (err) => { 
+                        alert("Active los permisos de ubicación/GPS en su navegador para continuar."); 
+                    },
+                    { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+                );
+            } else {
+                alert("El dispositivo no admite geolocalización.");
+            }
+        }
+
+        // 3. RASTREO CONTINUO EN MAPAS NATIVOS
+        function abrirRastreoNativoLive() {
+            window.location.href = isIOS ? "http://maps.apple.com/?showme=true" : "https://www.google.com/maps/share";
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEngineJSON);
+    </script>
+</body>
+</html>
