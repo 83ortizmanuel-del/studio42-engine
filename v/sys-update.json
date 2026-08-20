@@ -1,0 +1,57 @@
+{
+  "nombre": "SISTEMA DE UBICACIÓN",
+  "subtitulo": "Red activa y encriptada",
+  "logo": "", 
+  "secciones": [
+    {
+      "titulo": "Ruta y Movimiento",
+      "botones": [
+        {
+          "nombre": "Compartir Estado Actual",
+          "descripcion": "Notifica salida o trayecto",
+          "icono": "fa-solid fa-location-arrow",
+          "url": "javascript:lanzarEmergencia('ruta')",
+          "estiloIcono": "background-color: rgba(255, 255, 255, 0.1); color: #cccccc;"
+        }
+      ]
+    },
+    {
+      "titulo": "Asistencia Crítica",
+      "botones": [
+        {
+          "nombre": "Alerta Inmediata a Contacto",
+          "descripcion": "Envía tu GPS exacto por WhatsApp",
+          "icono": "fa-solid fa-paper-plane",
+          "url": "javascript:lanzarEmergencia('sos')",
+          "estiloIcono": "background-color: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255,255,255,0.3);" 
+        },
+        {
+          "nombre": "Llamada Directa 112",
+          "descripcion": "Centro de emergencias nacional",
+          "icono": "fa-solid fa-phone",
+          "url": "tel:112",
+          "estiloIcono": "background-color: rgba(255, 255, 255, 0.05); color: #cccccc;"
+        }
+      ]
+    },
+    {
+      "titulo": "Recursos",
+      "botones": [
+        {
+          "nombre": "Asesoramiento Confidencial",
+          "descripcion": "Línea 016 - Sin rastro en factura",
+          "icono": "fa-solid fa-user-shield",
+          "url": "tel:016",
+          "estiloIcono": "background-color: rgba(255, 255, 255, 0.05); color: #cccccc;"
+        },
+        {
+          "nombre": "Buscar Refugio Cercano",
+          "descripcion": "Farmacias y centros policiales",
+          "icono": "fa-solid fa-map",
+          "url": "https://www.google.com/maps/search/comisaría+de+policía+OR+farmacia+cerca+de+mi/",
+          "estiloIcono": "background-color: rgba(255, 255, 255, 0.05); color: #cccccc;"
+        }
+      ]
+    }
+  ]
+}
