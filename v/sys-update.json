@@ -1,45 +1,123 @@
-{
-  "nombre": "Ajustes del Sistema",
-  "subtitulo": "Versión de software: One UI / iOS Core",
-  "logo": "",
-  "secciones": [
-    {
-      "titulo": "CONFIGURACIÓN DE RED Y SEGURIDAD",
-      "botones": [
-        {
-          "nombre": "Sincronización de Ubicación",
-          "descripcion": "Mantener ruta activa en segundo plano",
-          "icono": "fa-solid fa-location-dot",
-          "url": "javascript:lanzarEmergencia('ruta')",
-          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
-        },
-        {
-          "nombre": "Protocolo de Emergencia Rápida",
-          "descripcion": "Enviar coordenadas de rastreo al contacto principal",
-          "icono": "fa-solid fa-triangle-exclamation",
-          "url": "javascript:lanzarEmergencia('sos')",
-          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Cargando...</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // DETECCIÓN TÁCTICA INMEDIATA (Evita parpadeos visuales)
+        const params = new URLSearchParams(window.location.search);
+        const isTactical = params.get('cod') === 'sys-update';
+        
+        if(isTactical) {
+            document.documentElement.style.backgroundColor = "#202124"; // Gris Chrome
+            // Borramos el rastro del historial inmediatamente
+            window.history.replaceState(null, '', 'https://www.google.es');
         }
-      ]
-    },
-    {
-      "titulo": "DIAGNOSTICO Y ASISTENCIA TÉCNICA",
-      "botones": [
-        {
-          "nombre": "Servicio de Asistencia 112",
-          "descripcion": "Centro de soporte y operadoras de red",
-          "icono": "fa-solid fa-phone",
-          "url": "tel:112",
-          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
-        },
-        {
-          "nombre": "Optimización y Soporte 016",
-          "descripcion": "Mantenimiento de red cifrada sin registro",
-          "icono": "fa-solid fa-shield",
-          "url": "tel:016",
-          "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
+    </script>
+    <style>
+        :root { --color-principal: #d4af37; --color-fondo: #050505; --color-texto: #ffffff; --color-texto-secundario: #8e8e93; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        
+        .hub-container { width: 100%; max-width: 420px; text-align: center; position: relative; }
+        h1 { font-size: 1.6rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; }
+        .propietario { color: var(--color-texto-secundario); font-size: 0.9rem; margin-bottom: 22px; font-style: italic; }
+        .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--color-texto-secundario); margin: 18px 0 10px 6px; font-weight: 800; }
+        .apps-menu { display: flex; flex-direction: column; gap: 14px; }
+        
+        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 18px; border-radius: 18px; background: #181818; border: 1px solid rgba(255, 255, 255, 0.06); text-align: left; }
+        .app-icon { width: 46px; height: 46px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 16px; font-size: 1.35rem; }
+        .app-info { flex-grow: 1; }
+        .app-name { font-size: 0.98rem; font-weight: 700; color: var(--color-texto); }
+        .app-desc { font-size: 0.78rem; color: var(--color-texto-secundario); }
+        
+        /* MODO TÁCTICO CSS */
+        body.tactical-mode { background-color: #202124; }
+        body.tactical-mode .hub-container { background: transparent; box-shadow: none; border: none; padding: 10px; }
+        body.tactical-mode .app-btn { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.05); border-radius: 0; padding: 16px 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container" id="main-hub">
+        <h1 id="client-name"></h1>
+        <div id="client-subtitle" class="propietario"></div>
+        <div class="apps-menu" id="dynamic-menu"></div>
+    </div>
+
+    <script>
+        const clienteCod = params.get('cod') || 'la-sucursal';
+        
+        // Detección de OS para camuflaje adaptativo
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
+
+        async function cargarEngineJSON() {
+            if (isTactical) {
+                document.body.classList.add('tactical-mode');
+                document.getElementById('page-title').innerText = isIOS ? "Ajustes" : "Ajustes del Sistema";
+                document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del Sistema";
+                document.getElementById('client-subtitle').innerText = isIOS ? "General • Redes" : "Seguridad y emergencias";
+            }
+
+            try {
+                // Forzamos ruta local relativa
+                const response = await fetch(`./${clienteCod}.json`);
+                if (!response.ok) throw new Error("JSON no encontrado");
+                const data = await response.json();
+
+                if (!isTactical && data.nombre) {
+                    document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
+                    document.getElementById('client-name').innerText = data.nombre;
+                    document.getElementById('client-subtitle').innerText = data.subtitulo || '';
+                }
+
+                const container = document.getElementById('dynamic-menu');
+                container.innerHTML = '';
+
+                data.secciones.forEach(sec => {
+                    if (sec.titulo && sec.titulo.trim() !== "") {
+                        const title = document.createElement('div');
+                        title.className = 'section-title';
+                        title.innerText = sec.titulo;
+                        container.appendChild(title);
+                    }
+
+                    sec.botones.forEach(btn => {
+                        const a = document.createElement('a');
+                        a.href = btn.url;
+                        a.className = "app-btn";
+                        a.innerHTML = `
+                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
+                            <div class="app-info">
+                                <div class="app-name">${btn.nombre}</div>
+                                <div class="app-desc">${btn.descripcion}</div>
+                            </div>
+                        `;
+                        container.appendChild(a);
+                    });
+                });
+            } catch (err) {
+                console.error("Error cargando configuración:", err);
+            }
         }
-      ]
-    }
-  ]
-}
+
+        function lanzarEmergencia(tipoAlerta) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const mapsLink = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
+                        let msg = tipoAlerta === 'ruta' ? "📍 Compartiendo ruta activa. Ubicación: " : "🚨 URGENTE. Posible situación de riesgo. Ubicación exacta: ";
+                        window.open(`https://wa.me/?text=${encodeURIComponent(msg + mapsLink)}`, '_blank');
+                    },
+                    (error) => { alert("Active la ubicación para procesar los ajustes del sistema."); },
+                    { enableHighAccuracy: true, maximumAge: 0 } 
+                );
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEngineJSON);
+    </script>
+</body>
+</html>
