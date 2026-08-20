@@ -28,8 +28,7 @@
         const status = document.getElementById('status');
         
         // RUTA ABSOLUTA: Cambia este link por la ruta real de tu archivo en GitHub
-        const urlJSON = `https://83ortizmanuel-del.github.io/studio42-engine/v/${cod}.json`;
-
+        const urlJSON = `./${cod}.json`;
         try {
             const response = await fetch(urlJSON);
             if (!response.ok) throw new Error("No se encuentra el archivo: " + cod);
