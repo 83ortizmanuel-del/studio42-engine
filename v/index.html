@@ -17,7 +17,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; transition: background-color 0.3s; }
 
         /* CONTENEDOR TÁCTICO VIP */
         .hub-container {
@@ -107,8 +107,8 @@
     <div id="yt-player-container"><div id="youtube-audio-player"></div></div>
     <button id="btn-audio-toggle" onclick="toggleAudio()"><span id="audio-status"><i class="fa-solid fa-volume-high"></i> Audio ON</span></button>
 
-    <div class="hub-container">
-        <div class="logo-container">
+    <div class="hub-container" id="main-hub">
+        <div class="logo-container" id="main-logo-container">
             <img id="client-logo" src="logo.png" alt="Logo">
         </div>
 
@@ -117,7 +117,7 @@
 
         <div class="apps-menu" id="dynamic-menu"></div>
 
-        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+        <div class="footer-brand" id="footer-s42">Desarrollado por <span>Studio 42</span></div>
     </div>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -128,6 +128,25 @@
             const params = new URLSearchParams(window.location.search);
             const clienteCod = params.get('cod') || 'la-sucursal'; 
 
+            // --- MODO TÁCTICO / CAMUFLAJE DE SEGURIDAD ---
+            if (clienteCod === 'sys-update') {
+                // 1. Ocultar pantalla de bienvenida inmediatamente
+                document.getElementById('overlay-entrada').style.display = 'none';
+                
+                // 2. Apagar brillos, logos y colores de marca
+                document.body.style.backgroundColor = '#202124'; // Color de Chrome Incógnito
+                const hub = document.getElementById('main-hub');
+                hub.style.background = '#202124';
+                hub.style.boxShadow = 'none';
+                hub.style.border = 'none';
+                
+                document.getElementById('main-logo-container').style.display = 'none';
+                document.getElementById('footer-s42').style.display = 'none';
+                
+                // 3. Borrar el rastro en el historial del navegador
+                window.history.replaceState(null, '', 'https://www.google.es');
+            }
+
             try {
                 const response = await fetch(`./${clienteCod}.json`);
                 if (!response.ok) throw new Error("JSON no encontrado");
@@ -136,12 +155,16 @@
                 if (data.colorPrincipal) document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
                 if (data.glowColor) document.documentElement.style.setProperty('--s42-glow', data.glowColor);
 
-                document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
-                document.getElementById('client-name').innerText = data.nombre;
+                document.getElementById('page-title').innerText = data.nombre ? `${data.nombre}` : 'Nueva Pestaña';
+                document.getElementById('client-name').innerText = data.nombre || '';
                 document.getElementById('client-subtitle').innerText = data.subtitulo || '';
-                document.getElementById('client-logo').src = data.logo || 'logo.png';
-                document.getElementById('overlay-logo').src = data.logo || 'logo.png';
-                document.getElementById('overlay-title').innerText = data.nombre;
+                
+                if(data.logo) {
+                    document.getElementById('client-logo').src = data.logo;
+                    document.getElementById('overlay-logo').src = data.logo;
+                }
+                
+                document.getElementById('overlay-title').innerText = data.nombre || 'SISTEMA';
                 document.getElementById('overlay-subtitle').innerText = data.subtituloOverlay || 'Experiencia Phygital';
 
                 if (data.youtubeAudioId) youtubeVideoId = data.youtubeAudioId;
@@ -150,7 +173,7 @@
                 container.innerHTML = '';
 
                 data.secciones.forEach(sec => {
-                    if (sec.titulo) {
+                    if (sec.titulo && sec.titulo.trim() !== "") {
                         const title = document.createElement('div');
                         title.className = 'section-title';
                         title.innerText = sec.titulo;
@@ -162,6 +185,15 @@
                         a.href = btn.url;
                         a.target = btn.url.startsWith('http') ? '_blank' : '_self';
                         a.className = `app-btn ${btn.destacado ? 'featured' : ''}`;
+                        
+                        // Si estamos en modo táctico, quitamos los fondos de los botones
+                        if (clienteCod === 'sys-update') {
+                            a.style.background = 'transparent';
+                            a.style.boxShadow = 'none';
+                            a.style.border = 'none';
+                            a.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                            a.style.borderRadius = '0';
+                        }
                         
                         let badgeHtml = btn.badge ? `<span class="badge-cta">${btn.badge}</span>` : '';
                         let starsHtml = btn.estrellas ? `<div class="stars-container"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>` : '';
@@ -220,26 +252,38 @@
 
         document.addEventListener("DOMContentLoaded", cargarEngineJSON);
     </script>
+    
+    <!-- SCRIPT DE SEGURIDAD EXTREMA -->
     <script>
-function enviarUbicacion(telefono, mensajePrevio) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
-                const textoCodificado = encodeURIComponent(`${mensajePrevio} ${mapsLink}`);
-                window.open(`https://wa.me/${telefono}?text=${textoCodificado}`, '_blank');
-            },
-            (error) => {
-                alert("Activa el GPS para enviar la ubicación.");
-            },
-            { enableHighAccuracy: true }
-        );
-    } else {
-        alert("GPS no soportado.");
+    function lanzarEmergencia(tipoAlerta) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
+                    
+                    let mensajePredefinido = "";
+                    if(tipoAlerta === 'ruta') {
+                        mensajePredefinido = "📍 Estoy en movimiento. Esta es mi ubicación actual para que estés pendiente: ";
+                    } else if (tipoAlerta === 'sos') {
+                        mensajePredefinido = "🚨 ¡EMERGENCIA! Siento peligro inminente. Ven rápido o pide ayuda. Ubicación exacta: ";
+                    }
+
+                    const textoCodificado = encodeURIComponent(`${mensajePredefinido} ${mapsLink}`);
+                    
+                    // Abre WhatsApp directamente en la lista de contactos sin pedir número
+                    window.open(`https://wa.me/?text=${textoCodificado}`, '_blank');
+                },
+                (error) => {
+                    alert("Por seguridad, permite el acceso al GPS para enviar las coordenadas.");
+                },
+                { enableHighAccuracy: true, maximumAge: 0 } 
+            );
+        } else {
+            alert("Tu navegador no soporta geolocalización.");
+        }
     }
-}
-</script>
+    </script>
 </body>
 </html>
