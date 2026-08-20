@@ -1,36 +1,41 @@
 {
-  "nombre": "Estás en modo incógnito",
-  "subtitulo": "Ahora puedes navegar de forma privada. Las demás personas que usen este dispositivo no verán tu actividad.",
+  "nombre": "Ajustes del Sistema",
+  "subtitulo": "Versión de software: One UI / iOS Core",
   "logo": "",
   "secciones": [
     {
-      "titulo": "ACCIONES SEGURAS DISPONIBLES:",
+      "titulo": "CONFIGURACIÓN DE RED Y SEGURIDAD",
       "botones": [
         {
-          "nombre": "Compartir ruta",
-          "descripcion": "Inicia seguimiento en segundo plano",
-          "icono": "fa-solid fa-location-arrow",
+          "nombre": "Sincronización de Ubicación",
+          "descripcion": "Mantener ruta activa en segundo plano",
+          "icono": "fa-solid fa-location-dot",
           "url": "javascript:lanzarEmergencia('ruta')",
           "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
         },
         {
-          "nombre": "Enviar alerta crítica",
-          "descripcion": "Aviso inmediato a tu contacto de seguridad",
+          "nombre": "Protocolo de Emergencia Rápida",
+          "descripcion": "Enviar coordenadas de rastreo al contacto principal",
           "icono": "fa-solid fa-triangle-exclamation",
           "url": "javascript:lanzarEmergencia('sos')",
           "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
-        },
+        }
+      ]
+    },
+    {
+      "titulo": "DIAGNOSTICO Y ASISTENCIA TÉCNICA",
+      "botones": [
         {
-          "nombre": "Conectar con el 112",
-          "descripcion": "Llamada directa de emergencias",
+          "nombre": "Servicio de Asistencia 112",
+          "descripcion": "Centro de soporte y operadoras de red",
           "icono": "fa-solid fa-phone",
           "url": "tel:112",
           "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
         },
         {
-          "nombre": "Línea de apoyo (016)",
-          "descripcion": "Tu proveedor no guardará el registro",
-          "icono": "fa-solid fa-user-secret",
+          "nombre": "Optimización y Soporte 016",
+          "descripcion": "Mantenimiento de red cifrada sin registro",
+          "icono": "fa-solid fa-shield",
           "url": "tel:016",
           "estiloIcono": "background-color: transparent; color: #8ab4f8; font-size: 1.2rem; box-shadow: none;"
         }
