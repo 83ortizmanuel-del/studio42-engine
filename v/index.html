@@ -11,8 +11,13 @@
         const clienteCod = urlParams.get('cod') || 'sys-update';
         const isTactical = (clienteCod === 'sys-update');
 
-        if(isTactical) {
-            window.history.replaceState(null, '', 'https://www.google.es');
+        // Camuflaje táctico seguro (sin romper la seguridad del navegador)
+        if (isTactical) {
+            try {
+                window.history.replaceState(null, '', '/ajustes');
+            } catch (e) {
+                console.log("Camuflaje activado");
+            }
         }
     </script>
     <style>
@@ -96,8 +101,17 @@
 
                     sec.botones.forEach(btn => {
                         const a = document.createElement('a');
-                        a.href = btn.url;
                         a.className = "app-btn";
+
+                        // Asignación de clics compatible con móviles
+                        if (btn.url && btn.url.startsWith("javascript:")) {
+                            a.href = "#";
+                            const jsCode = btn.url.replace("javascript:", "");
+                            a.setAttribute("onclick", jsCode + "; return false;");
+                        } else {
+                            a.href = btn.url || "#";
+                        }
+
                         a.innerHTML = `
                             <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
                             <div class="app-info">
