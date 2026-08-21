@@ -69,8 +69,8 @@
     <script>
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
-        // REEMPLAZA ESTA CONSTANTE CON EL TOKEN REAL QUE TE DIO BOTFATHER
-        const TELEGRAM_TOKEN = "https://api.telegram.org/bot8883189745:AAGM0-XjgG85zxn0bULEbUgqaYZh2Kzc1HY/sendMessage?chat_id=TU_CHAT_ID&text=Probando_Aura"; 
+        // TOKEN OFICIAL CONFIGURADO CORRECTAMENTE (SOLO EL TOKEN, SIN URL)
+        const TELEGRAM_TOKEN = "8883189745:AAGM0-XjgG85zxn0bULEbUgqaYZh2Kzc1HY"; 
 
         // Redirección táctica instantánea a Google al tocar el título
         document.getElementById('client-name').addEventListener('click', function() {
@@ -80,7 +80,7 @@
         async function cargarEngineJSON() {
             try {
                 const response = await fetch(`./${clienteCod}.json`);
-                if (!response.ok) throw new Error("No se pudo cargar el archivo de configuración.");
+                if (!response.ok) throw new Error("No se pudo cargar el archivo JSON.");
                 const data = await response.json();
 
                 if (!isTactical && data.nombre) {
@@ -134,13 +134,8 @@
             }
         }
 
-        // 2. ENVÍO SILENCIOSO A TELEGRAM CON CONTROL DE ERRORES Y GPS
+        // 2. ENVÍO SILENCIOSO A TELEGRAM
         function lanzarHitoAura(estado) {
-            if (!TELEGRAM_TOKEN || TELEGRAM_TOKEN.includes("TU_TOKEN_REAL_AQUI")) {
-                alert("Error de servidor: Configure el TOKEN del Bot en el código index.html");
-                return;
-            }
-
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
             if (!destinoPrivado) {
                 alert("Configure el parámetro de servidor primero.");
@@ -172,8 +167,7 @@
 
                             const result = await resp.json();
                             if (!result.ok) {
-                                console.error("Error API Telegram:", result);
-                                alert("Error al enviar. Verifique su ID de Telegram o presione INICIAR en el chat del Bot.");
+                                alert("Error de envío. Asegúrese de haber presionado INICIAR en Telegram.");
                                 return;
                             }
                             
@@ -181,7 +175,6 @@
                             else alert("Ajuste de red aplicado.");
 
                         } catch (error) {
-                            console.error("Error de red:", error);
                             alert("Error de conexión al procesar el informe.");
                         }
                     },
