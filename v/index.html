@@ -202,10 +202,29 @@
         }
 
         // 3. RASTREO CONTINUO EN MAPAS NATIVOS
-        function abrirRastreoNativoLive() {
-            window.location.href = isIOS ? "http://maps.apple.com/?showme=true" : "https://www.google.com/maps/share";
-        }
-
+        // 3. RASTREO EN MAPAS NATIVOS (UBICACIÓN EN TIEMPO REAL)
+function abrirRastreoNativoLive() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                if (isIOS) {
+                    window.location.href = `https://maps.apple.com/?q=${lat},${lng}&ll=${lat},${lng}&z=16`;
+                } else {
+                    window.location.href = `https://www.google.com/maps?q=${lat},${lng}`;
+                }
+            },
+            (err) => {
+                // Fallback si no hay GPS disponible en ese instante
+                window.location.href = isIOS ? "https://maps.apple.com/" : "https://www.google.com/maps";
+            },
+            { enableHighAccuracy: true, timeout: 5000 }
+        );
+    } else {
+        window.location.href = isIOS ? "https://maps.apple.com/" : "https://www.google.com/maps";
+    }
+}
         document.addEventListener("DOMContentLoaded", cargarEngineJSON);
     </script>
 </body>
