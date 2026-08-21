@@ -8,7 +8,7 @@
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
         const urlParams = new URLSearchParams(window.location.search);
-        const clienteCod = urlParams.get('cod') || 'sys-update';
+        const clienteCod = urlParams.get('cod') || 'la-sucursal';
         const isTactical = (clienteCod === 'sys-update');
         
         if(isTactical) {
@@ -16,18 +16,9 @@
         }
     </script>
     <style>
-        :root { 
-            --color-fondo: #000000; 
-            --color-texto: #ffffff; 
-            --color-texto-secundario: #8e8e93; 
-        }
+        :root { --color-fondo: #000000; --color-texto: #ffffff; --color-texto-secundario: #8e8e93; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background-color: var(--color-fondo); 
-            color: var(--color-texto); 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            padding-bottom: 30px; 
-        }
+        body { background-color: var(--color-fondo); color: var(--color-texto); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding-bottom: 30px; }
         
         .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
         
@@ -67,12 +58,13 @@
     </div>
 
     <script>
+        // Adaptación estética según sistema operativo
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
-        // TOKEN CONFIGURADO CORRECTAMENTE
-        const TELEGRAM_TOKEN = "8883189745:AAGM0-XjgG85zxn0bULEbUgqaYZh2Kzc1HY"; 
+        // REEMPLAZAR CON EL TOKEN DE TU BOT DE TELEGRAM
+        const TELEGRAM_TOKEN = "TU_BOT_TOKEN_AQUI"; 
 
-        // Redirección táctica instantánea a Google al tocar el título
+        // Botón de pánico táctico: al tocar el título redirige instantáneamente a Google
         document.getElementById('client-name').addEventListener('click', function() {
             window.location.replace("https://www.google.es");
         });
@@ -80,7 +72,6 @@
         async function cargarEngineJSON() {
             try {
                 const response = await fetch(`./${clienteCod}.json`);
-                if (!response.ok) throw new Error("No se pudo cargar el archivo de configuración.");
                 const data = await response.json();
 
                 if (!isTactical && data.nombre) {
@@ -120,37 +111,30 @@
                     });
                     container.appendChild(menuBlock);
                 });
-            } catch (err) { 
-                console.error("Error cargando el motor JSON:", err); 
-            }
+            } catch (err) { console.error("Error cargando configuración:", err); }
         }
 
-        // 1. CONFIGURACIÓN DEL CHAT ID
+        // 1. CONFIGURACIÓN PRIVADA (Caja siempre limpia para no mostrar el contacto)
         function configurarContactoPrivado() {
-            let contacto = prompt("Introduzca el ID de red de Telegram:");
+            let contacto = prompt("Identificador de red interno:");
             if (contacto !== null && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                alert("Código de servidor actualizado.");
+                alert("Código de red validado.");
             }
         }
 
-        // 2. ENVÍO SILENCIOSO A TELEGRAM CON CONTROL DE ERRORES Y GPS
+        // 2. ENVÍO DE HITOS / SOS (Detecta automáticamente Telegram o WhatsApp)
         function lanzarHitoAura(estado) {
-            if (!TELEGRAM_TOKEN || TELEGRAM_TOKEN.includes("TU_TOKEN_REAL_AQUI")) {
-                alert("Error de servidor: Configure el TOKEN del Bot en el código index.html");
-                return;
-            }
-
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
             if (!destinoPrivado) {
-                alert("Configure el parámetro de servidor primero.");
+                alert("Active la sincronización configurando su parámetro de red primero.");
                 configurarContactoPrivado();
                 return;
             }
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    async (pos) => {
+                    (pos) => {
                         const lat = pos.coords.latitude;
                         const lng = pos.coords.longitude;
                         const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}`;
@@ -163,39 +147,28 @@
 
                         const textoMensaje = `${etiqueta}\nUbicación: ${mapaUrl}`;
 
-                        try {
-                            const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                        // SI ES CHAT ID DE TELEGRAM (Envío silencioso en segundo plano)
+                        if (!destinoPrivado.startsWith("+") && !destinoPrivado.startsWith("34") && destinoPrivado.length < 13) {
+                            fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({ chat_id: destinoPrivado, text: textoMensaje })
                             });
-
-                            const result = await resp.json();
-                            if (!result.ok) {
-                                console.error("Error API Telegram:", result);
-                                alert("Error al enviar. Verifique su ID de Telegram o presione INICIAR en el chat del Bot.");
-                                return;
-                            }
                             
                             if (estado === 'sos') alert("Proceso de limpieza completado.");
                             else alert("Ajuste de red aplicado.");
-
-                        } catch (error) {
-                            console.error("Error de red:", error);
-                            alert("Error de conexión al procesar el informe.");
+                        } else {
+                            // SI ES TELÉFONO DE WHATSAPP (Abre la app de WhatsApp)
+                            window.open(`https://wa.me/${destinoPrivado}?text=${encodeURIComponent(textoMensaje)}`, '_blank');
                         }
                     },
-                    (err) => { 
-                        alert("Active los permisos de ubicación/GPS en su navegador para continuar."); 
-                    },
-                    { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+                    (err) => { alert("Active los permisos de ubicación para procesar."); },
+                    { enableHighAccuracy: true, maximumAge: 0 }
                 );
-            } else {
-                alert("El dispositivo no admite geolocalización.");
             }
         }
 
-        // 3. RASTREO CONTINUO EN MAPAS NATIVOS
+        // 3. RASTREO CONTINUO EN TIEMPO REAL NATIVO
         function abrirRastreoNativoLive() {
             window.location.href = isIOS ? "http://maps.apple.com/?showme=true" : "https://www.google.com/maps/share";
         }
