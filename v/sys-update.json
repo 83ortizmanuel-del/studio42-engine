@@ -70,7 +70,7 @@
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
         // REEMPLAZA ESTA CONSTANTE CON EL TOKEN REAL QUE TE DIO BOTFATHER
-        const TELEGRAM_TOKEN = "7123456789:AAFxxx_TU_TOKEN_REAL_AQUI"; 
+        const TELEGRAM_TOKEN = "https://api.telegram.org/bot8883189745:AAGM0-XjgG85zxn0bULEbUgqaYZh2Kzc1HY/sendMessage?chat_id=TU_CHAT_ID&text=Probando_Aura"; 
 
         // Redirección táctica instantánea a Google al tocar el título
         document.getElementById('client-name').addEventListener('click', function() {
