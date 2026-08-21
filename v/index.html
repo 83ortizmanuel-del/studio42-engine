@@ -34,10 +34,7 @@
 
         /* ELEMENTOS COMUNES */
         .app-icon { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
-        
-        /* Auto-ajuste si usas imágenes reales en lugar de iconos */
         .app-icon img { width: 100%; height: 100%; object-fit: contain; border-radius: 4px; }
-        
         .app-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .app-name { font-size: 16px; color: #ffffff; font-weight: 400; }
         .app-desc { font-size: 12px; color: #8e8e93; margin-top: 2px; }
@@ -50,7 +47,6 @@
 <body>
 
     <div class="hub-container" id="main-hub">
-        <!-- Evento gestionado desde JS para pasar la seguridad de GitHub -->
         <h1 id="client-name">Ajustes</h1>
         <div id="client-subtitle" class="propietario"></div>
         <div id="dynamic-menu"></div>
@@ -60,7 +56,6 @@
         const TELEGRAM_TOKEN = "8883189745:AAFpBiz8u10Gdr9Ce_OAolk2iHhvf6awIkU";
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
 
-        // Salida táctica autorizada por GitHub (sin inline HTML)
         document.getElementById('client-name').addEventListener('click', () => {
             window.location.replace("https://www.google.es");
         });
@@ -74,8 +69,6 @@
                     "botones": [
                         { "nombre": "Configuración de parámetros", "descripcion": "Establecer ID de destinatario", "icono": "fa-solid fa-sliders", "url": "javascript:configurarContactoPrivado()" },
                         { "nombre": "Sincronización inicial", "descripcion": "Enviar reporte de ruta y estado", "icono": "fa-solid fa-play", "url": "javascript:lanzarHitoAura('inicio')" },
-                        { "nombre": "Punto de control", "descripcion": "Registro de ubicación intermedia", "icono": "fa-solid fa-location-dot", "url": "javascript:lanzarHitoAura('ping')" },
-                        { "nombre": "Llegada a destino", "descripcion": "Confirmar llegada segura a destino", "icono": "fa-solid fa-circle-check", "url": "javascript:lanzarHitoAura('fin')" },
                         { "nombre": "Limpieza de datos (SOS)", "descripcion": "Envío prioritario de emergencia", "icono": "fa-solid fa-triangle-exclamation", "url": "javascript:lanzarHitoAura('sos')" }
                     ]
                 }
@@ -108,7 +101,6 @@
                     a.className = "app-btn";
                     a.href = "#";
 
-                    // Evita bloqueos de seguridad de GitHub asignando eventos directos
                     if (btn.url && btn.url.startsWith("javascript:")) {
                         const jsAccion = btn.url.replace("javascript:", "");
                         a.addEventListener("click", (e) => {
@@ -118,22 +110,15 @@
                             else if (jsAccion.includes("lanzarHitoAura('ping')")) lanzarHitoAura('ping');
                             else if (jsAccion.includes("lanzarHitoAura('fin')")) lanzarHitoAura('fin');
                             else if (jsAccion.includes("lanzarHitoAura('sos')")) lanzarHitoAura('sos');
+                            else if (jsAccion.includes("abrirRastreoNativoLive")) abrirRastreoNativoLive();
                         });
                     } else if (btn.url) {
                         a.href = btn.url;
                     }
 
-                    // Detector inteligente de imágenes vs iconos
-                    let contenidoIcono = "";
-                    if (btn.icono) {
-                        // Si el texto del icono tiene un punto (ej: logo.png) o barra, lo trata como imagen real
-                        if (btn.icono.includes('.') || btn.icono.includes('/')) {
-                            contenidoIcono = `<img src="${btn.icono}" alt="Icono">`;
-                        } else {
-                            // Si no, lo trata como un icono de FontAwesome
-                            contenidoIcono = `<i class="${btn.icono}"></i>`;
-                        }
-                    }
+                    let contenidoIcono = btn.icono && (btn.icono.includes('.') || btn.icono.includes('/')) 
+                        ? `<img src="${btn.icono}" alt="Icono">` 
+                        : `<i class="${btn.icono || ''}"></i>`;
 
                     a.innerHTML = `
                         <div class="app-icon" style="${btn.estiloIcono || ''}">${contenidoIcono}</div>
@@ -153,7 +138,11 @@
             const clienteCod = urlParams.get('cod') || 'sys-update';
 
             try {
-                const response = await fetch(`./${clienteCod}.json`);
+                const rutaJson = window.location.pathname.endsWith('/') 
+                    ? `${clienteCod}.json` 
+                    : `./${clienteCod}.json`;
+                    
+                const response = await fetch(rutaJson);
                 if (response.ok) {
                     const data = await response.json();
                     renderizarMenu(data);
@@ -161,7 +150,7 @@
                     return;
                 }
             } catch (err) {
-                console.log("Cargando menú de respaldo integrado.");
+                console.log("No se pudo cargar el JSON remoto, usando fallback.");
             }
 
             renderizarMenu(fallbackData);
@@ -169,11 +158,8 @@
         }
 
         function limpiarUrl() {
-            // Mantiene limpia la ruta en GitHub Pages sin dar error 404
             if (window.history && window.history.replaceState) {
-                try {
-                    window.history.replaceState(null, '', window.location.pathname);
-                } catch(e){}
+                try { window.history.replaceState(null, '', window.location.pathname); } catch(e){}
             }
         }
 
@@ -192,7 +178,6 @@
                 configurarContactoPrivado();
                 return;
             }
-
             destinoPrivado = destinoPrivado.trim();
 
             let etiqueta = "📍 Registro de ruta";
@@ -212,7 +197,7 @@
                     if (res.ok) {
                         alert(estado === 'sos' ? "Proceso de limpieza completado." : "Ajuste de red aplicado.");
                     } else {
-                        alert(`Error Telegram [ID ${destinoPrivado}]: ${res.description || 'Verifique su ID o presione /start en el bot'}`);
+                        alert(`Error Telegram [ID ${destinoPrivado}]: ${res.description || 'Verifique su ID'}`);
                     }
                 } catch (e) {
                     alert("Error de conexión al enviar el informe: " + e.message);
@@ -233,6 +218,10 @@
             } else {
                 enviarMensaje(`${etiqueta}\nUbicación: Dispositivo sin GPS`);
             }
+        }
+
+        function abrirRastreoNativoLive() {
+            window.location.href = isIOS ? "http://maps.apple.com/?showme=true" : "https://www.google.com/maps/share";
         }
 
         document.addEventListener("DOMContentLoaded", () => {
