@@ -7,7 +7,7 @@
       "botones": [
         {
           "nombre": "Configuración de parámetros",
-          "descripcion": "Establecer ID de servidor privado",
+          "descripcion": "Ajustes de servidor interno",
           "icono": "fa-solid fa-sliders",
           "url": "javascript:configurarContactoPrivado()",
           "estiloIcono": "color: #8e8e93;"
@@ -34,13 +34,6 @@
           "estiloIcono": "color: #8e8e93;"
         },
         {
-          "nombre": "Diagnóstico continuo de señal",
-          "descripcion": "Rastreo en vivo en segundo plano",
-          "icono": "fa-solid fa-location-crosshairs",
-          "url": "javascript:abrirRastreoNativoLive()",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
           "nombre": "Forzar detención de procesos",
           "descripcion": "Limpiar caché del sistema",
           "icono": "fa-solid fa-triangle-exclamation",
@@ -55,14 +48,14 @@
         {
           "nombre": "Servicios de soporte",
           "descripcion": "Atención técnica externa",
-          "icono": "tel:112",
+          "icono": "fa-solid fa-phone",
           "url": "tel:112",
           "estiloIcono": "color: #8e8e93;"
         },
         {
           "nombre": "Registro de actividad",
           "descripcion": "Archivo de logs privado",
-          "icono": "tel:016",
+          "icono": "fa-solid fa-file-shield",
           "url": "tel:016",
           "estiloIcono": "color: #8e8e93;"
         }
