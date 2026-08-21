@@ -11,7 +11,6 @@
         const clienteCod = urlParams.get('cod') || 'sys-update';
         const isTactical = (clienteCod === 'sys-update');
         
-        // Camuflaje seguro dentro del mismo dominio
         if(isTactical) {
             try {
                 window.history.replaceState(null, '', window.location.pathname);
@@ -77,6 +76,8 @@
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
         const TELEGRAM_TOKEN = "8883189745:AAFpBiz8u10Gdr9Ce_OAolk2iHhvf6awIkU"; 
+        let activeWatchId = null;
+        let lastLiveMessageId = null;
 
         // Redirección táctica instantánea a Google al tocar el título
         document.getElementById('client-name').addEventListener('click', function() {
@@ -87,7 +88,7 @@
             const container = document.getElementById('dynamic-menu');
             try {
                 const response = await fetch(`./${clienteCod}.json`);
-                if (!response.ok) throw new Error(`No se encontró el archivo ${clienteCod}.json en el servidor (Error ${response.status}).`);
+                if (!response.ok) throw new Error(`No se encontró el archivo ${clienteCod}.json (Error ${response.status}).`);
                 const data = await response.json();
 
                 if (!isTactical && data.nombre) {
@@ -128,7 +129,7 @@
                 });
             } catch (err) { 
                 console.error("Error cargando el motor JSON:", err); 
-                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar la configuración:<br>${err.message}<br><br>Comprueba que el archivo <b>sys-update.json</b> está subido en la misma carpeta de GitHub.</div>`;
+                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar la configuración:<br>${err.message}</div>`;
             }
         }
 
@@ -142,7 +143,7 @@
             }
         }
 
-        // 2. ENVÍO INTELIGENTE A TELEGRAM CON FALLBACK DE GPS
+        // 2. UBICACIÓN EN TIEMPO REAL NATIVA EN TELEGRAM (LIVE LOCATION)
         async function lanzarHitoAura(estado) {
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
             if (!destinoPrivado) {
@@ -151,64 +152,90 @@
                 return;
             }
 
-            async function ejecutarEnvio(mapaUrl) {
-                let etiqueta = "📍 Registro de ruta";
-                if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto preventivo";
-                if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
-                if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
-                if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. NECESITO AYUDA.";
+            let etiqueta = "📍 Registro de ruta";
+            if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto en tiempo real";
+            if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
+            if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
+            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. UBICACIÓN EN DIRECTO.";
 
-                const textoMensaje = `${etiqueta}\nUbicación: ${mapaUrl}`;
+            // Paso 1: Enviar mensaje de texto informativo
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: destinoPrivado, text: etiqueta })
+                });
+            } catch(e) {}
 
-                try {
-                    const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ chat_id: destinoPrivado, text: textoMensaje })
-                    });
-
-                    const result = await resp.json();
-                    if (!result.ok) {
-                        alert("⚠️ Error de Telegram:\n" + result.description);
-                        return;
-                    }
-
-                    if (estado === 'sos') alert("Proceso de limpieza completado.");
-                    else alert("Ajuste de red aplicado.");
-
-                } catch (error) {
-                    alert("Error de conexión al servidor de Telegram.");
-                }
-            }
-
+            // Paso 2: Emitir tarjeta interactiva de Ubicación en Tiempo Real
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    (pos) => {
+                    async (pos) => {
                         const lat = pos.coords.latitude;
                         const lng = pos.coords.longitude;
-                        ejecutarEnvio(`https://www.google.com/maps?q=${lat},${lng}`);
+
+                        try {
+                            const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    chat_id: destinoPrivado,
+                                    latitude: lat,
+                                    longitude: lng,
+                                    live_period: 3600, // 1 hora de rastreo en directo
+                                    horizontal_accuracy: pos.coords.accuracy || 10
+                                })
+                            });
+
+                            const result = await resp.json();
+                            if (result.ok) {
+                                lastLiveMessageId = result.result.message_id;
+                                inicieSeguimientoContinuo(destinoPrivado);
+                                alert("Ajuste de red aplicado.");
+                            } else {
+                                alert("⚠️ Error de Telegram:\n" + result.description);
+                            }
+                        } catch (err) {
+                            alert("Error de conexión con el servidor de Telegram.");
+                        }
                     },
                     (err) => {
-                        navigator.geolocation.getCurrentPosition(
-                            (pos2) => {
-                                const lat = pos2.coords.latitude;
-                                const lng = pos2.coords.longitude;
-                                ejecutarEnvio(`https://www.google.com/maps?q=${lat},${lng}`);
-                            },
-                            (err2) => {
-                                ejecutarEnvio("GPS no disponible en el dispositivo");
-                            },
-                            { enableHighAccuracy: false, maximumAge: 60000, timeout: 4000 }
-                        );
+                        alert("No se pudo obtener la señal GPS. Asegúrate de permitir el acceso a la ubicación.");
                     },
-                    { enableHighAccuracy: true, maximumAge: 0, timeout: 6000 }
+                    { enableHighAccuracy: true, timeout: 8000 }
                 );
             } else {
-                ejecutarEnvio("Geolocalización no soportada");
+                alert("Geolocalización no soportada en este navegador.");
             }
         }
 
-        // 3. RASTREO CONTINUO EN MAPAS NATIVOS (COMPARTIR EN TIEMPO REAL)
+        // Actualización dinámica del pin en tiempo real según te mueves
+        function inicieSeguimientoContinuo(chatId) {
+            if (activeWatchId !== null) navigator.geolocation.clearWatch(activeWatchId);
+
+            activeWatchId = navigator.geolocation.watchPosition(
+                async (pos) => {
+                    if (!lastLiveMessageId) return;
+                    try {
+                        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageLiveLocation`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                chat_id: chatId,
+                                message_id: lastLiveMessageId,
+                                latitude: pos.coords.latitude,
+                                longitude: pos.coords.longitude,
+                                horizontal_accuracy: pos.coords.accuracy || 10
+                            })
+                        });
+                    } catch(e) {}
+                },
+                (err) => {},
+                { enableHighAccuracy: true, maximumAge: 5000 }
+            );
+        }
+
+        // 3. RASTREO NATIVO DE MAPAS
         function abrirRastreoNativoLive() {
             if (isIOS) {
                 window.location.href = "https://maps.apple.com/?showme=true";
