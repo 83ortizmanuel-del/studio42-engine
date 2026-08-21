@@ -200,15 +200,17 @@
                 ejecutarEnvio("Geolocalización no soportada");
             }
         }
-// 3. RASTREO CONTINUO EN MAPAS NATIVOS (COMPARTIR EN TIEMPO REAL)
-function abrirRastreoNativoLive() {
-    if (isIOS) {
-        // Abre Apple Maps centrado en tu posición en vivo (sin marcar destino)
-        window.location.href = "https://maps.apple.com/?showme=true";
-    } else {
-        // Abre la pantalla directa de "Compartir ubicación" en Google Maps
-        window.location.href = "https://www.google.com/maps/location-sharing";
-    }
-}
+
+        // 3. RASTREO CONTINUO EN MAPAS NATIVOS (COMPARTIR EN TIEMPO REAL)
+        function abrirRastreoNativoLive() {
+            if (isIOS) {
+                window.location.href = "https://maps.apple.com/?showme=true";
+            } else {
+                window.location.href = "https://www.google.com/maps/location-sharing";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEngineJSON);
+    </script>
 </body>
 </html>
