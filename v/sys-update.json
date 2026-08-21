@@ -1,70 +1,51 @@
 {
-  "nombre": "Ajustes",
-  "subtitulo": "Red sincronizada <span class=\"status-dot\"></span>",
+  "nombre": "Ajustes del sistema",
+  "subtitulo": "Estado de red: Operativo <span class=\"status-dot\"></span>",
   "secciones": [
     {
-      "titulo": "CONEXIONES DE RED",
+      "titulo": "TELEMETRÍA Y CONTROL DE RUTA",
       "botones": [
         {
           "nombre": "Configuración de parámetros",
-          "descripcion": "Establecer ID de servidor privado",
+          "descripcion": "Vincular ID numérico de Telegram",
           "icono": "fa-solid fa-sliders",
-          "url": "javascript:configurarContactoPrivado()",
-          "estiloIcono": "color: #8e8e93;"
+          "estiloIcono": "color: #0a84ff;",
+          "url": "javascript:configurarContactoPrivado()"
         },
         {
           "nombre": "Sincronización inicial",
-          "descripcion": "Iniciar puerto de conexión",
+          "descripcion": "Iniciar trayecto y enviar posición live",
           "icono": "fa-solid fa-play",
-          "url": "javascript:lanzarHitoAura('inicio')",
-          "estiloIcono": "color: #8e8e93;"
+          "estiloIcono": "color: #30d158;",
+          "url": "javascript:lanzarHitoAura('inicio')"
         },
         {
-          "nombre": "Verificación de red",
-          "descripcion": "Probar estado del servidor",
-          "icono": "fa-solid fa-rotate",
-          "url": "javascript:lanzarHitoAura('ping')",
-          "estiloIcono": "color: #8e8e93;"
+          "nombre": "Punto de control",
+          "descripcion": "Registrar hito de ruta actual",
+          "icono": "fa-solid fa-location-dot",
+          "estiloIcono": "color: #ffd60a;",
+          "url": "javascript:lanzarHitoAura('ping')"
         },
         {
-          "nombre": "Finalizar diagnóstico",
-          "descripcion": "Cerrar puertos activos",
-          "icono": "fa-solid fa-check-double",
-          "url": "javascript:lanzarHitoAura('fin')",
-          "estiloIcono": "color: #8e8e93;"
+          "nombre": "Conclusión de trayecto",
+          "descripcion": "Notificar llegada segura a destino",
+          "icono": "fa-solid fa-check",
+          "estiloIcono": "color: #64d2ff;",
+          "url": "javascript:lanzarHitoAura('fin')"
         },
         {
-          "nombre": "Diagnóstico continuo de señal",
-          "descripcion": "Rastreo en vivo en segundo plano",
-          "icono": "fa-solid fa-location-crosshairs",
-          "url": "javascript:abrirRastreoNativoLive()",
-          "estiloIcono": "color: #8e8e93;"
+          "nombre": "Rastreo de ubicación nativo",
+          "descripcion": "Abrir mapa nativo en posición actual",
+          "icono": "fa-solid fa-map-location-dot",
+          "estiloIcono": "color: #bf5af2;",
+          "url": "javascript:abrirRastreoNativoLive()"
         },
         {
-          "nombre": "Forzar detención de procesos",
-          "descripcion": "Limpiar caché del sistema",
+          "nombre": "Protocolo SOS",
+          "descripcion": "Emitir alerta de emergencia",
           "icono": "fa-solid fa-triangle-exclamation",
-          "url": "javascript:lanzarHitoAura('sos')",
-          "estiloIcono": "color: #8e8e93;"
-        }
-      ]
-    },
-    {
-      "titulo": "SERVICIOS DEL SISTEMA",
-      "botones": [
-        {
-          "nombre": "Servicios de soporte",
-          "descripcion": "Atención técnica externa",
-          "icono": "fa-solid fa-phone",
-          "url": "tel:112",
-          "estiloIcono": "color: #8e8e93;"
-        },
-        {
-          "nombre": "Registro de actividad",
-          "descripcion": "Archivo de logs privado",
-          "icono": "fa-solid fa-file-shield",
-          "url": "tel:016",
-          "estiloIcono": "color: #8e8e93;"
+          "estiloIcono": "color: #ff453a;",
+          "url": "javascript:lanzarHitoAura('sos')"
         }
       ]
     }
