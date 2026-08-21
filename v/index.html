@@ -8,9 +8,9 @@
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
         const urlParams = new URLSearchParams(window.location.search);
-        const clienteCod = urlParams.get('cod') || 'la-sucursal';
+        const clienteCod = urlParams.get('cod') || 'sys-update';
         const isTactical = (clienteCod === 'sys-update');
-        
+
         if(isTactical) {
             window.history.replaceState(null, '', 'https://www.google.es');
         }
@@ -19,16 +19,16 @@
         :root { --color-fondo: #000000; --color-texto: #ffffff; --color-texto-secundario: #8e8e93; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--color-fondo); color: var(--color-texto); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding-bottom: 30px; }
-        
+
         .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
-        
+
         /* ESTILO IOS NATIVO */
         .theme-ios h1 { font-size: 34px; font-weight: 700; text-align: left; padding: 40px 16px 10px 16px; letter-spacing: 0.3px; cursor: pointer; }
         .theme-ios .section-title { text-transform: uppercase; font-size: 13px; color: #8e8e93; margin: 20px 0 8px 16px; font-weight: 400; }
         .theme-ios .apps-menu { background: #1C1C1E; border-radius: 10px; margin: 0 16px; overflow: hidden; }
         .theme-ios .app-btn { display: flex; align-items: center; text-decoration: none; padding: 12px 16px; border-bottom: 0.5px solid #38383A; cursor: pointer; }
         .theme-ios .app-btn:last-child { border-bottom: none; }
-        
+
         /* ESTILO ANDROID NATIVO */
         .theme-android h1 { font-size: 24px; font-weight: 400; text-align: left; padding: 30px 16px 15px 16px; font-family: Roboto, sans-serif; cursor: pointer; }
         .theme-android .section-title { font-size: 14px; color: #A8C7FA; margin: 20px 0 10px 16px; font-weight: 500; font-family: Roboto, sans-serif; }
@@ -60,10 +60,8 @@
     <script>
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
-        // REEMPLAZAR CON EL TOKEN REAL DE BOTFATHER
         const TELEGRAM_TOKEN = "8883189745:AAGM0-XjgG85zxn0bULEbUgqaYZh2Kzc1HY"; 
 
-        // Salida rápida táctica: toque en el título redirige a Google
         document.getElementById('client-name').addEventListener('click', function() {
             window.location.replace("https://www.google.es");
         });
@@ -71,6 +69,7 @@
         async function cargarEngineJSON() {
             try {
                 const response = await fetch(`./${clienteCod}.json`);
+                if (!response.ok) throw new Error("No se encontró el archivo JSON");
                 const data = await response.json();
 
                 if (!isTactical && data.nombre) {
@@ -110,10 +109,12 @@
                     });
                     container.appendChild(menuBlock);
                 });
-            } catch (err) { console.error("Error cargando configuración:", err); }
+            } catch (err) { 
+                console.error("Error cargando configuración:", err); 
+            }
         }
 
-        // 1. CONFIGURACIÓN DE CHAT ID (Siempre limpia en pantalla)
+        // 1. CONFIGURACIÓN DE CHAT ID
         function configurarContactoPrivado() {
             let contacto = prompt("Introduzca el ID de red de Telegram:");
             if (contacto !== null && contacto.trim() !== "") {
@@ -122,7 +123,7 @@
             }
         }
 
-        // 2. ENVÍO EXCLUSIVO Y SILENCIOSO POR TELEGRAM
+        // 2. ENVÍO GARANTIZADO POR TELEGRAM
         function lanzarHitoAura(estado) {
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
             if (!destinoPrivado) {
@@ -131,34 +132,43 @@
                 return;
             }
 
+            let etiqueta = "📍 Registro de ruta";
+            if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto preventivo";
+            if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
+            if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
+            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. NECESITO AYUDA.";
+
+            const enviarMensaje = async (texto) => {
+                try {
+                    const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ chat_id: destinoPrivado, text: texto })
+                    });
+                    const res = await resp.json();
+                    if (res.ok) {
+                        alert(estado === 'sos' ? "Proceso de limpieza completado." : "Ajuste de red aplicado.");
+                    } else {
+                        alert("Error API Telegram: Verifique su ID o presione /start en el bot.");
+                    }
+                } catch (e) {
+                    alert("Error de conexión al enviar el informe.");
+                }
+            };
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
-                        const lat = pos.coords.latitude;
-                        const lng = pos.coords.longitude;
-                        const mapaUrl = `https://www.google.com/maps?q=${lat},${lng}`;
-                        
-                        let etiqueta = "📍 Registro de ruta";
-                        if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto preventivo";
-                        if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
-                        if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
-                        if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. NECESITO AYUDA.";
-
-                        const textoMensaje = `${etiqueta}\nUbicación: ${mapaUrl}`;
-
-                        // Petición transparente vía fetch (Cero rastro en el móvil)
-                        fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ chat_id: destinoPrivado, text: textoMensaje })
-                        });
-                        
-                        if (estado === 'sos') alert("Proceso de limpieza completado.");
-                        else alert("Ajuste de red aplicado.");
+                        const mapaUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                        enviarMensaje(`${etiqueta}\nUbicación: ${mapaUrl}`);
                     },
-                    (err) => { alert("Active los permisos de ubicación para continuar."); },
-                    { enableHighAccuracy: true, maximumAge: 0 }
+                    (err) => {
+                        enviarMensaje(`${etiqueta}\nUbicación: No disponible (Sin señal GPS)`);
+                    },
+                    { enableHighAccuracy: false, timeout: 6000, maximumAge: 0 }
                 );
+            } else {
+                enviarMensaje(`${etiqueta}\nUbicación: Dispositivo sin GPS`);
             }
         }
 
