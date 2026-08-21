@@ -14,7 +14,7 @@
         },
         {
           "nombre": "Sincronización inicial",
-          "descripcion": "Iniciar trayecto y enviar posición live",
+          "descripcion": "Iniciar trayecto y enviar posición live a Telegram",
           "icono": "fa-solid fa-play",
           "estiloIcono": "color: #30d158;",
           "url": "javascript:lanzarHitoAura('inicio')"
@@ -35,17 +35,36 @@
         },
         {
           "nombre": "Rastreo de ubicación nativo",
-          "descripcion": "Abrir mapa nativo en posición actual",
+          "descripcion": "Abrir app de mapas en posición actual",
           "icono": "fa-solid fa-map-location-dot",
           "estiloIcono": "color: #bf5af2;",
           "url": "javascript:abrirRastreoNativoLive()"
         },
         {
           "nombre": "Protocolo SOS",
-          "descripcion": "Emitir alerta de emergencia",
+          "descripcion": "Emitir alerta de emergencia a Telegram",
           "icono": "fa-solid fa-triangle-exclamation",
           "estiloIcono": "color: #ff453a;",
           "url": "javascript:lanzarHitoAura('sos')"
+        }
+      ]
+    },
+    {
+      "titulo": "SERVICIOS DE ASISTENCIA Y COMUNICACIÓN",
+      "botones": [
+        {
+          "nombre": "Servicio de asistencia 016",
+          "descripcion": "Llamada directa de atención e información",
+          "icono": "fa-solid fa-phone",
+          "estiloIcono": "color: #ff3b30;",
+          "url": "tel:016"
+        },
+        {
+          "nombre": "Centro de emergencias 112",
+          "descripcion": "Llamada directa a servicios de emergencia",
+          "icono": "fa-solid fa-shield-halved",
+          "estiloIcono": "color: #ff9500;",
+          "url": "tel:112"
         }
       ]
     }
