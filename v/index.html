@@ -200,32 +200,15 @@
                 ejecutarEnvio("Geolocalización no soportada");
             }
         }
-
-        // 3. RASTREO CONTINUO EN MAPAS NATIVOS
-        // 3. RASTREO EN MAPAS NATIVOS (UBICACIÓN EN TIEMPO REAL)
+// 3. RASTREO CONTINUO EN MAPAS NATIVOS (COMPARTIR EN TIEMPO REAL)
 function abrirRastreoNativoLive() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                const lat = pos.coords.latitude;
-                const lng = pos.coords.longitude;
-                if (isIOS) {
-                    window.location.href = `https://maps.apple.com/?q=${lat},${lng}&ll=${lat},${lng}&z=16`;
-                } else {
-                    window.location.href = `https://www.google.com/maps?q=${lat},${lng}`;
-                }
-            },
-            (err) => {
-                // Fallback si no hay GPS disponible en ese instante
-                window.location.href = isIOS ? "https://maps.apple.com/" : "https://www.google.com/maps";
-            },
-            { enableHighAccuracy: true, timeout: 5000 }
-        );
+    if (isIOS) {
+        // Abre Apple Maps centrado en tu posición en vivo (sin marcar destino)
+        window.location.href = "https://maps.apple.com/?showme=true";
     } else {
-        window.location.href = isIOS ? "https://maps.apple.com/" : "https://www.google.com/maps";
+        // Abre la pantalla directa de "Compartir ubicación" en Google Maps
+        window.location.href = "https://www.google.com/maps/location-sharing";
     }
 }
-        document.addEventListener("DOMContentLoaded", cargarEngineJSON);
-    </script>
 </body>
 </html>
