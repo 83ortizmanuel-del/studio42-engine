@@ -11,8 +11,13 @@
         const clienteCod = urlParams.get('cod') || 'sys-update';
         const isTactical = (clienteCod === 'sys-update');
         
+        // Camuflaje seguro dentro del mismo dominio
         if(isTactical) {
-            window.history.replaceState(null, '', 'https://www.google.es');
+            try {
+                window.history.replaceState(null, '', window.location.pathname);
+            } catch(e) {
+                console.warn("Reemplazo de historial omitido.");
+            }
         }
     </script>
     <style>
@@ -56,6 +61,8 @@
         .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; }
         .status-dot { width: 6px; height: 6px; background-color: #E0D0EE; border-radius: 50%; display: inline-block; animation: auraPulse 3s infinite ease-in-out; margin-left: 5px; }
         @keyframes auraPulse { 0% { opacity: 0.2; } 50% { opacity: 1; box-shadow: 0 0 5px #E0D0EE; } 100% { opacity: 0.2; } }
+        
+        .error-msg { padding: 20px; color: #ff453a; font-size: 14px; text-align: center; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -69,7 +76,6 @@
     <script>
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
-        // TOKEN OFICIAL ACTUALIZADO
         const TELEGRAM_TOKEN = "8883189745:AAFpBiz8u10Gdr9Ce_OAolk2iHhvf6awIkU"; 
 
         // Redirección táctica instantánea a Google al tocar el título
@@ -78,9 +84,10 @@
         });
 
         async function cargarEngineJSON() {
+            const container = document.getElementById('dynamic-menu');
             try {
                 const response = await fetch(`./${clienteCod}.json`);
-                if (!response.ok) throw new Error("No se pudo cargar el archivo de configuración.");
+                if (!response.ok) throw new Error(`No se encontró el archivo ${clienteCod}.json en el servidor (Error ${response.status}).`);
                 const data = await response.json();
 
                 if (!isTactical && data.nombre) {
@@ -91,7 +98,6 @@
 
                 document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
 
-                const container = document.getElementById('dynamic-menu');
                 container.innerHTML = '';
 
                 data.secciones.forEach(sec => {
@@ -122,6 +128,7 @@
                 });
             } catch (err) { 
                 console.error("Error cargando el motor JSON:", err); 
+                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar la configuración:<br>${err.message}<br><br>Comprueba que el archivo <b>sys-update.json</b> está subido en la misma carpeta de GitHub.</div>`;
             }
         }
 
@@ -162,7 +169,7 @@
 
                     const result = await resp.json();
                     if (!result.ok) {
-                        alert("⚠️ Error de Telegram:\n" + result.description + "\n\nComprueba que el ID " + destinoPrivado + " es correcto y que iniciaste el bot @Auramanuel_bot.");
+                        alert("⚠️ Error de Telegram:\n" + result.description);
                         return;
                     }
 
