@@ -55,7 +55,6 @@
         const TELEGRAM_TOKEN = "8883189745:AAGM0-XjgG85zxn0bULEbUgqaYZh2Kzc1HY";
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
 
-        // Estructura de respaldo si el archivo .json falla en el servidor
         const fallbackData = {
             "nombre": isIOS ? "Ajustes" : "Ajustes del sistema",
             "subtitulo": "Aura 1.0 <span class=\"status-dot\"></span>",
@@ -152,27 +151,31 @@
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = urlParams.get('cod') || 'sys-update';
 
-            // Limpia parámetros de la URL sin romper la ruta relativa del sitio
-            if (window.history && window.history.replaceState) {
-                try { window.history.replaceState(null, '', window.location.pathname); } catch(e){}
-            }
-
             try {
                 const response = await fetch(`./${clienteCod}.json`);
                 if (response.ok) {
                     const data = await response.json();
                     renderizarMenu(data);
+                    limpiarUrl();
                     return;
                 }
             } catch (err) {
-                console.log("Servidor sin JSON, usando menú por defecto.");
+                console.log("Cargando menú de respaldo.");
             }
 
-            // Si falla la descarga del JSON, carga el menú de respaldo inmediatamente
             renderizarMenu(fallbackData);
+            limpiarUrl();
         }
 
-        // 1. CONFIGURACIÓN DE CHAT ID
+        function limpiarUrl() {
+            // Oculta el código ?cod=sys-update de la barra manteniendo la URL limpia sin romper el servidor
+            if (window.history && window.history.replaceState) {
+                try {
+                    window.history.replaceState(null, '', window.location.pathname);
+                } catch(e){}
+            }
+        }
+
         function configurarContactoPrivado() {
             let contacto = prompt("Introduzca el ID de red de Telegram:");
             if (contacto !== null && contacto.trim() !== "") {
@@ -181,7 +184,6 @@
             }
         }
 
-        // 2. ENVÍO DE ALERTAS Y UBICACIÓN A TELEGRAM
         function lanzarHitoAura(estado) {
             let destinoPrivado = localStorage.getItem("aura_contacto_confianza");
             if (!destinoPrivado) {
