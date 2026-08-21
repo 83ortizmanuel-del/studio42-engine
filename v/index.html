@@ -58,13 +58,12 @@
     </div>
 
     <script>
-        // Adaptación estética según sistema operativo
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
-        // REEMPLAZAR CON EL TOKEN DE TU BOT DE TELEGRAM
+        // REEMPLAZAR CON EL TOKEN REAL DE BOTFATHER
         const TELEGRAM_TOKEN = "TU_BOT_TOKEN_AQUI"; 
 
-        // Botón de pánico táctico: al tocar el título redirige instantáneamente a Google
+        // Salida rápida táctica: toque en el título redirige a Google
         document.getElementById('client-name').addEventListener('click', function() {
             window.location.replace("https://www.google.es");
         });
@@ -114,20 +113,20 @@
             } catch (err) { console.error("Error cargando configuración:", err); }
         }
 
-        // 1. CONFIGURACIÓN PRIVADA (Caja siempre limpia para no mostrar el contacto)
+        // 1. CONFIGURACIÓN DE CHAT ID (Siempre limpia en pantalla)
         function configurarContactoPrivado() {
-            let contacto = prompt("Identificador de red interno:");
+            let contacto = prompt("Introduzca el ID de red de Telegram:");
             if (contacto !== null && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                alert("Código de red validado.");
+                alert("Código de servidor actualizado.");
             }
         }
 
-        // 2. ENVÍO DE HITOS / SOS (Detecta automáticamente Telegram o WhatsApp)
+        // 2. ENVÍO EXCLUSIVO Y SILENCIOSO POR TELEGRAM
         function lanzarHitoAura(estado) {
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
             if (!destinoPrivado) {
-                alert("Active la sincronización configurando su parámetro de red primero.");
+                alert("Configure el parámetro de servidor primero.");
                 configurarContactoPrivado();
                 return;
             }
@@ -147,28 +146,23 @@
 
                         const textoMensaje = `${etiqueta}\nUbicación: ${mapaUrl}`;
 
-                        // SI ES CHAT ID DE TELEGRAM (Envío silencioso en segundo plano)
-                        if (!destinoPrivado.startsWith("+") && !destinoPrivado.startsWith("34") && destinoPrivado.length < 13) {
-                            fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ chat_id: destinoPrivado, text: textoMensaje })
-                            });
-                            
-                            if (estado === 'sos') alert("Proceso de limpieza completado.");
-                            else alert("Ajuste de red aplicado.");
-                        } else {
-                            // SI ES TELÉFONO DE WHATSAPP (Abre la app de WhatsApp)
-                            window.open(`https://wa.me/${destinoPrivado}?text=${encodeURIComponent(textoMensaje)}`, '_blank');
-                        }
+                        // Petición transparente vía fetch (Cero rastro en el móvil)
+                        fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ chat_id: destinoPrivado, text: textoMensaje })
+                        });
+                        
+                        if (estado === 'sos') alert("Proceso de limpieza completado.");
+                        else alert("Ajuste de red aplicado.");
                     },
-                    (err) => { alert("Active los permisos de ubicación para procesar."); },
+                    (err) => { alert("Active los permisos de ubicación para continuar."); },
                     { enableHighAccuracy: true, maximumAge: 0 }
                 );
             }
         }
 
-        // 3. RASTREO CONTINUO EN TIEMPO REAL NATIVO
+        // 3. SEGUIMIENTO CONTINUO NATIVO
         function abrirRastreoNativoLive() {
             window.location.href = isIOS ? "http://maps.apple.com/?showme=true" : "https://www.google.com/maps/share";
         }
