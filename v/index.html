@@ -79,7 +79,7 @@
         let activeWatchId = null;
         let lastLiveMessageId = null;
 
-        // Redirección táctica instantánea a Google al tocar el título
+        // Redirección táctica a Google al tocar el título
         document.getElementById('client-name').addEventListener('click', function() {
             window.location.replace("https://www.google.es");
         });
@@ -87,8 +87,9 @@
         async function cargarEngineJSON() {
             const container = document.getElementById('dynamic-menu');
             try {
-                const response = await fetch(`./${clienteCod}.json`);
-                if (!response.ok) throw new Error(`No se encontró el archivo ${clienteCod}.json (Error ${response.status}).`);
+                // Se solicita dinámicamente el JSON del cliente con timestamp anti-caché
+                const response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok) throw new Error(`No se encontró la configuración para "${clienteCod}".`);
                 const data = await response.json();
 
                 if (!isTactical && data.nombre) {
@@ -98,7 +99,6 @@
                 }
 
                 document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
-
                 container.innerHTML = '';
 
                 data.secciones.forEach(sec => {
@@ -129,7 +129,7 @@
                 });
             } catch (err) { 
                 console.error("Error cargando el motor JSON:", err); 
-                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar la configuración:<br>${err.message}</div>`;
+                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar el perfil:<br><b>${err.message}</b></div>`;
             }
         }
 
@@ -143,7 +143,7 @@
             }
         }
 
-        // 2. UBICACIÓN EN TIEMPO REAL NATIVA EN TELEGRAM (LIVE LOCATION)
+        // 2. UBICACIÓN EN TIEMPO REAL NATIVA EN TELEGRAM
         async function lanzarHitoAura(estado) {
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
             if (!destinoPrivado) {
@@ -158,7 +158,6 @@
             if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
             if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. UBICACIÓN EN DIRECTO.";
 
-            // Paso 1: Enviar mensaje de texto informativo
             try {
                 await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                     method: "POST",
@@ -167,7 +166,6 @@
                 });
             } catch(e) {}
 
-            // Paso 2: Emitir tarjeta interactiva de Ubicación en Tiempo Real
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     async (pos) => {
@@ -182,7 +180,7 @@
                                     chat_id: destinoPrivado,
                                     latitude: lat,
                                     longitude: lng,
-                                    live_period: 3600, // 1 hora de rastreo en directo
+                                    live_period: 3600,
                                     horizontal_accuracy: pos.coords.accuracy || 10
                                 })
                             });
@@ -209,7 +207,6 @@
             }
         }
 
-        // Actualización dinámica del pin en tiempo real según te mueves
         function inicieSeguimientoContinuo(chatId) {
             if (activeWatchId !== null) navigator.geolocation.clearWatch(activeWatchId);
 
@@ -221,7 +218,7 @@
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
-                                chatId: chatId,
+                                chat_id: chatId,
                                 message_id: lastLiveMessageId,
                                 latitude: pos.coords.latitude,
                                 longitude: pos.coords.longitude,
@@ -235,7 +232,7 @@
             );
         }
 
-        // 3. RASTREO NATIVO DE MAPAS (URL OFICIAL UNIVERSAL - SIN ERROR 404)
+        // 3. RASTREO NATIVO DE MAPAS
         function abrirRastreoNativoLive() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -249,20 +246,12 @@
                         }
                     },
                     (err) => {
-                        if (isIOS) {
-                            window.location.href = "http://maps.apple.com/";
-                        } else {
-                            window.location.href = "https://www.google.com/maps/@?api=1&map_action=map";
-                        }
+                        window.location.href = isIOS ? "http://maps.apple.com/" : "https://www.google.com/maps/@?api=1&map_action=map";
                     },
                     { enableHighAccuracy: true, timeout: 5000 }
                 );
             } else {
-                if (isIOS) {
-                    window.location.href = "http://maps.apple.com/";
-                } else {
-                    window.location.href = "https://www.google.com/maps/@?api=1&map_action=map";
-                }
+                window.location.href = isIOS ? "http://maps.apple.com/" : "https://www.google.com/maps/@?api=1&map_action=map";
             }
         }
 
