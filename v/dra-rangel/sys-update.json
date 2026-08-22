@@ -1,83 +1,84 @@
 {
-"nombre": "CONSULTA GINECOLÓGICA Y OBSTETRICIA",
-"subtitulo": "Atención Médica Integral en Valencia",
-"subtituloOverlay": "Bienvenida a tu espacio de salud, confianza y transparencia",
-"logo": "./logo.png",
-"colorPrincipal": "#E1869E",
-"glowColor": "rgba(225, 134, 158, 0.25)",
-"youtubeAudioId": "",
-"secciones": [
-{
-"titulo": "Agendamiento Inteligente",
-"botones": [
-{
-"nombre": "Agendar Primera Vez",
-"descripcion": "Inicia tu control. Incluye rastreo ecográfico y citología.",
-"icono": "fa-solid fa-calendar-plus",
-"url": "https://wa.me/584140344533?text=Hola,%20deseo%20agendar%20mi%20primera%20consulta%20integral",
-"estiloIcono": "background-color: rgba(225, 134, 158, 0.15); color: #E1869E;",
-"destacado": true,
-"badge": "Recomendado"
-},
-{
-"nombre": "Cita de Control",
-"descripcion": "Programa tu seguimiento médico sin esperas",
-"icono": "fa-solid fa-user-doctor",
-"url": "./agendar-control.html",
-"estiloIcono": "background-color: rgba(72, 202, 228, 0.1); color: #48CAE4;"
-}
-]
-},
-{
-"titulo": "Herramientas de Salud",
-"botones": [
-{
-"nombre": "Calculadora Gestacional",
-"descripcion": "Calcula tus semanas y tu próxima ecografía recomendada",
-"icono": "fa-solid fa-baby",
-"url": "./gestograma.html",
-"estiloIcono": "background-color: rgba(156, 39, 176, 0.1); color: #9c27b0;"
-},
-{
-"nombre": "Transparencia de Costos",
-"descripcion": "Conoce nuestro combo integral sin costos ocultos (Tasa BCV)",
-"icono": "fa-solid fa-file-invoice-dollar",
-"url": "./transparencia.html",
-"estiloIcono": "background-color: rgba(76, 175, 80, 0.1); color: #4caf50;"
-}
-]
-},
-{
-"titulo": "Atención Inmediata",
-"botones": [
-{
-"nombre": "Emergencia Obstétrica",
-"descripcion": "Triaje rápido para síntomas graves o inicio de parto",
-"icono": "fa-solid fa-truck-medical",
-"url": "./triaje-emergencia.html",
-"estiloIcono": "background-color: rgba(255, 59, 48, 0.1); color: #ff3b30;"
-}
-]
-},
-{
-"titulo": "Tu Opinión Nos Importa",
-"botones": [
-{
-"nombre": "¿Algo no salió perfecto?",
-"descripcion": "Atención y solución directa y privada con la Doctora",
-"icono": "fa-solid fa-comment-medical",
-"url": "https://wa.me/584140344533?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20consulta",
-"estiloIcono": "background-color: rgba(255, 152, 0, 0.1); color: #ff9800;"
-},
-{
-"nombre": "Déjanos 5 Estrellas en Google",
-"descripcion": "Su confianza es nuestro mayor respaldo. ¡Gracias por su reseña!",
-"icono": "fa-brands fa-google",
-"url": "https://search.google.com/local/writereview?placeid=ID_GOOGLE",
-"estiloIcono": "background-color: rgba(255, 180, 0, 0.1); color: #ffb400;",
-"estrellas": true
-}
-]
-}
-]
+  "nombre": "CONSULTA GINECOLÓGICA Y OBSTETRICIA",
+  "subtitulo": "Atención Médica Integral en Valencia",
+  "subtituloOverlay": "Bienvenida a tu espacio de salud, confianza y transparencia",
+  "logo": "./logo.png",
+  "colorPrincipal": "#E1869E",
+  "colorWarm": "#5C3D2E",
+  "glowColor": "rgba(225, 134, 158, 0.25)",
+  "youtubeAudioId": "",
+  "secciones": [
+    {
+      "titulo": "Agendamiento Inteligente",
+      "botones": [
+        {
+          "nombre": "Agendar Primera Vez",
+          "descripcion": "Inicia tu control. Incluye rastreo ecográfico y citología.",
+          "icono": "fa-solid fa-calendar-plus",
+          "url": "https://wa.me/584140344533?text=Hola,%20deseo%20agendar%20mi%20primera%20consulta%20integral",
+          "estiloIcono": "background-color: rgba(225, 134, 158, 0.15); color: #E1869E;",
+          "destacado": true,
+          "badge": "Recomendado"
+        },
+        {
+          "nombre": "Cita de Control",
+          "descripcion": "Programa tu seguimiento médico sin esperas",
+          "icono": "fa-solid fa-user-doctor",
+          "url": "./agendar-control.html",
+          "estiloIcono": "background-color: rgba(92, 61, 46, 0.12); color: #5C3D2E;"
+        }
+      ]
+    },
+    {
+      "titulo": "Herramientas de Salud",
+      "botones": [
+        {
+          "nombre": "Calculadora Gestacional",
+          "descripcion": "Calcula tus semanas y tu próxima ecografía recomendada",
+          "icono": "fa-solid fa-baby",
+          "url": "./gestograma.html",
+          "estiloIcono": "background-color: rgba(184, 92, 56, 0.12); color: #B85C38;"
+        },
+        {
+          "nombre": "Transparencia de Costos",
+          "descripcion": "Conoce nuestro combo integral sin costos ocultos (Tasa BCV)",
+          "icono": "fa-solid fa-file-invoice-dollar",
+          "url": "./transparencia.html",
+          "estiloIcono": "background-color: rgba(76, 175, 80, 0.1); color: #4caf50;"
+        }
+      ]
+    },
+    {
+      "titulo": "Atención Inmediata",
+      "botones": [
+        {
+          "nombre": "Emergencia Obstétrica",
+          "descripcion": "Triaje rápido para síntomas graves o inicio de parto",
+          "icono": "fa-solid fa-truck-medical",
+          "url": "./triaje-emergencia.html",
+          "estiloIcono": "background-color: rgba(255, 59, 48, 0.1); color: #ff3b30;"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "botones": [
+        {
+          "nombre": "¿Algo no salió perfecto?",
+          "descripcion": "Atención y solución directa y privada con la Doctora",
+          "icono": "fa-solid fa-comment-medical",
+          "url": "https://wa.me/584140344533?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20consulta",
+          "estiloIcono": "background-color: rgba(255, 152, 0, 0.1); color: #ff9800;"
+        },
+        {
+          "nombre": "Déjanos 5 Estrellas en Google",
+          "descripcion": "Su confianza es nuestro mayor respaldo. ¡Gracias por su reseña!",
+          "icono": "fa-brands fa-google",
+          "url": "https://search.google.com/local/writereview?placeid=ID_GOOGLE",
+          "estiloIcono": "background-color: rgba(255, 180, 0, 0.12); color: #ffb400;",
+          "estrellas": true
+        }
+      ]
+    }
+  ]
 }
