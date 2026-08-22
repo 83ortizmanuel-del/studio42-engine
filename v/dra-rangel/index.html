@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Cargando...</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteCod = urlParams.get('cod') || 'sys-update';
+        const isTactical = (clienteCod === 'sys-update');
+        
+        if(isTactical) {
+            try {
+                window.history.replaceState(null, '', window.location.pathname);
+            } catch(e) {}
+        }
+    </script>
+    <style>
+        :root { 
+            --color-fondo: #000000; 
+            --color-texto: #ffffff; 
+            --color-texto-secundario: #8e8e93; 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background-color: var(--color-fondo); 
+            color: var(--color-texto); 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            padding-bottom: 30px; 
+        }
+        
+        .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
+        
+        /* CABECERA Y LOGO */
+        .brand-header { padding: 30px 16px 10px 16px; display: flex; flex-direction: column; align-items: flex-start; }
+        .client-logo { max-height: 60px; max-width: 180px; object-fit: contain; margin-bottom: 12px; display: none; }
+        
+        /* ESTILO IOS NATIVO */
+        .theme-ios h1 { font-size: 34px; font-weight: 700; text-align: left; letter-spacing: 0.3px; cursor: pointer; }
+        .theme-ios .section-title { text-transform: uppercase; font-size: 13px; color: #8e8e93; margin: 20px 0 8px 16px; font-weight: 400; }
+        .theme-ios .apps-menu { background: #1C1C1E; border-radius: 10px; margin: 0 16px; overflow: hidden; }
+        .theme-ios .app-btn { display: flex; align-items: center; text-decoration: none; padding: 12px 16px; border-bottom: 0.5px solid #38383A; cursor: pointer; }
+        .theme-ios .app-btn:last-child { border-bottom: none; }
+        
+        /* ESTILO ANDROID NATIVO */
+        .theme-android h1 { font-size: 24px; font-weight: 400; text-align: left; font-family: Roboto, sans-serif; cursor: pointer; }
+        .theme-android .section-title { font-size: 14px; color: #A8C7FA; margin: 20px 0 10px 16px; font-weight: 500; font-family: Roboto, sans-serif; }
+        .theme-android .apps-menu { background: transparent; display: flex; flex-direction: column; }
+        .theme-android .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 20px; cursor: pointer; }
+
+        /* ELEMENTOS COMUNES */
+        .app-icon { width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.2rem; border-radius: 8px; }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+        .app-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .app-name { font-size: 16px; color: var(--color-texto); }
+        .theme-ios .app-name { font-weight: 400; }
+        .theme-android .app-name { font-weight: 400; font-family: Roboto, sans-serif; }
+        .app-desc { font-size: 12px; color: var(--color-texto-secundario); margin-top: 2px; }
+
+        /* SUBTÍTULO */
+        .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; margin-bottom: 10px; }
+        
+        .error-msg { padding: 20px; color: #ff453a; font-size: 14px; text-align: center; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container" id="main-hub">
+        <div class="brand-header">
+            <img id="client-logo-img" class="client-logo" src="" alt="Logo">
+            <h1 id="client-name">Ajustes</h1>
+        </div>
+        <div id="client-subtitle" class="propietario"></div>
+        <div id="dynamic-menu"></div>
+    </div>
+
+    <script>
+        document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
+
+        const TELEGRAM_TOKEN = "8883189745:AAFpBiz8u10Gdr9Ce_OAolk2iHhvf6awIkU"; 
+        let activeWatchId = null;
+        let lastLiveMessageId = null;
+
+        // Redirección rápida al tocar el título
+        document.getElementById('client-name').addEventListener('click', function() {
+            window.location.replace("https://www.google.es");
+        });
+
+        async function cargarEngineJSON() {
+            const container = document.getElementById('dynamic-menu');
+            const logoImg = document.getElementById('client-logo-img');
+
+            try {
+                const response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok) throw new Error(`No existe el archivo "${clienteCod}.json".`);
+                const data = await response.json();
+
+                // 1. GESTIÓN DEL LOGO
+                if (data.logo) {
+                    logoImg.src = data.logo;
+                    logoImg.style.display = 'block';
+                } else {
+                    logoImg.style.display = 'none';
+                }
+
+                // 2. GESTIÓN DEL TÍTULO Y NOMBRE
+                if (!isTactical && data.nombre) {
+                    document.getElementById('client-name').innerText = data.nombre;
+                    document.title = data.nombre;
+                } else {
+                    document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del sistema";
+                    document.title = "Ajustes";
+                }
+
+                document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
+                container.innerHTML = '';
+
+                // 3. RENDERIZADO DE SECCIONES Y BOTONES
+                data.secciones.forEach(sec => {
+                    if (sec.titulo) {
+                        const title = document.createElement('div');
+                        title.className = 'section-title';
+                        title.innerText = sec.titulo;
+                        container.appendChild(title);
+                    }
+
+                    const menuBlock = document.createElement('div');
+                    menuBlock.className = 'apps-menu';
+
+                    sec.botones.forEach(btn => {
+                        const a = document.createElement('a');
+                        a.href = btn.url;
+                        a.className = "app-btn";
+
+                        // Determinar si el icono es imagen o clase de FontAwesome
+                        let iconHTML = '';
+                        if (btn.iconoImg) {
+                            iconHTML = `<img src="${btn.iconoImg}" alt="icon">`;
+                        } else if (btn.icono) {
+                            iconHTML = `<i class="${btn.icono}"></i>`;
+                        } else {
+                            iconHTML = `<i class="fas fa-chevron-right"></i>`;
+                        }
+
+                        a.innerHTML = `
+                            <div class="app-icon" style="${btn.estiloIcono || ''}">${iconHTML}</div>
+                            <div class="app-info">
+                                <div class="app-name">${btn.nombre}</div>
+                                <div class="app-desc">${btn.descripcion}</div>
+                            </div>
+                        `;
+                        menuBlock.appendChild(a);
+                    });
+                    container.appendChild(menuBlock);
+                });
+            } catch (err) { 
+                console.error("Error cargando el motor JSON:", err); 
+                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar la configuración:<br><b>${err.message}</b></div>`;
+            }
+        }
+
+        // FUNCIONES DE CONTROL AURA / TELEGRAM
+        function configurarContactoPrivado() {
+            let actual = localStorage.getItem("aura_contacto_confianza") || "";
+            let contacto = prompt("ID numérico de Telegram:", actual);
+            if (contacto !== null && contacto.trim() !== "") {
+                localStorage.setItem("aura_contacto_confianza", contacto.trim());
+                alert("ID de Telegram guardado.");
+            }
+        }
+
+        async function lanzarHitoAura(estado) {
+            const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
+            if (!destinoPrivado) { alert("Configura primero tu ID."); configurarContactoPrivado(); return; }
+
+            let etiqueta = "📍 Registro de ruta";
+            if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto en tiempo real";
+            if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
+            if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
+            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: UBICACIÓN EN DIRECTO.";
+
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: destinoPrivado, text: etiqueta })
+                });
+            } catch(e) {}
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                        try {
+                            const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    chat_id: destinoPrivado,
+                                    latitude: pos.coords.latitude,
+                                    longitude: pos.coords.longitude,
+                                    live_period: 3600,
+                                    horizontal_accuracy: pos.coords.accuracy || 10
+                                })
+                            });
+
+                            const result = await resp.json();
+                            if (result.ok) {
+                                lastLiveMessageId = result.result.message_id;
+                                inicieSeguimientoContinuo(destinoPrivado);
+                                alert("Red sincronizada.");
+                            }
+                        } catch (err) {}
+                    },
+                    (err) => { alert("Permiso de GPS requerido."); },
+                    { enableHighAccuracy: true, timeout: 8000 }
+                );
+            }
+        }
+
+        function inicieSeguimientoContinuo(chatId) {
+            if (activeWatchId !== null) navigator.geolocation.clearWatch(activeWatchId);
+            activeWatchId = navigator.geolocation.watchPosition(
+                async (pos) => {
+                    if (!lastLiveMessageId) return;
+                    try {
+                        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageLiveLocation`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                chat_id: chatId,
+                                message_id: lastLiveMessageId,
+                                latitude: pos.coords.latitude,
+                                longitude: pos.coords.longitude
+                            })
+                        });
+                    } catch(e) {}
+                },
+                (err) => {},
+                { enableHighAccuracy: true, maximumAge: 5000 }
+            );
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEngineJSON);
+    </script>
+</body>
+</html>
