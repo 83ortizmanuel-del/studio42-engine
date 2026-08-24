@@ -3,259 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Ajustes</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Identidad Inteligente - Centro de Enlaces</title>
+    
+    <!-- Tipografía premium para darle aspecto de App Nativa -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Carga de Tailwind CSS ultra-rápida (Sin terminal) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- EL MOTOR DE TU PLANTILLA: Cambia aquí los colores para cada cliente -->
     <script>
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
-        const urlParams = new URLSearchParams(window.location.search);
-        const clienteCod = urlParams.get('cod') || 'sys-update';
-        const isTactical = (clienteCod === 'sys-update');
-        
-        if(isTactical) {
-            try {
-                window.history.replaceState(null, '', window.location.pathname);
-            } catch(e) {
-                console.warn("Reemplazo de historial omitido.");
-            }
-        }
-    </script>
-    <style>
-        :root { 
-            --color-fondo: #000000; 
-            --color-texto: #ffffff; 
-            --color-texto-secundario: #8e8e93; 
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background-color: var(--color-fondo); 
-            color: var(--color-texto); 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            padding-bottom: 30px; 
-        }
-        
-        .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
-        
-        /* ESTILO IOS NATIVO */
-        .theme-ios h1 { font-size: 34px; font-weight: 700; text-align: left; padding: 40px 16px 10px 16px; letter-spacing: 0.3px; cursor: pointer; }
-        .theme-ios .section-title { text-transform: uppercase; font-size: 13px; color: #8e8e93; margin: 20px 0 8px 16px; font-weight: 400; }
-        .theme-ios .apps-menu { background: #1C1C1E; border-radius: 10px; margin: 0 16px; overflow: hidden; }
-        .theme-ios .app-btn { display: flex; align-items: center; text-decoration: none; padding: 12px 16px; border-bottom: 0.5px solid #38383A; cursor: pointer; }
-        .theme-ios .app-btn:last-child { border-bottom: none; }
-        
-        /* ESTILO ANDROID NATIVO */
-        .theme-android h1 { font-size: 24px; font-weight: 400; text-align: left; padding: 30px 16px 15px 16px; font-family: Roboto, sans-serif; cursor: pointer; }
-        .theme-android .section-title { font-size: 14px; color: #A8C7FA; margin: 20px 0 10px 16px; font-weight: 500; font-family: Roboto, sans-serif; }
-        .theme-android .apps-menu { background: transparent; display: flex; flex-direction: column; }
-        .theme-android .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 20px; cursor: pointer; }
-
-        /* ELEMENTOS COMUNES */
-        .app-icon { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.2rem; }
-        .app-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .app-name { font-size: 16px; color: var(--color-texto); }
-        .theme-ios .app-name { font-weight: 400; }
-        .theme-android .app-name { font-weight: 400; font-family: Roboto, sans-serif; }
-        .app-desc { font-size: 12px; color: var(--color-texto-secundario); margin-top: 2px; }
-
-        /* INDICADOR AURA */
-        .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; }
-        .status-dot { width: 6px; height: 6px; background-color: #E0D0EE; border-radius: 50%; display: inline-block; animation: auraPulse 3s infinite ease-in-out; margin-left: 5px; }
-        @keyframes auraPulse { 0% { opacity: 0.2; } 50% { opacity: 1; box-shadow: 0 0 5px #E0D0EE; } 100% { opacity: 0.2; } }
-        
-        .error-msg { padding: 20px; color: #ff453a; font-size: 14px; text-align: center; line-height: 1.4; }
-    </style>
-</head>
-<body>
-
-    <div class="hub-container" id="main-hub">
-        <h1 id="client-name">Ajustes</h1>
-        <div id="client-subtitle" class="propietario"></div>
-        <div id="dynamic-menu"></div>
-    </div>
-
-    <script>
-        document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
-
-        const TELEGRAM_TOKEN = "8883189745:AAFpBiz8u10Gdr9Ce_OAolk2iHhvf6awIkU"; 
-        let activeWatchId = null;
-        let lastLiveMessageId = null;
-
-        // Redirección táctica a Google al tocar el título
-        document.getElementById('client-name').addEventListener('click', function() {
-            window.location.replace("https://www.google.es");
-        });
-
-        async function cargarEngineJSON() {
-            const container = document.getElementById('dynamic-menu');
-            try {
-                // Se solicita dinámicamente el JSON del cliente con timestamp anti-caché
-                const response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
-                if (!response.ok) throw new Error(`No se encontró la configuración para "${clienteCod}".`);
-                const data = await response.json();
-
-                if (!isTactical && data.nombre) {
-                    document.getElementById('client-name').innerText = data.nombre;
-                } else {
-                    document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del sistema";
-                }
-
-                document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
-                container.innerHTML = '';
-
-                data.secciones.forEach(sec => {
-                    if (sec.titulo) {
-                        const title = document.createElement('div');
-                        title.className = 'section-title';
-                        title.innerText = sec.titulo;
-                        container.appendChild(title);
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        // Cambia este HEX por el color de tu próximo cliente
+                        marcaPrincipal: '#FACC15', // Amarillo Copy Laser
+                        fondoClaro: '#F8F9FA', // Gris casi blanco para el fondo
+                        textoOscuro: '#1F2937', // Gris muy oscuro, más elegante que el negro puro
                     }
-
-                    const menuBlock = document.createElement('div');
-                    menuBlock.className = 'apps-menu';
-
-                    sec.botones.forEach(btn => {
-                        const a = document.createElement('a');
-                        a.href = btn.url;
-                        a.className = "app-btn";
-                        a.innerHTML = `
-                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
-                            <div class="app-info">
-                                <div class="app-name">${btn.nombre}</div>
-                                <div class="app-desc">${btn.descripcion}</div>
-                            </div>
-                        `;
-                        menuBlock.appendChild(a);
-                    });
-                    container.appendChild(menuBlock);
-                });
-            } catch (err) { 
-                console.error("Error cargando el motor JSON:", err); 
-                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar el perfil:<br><b>${err.message}</b></div>`;
+                }
             }
         }
-
-        // 1. CONFIGURACIÓN DEL CHAT ID
-        function configurarContactoPrivado() {
-            let actual = localStorage.getItem("aura_contacto_confianza") || "";
-            let contacto = prompt("Introduzca su ID numérico de Telegram (actual: " + actual + "):", actual);
-            if (contacto !== null && contacto.trim() !== "") {
-                localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                alert("ID de Telegram guardado: " + contacto.trim());
-            }
-        }
-
-        // 2. UBICACIÓN EN TIEMPO REAL NATIVA EN TELEGRAM
-        async function lanzarHitoAura(estado) {
-            const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
-            if (!destinoPrivado) {
-                alert("Primero debes configurar tu ID de Telegram.");
-                configurarContactoPrivado();
-                return;
-            }
-
-            let etiqueta = "📍 Registro de ruta";
-            if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto en tiempo real";
-            if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
-            if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
-            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. UBICACIÓN EN DIRECTO.";
-
-            try {
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ chat_id: destinoPrivado, text: etiqueta })
-                });
-            } catch(e) {}
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    async (pos) => {
-                        const lat = pos.coords.latitude;
-                        const lng = pos.coords.longitude;
-
-                        try {
-                            const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    chat_id: destinoPrivado,
-                                    latitude: lat,
-                                    longitude: lng,
-                                    live_period: 3600,
-                                    horizontal_accuracy: pos.coords.accuracy || 10
-                                })
-                            });
-
-                            const result = await resp.json();
-                            if (result.ok) {
-                                lastLiveMessageId = result.result.message_id;
-                                inicieSeguimientoContinuo(destinoPrivado);
-                                alert("Ajuste de red aplicado.");
-                            } else {
-                                alert("⚠️ Error de Telegram:\n" + result.description);
-                            }
-                        } catch (err) {
-                            alert("Error de conexión con el servidor de Telegram.");
-                        }
-                    },
-                    (err) => {
-                        alert("No se pudo obtener la señal GPS. Asegúrate de permitir el acceso a la ubicación.");
-                    },
-                    { enableHighAccuracy: true, timeout: 8000 }
-                );
-            } else {
-                alert("Geolocalización no soportada en este navegador.");
-            }
-        }
-
-        function inicieSeguimientoContinuo(chatId) {
-            if (activeWatchId !== null) navigator.geolocation.clearWatch(activeWatchId);
-
-            activeWatchId = navigator.geolocation.watchPosition(
-                async (pos) => {
-                    if (!lastLiveMessageId) return;
-                    try {
-                        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageLiveLocation`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                chat_id: chatId,
-                                message_id: lastLiveMessageId,
-                                latitude: pos.coords.latitude,
-                                longitude: pos.coords.longitude,
-                                horizontal_accuracy: pos.coords.accuracy || 10
-                            })
-                        });
-                    } catch(e) {}
-                },
-                (err) => {},
-                { enableHighAccuracy: true, maximumAge: 5000 }
-            );
-        }
-
-        // 3. RASTREO NATIVO DE MAPAS
-        function abrirRastreoNativoLive() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        const lat = pos.coords.latitude;
-                        const lng = pos.coords.longitude;
-                        if (isIOS) {
-                            window.location.href = `http://maps.apple.com/?ll=${lat},${lng}&q=Mi+Ubicacion`;
-                        } else {
-                            window.location.href = `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lng}&zoom=16`;
-                        }
-                    },
-                    (err) => {
-                        window.location.href = isIOS ? "http://maps.apple.com/" : "https://www.google.com/maps/@?api=1&map_action=map";
-                    },
-                    { enableHighAccuracy: true, timeout: 5000 }
-                );
-            } else {
-                window.location.href = isIOS ? "http://maps.apple.com/" : "https://www.google.com/maps/@?api=1&map_action=map";
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", cargarEngineJSON);
     </script>
+    
+    <!-- Pequeño script JS para dar efecto de "rebote" a los botones al tocarlos -->
+    <script>
+        function animarClick(elemento) {
+            elemento.style.transform = "scale(0.95)";
+            setTimeout(() => {
+                elemento.style.transform = "scale(1)";
+            }, 150);
+        }
+    </script>
+</head>
+
+<body class="bg-fondoClaro min-h-screen flex flex-col items-center justify-center p-6 text-textoOscuro selection:bg-marcaPrincipal selection:text-black">
+
+    <!-- CABECERA: Identidad del Cliente -->
+    <header class="w-full max-w-sm flex flex-col items-center mb-10 text-center">
+        <img src="logo.jpg" alt="Logo Cliente" class="h-32 mb-4">
+        
+        <h1 class="text-4xl font-extrabold tracking-tight mb-1 uppercase text-black">
+        </h1>
+        <p class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mt-1">
+            Imprimiendo desde 1987
+        </p>
+    </header>
+
+    <!-- CUERPO: Botones Phygital -->
+    <main class="w-full max-w-sm flex flex-col gap-4">
+        
+        <!-- BOTÓN 1: WHATSAPP -->
+        <!-- Cambia el número 34600000000 por el del cliente -->
+        <a href="https://wa.me/34646546315?text=Hola,%20estoy%20en%20la%20tienda%20y%20quiero%20imprimir%20estos%20archivos:" 
+           target="_blank"
+           onclick="animarClick(this)"
+           class="flex items-center justify-center w-full py-4 px-6 rounded-xl shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] bg-marcaPrincipal text-black font-bold uppercase text-sm tracking-wide transition-all hover:shadow-[0_6px_20px_rgba(250,204,21,0.4)]">
+            <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Enviar por WhatsApp
+        </a>
+
+        <!-- BOTÓN 2: EMAIL -->
+        <!-- Cambia copylaser@copylaser.com por el correo real -->
+        <a href="mailto:copylaser@copylaser.com?subject=Archivos%20para%20imprimir" 
+           onclick="animarClick(this)"
+           class="flex items-center justify-center w-full py-4 px-6 rounded-xl shadow-md bg-white border-2 border-gray-100 text-textoOscuro font-bold uppercase text-sm tracking-wide transition-all hover:border-marcaPrincipal">
+            <svg class="w-6 h-6 mr-3 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+            Enviar por Email
+        </a>
+
+        <!-- LÍNEA SEPARADORA (Opcional, para organizar) -->
+        <div class="w-full border-t border-gray-200 my-4"></div>
+
+        <!-- SECCIÓN DE RESEÑA GOOGLE ENFOCADA EN 5 ESTRELLAS -->
+        <div class="w-full flex flex-col items-center bg-gray-50 p-4 rounded-2xl border border-gray-100 shadow-sm">
+            
+            <!-- Texto de invitación -->
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                ¿Qué tal tu experiencia?
+            </p>
+            
+            <!-- Las 5 Estrellas Doradas de Google -->
+            <div class="flex justify-center gap-1 mb-3">
+                <svg class="w-7 h-7 text-amber-400 drop-shadow" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <svg class="w-7 h-7 text-amber-400 drop-shadow" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <svg class="w-7 h-7 text-amber-400 drop-shadow" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <svg class="w-7 h-7 text-amber-400 drop-shadow" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <svg class="w-7 h-7 text-amber-400 drop-shadow" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+            </div>
+
+            <!-- Botón de acción directo -->
+            <!-- Recuerda cambiar la URL de abajo por la del perfil de Copy Laser en Google -->
+            <a href="https://search.google.com/local/writereview?placeid=ChIJt0iACmurWg0R33c7c23e7xc" 
+               target="_blank"
+               onclick="animarClick(this)"
+               class="flex items-center justify-center w-full py-4 px-6 rounded-xl shadow-md bg-gray-900 text-white font-bold uppercase text-xs tracking-wider transition-all hover:bg-gray-800">
+                Valorar en Google
+            </a>
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA: Tu firma de Agencia -->
+    <footer class="mt-14 text-center opacity-50">
+        <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-500">Tecnología Phygital por</p>
+        <p class="text-xs font-extrabold tracking-[0.2em] mt-1 text-gray-800">STUDIO 42</p>
+    </footer>
+
 </body>
 </html>
