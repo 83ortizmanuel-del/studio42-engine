@@ -2,150 +2,229 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Ajustes del Sistema</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Ajustes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
+        
+        // 1. EXTRAER EL CÓDIGO DEL CLIENTE PRIMERO
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteCod = urlParams.get('cod') || 'sys-update';
+        const isTactical = (clienteCod === 'sys-update');
+        
+        // 2. CAMUFLAJE SÓLO SI ES MODO TÁCTICO (SYS-UPDATE)
+        if(isTactical) {
+            try {
+                window.history.replaceState(null, '', window.location.pathname);
+            } catch(e) {}
+        }
+    </script>
     <style>
-        :root {
-            --bg-dark: #09090b;
-            --card-dark: #121215;
-            --border-dark: #27272a;
-            --text-main: #f4f4f5;
-            --text-sub: #a1a1aa;
-            --accent-magenta: #e056fd;
-            --glow-magenta: rgba(224, 86, 253, 0.4);
+        :root { 
+            --color-fondo: #000000; 
+            --color-texto: #ffffff; 
+            --color-texto-secundario: #8e8e93; 
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            padding: 20px 16px 40px 16px;
-            display: flex;
-            justify-content: center;
+        body { 
+            background-color: var(--color-fondo); 
+            color: var(--color-texto); 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            padding-bottom: 30px; 
         }
+        
+        .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
+        
+        /* ESTILO IOS NATIVO */
+        .theme-ios h1 { font-size: 34px; font-weight: 700; text-align: left; padding: 40px 16px 10px 16px; letter-spacing: 0.3px; cursor: pointer; }
+        .theme-ios .section-title { text-transform: uppercase; font-size: 13px; color: #8e8e93; margin: 20px 0 8px 16px; font-weight: 400; }
+        .theme-ios .apps-menu { background: #1C1C1E; border-radius: 10px; margin: 0 16px; overflow: hidden; }
+        .theme-ios .app-btn { display: flex; align-items: center; text-decoration: none; padding: 12px 16px; border-bottom: 0.5px solid #38383A; cursor: pointer; }
+        .theme-ios .app-btn:last-child { border-bottom: none; }
+        
+        /* ESTILO ANDROID NATIVO */
+        .theme-android h1 { font-size: 24px; font-weight: 400; text-align: left; padding: 30px 16px 15px 16px; font-family: Roboto, sans-serif; cursor: pointer; }
+        .theme-android .section-title { font-size: 14px; color: #A8C7FA; margin: 20px 0 10px 16px; font-weight: 500; font-family: Roboto, sans-serif; }
+        .theme-android .apps-menu { background: transparent; display: flex; flex-direction: column; }
+        .theme-android .app-btn { display: flex; align-items: center; text-decoration: none; padding: 16px 20px; cursor: pointer; }
 
-        .container { width: 100%; max-width: 440px; }
+        /* ELEMENTOS COMUNES */
+        .app-icon { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.2rem; }
+        .app-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .app-name { font-size: 16px; color: var(--color-texto); }
+        .theme-ios .app-name { font-weight: 400; }
+        .theme-android .app-name { font-weight: 400; font-family: Roboto, sans-serif; }
+        .app-desc { font-size: 12px; color: var(--color-texto-secundario); margin-top: 2px; }
 
-        /* HEADER INTERFAZ NATIVA */
-        .system-header {
-            background: var(--card-dark);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: left;
-            border: 1px solid var(--border-dark);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* INDICADOR AURA MAGENTA PARPADEANTE */
+        .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; display: flex; align-items: center; }
+        .status-dot { 
+            width: 8px; 
+            height: 8px; 
+            background-color: #e056fd; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-left: 8px; 
+            box-shadow: 0 0 8px #e056fd;
+            animation: auraPulse 1.5s infinite ease-in-out; 
         }
-
-        .header-info h1 { font-size: 18px; font-weight: 600; color: var(--text-main); }
-        .header-info p { font-size: 12px; color: var(--text-sub); margin-top: 4px; display: flex; align-items: center; gap: 8px; }
-
-        /* LUZ MAGENTA PARPADEANTE (LED DE TELEMETRÍA) */
-        .status-dot-magenta {
-            width: 10px;
-            height: 10px;
-            background-color: var(--accent-magenta);
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px var(--glow-magenta);
-            animation: pulse-magenta 1.5s infinite;
+        @keyframes auraPulse { 
+            0% { opacity: 0.3; transform: scale(0.9); } 
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 12px #e056fd; } 
+            100% { opacity: 0.3; transform: scale(0.9); } 
         }
-
-        @keyframes pulse-magenta {
-            0% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(224, 86, 253, 0.7);
-            }
-            70% {
-                transform: scale(1);
-                box-shadow: 0 0 0 8px rgba(224, 86, 253, 0);
-            }
-            100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(224, 86, 253, 0);
-            }
-        }
-
-        /* GRUPOS Y SECCIONES */
-        .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-sub); margin: 20px 0 10px 8px; }
-        .menu-group { display: flex; flex-direction: column; gap: 10px; }
-
-        .app-btn {
-            display: flex; align-items: center; background: var(--card-dark); padding: 16px; border-radius: 14px; text-decoration: none; color: var(--text-main); border: 1px solid var(--border-dark); transition: background 0.2s ease;
-        }
-        .app-btn:active { background: #1c1c21; }
-        .btn-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 14px; flex-shrink: 0; }
-        .btn-content { flex-grow: 1; }
-        .btn-title { font-size: 14px; font-weight: 500; }
-        .btn-desc { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
-        .btn-arrow { color: #3f3f46; font-size: 12px; margin-left: 8px; }
-
-        .footer-brand { text-align: center; margin-top: 35px; font-size: 10px; color: #3f3f46; letter-spacing: 1px; }
-        .error-msg { background: #271414; color: #f87171; padding: 16px; border-radius: 12px; font-size: 13px; text-align: center; border: 1px solid #7f1d1d; }
+        
+        .error-msg { padding: 20px; color: #ff453a; font-size: 14px; text-align: center; line-height: 1.4; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="system-header">
-            <div class="header-info">
-                <h1 id="client-name">Ajustes del sistema</h1>
-                <p id="client-subtitle"><span class="status-dot-magenta"></span> Estado de red: Operativo</p>
-            </div>
-            <i class="fa-solid fa-sliders" style="color: var(--text-sub); font-size: 18px;"></i>
-        </div>
 
+    <div class="hub-container" id="main-hub">
+        <h1 id="client-name">Ajustes</h1>
+        <div id="client-subtitle" class="propietario"></div>
         <div id="dynamic-menu"></div>
-        <div class="footer-brand">SISTEMA OPERATIVO — PROTECCIÓN ACTIVA</div>
     </div>
 
     <script>
+        document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
+
+        const TELEGRAM_TOKEN = "8883189745:AAFpBiz8u10Gdr9Ce_OAolk2iHhvf6awIkU"; 
+        let activeWatchId = null;
+        let lastLiveMessageId = null;
+
+        document.getElementById('client-name').addEventListener('click', function() {
+            window.location.replace("https://www.google.es");
+        });
+
         async function cargarEngineJSON() {
             const container = document.getElementById('dynamic-menu');
             try {
-                const response = await fetch(`./sys-update.json?v=${Date.now()}`);
-                if (!response.ok) throw new Error("No se encontró sys-update.json");
+                const response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok) throw new Error(`No existe el archivo de configuración "${clienteCod}.json".`);
                 const data = await response.json();
 
-                if (data.nombre) document.getElementById('client-name').innerText = data.nombre;
-                
+                if (data.nombre) {
+                    document.getElementById('client-name').innerText = data.nombre;
+                } else {
+                    document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del sistema";
+                }
+
+                document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
                 container.innerHTML = '';
 
                 data.secciones.forEach(sec => {
                     if (sec.titulo) {
-                        const label = document.createElement('div');
-                        label.className = 'section-label';
-                        label.innerText = sec.titulo;
-                        container.appendChild(label);
+                        const title = document.createElement('div');
+                        title.className = 'section-title';
+                        title.innerText = sec.titulo;
+                        container.appendChild(title);
                     }
 
-                    const group = document.createElement('div');
-                    group.className = 'menu-group';
+                    const menuBlock = document.createElement('div');
+                    menuBlock.className = 'apps-menu';
 
                     sec.botones.forEach(btn => {
                         const a = document.createElement('a');
                         a.href = btn.url;
                         a.className = "app-btn";
                         a.innerHTML = `
-                            <div class="btn-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
-                            <div class="btn-content">
-                                <div class="btn-title">${btn.nombre}</div>
-                                <div class="btn-desc">${btn.descripcion}</div>
+                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
+                            <div class="app-info">
+                                <div class="app-name">${btn.nombre}</div>
+                                <div class="app-desc">${btn.descripcion}</div>
                             </div>
-                            <div class="btn-arrow"><i class="fa-solid fa-chevron-right"></i></div>
                         `;
-                        group.appendChild(a);
+                        menuBlock.appendChild(a);
                     });
-                    container.appendChild(group);
+                    container.appendChild(menuBlock);
                 });
-            } catch (err) {
-                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar parámetros del sistema.</div>`;
+            } catch (err) { 
+                console.error("Error cargando el JSON:", err); 
+                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar el perfil:<br><b>${err.message}</b><br><br>Verifica que el archivo exista en la carpeta.</div>`;
             }
         }
+
+        // FUNCIONES DE CONTROL RASTREO / TELEGRAM
+        function configurarContactoPrivado() {
+            let actual = localStorage.getItem("aura_contacto_confianza") || "";
+            let contacto = prompt("Introduzca su ID numérico de Telegram:", actual);
+            if (contacto !== null && contacto.trim() !== "") {
+                localStorage.setItem("aura_contacto_confianza", contacto.trim());
+                alert("ID guardado.");
+            }
+        }
+
+        async function lanzarHitoAura(estado) {
+            const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
+            if (!destinoPrivado) { alert("Configura primero el ID."); configurarContactoPrivado(); return; }
+            let etiqueta = "📍 Registro de ruta";
+            if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto";
+            if (estado === 'ping') etiqueta = "📍 Punto de control";
+            if (estado === 'fin') etiqueta = "✅ Llegada segura";
+            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS";
+
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: destinoPrivado, text: etiqueta })
+                });
+            } catch(e) {}
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    try {
+                        const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                chat_id: destinoPrivado,
+                                latitude: pos.coords.latitude,
+                                longitude: pos.coords.longitude,
+                                live_period: 3600
+                            })
+                        });
+                        const result = await resp.json();
+                        if (result.ok) {
+                            lastLiveMessageId = result.result.message_id;
+                            inicieSeguimientoContinuo(destinoPrivado);
+                            alert("Ubicación en vivo transmitida.");
+                        }
+                    } catch (err) {}
+                });
+            }
+        }
+
+        function inicieSeguimientoContinuo(chatId) {
+            if (activeWatchId !== null) navigator.geolocation.clearWatch(activeWatchId);
+            activeWatchId = navigator.geolocation.watchPosition(async (pos) => {
+                if (!lastLiveMessageId) return;
+                try {
+                    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageLiveLocation`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            message_id: lastLiveMessageId,
+                            latitude: pos.coords.latitude,
+                            longitude: pos.coords.longitude
+                        })
+                    });
+                } catch(e) {}
+            }, (err) => {}, { enableHighAccuracy: true, maximumAge: 5000 });
+        }
+
+        function abrirRastreoNativoLive() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    window.location.href = isIOS ? `http://maps.apple.com/?ll=${lat},${lng}&q=Mi+Ubicacion` : `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lng}&zoom=16`;
+                });
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", cargarEngineJSON);
     </script>
 </body>
