@@ -21,6 +21,36 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
+        /* Estilos Pantalla de Bienvenida (Splash Screen) */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--color-fondo);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 0.5s ease;
+        }
+        #btn-entrar {
+            background-color: var(--color-principal); color: #000;
+            padding: 14px 45px; font-size: 1.2rem; font-weight: 800;
+            border: none; border-radius: 30px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: transform 0.2s ease;
+            margin-top: 20px;
+        }
+        #btn-entrar:active { transform: scale(0.95); }
+
+        /* Estilos Botón Flotante Audio */
+        #mute-btn {
+            position: fixed; bottom: 25px; right: 25px;
+            width: 55px; height: 55px; border-radius: 50%;
+            background-color: var(--color-tarjeta);
+            border: 2px solid var(--color-principal);
+            color: var(--color-principal); font-size: 1.3rem;
+            display: none; justify-content: center; align-items: center;
+            z-index: 1000; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: all 0.3s ease;
+        }
+
+        /* Contenedor Principal */
         .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); }
         
         .logo-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 22%; border: 2px solid var(--color-principal); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; }
@@ -36,28 +66,53 @@
         .app-btn:active { transform: scale(0.97); background-color: #2a2a2a; }
         .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; transition: all 0.3s ease; }
         
-        /* Colores específicos de Iconos */
+        /* Colores de Iconos */
         .icon-contact { background-color: rgba(0, 229, 255, 0.1); color: #00e5ff; }
         .icon-booking { background-color: rgba(212, 175, 55, 0.1); color: #d4af37; }
         .icon-insta { background-color: rgba(225, 48, 108, 0.1); color: #e1306c; }
         .icon-review { background-color: rgba(255, 180, 0, 0.1); color: #ffb400; }
-        
-        /* Colores para el Parking */
         .icon-parking { background-color: rgba(142, 142, 147, 0.1); color: #8e8e93; }
         .icon-parking-active { background-color: rgba(212, 175, 55, 0.15); color: var(--color-principal); }
 
         .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; transition: color 0.3s ease; }
+        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
         .app-desc { font-size: 0.75rem; color: var(--color-texto-secundario); }
         .app-arrow { color: var(--color-texto-secundario); font-size: 0.85rem; opacity: 0.5; }
         
-        .stars-container { color: var(--color-estrellas); font-size: 0.75rem; margin-top: 3px; }
+        /* Estilos Escudo Anti-Reseñas */
+        .stars-container { font-size: 1.8rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .star-rating i:hover { transform: scale(1.2); }
+        .star-active { color: var(--color-estrellas); }
+        .star-inactive { color: #4b5563; }
         
         .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
         .footer-brand span { color: var(--color-principal); font-weight: 700; }
     </style>
 </head>
 <body>
+
+    <!-- 1. PANTALLA PREVIA (SPLASH SCREEN) -->
+    <div id="splash-screen">
+        <div class="logo-container" style="width: 140px; height: 140px; margin-bottom: 30px;">
+            <img src="logo.png" alt="La Sucursal">
+        </div>
+        <h1 style="color: var(--color-principal);">LA SUCURSAL</h1>
+        <p style="color: var(--color-texto-secundario); margin-bottom: 20px;">Barbería & Estilo</p>
+        <button id="btn-entrar">ENTRAR</button>
+    </div>
+
+    <!-- 2. AUDIO OCULTO -->
+    <audio id="bg-audio" loop>
+        <source src="ambiente.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 3. BOTÓN FLOTANTE MUTE -->
+    <button id="mute-btn">
+        <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+    </button>
+
+    <!-- CONTENEDOR PRINCIPAL -->
     <div class="hub-container">
         <!-- Logo -->
         <div class="logo-container">
@@ -124,32 +179,92 @@
 
             <div class="section-title">¿Te ha gustado?</div>
 
-            <a href="https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI" target="_blank" class="app-btn">
-                <div class="app-icon icon-review"><i class="fa-brands fa-google"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Déjanos 5 Estrellas</div>
-                    <div class="stars-container">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
+            <!-- ESCUDO ANTI-RESEÑAS INTEGRADO -->
+            <div class="app-btn" style="flex-direction: column; cursor: default;">
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <div class="app-icon icon-review"><i class="fa-brands fa-google"></i></div>
+                    <div class="app-info">
+                        <div class="app-name">Valora tu experiencia</div>
+                        <div class="app-desc">Ayúdanos a mejorar</div>
                     </div>
                 </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
+                <div class="stars-container star-rating" id="escudo-estrellas">
+                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(1)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(2)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(3)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(4)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(5)"></i>
+                </div>
+                <p id="star-feedback" style="font-size: 0.75rem; color: var(--color-principal); text-align: center; width: 100%; margin-top: 10px; display: none;">Procesando valoración...</p>
+            </div>
 
         </div>
 
         <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
     </div>
 
-    <!-- SCRIPT GESTOR DE PARKING BLINDADO -->
+    <!-- SCRIPTS -->
     <script>
+        // --- A. LÓGICA DE SPLASH SCREEN Y AUDIO FLOTANTE ---
+        const splashScreen = document.getElementById('splash-screen');
+        const btnEntrar = document.getElementById('btn-entrar');
+        const bgAudio = document.getElementById('bg-audio');
+        const muteBtn = document.getElementById('mute-btn');
+        const muteIcon = document.getElementById('mute-icon');
+
+        btnEntrar.addEventListener('click', () => {
+            splashScreen.style.opacity = '0'; // Efecto de desvanecimiento
+            setTimeout(() => { splashScreen.style.display = 'none'; }, 500);
+            
+            muteBtn.style.display = 'flex'; // Mostrar botón de audio
+            
+            bgAudio.play().catch(e => console.log("Autoplay bloqueado:", e));
+        });
+
+        muteBtn.addEventListener('click', () => {
+            if (bgAudio.paused) {
+                bgAudio.play();
+                muteIcon.className = "fa-solid fa-volume-high";
+                muteBtn.style.borderColor = "var(--color-principal)";
+                muteBtn.style.color = "var(--color-principal)";
+            } else {
+                bgAudio.pause();
+                muteIcon.className = "fa-solid fa-volume-xmark";
+                muteBtn.style.borderColor = "var(--color-texto-secundario)";
+                muteBtn.style.color = "var(--color-texto-secundario)";
+            }
+        });
+
+        // --- B. LÓGICA DEL ESCUDO ANTI-RESEÑAS ---
+        function rateExperience(stars) {
+            const allStars = document.querySelectorAll('#escudo-estrellas i');
+            
+            allStars.forEach((star, index) => {
+                if (index < stars) {
+                    star.classList.replace('star-inactive', 'star-active');
+                } else {
+                    star.classList.replace('star-active', 'star-inactive');
+                }
+            });
+
+            document.getElementById('star-feedback').style.display = 'block';
+
+            setTimeout(() => {
+                if (stars <= 3) {
+                    // ⚠️ PON AQUÍ EL NÚMERO DE WHATSAPP PARA QUEJAS PRIVADAS
+                    window.location.href = "https://wa.me/34600000000?text=Hola,%20tengo%20una%20sugerencia%20para%20mejorar%20mi%20experiencia%20en%20La%20Sucursal.";
+                } else {
+                    // 4 o 5 estrellas: Redirección directa a reseña pública de Google
+                    window.open("https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI", '_blank');
+                }
+                document.getElementById('star-feedback').style.display = 'none';
+            }, 600);
+        }
+
+        // --- C. LÓGICA DEL GESTOR DE PARKING ---
         function comprobarEstadoParkingBarberia() {
             const lat = localStorage.getItem('barberia_lat');
             const lng = localStorage.getItem('barberia_lng');
-
             const icon = document.getElementById('parking-icon');
             const iconContainer = document.getElementById('parking-icon-container');
             const title = document.getElementById('parking-name');
@@ -158,14 +273,12 @@
             if (!icon || !iconContainer || !title || !subtitle) return;
 
             if (lat && lng) {
-                // Modo: Volver al coche
                 icon.className = "fa-solid fa-person-walking";
                 iconContainer.className = "app-icon icon-parking-active";
                 title.innerText = "Ir a mi coche (A pie)";
                 title.style.color = "var(--color-principal)";
                 subtitle.innerText = "Toca para abrir la ruta en el mapa";
             } else {
-                // Modo: Guardar coche
                 icon.className = "fa-solid fa-location-crosshairs";
                 iconContainer.className = "app-icon icon-parking";
                 title.innerText = "¿Dónde aparqué?";
@@ -181,14 +294,11 @@
             const lng = localStorage.getItem('barberia_lng');
 
             if (lat && lng) {
-                // 1. ABRE EL MAPA DIRECTAMENTE SIN PREGUNTAR (Para que nunca se pierda por error)
                 const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
                 window.open(mapsUrl, '_blank');
 
-                // 2. LA PREGUNTA SE HACE UN SEGUNDO DESPUÉS DE ABRIR EL MAPA
                 setTimeout(() => {
                     const yaLlego = confirm("🚙 Hemos abierto la ruta en Google Maps.\n\n¿Has llegado ya a tu vehículo y quieres BORRAR esta ubicación?\n\n• Pulsa ACEPTAR para borrar el coche.\n• Pulsa CANCELAR para mantenerlo guardado.");
-                    
                     if (yaLlego) {
                         localStorage.removeItem('barberia_lat');
                         localStorage.removeItem('barberia_lng');
@@ -197,7 +307,6 @@
                 }, 1000);
 
             } else {
-                // GUARDAR EL COCHE POR PRIMERA VEZ
                 if (navigator.geolocation) {
                     const subtitle = document.getElementById('parking-desc');
                     if (subtitle) subtitle.innerText = "Obteniendo señal GPS...";
