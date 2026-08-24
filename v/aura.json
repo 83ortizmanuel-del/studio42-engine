@@ -1,8 +1,7 @@
 {
   "nombre": "Ajustes del sistema",
   "subtitulo": "Estado de red: Operativo <span class=\"status-dot\"></span>",
-  "secciones": [
-    {
+  "secciones":    {
       "titulo": "TELEMETRÍA Y CONTROL DE RUTA",
       "botones": [
         {
