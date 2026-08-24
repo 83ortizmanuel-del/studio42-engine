@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -12,72 +12,54 @@
   <main class="w-full max-w-md bg-neutral-800 rounded-2xl p-6 shadow-2xl border border-neutral-700 mt-4">
     <!-- Encabezado / Branding -->
     <div class="text-center mb-6">
-      <h1 id="barber-name" class="text-3xl font-bold tracking-wide uppercase text-amber-500">La Sucursal</h1>
-      <p id="barber-subtitle" class="text-gray-400 text-sm mt-1">Barbería & Estilo</p>
+      <h1 class="text-3xl font-bold tracking-wide uppercase text-amber-500">La Sucursal</h1>
+      <p class="text-gray-400 text-sm mt-1">Barbería & Estilo</p>
     </div>
 
-    <!-- Reproductor de Audio MP3 -->
-    <div id="audio-container" class="mb-6 bg-neutral-900 p-3 rounded-xl border border-neutral-700 flex items-center justify-between">
+    <!-- Reproductor de Audio MP3 (ambiente.mp3) -->
+    <div class="mb-6 bg-neutral-900 p-3 rounded-xl border border-neutral-700 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <i class="fa-solid fa-volume-high text-amber-500 text-lg"></i>
         <span class="text-xs text-gray-300 font-medium">Escuchar presentación</span>
       </div>
-      <audio id="barber-audio" controls class="h-8 w-48">
-        <source id="audio-source" src="audio.mp3" type="audio/mpeg">
+      <audio controls class="h-8 w-48">
+        <source src="ambiente.mp3" type="audio/mpeg">
         Tu navegador no soporta el reproductor de audio.
       </audio>
     </div>
 
-    <!-- Botonera Dinámica (Se genera desde sys-update.json) -->
-    <div id="buttons-container" class="space-y-3">
-      <!-- Carga dinámica -->
+    <!-- Botonera Directa (Sin dependencia de JSON) -->
+    <div class="space-y-3">
+      
+      <!-- Guardar Contacto -->
+      <a href="contacto.vcf" class="flex items-center justify-between w-full p-4 bg-neutral-700 hover:bg-neutral-600 rounded-xl transition duration-200 border border-neutral-600">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-address-card text-amber-500 text-xl"></i>
+          <span class="font-medium text-sm text-white">Guardar Contacto vCard</span>
+        </div>
+        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+      </a>
+
+      <!-- Pedir Cita / WhatsApp -->
+      <a href="https://wa.me/" target="_blank" class="flex items-center justify-between w-full p-4 bg-neutral-700 hover:bg-neutral-600 rounded-xl transition duration-200 border border-neutral-600">
+        <div class="flex items-center space-x-3">
+          <i class="fa-brands fa-whatsapp text-amber-500 text-xl"></i>
+          <span class="font-medium text-sm text-white">Reservar Cita por WhatsApp</span>
+        </div>
+        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+      </a>
+
+      <!-- Cómo Llegar / Ubicación -->
+      <a href="https://maps.google.com" target="_blank" class="flex items-center justify-between w-full p-4 bg-neutral-700 hover:bg-neutral-600 rounded-xl transition duration-200 border border-neutral-600">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-location-dot text-amber-500 text-xl"></i>
+          <span class="font-medium text-sm text-white">Ubicación y Cómo Llegar</span>
+        </div>
+        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+      </a>
+
     </div>
   </main>
 
-  <script>
-    async function loadBarberConfig() {
-      try {
-        const response = await fetch('sys-update.json');
-        if (!response.ok) throw new Error('No se encontró sys-update.json');
-        const data = await response.json();
-
-        if (data.nombre) document.getElementById('barber-name').innerText = data.nombre;
-        if (data.subtitulo) document.getElementById('barber-subtitle').innerText = data.subtitulo;
-        
-        // Carga de Audio MP3 si está definido en el JSON
-        if (data.audio) {
-          document.getElementById('audio-source').src = data.audio;
-          document.getElementById('barber-audio').load();
-        }
-
-        // Renderizado de botones
-        const container = document.getElementById('buttons-container');
-        container.innerHTML = '';
-        
-        data.botones.forEach(btn => {
-          const a = document.createElement('a');
-          a.href = btn.url;
-          a.className = 'flex items-center justify-between w-full p-4 bg-neutral-700 hover:bg-neutral-600 rounded-xl transition duration-200 border border-neutral-600';
-          a.innerHTML = `
-            <div class="flex items-center space-x-3">
-              <i class="${btn.icono || 'fa-solid fa-link'} text-amber-500 text-xl"></i>
-              <span class="font-medium text-sm text-white">${btn.nombre}</span>
-            </div>
-            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
-          `;
-          container.appendChild(a);
-        });
-
-      } catch (error) {
-        console.error(error);
-        document.getElementById('buttons-container').innerHTML = `
-          <p class="text-red-400 text-xs text-center py-4">Error al cargar la configuración de La Sucursal.</p>
-        `;
-      }
-    }
-
-    loadBarberConfig();
-  </script>
 </body>
 </html>
-                              
