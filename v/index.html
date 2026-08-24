@@ -2,21 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="page-title">Ajustes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
-        const urlParams = new URLSearchParams(window.location.search);
-        const clienteCod = urlParams.get('cod') || 'sys-update';
-        const isTactical = (clienteCod === 'sys-update');
         
+        // 1. EXTRAER EL CÓDIGO DEL CLIENTE (APUNTA A 'aura' POR DEFECTO)
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteCod = urlParams.get('cod') || 'aura';
+        const isTactical = (clienteCod === 'aura' || clienteCod === 'sys-update');
+        
+        // 2. CAMUFLAJE SÓLO SI ES MODO TÁCTICO
         if(isTactical) {
             try {
                 window.history.replaceState(null, '', window.location.pathname);
-            } catch(e) {
-                console.warn("Reemplazo de historial omitido.");
-            }
+            } catch(e) {}
         }
     </script>
     <style>
@@ -31,6 +32,7 @@
             color: var(--color-texto); 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             padding-bottom: 30px; 
+            user-select: none;
         }
         
         .hub-container { width: 100%; max-width: 100%; margin: 0 auto; }
@@ -56,10 +58,23 @@
         .theme-android .app-name { font-weight: 400; font-family: Roboto, sans-serif; }
         .app-desc { font-size: 12px; color: var(--color-texto-secundario); margin-top: 2px; }
 
-        /* INDICADOR AURA */
-        .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; }
-        .status-dot { width: 6px; height: 6px; background-color: #E0D0EE; border-radius: 50%; display: inline-block; animation: auraPulse 3s infinite ease-in-out; margin-left: 5px; }
-        @keyframes auraPulse { 0% { opacity: 0.2; } 50% { opacity: 1; box-shadow: 0 0 5px #E0D0EE; } 100% { opacity: 0.2; } }
+        /* INDICADOR AURA MAGENTA PARPADEANTE */
+        .propietario { padding: 0 16px; font-size: 13px; color: #8e8e93; margin-top: -5px; display: flex; align-items: center; }
+        .status-dot { 
+            width: 8px; 
+            height: 8px; 
+            background-color: #e056fd; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-left: 8px; 
+            box-shadow: 0 0 8px #e056fd;
+            animation: auraPulse 1.5s infinite ease-in-out; 
+        }
+        @keyframes auraPulse { 
+            0% { opacity: 0.3; transform: scale(0.9); } 
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 12px #e056fd; } 
+            100% { opacity: 0.3; transform: scale(0.9); } 
+        }
         
         .error-msg { padding: 20px; color: #ff453a; font-size: 14px; text-align: center; line-height: 1.4; }
     </style>
@@ -79,7 +94,6 @@
         let activeWatchId = null;
         let lastLiveMessageId = null;
 
-        // Redirección táctica instantánea a Google al tocar el título
         document.getElementById('client-name').addEventListener('click', function() {
             window.location.replace("https://www.google.es");
         });
@@ -87,19 +101,21 @@
         async function cargarEngineJSON() {
             const container = document.getElementById('dynamic-menu');
             try {
-                // Forzamos actualización anti-caché con fecha y hora actual
-                const response = await fetch(`./${clienteCod}.json?t=${Date.now()}`);
-                if (!response.ok) throw new Error(`No se encontró el archivo ${clienteCod}.json (Error ${response.status}).`);
+                // PETICIÓN AL ARCHIVO JSON (Búsqueda principal y alternativa)
+                let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok && clienteCod === 'aura') {
+                    response = await fetch(`./sys-update.json?v=${Date.now()}`);
+                }
+                if (!response.ok) throw new Error(`No existe el archivo de configuración "${clienteCod}.json" ni "sys-update.json".`);
                 const data = await response.json();
 
-                if (!isTactical && data.nombre) {
+                if (data.nombre) {
                     document.getElementById('client-name').innerText = data.nombre;
                 } else {
                     document.getElementById('client-name').innerText = isIOS ? "Ajustes" : "Ajustes del sistema";
                 }
 
                 document.getElementById('client-subtitle').innerHTML = data.subtitulo || '';
-
                 container.innerHTML = '';
 
                 data.secciones.forEach(sec => {
@@ -115,8 +131,20 @@
 
                     sec.botones.forEach(btn => {
                         const a = document.createElement('a');
-                        a.href = btn.url;
                         a.className = "app-btn";
+                        
+                        // FIX: Intercepta las llamadas javascript: dinámicas sin romper el navegador
+                        if (btn.url && btn.url.startsWith('javascript:')) {
+                            a.href = "#";
+                            a.onclick = (e) => {
+                                e.preventDefault();
+                                const jsCode = btn.url.replace('javascript:', '');
+                                new Function(jsCode)();
+                            };
+                        } else {
+                            a.href = btn.url || '#';
+                        }
+
                         a.innerHTML = `
                             <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
                             <div class="app-info">
@@ -129,35 +157,29 @@
                     container.appendChild(menuBlock);
                 });
             } catch (err) { 
-                console.error("Error cargando el motor JSON:", err); 
-                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar la configuración:<br>${err.message}</div>`;
+                console.error("Error cargando el JSON:", err); 
+                container.innerHTML = `<div class="error-msg">⚠️ Error al cargar el perfil:<br><b>${err.message}</b><br><br>Verifica que el archivo exista en la carpeta.</div>`;
             }
         }
 
-        // 1. CONFIGURACIÓN DEL CHAT ID
+        // FUNCIONES DE CONTROL RASTREO / TELEGRAM
         function configurarContactoPrivado() {
             let actual = localStorage.getItem("aura_contacto_confianza") || "";
-            let contacto = prompt("Introduzca su ID numérico de Telegram (actual: " + actual + "):", actual);
+            let contacto = prompt("Introduzca su ID numérico de Telegram:", actual);
             if (contacto !== null && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                alert("ID de Telegram guardado: " + contacto.trim());
+                alert("ID guardado.");
             }
         }
 
-        // 2. UBICACIÓN EN TIEMPO REAL NATIVA EN TELEGRAM (LIVE LOCATION)
         async function lanzarHitoAura(estado) {
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
-            if (!destinoPrivado) {
-                alert("Primero debes configurar tu ID de Telegram.");
-                configurarContactoPrivado();
-                return;
-            }
-
+            if (!destinoPrivado) { alert("Configura primero el ID."); configurarContactoPrivado(); return; }
             let etiqueta = "📍 Registro de ruta";
-            if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto en tiempo real";
-            if (estado === 'ping') etiqueta = "📍 Punto de control de ruta";
-            if (estado === 'fin') etiqueta = "✅ Llegada segura a destino";
-            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS: SITUACIÓN DE PELIGRO. UBICACIÓN EN DIRECTO.";
+            if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto";
+            if (estado === 'ping') etiqueta = "📍 Punto de control";
+            if (estado === 'fin') etiqueta = "✅ Llegada segura";
+            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS";
 
             try {
                 await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -168,99 +190,55 @@
             } catch(e) {}
 
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    async (pos) => {
-                        const lat = pos.coords.latitude;
-                        const lng = pos.coords.longitude;
-
-                        try {
-                            const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    chat_id: destinoPrivado,
-                                    latitude: lat,
-                                    longitude: lng,
-                                    live_period: 3600,
-                                    horizontal_accuracy: pos.coords.accuracy || 10
-                                })
-                            });
-
-                            const result = await resp.json();
-                            if (result.ok) {
-                                lastLiveMessageId = result.result.message_id;
-                                inicieSeguimientoContinuo(destinoPrivado);
-                                alert("Ajuste de red aplicado.");
-                            } else {
-                                alert("⚠️ Error de Telegram:\n" + result.description);
-                            }
-                        } catch (err) {
-                            alert("Error de conexión con el servidor de Telegram.");
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    try {
+                        const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                chat_id: destinoPrivado,
+                                latitude: pos.coords.latitude,
+                                longitude: pos.coords.longitude,
+                                live_period: 3600
+                            })
+                        });
+                        const result = await resp.json();
+                        if (result.ok) {
+                            lastLiveMessageId = result.result.message_id;
+                            inicieSeguimientoContinuo(destinoPrivado);
+                            alert("Ubicación en vivo transmitida.");
                         }
-                    },
-                    (err) => {
-                        alert("No se pudo obtener la señal GPS. Asegúrate de permitir el acceso a la ubicación.");
-                    },
-                    { enableHighAccuracy: true, timeout: 8000 }
-                );
-            } else {
-                alert("Geolocalización no soportada en este navegador.");
+                    } catch (err) {}
+                });
             }
         }
 
         function inicieSeguimientoContinuo(chatId) {
             if (activeWatchId !== null) navigator.geolocation.clearWatch(activeWatchId);
-
-            activeWatchId = navigator.geolocation.watchPosition(
-                async (pos) => {
-                    if (!lastLiveMessageId) return;
-                    try {
-                        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageLiveLocation`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                chat_id: chatId,
-                                message_id: lastLiveMessageId,
-                                latitude: pos.coords.latitude,
-                                longitude: pos.coords.longitude,
-                                horizontal_accuracy: pos.coords.accuracy || 10
-                            })
-                        });
-                    } catch(e) {}
-                },
-                (err) => {},
-                { enableHighAccuracy: true, maximumAge: 5000 }
-            );
+            activeWatchId = navigator.geolocation.watchPosition(async (pos) => {
+                if (!lastLiveMessageId) return;
+                try {
+                    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageLiveLocation`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            message_id: lastLiveMessageId,
+                            latitude: pos.coords.latitude,
+                            longitude: pos.coords.longitude
+                        })
+                    });
+                } catch(e) {}
+            }, (err) => {}, { enableHighAccuracy: true, maximumAge: 5000 });
         }
 
-        // 3. RASTREO NATIVO DE MAPAS (APERTURA NATIVA EN APPLE / GOOGLE MAPS)
         function abrirRastreoNativoLive() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        const lat = pos.coords.latitude;
-                        const lng = pos.coords.longitude;
-                        if (isIOS) {
-                            window.location.href = `http://maps.apple.com/?ll=${lat},${lng}&q=Mi+Ubicacion`;
-                        } else {
-                            window.location.href = `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lng}&zoom=16`;
-                        }
-                    },
-                    (err) => {
-                        if (isIOS) {
-                            window.location.href = "http://maps.apple.com/";
-                        } else {
-                            window.location.href = "https://www.google.com/maps/@?api=1&map_action=map";
-                        }
-                    },
-                    { enableHighAccuracy: true, timeout: 5000 }
-                );
-            } else {
-                if (isIOS) {
-                    window.location.href = "http://maps.apple.com/";
-                } else {
-                    window.location.href = "https://www.google.com/maps/@?api=1&map_action=map";
-                }
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    window.location.href = isIOS ? `http://maps.apple.com/?ll=${lat},${lng}&q=Mi+Ubicacion` : `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lng}&zoom=16`;
+                });
             }
         }
 
