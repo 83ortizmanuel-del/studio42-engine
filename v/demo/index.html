@@ -121,7 +121,7 @@
         <h1>STUDIO 42</h1>
         <div class="propietario">ELIMINA TUS CUELLOS DE BOTELLA</div>
 
-        <!-- 🚀 NUEVO: DASHBOARD DE FRICCIONES -->
+        <!-- DASHBOARD DE FRICCIONES -->
         <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
         <div class="friccion-grid">
             <div class="friccion-card" onclick="mostrarExplicacion('contactos')">
@@ -199,6 +199,17 @@
             audioMuteado = !audioMuteado;
         }
 
+        // CONTROL AUTOMÁTICO DE PAUSA AL SALIR O CAMBIAR DE PESTAÑA
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                reproductor.pause();
+            } else {
+                if (!audioMuteado && splash.style.display === 'none') {
+                    reproductor.play().catch(e => {});
+                }
+            }
+        });
+
         // --- 2. LÓGICA DEL PANEL DE FRICCIONES (MODAL) ---
         const datosFricciones = {
             'contactos': {
@@ -260,7 +271,7 @@
             setTimeout(() => {
                 mensaje.style.display = 'none';
                 if (nota <= 3) {
-                    mostrarExplicacion('resenas'); // Reutilizamos el modal para explicar el efecto
+                    mostrarExplicacion('resenas');
                     document.getElementById('modal-title').innerText = "🛡️ ESCUDO ACTIVADO";
                     document.getElementById('modal-text').innerHTML = "El cliente valoró con " + nota + " estrella(s).<br><br>El sistema ha bloqueado el paso a Google y le habría abierto tu <b>WhatsApp Privado</b> pidiéndole disculpas.<br><br>¡Reputación a salvo!";
                 } else {
