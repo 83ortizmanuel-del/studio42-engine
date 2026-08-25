@@ -53,18 +53,18 @@
       "titulo": "SERVICIOS DE TELEFONÍA E INFORMACIÓN",
       "botones": [
         {
-          "nombre": "Buzón de información al usuario",
-          "descripcion": "Consulta gratuita de servicios del operador",
-          "icono": "fa-solid fa-phone",
-          "estiloIcono": "color: #ff3b30;",
-          "url": "tel:016"
-        },
-        {
           "nombre": "Soporte técnico de línea",
           "descripcion": "Atención directa de incidencias generales",
           "icono": "fa-solid fa-shield-halved",
           "estiloIcono": "color: #ff9500;",
           "url": "tel:112"
+        },
+        {
+          "nombre": "Buzón de información al usuario",
+          "descripcion": "Consulta gratuita de servicios del operador",
+          "icono": "fa-solid fa-phone",
+          "estiloIcono": "color: #ff3b30;",
+          "url": "tel:016"
         }
       ]
     }
