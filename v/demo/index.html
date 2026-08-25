@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Studio 42 | Demo Phygital</title>
-    <!-- Iconos y Estilos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -37,7 +36,7 @@
         .pulse-logo { animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); } 70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } }
 
-        /* HUB PRINCIPAL (GLASSMORPHISM) */
+        /* HUB PRINCIPAL */
         .hub-container { 
             background: var(--color-tarjeta); width: 100%; max-width: 400px; border-radius: 28px; 
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9); padding: 30px 20px; text-align: center; 
@@ -48,15 +47,22 @@
         .logo-container img { width: 80%; height: 80%; object-fit: contain; }
         
         h1 { font-size: 1.5rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; }
-        .propietario { color: var(--color-oro); font-size: 0.85rem; margin-bottom: 25px; font-weight: 600; letter-spacing: 1px; }
+        .propietario { color: var(--color-oro); font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; letter-spacing: 1px; }
         
-        /* BOTONES DE LA DEMO */
         .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 700; }
+        
+        /* PANEL DE FRICCIONES (GRID 2x2) */
+        .friccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        .friccion-card { background: var(--color-boton); border-radius: 18px; padding: 15px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: all 0.2s ease; }
+        .friccion-card:active { transform: scale(0.95); background-color: #222; border-color: rgba(212, 175, 55, 0.4); }
+        .friccion-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .friccion-title { font-size: 0.75rem; font-weight: 700; color: var(--color-texto); line-height: 1.2; }
+
+        /* LISTA DE APPS NORMALES */
         .apps-menu { display: flex; flex-direction: column; gap: 12px; }
         .app-btn { display: flex; align-items: center; padding: 14px 18px; border-radius: 18px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; }
         .app-btn:active { transform: scale(0.97); background-color: #222; border-color: rgba(212, 175, 55, 0.3); }
         .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; flex-shrink: 0; }
-
         .app-info { flex-grow: 1; }
         .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
         .app-desc { font-size: 0.75rem; color: var(--color-gris); }
@@ -68,25 +74,25 @@
         .star-active { color: #ffb400; text-shadow: 0 0 10px rgba(255, 180, 0, 0.5); }
         .star-inactive { color: #333; }
 
+        /* MODAL EXPLICATIVO (GLASSMORPHISM) */
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: var(--color-tarjeta); border: 1px solid var(--color-oro); border-radius: 24px; padding: 25px; max-width: 350px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .modal-title { font-size: 1.1rem; font-weight: 800; color: var(--color-oro); margin-bottom: 10px; text-transform: uppercase; }
+        .modal-text { font-size: 0.9rem; color: #ddd; line-height: 1.5; margin-bottom: 25px; }
+        .modal-close { background: var(--color-boton); color: var(--color-texto); border: 1px solid rgba(255,255,255,0.1); padding: 10px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .modal-close:active { background: #333; }
+
         /* BOTÓN FLOTANTE AUDIO */
-        #btn-audio {
-            display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; 
-            background: rgba(10, 10, 10, 0.8); border: 1px solid var(--color-oro); color: var(--color-oro); 
-            width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-            align-items: center; justify-content: center; transition: all 0.3s;
-        }
+        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(10, 10, 10, 0.8); border: 1px solid var(--color-oro); color: var(--color-oro); width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; transition: all 0.3s; }
     </style>
 </head>
 <body>
 
-    <!-- 1. AUDIO MP3 NATIVO (Sin dependencias de YouTube) -->
-    <audio id="audio-fondo" loop>
-        <!-- ASEGÚRATE DE TENER EL ARCHIVO ambiente.mp3 EN LA MISMA CARPETA -->
-        <source src="ambiente.mp3" type="audio/mpeg">
-    </audio>
+    <!-- MP3 LOCAL -->
+    <audio id="audio-fondo" loop><source src="ambiente.mp3" type="audio/mpeg"></audio>
 
-    <!-- 2. PANTALLA DE DESBLOQUEO SENSORIAL -->
+    <!-- SPLASH SCREEN -->
     <div id="splash-screen">
         <div class="logo-container pulse-logo" style="width: 120px; height: 120px; margin-bottom: 25px;">
             <img src="logo.png" alt="Studio 42" onerror="this.style.display='none'">
@@ -96,28 +102,52 @@
         <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
-    <!-- 3. BOTÓN FLOTANTE MUTE -->
-    <button id="btn-audio" onclick="alternarAudio()">
-        <i id="icono-audio" class="fa-solid fa-volume-high"></i>
-    </button>
-
-    <!-- 4. HUB DE VENTAS (DEMO PARA EL DUEÑO DEL NEGOCIO) -->
-    <div class="hub-container">
-        <div class="logo-container">
-            <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+    <!-- MODAL DE FRICCIONES -->
+    <div id="modal-overlay" onclick="cerrarModal(event)">
+        <div class="modal-box" id="modal-content">
+            <div id="modal-icon" class="modal-icon"></div>
+            <div id="modal-title" class="modal-title"></div>
+            <div id="modal-text" class="modal-text"></div>
+            <button class="modal-close" onclick="cerrarModalBtn()">Entendido</button>
         </div>
+    </div>
+
+    <!-- BOTÓN AUDIO -->
+    <button id="btn-audio" onclick="alternarAudio()"><i id="icono-audio" class="fa-solid fa-volume-high"></i></button>
+
+    <!-- HUB PRINCIPAL -->
+    <div class="hub-container">
+        <div class="logo-container"><img src="logo.png" alt="Logo" onerror="this.style.display='none'"></div>
         <h1>STUDIO 42</h1>
-        <div class="propietario">TECNOLOGÍA SIN FRICCIONES</div>
+        <div class="propietario">ELIMINA TUS CUELLOS DE BOTELLA</div>
+
+        <!-- 🚀 NUEVO: DASHBOARD DE FRICCIONES -->
+        <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
+        <div class="friccion-grid">
+            <div class="friccion-card" onclick="mostrarExplicacion('contactos')">
+                <div class="friccion-icon" style="color: #00e5ff;"><i class="fa-solid fa-user-xmark"></i></div>
+                <div class="friccion-title">Fuga de Contactos</div>
+            </div>
+            <div class="friccion-card" onclick="mostrarExplicacion('resenas')">
+                <div class="friccion-icon" style="color: #ff3b30;"><i class="fa-solid fa-star-half-stroke"></i></div>
+                <div class="friccion-title">Reputación Vulnerable</div>
+            </div>
+            <div class="friccion-card" onclick="mostrarExplicacion('embudos')">
+                <div class="friccion-icon" style="color: #30d158;"><i class="fa-solid fa-filter-circle-xmark"></i></div>
+                <div class="friccion-title">Embudos Rotos</div>
+            </div>
+            <div class="friccion-card" onclick="mostrarExplicacion('experiencia')">
+                <div class="friccion-icon" style="color: #bf5af2;"><i class="fa-solid fa-map-location-dot"></i></div>
+                <div class="friccion-title">Olvido del Cliente</div>
+            </div>
+        </div>
 
         <div class="apps-menu">
-            
-            <div class="section-title">Herramientas de Retención</div>
+            <div class="section-title">Prueba las Soluciones en Vivo</div>
 
-            <!-- GESTOR DE PARKING GPS -->
+            <!-- GESTOR DE PARKING -->
             <a class="app-btn" onclick="gestionarParking(event)">
-                <div class="app-icon" id="parking-box" style="background: rgba(142,142,147,0.1); color: #8e8e93;">
-                    <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
-                </div>
+                <div class="app-icon" id="parking-box" style="background: rgba(142,142,147,0.1); color: #8e8e93;"><i id="parking-icon" class="fa-solid fa-location-crosshairs"></i></div>
                 <div class="app-info">
                     <div class="app-name" id="parking-name">¿Dónde aparqué?</div>
                     <div class="app-desc" id="parking-desc">Guardamos tu coche por GPS</div>
@@ -125,33 +155,15 @@
                 <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
             </a>
 
-            <!-- GUARDAR CONTACTO -->
-            <a class="app-btn" onclick="alert('Demo: Al tocar aquí, el móvil descarga tu tarjeta vCard y te guarda en sus contactos para siempre.');">
-                <div class="app-icon" style="background: rgba(0,229,255,0.1); color: #00e5ff;">
-                    <i class="fa-solid fa-address-card"></i>
-                </div>
-                <div class="app-info">
-                    <div class="app-name">Guardar en Contactos</div>
-                    <div class="app-desc">No volverán a perder tu número</div>
-                </div>
-                <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
-            </a>
-
-            <div class="section-title" style="color: var(--color-oro);">El Escudo Protector</div>
-
-            <!-- ESCUDO ANTI-RESEÑAS (LA VENTA MAESTRA) -->
+            <!-- ESCUDO ANTI-RESEÑAS -->
             <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start; border: 1px solid rgba(212, 175, 55, 0.3); background: rgba(212, 175, 55, 0.05);">
                 <div style="display: flex; align-items: center; width: 100%;">
-                    <div class="app-icon" style="background: rgba(255,180,0,0.15); color: #ffb400;">
-                        <i class="fa-brands fa-google"></i>
-                    </div>
+                    <div class="app-icon" style="background: rgba(255,180,0,0.15); color: #ffb400;"><i class="fa-brands fa-google"></i></div>
                     <div class="app-info">
-                        <div class="app-name" style="color: var(--color-oro);">Filtro Inteligente de Reseñas</div>
+                        <div class="app-name" style="color: var(--color-oro);">Escudo de Reseñas</div>
                         <div class="app-desc">Toca las estrellas para probarlo</div>
                     </div>
                 </div>
-                
-                <!-- Estrellas Interactivas -->
                 <div class="stars-container star-rating" id="escudo-estrellas">
                     <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(1)"></i>
                     <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(2)"></i>
@@ -161,13 +173,11 @@
                 </div>
                 <p id="mensaje-filtro" style="font-size: 0.75rem; color: var(--color-oro); text-align: center; width: 100%; margin-top: 10px; display: none; font-weight:600;">Procesando...</p>
             </div>
-
         </div>
     </div>
 
-    <!-- SCRIPTS CORE (Sin llamadas externas) -->
     <script>
-        // 1. CONTROL DE AUDIO Y DESBLOQUEO
+        // --- 1. AUDIO Y SPLASH SCREEN ---
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
         const btnAudio = document.getElementById('btn-audio');
@@ -175,113 +185,132 @@
         let audioMuteado = false;
 
         function iniciarMagia() {
-            // Desvanece la pantalla
             splash.style.opacity = '0';
             setTimeout(() => { splash.style.display = 'none'; }, 600);
-            
-            // Fuerza la reproducción del MP3 local
-            reproductor.play().then(() => {
-                btnAudio.style.display = 'flex'; // Muestra el botón flotante solo si reprodujo bien
-            }).catch(e => {
-                console.log("No se encontró ambiente.mp3 o el navegador bloqueó el autoplay.");
-                btnAudio.style.display = 'flex'; // Lo mostramos igual para control visual
-            });
+            reproductor.play().then(() => { btnAudio.style.display = 'flex'; }).catch(e => { btnAudio.style.display = 'flex'; });
         }
 
         function alternarAudio() {
             if (audioMuteado) {
-                reproductor.play();
-                iconoAudio.className = "fa-solid fa-volume-high";
-                btnAudio.style.borderColor = "var(--color-oro)";
-                btnAudio.style.color = "var(--color-oro)";
-                audioMuteado = false;
+                reproductor.play(); iconoAudio.className = "fa-solid fa-volume-high"; btnAudio.style.color = "var(--color-oro)"; btnAudio.style.borderColor = "var(--color-oro)";
             } else {
-                reproductor.pause();
-                iconoAudio.className = "fa-solid fa-volume-xmark";
-                btnAudio.style.borderColor = "var(--color-gris)";
-                btnAudio.style.color = "var(--color-gris)";
-                audioMuteado = true;
+                reproductor.pause(); iconoAudio.className = "fa-solid fa-volume-xmark"; btnAudio.style.color = "var(--color-gris)"; btnAudio.style.borderColor = "var(--color-gris)";
             }
+            audioMuteado = !audioMuteado;
         }
 
-        // 2. LÓGICA DEL ESCUDO ANTI-RESEÑAS (Efecto WOW)
+        // --- 2. LÓGICA DEL PANEL DE FRICCIONES (MODAL) ---
+        const datosFricciones = {
+            'contactos': {
+                icono: '<i class="fa-solid fa-user-check" style="color:#00e5ff;"></i>',
+                titulo: 'Retención de Clientes',
+                texto: 'El 70% de las personas no guardará tu número manualmente. <br><br><b>La Solución Studio 42:</b> Inyectamos tu tarjeta vCard directamente en la agenda de tu cliente con un solo clic. Cero fricción, 100% de retención.'
+            },
+            'resenas': {
+                icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>',
+                titulo: 'Protección de Reputación',
+                texto: 'Una sola queja pública en Google aleja a decenas de nuevos clientes. <br><br><b>La Solución Studio 42:</b> Nuestro Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas y las redirige a tu WhatsApp Privado. Las de 4 y 5 estrellas van directo a Google Maps.'
+            },
+            'embudos': {
+                icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>',
+                titulo: 'Embudos Directos',
+                texto: 'Las webs tradicionales son lentas y los clientes se pierden buscando dónde comprar o reservar. <br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión (reservas, tienda, WhatsApp) literalmente en la mano del cliente de forma instantánea.'
+            },
+            'experiencia': {
+                icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>',
+                titulo: 'Experiencia Memorable',
+                texto: 'El cliente olvida rápidamente la experiencia física una vez sale por la puerta. <br><br><b>La Solución Studio 42:</b> Aportamos herramientas de utilidad real, como el Gestor GPS de Parking, para que mantengan tu marca en su pantalla durante todo el día.'
+            }
+        };
+
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+
+        function mostrarExplicacion(tipo) {
+            document.getElementById('modal-icon').innerHTML = datosFricciones[tipo].icono;
+            document.getElementById('modal-title').innerText = datosFricciones[tipo].titulo;
+            document.getElementById('modal-text').innerHTML = datosFricciones[tipo].texto;
+            
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => { 
+                modalOverlay.style.opacity = '1'; 
+                modalContent.style.transform = 'translateY(0)';
+            }, 10);
+        }
+
+        function cerrarModal(e) {
+            if(e.target === modalOverlay) cerrarModalBtn();
+        }
+
+        function cerrarModalBtn() {
+            modalOverlay.style.opacity = '0';
+            modalContent.style.transform = 'translateY(20px)';
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // --- 3. ESCUDO ANTI-RESEÑAS (DEMO) ---
         function simularFiltro(nota) {
             const estrellas = document.querySelectorAll('#escudo-estrellas i');
             const mensaje = document.getElementById('mensaje-filtro');
-
-            // Colorear estrellas
-            estrellas.forEach((estrella, indice) => {
-                if (indice < nota) {
-                    estrella.classList.replace('star-inactive', 'star-active');
-                } else {
-                    estrella.classList.replace('star-active', 'star-inactive');
-                }
-            });
-
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
+            
             mensaje.style.display = 'block';
             mensaje.innerText = "Analizando respuesta...";
 
             setTimeout(() => {
+                mensaje.style.display = 'none';
                 if (nota <= 3) {
-                    mensaje.style.display = 'none';
-                    alert("🛡️ SIMULACIÓN DE QUEJA (1 a 3 Estrellas)\n\nEl cliente enfadado no irá a Google. El sistema intercepta su mala nota y abre tu WhatsApp Privado pidiéndole disculpas para que resuelvas el problema en privado.\n\n¡Tu reputación está a salvo!");
+                    mostrarExplicacion('resenas'); // Reutilizamos el modal para explicar el efecto
+                    document.getElementById('modal-title').innerText = "🛡️ ESCUDO ACTIVADO";
+                    document.getElementById('modal-text').innerHTML = "El cliente valoró con " + nota + " estrella(s).<br><br>El sistema ha bloqueado el paso a Google y le habría abierto tu <b>WhatsApp Privado</b> pidiéndole disculpas.<br><br>¡Reputación a salvo!";
                 } else {
-                    mensaje.style.display = 'none';
-                    alert("⭐ SIMULACIÓN DE ÉXITO (4 o 5 Estrellas)\n\nEl cliente feliz es redirigido directamente a tu ficha de Google Maps para que te deje una reseña pública de 5 estrellas al instante.\n\n¡SEO Local disparado!");
+                    mostrarExplicacion('resenas');
+                    document.getElementById('modal-title').innerText = "⭐ IMPULSO SEO LOCAL";
+                    document.getElementById('modal-text').innerHTML = "El cliente valoró con " + nota + " estrellas.<br><br>Al estar satisfecho, el sistema lo empuja directamente a tu ficha pública de <b>Google Maps</b> para mejorar tu posicionamiento.";
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google" style="color:#ffb400;"></i>';
                 }
-                
-                // Reset visual
-                estrellas.forEach(e => e.classList.replace('star-active', 'star-inactive'));
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
             }, 600);
         }
 
-        // 3. LÓGICA DEL PARKING GPS (Aporta utilidad real)
+        // --- 4. GESTOR PARKING GPS ---
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('demo_gps_lat');
-            const lng = localStorage.getItem('demo_gps_lng');
             const iconBox = document.getElementById('parking-box');
             const icon = document.getElementById('parking-icon');
             const title = document.getElementById('parking-name');
             const desc = document.getElementById('parking-desc');
 
-            if (lat && lng) {
-                iconBox.style.background = "rgba(212, 175, 55, 0.2)";
-                iconBox.style.color = "var(--color-oro)";
+            if (lat) {
+                iconBox.style.background = "rgba(212, 175, 55, 0.2)"; iconBox.style.color = "var(--color-oro)";
                 icon.className = "fa-solid fa-person-walking";
-                title.innerText = "Ir a mi coche (Ruta GPS)";
-                title.style.color = "var(--color-oro)";
+                title.innerText = "Ir a mi coche (Ruta GPS)"; title.style.color = "var(--color-oro)";
                 desc.innerText = "Toca para abrir Maps y volver";
             } else {
-                iconBox.style.background = "rgba(142,142,147,0.1)";
-                iconBox.style.color = "#8e8e93";
+                iconBox.style.background = "rgba(142,142,147,0.1)"; iconBox.style.color = "#8e8e93";
                 icon.className = "fa-solid fa-location-crosshairs";
-                title.innerText = "¿Dónde aparqué?";
-                title.style.color = "var(--color-texto)";
+                title.innerText = "¿Dónde aparqué?"; title.style.color = "var(--color-texto)";
                 desc.innerText = "Guarda tu coche por GPS";
             }
         }
 
         function gestionarParking(e) {
             e.preventDefault();
-            const lat = localStorage.getItem('demo_gps_lat');
-            
-            if (lat) {
-                alert("Demo: El sistema abre Google Maps con la ruta a pie exacta hasta el coche del cliente.");
-                if (confirm("¿Quieres borrar el coche de la memoria para reiniciar la demo?")) {
-                    localStorage.removeItem('demo_gps_lat');
-                    localStorage.removeItem('demo_gps_lng');
-                    actualizarInterfazParking();
-                }
-            } else {
-                alert("Demo: Guardando ubicación actual por satélite...");
-                localStorage.setItem('demo_gps_lat', "42.4667"); // Coordenadas simuladas
-                localStorage.setItem('demo_gps_lng', "-2.4500");
+            if (localStorage.getItem('demo_gps_lat')) {
+                mostrarExplicacion('experiencia');
+                document.getElementById('modal-title').innerText = "📍 RUTA AL VEHÍCULO";
+                document.getElementById('modal-text').innerHTML = "El cliente tocaría aquí al salir de tu local.<br><br>Se le abre Google Maps trazando la ruta a pie exacta hasta donde dejó el coche.<br><br><em>(Ubicación de demo borrada para reiniciar)</em>";
+                localStorage.removeItem('demo_gps_lat');
                 actualizarInterfazParking();
-                alert("¡Coche guardado! Mira cómo cambia el botón automáticamente.");
+            } else {
+                mostrarExplicacion('experiencia');
+                document.getElementById('modal-title').innerText = "🚗 VEHÍCULO GUARDADO";
+                document.getElementById('modal-text').innerHTML = "Hemos capturado la coordenada GPS satelital.<br><br>El botón ha cambiado de estado. El cliente cerrará la web, disfrutará de tu negocio, y la usará al salir.";
+                localStorage.setItem('demo_gps_lat', "demo");
+                actualizarInterfazParking();
             }
         }
 
-        // Iniciar interfaz
         actualizarInterfazParking();
     </script>
 </body>
