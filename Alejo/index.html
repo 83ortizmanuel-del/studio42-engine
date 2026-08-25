@@ -1,1 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbería de Fernando | Hub de Servicios y Arte</title>
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-principal: #d4af37; /* Dorado Barbería */
+            --color-secundario: #00e5ff; /* Cyan para detalles */
+            --color-estrellas: #ffb400; /* Amarillo Google Maps para las reseñas */
+            --color-fondo: #0a0a0a; 
+            --color-tarjeta: #141414; 
+            --color-boton: #1f1f1f; 
+            --color-texto: #ffffff;
+            --color-texto-secundario: #8e8e93;
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        .logo-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 22%; border: 2px solid var(--color-principal); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; }
+        .logo-container img { width: 85%; height: 85%; object-fit: contain; }
+        
+        h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; }
+        .propietario { color: var(--color-texto-secundario); font-size: 1rem; margin-bottom: 20px; font-style: italic; }
+        
+        .section-title { text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-texto-secundario); margin: 15px 0 8px 5px; font-weight: 700; }
+        
+        .apps-menu { display: flex; flex-direction: column; gap: 12px; }
+        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 14px 18px; border-radius: 16px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; }
+        .app-btn:active { transform: scale(0.97); background-color: #2a2a2a; }
+        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; }
+        
+        /* Colores específicos de Iconos */
+        .icon-contact { background-color: rgba(0, 229, 255, 0.1); color: #00e5ff; }
+        .icon-booking { background-color: rgba(212, 175, 55, 0.1); color: #d4af37; }
+        .icon-insta { background-color: rgba(225, 48, 108, 0.1); color: #e1306c; }
+        .icon-review { background-color: rgba(255, 180, 0, 0.1); color: #ffb400; }
+
+        .app-info { flex-grow: 1; }
+        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.75rem; color: var(--color-texto-secundario); }
+        .app-arrow { color: var(--color-texto-secundario); font-size: 0.85rem; opacity: 0.5; }
+        
+        /* Contenedor especial para las estrellas de Google */
+        .stars-container { color: var(--color-estrellas); font-size: 0.75rem; margin-top: 3px; }
+        
+        .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
+        .footer-brand span { color: var(--color-principal); font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="hub-container">
+        <!-- Logo -->
+       <div class="logo-container" style="width: 140px; height: 140px; margin: 0 auto;">
+    <img src="foto-barbero.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16PX;" alt="Foto Alejandro">
+</div>
+
+        <!-- Títulos -->
+        <h1>ALEJANDRO SILVA</h1>
+        <div class="Barbero">Estilista Barbero</div>
+        <div class="apps-menu">
+            
+            <div class="section-title">Estilista Barbero</div>
+
+            <!-- RESERVAR CITA -->
+            <a href="https://lasucursalstoreart.com/appointment.php" target="_blank" class="app-btn">
+                <div class="app-icon icon-booking"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Reservar Cita</div>
+                    <div class="app-desc">Accede a nuestra agenda online</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- GUARDAR CONTACTO -->
+            <a href="Alejandro-contacto.vcf" download="Alejandro-contacto.vcf" class="app-btn">
+                <div class="app-icon icon-contact"><i class="fa-solid fa-address-card"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Guardar Contacto</div>
+                    <div class="app-desc">Teléfono y ubicación en tu agenda</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <div class="section-title">Redes Sociales</div>
+
+            <!-- INSTAGRAM CUENTA PERSONAL -->
+            <a href="https://www.instagram.com/_alejandro_silvaa?igsh=MWQzeXMwemtpd25keA==" target="_blank" class="app-btn">
+                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
+                <div class="app-info">
+                    <div class="app-name">INSTAGRAM PERSONAL</div>
+                    <div class="app-desc">Mis trabajos y estilos</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <!-- INSTAGRAM LA SUCURSAL -->
+            <a href="https://www.instagram.com/la_sucursal_the_barber/?hl=es" target="_blank" class="app-btn">
+                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
+                <div class="app-info">
+                    <div class="app-name">INSTAGRAM LA SUCURSAL</div>
+                    <div class="app-desc">Cuenta Oficial</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+            <div class="section-title">¿Te ha gustado?</div>
+
+            <!-- VALORAR 5 ESTRELLAS (GOOGLE MAPS) -->
+            <a href="https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI" target="_blank" class="app-btn">
+                <div class="app-icon icon-review"><i class="fa-brands fa-google"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Déjanos 5 Estrellas</div>
+                    <div class="stars-container">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
+        </div>
+
+        <!-- Firma -->
+        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+    </div>
+</body>
+</html>
