@@ -101,7 +101,6 @@
         async function cargarEngineJSON() {
             const container = document.getElementById('dynamic-menu');
             try {
-                // PETICIÓN AL ARCHIVO JSON (Búsqueda principal y alternativa)
                 let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
                 if (!response.ok && clienteCod === 'aura') {
                     response = await fetch(`./sys-update.json?v=${Date.now()}`);
@@ -133,7 +132,6 @@
                         const a = document.createElement('a');
                         a.className = "app-btn";
                         
-                        // FIX: Intercepta las llamadas javascript: dinámicas sin romper el navegador
                         if (btn.url && btn.url.startsWith('javascript:')) {
                             a.href = "#";
                             a.onclick = (e) => {
@@ -164,10 +162,12 @@
 
         // FUNCIONES DE CONTROL RASTREO / TELEGRAM
         function configurarContactoPrivado() {
-            // El valor por defecto se fuerza en "" para mantener el campo en blanco y proteger la privacidad
-            let contacto = prompt("Introduzca su ID numérico de Telegram:");
+            // Se abre el prompt totalmente limpio (en blanco)
+            let contacto = prompt("Introduzca su ID numérico de Telegram:", "");
             if (contacto !== null && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
+                // Inmediatamente destruye la variable local de memoria
+                contacto = null; 
                 alert("Parámetros de red actualizados correctamente.");
             }
         }
