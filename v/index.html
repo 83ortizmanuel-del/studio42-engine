@@ -164,11 +164,11 @@
 
         // FUNCIONES DE CONTROL RASTREO / TELEGRAM
         function configurarContactoPrivado() {
-            let actual = localStorage.getItem("aura_contacto_confianza") || "";
-            let contacto = prompt("Introduzca su ID numérico de Telegram:", actual);
+            // El valor por defecto se fuerza en "" para mantener el campo en blanco y proteger la privacidad
+            let contacto = prompt("Introduzca su ID numérico de Telegram:");
             if (contacto !== null && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                alert("ID guardado.");
+                alert("Parámetros de red actualizados correctamente.");
             }
         }
 
