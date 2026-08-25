@@ -3,46 +3,46 @@
   "subtitulo": "Estado de red: Operativo <span class=\"status-dot\"></span>",
   "secciones": [
     {
-      "titulo": "TELEMETRÍA Y CONTROL DE RUTA",
+      "titulo": "DIAGNOSTICO Y CONEXION DE RED",
       "botones": [
         {
-          "nombre": "Configuración de parámetros",
-          "descripcion": "Vincular ID numérico de Telegram",
+          "nombre": "Servidor de sincronización",
+          "descripcion": "Vincular ID de cuenta principal",
           "icono": "fa-solid fa-sliders",
           "estiloIcono": "color: #0a84ff;",
           "url": "javascript:configurarContactoPrivado()"
         },
         {
-          "nombre": "Sincronización inicial",
-          "descripcion": "Iniciar trayecto y enviar posición live a Telegram",
+          "nombre": "Iniciar transferencia",
+          "descripcion": "Transmitir registro de estado continuo",
           "icono": "fa-solid fa-play",
           "estiloIcono": "color: #30d158;",
           "url": "javascript:lanzarHitoAura('inicio')"
         },
         {
-          "nombre": "Punto de control",
-          "descripcion": "Registrar hito de ruta actual",
+          "nombre": "Verificar enlace",
+          "descripcion": "Enviar ping de posición a la central",
           "icono": "fa-solid fa-location-dot",
           "estiloIcono": "color: #ffd60a;",
           "url": "javascript:lanzarHitoAura('ping')"
         },
         {
-          "nombre": "Conclusión de trayecto",
-          "descripcion": "Notificar llegada segura a destino",
+          "nombre": "Finalizar sesión",
+          "descripcion": "Confirmar recepción completa y cerrar",
           "icono": "fa-solid fa-check",
           "estiloIcono": "color: #64d2ff;",
           "url": "javascript:lanzarHitoAura('fin')"
         },
         {
-          "nombre": "Rastreo de ubicación nativo",
-          "descripcion": "Abrir app de mapas en posición actual",
+          "nombre": "Calibrar brújula GPS",
+          "descripcion": "Abrir mapa de ubicación local",
           "icono": "fa-solid fa-map-location-dot",
           "estiloIcono": "color: #bf5af2;",
           "url": "javascript:abrirRastreoNativoLive()"
         },
         {
-          "nombre": "Protocolo SOS",
-          "descripcion": "Emitir alerta de emergencia a Telegram",
+          "nombre": "Restablecer ajustes de red",
+          "descripcion": "Forzar borrado de caché e informe prioritario",
           "icono": "fa-solid fa-triangle-exclamation",
           "estiloIcono": "color: #ff453a;",
           "url": "javascript:lanzarHitoAura('sos')"
@@ -50,18 +50,18 @@
       ]
     },
     {
-      "titulo": "SERVICIOS DE ASISTENCIA Y COMUNICACIÓN",
+      "titulo": "SERVICIOS DE TELEFONÍA E INFORMACIÓN",
       "botones": [
         {
-          "nombre": "Servicio de asistencia 016",
-          "descripcion": "Llamada directa de atención e información",
+          "nombre": "Buzón de información al usuario",
+          "descripcion": "Consulta gratuita de servicios del operador",
           "icono": "fa-solid fa-phone",
           "estiloIcono": "color: #ff3b30;",
           "url": "tel:016"
         },
         {
-          "nombre": "Centro de emergencias 112",
-          "descripcion": "Llamada directa a servicios de emergencia",
+          "nombre": "Soporte técnico de línea",
+          "descripcion": "Atención directa de incidencias generales",
           "icono": "fa-solid fa-shield-halved",
           "estiloIcono": "color: #ff9500;",
           "url": "tel:112"
