@@ -211,6 +211,7 @@
         const bgAudio = document.getElementById('bg-audio');
         const muteBtn = document.getElementById('mute-btn');
         const muteIcon = document.getElementById('mute-icon');
+        let userMuted = false;
 
         btnEntrar.addEventListener('click', () => {
             splashScreen.style.opacity = '0'; // Efecto de desvanecimiento
@@ -224,14 +225,27 @@
         muteBtn.addEventListener('click', () => {
             if (bgAudio.paused) {
                 bgAudio.play();
+                userMuted = false;
                 muteIcon.className = "fa-solid fa-volume-high";
                 muteBtn.style.borderColor = "var(--color-principal)";
                 muteBtn.style.color = "var(--color-principal)";
             } else {
                 bgAudio.pause();
+                userMuted = true;
                 muteIcon.className = "fa-solid fa-volume-xmark";
                 muteBtn.style.borderColor = "var(--color-texto-secundario)";
                 muteBtn.style.color = "var(--color-texto-secundario)";
+            }
+        });
+
+        // CONTROL DE PAUSA AL SALIR O MINIMIZAR LA PÁGINA
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                bgAudio.pause();
+            } else {
+                if (!userMuted && splashScreen.style.display === 'none') {
+                    bgAudio.play().catch(e => {});
+                }
             }
         });
 
@@ -251,10 +265,8 @@
 
             setTimeout(() => {
                 if (stars <= 3) {
-                    // ⚠️ PON AQUÍ EL NÚMERO DE WHATSAPP PARA QUEJAS PRIVADAS
                     window.location.href = "https://wa.me/+34643023681?text=Hola,%20tengo%20una%20sugerencia%20para%20mejorar%20mi%20experiencia%20en%20La%20Sucursal.";
                 } else {
-                    // 4 o 5 estrellas: Redirección directa a reseña pública de Google
                     window.open("https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI", '_blank');
                 }
                 document.getElementById('star-feedback').style.display = 'none';
