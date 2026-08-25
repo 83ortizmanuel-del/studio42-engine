@@ -2,9 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Cargando Experiencia Phygital... | Studio 42</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">Studio 42 | Experiencia Phygital</title>
+    <!-- FontAwesome & Tailwind CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
             --color-principal: #d4af37;
@@ -13,135 +15,314 @@
             --color-boton: #1f1f1f; 
             --color-texto: #ffffff;
             --color-texto-secundario: #8e8e93;
-            --color-critica: #ff3b30;
+            --color-estrellas: #ffb400;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; user-select: none; }
         
-        .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 28px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8); padding: 28px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.08); position: relative; }
         
-        .logo-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 22%; border: 2px solid var(--color-principal); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; }
+        .logo-container { width: 90px; height: 90px; margin: 0 auto 12px auto; border-radius: 22%; border: 2px solid var(--color-principal); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
         .logo-container img { width: 85%; height: 85%; object-fit: contain; }
         
-        h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; }
-        .propietario { color: var(--color-texto-secundario); font-size: 0.95rem; margin-bottom: 20px; font-style: italic; }
+        h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; }
+        .propietario { color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 18px; font-style: italic; }
         
-        .section-title { text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-texto-secundario); margin: 15px 0 8px 5px; font-weight: 700; }
+        .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-texto-secundario); margin: 16px 0 8px 6px; font-weight: 700; }
         
-        .apps-menu { display: flex; flex-direction: column; gap: 12px; }
-        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 14px 18px; border-radius: 16px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; }
-        .app-btn:active { transform: scale(0.97); }
-        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; background-color: rgba(212, 175, 55, 0.1); color: var(--color-principal); }
+        .apps-menu { display: flex; flex-direction: column; gap: 10px; }
+        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 12px 16px; border-radius: 16px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.04); transition: all 0.2s ease; cursor: pointer; text-align: left; }
+        .app-btn:active { transform: scale(0.97); background-color: #252525; }
+        .app-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; background-color: rgba(212, 175, 55, 0.1); color: var(--color-principal); flex-shrink: 0; }
 
         .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
-        .app-desc { font-size: 0.75rem; color: var(--color-texto-secundario); }
-        .app-arrow { color: var(--color-texto-secundario); font-size: 0.85rem; opacity: 0.5; }
+        .app-name { font-size: 0.9rem; font-weight: 600; color: var(--color-texto); margin-bottom: 1px; }
+        .app-desc { font-size: 0.72rem; color: var(--color-texto-secundario); line-height: 1.2; }
+        .app-arrow { color: var(--color-texto-secundario); font-size: 0.8rem; opacity: 0.5; }
         
-        .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
+        /* ESTILOS ESCUDO ANTI-RESEÑAS */
+        .stars-container { font-size: 1.7rem; margin-top: 8px; display: flex; justify-content: center; gap: 6px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .star-rating i:hover { transform: scale(1.2); }
+        .star-active { color: var(--color-estrellas); }
+        .star-inactive { color: #4b5563; }
+
+        .footer-brand { margin-top: 25px; font-size: 0.72rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
         .footer-brand span { color: var(--color-principal); font-weight: 700; }
 
-        /* OVERLAY DE ENTORNOS AUDIO/AMBIENTE */
-        #overlay-entrada { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: rgba(10, 10, 10, 0.98); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease; backdrop-filter: blur(10px); padding: 20px; }
-        .btn-experiencia { background: linear-gradient(135deg, var(--color-principal), #b38f24); color: #000; border: none; padding: 16px 32px; border-radius: 50px; font-size: 0.95rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+        /* OVERLAY DE BIENVENIDA */
+        #overlay-entrada { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: rgba(10, 10, 10, 0.98); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; backdrop-filter: blur(12px); padding: 20px; }
+        .btn-experiencia { background: linear-gradient(135deg, var(--color-principal), #b38f24); color: #000; border: none; padding: 14px 32px; border-radius: 50px; font-size: 0.9rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3); transition: transform 0.2s; }
+        .btn-experiencia:active { transform: scale(0.95); }
+
+        /* REPRODUCTOR Y BOTÓN FLOTANTE */
         #yt-player-container { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none; }
-        #btn-audio-toggle { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 999; background: rgba(20, 20, 20, 0.85); border: 1px solid rgba(212, 175, 55, 0.3); color: var(--color-texto); padding: 10px 16px; border-radius: 30px; font-size: 0.75rem; cursor: pointer; }
+        #btn-audio-toggle { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 999; background: rgba(20, 20, 20, 0.9); border: 1px solid rgba(212, 175, 55, 0.4); color: var(--color-texto); padding: 8px 14px; border-radius: 30px; font-size: 0.75rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
     <!-- OVERLAY DINÁMICO DE ENTRADA -->
     <div id="overlay-entrada">
-        <div class="logo-container" style="margin-bottom: 20px;">
-            <img id="overlay-logo" src="Logo Studio42" alt="Logo">
+        <div class="logo-container" style="width: 110px; height: 110px; margin-bottom: 20px;">
+            <img id="overlay-logo" src="logo.png" alt="Studio 42">
         </div>
-        <h2 id="overlay-title" style="color: var(--color-principal); font-size: 1.4rem; margin-bottom: 8px; letter-spacing: 2px;">CARGANDO...</h2>
-        <p id="overlay-subtitle" style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 30px;">Experiencia Phygital</p>
-        <button onclick="iniciarExperiencia()" class="btn-experiencia">Ver Demo</button>
+        <h2 id="overlay-title" style="color: var(--color-principal); font-size: 1.3rem; margin-bottom: 6px; letter-spacing: 2px;">STUDIO 42</h2>
+        <p id="overlay-subtitle" style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 25px;">Experiencia Phygital Interactiva</p>
+        <button onclick="iniciarExperiencia()" class="btn-experiencia">Probar Demo Live</button>
     </div>
 
     <!-- REPRODUCTOR OCULTO DE AUDIO -->
     <div id="yt-player-container"><div id="youtube-audio-player"></div></div>
     <button id="btn-audio-toggle" onclick="toggleAudio()"><span id="audio-status"><i class="fa-solid fa-volume-high"></i> Audio ON</span></button>
 
+    <!-- HUB PRINCIPAL -->
     <div class="hub-container">
         <div class="logo-container">
-            <img id="client-logo" src="Logo Studio42" alt="Logo">
+            <img id="client-logo" src="logo.png" alt="Logo">
         </div>
 
-        <h1 id="client-name">NOMBRE DEL COMERCIO</h1>
-        <div id="client-subtitle" class="propietario">Subtítulo o Propietario</div>
+        <h1 id="client-name">STUDIO 42</h1>
+        <div id="client-subtitle" class="propietario">Ecosistema Digital Phygital</div>
 
+        <!-- MENU DINÁMICO -->
         <div class="apps-menu" id="dynamic-menu">
-            <!-- Los botones se inyectan automáticamente desde el JSON dinámico generado por la IA -->
+            <!-- Carga desde JSON o plantilla básica -->
         </div>
 
         <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
     </div>
 
+    <!-- SCRIPT DE REPRODUCCIÓN Y CONTROL DE EXPERIENCIA -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         let player;
         let isMuted = false;
         let youtubeVideoId = '';
 
-        // Cargar datos dinámicos mediante JSON
+        // CARGA Y RENDERIZADO DEL JSON
         async function cargarDatosJSON() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = urlParams.get('cod') || 'demo';
 
             try {
-                const response = await fetch(`../${clienteCod}.json`);
-                if (!response.ok) throw new Error('JSON no encontrado');
+                let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok) {
+                    response = await fetch(`../${clienteCod}.json?v=${Date.now()}`);
+                }
+                if (!response.ok) throw new Error('Cargando demo predeterminada.');
+                
                 const data = await response.json();
 
-                // Inyectar datos en la interfaz
-                document.getElementById('page-title').innerText = data.nombre + " | Studio 42";
-                document.getElementById('client-name').innerText = data.nombre;
-                document.getElementById('client-subtitle').innerText = data.subtitulo || '';
-                document.getElementById('client-logo').src = data.logo || 'logo.png';
-                document.getElementById('overlay-logo').src = data.logo || 'logo.png';
-                document.getElementById('overlay-title').innerText = data.nombre;
-
+                document.getElementById('page-title').innerText = (data.nombre || "Studio 42") + " | Experiencia Phygital";
+                document.getElementById('client-name').innerText = data.nombre || "STUDIO 42";
+                document.getElementById('client-subtitle').innerText = data.subtitulo || "Soluciones Phygital";
+                
+                if (data.logo) {
+                    document.getElementById('client-logo').src = data.logo;
+                    document.getElementById('overlay-logo').src = data.logo;
+                }
+                if (data.nombre) {
+                    document.getElementById('overlay-title').innerText = data.nombre;
+                }
                 if (data.youtubeAudioId) {
                     youtubeVideoId = data.youtubeAudioId;
                 }
 
-                // Renderizar Botones Dinámicos
-                const menuContainer = document.getElementById('dynamic-menu');
-                menuContainer.innerHTML = '';
-
-                data.secciones.forEach(sec => {
-                    if (sec.titulo) {
-                        const titleDiv = document.createElement('div');
-                        titleDiv.className = 'section-title';
-                        titleDiv.innerText = sec.titulo;
-                        menuContainer.appendChild(titleDiv);
-                    }
-
-                    sec.botones.forEach(btn => {
-                        const btnAnchor = document.createElement('a');
-                        btnAnchor.href = btn.url;
-                        btnAnchor.target = btn.url.startsWith('http') ? '_blank' : '_self';
-                        btnAnchor.className = 'app-btn';
-                        btnAnchor.innerHTML = `
-                            <div class="app-icon"><i class="${btn.icono}"></i></div>
-                            <div class="app-info">
-                                <div class="app-name">${btn.nombre}</div>
-                                <div class="app-desc">${btn.descripcion}</div>
-                            </div>
-                            <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                        `;
-                        menuContainer.appendChild(btnAnchor);
-                    });
-                });
-
+                renderizarBotones(data.secciones, data.whatsapp, data.googleMaps);
             } catch (error) {
-                console.log("Cargando vista demo básica por defecto.");
+                console.log("Cargando estructura demo predeterminada de Studio 42.");
+                renderizarDemoBase();
             }
         }
 
+        // RENDERIZADOR BASE CON EL ESCUDO ANTI-RESEÑAS Y PARKING GPS
+        function renderizarDemoBase() {
+            const menuContainer = document.getElementById('dynamic-menu');
+            menuContainer.innerHTML = `
+                <div class="section-title">Servicios Principales</div>
+                
+                <a href="#" onclick="alert('Demo: Aquí se abriría la agenda online del cliente.'); return false;" class="app-btn">
+                    <div class="app-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div class="app-info">
+                        <div class="app-name">Reservar Cita Online</div>
+                        <div class="app-desc">Agenda directa sin intermediarios</div>
+                    </div>
+                    <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
+
+                <a href="#" onclick="alert('Demo: Aquí el usuario guarda el contacto vCard completo en su agenda.'); return false;" class="app-btn">
+                    <div class="app-icon" style="color:#00e5ff; background:rgba(0,229,255,0.1);"><i class="fa-solid fa-address-card"></i></div>
+                    <div class="app-info">
+                        <div class="app-name">Guardar Contacto vCard</div>
+                        <div class="app-desc">Ubicación y teléfono en 1 clic</div>
+                    </div>
+                    <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
+
+                <!-- GESTOR DE PARKING GPS -->
+                <a href="#" onclick="gestionarParking(event)" class="app-btn">
+                    <div class="app-icon" id="parking-icon-container" style="color:#8e8e93; background:rgba(142,142,147,0.1);">
+                        <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-name" id="parking-name">¿Dónde aparqué?</div>
+                        <div class="app-desc" id="parking-desc">Guarda tu coche para volver a pie</div>
+                    </div>
+                    <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </a>
+
+                <div class="section-title">Protección de Reputación</div>
+
+                <!-- ESCUDO ANTI-RESEÑAS INTERACTIVO -->
+                <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start;">
+                    <div style="display: flex; align-items: center; width: 100%;">
+                        <div class="app-icon" style="color:#ffb400; background:rgba(255,180,0,0.1);"><i class="fa-brands fa-google"></i></div>
+                        <div class="app-info">
+                            <div class="app-name">Valora tu experiencia</div>
+                            <div class="app-desc">Filtro inteligente de 5 estrellas</div>
+                        </div>
+                    </div>
+                    <div class="stars-container star-rating" id="escudo-estrellas">
+                        <i class="fa-solid fa-star star-inactive" onclick="rateExperience(1)"></i>
+                        <i class="fa-solid fa-star star-inactive" onclick="rateExperience(2)"></i>
+                        <i class="fa-solid fa-star star-inactive" onclick="rateExperience(3)"></i>
+                        <i class="fa-solid fa-star star-inactive" onclick="rateExperience(4)"></i>
+                        <i class="fa-solid fa-star star-inactive" onclick="rateExperience(5)"></i>
+                    </div>
+                    <p id="star-feedback" style="font-size: 0.72rem; color: var(--color-principal); text-align: center; width: 100%; margin-top: 8px; display: none;">Procesando valoración...</p>
+                </div>
+            `;
+            comprobarEstadoParking();
+        }
+
+        // RENDERIZADO DINÁMICO PARA CLIENTES CON JSON
+        function renderizarBotones(secciones, whatsapp, googleMaps) {
+            const menuContainer = document.getElementById('dynamic-menu');
+            menuContainer.innerHTML = '';
+
+            if(!secciones) { renderizarDemoBase(); return; }
+
+            secciones.forEach(sec => {
+                if (sec.titulo) {
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = 'section-title';
+                    titleDiv.innerText = sec.titulo;
+                    menuContainer.appendChild(titleDiv);
+                }
+
+                sec.botones.forEach(btn => {
+                    const btnAnchor = document.createElement('a');
+                    btnAnchor.className = 'app-btn';
+                    
+                    if(btn.url.startsWith('javascript:')) {
+                        btnAnchor.href = "#";
+                        btnAnchor.onclick = (e) => { e.preventDefault(); eval(btn.url.replace('javascript:', '')); };
+                    } else {
+                        btnAnchor.href = btn.url;
+                        btnAnchor.target = btn.url.startsWith('http') ? '_blank' : '_self';
+                    }
+
+                    btnAnchor.innerHTML = `
+                        <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
+                        <div class="app-info">
+                            <div class="app-name">${btn.nombre}</div>
+                            <div class="app-desc">${btn.descripcion}</div>
+                        </div>
+                        <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                    `;
+                    menuContainer.appendChild(btnAnchor);
+                });
+            });
+        }
+
+        // LÓGICA DEL ESCUDO ANTI-RESEÑAS (DEMO E INTERACTIVA)
+        function rateExperience(stars) {
+            const allStars = document.querySelectorAll('#escudo-estrellas i');
+            allStars.forEach((star, index) => {
+                if (index < stars) {
+                    star.classList.replace('star-inactive', 'star-active');
+                } else {
+                    star.classList.replace('star-active', 'star-inactive');
+                }
+            });
+
+            const feedback = document.getElementById('star-feedback');
+            feedback.style.display = 'block';
+
+            setTimeout(() => {
+                if (stars <= 3) {
+                    alert("🛡️ ESCUDO ACTIVADO:\n\nEl cliente valoró con " + stars + " estrella(s).\nEn lugar de ir a Google Maps a dejar una mala reseña, el sistema abre su WhatsApp Privado para resolver la incidencia.");
+                    window.location.href = "https://wa.me/?text=Hola,%20quisiera%20daros%20mi%20opinión%20sobre%20mi%20visita.";
+                } else {
+                    alert("⭐ REPUTACIÓN IMPULSADA:\n\nEl cliente valoró con " + stars + " estrellas.\nEl sistema redirige directamente a la ficha pública de Google Maps para acumular 5 estrellas.");
+                    window.open("https://maps.google.com", '_blank');
+                }
+                feedback.style.display = 'none';
+            }, 500);
+        }
+
+        // GESTOR DE PARKING CON GPS
+        function comprobarEstadoParking() {
+            const lat = localStorage.getItem('demo_lat');
+            const lng = localStorage.getItem('demo_lng');
+            const icon = document.getElementById('parking-icon');
+            const iconContainer = document.getElementById('parking-icon-container');
+            const title = document.getElementById('parking-name');
+            const subtitle = document.getElementById('parking-desc');
+
+            if (!icon || !iconContainer || !title || !subtitle) return;
+
+            if (lat && lng) {
+                icon.className = "fa-solid fa-person-walking";
+                iconContainer.style.background = "rgba(212, 175, 55, 0.15)";
+                iconContainer.style.color = "var(--color-principal)";
+                title.innerText = "Ir a mi coche (Ruta GPS)";
+                title.style.color = "var(--color-principal)";
+                subtitle.innerText = "Toca para abrir la ruta en el mapa";
+            } else {
+                icon.className = "fa-solid fa-location-crosshairs";
+                iconContainer.style.background = "rgba(142, 142, 147, 0.1)";
+                iconContainer.style.color = "#8e8e93";
+                title.innerText = "¿Dónde aparqué?";
+                title.style.color = "var(--color-texto)";
+                subtitle.innerText = "Guarda tu coche para volver a pie";
+            }
+        }
+
+        function gestionarParking(e) {
+            if (e) e.preventDefault(); 
+            const lat = localStorage.getItem('demo_lat');
+            const lng = localStorage.getItem('demo_lng');
+
+            if (lat && lng) {
+                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
+                window.open(mapsUrl, '_blank');
+                setTimeout(() => {
+                    if (confirm("🚙 ¿Has llegado a tu vehículo y deseas BORRAR la ubicación guardada?")) {
+                        localStorage.removeItem('demo_lat');
+                        localStorage.removeItem('demo_lng');
+                        comprobarEstadoParking();
+                    }
+                }, 1000);
+            } else {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            localStorage.setItem('demo_lat', position.coords.latitude);
+                            localStorage.setItem('demo_lng', position.coords.longitude);
+                            comprobarEstadoParking();
+                            alert("📍 ¡Ubicación de tu coche guardada! Cuando termines tu visita, toca el botón para volver a pie.");
+                        },
+                        () => alert("Activa el GPS de tu teléfono para guardar la posición de tu coche."),
+                        { enableHighAccuracy: true }
+                    );
+                }
+            }
+        }
+
+        // CONTROL DE REPRODUCTOR DE YOUTUBE / AUDIO
         function onYouTubeIframeAPIReady() {
             if (!youtubeVideoId) return;
             player = new YT.Player('youtube-audio-player', {
@@ -153,10 +334,10 @@
         function iniciarExperiencia() {
             const overlay = document.getElementById("overlay-entrada");
             overlay.style.opacity = '0';
-            setTimeout(() => { overlay.style.display = 'none'; }, 600);
+            setTimeout(() => { overlay.style.display = 'none'; }, 500);
 
             if (player && player.playVideo) {
-                player.setVolume(25);
+                player.setVolume(30);
                 player.playVideo();
                 document.getElementById("btn-audio-toggle").style.display = "block";
             }
