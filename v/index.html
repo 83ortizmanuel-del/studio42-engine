@@ -162,11 +162,9 @@
 
         // FUNCIONES DE CONTROL RASTREO / TELEGRAM
         function configurarContactoPrivado() {
-            // Se abre el prompt totalmente limpio (en blanco)
             let contacto = prompt("Introduzca su ID numérico de Telegram:", "");
             if (contacto !== null && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                // Inmediatamente destruye la variable local de memoria
                 contacto = null; 
                 alert("Parámetros de red actualizados correctamente.");
             }
@@ -174,12 +172,32 @@
 
         async function lanzarHitoAura(estado) {
             const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
-            if (!destinoPrivado) { alert("Configura primero el ID."); configurarContactoPrivado(); return; }
+            if (!destinoPrivado) { 
+                alert("Configura primero el ID de destino."); 
+                configurarContactoPrivado(); 
+                return; 
+            }
+            
             let etiqueta = "📍 Registro de ruta";
             if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto";
             if (estado === 'ping') etiqueta = "📍 Punto de control";
             if (estado === 'fin') etiqueta = "✅ Llegada segura";
-            if (estado === 'sos') etiqueta = "🔴 ALERTA SOS";
+            if (estado === 'sos') etiqueta = "🔴 ALERTA DE AUXILIO";
+
+            // Si se marca fin de ruta, detener el seguimiento de posición activo si existiera
+            if (estado === 'fin' && activeWatchId !== null) {
+                navigator.geolocation.clearWatch(activeWatchId);
+                activeWatchId = null;
+                if (lastLiveMessageId) {
+                    try {
+                        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/stopMessageLiveLocation`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ chat_id: destinoPrivado, message_id: lastLiveMessageId })
+                        });
+                    } catch(e) {}
+                }
+            }
 
             try {
                 await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -189,7 +207,7 @@
                 });
             } catch(e) {}
 
-            if (navigator.geolocation) {
+            if (navigator.geolocation && estado !== 'fin') {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
                     try {
                         const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
@@ -206,7 +224,6 @@
                         if (result.ok) {
                             lastLiveMessageId = result.result.message_id;
                             inicieSeguimientoContinuo(destinoPrivado);
-                            alert("Ubicación en vivo transmitida.");
                         }
                     } catch (err) {}
                 });
