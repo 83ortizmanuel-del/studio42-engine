@@ -3,46 +3,46 @@
   "subtitulo": "Estado de red: Operativo <span class=\"status-dot\"></span>",
   "secciones": [
     {
-      "titulo": "DIAGNOSTICO Y CONEXION DE RED",
+      "titulo": "DIAGNÓSTICO Y REGISTRO DE RED",
       "botones": [
         {
-          "nombre": "Servidor de sincronización",
-          "descripcion": "Vincular ID de cuenta principal",
-          "icono": "fa-solid fa-sliders",
+          "nombre": "Servidor principal",
+          "descripcion": "Vincular número para envío de datos",
+          "icono": "fa-solid fa-link",
           "estiloIcono": "color: #0a84ff;",
           "url": "javascript:configurarContactoPrivado()"
         },
         {
-          "nombre": "Iniciar transferencia",
-          "descripcion": "Transmitir registro de estado continuo",
+          "nombre": "Iniciar registro",
+          "descripcion": "Transmitir ubicación en tiempo real",
           "icono": "fa-solid fa-play",
           "estiloIcono": "color: #30d158;",
           "url": "javascript:lanzarHitoAura('inicio')"
         },
         {
-          "nombre": "Verificar enlace",
-          "descripcion": "Enviar ping de posición a la central",
+          "nombre": "Enviar reporte",
+          "descripcion": "Mandar punto de ubicación actual",
           "icono": "fa-solid fa-location-dot",
           "estiloIcono": "color: #ffd60a;",
           "url": "javascript:lanzarHitoAura('ping')"
         },
         {
-          "nombre": "Finalizar sesión",
-          "descripcion": "Confirmar recepción completa y cerrar",
-          "icono": "fa-solid fa-check",
+          "nombre": "Confirmar llegada",
+          "descripcion": "Marcar fin de trayecto seguro",
+          "icono": "fa-solid fa-circle-check",
           "estiloIcono": "color: #64d2ff;",
           "url": "javascript:lanzarHitoAura('fin')"
         },
         {
-          "nombre": "Calibrar brújula GPS",
+          "nombre": "Visualizar mapa",
           "descripcion": "Abrir mapa de ubicación local",
           "icono": "fa-solid fa-map-location-dot",
           "estiloIcono": "color: #bf5af2;",
           "url": "javascript:abrirRastreoNativoLive()"
         },
         {
-          "nombre": "Restablecer ajustes de red",
-          "descripcion": "Forzar borrado de caché e informe prioritario",
+          "nombre": "Reporte prioritario",
+          "descripcion": "Forzar alerta e informe inmediato",
           "icono": "fa-solid fa-triangle-exclamation",
           "estiloIcono": "color: #ff453a;",
           "url": "javascript:lanzarHitoAura('sos')"
@@ -54,14 +54,14 @@
       "botones": [
         {
           "nombre": "Soporte técnico de línea",
-          "descripcion": "Atención directa de incidencias generales",
+          "descripcion": "Atención directa de incidencias (112)",
           "icono": "fa-solid fa-shield-halved",
           "estiloIcono": "color: #ff9500;",
           "url": "tel:112"
         },
         {
           "nombre": "Buzón de información al usuario",
-          "descripcion": "Consulta gratuita de servicios del operador",
+          "descripcion": "Consulta gratuita de servicios (016)",
           "icono": "fa-solid fa-phone",
           "estiloIcono": "color: #ff3b30;",
           "url": "tel:016"
