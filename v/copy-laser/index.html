@@ -29,10 +29,32 @@
         .star-rating i:active { transform: scale(1.25); }
         .star-active { color: #FACC15; }
         .star-inactive { color: #D1D5DB; }
+
+        /* Estilos del Modal Empático */
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: #1C1C1E; border: 1px solid #FACC15; border-radius: 24px; padding: 25px; max-width: 350px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s ease; color: white; }
+        .modal-icon { font-size: 2.5rem; margin-bottom: 12px; color: #FACC15; }
+        .modal-title { font-size: 1.1rem; font-weight: 800; color: #FACC15; margin-bottom: 10px; text-transform: uppercase; }
+        .modal-text { font-size: 0.85rem; color: #DDD; line-height: 1.5; margin-bottom: 20px; }
+        .modal-btn { background: #FACC15; color: #000; font-weight: 800; padding: 12px 25px; border-radius: 50px; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; transition: 0.2s; display: inline-block; width: 100%; }
+        .modal-btn:active { transform: scale(0.95); }
     </style>
 </head>
 
 <body class="bg-fondoClaro min-h-screen flex flex-col items-center justify-center p-6 text-textoOscuro select-none">
+
+    <!-- MODAL EMPÁTICO ANTI-RESEÑAS NEGATIVAS -->
+    <div id="modal-overlay">
+        <div class="modal-box" id="modal-content">
+            <div class="modal-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+            <div class="modal-title">Sentimos no haber cumplido tus expectativas</div>
+            <div class="modal-text">
+                Tu experiencia es lo más importante para nosotros. Queremos escuchar lo sucedido y darte una solución directa.<br><br>
+                Te redirigimos al <b>WhatsApp de dirección</b> para atenderte de forma prioritaria.
+            </div>
+            <button class="modal-btn" id="modal-action-btn">Continuar a WhatsApp</button>
+        </div>
+    </div>
 
     <!-- CABECERA -->
     <header class="w-full max-w-sm flex flex-col items-center mb-6 text-center">
@@ -75,7 +97,7 @@
 
         <div class="w-full border-t border-gray-200 my-2"></div>
 
-        <!-- ESCUDO ANTI-RESEÑAS REAL Y OPERATIVO -->
+        <!-- ESCUDO ANTI-RESEÑAS CON MODAL EMPÁTICO -->
         <div class="w-full flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-center">
             <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">¿Te hemos atendido bien?</p>
             <p class="text-[11px] text-gray-400 mb-3">Valora tu experiencia con nosotros</p>
@@ -87,7 +109,7 @@
                 <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(4)"></i>
                 <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(5)"></i>
             </div>
-            <p id="star-feedback" class="text-xs font-bold text-gray-600 mt-1 hidden">Redirigiendo...</p>
+            <p id="star-feedback" class="text-xs font-bold text-gray-600 mt-1 hidden">Procesando valoración...</p>
         </div>
 
     </main>
@@ -98,13 +120,11 @@
         <p class="text-xs font-extrabold tracking-[0.2em] mt-0.5 text-gray-800">STUDIO 42</p>
     </footer>
 
-    <!-- SCRIPT DEL ESCUDO EN MODO PRODUCCIÓN -->
+    <!-- SCRIPT DEL ESCUDO CON MODAL EMPÁTICO -->
     <script>
-        // ENLACE OFICIAL DE RESEÑAS DE GOOGLE MAPS DE COPY LASER
         const GOOGLE_MAPS_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJXb-0xQ1LRA0R0YvB-x753bM"; 
-        
-        // NÚMERO DE WHATSAPP PRIVADO DE ATENCIÓN AL CLIENTE
         const WHATSAPP_CLIENTE = "34646546315";
+        let redirectTimeout = null;
 
         function procesarResenaReal(nota) {
             const estrellas = document.querySelectorAll('#escudo-estrellas i');
@@ -123,14 +143,39 @@
 
             setTimeout(() => {
                 if (nota <= 3) {
-                    // MALA NOTA: Canalización a WhatsApp Privado
+                    // MALA NOTA: Mostrar Modal Empático y preparar enlace de WhatsApp
                     const msj = encodeURIComponent(`Hola, estuve en Copy Laser y quiero darles una sugerencia/comentario sobre mi atención (Valoración: ${nota} estrella/s):`);
-                    window.location.href = `https://wa.me/${WHATSAPP_CLIENTE}?text=${msj}`;
+                    const urlTarget = `https://wa.me/${WHATSAPP_CLIENTE}?text=${msj}`;
+
+                    mostrarModalEmpatico(urlTarget);
                 } else {
-                    // BUENA NOTA: Redirección directa a Google Maps
+                    // BUENA NOTA: Redirección directa e inmediata a Google Maps
                     window.location.href = GOOGLE_MAPS_REVIEW_URL;
                 }
-            }, 400);
+            }, 300);
+        }
+
+        function mostrarModalEmpatico(urlTarget) {
+            const overlay = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            const btn = document.getElementById('modal-action-btn');
+
+            // Asignar evento al botón del modal
+            btn.onclick = () => {
+                if(redirectTimeout) clearTimeout(redirectTimeout);
+                window.location.href = urlTarget;
+            };
+
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+                content.style.transform = 'translateY(0)';
+            }, 10);
+
+            // Redirección automática a los 3.5 segundos si el usuario no pulsa el botón
+            redirectTimeout = setTimeout(() => {
+                window.location.href = urlTarget;
+            }, 3500);
         }
     </script>
 </body>
