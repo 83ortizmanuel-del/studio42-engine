@@ -43,7 +43,6 @@
 
 <body class="bg-fondoClaro min-h-screen flex flex-col items-center justify-center p-6 text-textoOscuro select-none">
 
-    <!-- MODAL EMPÁTICO ANTI-RESEÑAS NEGATIVAS -->
     <div id="modal-overlay">
         <div class="modal-box" id="modal-content">
             <div class="modal-icon"><i class="fa-solid fa-handshake-angle"></i></div>
@@ -56,19 +55,16 @@
         </div>
     </div>
 
-    <!-- CABECERA -->
     <header class="w-full max-w-sm flex flex-col items-center mb-6 text-center">
         <img src="logo.jpg" alt="Copy Laser Logo" class="h-28 object-contain mb-3" onerror="this.onerror=null; this.src='logo.png';">
         <h1 class="text-3xl font-extrabold tracking-tight uppercase text-black">COPY LASER</h1>
         <p class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mt-1">Imprimiendo desde 1987</p>
     </header>
 
-    <!-- CUERPO DE ACCIÓN RÁPIDA -->
     <main class="w-full max-w-sm flex flex-col gap-4">
         
         <div class="text-xs font-bold uppercase tracking-wider text-gray-400 ml-1">Enviar documentos a tienda</div>
 
-        <!-- BOTÓN WHATSAPP -->
         <a href="https://wa.me/34646546315?text=Hola,%20estoy%20en%20el%20mostrador%20y%20quiero%20imprimir%20estos%20archivos:" 
            target="_blank"
            class="flex items-center justify-between w-full py-4 px-6 rounded-2xl shadow-md bg-marcaPrincipal text-black font-extrabold uppercase text-xs tracking-wide transition-all active:scale-95 border border-amber-400">
@@ -82,7 +78,6 @@
             <i class="fa-solid fa-chevron-right text-black/50 text-xs"></i>
         </a>
 
-        <!-- BOTÓN EMAIL -->
         <a href="mailto:copylaser@copylaser.com?subject=Archivos%20para%20imprimir" 
            class="flex items-center justify-between w-full py-4 px-6 rounded-2xl shadow-sm bg-white border border-gray-200 text-textoOscuro font-bold uppercase text-xs tracking-wide transition-all active:scale-95">
             <div class="flex items-center">
@@ -97,7 +92,6 @@
 
         <div class="w-full border-t border-gray-200 my-2"></div>
 
-        <!-- ESCUDO ANTI-RESEÑAS CON MODAL EMPÁTICO -->
         <div class="w-full flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-center">
             <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">¿Te hemos atendido bien?</p>
             <p class="text-[11px] text-gray-400 mb-3">Valora tu experiencia con nosotros</p>
@@ -106,77 +100,4 @@
                 <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(1)"></i>
                 <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(2)"></i>
                 <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(3)"></i>
-                <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(4)"></i>
-                <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(5)"></i>
-            </div>
-            <p id="star-feedback" class="text-xs font-bold text-gray-600 mt-1 hidden">Procesando valoración...</p>
-        </div>
-
-    </main>
-
-    <!-- PIE DE PÁGINA -->
-    <footer class="mt-10 text-center opacity-60">
-        <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Tecnología Phygital por</p>
-        <p class="text-xs font-extrabold tracking-[0.2em] mt-0.5 text-gray-800">STUDIO 42</p>
-    </footer>
-
-    <!-- SCRIPT DEL ESCUDO CON MODAL EMPÁTICO -->
-    <script>
-        const GOOGLE_MAPS_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJXb-0xQ1LRA0R0YvB-x753bM"; 
-        const WHATSAPP_CLIENTE = "34646546315";
-        let redirectTimeout = null;
-
-        function procesarResenaReal(nota) {
-            const estrellas = document.querySelectorAll('#escudo-estrellas i');
-            const feedback = document.getElementById('star-feedback');
-
-            // Iluminar estrellas
-            estrellas.forEach((star, index) => {
-                if (index < nota) {
-                    star.classList.replace('star-inactive', 'star-active');
-                } else {
-                    star.classList.replace('star-active', 'star-inactive');
-                }
-            });
-
-            feedback.classList.remove('hidden');
-
-            setTimeout(() => {
-                if (nota <= 3) {
-                    // MALA NOTA: Mostrar Modal Empático y preparar enlace de WhatsApp
-                    const msj = encodeURIComponent(`Hola, estuve en Copy Laser y quiero darles una sugerencia/comentario sobre mi atención (Valoración: ${nota} estrella/s):`);
-                    const urlTarget = `https://wa.me/${WHATSAPP_CLIENTE}?text=${msj}`;
-
-                    mostrarModalEmpatico(urlTarget);
-                } else {
-                    // BUENA NOTA: Redirección directa e inmediata a Google Maps
-                    window.location.href = GOOGLE_MAPS_REVIEW_URL;
-                }
-            }, 300);
-        }
-
-        function mostrarModalEmpatico(urlTarget) {
-            const overlay = document.getElementById('modal-overlay');
-            const content = document.getElementById('modal-content');
-            const btn = document.getElementById('modal-action-btn');
-
-            // Asignar evento al botón del modal
-            btn.onclick = () => {
-                if(redirectTimeout) clearTimeout(redirectTimeout);
-                window.location.href = urlTarget;
-            };
-
-            overlay.style.display = 'flex';
-            setTimeout(() => {
-                overlay.style.opacity = '1';
-                content.style.transform = 'translateY(0)';
-            }, 10);
-
-            // Redirección automática a los 3.5 segundos si el usuario no pulsa el botón
-            redirectTimeout = setTimeout(() => {
-                window.location.href = urlTarget;
-            }, 3500);
-        }
-    </script>
-</body>
-</html>
+                <i class="fa
