@@ -8,13 +8,21 @@
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
         
-        // 1. EXTRAER EL CÓDIGO DEL CLIENTE (APUNTA A 'aura' POR DEFECTO)
+        // 1. CAPTURA AUTOMÁTICA DE VINCULACIÓN DE RED EN 1 CLIC (?set_id=-100...)
         const urlParams = new URLSearchParams(window.location.search);
+        const autoSetId = urlParams.get('set_id');
+
+        if (autoSetId) {
+            localStorage.setItem("aura_contacto_confianza", autoSetId.trim());
+            alert("🟢 Red AURA vinculada correctamente en este dispositivo.");
+        }
+
+        // 2. EXTRAER EL CÓDIGO DEL CLIENTE (APUNTA A 'aura' POR DEFECTO)
         const clienteCod = urlParams.get('cod') || 'aura';
         const isTactical = (clienteCod === 'aura' || clienteCod === 'sys-update');
         
-        // 2. CAMUFLAJE SÓLO SI ES MODO TÁCTICO
-        if(isTactical) {
+        // 3. CAMUFLAJE DE URL (Limpia los parámetros para no dejar rastro visual)
+        if (isTactical || autoSetId) {
             try {
                 window.history.replaceState(null, '', window.location.pathname);
             } catch(e) {}
@@ -94,6 +102,7 @@
         let activeWatchId = null;
         let lastLiveMessageId = null;
 
+        // Salida rápida de emergencia: al tocar el título "Ajustes" redirige a Google
         document.getElementById('client-name').addEventListener('click', function() {
             window.location.replace("https://www.google.es");
         });
@@ -162,10 +171,10 @@
 
         // FUNCIONES DE CONTROL RASTREO / TELEGRAM
         function configurarContactoPrivado() {
-            let contacto = prompt("Introduzca su ID numérico de Telegram:", "");
+            const actual = localStorage.getItem("aura_contacto_confianza") || "";
+            let contacto = prompt("Introduzca su ID numérico o ID de grupo de Telegram:", actual);
             if (contacto !== null && contacto.trim() !== "") {
                 localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                contacto = null; 
                 alert("Parámetros de red actualizados correctamente.");
             }
         }
@@ -184,7 +193,7 @@
             if (estado === 'fin') etiqueta = "✅ Llegada segura";
             if (estado === 'sos') etiqueta = "🔴 ALERTA DE AUXILIO";
 
-            // Si se marca fin de ruta, detener el seguimiento de posición activo si existiera
+            // Si se marca fin de ruta, detener el seguimiento de posición activo
             if (estado === 'fin' && activeWatchId !== null) {
                 navigator.geolocation.clearWatch(activeWatchId);
                 activeWatchId = null;
