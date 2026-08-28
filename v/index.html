@@ -182,11 +182,20 @@
 
         // FUNCIONES DE CONTROL RASTREO / TELEGRAM
         function configurarContactoPrivado() {
-            const actual = localStorage.getItem("aura_contacto_confianza") || "";
-            let contacto = prompt("Introduzca su ID numérico o ID de grupo de Telegram:", actual);
-            if (contacto !== null && contacto.trim() !== "") {
-                localStorage.setItem("aura_contacto_confianza", contacto.trim());
-                alert("Parámetros de red actualizados correctamente.");
+            // Se pasa siempre una cadena vacía "" para no mostrar ningún número expuesto
+            let contacto = prompt("Introduzca su ID numérico de Telegram (o déjelo en blanco para desvincular):", "");
+            
+            if (contacto !== null) {
+                const valorLimpio = contacto.trim();
+                if (valorLimpio === "") {
+                    // Borra definitivamente la memoria del teléfono
+                    localStorage.removeItem("aura_contacto_confianza");
+                    alert("🔴 Dispositivo desvinculado de la red.");
+                } else {
+                    // Guarda el nuevo ID sobrescribiendo cualquier anterior
+                    localStorage.setItem("aura_contacto_confianza", valorLimpio);
+                    alert("🟢 Parámetros de red actualizados correctamente.");
+                }
             }
         }
 
