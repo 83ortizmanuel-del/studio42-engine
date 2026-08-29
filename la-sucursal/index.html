@@ -151,7 +151,7 @@
                 <div class="app-icon icon-bizum"><i class="fa-solid fa-mobile-screen-button"></i></div>
                 <div class="app-info">
                     <div class="app-name">Pagar por Bizum</div>
-                    <div class="app-desc" id="bizum-desc">Copiar número y abrir mi banco</div>
+                    <div class="app-desc" id="bizum-desc">Copiar número e instrucciones</div>
                 </div>
                 <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
             </a>
@@ -358,7 +358,7 @@
             if (e) e.preventDefault();
             
             // Teléfono oficial de Bizum para La Sucursal
-            const numeroTelefono = "643023681"; 
+            const numeroTelefono = "643186453"; 
             
             // Vibración táctil de confirmación en la mano
             if ("vibrate" in navigator) {
@@ -368,16 +368,13 @@
             // Copiar número al portapapeles automáticamente
             navigator.clipboard.writeText(numeroTelefono).then(() => {
                 const desc = document.getElementById('bizum-desc');
-                if (desc) desc.innerText = "¡Número copiado! Abre tu banco";
+                if (desc) desc.innerText = "¡Número copiado en tu móvil!";
 
-                alert(`✅ ¡Número de Bizum copiado!\n\n📱 Teléfono: ${numeroTelefono}\n\n1. Abre la app de tu banco.\n2. En la sección Bizum, mantén pulsado y pega el número.\n3. Pon el importe y confirma.`);
-
-                // Lanza la marcación/redirección nativa
-                window.location.href = "tel:" + numeroTelefono;
+                alert(`✅ ¡Número de Bizum copiado con éxito!\n\n📱 Teléfono: ${numeroTelefono}\n\nPASOS:\n1. Abre la app de tu banco habitual.\n2. Ve a la sección Bizum y mantén pulsado en el teléfono para seleccionar "Pegar".\n3. Pon el importe y confirma tu pago.`);
 
                 setTimeout(() => {
-                    if (desc) desc.innerText = "Copiar número y abrir mi banco";
-                }, 3000);
+                    if (desc) desc.innerText = "Copiar número e instrucciones";
+                }, 4000);
 
             }).catch(err => {
                 prompt("Mantén pulsado para copiar este número de Bizum:", numeroTelefono);
