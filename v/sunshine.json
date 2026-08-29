@@ -1,0 +1,52 @@
+{
+"nombre": "SUNSHINE RENT DADI",
+"subtitulo": "Excursiones, Rent a Car & Motos",
+"subtituloOverlay": "Bienvenido a Sunshine Rent Tenerife",
+"logo": "./logo.png",
+"colorPrincipal": "#007BFF",
+"glowColor": "rgba(0, 123, 255, 0.25)",
+"youtubeAudioId": "",
+"secciones": [
+{
+"titulo": "Servicios & Alquiler",
+"botones": [
+{
+"nombre": "Reservar Vehículo o Excursión",
+"descripcion": "Accede a nuestros coches, motos y mejores experiencias",
+"icono": "fa-solid fa-car",
+"url": "https://tenerifesunshinerent.com/",
+"estiloIcono": "background-color: rgba(0, 123, 255, 0.15); color: #007BFF;",
+"destacado": true,
+"badge": "Recomendado"
+},
+{
+"nombre": "Guardar Contacto",
+"descripcion": "Añade nuestro teléfono y ubicación a tu agenda",
+"icono": "fa-solid fa-address-card",
+"url": "./contacto.vcf",
+"estiloIcono": "background-color: rgba(255, 193, 7, 0.15); color: #FFC107;"
+}
+]
+},
+{
+"titulo": "Tu Opinión Nos Importa",
+"botones": [
+{
+"nombre": "¿Algo no salió perfecto?",
+"descripcion": "Atención personalizada y solución directa con Gerencia",
+"icono": "fa-solid fa-comment-dots",
+"url": "https://wa.me/34000000000?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20alquiler%20en%20Sunshine%20Rent",
+"estiloIcono": "background-color: rgba(255, 59, 48, 0.1); color: #ff3b30;"
+},
+{
+"nombre": "Déjanos 5 Estrellas en Google",
+"descripcion": "Tu valoración nos ayuda a seguir recomendando las mejores rutas",
+"icono": "fa-brands fa-google",
+"url": "https://search.google.com/local/writereview?placeid=ID_GOOGLE_SUNSHINE_RENT",
+"estiloIcono": "background-color: rgba(255, 180, 0, 0.1); color: #ffb400;",
+"estrellas": true
+}
+]
+}
+]
+}
