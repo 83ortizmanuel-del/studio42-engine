@@ -353,24 +353,21 @@
             }
         }
 
-        // --- D. LÓGICA DE PAGO POR BIZUM ---
+        // --- D. LÓGICA DE PAGO POR BIZUM CON POPUP PERSONALIZADO DE FERNANDO ---
         function pagarPorBizum(e) {
             if (e) e.preventDefault();
             
-            // Teléfono oficial de Bizum para La Sucursal
             const numeroTelefono = "643186453"; 
             
-            // Vibración táctil de confirmación en la mano
             if ("vibrate" in navigator) {
                 navigator.vibrate(60);
             }
 
-            // Copiar número al portapapeles automáticamente
             navigator.clipboard.writeText(numeroTelefono).then(() => {
                 const desc = document.getElementById('bizum-desc');
                 if (desc) desc.innerText = "¡Número copiado en tu móvil!";
 
-                alert(`✅ ¡Número de Bizum copiado con éxito!\n\n📱 Teléfono: ${numeroTelefono}\n\nPASOS:\n1. Abre la app de tu banco habitual.\n2. Ve a la sección Bizum y mantén pulsado en el teléfono para seleccionar "Pegar".\n3. Pon el importe y confirma tu pago.`);
+                mostrarAvisoFernando(numeroTelefono);
 
                 setTimeout(() => {
                     if (desc) desc.innerText = "Copiar número e instrucciones";
@@ -379,6 +376,42 @@
             }).catch(err => {
                 prompt("Mantén pulsado para copiar este número de Bizum:", numeroTelefono);
             });
+        }
+
+        function mostrarAvisoFernando(numero) {
+            let modal = document.getElementById('modal-bizum-fernando');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'modal-bizum-fernando';
+                modal.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center;
+                    align-items: center; z-index: 10000; padding: 20px;
+                `;
+                modal.innerHTML = `
+                    <div style="background: #141414; border: 1px solid #d4af37; border-radius: 20px; padding: 25px 20px; max-width: 360px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 12px auto; border-radius: 50%; border: 2px solid #d4af37; overflow: hidden; background: #000;">
+                            <img src="logo.png" alt="La Sucursal" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h3 style="color: #d4af37; font-size: 1.1rem; margin-bottom: 4px; text-transform: uppercase;">¡Gracias por tu visita! 💈</h3>
+                        <p style="color: #8e8e93; font-size: 0.85rem; margin-bottom: 15px; font-style: italic;">Fernando Ambuila</p>
+                        
+                        <div style="background: #1f1f1f; border-radius: 12px; padding: 12px; margin-bottom: 15px; border: 1px dashed rgba(212,175,55,0.4);">
+                            <span style="font-size: 0.75rem; color: #8e8e93; display: block; margin-bottom: 2px;">Número Bizum Copiado:</span>
+                            <strong style="font-size: 1.3rem; color: #00c853; letter-spacing: 1px;">${numero}</strong>
+                        </div>
+
+                        <div style="text-align: left; font-size: 0.85rem; color: #fff; line-height: 1.5; margin-bottom: 20px;">
+                            <p style="margin-bottom: 6px;"><b>1.</b> Abre la app de tu banco habitual.</p>
+                            <p style="margin-bottom: 6px;"><b>2.</b> En la sección Bizum, mantén pulsado en el teléfono y selecciona <b>"Pegar"</b>.</p>
+                            <p><b>3.</b> Pon el importe de tu servicio y confirma.</p>
+                        </div>
+
+                        <button onclick="document.getElementById('modal-bizum-fernando').remove()" style="background: #d4af37; color: #000; font-weight: 800; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; width: 100%;">¡ENTENDIDO!</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
         }
 
         document.addEventListener("DOMContentLoaded", () => {
