@@ -69,6 +69,7 @@
         /* Colores de Iconos */
         .icon-contact { background-color: rgba(0, 229, 255, 0.1); color: #00e5ff; }
         .icon-booking { background-color: rgba(212, 175, 55, 0.1); color: #d4af37; }
+        .icon-bizum { background-color: rgba(0, 200, 83, 0.15); color: #00c853; }
         .icon-insta { background-color: rgba(225, 48, 108, 0.1); color: #e1306c; }
         .icon-review { background-color: rgba(255, 180, 0, 0.1); color: #ffb400; }
         .icon-parking { background-color: rgba(142, 142, 147, 0.1); color: #8e8e93; }
@@ -145,6 +146,16 @@
                 <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
             </a>
 
+            <!-- BOTÓN DE PAGO BIZUM EN 1 CLIC -->
+            <a href="#" onclick="pagarPorBizum(event)" class="app-btn" id="btn-bizum">
+                <div class="app-icon icon-bizum"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                <div class="app-info">
+                    <div class="app-name">Pagar por Bizum</div>
+                    <div class="app-desc" id="bizum-desc">Copiar número y abrir mi banco</div>
+                </div>
+                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            </a>
+
             <!-- GESTOR DE PARKING -->
             <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
                 <div class="app-icon icon-parking" id="parking-icon-container">
@@ -214,10 +225,10 @@
         let userMuted = false;
 
         btnEntrar.addEventListener('click', () => {
-            splashScreen.style.opacity = '0'; // Efecto de desvanecimiento
+            splashScreen.style.opacity = '0';
             setTimeout(() => { splashScreen.style.display = 'none'; }, 500);
             
-            muteBtn.style.display = 'flex'; // Mostrar botón de audio
+            muteBtn.style.display = 'flex';
             
             bgAudio.play().catch(e => console.log("Autoplay bloqueado:", e));
         });
@@ -342,7 +353,40 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", comprobarEstadoParkingBarberia);
+        // --- D. LÓGICA DE PAGO POR BIZUM ---
+        function pagarPorBizum(e) {
+            if (e) e.preventDefault();
+            
+            // Teléfono oficial de Bizum para La Sucursal
+            const numeroTelefono = "643023681"; 
+            
+            // Vibración táctil de confirmación en la mano
+            if ("vibrate" in navigator) {
+                navigator.vibrate(60);
+            }
+
+            // Copiar número al portapapeles automáticamente
+            navigator.clipboard.writeText(numeroTelefono).then(() => {
+                const desc = document.getElementById('bizum-desc');
+                if (desc) desc.innerText = "¡Número copiado! Abre tu banco";
+
+                alert(`✅ ¡Número de Bizum copiado!\n\n📱 Teléfono: ${numeroTelefono}\n\n1. Abre la app de tu banco.\n2. En la sección Bizum, mantén pulsado y pega el número.\n3. Pon el importe y confirma.`);
+
+                // Lanza la marcación/redirección nativa
+                window.location.href = "tel:" + numeroTelefono;
+
+                setTimeout(() => {
+                    if (desc) desc.innerText = "Copiar número y abrir mi banco";
+                }, 3000);
+
+            }).catch(err => {
+                prompt("Mantén pulsado para copiar este número de Bizum:", numeroTelefono);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            comprobarEstadoParkingBarberia();
+        });
     </script>
 </body>
 </html>
