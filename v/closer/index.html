@@ -71,6 +71,39 @@
             backdrop-filter: blur(16px);
         }
 
+        /* --- CABECERA REFINADA Y HERO LOGO --- */
+        .logo-hero {
+            height: 105px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 16px rgba(250, 204, 21, 0.45));
+            animation: logoAura 3.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoAura {
+            0% { filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.3)); transform: scale(1); }
+            100% { filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.65)); transform: scale(1.02); }
+        }
+
+        .title-phygital {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .subtitle-phygital {
+            background: linear-gradient(90deg, #FACC15 0%, #EAB308 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
         /* INPUTS CON GLOW DORADO ELEGANTE */
         .input-cyber {
             background: rgba(255, 255, 255, 0.03);
@@ -144,16 +177,6 @@
             transform: scale(0.96);
             box-shadow: 0 0 12px rgba(250, 204, 21, 0.2);
         }
-
-        .logo-pulse {
-            filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.3));
-            animation: pulseGlowSutil 4s infinite alternate;
-        }
-
-        @keyframes pulseGlowSutil {
-            0% { filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.2)); }
-            100% { filter: drop-shadow(0 0 14px rgba(250, 204, 21, 0.5)); }
-        }
     </style>
 </head>
 
@@ -163,13 +186,20 @@
     <div class="w-full max-w-sm neon-card-wrapper">
         <main class="neon-card-content p-6 sm:p-7">
             
-            <!-- Cabecera Phygital -->
-            <header class="w-full flex flex-col items-center mb-6 text-center">
-                <img src="/logo.png" alt="Studio 42 Logo" class="h-20 object-contain mb-3 logo-pulse" onerror="this.onerror=null; this.src='logo.png';">
-                <h1 class="text-2xl font-black tracking-wider uppercase text-white">Diagnóstico Phygital</h1>
+            <!-- CABECERA DESTACADA Y ESTILIZADA -->
+            <header class="w-full flex flex-col items-center mb-6 text-center space-y-2">
+                <div class="relative inline-flex items-center justify-center p-1">
+                    <div class="absolute inset-0 bg-[#FACC15]/15 blur-2xl rounded-full"></div>
+                    <img src="/logo.png" alt="Studio 42 Logo" class="relative logo-hero" onerror="this.onerror=null; this.src='logo.png';">
+                </div>
+
+                <div>
+                    <h1 class="title-phygital">Diagnóstico Phygital</h1>
+                    <p class="subtitle-phygital mt-0.5">Engine v2 // Identidad Inteligente</p>
+                </div>
                 
-                <div class="inline-flex items-center gap-2 bg-black/80 px-3 py-1 rounded-full border border-[#FACC15]/40 mt-2">
-                    <span class="w-2 h-2 rounded-full bg-[#FACC15] animate-ping"></span>
+                <div class="inline-flex items-center gap-2 bg-black/90 px-3 py-1 rounded-full border border-[#FACC15]/30 shadow-md mt-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#FACC15] animate-ping"></span>
                     <span class="text-[9px] font-black text-[#FACC15] uppercase tracking-widest">Acceso Exclusivo Closer</span>
                 </div>
             </header>
@@ -240,7 +270,7 @@
             }
         });
 
-        // URL DE TU NUEVA IMPLEMENTACIÓN DE GOOGLE APPS SCRIPT
+        // URL DE TU IMPLEMENTACIÓN DE GOOGLE APPS SCRIPT
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsKQpR9iWP4HnrBHt31Y4hNTvFDszp0GUITguP6KslwK6gfum8ODKupoJB6imDQnMn/exec";
 
         const form = document.getElementById('form-diagnostico');
