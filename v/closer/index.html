@@ -28,7 +28,7 @@
             background-size: 28px 28px;
         }
 
-        /* MARCO CON LUZ SUTIL GIRATORIA (REDUCIDA OPACIDAD Y VELOCIDAD) */
+        /* MARCO CON LUZ SUTIL GIRATORIA */
         .neon-card-wrapper {
             position: relative;
             border-radius: 28px;
@@ -98,7 +98,7 @@
             text-shadow: 0 0 6px rgba(250, 204, 21, 0.3);
         }
 
-        /* BOTÓN DE IMPULSO */
+        /* --- BOTÓN CON TEXTURA DE REFLEJO VIVO & SHIMMER --- */
         .btn-cyber-submit {
             background: linear-gradient(135deg, #facc15 0%, #eab308 50%, #ca8a04 100%);
             color: #000000;
@@ -109,15 +109,41 @@
             padding: 16px;
             width: 100%;
             font-size: 0.85rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(250, 204, 21, 0.25);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
             border: none;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* TEXTURA / RÁFAGA DE LUZ EN BUCLE */
+        .btn-cyber-submit::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.45) 50%,
+                transparent 70%
+            );
+            transform: rotate(30deg);
+            animation: btnTextureShimmer 4s infinite;
+        }
+
+        @keyframes btnTextureShimmer {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            20% { transform: translateX(100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
         }
 
         .btn-cyber-submit:active {
             transform: scale(0.96);
-            box-shadow: 0 0 10px rgba(250, 204, 21, 0.15);
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.2);
         }
 
         .logo-pulse {
