@@ -3,140 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 | Diagnóstico Phygital</title>
+    <title>Studio 42 | Diagnóstico Phygital Cyber-Engine</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
-                    colors: {
-                        marcaPrincipal: '#FACC15',
-                        fondoClaro: '#000000',
-                        tarjetaOscura: '#1C1C1E',
-                        textoOscuro: '#1F2937',
-                    }
-                }
-            }
-        }
-    </script>
 
     <style>
-        .input-phygital {
-            background-color: #2C2C2E;
-            border: 1px solid #3A3A3C;
-            color: #FFFFFF;
+        :root {
+            --color-oro: #facc15;
+            --color-oro-glow: rgba(250, 204, 21, 0.5);
+            --color-fondo: #050507;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-fondo);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* --- FONDO TECH DE PARTÍCULAS/GRID --- */
+        .bg-tech-grid {
+            background-image: radial-gradient(rgba(250, 204, 21, 0.08) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        /* --- TARJETA CON BORDE NEÓN GIRATORIO (LUS DE BORDES ANIMADA) --- */
+        .neon-card-wrapper {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            padding: 2px;
+            background: rgba(20, 20, 22, 0.85);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(250, 204, 21, 0.15);
+        }
+
+        .neon-card-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent, 
+                transparent, 
+                transparent, 
+                var(--color-oro), 
+                #ffffff, 
+                var(--color-oro)
+            );
+            animation: rotateNeon 4s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateNeon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .neon-card-content {
+            position: relative;
+            background: rgba(15, 15, 18, 0.95);
+            border-radius: 26px;
+            z-index: 1;
+            backdrop-filter: blur(16px);
+        }
+
+        /* --- INPUTS CON GLOW CYBER --- */
+        .input-cyber {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #ffffff;
             border-radius: 16px;
             padding: 14px 16px;
             width: 100%;
             font-size: 0.85rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .input-phygital:focus {
+
+        .input-cyber:focus {
             outline: none;
-            border-color: #FACC15;
-            box-shadow: 0 0 12px rgba(250, 204, 21, 0.25);
+            background: rgba(250, 204, 21, 0.05);
+            border-color: var(--color-oro);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.3), inset 0 0 10px rgba(250, 204, 21, 0.1);
         }
-        .input-blocked {
-            background-color: #141415 !important;
-            border-color: #FACC15/40 !important;
-            color: #FACC15 !important;
+
+        .input-locked {
+            background: rgba(250, 204, 21, 0.05) !important;
+            border-color: rgba(250, 204, 21, 0.3) !important;
+            color: var(--color-oro) !important;
             cursor: not-allowed;
+            text-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
         }
-        .btn-submit {
-            background: #FACC15;
+
+        /* --- BOTÓN PULSO NEÓN --- */
+        .btn-cyber-submit {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 50%, #ca8a04 100%);
             color: #000000;
-            font-weight: 800;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             border-radius: 50px;
             padding: 16px;
             width: 100%;
             font-size: 0.85rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 20px rgba(250, 204, 21, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.4);
+            position: relative;
+            overflow: hidden;
             border: none;
             cursor: pointer;
         }
-        .btn-submit:active { transform: scale(0.96); }
+
+        .btn-cyber-submit::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: rotate(30deg);
+            transition: 0.5s;
+        }
+
+        .btn-cyber-submit:active {
+            transform: scale(0.96);
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);
+        }
+
+        /* --- LOGO CON IMPULSO DE LUZ --- */
+        .logo-pulse {
+            filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.4));
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.3)); }
+            100% { filter: drop-shadow(0 0 18px rgba(250, 204, 21, 0.7)); }
+        }
     </style>
 </head>
 
-<body class="bg-black min-h-screen flex flex-col items-center justify-center p-4 text-white select-none">
+<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-center p-4 text-white select-none">
 
-    <main class="w-full max-w-sm bg-tarjetaOscura p-6 rounded-3xl border border-[#FACC15]/20 shadow-2xl">
-        
-        <!-- Cabecera con Logo de Studio 42 -->
-        <header class="w-full flex flex-col items-center mb-6 text-center">
-            <img src="../../logo.png" alt="Studio 42 Logo" class="h-20 object-contain mb-3" onerror="this.onerror=null; this.src='../logo.png';">
-            <h1 class="text-2xl font-extrabold tracking-tight uppercase text-white">Diagnóstico Phygital</h1>
-            <div class="inline-flex items-center gap-2 bg-black/60 px-3 py-1 rounded-full border border-[#FACC15]/40 mt-2">
-                <span class="w-2 h-2 rounded-full bg-[#FACC15] animate-pulse"></span>
-                <span class="text-[9px] font-bold text-[#FACC15] uppercase tracking-widest">Acceso Exclusivo Closer</span>
-            </div>
-        </header>
-
-        <form id="form-diagnostico" class="space-y-4">
+    <!-- CONTENEDOR CON BORDE NEÓN GIRATORIO -->
+    <div class="w-full max-w-sm neon-card-wrapper">
+        <main class="neon-card-content p-6 sm:p-7">
             
-            <!-- CAMPO DEL CLOSER BLOQUEADO (Solo asignable por NFC Tools mediante URL) -->
-            <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-[#FACC15] mb-1 ml-1">
-                    ID Responsable (Closer)
-                </label>
-                <div class="relative">
-                    <input type="text" id="closer_id" name="closer_id" value="MEL42" class="input-phygital input-blocked font-extrabold text-sm" readonly required>
-                    <i class="fa-solid fa-lock absolute right-4 top-4 text-[#FACC15]/70 text-xs"></i>
+            <!-- Cabecera Phygital -->
+            <header class="w-full flex flex-col items-center mb-6 text-center">
+                <img src="/logo.png" alt="Studio 42 Logo" class="h-20 object-contain mb-3 logo-pulse" onerror="this.onerror=null; this.src='logo.png';">
+                <h1 class="text-2xl font-black tracking-wider uppercase text-white drop-shadow-md">Diagnóstico Phygital</h1>
+                
+                <div class="inline-flex items-center gap-2 bg-black/80 px-3 py-1 rounded-full border border-[#FACC15]/50 mt-2 shadow-[0_0_15px_rgba(250,204,21,0.2)]">
+                    <span class="w-2 h-2 rounded-full bg-[#FACC15] animate-ping"></span>
+                    <span class="text-[9px] font-black text-[#FACC15] uppercase tracking-widest">Acceso Exclusivo Closer</span>
                 </div>
-                <p class="text-[9px] text-gray-400 mt-1 ml-1">🔒 Master key asignada por CEOStudio42.</p>
-            </div>
+            </header>
 
-            <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1 ml-1">
-                    Nombre Comercial / Sector
-                </label>
-                <input type="text" id="nombre_sector" name="nombre_sector" placeholder="Ej: Óptica San José / Salud" class="input-phygital" required>
-            </div>
+            <form id="form-diagnostico" class="space-y-4">
+                
+                <!-- ID CLOSER BLOQUEADO -->
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-[#FACC15] mb-1 ml-1">
+                        ID Responsable (Closer)
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="closer_id" name="closer_id" value="MEL42" class="input-cyber input-locked font-black text-sm" readonly required>
+                        <i class="fa-solid fa-lock absolute right-4 top-4 text-[#FACC15] text-xs drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]"></i>
+                    </div>
+                    <p class="text-[9px] text-gray-400 mt-1 ml-1">🔒 Llave maestra asignada mediante NFC.</p>
+                </div>
 
-            <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1 ml-1">
-                    Fricción o Quejas de los Clientes
-                </label>
-                <textarea id="fricciones" name="fricciones" rows="3" placeholder="Fricciones detectadas en el comercio..." class="input-phygital" required></textarea>
-            </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
+                        Nombre Comercial / Sector
+                    </label>
+                    <input type="text" id="nombre_sector" name="nombre_sector" placeholder="Ej: Óptica San José / Salud" class="input-cyber" required>
+                </div>
 
-            <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1 ml-1">
-                    Branding, Paleta de Colores y Redes
-                </label>
-                <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#FF0000), IG @comercio..." class="input-phygital" required>
-            </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
+                        Fricción o Quejas de los Clientes
+                    </label>
+                    <textarea id="fricciones" name="fricciones" rows="3" placeholder="Fricciones detectadas en el comercio..." class="input-cyber" required></textarea>
+                </div>
 
-            <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1 ml-1">
-                    URL del Logo / Observaciones Extra
-                </label>
-                <input type="text" id="logo_extra" name="logo_extra" placeholder="Ej: Link al logo en Web/Drive o notas..." class="input-phygital">
-            </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
+                        Branding, Paleta de Colores y Redes
+                    </label>
+                    <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#FF0000), IG @comercio..." class="input-cyber" required>
+                </div>
 
-            <button type="submit" id="btn-enviar" class="btn-submit mt-4">
-                Registrar Diagnóstico
-            </button>
-        </form>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
+                        URL del Logo / Observaciones Extra
+                    </label>
+                    <input type="text" id="logo_extra" name="logo_extra" placeholder="Ej: Link al logo en Web/Drive o notas..." class="input-cyber">
+                </div>
 
-        <div id="mensaje-estado" class="hidden mt-4 p-4 rounded-2xl text-center text-xs font-bold"></div>
+                <button type="submit" id="btn-enviar" class="btn-cyber-submit mt-4">
+                    Registrar Diagnóstico
+                </button>
+            </form>
 
-    </main>
+            <div id="mensaje-estado" class="hidden mt-4 p-4 rounded-2xl text-center text-xs font-bold"></div>
 
-    <footer class="mt-6 text-center text-[10px] text-gray-500 font-semibold tracking-widest uppercase">
-        Desarrollado por <span class="text-[#FACC15] font-extrabold">Studio 42</span>
+        </main>
+    </div>
+
+    <footer class="mt-6 text-center text-[10px] text-gray-500 font-bold tracking-widest uppercase">
+        Engine v2 // Desarrollado por <span class="text-[#FACC15] drop-shadow-[0_0_8px_rgba(250,204,21,0.6)] font-black">Studio 42</span>
     </footer>
 
     <script>
-        // CAPTURA AUTOMÁTICA DEL ID DEL CLOSER DESDE LA TARJETA NFC
+        // CAPTURA DEL ID DEL CLOSER DESDE LA TARJETA NFC
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const closerCod = urlParams.get('cod');
@@ -145,7 +230,6 @@
             }
         });
 
-        // URL DE TU APLICACIÓN WEB DE GOOGLE APPS SCRIPT
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS0sqzGlR4Ko3kBtSOxLsITyPRO9skuFIewaM6gA3DC7RLHKLDUp32gsibp_0IlEcQ/exec";
 
         const form = document.getElementById('form-diagnostico');
@@ -156,7 +240,7 @@
             e.preventDefault();
             
             btnEnviar.disabled = true;
-            btnEnviar.innerText = "Registrando en Google Sheets...";
+            btnEnviar.innerText = "Sincronizando con Sheet...";
             btnEnviar.style.opacity = "0.7";
 
             const formData = new FormData(form);
@@ -167,8 +251,8 @@
                     body: formData
                 });
 
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-bold bg-[#FACC15]/10 border border-[#FACC15]/40 text-[#FACC15]";
-                mensajeEstado.innerText = "¡Diagnóstico registrado con éxito en Google Sheets!";
+                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-[#FACC15]/10 border border-[#FACC15] text-[#FACC15] shadow-[0_0_15px_rgba(250,204,21,0.3)]";
+                mensajeEstado.innerText = "¡Diagnóstico registrado con éxito en la Base de Datos!";
                 mensajeEstado.classList.remove('hidden');
 
                 const closerActual = document.getElementById('closer_id').value;
@@ -177,8 +261,8 @@
 
             } catch (error) {
                 console.error('Error enviando diagnóstico:', error);
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-bold bg-red-500/10 border border-red-500/30 text-red-400";
-                mensajeEstado.innerText = "Error al conectar. Revisa la conexión.";
+                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-red-500/10 border border-red-500/40 text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.3)]";
+                mensajeEstado.innerText = "Error al conectar con la red. Revisa la conexión.";
                 mensajeEstado.classList.remove('hidden');
             } finally {
                 btnEnviar.disabled = false;
