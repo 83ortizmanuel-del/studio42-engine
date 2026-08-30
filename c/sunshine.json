@@ -2,7 +2,7 @@
   "nombre": "SUNSHINE RENT DADI",
   "subtitulo": "Excursiones, Rent a Car & Motos",
   "subtituloOverlay": "Bienvenido a Sunshine Rent Tenerife",
-  "logo": "./logo.png",
+  "logo": "https://tenerifesunshinerent.com/wp-content/uploads/2024/11/logo_sunshinerent_tenerife_completo-1.svg",
   "colorPrincipal": "#007BFF",
   "glowColor": "rgba(0, 123, 255, 0.25)",
   "youtubeAudioId": "",
@@ -14,7 +14,7 @@
           "nombre": "Reservar Vehículo o Excursión",
           "descripcion": "Accede a nuestros coches, motos y mejores experiencias",
           "icono": "fa-solid fa-car",
-          "url": "https://tenerifesunshinerent.com/wp-content/uploads/2024/11/logo_sunshinerent_tenerife_completo-1.svg",
+          "url": "https://tenerifesunshinerent.com/",
           "estiloIcono": "background-color: rgba(0, 123, 255, 0.15); color: #007BFF;",
           "destacado": true,
           "badge": "Recomendado"
