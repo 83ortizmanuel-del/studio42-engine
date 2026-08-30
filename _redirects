@@ -1,5 +1,5 @@
-# Regla para AURA (solo lo que empiece por /v/)
-/v/*    /v/index.html   200
-
-# Regla para los Comercios (solo lo que empiece por /c/)
+# Redirección específica para la subcarpeta de Comercios
 /c/*    /c/index.html   200
+
+# Redirección específica para AURA
+/v/*    /v/index.html   200
