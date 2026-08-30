@@ -1,8 +1,107 @@
-<div class="w-full flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-center">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Copy Laser | Identidad Inteligente</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    colors: {
+                        marcaPrincipal: '#FACC15',
+                        fondoClaro: '#F8F9FA',
+                        textoOscuro: '#1F2937',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .star-rating i:active { transform: scale(1.25); }
+        .star-active { color: #FACC15; }
+        .star-inactive { color: #D1D5DB; }
+
+        /* Estilos del Modal Empático (Shield Anti-Reseñas) */
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: #1C1C1E; border: 1px solid #FACC15; border-radius: 24px; padding: 25px; max-width: 350px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s ease; color: white; }
+        .modal-icon { font-size: 2.5rem; margin-bottom: 12px; color: #FACC15; }
+        .modal-title { font-size: 1.1rem; font-weight: 800; color: #FACC15; margin-bottom: 10px; text-transform: uppercase; }
+        .modal-text { font-size: 0.85rem; color: #DDD; line-height: 1.5; margin-bottom: 20px; }
+        .modal-btn { background: #FACC15; color: #000; font-weight: 800; padding: 12px 25px; border-radius: 50px; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; transition: 0.2s; display: inline-block; width: 100%; border: none; }
+        .modal-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+
+<body class="bg-fondoClaro min-h-screen flex flex-col items-center justify-center p-6 text-textoOscuro select-none">
+
+    <!-- Modal Shield Anti-Reseñas -->
+    <div id="modal-overlay">
+        <div class="modal-box" id="modal-content">
+            <div class="modal-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+            <div class="modal-title">Sentimos no haber cumplido tus expectativas</div>
+            <div class="modal-text">
+                Tu experiencia es lo más importante para nosotros. Queremos escuchar lo sucedido y darte una solución directa.<br><br>
+                Te redirigimos al <b>WhatsApp de dirección</b> para atenderte de forma prioritaria.
+            </div>
+            <button class="modal-btn" id="modal-action-btn">Continuar a WhatsApp</button>
+        </div>
+    </div>
+
+    <!-- Cabecera -->
+    <header class="w-full max-w-sm flex flex-col items-center mb-6 text-center">
+        <img src="logo.jpg" alt="Copy Laser Logo" class="h-28 object-contain mb-3" onerror="this.onerror=null; this.src='logo.png';">
+        <h1 class="text-3xl font-extrabold tracking-tight uppercase text-black">COPY LASER</h1>
+        <p class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mt-1">Imprimiendo desde 1987</p>
+    </header>
+
+    <!-- Menú Principal de Acciones -->
+    <main class="w-full max-w-sm flex flex-col gap-4">
+        
+        <div class="text-xs font-bold uppercase tracking-wider text-gray-400 ml-1">Enviar documentos a tienda</div>
+
+        <!-- Botón WhatsApp Directo -->
+        <a href="https://wa.me/34646546315?text=Hola,%20estoy%20en%20el%20mostrador%20y%20quiero%20imprimir%20estos%20archivos:" 
+           target="_blank"
+           class="flex items-center justify-between w-full py-4 px-6 rounded-2xl shadow-md bg-marcaPrincipal text-black font-extrabold uppercase text-xs tracking-wide transition-all active:scale-95 border border-amber-400">
+            <div class="flex items-center">
+                <i class="fa-brands fa-whatsapp text-2xl mr-3 text-black"></i>
+                <div class="flex flex-col text-left">
+                    <span>Imprimir por WhatsApp</span>
+                    <span class="text-[10px] lowercase font-normal opacity-80">Adjunta tus documentos en el chat</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-black/50 text-xs"></i>
+        </a>
+
+        <!-- Botón Email Directo -->
+        <a href="mailto:copylaser@copylaser.com?subject=Archivos%20para%20imprimir" 
+           class="flex items-center justify-between w-full py-4 px-6 rounded-2xl shadow-sm bg-white border border-gray-200 text-textoOscuro font-bold uppercase text-xs tracking-wide transition-all active:scale-95">
+            <div class="flex items-center">
+                <i class="fa-regular fa-envelope text-xl mr-3 text-gray-400"></i>
+                <div class="flex flex-col text-left">
+                    <span>Enviar por Email</span>
+                    <span class="text-[10px] text-gray-400 lowercase font-normal">copylaser@copylaser.com</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+        </a>
+
+        <div class="w-full border-t border-gray-200 my-2"></div>
+
+        <!-- Bloque interactivo de las 5 Estrellas -->
+        <div class="w-full flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-center">
             <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">¿Te hemos atendido bien?</p>
             <p class="text-[11px] text-gray-400 mb-3">Valora tu experiencia con nosotros</p>
             
-            <!-- LAS 5 ESTRELLAS COMPLETAS -->
             <div class="flex justify-center gap-2 text-3xl star-rating mb-2" id="escudo-estrellas">
                 <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(1)"></i>
                 <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(2)"></i>
@@ -14,11 +113,14 @@
 
     </main>
 
+    <!-- Pie de página de marca -->
     <footer class="mt-8 text-center text-[10px] text-gray-400 font-semibold tracking-widest uppercase">
         Desarrollado por <span class="text-black font-extrabold">Studio 42</span>
     </footer>
 
+    <!-- Lógica de Filtrado Anti-Reseñas -->
     <script>
+        // Sustituye por la URL real de la ficha de Google Maps de Copy Laser
         const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=TU_PLACE_ID_AQUI";
         const WHATSAPP_GERENCIA = "https://wa.me/34646546315?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20atención%20en%20Copy%20Laser";
 
@@ -36,10 +138,10 @@
 
             setTimeout(() => {
                 if (estrellas >= 4) {
-                    // 4 o 5 Estrellas -> Redirige a Google
+                    // 4 o 5 Estrellas -> Redirige a Google Maps
                     window.location.href = GOOGLE_REVIEW_URL;
                 } else {
-                    // 1, 2 o 3 Estrellas -> Abre Modal de WhatsApp
+                    // 1, 2 o 3 Estrellas -> Abre el Modal Empático para enviar a WhatsApp
                     mostrarModalShield();
                 }
             }, 300);
