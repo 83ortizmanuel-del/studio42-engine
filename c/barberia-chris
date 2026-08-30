@@ -1,0 +1,81 @@
+{
+  "nombre": "LA BARBERÍA DEL CASCO ANTIGUO",
+  "subtituloGold": "ESTILO, TRADICIÓN Y CERO ESPERAS",
+  "logo": "./logo-barberia.png",
+  "colorPrincipal": "#d4af37",
+  "audioFondo": "./ambiente2.mp3",
+  "fricciones": [
+    {
+      "id": "contactos",
+      "titulo": "Fuga de Clientes",
+      "icono": "fa-solid fa-user-xmark",
+      "colorIcono": "#00e5ff",
+      "modalTitulo": "Citas Rápidas y Agilizadas",
+      "modalTexto": "Guardamos nuestra agenda directa en tu teléfono para que pidas cita sin buscar en Google."
+    },
+    {
+      "id": "resenas",
+      "titulo": "Reseñas Raras en Google",
+      "icono": "fa-solid fa-star-half-stroke",
+      "colorIcono": "#ff3b30",
+      "modalTitulo": "Atención VIP Directa",
+      "modalTexto": "Cualquier detalle de tu corte se resuelve al instante con el dueño por WhatsApp."
+    },
+    {
+      "id": "embudos",
+      "titulo": "Llamadas Interrumpidas",
+      "icono": "fa-solid fa-filter-circle-xmark",
+      "colorIcono": "#30d158",
+      "modalTitulo": "Reserva Digital 24/7",
+      "modalTexto": "Corta la llamada. Elige tu barbero y hora en 2 toques de pantalla."
+    },
+    {
+      "id": "experiencia",
+      "titulo": "Retorno Asegurado",
+      "icono": "fa-solid fa-map-location-dot",
+      "colorIcono": "#bf5af2",
+      "modalTitulo": "Utilidad Real en tu Móvil",
+      "modalTexto": "Guarda dónde aparcaste para volver a pie a tu coche sin preocupaciones tras cortarte el pelo."
+    }
+  ],
+  "secciones": [
+    {
+      "titulo": "Reservas & Herramientas",
+      "botones": [
+        {
+          "nombre": "Pedir Cita Online",
+          "descripcion": "Elige tu barbero y tu horario ideal",
+          "icono": "fa-solid fa-scissors",
+          "url": "https://agendabarberia.com",
+          "estiloIcono": "background-color: rgba(212, 175, 55, 0.15); color: #d4af37;",
+          "destacado": true
+        },
+        {
+          "nombre": "Galería de Cortes & Tendencias",
+          "descripcion": "Encuentra tu próximo estilo antes de sentarte en el sillón",
+          "icono": "fa-solid fa-camera-retro",
+          "url": "https://instagram.com/barberia",
+          "estiloIcono": "background-color: rgba(138, 43, 226, 0.1); color: #8a2be2;"
+        },
+        {
+          "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
+          "descripcion": "Guarda tu coche por GPS mientras te atendemos"
+        },
+        {
+          "nombre": "Guardar Contacto del Barbero",
+          "descripcion": "Añade nuestro teléfono directo a tu agenda",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf",
+          "estiloIcono": "background-color: rgba(0, 229, 255, 0.1); color: #00e5ff;"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "escudoResenas": true,
+      "placeIdGoogle": "ChIJ_383838383838",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20corte"
+    }
+  ]
+}
