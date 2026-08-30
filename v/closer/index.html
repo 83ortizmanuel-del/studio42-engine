@@ -5,140 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Studio 42 | Diagnóstico Phygital</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #0d0d0d; color: #ffffff; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0f0f10;
+            color: #ffffff;
+        }
         .input-phygital {
-            background-color: #1a1a1a;
-            border: 1px solid #333333;
+            background-color: #1a1a1c;
+            border: 1px solid #2d2d30;
             color: #ffffff;
             border-radius: 12px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             width: 100%;
-            outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
         }
-        .input-phygital:focus { border-color: #d4af37; }
-        .btn-gold {
-            background: linear-gradient(135deg, #d4af37, #aa8a28);
+        .input-phygital:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #d4af37 0%, #aa8a28 100%);
             color: #000000;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-radius: 50px;
+            border-radius: 14px;
             padding: 16px;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
         }
-        .btn-gold:active { transform: scale(0.98); }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div class="w-full max-w-md bg-[#141414] border border-[#262626] rounded-3xl p-6 shadow-2xl">
+    <main class="w-full max-w-lg bg-[#141416] p-6 sm:p-8 rounded-3xl border border-[#26262a] shadow-2xl">
         
         <header class="text-center mb-6">
-            <h1 class="text-2xl font-black tracking-tight text-white uppercase">Diagnóstico Phygital</h1>
-            <div class="inline-flex items-center gap-2 mt-2 px-3 py-1 bg-[#221c0f] border border-[#d4af37]/30 rounded-full">
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight uppercase mb-2">Diagnóstico Phygital</h1>
+            <div class="inline-flex items-center gap-2 bg-[#1f1f23] px-3 py-1 rounded-full border border-[#d4af37]/30">
                 <span class="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></span>
-                <span class="text-[10px] font-bold tracking-widest text-[#d4af37] uppercase">ACCESO EXCLUSIVO CLOSER</span>
+                <span class="text-[10px] font-bold text-[#d4af37] uppercase tracking-widest">Acceso Exclusivo Closer</span>
             </div>
         </header>
 
-        <form id="form-diagnostico" onsubmit="enviarDiagnosticoToSheet(event)" class="space-y-4">
+        <form id="form-diagnostico" class="space-y-4">
             
             <div>
-                <label class="block text-[11px] font-bold text-[#d4af37] uppercase tracking-wider mb-2">ID RESPONSABLE (CLOSER)</label>
-                <input type="text" id="id-closer" class="input-phygital font-bold uppercase" placeholder="MEL42" required readonly>
-                <p class="text-[10px] text-gray-500 mt-1">🔒 Llave maestra asignada mediante NFC.</p>
+                <label class="block text-xs font-bold uppercase tracking-wider text-[#d4af37] mb-2">
+                    ID Responsable (Closer)
+                </label>
+                <input type="text" id="closer_id" name="closer_id" value="MEL42" class="input-phygital font-semibold" required>
+                <p class="text-[10px] text-gray-500 mt-1"><i class="fa-solid fa-lock text-[9px] mr-1"></i>Llave maestra asignada mediante NFC.</p>
             </div>
 
             <div>
-                <label class="block text-[11px] font-bold text-gray-300 uppercase tracking-wider mb-2">NOMBRE COMERCIAL / SECTOR</label>
-                <input type="text" id="nombre-comercio" class="input-phygital" placeholder="Ej: Nails & Glow / Estética" required>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+                    Nombre Comercial / Sector
+                </label>
+                <input type="text" id="nombre_sector" name="nombre_sector" placeholder="Ej: Nails & Glow Studio / Estética" class="input-phygital" required>
             </div>
 
             <div>
-                <label class="block text-[11px] font-bold text-gray-300 uppercase tracking-wider mb-2">FRICCIÓN O QUEJAS DE LOS CLIENTES</label>
-                <textarea id="fricciones" rows="3" class="input-phygital text-xs" placeholder="Describe las fricciones operativas detectadas..." required></textarea>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+                    Fricción o Quejas de los Clientes
+                </label>
+                <textarea id="fricciones" name="fricciones" rows="4" placeholder="Fricciones detectadas en el comercio..." class="input-phygital" required></textarea>
             </div>
 
             <div>
-                <label class="block text-[11px] font-bold text-gray-300 uppercase tracking-wider mb-2">BRANDING, PALETA DE COLORES Y REDES</label>
-                <textarea id="branding" rows="2" class="input-phygital text-xs" placeholder="Colores Hex, @instagram, estilo visual..."></textarea>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+                    Branding, Paleta de Colores y Redes
+                </label>
+                <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#F4C2C2, #FFFFFF), IG @nailsandglow..." class="input-phygital" required>
             </div>
 
             <div>
-                <label class="block text-[11px] font-bold text-gray-300 uppercase tracking-wider mb-2">URL DEL LOGO / OBSERVACIONES EXTRA</label>
-                <input type="text" id="logo-url" class="input-phygital text-xs" placeholder="Link al logo, web actual o notas WOW...">
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+                    URL del Logo / Observaciones Extra
+                </label>
+                <input type="text" id="logo_extra" name="logo_extra" placeholder="Ej: Link al logo en Web/Drive o notas adicionales..." class="input-phygital">
             </div>
 
-            <button type="submit" id="btn-submit" class="btn-gold mt-4">
+            <button type="submit" id="btn-enviar" class="btn-submit mt-4">
                 Registrar Diagnóstico
             </button>
         </form>
 
-    </div>
+        <div id="mensaje-estado" class="hidden mt-4 p-4 rounded-xl text-center text-xs font-bold"></div>
+
+    </main>
 
     <script>
-        // PEGA AQUÍ LA URL DE TU GOOGLE APPS SCRIPT
-        const GOOGLE_SCRIPT_URL = "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI";
+        // URL DE TU APLICACIÓN WEB DE GOOGLE APPS SCRIPT
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS0sqzGlR4Ko3kBtSOxLsITyPRO9skuFIewaM6gA3DC7RLHKLDUp32gsibp_0IlEcQ/exec";
 
-        let closerCode = "GENERAL";
+        const form = document.getElementById('form-diagnostico');
+        const btnEnviar = document.getElementById('btn-enviar');
+        const mensajeEstado = document.getElementById('mensaje-estado');
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const codURL = urlParams.get('cod');
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            btnEnviar.disabled = true;
+            btnEnviar.innerText = "Registrando en Google Sheets...";
+            btnEnviar.style.opacity = "0.7";
 
-            const inputCloser = document.getElementById('id-closer');
-
-            if (codURL && codURL.trim() !== "") {
-                closerCode = codURL.toUpperCase();
-                inputCloser.value = closerCode;
-            } else {
-                inputCloser.value = "CLOSER_GENERAL";
-                inputCloser.readOnly = false; // Permite escribir a mano si entra sin ?cod=
-            }
-        });
-
-        async function enviarDiagnosticoToSheet(event) {
-            event.preventDefault();
-
-            const btn = document.getElementById('btn-submit');
-            btn.disabled = true;
-            btn.innerText = "REGISTRANDO...";
-
-            const closerFinal = document.getElementById('id-closer').value.toUpperCase();
-
-            const payload = {
-                closer: closerFinal,
-                comercio: document.getElementById('nombre-comercio').value,
-                fricciones: document.getElementById('fricciones').value,
-                branding: document.getElementById('branding').value,
-                logo: document.getElementById('logo-url').value,
-                fecha: new Date().toLocaleString("es-ES")
-            };
+            const formData = new FormData(form);
 
             try {
-                await fetch(GOOGLE_SCRIPT_URL, {
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: formData
                 });
 
-                alert("✅ Diagnóstico de [" + closerFinal + "] registrado con éxito.");
-                document.getElementById('form-diagnostico').reset();
-                document.getElementById('id-closer').value = closerFinal;
+                mensajeEstado.className = "mt-4 p-4 rounded-xl text-center text-xs font-bold bg-green-500/10 border border-green-500/30 text-green-400";
+                mensajeEstado.innerText = "¡Diagnóstico registrado con éxito en la base de datos!";
+                mensajeEstado.classList.remove('hidden');
+
+                form.reset();
+                document.getElementById('closer_id').value = "MEL42";
 
             } catch (error) {
-                console.error("Error enviando datos:", error);
-                alert("❌ Hubo un fallo al guardar el diagnóstico.");
+                console.error('Error enviando diagnóstico:', error);
+                mensajeEstado.className = "mt-4 p-4 rounded-xl text-center text-xs font-bold bg-red-500/10 border border-red-500/30 text-red-400";
+                mensajeEstado.innerText = "Hubo un error al enviar el registro. Revisa la conexión.";
+                mensajeEstado.classList.remove('hidden');
             } finally {
-                btn.disabled = false;
-                btn.innerText = "Registrar Diagnóstico";
+                btnEnviar.disabled = false;
+                btnEnviar.innerText = "Registrar Diagnóstico";
+                btnEnviar.style.opacity = "1";
+                
+                setTimeout(() => {
+                    mensajeEstado.classList.add('hidden');
+                }, 5000);
             }
-        }
+        });
     </script>
 </body>
 </html>
