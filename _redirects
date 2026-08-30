@@ -1,1 +1,5 @@
-/v/*  /v/index.html  200
+# Regla para AURA (solo lo que empiece por /v/)
+/v/*    /v/index.html   200
+
+# Regla para los Comercios (solo lo que empiece por /c/)
+/c/*    /c/index.html   200
