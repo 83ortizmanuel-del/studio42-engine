@@ -7,17 +7,17 @@
       const path = window.location.pathname;
       const search = window.location.search;
 
-      // Si la URL intenta acceder a Comercios (/c/)
+      // Redirección para Comercios (/c/)
       if (path.includes('/c/')) {
-          window.location.replace('/engine/c/index.html' + search);
+          window.location.replace('/c/index.html' + search);
       } 
-      // Si la URL intenta acceder a AURA (/v/)
+      // Redirección para AURA (/v/)
       else if (path.includes('/v/')) {
-          window.location.replace('/engine/v/index.html' + search);
+          window.location.replace('/v/index.html' + search);
       } 
-      // Si es cualquier otra ruta, manda a la raíz comercial con sus parámetros
+      // Si la ruta no coincide, enviar a la plantilla comercial principal
       else {
-          window.location.replace('/engine/c/index.html' + search);
+          window.location.replace('/c/index.html' + search);
       }
     </script>
   </head>
