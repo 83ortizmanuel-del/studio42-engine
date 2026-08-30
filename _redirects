@@ -1,2 +1,5 @@
-# Redirección SPA para el motor comercial
+# Motor Comercial
 /c/*    /c/index.html   200
+
+# Motor Táctico (AURA)
+/v/*    /v/aura/index.html   200
