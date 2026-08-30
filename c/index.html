@@ -2,286 +2,315 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Studio 42 Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">Studio 42 | Ecosistema Phygital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-principal: #d4af37;
-            --color-fondo: #0a0a0a; 
-            --color-tarjeta: #141414; 
-            --color-boton: #1f1f1f; 
+            --color-oro: #d4af37;
+            --color-fondo: #050505; 
+            --color-tarjeta: rgba(20, 20, 20, 0.85); 
+            --color-boton: #1a1a1a; 
             --color-texto: #ffffff;
-            --color-texto-secundario: #8e8e93;
-            --glow-color: rgba(212, 175, 55, 0.25);
+            --color-gris: #8e8e93;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; user-select: none; }
+        
+        /* OVERLAY DE DESBLOQUEO SENSORIAL */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            background: linear-gradient(180deg, #0f0f0f 0%, #000000 100%);
+            z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px;
         }
-
-        body { 
-            background-color: var(--color-fondo); 
-            color: var(--color-texto); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            padding: 20px; 
+        .btn-desbloqueo {
+            background: linear-gradient(135deg, var(--color-oro), #aa8a28); color: #000; border: none; 
+            padding: 16px 36px; border-radius: 50px; font-size: 0.95rem; font-weight: 800; letter-spacing: 1.5px; 
+            text-transform: uppercase; cursor: pointer; box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+            transition: all 0.2s ease;
         }
+        .btn-desbloqueo:active { transform: scale(0.95); box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+        .pulse-logo { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); } 70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } }
 
+        /* HUB PRINCIPAL */
         .hub-container { 
-            background-color: var(--color-tarjeta); 
-            width: 100%; 
-            max-width: 420px; 
-            border-radius: 24px; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); 
-            padding: 30px 20px; 
-            text-align: center; 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
+            background: var(--color-tarjeta); width: 100%; max-width: 400px; border-radius: 28px; 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9); padding: 30px 20px; text-align: center; 
+            border: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(12px);
         }
         
-        .logo-container { 
-            width: 100px; 
-            height: 100px; 
-            margin: 0 auto 15px auto; 
-            border-radius: 22%; 
-            border: 2px solid var(--color-principal); 
-            overflow: hidden; 
-            background-color: #000; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            box-shadow: 0 0 20px var(--glow-color); 
-            transition: all 0.3s ease;
-        }
-
-        .logo-container img { 
-            width: 85%; 
-            height: 85%; 
-            object-fit: contain; 
-        }
+        .logo-container { width: 90px; height: 90px; margin: 0 auto 15px auto; border-radius: 25%; border: 2px solid var(--color-oro); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; }
+        .logo-container img { width: 85%; height: 85%; object-fit: contain; }
         
-        h1 { 
-            font-size: 1.5rem; 
-            font-weight: 800; 
-            letter-spacing: 1px; 
-            margin-bottom: 2px; 
-            text-transform: uppercase; 
-            color: var(--color-principal); 
-            transition: color 0.3s ease;
-        }
-
-        .propietario { 
-            color: var(--color-texto-secundario); 
-            font-size: 1rem; 
-            margin-bottom: 20px; 
-            font-style: italic; 
-        }
+        h1 { font-size: 1.5rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; color: #fff; }
+        .propietario { color: var(--color-oro); font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; letter-spacing: 1px; }
         
-        .section-title { 
-            text-align: left; 
-            font-size: 0.8rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1.5px; 
-            color: var(--color-texto-secundario); 
-            margin: 15px 0 8px 5px; 
-            font-weight: 700; 
-        }
+        .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 700; }
         
-        .apps-menu { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-            margin-bottom: 15px; 
-        }
+        /* PANEL DE FRICCIONES (GRID 2x2) */
+        .friccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        .friccion-card { background: var(--color-boton); border-radius: 18px; padding: 15px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: all 0.2s ease; }
+        .friccion-card:active { transform: scale(0.95); background-color: #222; border-color: rgba(212, 175, 55, 0.4); }
+        .friccion-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .friccion-title { font-size: 0.75rem; font-weight: 700; color: var(--color-texto); line-height: 1.2; }
 
-        .app-btn { 
-            display: flex; 
-            align-items: center; 
-            text-decoration: none; 
-            padding: 14px 18px; 
-            border-radius: 16px; 
-            background-color: var(--color-boton); 
-            border: 1px solid rgba(255, 255, 255, 0.03); 
-            transition: all 0.2s ease; 
-            cursor: pointer; 
-            text-align: left; 
-        }
-
-        .app-btn:active { 
-            transform: scale(0.97); 
-        }
-
-        .app-btn.destacado { 
-            border: 1px solid var(--color-principal); 
-            box-shadow: 0 0 15px var(--glow-color); 
-        }
+        /* LISTA DE APPS Y BOTONES */
+        .apps-menu { display: flex; flex-direction: column; gap: 12px; }
+        .app-btn { display: flex; align-items: center; padding: 14px 18px; border-radius: 18px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; }
+        .app-btn:active { transform: scale(0.97); background-color: #222; border-color: rgba(212, 175, 55, 0.3); }
+        .app-btn.destacado { border: 1px solid var(--color-oro); box-shadow: 0 0 15px rgba(212, 175, 55, 0.25); }
+        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; flex-shrink: 0; }
+        .app-info { flex-grow: 1; }
+        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.75rem; color: var(--color-gris); }
         
-        .app-icon { 
-            width: 42px; 
-            height: 42px; 
-            border-radius: 12px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            margin-right: 15px; 
-            font-size: 1.25rem; 
-            flex-shrink: 0; 
-        }
+        /* ESCUDO ANTI-RESEÑAS */
+        .stars-container { font-size: 1.8rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .star-rating i:active { transform: scale(1.3); }
+        .star-active { color: #ffb400; text-shadow: 0 0 10px rgba(255, 180, 0, 0.5); }
+        .star-inactive { color: #333; }
 
-        .app-info { 
-            flex-grow: 1; 
-        }
+        /* MODAL EXPLICATIVO (GLASSMORPHISM) */
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: var(--color-tarjeta); border: 1px solid var(--color-oro); border-radius: 24px; padding: 25px; max-width: 350px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .modal-title { font-size: 1.1rem; font-weight: 800; color: var(--color-oro); margin-bottom: 10px; text-transform: uppercase; }
+        .modal-text { font-size: 0.9rem; color: #ddd; line-height: 1.5; margin-bottom: 25px; }
+        .modal-close { background: var(--color-boton); color: var(--color-texto); border: 1px solid rgba(255,255,255,0.1); padding: 10px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .modal-close:active { background: #333; }
 
-        .app-name { 
-            font-size: 0.95rem; 
-            font-weight: 600; 
-            color: var(--color-texto); 
-            margin-bottom: 2px; 
-        }
-
-        .app-desc { 
-            font-size: 0.75rem; 
-            color: var(--color-texto-secundario); 
-        }
-
-        .app-arrow { 
-            color: var(--color-texto-secundario); 
-            font-size: 0.85rem; 
-            opacity: 0.5; 
-            margin-left: 8px; 
-        }
-
-        .stars-yellow { 
-            color: #FFB400; 
-            font-size: 0.75rem; 
-            margin-top: 4px; 
-            display: flex;
-            gap: 2px;
-        }
+        /* BOTÓN FLOTANTE AUDIO */
+        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(10, 10, 10, 0.8); border: 1px solid var(--color-oro); color: var(--color-oro); width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; transition: all 0.3s; }
         
-        .footer-brand { 
-            margin-top: 30px; 
-            font-size: 0.75rem; 
-            color: var(--color-texto-secundario); 
-            letter-spacing: 1px; 
-        }
-
-        .footer-brand span { 
-            color: var(--color-principal); 
-            font-weight: 700; 
-        }
+        .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-gris); letter-spacing: 1px; }
+        .footer-brand span { color: var(--color-oro); font-weight: 700; }
     </style>
 </head>
 <body>
 
+    <!-- REPRODUCTOR MP3 -->
+    <audio id="audio-fondo" loop><source src="" type="audio/mpeg"></audio>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash-screen">
+        <div class="logo-container pulse-logo" id="splash-logo-box" style="width: 120px; height: 120px; margin-bottom: 25px;">
+            <img id="splash-logo" src="logo.png" alt="Studio 42" onerror="this.parentElement.style.display='none'">
+        </div>
+        <h2 id="splash-title" style="color: var(--color-oro); font-size: 1.5rem; margin-bottom: 8px; letter-spacing: 3px; font-weight: 900;">STUDIO 42</h2>
+        <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.9rem; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1px;">Ecosistema Phygital</p>
+        <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
+    </div>
+
+    <!-- MODAL DE EXPLICACIÓN / FRICCIONES -->
+    <div id="modal-overlay" onclick="cerrarModal(event)">
+        <div class="modal-box" id="modal-content">
+            <div id="modal-icon" class="modal-icon"></div>
+            <div id="modal-title" class="modal-title"></div>
+            <div id="modal-text" class="modal-text"></div>
+            <button class="modal-close" onclick="cerrarModalBtn()">Entendido</button>
+        </div>
+    </div>
+
+    <!-- BOTÓN AUDIO -->
+    <button id="btn-audio" onclick="alternarAudio()"><i id="icono-audio" class="fa-solid fa-volume-high"></i></button>
+
+    <!-- HUB PRINCIPAL -->
     <div class="hub-container">
-        <div class="logo-container" id="logo-box" style="display: none;">
-            <img id="client-logo" src="" alt="Logo Corporativo">
+        <div class="logo-container" id="hub-logo-box"><img id="hub-logo" src="logo.png" alt="Logo" onerror="this.parentElement.style.display='none'"></div>
+        <h1 id="client-name">STUDIO 42</h1>
+        <div class="propietario" id="client-subtitle">ELIMINA TUS CUELLOS DE BOTELLA</div>
+
+        <!-- PANEL DE FRICCIONES -->
+        <div id="fricciones-section">
+            <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
+            <div class="friccion-grid" id="friccion-grid"></div>
         </div>
 
-        <h1 id="client-name">STUDIO 42</h1>
-        <div class="propietario" id="client-subtitle">Engine Phygital</div>
-
+        <!-- MENÚ DINÁMICO DE SERVICIOS Y ESCUDO -->
         <div id="dynamic-menu"></div>
 
         <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
     </div>
 
     <script>
-        async function cargarEngineComercio() {
+        // ESTADO GLOBAL Y CONFIGURACIÓN
+        let datosFriccionesGlobales = {};
+        let googleReviewUrlGlobal = "https://search.google.com/";
+        let whatsappGerenciaGlobal = "https://wa.me/";
+
+        const reproductor = document.getElementById('audio-fondo');
+        const splash = document.getElementById('splash-screen');
+        const btnAudio = document.getElementById('btn-audio');
+        const iconoAudio = document.getElementById('icono-audio');
+        let audioMuteado = false;
+
+        // --- 1. CARGA DEL ENGINE DESDE EL JSON DEL CLIENTE ---
+        async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = urlParams.get('cod') || 'sunshine';
 
             try {
-                // Busca el JSON en la misma carpeta o dentro de /json/
                 let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
                 if (!response.ok) {
                     response = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
                 }
-                if (!response.ok) throw new Error(`No se encontró el archivo ${clienteCod}.json`);
-                
+                if (!response.ok) throw new Error(`No se encontró ${clienteCod}.json`);
+
                 const data = await response.json();
 
-                // 1. INYECCIÓN DE COLORES CORPORATIVOS
+                // Colores Corporativos
                 if (data.colorPrincipal) {
-                    document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
-                }
-                if (data.glowColor) {
-                    document.documentElement.style.setProperty('--glow-color', data.glowColor);
-                } else if (data.colorPrincipal) {
-                    document.documentElement.style.setProperty('--glow-color', `${data.colorPrincipal}40`);
+                    document.documentElement.style.setProperty('--color-oro', data.colorPrincipal);
                 }
 
-                // 2. TEXTOS Y TÍTULOS
-                document.getElementById('page-title').innerText = data.nombre || 'Studio 42';
-                document.getElementById('client-name').innerText = data.nombre || '';
-                document.getElementById('client-subtitle').innerText = data.subtitulo || '';
+                // Textos e Identidad
+                document.getElementById('page-title').innerText = `${data.nombre || 'Studio 42'} | Identidad Inteligente`;
+                document.getElementById('splash-title').innerText = data.nombre || 'STUDIO 42';
+                document.getElementById('client-name').innerText = data.nombre || 'STUDIO 42';
+                
+                const subtituloText = data.subtituloGold || data.subtitulo || 'Ecosistema Phygital';
+                document.getElementById('splash-subtitle').innerText = subtituloText;
+                document.getElementById('client-subtitle').innerText = subtituloText;
 
-                // 3. LOGO (SOPORTA URLS EXTERNAS Y RELATIVAS)
-                const logoImg = document.getElementById('client-logo');
-                const logoBox = document.getElementById('logo-box');
-
+                // Logo Dinámico
                 if (data.logo && data.logo.trim() !== "") {
-                    logoImg.src = data.logo;
-                    logoBox.style.display = 'flex';
-                    
-                    // Si la URL del logo externo falla o está rota, oculta el contenedor limpiamente
-                    logoImg.onerror = function() {
-                        console.warn("No se pudo cargar el logo:", data.logo);
-                        logoBox.style.display = 'none';
-                    };
+                    document.getElementById('splash-logo').src = data.logo;
+                    document.getElementById('hub-logo').src = data.logo;
                 } else {
-                    logoBox.style.display = 'none';
+                    document.getElementById('splash-logo-box').style.display = 'none';
+                    document.getElementById('hub-logo-box').style.display = 'none';
                 }
 
-                // 4. CONSTRUCCIÓN DE SECCIONES Y BOTONES
-                const container = document.getElementById('dynamic-menu');
-                container.innerHTML = '';
+                // Audio Ambiente Dinámico
+                if (data.audioFondo && data.audioFondo.trim() !== "") {
+                    reproductor.querySelector('source').src = data.audioFondo;
+                    reproductor.load();
+                } else {
+                    reproductor.querySelector('source').src = "ambiente2.mp3";
+                    reproductor.load();
+                }
+
+                // Renderizar Grid de Fricciones (Si existen en el JSON)
+                const gridContainer = document.getElementById('friccion-grid');
+                gridContainer.innerHTML = '';
+                if (data.fricciones && Array.isArray(data.fricciones) && data.fricciones.length > 0) {
+                    data.fricciones.forEach(f => {
+                        datosFriccionesGlobales[f.id] = {
+                            icono: `<i class="${f.icono}" style="color:${f.colorIcono || 'var(--color-oro)'};"></i>`,
+                            titulo: f.modalTitulo || f.titulo,
+                            texto: f.modalTexto || ''
+                        };
+
+                        gridContainer.innerHTML += `
+                            <div class="friccion-card" onclick="mostrarExplicacion('${f.id}')">
+                                <div class="friccion-icon" style="color: ${f.colorIcono || 'var(--color-oro)'};"><i class="${f.icono}"></i></div>
+                                <div class="friccion-title">${f.titulo}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    // Fricciones por defecto si no están explícitas en el JSON
+                    datosFriccionesGlobales = {
+                        'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:#00e5ff;"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
+                        'resenas': { icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>', titulo: 'Protección de Reputación', texto: 'Una sola queja pública en Google aleja clientes.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas hacia tu WhatsApp Privado.' },
+                        'embudos': { icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>', titulo: 'Embudos Directos', texto: 'Las webs tradicionales son lentas.<br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión directamente en la mano del cliente.' },
+                        'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real, como el Gestor GPS de Parking, para que mantengan tu marca guardada.' }
+                    };
+
+                    gridContainer.innerHTML = `
+                        <div class="friccion-card" onclick="mostrarExplicacion('contactos')"><div class="friccion-icon" style="color: #00e5ff;"><i class="fa-solid fa-user-xmark"></i></div><div class="friccion-title">Fuga de Contactos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('resenas')"><div class="friccion-icon" style="color: #ff3b30;"><i class="fa-solid fa-star-half-stroke"></i></div><div class="friccion-title">Reputación Vulnerable</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('embudos')"><div class="friccion-icon" style="color: #30d158;"><i class="fa-solid fa-filter-circle-xmark"></i></div><div class="friccion-title">Embudos Rotos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('experiencia')"><div class="friccion-icon" style="color: #bf5af2;"><i class="fa-solid fa-map-location-dot"></i></div><div class="friccion-title">Olvido del Cliente</div></div>
+                    `;
+                }
+
+                // Renderizar Menú Dinámico y Botones
+                const menuContainer = document.getElementById('dynamic-menu');
+                menuContainer.innerHTML = '';
 
                 if (data.secciones && Array.isArray(data.secciones)) {
                     data.secciones.forEach(sec => {
                         if (sec.titulo) {
-                            const title = document.createElement('div');
-                            title.className = 'section-title';
-                            title.innerText = sec.titulo;
-                            container.appendChild(title);
+                            menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
                         }
 
-                        const menuBlock = document.createElement('div');
-                        menuBlock.className = 'apps-menu';
+                        const block = document.createElement('div');
+                        block.className = 'apps-menu';
 
                         if (sec.botones && Array.isArray(sec.botones)) {
                             sec.botones.forEach(btn => {
-                                const a = document.createElement('a');
-                                a.className = `app-btn ${btn.destacado ? 'destacado' : ''}`;
-                                a.href = btn.url || '#';
-                                if (btn.url && btn.url.startsWith('http')) a.target = '_blank';
+                                // DETECCIÓN DE BOTÓN ESPECIAL PARKING GPS
+                                if (btn.tipo === 'parking' || btn.nombre.toLowerCase().includes('aparqué') || btn.nombre.toLowerCase().includes('parking')) {
+                                    block.innerHTML += `
+                                        <a class="app-btn" onclick="gestionarParking(event)">
+                                            <div class="app-icon" id="parking-box" style="background: rgba(142,142,147,0.1); color: #8e8e93;"><i id="parking-icon" class="fa-solid fa-location-crosshairs"></i></div>
+                                            <div class="app-info">
+                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda tu coche por GPS'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                } else {
+                                    // BOTÓN ESTÁNDAR O DESTACADO
+                                    let estrellasHTML = btn.estrellas ? '<div class="stars-active" style="font-size: 0.75rem; margin-top: 4px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>' : '';
+                                    
+                                    // CAPTURA DE RUTA REVISIÓN / WHATSAPP PARA EL ESCUDO
+                                    if(btn.url && btn.url.includes('writereview')) googleReviewUrlGlobal = btn.url;
+                                    if(btn.url && btn.url.includes('wa.me')) whatsappGerenciaGlobal = btn.url;
 
-                                let estrellasHTML = '';
-                                if (btn.estrellas) {
-                                    estrellasHTML = '<div class="stars-yellow"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>';
+                                    block.innerHTML += `
+                                        <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
+                                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || ''}</div>
+                                                ${estrellasHTML}
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
                                 }
-
-                                a.innerHTML = `
-                                    <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
-                                    <div class="app-info">
-                                        <div class="app-name">${btn.nombre}</div>
-                                        <div class="app-desc">${btn.descripcion}</div>
-                                        ${estrellasHTML}
-                                    </div>
-                                    <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                                `;
-                                menuBlock.appendChild(a);
                             });
                         }
-                        container.appendChild(menuBlock);
+
+                        // ESCUDO DE RESEÑAS DENTRO DE LA SECCIÓN (SI VIENE MARCADO)
+                        if (sec.escudoResenas) {
+                            if(sec.placeIdGoogle) googleReviewUrlGlobal = `https://search.google.com/local/writereview?placeid=${sec.placeIdGoogle}`;
+                            if(sec.whatsappGerencia) whatsappGerenciaGlobal = sec.whatsappGerencia;
+
+                            block.innerHTML += `
+                                <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start; border: 1px solid rgba(212, 175, 55, 0.3); background: rgba(212, 175, 55, 0.05);">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <div class="app-icon" style="background: rgba(255,180,0,0.15); color: #ffb400;"><i class="fa-brands fa-google"></i></div>
+                                        <div class="app-info">
+                                            <div class="app-name" style="color: var(--color-oro);">Escudo de Reseñas</div>
+                                            <div class="app-desc">Toca las estrellas para probarlo</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars-container star-rating" id="escudo-estrellas">
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(1)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(2)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(3)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(4)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(5)"></i>
+                                    </div>
+                                    <p id="mensaje-filtro" style="font-size: 0.75rem; color: var(--color-oro); text-align: center; width: 100%; margin-top: 10px; display: none; font-weight:600;">Procesando...</p>
+                                </div>
+                            `;
+                        }
+
+                        menuContainer.appendChild(block);
                     });
                 }
+
+                actualizarInterfazParking();
 
             } catch (err) {
                 console.error(err);
@@ -289,7 +318,142 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", cargarEngineComercio);
+        // --- 2. CONTROL DE AUDIO Y DESBLOQUEO SENSORIAL ---
+        function iniciarMagia() {
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.display = 'none'; }, 600);
+            reproductor.play().then(() => { btnAudio.style.display = 'flex'; }).catch(e => { btnAudio.style.display = 'flex'; });
+        }
+
+        function alternarAudio() {
+            if (audioMuteado) {
+                reproductor.play(); 
+                iconoAudio.className = "fa-solid fa-volume-high"; 
+                btnAudio.style.color = "var(--color-oro)"; 
+                btnAudio.style.borderColor = "var(--color-oro)";
+            } else {
+                reproductor.pause(); 
+                iconoAudio.className = "fa-solid fa-volume-xmark"; 
+                btnAudio.style.color = "var(--color-gris)"; 
+                btnAudio.style.borderColor = "var(--color-gris)";
+            }
+            audioMuteado = !audioMuteado;
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                reproductor.pause();
+            } else {
+                if (!audioMuteado && splash.style.display === 'none') {
+                    reproductor.play().catch(e => {});
+                }
+            }
+        });
+
+        // --- 3. LÓGICA DE MODALES Y EXPLICACIONES ---
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+
+        function mostrarExplicacion(tipo) {
+            if (datosFriccionesGlobales[tipo]) {
+                document.getElementById('modal-icon').innerHTML = datosFriccionesGlobales[tipo].icono;
+                document.getElementById('modal-title').innerText = datosFriccionesGlobales[tipo].titulo;
+                document.getElementById('modal-text').innerHTML = datosFriccionesGlobales[tipo].texto;
+                
+                modalOverlay.style.display = 'flex';
+                setTimeout(() => { 
+                    modalOverlay.style.opacity = '1'; 
+                    modalContent.style.transform = 'translateY(0)';
+                }, 10);
+            }
+        }
+
+        function cerrarModal(e) {
+            if(e.target === modalOverlay) cerrarModalBtn();
+        }
+
+        function cerrarModalBtn() {
+            modalOverlay.style.opacity = '0';
+            modalContent.style.transform = 'translateY(20px)';
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // --- 4. FILTRADO REAL ESCUDO ANTI-RESEÑAS ---
+        function simularFiltro(nota) {
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
+            
+            mensaje.style.display = 'block';
+            mensaje.innerText = "Procesando valoración...";
+
+            setTimeout(() => {
+                mensaje.style.display = 'none';
+                if (nota <= 3) {
+                    mostrarExplicacion('resenas');
+                    document.getElementById('modal-title').innerText = "🛡️ ESCUDO ACTIVADO";
+                    document.getElementById('modal-text').innerHTML = "Valoraste con " + nota + " estrella(s).<br><br>El sistema intercepta la queja y redirige al <b>WhatsApp de Gerencia</b> para darte una solución inmediata.<br><br>¡Reputación en Google protegida!";
+                    
+                    const btnEntendido = document.querySelector('.modal-close');
+                    btnEntendido.innerText = "Ir a WhatsApp de Gerencia";
+                    btnEntendido.onclick = function() { window.location.href = whatsappGerenciaGlobal; };
+                } else {
+                    mostrarExplicacion('resenas');
+                    document.getElementById('modal-title').innerText = "⭐ IMPULSO EN GOOGLE";
+                    document.getElementById('modal-text').innerHTML = "¡Gracias por tus " + nota + " estrellas!<br><br>Te redirigimos a la ficha pública de <b>Google Maps</b> para publicar tu valoración positiva.";
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google" style="color:#ffb400;"></i>';
+                    
+                    const btnEntendido = document.querySelector('.modal-close');
+                    btnEntendido.innerText = "Publicar en Google Maps";
+                    btnEntendido.onclick = function() { window.location.href = googleReviewUrlGlobal; };
+                }
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
+            }, 500);
+        }
+
+        // --- 5. GESTOR PARKING GPS INTEGRADO ---
+        function actualizarInterfazParking() {
+            const lat = localStorage.getItem('demo_gps_lat');
+            const iconBox = document.getElementById('parking-box');
+            const icon = document.getElementById('parking-icon');
+            const title = document.getElementById('parking-name');
+            const desc = document.getElementById('parking-desc');
+
+            if (!iconBox) return;
+
+            if (lat) {
+                iconBox.style.background = "rgba(212, 175, 55, 0.2)"; 
+                iconBox.style.color = "var(--color-oro)";
+                icon.className = "fa-solid fa-person-walking";
+                if(title) { title.innerText = "Ir a mi coche (Ruta GPS)"; title.style.color = "var(--color-oro)"; }
+                if(desc) desc.innerText = "Toca para abrir Maps y volver a pie";
+            } else {
+                iconBox.style.background = "rgba(142,142,147,0.1)"; 
+                iconBox.style.color = "#8e8e93";
+                icon.className = "fa-solid fa-location-crosshairs";
+                if(title) { title.innerText = "¿Dónde aparqué?"; title.style.color = "var(--color-texto)"; }
+                if(desc) desc.innerText = "Guarda tu posición por GPS";
+            }
+        }
+
+        function gestionarParking(e) {
+            e.preventDefault();
+            if (localStorage.getItem('demo_gps_lat')) {
+                mostrarExplicacion('experiencia');
+                document.getElementById('modal-title').innerText = "📍 RUTA AL VEHÍCULO";
+                document.getElementById('modal-text').innerHTML = "Trazando ruta GPS a pie hasta la ubicación guardada.<br><br><em>(Coordenada liberada para reiniciar prueba)</em>";
+                localStorage.removeItem('demo_gps_lat');
+                actualizarInterfazParking();
+            } else {
+                mostrarExplicacion('experiencia');
+                document.getElementById('modal-title').innerText = "🚗 VEHÍCULO GUARDADO";
+                document.getElementById('modal-text').innerHTML = "Hemos capturado la posición GPS satelital.<br><br>El botón ha cambiado de estado. Podrás tocarlo al salir para regresar a tu coche sin perderte.";
+                localStorage.setItem('demo_gps_lat', "demo");
+                actualizarInterfazParking();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
     </script>
 </body>
 </html>
