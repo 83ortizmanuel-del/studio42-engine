@@ -1,0 +1,72 @@
+{
+  "nombre": "Ajustes del sistema",
+  "subtitulo": "Estado de red: Operativo <span class=\"status-dot\"></span>",
+  "secciones": [
+    {
+      "titulo": "DIAGNÓSTICO Y REGISTRO DE RED",
+      "botones": [
+        {
+          "nombre": "Servidor principal",
+          "descripcion": "Vincular número para envío de datos",
+          "icono": "fa-solid fa-link",
+          "estiloIcono": "color: #0a84ff;",
+          "url": "javascript:configurarContactoPrivado()"
+        },
+        {
+          "nombre": "Iniciar registro",
+          "descripcion": "Transmitir ubicación en tiempo real",
+          "icono": "fa-solid fa-play",
+          "estiloIcono": "color: #30d158;",
+          "url": "javascript:lanzarHitoAura('inicio')"
+        },
+        {
+          "nombre": "Enviar reporte",
+          "descripcion": "Mandar punto de ubicación actual",
+          "icono": "fa-solid fa-location-dot",
+          "estiloIcono": "color: #ffd60a;",
+          "url": "javascript:lanzarHitoAura('ping')"
+        },
+        {
+          "nombre": "Confirmar llegada",
+          "descripcion": "Marcar fin de trayecto seguro",
+          "icono": "fa-solid fa-circle-check",
+          "estiloIcono": "color: #64d2ff;",
+          "url": "javascript:lanzarHitoAura('fin')"
+        },
+        {
+          "nombre": "Visualizar mapa",
+          "descripcion": "Abrir mapa de ubicación local",
+          "icono": "fa-solid fa-map-location-dot",
+          "estiloIcono": "color: #bf5af2;",
+          "url": "javascript:abrirRastreoNativoLive()"
+        },
+        {
+          "nombre": "Reporte prioritario",
+          "descripcion": "Forzar alerta e informe inmediato",
+          "icono": "fa-solid fa-triangle-exclamation",
+          "estiloIcono": "color: #ff453a;",
+          "url": "javascript:lanzarHitoAura('sos')"
+        }
+      ]
+    },
+    {
+      "titulo": "SERVICIOS DE TELEFONÍA E INFORMACIÓN",
+      "botones": [
+        {
+          "nombre": "Soporte técnico de línea",
+          "descripcion": "Atención directa de incidencias (112)",
+          "icono": "fa-solid fa-shield-halved",
+          "estiloIcono": "color: #ff9500;",
+          "url": "tel:112"
+        },
+        {
+          "nombre": "Buzón de información al usuario",
+          "descripcion": "Consulta gratuita de servicios (016)",
+          "icono": "fa-solid fa-phone",
+          "estiloIcono": "color: #ff3b30;",
+          "url": "tel:016"
+        }
+      ]
+    }
+  ]
+}
