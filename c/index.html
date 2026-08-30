@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Studio 42 Engine</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-principal: #d4af37;
+            --color-fondo: #0a0a0a; 
+            --color-tarjeta: #141414; 
+            --color-boton: #1f1f1f; 
+            --color-texto: #ffffff;
+            --color-texto-secundario: #8e8e93;
+            --glow-color: rgba(212, 175, 55, 0.25);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+        .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        .logo-container { width: 100px; height: 100px; margin: 0 auto 15px auto; border-radius: 22%; border: 2px solid var(--color-principal); overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px var(--glow-color); }
+        .logo-container img { width: 85%; height: 85%; object-fit: contain; }
+        
+        h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; color: var(--color-principal); }
+        .propietario { color: var(--color-texto-secundario); font-size: 1rem; margin-bottom: 20px; font-style: italic; }
+        
+        .section-title { text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-texto-secundario); margin: 15px 0 8px 5px; font-weight: 700; }
+        
+        .apps-menu { display: flex; flex-direction: column; gap: 12px; }
+        .app-btn { display: flex; align-items: center; text-decoration: none; padding: 14px 18px; border-radius: 16px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; }
+        .app-btn:active { transform: scale(0.97); }
+        .app-btn.destacado { border: 1px solid var(--color-principal); box-shadow: 0 0 15px var(--glow-color); }
+        
+        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; }
+        .app-info { flex-grow: 1; }
+        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.75rem; color: var(--color-texto-secundario); }
+        .app-arrow { color: var(--color-texto-secundario); font-size: 0.85rem; opacity: 0.5; }
+        
+        .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-texto-secundario); letter-spacing: 1px; }
+        .footer-brand span { color: var(--color-principal); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container">
+        <div class="logo-container" id="logo-box" style="display: none;">
+            <img id="client-logo" src="" alt="Logo">
+        </div>
+
+        <h1 id="client-name">STUDIO 42</h1>
+        <div class="propietario" id="client-subtitle">Engine Phygital</div>
+
+        <div id="dynamic-menu"></div>
+
+        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+    </div>
+
+    <script>
+        async function cargarEngineComercio() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = urlParams.get('cod');
+
+            if (!clienteCod) {
+                document.getElementById('client-name').innerText = "STUDIO 42";
+                document.getElementById('client-subtitle').innerText = "Motor Phygital de Servicios";
+                return;
+            }
+
+            try {
+                // Busca el archivo JSON dentro de la subcarpeta 'json/' o en la misma carpeta 'c/'
+                let response = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok) {
+                    response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                }
+                if (!response.ok) throw new Error(`No se encontró el archivo ${clienteCod}.json`);
+                
+                const data = await response.json();
+
+                if (data.colorPrincipal) {
+                    document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
+                }
+                if (data.glowColor) {
+                    document.documentElement.style.setProperty('--glow-color', data.glowColor);
+                }
+
+                document.getElementById('page-title').innerText = data.nombre || 'Studio 42';
+                document.getElementById('client-name').innerText = data.nombre || '';
+                document.getElementById('client-subtitle').innerText = data.subtitulo || '';
+
+                if (data.logo) {
+                    document.getElementById('client-logo').src = data.logo;
+                    document.getElementById('logo-box').style.display = 'flex';
+                }
+
+                const container = document.getElementById('dynamic-menu');
+                container.innerHTML = '';
+
+                data.secciones.forEach(sec => {
+                    if (sec.titulo) {
+                        const title = document.createElement('div');
+                        title.className = 'section-title';
+                        title.innerText = sec.titulo;
+                        container.appendChild(title);
+                    }
+
+                    const menuBlock = document.createElement('div');
+                    menuBlock.className = 'apps-menu';
+
+                    sec.botones.forEach(btn => {
+                        const a = document.createElement('a');
+                        a.className = `app-btn ${btn.destacado ? 'destacado' : ''}`;
+                        a.href = btn.url || '#';
+                        if (btn.url && btn.url.startsWith('http')) a.target = '_blank';
+
+                        a.innerHTML = `
+                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono}"></i></div>
+                            <div class="app-info">
+                                <div class="app-name">${btn.nombre}</div>
+                                <div class="app-desc">${btn.descripcion}</div>
+                            </div>
+                            <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        `;
+                        menuBlock.appendChild(a);
+                    });
+                    container.appendChild(menuBlock);
+                });
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('client-subtitle').innerText = "Perfil en configuración";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEngineComercio);
+    </script>
+</body>
+</html>
