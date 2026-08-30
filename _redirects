@@ -1,5 +1,2 @@
-# Redirección específica para la subcarpeta de Comercios
+# Redirección SPA para el motor comercial
 /c/*    /c/index.html   200
-
-# Redirección específica para AURA
-/v/*    /v/index.html   200
