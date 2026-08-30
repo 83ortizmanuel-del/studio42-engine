@@ -98,7 +98,7 @@
             text-shadow: 0 0 6px rgba(250, 204, 21, 0.3);
         }
 
-        /* --- BOTÓN CON TEXTURA DE REFLEJO VIVO & SHIMMER --- */
+        /* BOTÓN CON TEXTURA DE REFLEJO VIVO & SHIMMER */
         .btn-cyber-submit {
             background: linear-gradient(135deg, #facc15 0%, #eab308 50%, #ca8a04 100%);
             color: #000000;
@@ -117,7 +117,6 @@
             overflow: hidden;
         }
 
-        /* TEXTURA / RÁFAGA DE LUZ EN BUCLE */
         .btn-cyber-submit::after {
             content: '';
             position: absolute;
@@ -241,13 +240,14 @@
             }
         });
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS0sqzGlR4Ko3kBtSOxLsITyPRO9skuFIewaM6gA3DC7RLHKLDUp32gsibp_0IlEcQ/exec";
+        // NUEVA URL ACTUALIZADA DE TU GOOGLE APPS SCRIPT
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykjlo74mlpbMNg-Qyzt0u7qRzrIrSmo1OE9sXfOgBTOv4Zkj2jriUHimXC22b3P556/exec";
 
         const form = document.getElementById('form-diagnostico');
         const btnEnviar = document.getElementById('btn-enviar');
         const mensajeEstado = document.getElementById('mensaje-estado');
 
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
             
             btnEnviar.disabled = true;
@@ -255,13 +255,17 @@
             btnEnviar.style.opacity = "0.7";
 
             const formData = new FormData(form);
+            const params = new URLSearchParams(formData);
 
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params.toString()
+            })
+            .then(() => {
                 mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-[#FACC15]/10 border border-[#FACC15]/40 text-[#FACC15]";
                 mensajeEstado.innerText = "¡Diagnóstico registrado con éxito en la Base de Datos!";
                 mensajeEstado.classList.remove('hidden');
@@ -269,13 +273,14 @@
                 const closerActual = document.getElementById('closer_id').value;
                 form.reset();
                 document.getElementById('closer_id').value = closerActual;
-
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error('Error enviando diagnóstico:', error);
                 mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-red-500/10 border border-red-500/40 text-red-400";
                 mensajeEstado.innerText = "Error al conectar con la red. Revisa la conexión.";
                 mensajeEstado.classList.remove('hidden');
-            } finally {
+            })
+            .finally(() => {
                 btnEnviar.disabled = false;
                 btnEnviar.innerText = "Registrar Diagnóstico";
                 btnEnviar.style.opacity = "1";
@@ -283,7 +288,7 @@
                 setTimeout(() => {
                     mensajeEstado.classList.add('hidden');
                 }, 4000);
-            }
+            });
         });
     </script>
 </body>
