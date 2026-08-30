@@ -1,5 +1,1 @@
-# Forzar carga limpia de comercios
 /c/*    /c/index.html   200
-
-# Forzar carga limpia de AURA
-/v/*    /v/index.html   200
