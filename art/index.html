@@ -158,6 +158,20 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const obraId = urlParams.get('id') || 'vegeta-prince';
+            const audioEl = document.getElementById('obra-audio');
+
+            // PAUSAR AUDIO AUTOMÁTICAMENTE AL SALIR O CAMBIAR DE PESTAÑA/APP
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && audioEl) {
+                    audioEl.pause();
+                }
+            });
+
+            window.addEventListener('pagehide', () => {
+                if (audioEl) {
+                    audioEl.pause();
+                }
+            });
 
             try {
                 const response = await fetch(`./${obraId}.json?v=${new Date().getTime()}`);
@@ -190,7 +204,7 @@
 
                 if (data.audio_experience && data.audio_experience.voice_over_url) {
                     document.getElementById('track-nombre').innerText = data.audio_experience.titulo_track || "Banda Sonora";
-                    document.getElementById('obra-audio').src = data.audio_experience.voice_over_url;
+                    audioEl.src = data.audio_experience.voice_over_url;
                     document.getElementById('obra-lore').innerText = `"${data.audio_experience.transcripcion_lore}"`;
                     document.getElementById('contenedor-audio').classList.remove('hidden');
                 }
