@@ -1,0 +1,40 @@
+{
+  "obra_id": "ART-ANIME-002",
+  "titulo_obra": "Vegeta // Orgullo de Príncipe",
+  "personaje": "Vegeta (Super Saiyan Blue / Ultra Ego)",
+  "serie_anime": "Dragon Ball Super",
+  "edicion_limitada": "Edición Limitada // Pieza 01 de 25",
+  "artista": "Studio 42 Art Division",
+  "fecha_creacion": "Agosto, 2026",
+  
+  "estetica": {
+    "color_primario": "#3B82F6",
+    "color_acento": "#A855F7",
+    "color_fondo": "#05070F",
+    "aura_neon": "rgba(59, 130, 246, 0.65)"
+  },
+
+  "imagen_lienzo": "AQUI_PEGAS_EL_LINK_DE_LA_IMAGEN_DEL_CUADRO.jpg",
+  
+  "audio_experience": {
+    "titulo_track": "El Juicio del Príncipe Saiyan",
+    "voice_over_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "transcripcion_lore": "No soy un guerrero ordinario. No peleo por lástima ni por justicia, peleo por el orgullo de mi estirpe. Cada trazo de esta obra encierra la fuerza inquebrantable que nunca se rinde ante ningún dios."
+  },
+
+  "certificado_autenticidad": {
+    "codigo_verificacion": "S42-BLOCK-7708-VEGETA",
+    "estado": "ORIGINAL VERIFICADO POR NFC",
+    "propietario_registrado": "Coleccionista VIP #01"
+  },
+
+  "easter_eggs": {
+    "boceto_making_of": "AQUI_PEGAS_EL_LINK_DEL_BOCETO_O_PROCESS.jpg",
+    "wallpaper_4k_download": "AQUI_PEGAS_EL_LINK_DEL_WALLPAPER_4K.jpg"
+  },
+
+  "club_coleccionistas": {
+    "mensaje": "Registra este lienzo oficial a tu nombre para reclamar tu certificado impreso y futuros encargos.",
+    "whatsapp_artista": "https://wa.me/34600000000?text=Hola,%20he%20escaneado%20mi%20cuadro%20Phygital%20de%20Vegeta%20y%20quiero%20registrarlo"
+  }
+}
