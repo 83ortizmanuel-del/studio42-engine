@@ -1,0 +1,41 @@
+{
+  "obra_id": "ART-ANIME-001",
+  "titulo_obra": "Goku // Estado Migatte no Gokui",
+  "personaje": "Son Goku (Ultra Instinct)",
+  "serie_anime": "Dragon Ball Super",
+  "edicion_limitada": "Pieza 04 de 50",
+  "artista": "Studio 42 Art Division",
+  "fecha_creacion": "Agosto, 2026",
+  
+  "estetica": {
+    "color_primario": "#38BDF8",
+    "color_acento": "#FFFFFF",
+    "color_fondo": "#090D16",
+    "aura_neon": "rgba(56, 189, 248, 0.5)"
+  },
+
+  "imagen_lienzo": "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1000&auto=format&fit=crop",
+  
+  "audio_experience": {
+    "titulo_track": "El Despertar del Dominio del Juicio",
+    "voice_over_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "transcripcion_lore": "En el límite de sus fuerzas, la mente se despoja de toda duda. La materia no piensa, solo reacciona. Esta obra captura el instante exacto en que la energía rompe la barrera de los mortales."
+  },
+
+  "certificado_autenticidad": {
+    "codigo_verificacion": "S42-BLOCK-9902-GOKU",
+    "estado": "ORIGINAL VERIFICADO POR NFC",
+    "propietario_registrado": "Coleccionista VIP #04"
+  },
+
+  "easter_eggs": {
+    "boceto_making_of": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1000&auto=format&fit=crop",
+    "frase_iconica_audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    "wallpaper_4k_download": "https://images.unsplash.com/photo-1578632767115-351597cf2477?force=true&w=3840"
+  },
+
+  "club_coleccionistas": {
+    "mensaje": "Vincula este cuadro a tu perfil oficial para solicitar nuevas obras personalizadas.",
+    "whatsapp_artista": "https://wa.me/34600000000?text=Hola,%20he%20escaneado%20mi%20cuadro%20Phygital%20de%20Goku%20y%20quiero%20registrarlo"
+  }
+}
