@@ -3,304 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 | Phygital Canvas Art Experience</title>
+    <title>Studio 42 | Phygital Art Gallery</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         :root {
-            --aura-neon: rgba(59, 130, 246, 0.6);
-            --color-primario: #3B82F6;
+            --color-oro: #facc15;
+            --color-fondo: #050507;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #05070F;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-fondo);
             color: #ffffff;
             overflow-x: hidden;
         }
 
-        .font-tech { font-family: 'Orbitron', sans-serif; }
+        .bg-tech-grid {
+            background-image: radial-gradient(rgba(250, 204, 21, 0.05) 1px, transparent 0);
+            background-size: 28px 28px;
+        }
 
-        /* LIENZO HERO CON AURA KI DINÁMICA */
-        .art-hero-container {
+        .art-card-wrapper {
             position: relative;
-            border-radius: 24px;
-            padding: 3px;
-            background: linear-gradient(145deg, rgba(59, 130, 246, 0.8), rgba(168, 85, 247, 0.3), rgba(255, 255, 255, 0.1));
-            box-shadow: 0 0 45px var(--aura-neon), inset 0 0 15px rgba(255, 255, 255, 0.2);
-            animation: auraPulse 4s ease-in-out infinite alternate;
+            border-radius: 28px;
+            overflow: hidden;
+            padding: 1.5px;
+            background: rgba(20, 20, 22, 0.8);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(250, 204, 21, 0.15);
         }
 
-        @keyframes auraPulse {
-            0% { box-shadow: 0 0 30px var(--aura-neon); transform: scale(1); }
-            100% { box-shadow: 0 0 55px var(--aura-neon), 0 0 100px rgba(168, 85, 247, 0.25); transform: scale(1.01); }
+        .art-card-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent 0%, 
+                rgba(250, 204, 21, 0.6) 50%, 
+                rgba(255, 255, 255, 0.8) 52%, 
+                rgba(250, 204, 21, 0.6) 54%, 
+                transparent 100%
+            );
+            animation: rotateNeon 10s linear infinite;
+            z-index: 0;
         }
 
-        .art-image-hero {
-            border-radius: 21px;
-            width: 100%;
-            height: auto;
-            max-height: 65vh;
-            object-fit: contain;
-            display: block;
-            background-color: #000000;
+        @keyframes rotateNeon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .audio-player-card {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+        .art-content {
+            position: relative;
+            background: rgba(14, 14, 17, 0.96);
+            border-radius: 26.5px;
+            z-index: 1;
+            backdrop-filter: blur(16px);
         }
 
-        .btn-phygital {
-            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 50%, #9333EA 100%);
-            color: #ffffff;
-            font-weight: 800;
+        .glow-image {
+            filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.25));
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 50%, #ca8a04 100%);
+            color: #000;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 25px var(--aura-neon);
-        }
-
-        .btn-phygital:active { transform: scale(0.96); }
-
-        .btn-voice {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            transition: all 0.2s ease;
-        }
-
-        .btn-voice:active {
-            background: rgba(59, 130, 246, 0.3);
-            border-color: #3B82F6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        }
-
-        .glass-modal {
-            background: rgba(8, 12, 22, 0.95);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 select-none">
 
-    <main class="w-full max-w-sm space-y-4 my-auto">
-        
-        <!-- BADGE Y TÍTULO COMPACTO -->
-        <header class="text-center space-y-1">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 border border-blue-500/40">
-                <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
-                <span id="edicion-badge" class="text-[10px] font-tech text-blue-300 uppercase tracking-widest">Edición Limitada</span>
-            </div>
-            <h1 id="titulo-obra" class="text-lg font-tech font-black tracking-tight uppercase text-white">...</h1>
-            <p id="serie-personaje" class="text-[11px] text-zinc-400 font-semibold">...</p>
-        </header>
+<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-center p-4 text-white select-none">
 
-        <!-- PINTURA CENTRAL (HERO LIENZO) -->
-        <div class="art-hero-container">
-            <div class="relative overflow-hidden rounded-[21px]">
-                <img id="imagen-obra" src="" alt="Lienzo Phygital" class="art-image-hero">
-                
-                <div class="absolute bottom-3 right-3 bg-black/90 backdrop-blur-md px-3 py-1 rounded-lg border border-blue-400/40 text-[9px] font-tech text-blue-300 shadow-lg">
-                    <i class="fa-solid fa-microchip mr-1 text-blue-400"></i> NFC AUTHENTICATED
-                </div>
-            </div>
-        </div>
-
-        <!-- 🔊 BOTONES DE VOZ DEL PERSONAJE (ESPAÑOL / JAPONÉS) -->
-        <section class="bg-gradient-to-r from-blue-950/60 to-purple-950/60 border border-blue-500/30 rounded-2xl p-3.5 space-y-2 text-center">
-            <div class="flex items-center justify-center gap-1.5 text-[10px] font-tech text-blue-300 uppercase tracking-wider">
-                <i class="fa-solid fa-bolt text-yellow-400"></i>
-                <span>Expresión del Personaje</span>
-            </div>
+    <div class="w-full max-w-md art-card-wrapper my-6">
+        <main class="art-content p-6 text-center">
             
-            <p id="frase-texto" class="text-xs font-extrabold text-white italic">"..."</p>
-
-            <div class="grid grid-cols-2 gap-2 pt-1">
-                <button onclick="playVoice('es')" class="btn-voice py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-volume-high text-blue-400 text-xs"></i>
-                    <span class="text-[11px] font-bold">Voz Español</span>
-                </button>
-
-                <button onclick="playVoice('jp')" class="btn-voice py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-torii-gate text-purple-400 text-xs"></i>
-                    <span class="text-[11px] font-bold">日本語 (Japonés)</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- REPRODUCTOR DE LA HISTORIA Y LORE -->
-        <section class="audio-player-card p-4 space-y-2.5">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <button id="btn-play-lore" onclick="toggleLore()" class="w-11 h-11 rounded-full bg-blue-500 text-white flex items-center justify-center font-black text-sm shadow-[0_0_20px_rgba(59,130,246,0.6)] cursor-pointer">
-                        <i id="icon-play" class="fa-solid fa-play ml-0.5"></i>
-                    </button>
-                    <div>
-                        <p class="text-[9px] font-tech text-blue-400 uppercase tracking-wider">Relato Narrado</p>
-                        <p id="titulo-track" class="text-xs font-bold text-white">Historia de la Obra</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-compact-disc text-blue-400/40 text-xl animate-spin" style="animation-duration: 8s;"></i>
+            <!-- BADGE DE AUTENTICIDAD DE OBRA -->
+            <div class="inline-flex items-center gap-2 bg-black/80 px-3 py-1 rounded-full border border-[#FACC15]/40 mb-4">
+                <i class="fa-solid fa-certificate text-[#FACC15] text-xs"></i>
+                <span id="obra-edicion" class="text-[10px] font-black text-[#FACC15] uppercase tracking-widest">Sello Phygital Activo</span>
             </div>
 
-            <p id="transcripcion-lore" class="text-[11px] text-zinc-300 italic leading-relaxed pt-2 border-t border-white/10">
-                "..."
-            </p>
-        </section>
-
-        <!-- CERTIFICADO DE AUTENTICIDAD DIGITAL -->
-        <section class="bg-zinc-950/80 border border-zinc-800 rounded-2xl p-3 text-center space-y-1.5">
-            <div class="flex items-center justify-center gap-2 text-[10px] font-tech text-zinc-400">
-                <i class="fa-solid fa-shield-halved text-blue-400"></i>
-                <span>CERTIFICADO DE AUTENTICIDAD PHYGITAL</span>
+            <!-- LIENZO / OBRA DE ARTE -->
+            <div class="relative overflow-hidden rounded-2xl border border-white/10 mb-4 bg-black/50 min-h-[200px] flex items-center justify-center">
+                <img id="obra-img" src="" alt="Obra Phygital Anime" class="w-full h-auto object-cover glow-image hidden" onload="this.classList.remove('hidden')">
+                <span id="loader-img" class="text-xs text-gray-500 font-bold uppercase animate-pulse">Cargando Obra...</span>
             </div>
-            <div class="bg-black/60 p-2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center justify-between px-3">
-                <span id="cert-id" class="text-zinc-400">...</span>
-                <span id="cert-estado" class="text-emerald-400 font-bold flex items-center gap-1">
-                    <i class="fa-solid fa-circle-check"></i> VERIFICADO
-                </span>
+
+            <!-- TÍTULO Y PERSONAJE -->
+            <h1 id="obra-titulo" class="text-2xl font-black uppercase text-white tracking-wider">Cargando...</h1>
+            <p id="obra-artista" class="text-xs text-[#FACC15] font-bold uppercase tracking-widest mt-1 mb-4">Studio 42 Phygital Collection</p>
+
+            <!-- REPRODUCTOR DE AUDIO / LORE NARRADO -->
+            <div id="contenedor-audio" class="hidden bg-white/5 p-4 rounded-2xl border border-white/10 mb-5 text-left">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-volume-high text-[#FACC15]"></i> Voice-Over & Lore de la Obra
+                </p>
+                <audio id="obra-audio" controls class="w-full h-10 accent-[#FACC15]"></audio>
             </div>
-        </section>
 
-        <!-- ACCIONES WOW -->
-        <div class="grid grid-cols-2 gap-2">
-            <button onclick="openModal('makingOf')" class="bg-zinc-900 border border-zinc-800 hover:border-blue-400 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer">
-                <i class="fa-solid fa-layer-group text-blue-400"></i>
-                <span>Ver Boceto</span>
-            </button>
+            <!-- HISTORIA DE LA OBRA -->
+            <div class="bg-black/40 p-4 rounded-2xl border border-white/5 text-left mb-5">
+                <h3 class="text-[10px] font-bold uppercase tracking-widest text-[#FACC15] mb-1">Historia & Lore</h3>
+                <p id="obra-historia" class="text-xs text-gray-300 leading-relaxed font-medium">Cargando la historia del personaje...</p>
+            </div>
 
-            <a id="btn-wallpaper" href="#" target="_blank" class="bg-zinc-900 border border-zinc-800 hover:border-blue-400 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-download text-purple-400"></i>
-                <span>Wallpaper 4K</span>
-            </a>
-        </div>
+            <!-- ACCIONES EXCLUSIVAS PARA EL COMPRADOR -->
+            <div class="space-y-3">
+                <a id="btn-wallpaper" href="#" target="_blank" class="block w-full py-3 text-center text-xs btn-gold">
+                    <i class="fa-solid fa-download mr-1"></i> Descargar Wallpaper 4K Exclusivo
+                </a>
+            </div>
 
-        <!-- BOTÓN PRINCIPAL REGISTRO DE PROPIEDAD -->
-        <a id="btn-whatsapp-club" href="#" target="_blank" class="btn-phygital w-full py-3.5 text-xs flex items-center justify-center gap-2">
-            <i class="fa-solid fa-crown"></i>
-            <span>Registrar Propietario Oficial</span>
-        </a>
-
-        <footer class="text-center text-[9px] font-tech text-zinc-600 uppercase tracking-widest pt-1">
-            Studio 42 // Phygital Art Division
-        </footer>
-
-    </main>
-
-    <!-- AUDIOS EN MEMORIA -->
-    <audio id="audio-lore" src=""></audio>
-    <audio id="audio-voice-es" src=""></audio>
-    <audio id="audio-voice-jp" src=""></audio>
-
-    <!-- MODAL MAKING OF -->
-    <div id="modal-making-of" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="glass-modal w-full max-w-sm p-5 rounded-2xl space-y-4 text-center relative">
-            <button onclick="closeModal('makingOf')" class="absolute top-3 right-3 text-zinc-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <h3 class="font-tech text-xs text-blue-400 uppercase">Process // Boceto Original</h3>
-            <img id="img-boceto" src="" class="rounded-xl w-full max-h-64 object-cover border border-white/10">
-            <p class="text-[10px] text-zinc-400">Estructura de trazado previa a la pintura final sobre lienzo.</p>
-        </div>
+        </main>
     </div>
 
-    <script>
-        let lorePlaying = false;
+    <footer class="text-center text-[10px] text-gray-500 font-bold tracking-widest uppercase mb-4">
+        Phygital Art Engine // Powered by <span class="text-[#FACC15]">Studio 42</span>
+    </footer>
 
+    <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const artId = urlParams.get('id') || 'vegeta-prince';
+            const obraId = urlParams.get('id') || 'vegeta-prince';
 
             try {
-                const response = await fetch(`./${artId}.json`);
+                // Obtener el JSON desde la misma carpeta /art/
+                const response = await fetch(`./${obraId}.json?v=${new Date().getTime()}`);
+                if (!response.ok) throw new Error("Obra no encontrada");
+                
                 const data = await response.json();
 
-                document.getElementById('edicion-badge').innerText = data.edicion_limitada;
-                document.getElementById('titulo-obra').innerText = data.titulo_obra;
-                document.getElementById('serie-personaje').innerText = `${data.personaje} // ${data.serie_anime}`;
-                document.getElementById('imagen-obra').src = data.imagen_lienzo;
+                document.getElementById('obra-titulo').innerText = data.titulo || "Sin Título";
+                document.getElementById('obra-artista').innerText = `Artista: ${data.artista || 'Colección Privada'}`;
+                document.getElementById('obra-edicion').innerText = `Certificado NFC #${data.edicion || '01/01'}`;
+                
+                const imgEl = document.getElementById('obra-img');
+                const loaderEl = document.getElementById('loader-img');
+                
+                imgEl.src = data.imagen || `./${obraId}.png`;
+                imgEl.onload = () => {
+                    imgEl.classList.remove('hidden');
+                    if(loaderEl) loaderEl.classList.add('hidden');
+                };
 
-                // NARRACIÓN DE LA HISTORIA
-                document.getElementById('titulo-track').innerText = data.audio_experience.titulo_track;
-                document.getElementById('transcripcion-lore').innerText = `"${data.audio_experience.transcripcion_lore}"`;
-                document.getElementById('audio-lore').src = data.audio_experience.voice_over_url;
+                document.getElementById('obra-historia').innerText = data.historia || "Sin historia registrada.";
 
-                // FRASES DEL PERSONAJE DUAL
-                if(data.voces_personaje) {
-                    document.getElementById('frase-texto').innerText = data.voces_personaje.frase_texto;
-                    document.getElementById('audio-voice-es').src = data.voces_personaje.audio_espanol;
-                    document.getElementById('audio-voice-jp').src = data.voces_personaje.audio_japones;
+                if (data.audio) {
+                    const audioEl = document.getElementById('obra-audio');
+                    audioEl.src = data.audio;
+                    document.getElementById('contenedor-audio').classList.remove('hidden');
                 }
 
-                // CERTIFICADO Y EASTER EGGS
-                document.getElementById('cert-id').innerText = data.certificado_autenticidad.codigo_verificacion;
-                document.getElementById('cert-estado').innerText = data.certificado_autenticidad.estado;
-                document.getElementById('img-boceto').src = data.easter_eggs.boceto_making_of;
-                document.getElementById('btn-wallpaper').href = data.easter_eggs.wallpaper_4k_download;
-                document.getElementById('btn-whatsapp-club').href = data.club_coleccionistas.whatsapp_artista;
-
-                if (data.estetica && data.estetica.aura_neon) {
-                    document.documentElement.style.setProperty('--aura-neon', data.estetica.aura_neon);
+                if (data.wallpaper) {
+                    document.getElementById('btn-wallpaper').href = data.wallpaper;
+                } else {
+                    document.getElementById('btn-wallpaper').classList.add('hidden');
                 }
 
             } catch (err) {
-                console.error("Error cargando obra Phygital:", err);
+                console.error("Error cargando la obra:", err);
+                document.getElementById('obra-titulo').innerText = "Obra Phygital Desconectada";
+                document.getElementById('obra-historia').innerText = "Asegúrate de que el archivo .json exista en la carpeta /art/ de GitHub.";
             }
         });
-
-        function toggleLore() {
-            const audio = document.getElementById('audio-lore');
-            const icon = document.getElementById('icon-play');
-            if (!lorePlaying) {
-                // Pausar audios de voz si están sonando
-                document.getElementById('audio-voice-es').pause();
-                document.getElementById('audio-voice-jp').pause();
-                
-                audio.play();
-                icon.className = "fa-solid fa-pause";
-                lorePlaying = true;
-            } else {
-                audio.pause();
-                icon.className = "fa-solid fa-play ml-0.5";
-                lorePlaying = false;
-            }
-        }
-
-        function playVoice(lang) {
-            // Pausar la historia de fondo si está sonando
-            const audioLore = document.getElementById('audio-lore');
-            audioLore.pause();
-            document.getElementById('icon-play').className = "fa-solid fa-play ml-0.5";
-            lorePlaying = false;
-
-            const audioEs = document.getElementById('audio-voice-es');
-            const audioJp = document.getElementById('audio-voice-jp');
-
-            if (lang === 'es') {
-                audioJp.pause();
-                audioEs.currentTime = 0;
-                audioEs.play();
-            } else if (lang === 'jp') {
-                audioEs.pause();
-                audioJp.currentTime = 0;
-                audioJp.play();
-            }
-        }
-
-        function openModal(type) {
-            if (type === 'makingOf') document.getElementById('modal-making-of').classList.remove('hidden');
-        }
-
-        function closeModal(type) {
-            if (type === 'makingOf') document.getElementById('modal-making-of').classList.add('hidden');
-        }
     </script>
 </body>
 </html>
