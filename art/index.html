@@ -81,11 +81,6 @@
             letter-spacing: 1px;
             border-radius: 50px;
             box-shadow: 0 0 20px var(--aura-neon);
-            transition: transform 0.2s ease;
-        }
-
-        .btn-phygital:active {
-            transform: scale(0.97);
         }
     </style>
 </head>
@@ -95,10 +90,10 @@
     <div class="w-full max-w-md art-card-wrapper my-6">
         <main class="art-content p-6 text-center">
             
-            <!-- BADGE DE AUTENTICIDAD & CERTIFICADO -->
+            <!-- BADGE DE AUTENTICIDAD -->
             <div class="inline-flex items-center gap-2 bg-black/80 px-3 py-1.5 rounded-full border border-blue-500/40 mb-4 shadow-lg">
                 <i class="fa-solid fa-shield-halved text-blue-400 text-xs"></i>
-                <span id="obra-edicion" class="text-[9px] font-black text-blue-300 uppercase tracking-widest">Sello NFC Verificando...</span>
+                <span id="obra-edicion" class="text-[9px] font-black text-blue-300 uppercase tracking-widest">Verificando Certificado...</span>
             </div>
 
             <!-- LIENZO / OBRA DE ARTE -->
@@ -107,11 +102,11 @@
                 <span id="loader-img" class="text-xs text-blue-400 font-bold uppercase animate-pulse">Sincronizando Lienzo Phygital...</span>
             </div>
 
-            <!-- TÍTULO Y DETALLES DEL PERSONAJE -->
+            <!-- TÍTULO Y DETALLES -->
             <h1 id="obra-titulo" class="text-xl font-black uppercase text-white tracking-wider">Cargando...</h1>
             <p id="obra-sub" class="text-xs font-bold uppercase tracking-widest mt-1 mb-4" style="color: var(--color-primario);">Studio 42 Art Division</p>
 
-            <!-- REPRODUCTOR DE AUDIO / LORE NARRADO -->
+            <!-- REPRODUCTOR DE AUDIO / LORE -->
             <div id="contenedor-audio" class="hidden bg-white/5 p-4 rounded-2xl border border-white/10 mb-4 text-left">
                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-2">
                     <i class="fa-solid fa-compact-disc text-blue-400 animate-spin"></i> Track: <span id="track-nombre" class="text-white">Voice-Over</span>
@@ -120,20 +115,12 @@
                 <p id="obra-lore" class="text-xs text-gray-300 italic font-medium mt-3 border-t border-white/10 pt-2 leading-relaxed"></p>
             </div>
 
-            <!-- FRASES ICÓNICAS DEL PERSONAJE -->
+            <!-- FRASES ICÓNICAS -->
             <div id="contenedor-voces" class="hidden bg-blue-950/30 p-4 rounded-2xl border border-blue-500/20 mb-4 text-center">
-                <p id="frase-texto" class="text-xs font-black text-blue-200 italic mb-3">«...»</p>
-                <div class="flex items-center justify-center gap-2">
-                    <button id="btn-audio-es" onclick="playAudio('es')" class="px-3 py-1.5 rounded-xl bg-blue-600/40 border border-blue-400/50 text-[10px] font-bold text-white uppercase flex items-center gap-1">
-                        <i class="fa-solid fa-play text-[8px]"></i> Voz Español
-                    </button>
-                    <button id="btn-audio-jp" onclick="playAudio('jp')" class="px-3 py-1.5 rounded-xl bg-purple-600/40 border border-purple-400/50 text-[10px] font-bold text-white uppercase flex items-center gap-1">
-                        <i class="fa-solid fa-play text-[8px]"></i> Voz Japonés
-                    </button>
-                </div>
+                <p id="frase-texto" class="text-xs font-black text-blue-200 italic">«...»</p>
             </div>
 
-            <!-- CERTIFICADO DE VERIFICACIÓN BLOCKCHAIN / NFC -->
+            <!-- CERTIFICADO DE VERIFICACIÓN -->
             <div class="bg-black/50 p-3 rounded-2xl border border-white/10 text-left mb-4 text-[10px] space-y-1">
                 <div class="flex justify-between items-center">
                     <span class="text-gray-400 font-bold uppercase">Código Verificación:</span>
@@ -149,9 +136,9 @@
                 </div>
             </div>
 
-            <!-- ACCIONES EXCLUSIVAS DEL CLUB DE COLECCIONISTAS -->
+            <!-- ACCIONES -->
             <div class="space-y-2.5">
-                <a id="btn-wallpaper" href="#" target="_blank" class="hidden block w-full py-3 text-center text-xs btn-phygital">
+                <a id="btn-wallpaper" href="#" target="_blank" class="block w-full py-3 text-center text-xs btn-phygital">
                     <i class="fa-solid fa-download mr-1"></i> Descargar Wallpaper 4K Exclusivo
                 </a>
 
@@ -168,29 +155,16 @@
     </footer>
 
     <script>
-        let audioES = null;
-        let audioJP = null;
-
-        function playAudio(lang) {
-            if (lang === 'es' && audioES) {
-                audioES.play();
-            } else if (lang === 'jp' && audioJP) {
-                audioJP.play();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const obraId = urlParams.get('id') || 'vegeta-prince';
 
             try {
-                // Carga dinámica del archivo .json desde la misma carpeta /art/
                 const response = await fetch(`./${obraId}.json?v=${new Date().getTime()}`);
-                if (!response.ok) throw new Error("Archivo .json no encontrado");
+                if (!response.ok) throw new Error("JSON no encontrado");
                 
                 const data = await response.json();
 
-                // INYECCIÓN DE ESTÉTICA DE COLOR
                 if (data.estetica) {
                     if (data.estetica.color_primario) document.documentElement.style.setProperty('--color-primario', data.estetica.color_primario);
                     if (data.estetica.color_acento) document.documentElement.style.setProperty('--color-acento', data.estetica.color_acento);
@@ -198,12 +172,10 @@
                     if (data.estetica.aura_neon) document.documentElement.style.setProperty('--aura-neon', data.estetica.aura_neon);
                 }
 
-                // DATOS PRINCIPALES
                 document.getElementById('obra-titulo').innerText = data.titulo_obra || "Sin Título";
                 document.getElementById('obra-sub').innerText = `${data.personaje || ''} // ${data.serie_anime || ''}`;
                 document.getElementById('obra-edicion').innerText = data.edicion_limitada || "Edición Única";
 
-                // IMAGEN DEL LIENZO
                 const imgEl = document.getElementById('obra-img');
                 const loaderEl = document.getElementById('loader-img');
                 const srcImg = data.imagen_lienzo.startsWith('http') || data.imagen_lienzo.startsWith('./') 
@@ -216,45 +188,37 @@
                     if (loaderEl) loaderEl.classList.add('hidden');
                 };
 
-                // AUDIO NARRATIVO & LORE
-                if (data.audio_experience) {
-                    document.getElementById('track-nombre').innerText = data.audio_experience.titulo_track || "Voice-Over";
+                if (data.audio_experience && data.audio_experience.voice_over_url) {
+                    document.getElementById('track-nombre').innerText = data.audio_experience.titulo_track || "Banda Sonora";
                     document.getElementById('obra-audio').src = data.audio_experience.voice_over_url;
                     document.getElementById('obra-lore').innerText = `"${data.audio_experience.transcripcion_lore}"`;
                     document.getElementById('contenedor-audio').classList.remove('hidden');
                 }
 
-                // VOCES DEL PERSONAJE
-                if (data.voces_personaje) {
-                    document.getElementById('frase-texto').innerText = data.voces_personaje.frase_texto || '';
-                    if (data.voces_personaje.audio_espanol) audioES = new Audio(data.voces_personaje.audio_espanol);
-                    if (data.voces_personaje.audio_japones) audioJP = new Audio(data.voces_personaje.audio_japones);
+                if (data.voces_personaje && data.voces_personaje.frase_texto) {
+                    document.getElementById('frase-texto').innerText = data.voces_personaje.frase_texto;
                     document.getElementById('contenedor-voces').classList.remove('hidden');
                 }
 
-                // CERTIFICADO DE AUTENTICIDAD
                 if (data.certificado_autenticidad) {
                     document.getElementById('cert-codigo').innerText = data.certificado_autenticidad.codigo_verificacion || 'S42-NFC-VERIFIED';
                     document.getElementById('cert-estado').innerText = data.certificado_autenticidad.estado || 'VERIFICADO';
                     document.getElementById('cert-dueno').innerText = data.certificado_autenticidad.propietario_registrado || 'Sin registrar';
                 }
 
-                // EASTER EGGS / WALLPAPER
-                if (data.easter_eggs && data.easter_eggs.wallpaper_4k_download && !data.easter_eggs.wallpaper_4k_download.includes("AQUI_PEGAS")) {
-                    const btnWall = document.getElementById('btn-wallpaper');
-                    btnWall.href = data.easter_eggs.wallpaper_4k_download;
-                    btnWall.classList.remove('hidden');
+                if (data.easter_eggs && data.easter_eggs.wallpaper_4k_download) {
+                    const srcWall = data.easter_eggs.wallpaper_4k_download.startsWith('http') || data.easter_eggs.wallpaper_4k_download.startsWith('./') 
+                        ? data.easter_eggs.wallpaper_4k_download 
+                        : `./${data.easter_eggs.wallpaper_4k_download}`;
+                    document.getElementById('btn-wallpaper').href = srcWall;
                 }
 
-                // CLUB COLECCIONISTAS WHATSAPP
                 if (data.club_coleccionistas && data.club_coleccionistas.whatsapp_artista) {
                     document.getElementById('btn-whatsapp').href = data.club_coleccionistas.whatsapp_artista;
                 }
 
             } catch (err) {
-                console.error("Error cargando el JSON de la obra:", err);
-                document.getElementById('obra-titulo').innerText = "Obra Phygital Desconectada";
-                document.getElementById('obra-sub').innerText = "Verifica el nombre del archivo .json en GitHub";
+                console.error("Error cargando el JSON:", err);
             }
         });
     </script>
