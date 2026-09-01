@@ -360,7 +360,7 @@
                 insta_tienda: "https://www.instagram.com/la_sucursal_store/?hl=es",
                 google_review_url: "https://search.google.com/local/writereview?placeid=ChIJz6zuGwCrWg0RMmghwkrmcoc"
             },
-            villamediana de Iregua: {
+            villamediana: {
                 nombre: "Sede Villamediana de Iregua",
                 responsable: "por Equipo La Sucursal Villamediana de Iregua",
                 reserva_url: "https://lasucursalstoreart.com/appointment.php",
@@ -511,7 +511,7 @@
                 window.open(mapsUrl, '_blank');
 
                 setTimeout(() => {
-                    const yaLlego = confirm("🚙 Hemos abierto la ruta en Google Maps.\n\n¿Has llegado ya a tu vehículo y quieres BORRAR esta ubicación?\n\n• Pulsa ACEPTAR para borrar el coche.\n• Pulsa CANCELAR para mantenerlo guardado.");
+                    const yaLlego = confirm("🚙 Hemos abierto la ruta en Google Maps.\\n\\n¿Has llegado ya a tu vehículo y quieres BORRAR esta ubicación?\\n\\n• Pulsa ACEPTAR para borrar el coche.\\n• Pulsa CANCELAR para mantenerlo guardado.");
                     if (yaLlego) {
                         localStorage.removeItem('barberia_lat');
                         localStorage.removeItem('barberia_lng');
@@ -522,7 +522,7 @@
             } else {
                 if (navigator.geolocation) {
                     const subtitle = document.getElementById('parking-desc');
-                    if (subtitle) subtitle.innerText = "Obteniendo señal GPS...";
+                    if (subtitle) subtitle.innerText = "Obteniendo signal GPS...";
 
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
