@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Ambuila;Fernando;;;
+FN:Fernando Ambuila - La Sucursal Centro
+ORG:La Sucursal Barbería
+TEL;TYPE=CELL,VOICE:+34643186453
+ADR;TYPE=WORK:;;Logroño Centro;Logroño;La Rioja;;España
+URL:https://studio42.es/la-sucursal/?sede=centro
+END:VCARD
