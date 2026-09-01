@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barbería de Fernando | Hub de Servicios y Arte</title>
+    <title>La Sucursal | Hub Inteligente Multi-Sede</title>
     <!-- Iconos de FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -38,6 +38,23 @@
         }
         #btn-entrar:active { transform: scale(0.95); }
 
+        /* Estilos Selector de Sede Modal */
+        #modal-selector-sedes {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(12px);
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9998; padding: 20px;
+        }
+        .sede-card-select {
+            background: #181818; border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 18px; padding: 16px 20px; width: 100%; max-width: 360px;
+            margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: all 0.2s ease; text-align: left;
+        }
+        .sede-card-select:hover, .sede-card-select:active {
+            border-color: var(--color-principal); background: #222222; transform: scale(1.02);
+        }
+
         /* Estilos Botón Flotante Audio */
         #mute-btn {
             position: fixed; bottom: 25px; right: 25px;
@@ -50,6 +67,16 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: all 0.3s ease;
         }
 
+        /* Badge Indicador de Sede Activa */
+        .sede-badge-container {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.35);
+            padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .sede-badge-container:hover { background: rgba(212, 175, 55, 0.2); }
+        .sede-badge-dot { width: 7px; height: 7px; background-color: var(--color-principal); border-radius: 50%; }
+
         /* Contenedor Principal */
         .hub-container { background-color: var(--color-tarjeta); width: 100%; max-width: 420px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7); padding: 30px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); }
         
@@ -57,7 +84,7 @@
         .logo-container img { width: 85%; height: 85%; object-fit: contain; }
         
         h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase; }
-        .propietario { color: var(--color-texto-secundario); font-size: 1rem; margin-bottom: 20px; font-style: italic; }
+        .propietario { color: var(--color-texto-secundario); font-size: 1rem; margin-bottom: 12px; font-style: italic; }
         
         .section-title { text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-texto-secundario); margin: 15px 0 8px 5px; font-weight: 700; }
         
@@ -95,20 +122,53 @@
 
     <!-- 1. PANTALLA PREVIA (SPLASH SCREEN) -->
     <div id="splash-screen">
-        <div class="logo-container" style="width: 140px; height: 140px; margin-bottom: 30px;">
+        <div class="logo-container" style="width: 140px; height: 140px; margin-bottom: 25px;">
             <img src="logo.png" alt="La Sucursal">
         </div>
         <h1 style="color: var(--color-principal);">LA SUCURSAL</h1>
-        <p style="color: var(--color-texto-secundario); margin-bottom: 20px;">Barbería & Estilo</p>
+        <p style="color: var(--color-texto-secundario); margin-bottom: 20px;">Barbería & Estilo // Logroño</p>
         <button id="btn-entrar">ENTRAR</button>
     </div>
 
-    <!-- 2. AUDIO OCULTO -->
+    <!-- 2. SELECTOR DE SEDES (MODAL) -->
+    <div id="modal-selector-sedes">
+        <div class="logo-container" style="width: 80px; height: 80px; margin-bottom: 15px;">
+            <img src="logo.png" alt="La Sucursal">
+        </div>
+        <h2 style="color: #fff; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Selecciona tu Sede</h2>
+        <p style="color: var(--color-texto-secundario); font-size: 0.8rem; margin-bottom: 22px;">Elige el local donde te encuentras:</p>
+
+        <div class="sede-card-select" onclick="seleccionarSedeManualmente('centro')">
+            <div>
+                <div style="color: var(--color-principal); font-weight: 700; font-size: 0.95rem;">Sede Centro (Principal)</div>
+                <div style="color: var(--color-texto-secundario); font-size: 0.75rem;">Logroño Centro</div>
+            </div>
+            <i class="fa-solid fa-chevron-right" style="color: var(--color-principal);"></i>
+        </div>
+
+        <div class="sede-card-select" onclick="seleccionarSedeManualmente('lirios')">
+            <div>
+                <div style="color: var(--color-principal); font-weight: 700; font-size: 0.95rem;">Sede Los Lirios</div>
+                <div style="color: var(--color-texto-secundario); font-size: 0.75rem;">Barrio Los Lirios // Logroño</div>
+            </div>
+            <i class="fa-solid fa-chevron-right" style="color: var(--color-principal);"></i>
+        </div>
+
+        <div class="sede-card-select" onclick="seleccionarSedeManualmente('villamediana')">
+            <div>
+                <div style="color: var(--color-principal); font-weight: 700; font-size: 0.95rem;">Sede Villamediana</div>
+                <div style="color: var(--color-texto-secundario); font-size: 0.75rem;">Villamediana de Iregua</div>
+            </div>
+            <i class="fa-solid fa-chevron-right" style="color: var(--color-principal);"></i>
+        </div>
+    </div>
+
+    <!-- 3. AUDIO OCULTO -->
     <audio id="bg-audio" loop>
         <source src="ambiente.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 3. BOTÓN FLOTANTE MUTE -->
+    <!-- 4. BOTÓN FLOTANTE MUTE -->
     <button id="mute-btn">
         <i id="mute-icon" class="fa-solid fa-volume-high"></i>
     </button>
@@ -124,20 +184,27 @@
         <h1>LA SUCURSAL</h1>
         <div class="propietario">por Fernando Ambuila Ortíz</div>
 
+        <!-- BADGE SEDE ACTIVA (Permite cambiar de sede en cualquier momento) -->
+        <div class="sede-badge-container" onclick="abrirSelectorSedes()">
+            <span class="sede-badge-dot"></span>
+            <span id="badge-sede-nombre" style="font-size: 0.75rem; font-weight: 700; color: var(--color-principal); text-transform: uppercase; letter-spacing: 1px;">Sede Centro</span>
+            <i class="fa-solid fa-arrows-rotate" style="font-size: 0.7rem; color: var(--color-texto-secundario); margin-left: 4px;"></i>
+        </div>
+
         <div class="apps-menu">
             
             <div class="section-title">Barbería</div>
 
-            <a href="https://lasucursalstoreart.com/appointment.php" target="_blank" class="app-btn">
+            <a id="btn-booking" href="https://lasucursalstoreart.com/appointment.php" target="_blank" class="app-btn">
                 <div class="app-icon icon-booking"><i class="fa-solid fa-calendar-check"></i></div>
                 <div class="app-info">
                     <div class="app-name">Reservar Cita</div>
-                    <div class="app-desc">Accede a nuestra agenda online</div>
+                    <div class="app-desc" id="booking-desc">Agenda online en Sede Centro</div>
                 </div>
                 <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
             </a>
 
-            <a href="contacto.vcf" download="Fernando_Contacto.vcf" class="app-btn">
+            <a id="btn-vcf" href="contacto.vcf" download="Fernando_Contacto.vcf" class="app-btn">
                 <div class="app-icon icon-contact"><i class="fa-solid fa-address-card"></i></div>
                 <div class="app-info">
                     <div class="app-name">Guardar Contacto</div>
@@ -196,7 +263,7 @@
                     <div class="app-icon icon-review"><i class="fa-brands fa-google"></i></div>
                     <div class="app-info">
                         <div class="app-name">Valora tu experiencia</div>
-                        <div class="app-desc">Ayúdanos a mejorar</div>
+                        <div class="app-desc" id="review-desc">Ayúdanos a mejorar en Centro</div>
                     </div>
                 </div>
                 <div class="stars-container star-rating" id="escudo-estrellas">
@@ -216,6 +283,55 @@
 
     <!-- SCRIPTS -->
     <script>
+        // --- BASE DE DATOS MULTI-SEDE ---
+        const DATOS_SEDES = {
+            centro: {
+                nombre: "Sede Centro",
+                reserva_url: "https://lasucursalstoreart.com/appointment.php",
+                reserva_desc: "Agenda online en Sede Centro",
+                bizum: "643186453",
+                whatsapp_soporte: "34643023681",
+                google_review_url: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI"
+            },
+            lirios: {
+                nombre: "Sede Los Lirios",
+                reserva_url: "https://lasucursalstoreart.com/appointment.php",
+                reserva_desc: "Agenda online en Los Lirios",
+                bizum: "643186453",
+                whatsapp_soporte: "34643023681",
+                google_review_url: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI"
+            },
+            villamediana: {
+                nombre: "Sede Villamediana",
+                reserva_url: "https://lasucursalstoreart.com/appointment.php",
+                reserva_desc: "Agenda online en Villamediana",
+                bizum: "643186453",
+                whatsapp_soporte: "34643023681",
+                google_review_url: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI"
+            }
+        };
+
+        let sedeActual = "centro";
+
+        function aplicarSede(key) {
+            const data = DATOS_SEDES[key] || DATOS_SEDES.centro;
+            sedeActual = key;
+
+            document.getElementById('badge-sede-nombre').innerText = data.nombre;
+            document.getElementById('booking-desc').innerText = data.reserva_desc;
+            document.getElementById('btn-booking').href = data.reserva_url;
+            document.getElementById('review-desc').innerText = `Ayúdanos a mejorar en ${data.nombre}`;
+        }
+
+        function abrirSelectorSedes() {
+            document.getElementById('modal-selector-sedes').style.display = 'flex';
+        }
+
+        function seleccionarSedeManualmente(key) {
+            aplicarSede(key);
+            document.getElementById('modal-selector-sedes').style.display = 'none';
+        }
+
         // --- A. LÓGICA DE SPLASH SCREEN Y AUDIO FLOTANTE ---
         const splashScreen = document.getElementById('splash-screen');
         const btnEntrar = document.getElementById('btn-entrar');
@@ -229,8 +345,13 @@
             setTimeout(() => { splashScreen.style.display = 'none'; }, 500);
             
             muteBtn.style.display = 'flex';
-            
             bgAudio.play().catch(e => console.log("Autoplay bloqueado:", e));
+
+            // Si no vino sede por URL (?sede=), abrir selector
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.get('sede')) {
+                abrirSelectorSedes();
+            }
         });
 
         muteBtn.addEventListener('click', () => {
@@ -249,7 +370,6 @@
             }
         });
 
-        // CONTROL DE PAUSA AL SALIR O MINIMIZAR LA PÁGINA
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 bgAudio.pause();
@@ -260,9 +380,10 @@
             }
         });
 
-        // --- B. LÓGICA DEL ESCUDO ANTI-RESEÑAS ---
+        // --- B. LÓGICA DEL ESCUDO ANTI-RESEÑAS (DINÁMICO POR SEDE) ---
         function rateExperience(stars) {
             const allStars = document.querySelectorAll('#escudo-estrellas i');
+            const data = DATOS_SEDES[sedeActual] || DATOS_SEDES.centro;
             
             allStars.forEach((star, index) => {
                 if (index < stars) {
@@ -276,9 +397,9 @@
 
             setTimeout(() => {
                 if (stars <= 3) {
-                    window.location.href = "https://wa.me/+34643023681?text=Hola,%20tengo%20una%20sugerencia%20para%20mejorar%20mi%20experiencia%20en%20La%20Sucursal.";
+                    window.location.href = `https://wa.me/+${data.whatsapp_soporte}?text=Hola,%20tengo%20una%20sugerencia%20para%20mejorar%20mi%20experiencia%20en%20La%20Sucursal%20(${encodeURIComponent(data.nombre)}).`;
                 } else {
-                    window.open("https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI", '_blank');
+                    window.open(data.google_review_url, '_blank');
                 }
                 document.getElementById('star-feedback').style.display = 'none';
             }, 600);
@@ -353,11 +474,11 @@
             }
         }
 
-        // --- D. LÓGICA DE PAGO POR BIZUM CON POPUP PERSONALIZADO DE FERNANDO ---
+        // --- D. LÓGICA DE PAGO POR BIZUM ---
         function pagarPorBizum(e) {
             if (e) e.preventDefault();
-            
-            const numeroTelefono = "643186453"; 
+            const data = DATOS_SEDES[sedeActual] || DATOS_SEDES.centro;
+            const numeroTelefono = data.bizum;
             
             if ("vibrate" in navigator) {
                 navigator.vibrate(60);
@@ -414,7 +535,17 @@
             }
         }
 
+        // --- INICIALIZACIÓN POR URL ---
         document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sedeParam = urlParams.get('sede');
+
+            if (sedeParam && DATOS_SEDES[sedeParam.toLowerCase()]) {
+                aplicarSede(sedeParam.toLowerCase());
+            } else {
+                aplicarSede('centro');
+            }
+
             comprobarEstadoParkingBarberia();
         });
     </script>
