@@ -7,430 +7,457 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-CPXJ4FNYBS');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio42 | Conectamos tu negocio físico con el buscador más grande del mundo.</title>
-    <meta name="description" content="Studio42: Estudio de identidad inteligente orientada al posicionamiento local y creación audiovisual en Logroño. Digitalizamos negocios locales y marcas.">
+    <title>Studio 42 | Identidad Inteligente & Ecosistemas Phygital</title>
+    <meta name="description" content="Studio 42: Estudio boutique de Identidad Inteligente, hardware NFC y posicionamiento local en Logroño. Transformamos negocios físicos en activos digitales de alta facturación.">
+    
+    <!-- Fuentes e Iconos Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        /* Tipografía extra-limpia para ese toque "Boutique" */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        
-        /* Ocultar scrollbar cuando el modal de la tienda está abierto */
+        :root {
+            --color-gold: #D4AF37;
+            --color-gold-light: #F5E6AB;
+            --color-gold-dark: #997A15;
+            --bg-dark: #07090E;
+            --card-surface: rgba(16, 20, 30, 0.75);
+            --card-border: rgba(212, 175, 55, 0.2);
+            --card-border-hover: rgba(212, 175, 55, 0.6);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Malla técnica de fondo */
+        .bg-grid-tech {
+            background-image: radial-gradient(rgba(212, 175, 55, 0.12) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Degradado dorado boutique */
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #FFFFFF 10%, #F5E6AB 45%, #D4AF37 80%, #AA820A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .border-gold-glow {
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 20px -5px rgba(212, 175, 55, 0.15);
+        }
+
+        .border-gold-glow:hover {
+            border-color: var(--card-border-hover);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.9), 0 0 35px 2px rgba(212, 175, 55, 0.35);
+        }
+
+        /* Halo circular de luz rotativa */
+        .animated-halo-border {
+            position: relative;
+            overflow: hidden;
+            padding: 1.5px;
+            border-radius: 24px;
+        }
+
+        .animated-halo-border::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent 0%,
+                transparent 35%,
+                var(--color-gold) 48%,
+                #ffffff 50%,
+                var(--color-gold) 52%,
+                transparent 65%,
+                transparent 100%
+            );
+            animation: rotateHalo 7s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateHalo {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .halo-inner {
+            position: relative;
+            background: #0B0E14;
+            border-radius: 22.5px;
+            z-index: 1;
+        }
+
+        /* Botón de oro satinado */
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #F3E5AB 50%, #997A15 100%);
+            color: #050608;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.55);
+            filter: brightness(1.08);
+        }
+
         body.modal-open { overflow: hidden; }
     </style>
 </head>
-<body class="bg-white text-zinc-800 antialiased selection:bg-[#C57A36] selection:text-white">
 
-    <!-- NAVEGACIÓN -->
-    <nav class="bg-white/90 backdrop-blur-md fixed w-full z-20 top-0 border-b border-zinc-100">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+<body class="bg-grid-tech selection:bg-[#D4AF37] selection:text-black">
+
+    <!-- NAVEGACIÓN BOUTIQUE -->
+    <nav class="bg-[#07090E]/85 backdrop-blur-xl fixed w-full z-40 top-0 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             
             <!-- LOGO STUDIO 42 -->
-            <a href="/" class="flex items-center shrink-0">
-                <img src="studio42-logo.png" alt="Studio 42 - Identidad Inteligente" class="h-20 md:h-24 lg:h-28 w-auto object-contain drop-shadow-md hover:drop-shadow-xl hover:scale-105 transition-all duration-500 ease-in-out"/>
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="studio42-logo.png" alt="Studio 42 - Identidad Inteligente" class="h-14 md:h-16 w-auto object-contain drop-shadow-md group-hover:scale-105 transition duration-300"/>
             </a>
             
-            <div class="hidden md:flex space-x-8 font-medium text-xs lg:text-sm tracking-wide text-zinc-500 uppercase ml-auto mr-8 items-center">
-                <a href="#soluciones" class="hover:text-zinc-950 transition duration-300">Ecosistemas</a>
-                <a href="#tienda-nfc" class="hover:text-zinc-950 transition duration-300">Expansiones</a>
-                <a href="#nosotros" class="hover:text-zinc-950 transition duration-300">El Estudio</a>
-                <a href="#talent" class="text-[#C57A36] font-bold hover:text-zinc-950 transition duration-300 flex items-center gap-1">
-                    <span>Talent</span>
-                    <span class="bg-[#C57A36]/10 text-[#C57A36] text-[9px] px-1.5 py-0.5 rounded-full font-extrabold">NEW</span>
-                </a>
-                <a href="#faq" class="hover:text-zinc-950 transition duration-300">Dudas</a>
+            <div class="hidden lg:flex space-x-9 font-semibold text-xs tracking-widest text-zinc-400 uppercase items-center">
+                <a href="#experiencia" class="hover:text-white transition duration-300">Arquitectura</a>
+                <a href="#soluciones" class="hover:text-white transition duration-300">Ecosistemas</a>
+                <a href="#hardware" class="hover:text-white transition duration-300">Hardware</a>
+                <a href="#estudio" class="hover:text-white transition duration-300">El Estudio</a>
+                <a href="#faq" class="hover:text-white transition duration-300">Garantías</a>
             </div>
 
-            <!-- BOTONES DE CABECERA (VCARD DINÁMICA MANUEL / MELINA) -->
-            <div class="flex items-center gap-2">
-                <a href="#contacto" class="bg-zinc-950 text-white px-3 py-2 text-xs font-bold uppercase tracking-wider hover:bg-[#C57A36] transition duration-300">
-                    Hablemos
+            <!-- BOTONES DE CONTACTO -->
+            <div class="flex items-center gap-3">
+                <a id="btn-vcard-dinamico" href="contacto.vcf?v=2" download="Studio42-Contacto.vcf" class="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white text-xs font-bold uppercase tracking-wider py-2.5 px-4 rounded-full border border-white/10 transition duration-300">
+                    <i class="fa-solid fa-address-card text-[#D4AF37]"></i>
+                    <span id="txt-vcard-dinamico">Guardar VCard</span>
                 </a>
-                <a id="btn-vcard-dinamico" href="contacto.vcf?v=2" download="Studio42-Contacto.vcf" class="flex items-center gap-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 text-xs font-bold uppercase tracking-wider py-2 px-3 transition duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-[#C57A36]">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                    </svg>
-                    <span class="hidden sm:inline" id="txt-vcard-dinamico">Guardar Contacto</span>
+                <a href="#contacto" class="btn-gold px-5 py-2.5 text-xs uppercase tracking-wider rounded-full flex items-center gap-2">
+                    <span>Hablemos</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- CABECERA PRINCIPAL -->
-    <header class="pt-44 pb-28 px-6 text-center bg-zinc-950 text-white border-b-8 border-[#C57A36]">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-[#C57A36] font-bold tracking-widest uppercase text-sm mb-6">Presencia corporativa de última generación</div>
-            <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight tracking-tight">
-                Multiplica tus reseñas de 5 estrellas con un solo <span class="text-[#C57A36]"> toque NFC</span>
+    <!-- HERO SECTION DE ALTO IMPACTO (ÚNICO) -->
+    <header class="relative pt-44 pb-28 px-6 text-center overflow-hidden">
+        <!-- Luces volumétricas de fondo -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#D4AF37]/15 blur-[120px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/30 px-4 py-1.5 rounded-full mb-8 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-ping"></span>
+                <span class="text-[#D4AF37] font-bold text-xs uppercase tracking-widest">Ingeniería Phygital & SEO Local // Logroño</span>
+            </div>
+
+            <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-black mb-8 leading-[1.08] tracking-tight">
+                Conectamos tu mostrador físico con el buscador <br class="hidden md:block">
+                <span class="text-gold-gradient">más potente del planeta.</span>
             </h1>
-            <p class="text-xl text-zinc-400 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-                Transformamos tu local en un espacio inteligente. Mediante tecnología NFC y QR, conectamos a tus clientes con Google Maps para disparar tu posicionamiento local y blindar tu reputación en piloto automático.
+
+            <p class="text-lg md:text-xl text-zinc-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+                Transformamos establecimientos comerciales en espacios interactivos. A través de <strong>Hardware NFC de lujo, tótems y direccionamiento dinámico</strong>, convertimos el paso presencial de tus clientes en reseñas de 5 estrellas, reservas directas y blindaje de reputación en piloto automático.
             </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#soluciones" class="btn-gold px-9 py-4 rounded-full text-xs font-black uppercase tracking-widest w-full sm:w-auto shadow-xl">
+                    Explorar Ecosistemas Llave en Mano
+                </a>
+                <a href="#contacto" class="bg-white/5 hover:bg-white/10 text-white border border-white/15 px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest w-full sm:w-auto transition duration-300 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-[#D4AF37] text-base"></i>
+                    <span>Solicitar Demostración en Local</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- FOTO REAL DEL UNBOXING / SENSACIÓN DE PRODUCTO -->
+        <div class="max-w-4xl mx-auto mt-16 relative">
+            <div class="animated-halo-border shadow-2xl">
+                <div class="halo-inner p-4 md:p-6 flex flex-col items-center">
+                    <img src="caja-real.png" alt="Welcome Pack Studio 42" class="rounded-xl w-full max-h-[440px] object-cover object-center shadow-inner">
+                    <div class="w-full mt-4 pt-4 border-t border-white/10 flex flex-wrap justify-between items-center text-left text-xs text-zinc-400 gap-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-box-open text-[#D4AF37] text-lg"></i>
+                            <div>
+                                <strong class="text-white block">Presentación Ejecutiva</strong>
+                                <span>Caja rígida imantada, tarjeta de madera noble y display acrílico.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-[#D4AF37] font-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                            <span>Tecnología 100% Configurada y Grabada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <!-- SECCIÓN HERO -->
-    <section class="max-w-6xl mx-auto px-6 py-20 md:py-32 text-center mt-16">
-        <h1 class="text-5xl md:text-7xl font-black text-zinc-900 tracking-tight mb-6 leading-tight">
-            Conectamos tu negocio físico con el <br class="hidden md:block">
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-500">buscador más grande del mundo.</span>
-        </h1>
-        <p class="text-lg md:text-xl text-zinc-600 max-w-3xl mx-auto mb-10 font-light leading-relaxed">
-            En <strong>Studio 42</strong> transformamos tu establecimiento en un espacio inteligente. Diseñamos e instalamos sistemas de <strong>Identidad Inteligente</strong> (NFC y QR) para multiplicar tus reseñas, disparar tu posicionamiento en Google Maps de forma orgánica y proteger tu reputación en tiempo real. Un solo toque basta.
-        </p>
-        <a href="#contacto" class="inline-block bg-zinc-950 text-white font-medium px-8 py-4 rounded-full hover:bg-zinc-800 transition-colors duration-300 shadow-lg">
-            Impulsar mi posicionamiento en Maps
-        </a>
-    </section>
-
-    <!-- SECCIÓN LOS 3 PILARES -->
-    <section class="bg-zinc-50 py-20 border-t border-zinc-100">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-zinc-100 hover:-translate-y-1 transition-all">
-                    <div class="text-4xl mb-5">🎯</div>
-                    <h3 class="text-xl font-bold text-zinc-900 mb-3">Visibilidad Máxima en Google</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed text-sm">
-                        El 90% de las decisiones de compra locales se toman en Google. Automatizamos el flujo de tus clientes físicos directamente hacia tu ficha de negocio, incrementando tus interacciones y escalando posiciones frente a tu competencia.
-                    </p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-zinc-100 hover:-translate-y-1 transition-all">
-                    <div class="text-4xl mb-5">🛡️</div>
-                    <h3 class="text-xl font-bold text-zinc-900 mb-3">Escudo de Reputación 24/7</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed text-sm">
-                        Filtramos la experiencia de usuario. Potenciamos las valoraciones de 5 estrellas en público y contenemos las críticas en privado, activando alertas al dueño y compensaciones automáticas para recuperar al cliente.
-                    </p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-zinc-100 hover:-translate-y-1 transition-all">
-                    <div class="text-4xl mb-5">🔄</div>
-                    <h3 class="text-xl font-bold text-zinc-900 mb-3">Infraestructura Dinámica</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed text-sm">
-                        Tu inversión física nunca queda obsoleta. Controlamos de forma remota los enlaces de tus tótems. Cambia tus menús, reservas o campañas al instante sin necesidad de reimprimir ni cambiar el soporte físico.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- EL DOLOR Y LA SOLUCIÓN -->
-    <section class="py-16 px-6 bg-white overflow-hidden border-b border-zinc-100">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div class="w-full md:w-1/2 text-left order-1">
-                <div class="text-[#C57A36] font-bold tracking-widest uppercase text-xs md:text-sm mb-3">La Fusión Phygital</div>
-                <h2 class="text-3xl md:text-5xl font-black text-zinc-950 mb-4 md:mb-6 tracking-tight leading-tight">Convierte el mundo real en tráfico digital.</h2>
-                <p class="text-base md:text-lg text-zinc-600 leading-relaxed mb-4">
-                    <strong>¿Cuántas veces un cliente te ha dicho "luego te dejo una reseña" y se ha olvidado al cruzar la puerta?</strong> Cada cliente que sale sin interactuar digitalmente es dinero que pierdes.
-                </p>
-                <p class="text-base md:text-lg text-zinc-600 leading-relaxed mb-4">
-                    En Studio 42 construimos puentes invisibles entre tu mostrador y el algoritmo de Google. Diseñamos ecosistemas físicos de metacrilato e impresión de alta calidad donde un simple roce con el móvil se transforma en una valoración de 5 estrellas de forma instantánea. Sin pedir favores. Sin que el cliente tenga que buscarte.
-                </p>
-                <p class="text-base md:text-lg text-zinc-600 leading-relaxed">
-                    Tus competidores ya están optimizando su presencia física. No dejes que se lleven a tus clientes por estar mejor posicionados en el mapa.
-                </p>
-                <div class="mt-8">
-                    <a href="#soluciones" class="inline-flex items-center justify-center gap-3 bg-zinc-950 hover:bg-[#C57A36] text-white font-bold text-xs uppercase tracking-widest py-4 px-8 rounded-none shadow-lg transition duration-300">
-                        Ver Soluciones para mi Negocio
-                    </a>
-                </div>
-            </div>
-            
-            <div class="md:w-1/2 relative flex justify-center">
-                <div class="absolute inset-0 bg-[#C57A36] opacity-10 blur-3xl rounded-full w-64 h-64 mx-auto top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-                <img src="movil-google.png" alt="Posicionamiento SEO Local en Google Maps" class="relative z-10 w-11/12 sm:max-w-sm md:w-auto md:max-w-sm lg:max-w-md drop-shadow-2xl transform hover:-translate-y-3 transition duration-500 ease-out mt-8 md:mt-0">
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN QUIÉNES SOMOS -->
-    <section id="nosotros" class="py-24 px-6 max-w-6xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-black text-zinc-950 mb-4 tracking-tight">El equipo detrás de Studio42</h2>
-            <p class="text-zinc-600 text-lg">Combinamos estrategia técnica y diseño visual para impulsar tu negocio.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-zinc-800 rounded-2xl p-10 text-center border border-zinc-700 shadow-xl transition hover:-translate-y-1 duration-300">
-                <img src="manuel.jpg" alt="Manuel - Especialista SEO" class="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-[#C57A36] shadow-lg">
-                <h3 class="text-3xl font-black text-white mb-2">Manuel</h3>
-                <p class="text-[#C57A36] font-bold tracking-widest uppercase text-xs mb-5">ESTRATEGIA Y OPERACIONES</p>
-                <p class="text-zinc-400 font-light leading-relaxed">
-                    Con formación técnica en desarrollo web, fotografía digital, SEO local y pilotaje de dron certificado por AESA. Aporto la visión estructural para que la presencia digital de tu negocio sea sólida y rentable.
-                </p>
-            </div>
-
-            <div class="bg-zinc-800 rounded-2xl p-10 text-center border border-zinc-700 shadow-xl transition hover:-translate-y-1 duration-300">
-                <img src="melina.jpg" alt="Melina - Branding" class="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-[#C57A36] shadow-lg">
-                <h3 class="text-3xl font-black text-white mb-2">Melina</h3>
-                <p class="text-[#C57A36] font-bold tracking-widest uppercase text-xs mb-5">BRANDING Y DISEÑO</p>
-                <p class="text-zinc-400 font-light leading-relaxed">
-                    El corazón estético del estudio. Mi experiencia en el diseño artesanal corporativo y las artes plásticas, me permite cuidar cada detalle, transformando la esencia de tu marca en un diseño visual magnético.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN STUDIO 42 TALENT / NETWORK DE CLOSERS -->
-    <section id="talent" class="py-24 px-6 bg-zinc-950 text-white relative overflow-hidden border-t border-b border-[#C57A36]/30">
-        <div class="absolute inset-0 bg-[#C57A36]/5 blur-3xl pointer-events-none"></div>
-        <div class="max-w-6xl mx-auto relative z-10 text-center">
-            
-            <span class="inline-block bg-[#C57A36]/10 border border-[#C57A36] text-[#C57A36] text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-                Studio 42 Talent Network 🚀
-            </span>
-            
-            <h2 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight leading-tight max-w-4xl mx-auto">
-                Convierte la tecnología en tu <span class="text-[#C57A36]">fuente de ingresos independiente</span>.
-            </h2>
-            
-            <p class="text-lg md:text-xl text-zinc-400 font-light max-w-3xl mx-auto mb-16 leading-relaxed">
-                No buscamos vendedores tradicionales de puerta fría aburrida. Buscamos perfiles jóvenes, frescos, empáticos y hambrientos de éxito que entiendan la revolución Phygital y quieran construir su propia libertad financiera comercializando nuestros Ecosistemas Inteligentes.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-16">
-                <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-[#C57A36]/50 transition duration-300">
-                    <div class="text-3xl mb-4">⚡</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Demos de 10 Segundos</h3>
-                    <p class="text-zinc-400 text-sm font-light leading-relaxed">
-                        Sin discursos pesados. Plantas el soporte en la barra o mostrador del local, le pides al gerente que acerque su smartphone y la tecnología vende sola en vivo.
-                    </p>
-                </div>
-
-                <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-[#C57A36]/50 transition duration-300">
-                    <div class="text-3xl mb-4">💰</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Comisiones de Alto Rendimiento</h3>
-                    <p class="text-zinc-400 text-sm font-light leading-relaxed">
-                        Gana entre 40 € y 150 € limpios por cada cierre. Cobro directo e instantáneo el mismo día que el cliente abona su señal de pedido.
-                    </p>
-                </div>
-
-                <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-[#C57A36]/50 transition duration-300">
-                    <div class="text-3xl mb-4">🌍</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Libertad Total de Agenda</h3>
-                    <p class="text-zinc-400 text-sm font-light leading-relaxed">
-                        Marca tu propia ruta en tu ciudad o compagínalo con tus estudios, proyectos o viajes. Medimos tu talento por cierres, no por horas de oficina.
-                    </p>
-                </div>
-            </div>
-
-            <div class="bg-zinc-900/80 border border-[#C57A36] p-8 md:p-12 rounded-2xl max-w-4xl mx-auto text-left flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
-                <div>
-                    <h3 class="text-2xl font-black text-white mb-3">¿Tienes el perfil que buscamos?</h3>
-                    <ul class="space-y-2 text-zinc-300 text-sm font-light">
-                        <li class="flex items-center gap-2"><span class="text-[#C57A36] font-bold">✓</span> Eres extrovertido, fresco, amable y empático.</li>
-                        <li class="flex items-center gap-2"><span class="text-[#C57A36] font-bold">✓</span> Entiendes que el rechazo es parte del juego y te motiva la presión de cerrar.</li>
-                        <li class="flex items-center gap-2"><span class="text-[#C57A36] font-bold">✓</span> Quieres dominar habilidades de ventas B2B útiles para toda tu vida.</li>
-                    </ul>
-                </div>
-                <a href="/talent/" class="shrink-0 bg-[#C57A36] hover:bg-white hover:text-zinc-950 text-white font-extrabold uppercase tracking-wider text-xs py-5 px-8 rounded-xl transition duration-300 shadow-lg shadow-[#C57A36]/20 text-center w-full md:w-auto">
-                    Aplicar al Programa de Closers 🚀
-                </a>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- PACKS DE SOLUCIONES -->
-    <section id="soluciones" class="pt-32 pb-24 px-6 bg-zinc-100 border-t border-zinc-200">
+    <!-- ARQUITECTURA TECNOLÓGICA (LOS 3 PILARES) -->
+    <section id="experiencia" class="py-24 px-6 border-t border-white/5 bg-[#090C12]/60">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
-                <div class="text-[#C57A36] font-bold tracking-widest uppercase text-sm mb-3">Sistemas Integrales</div>
-                <h2 class="text-4xl md:text-5xl font-black text-zinc-950 mb-4 tracking-tight">Ecosistemas Llave en Mano</h2>
-                <p class="text-lg text-zinc-600 font-light max-w-3xl mx-auto">Nuestros packs incluyen la configuración completa del software "Escudo Anti-Críticas" y todo el hardware necesario para digitalizar tu flujo de clientes.</p>
+                <span class="text-[#D4AF37] font-bold tracking-widest uppercase text-xs">Propuesta de Valor</span>
+                <h2 class="font-display text-3xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">Estructura Phygital de Alto Rendimiento</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base font-light">Eliminamos la fricción técnica para que el cliente califique, pague o reserve en menos de 2 segundos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tarjeta 1 -->
+                <div class="bg-[#10141E]/80 border border-white/10 p-8 rounded-2xl hover:border-[#D4AF37]/50 transition duration-500 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] text-2xl mb-6">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Imán Orgánico de Google Maps</h3>
+                        <p class="text-zinc-400 text-sm font-light leading-relaxed mb-6">
+                            El 92% de las decisiones de consumo local se toman en el móvil. Guiamos el tráfico presencial directo a tu ficha oficial de negocio, disparando tu autoridad en el algoritmo local sin pagar publicidad.
+                        </p>
+                    </div>
+                    <span class="text-[11px] font-bold tracking-wider uppercase text-[#D4AF37] flex items-center gap-2">
+                        <span>Mayor Cuota de Mercado</span>
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                    </span>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="bg-[#10141E]/80 border border-white/10 p-8 rounded-2xl hover:border-[#D4AF37]/50 transition duration-500 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] text-2xl mb-6">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Canal de Resolución Rápida</h3>
+                        <p class="text-zinc-400 text-sm font-light leading-relaxed mb-6">
+                            Protege tu prestigio. Las valoraciones excelentes viajan directo a Google Maps. Las incidencias o sugerencias abren un canal privado prioritario de WhatsApp hacia la gerencia para recuperar al cliente antes de que opine en público.
+                        </p>
+                    </div>
+                    <span class="text-[11px] font-bold tracking-wider uppercase text-[#D4AF37] flex items-center gap-2">
+                        <span>Blindaje Reputacional 24/7</span>
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="bg-[#10141E]/80 border border-white/10 p-8 rounded-2xl hover:border-[#D4AF37]/50 transition duration-500 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] text-2xl mb-6">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Infraestructura Serverless Dinámica</h3>
+                        <p class="text-zinc-400 text-sm font-light leading-relaxed mb-6">
+                            Tu hardware nunca caduca. Los chips NFC y códigos QR enlazan a arquitecturas inteligentes que modificamos en la nube en segundos: cambia de carta, teléfono de cobro Bizum o destinos sin tener que reimprimir nada.
+                        </p>
+                    </div>
+                    <span class="text-[11px] font-bold tracking-wider uppercase text-[#D4AF37] flex items-center gap-2">
+                        <span>Cero Costes de Reimpresión</span>
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PACKS DE SOLUCIONES (INTEGRAL B2B) -->
+    <section id="soluciones" class="py-28 px-6 bg-[#07090E] border-t border-white/5 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-20">
+                <span class="text-[#D4AF37] font-bold tracking-widest uppercase text-xs">Inversión Llave en Mano</span>
+                <h2 class="font-display text-4xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">Ecosistemas Phygital Completos</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto text-base font-light">Cada pack incluye la programación de software, redirección inteligente, hardware premium y soporte técnico.</p>
             </div>
 
             <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-8 items-stretch">
+                
                 <!-- PACK 1: IMÁN -->
-                <div class="bg-white border border-zinc-200 rounded-2xl overflow-hidden group hover:border-zinc-400 hover:shadow-xl transition duration-500 flex flex-col h-full">
-                    <div class="h-56 bg-zinc-50 relative overflow-hidden flex items-center justify-center p-4">
-                        <img src="expositor-real.png" alt="Pack Mostrador" class="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-105 transition duration-500">
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <h3 class="text-2xl font-black text-zinc-900 mb-1">Imán de Mostrador</h3>
-                        <p class="text-zinc-500 text-sm font-light mb-4">"El salvavidas de la caja registradora"</p>
+                <div class="bg-[#0F131C] border border-white/10 rounded-3xl p-8 flex flex-col justify-between hover:border-[#D4AF37]/40 transition duration-300">
+                    <div>
+                        <span class="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest bg-[#D4AF37]/10 px-3 py-1 rounded-full inline-block mb-4">Punto de Cobro Individual</span>
+                        <h3 class="text-2xl font-black text-white mb-2">Imán de Mostrador</h3>
+                        <p class="text-zinc-400 text-xs font-light mb-6">Diseñado para cajas registradoras y mostradores de atención individual.</p>
                         
-                        <div class="mb-4 border-b border-zinc-100 pb-4">
-                            <span class="text-[#C57A36] text-[10px] font-bold uppercase tracking-widest bg-[#C57A36]/10 px-2 py-1 rounded inline-block mb-2">Software + Hardware Básico</span>
-                            <p class="text-[#C57A36] font-black text-3xl">149,00 €</p>
-                            <span class="text-xs text-zinc-400 font-light block mt-1">Pago único, sin cuotas</span>
+                        <div class="mb-6 pb-6 border-b border-white/10">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-white font-black text-4xl">149,00 €</span>
+                                <span class="text-zinc-500 text-xs">+ IVA</span>
+                            </div>
+                            <span class="text-[11px] text-zinc-500 block mt-1">Pago único / Sin ataduras mensuales</span>
                         </div>
 
-                        <ul class="space-y-3 text-zinc-700 font-light text-sm mb-8 flex-grow">
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>Software:</strong> Enlace inteligente y redirección al Mapa.</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>1 Expositor de Metacrilato</strong> (NFC + QR).</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>2 Llaveros Smart NFC</strong> para bolsillo.</span></li>
+                        <ul class="space-y-3.5 text-zinc-300 text-xs font-light mb-8">
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>Software:</strong> Enlace inteligente y redirección directa a Google Maps.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>1 Display Acrílico Biselado</strong> con chip NFC + QR de alta visibilidad.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>2 Llaveros Smart NFC</strong> para bolsillo o llavero de local.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span>Configuración completa y entrega llave en mano en Logroño.</span></li>
                         </ul>
-                        <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20Pack%20Imán%20de%20Mostrador." target="_blank" class="block w-full text-center border-2 border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white font-bold py-3 rounded-lg transition duration-300 mt-auto">
-                            Digitalizar mi Caja
+                    </div>
+                    <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20instalar%20el%20Pack%20Imán%20de%20Mostrador." target="_blank" class="block w-full py-3.5 text-center text-xs font-extrabold uppercase tracking-wider rounded-xl border border-white/20 text-white hover:bg-white hover:text-black transition duration-300">
+                        Digitalizar mi Mostrador
+                    </a>
+                </div>
+
+                <!-- PACK 2: EFECTO MULTIPLICADOR (DESTACADO) -->
+                <div class="animated-halo-border transform lg:-translate-y-4 shadow-2xl">
+                    <div class="halo-inner p-8 flex flex-col justify-between h-full relative">
+                        <div class="absolute -top-3.5 right-6 bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">
+                            Más Demandado
+                        </div>
+                        <div>
+                            <span class="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest bg-[#D4AF37]/10 px-3 py-1 rounded-full inline-block mb-4">Equipo y Sala</span>
+                            <h3 class="text-2xl font-black text-white mb-2">Efecto Multiplicador</h3>
+                            <p class="text-zinc-400 text-xs font-light mb-6">Convierte a tus camareros o recepcionistas en puntos de interacción directos.</p>
+                            
+                            <div class="mb-6 pb-6 border-b border-white/10">
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-white font-black text-4xl">349,00 €</span>
+                                    <span class="text-zinc-500 text-xs">+ IVA</span>
+                                </div>
+                                <span class="text-[11px] text-[#D4AF37] font-semibold block mt-1">El pack que amortizas en el primer mes</span>
+                            </div>
+
+                            <ul class="space-y-3.5 text-zinc-200 text-xs font-light mb-8">
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>Software:</strong> Canal inteligente de resolución rápida y filtrado de incidencias.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>1 Display Acrílico</strong> para zona de caja o mostrador central.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>10 Llaveros Smart NFC</strong> individuales para el personal de sala.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>Tarjeta de Visita NFC</strong> de cortesía para el gerente o propietario.</span></li>
+                            </ul>
+                        </div>
+                        <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20Pack%20Efecto%20Multiplicador." target="_blank" class="btn-gold block w-full py-4 text-center text-xs font-black uppercase tracking-widest rounded-xl">
+                            Activar para mi Equipo
                         </a>
                     </div>
                 </div>
 
-                <!-- PACK 2: EFECTO MULTIPLICADOR -->
-                <div class="bg-zinc-900 border-2 border-[#C57A36] rounded-2xl overflow-hidden group shadow-2xl transition duration-500 flex flex-col h-full relative transform lg:-translate-y-4">
-                    <div class="absolute top-4 right-4 bg-[#C57A36] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full z-20 shadow-md">Recomendado</div>
-                    <div class="h-56 bg-zinc-800 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=600" alt="Pack Multiplicador" class="w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-700">
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <h3 class="text-2xl font-black text-white mb-1">Efecto Multiplicador</h3>
-                        <p class="text-zinc-400 text-sm font-light mb-4">"Convierte a tu equipo en captadores"</p>
+                <!-- PACK 3: DOMINIO TOTAL -->
+                <div class="bg-[#0F131C] border border-white/10 rounded-3xl p-8 flex flex-col justify-between hover:border-[#D4AF37]/40 transition duration-300">
+                    <div>
+                        <span class="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest bg-[#D4AF37]/10 px-3 py-1 rounded-full inline-block mb-4">Infraestructura Boutique</span>
+                        <h3 class="text-2xl font-black text-white mb-2">Dominio Local Total</h3>
+                        <p class="text-zinc-400 text-xs font-light mb-6">Despliegue completo con Welcome Pack VIP y producción audiovisual con dron.</p>
                         
-                        <div class="mb-4 border-b border-zinc-700 pb-4">
-                            <span class="text-[#C57A36] text-[10px] font-bold uppercase tracking-widest bg-[#C57A36]/20 px-2 py-1 rounded inline-block mb-2">Software + Hardware Ampliado</span>
-                            <p class="text-white font-black text-3xl">349,00 €</p>
-                            <span class="text-xs text-zinc-500 font-light block mt-1">Pago único, sin cuotas</span>
+                        <div class="mb-6 pb-6 border-b border-white/10">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-white font-black text-4xl">549,00 €</span>
+                                <span class="text-zinc-500 text-xs">+ IVA</span>
+                            </div>
+                            <span class="text-[11px] text-zinc-500 block mt-1">Servicio integral llave en mano</span>
                         </div>
 
-                        <ul class="space-y-3 text-zinc-300 font-light text-sm mb-8 flex-grow">
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>Software:</strong> Escudo de reputación básico configurado.</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>1 Expositor de Metacrilato</strong> (NFC + QR).</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>10 Llaveros Smart NFC</strong> para el staff.</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>2 Polos NFC Anti-Manchas</strong> (Regalo).</span></li>
+                        <ul class="space-y-3.5 text-zinc-300 text-xs font-light mb-8">
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>Welcome Pack VIP:</strong> Caja ejecutiva imantada + Tarjeta de madera noble.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>2 Displays Acrílicos</strong> de gran formato para barra y entrada.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>25 Llaveros Smart NFC</strong> corporativos con logo grabado.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-[#D4AF37] mt-0.5"></i><span><strong>Bonus:</strong> Micro-Tour audiovisual del local con dron oficial AESA.</span></li>
                         </ul>
-                        <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20Pack%20Efecto%20Multiplicador." target="_blank" class="block w-full text-center bg-[#C57A36] text-white hover:bg-white hover:text-zinc-900 font-bold py-3 rounded-lg transition duration-300 shadow-lg shadow-[#C57A36]/30 mt-auto">
-                            Multiplicar mi Equipo
-                        </a>
                     </div>
-                </div>
-
-                <!-- PACK 3: DOMINIO LOCAL -->
-                <div class="bg-white border border-zinc-200 rounded-2xl overflow-hidden group hover:border-zinc-400 hover:shadow-xl transition duration-500 flex flex-col h-full">
-                    <div class="h-56 bg-black relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=600" alt="Pack Dominio" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-700">
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <h3 class="text-2xl font-black text-zinc-900 mb-1">Dominio Local Total</h3>
-                        <p class="text-zinc-500 text-sm font-light mb-4">"La infraestructura de una franquicia"</p>
-                        
-                        <div class="mb-4 border-b border-zinc-100 pb-4">
-                            <span class="text-[#C57A36] text-[10px] font-bold uppercase tracking-widest bg-[#C57A36]/10 px-2 py-1 rounded inline-block mb-2">Software + Regalo VIP</span>
-                            <p class="text-[#C57A36] font-black text-3xl">549,00 €</p>
-                            <span class="text-xs text-zinc-400 font-light block mt-1">Pago único, sin cuotas</span>
-                        </div>
-
-                        <ul class="space-y-3 text-zinc-700 font-light text-sm mb-8 flex-grow">
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>Software:</strong> Escudo Anti-Críticas + Alertas activadas.</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>Welcome Pack: Caja Ejecutiva VIP</strong>.</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>2 Expositores de Metacrilato</strong>.</span></li>
-                            <li class="flex items-start gap-3"><span class="text-[#C57A36] font-bold">✓</span><span><strong>25 Llaveros Smart NFC</strong> corporativos.</span></li>
-                        </ul>
-                        <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20Pack%20Dominio%20Local." target="_blank" class="block w-full text-center border-2 border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white font-bold py-3 rounded-lg transition duration-300 mt-auto">
-                            Dominar mi Ciudad
-                        </a>
-                    </div>
+                    <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20el%20Pack%20Dominio%20Local." target="_blank" class="block w-full py-3.5 text-center text-xs font-extrabold uppercase tracking-wider rounded-xl border border-white/20 text-white hover:bg-white hover:text-black transition duration-300">
+                        Dominar mi Sector
+                    </a>
                 </div>
 
             </div>
         </div>
     </section>
 
-    <!-- TARJETA BONUS PREMIUM -->
-    <div class="my-16 bg-zinc-900 border border-[#C57A36]/30 rounded-xl p-6 md:p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6 shadow-2xl">
-        <div class="bg-[#C57A36] text-zinc-950 font-black p-4 rounded-full text-center flex flex-col justify-center items-center w-20 h-20 shrink-0 shadow-lg">
-            <span class="text-[9px] uppercase tracking-widest leading-none mb-1">INCLUIDO</span>
-            <span class="text-xl font-black">TOUR</span>
-        </div>
-        <div class="text-center md:text-left flex-grow">
-            <div class="inline-block bg-[#C57A36]/10 text-[#C57A36] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-2">
-                Cortesía con el Plan "Dominio Local"
-            </div>
-            <h4 class="text-xl font-bold text-white mb-2">Micro-Tour Audiovisual del Local</h4>
-            <p class="text-zinc-400 text-sm font-light leading-relaxed">
-                Elevamos la imagen de tu negocio en Google Maps con un vídeo promocional del interior de tu establecimiento. Incluye una espectacular grabación aérea certificada (Dron DJI Flip AESA) y edición para captar la atención de tus clientes a primera vista.
-            </p>
-        </div>
-    </div>
-
-    <!-- TIENDA HARDWARE NFC INDIVIDUAL -->
-    <section id="tienda-nfc" class="py-24 px-6 bg-white border-t border-zinc-200">
+    <!-- HARDWARE DE EXPANSIÓN (DISPOSITIVOS SUELTOS) -->
+    <section id="hardware" class="py-24 px-6 bg-[#0A0D14] border-t border-white/5">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
-                <div class="text-[#C57A36] font-bold tracking-widest uppercase text-sm mb-3">Hardware de Expansión</div>
-                <h2 class="text-4xl md:text-5xl font-black text-zinc-950 mb-4 tracking-tight">Accesorios Individuales</h2>
-                <p class="text-lg text-zinc-600 font-light max-w-2xl mx-auto">Añade dispositivos físicos a tu local o prueba nuestra tecnología antes de dar el salto a un Ecosistema completo con Escudo Anti-Críticas.</p>
+                <span class="text-[#D4AF37] font-bold tracking-widest uppercase text-xs">Módulos Individuales</span>
+                <h2 class="font-display text-3xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">Hardware de Ampliación</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base font-light">Dispositivos adicionales para clientes que ya disponen de un ecosistema o para ampliar puntos de contacto.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <!-- Expositor Suelto -->
-                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl overflow-hidden group hover:border-[#C57A36] hover:shadow-2xl transition duration-500 flex flex-col h-full relative">
-                    <div class="h-48 overflow-hidden relative bg-white cursor-pointer flex items-center justify-center p-3" onclick="abrirModalHardware('expositor')">
-                        <img src="expositor-real.png" alt="Expositor NFC" class="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-105 transition duration-500">
+                <!-- 1. Display Acrílico -->
+                <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
+                    <div>
+                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
+                            <img src="expositor-real.png" alt="Display Acrílico NFC" class="max-h-full max-w-full object-contain drop-shadow-md">
+                        </div>
+                        <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Mostrador</span>
+                        <h4 class="text-base font-bold text-white mt-1 mb-2">Display Acrílico Inclinado</h4>
+                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Soporte A6 biselado para barras y cajas con chip NFC integrado y QR grabado.</p>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow text-center">
-                        <h3 class="text-lg font-black text-zinc-900 mb-2 min-h-[3.5rem] flex items-center justify-center">Display Mostrador Acrílico</h3>
-                        <div class="mb-3">
-                            <span class="text-[#C57A36] text-[9px] font-bold uppercase tracking-widest bg-[#C57A36]/10 px-2 py-1 rounded">Hardware de Entrada</span>
-                        </div>
-                        <div class="mt-auto pt-4">
-                            <p class="text-[#C57A36] font-black text-2xl mb-4">49,00 €</p>
-                            <button onclick="abrirModalHardware('expositor')" class="block w-full text-center border-2 border-zinc-900 text-zinc-900 font-bold py-2 rounded-lg hover:bg-zinc-900 hover:text-white transition text-sm">
-                                Ampliar Detalles
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Llavero Suelto -->
-                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl overflow-hidden group hover:border-[#C57A36] hover:shadow-2xl transition duration-500 flex flex-col h-full">
-                    <div class="h-48 overflow-hidden relative bg-white cursor-pointer flex items-center justify-center p-3" onclick="abrirModalHardware('llavero')">
-                        <img src="llavero-real.png" alt="Llavero NFC" class="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-105 transition duration-500">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow text-center">
-                        <h3 class="text-lg font-black text-zinc-900 mb-2 min-h-[3.5rem] flex items-center justify-center">Llavero Smart NFC</h3>
-                        <div class="mb-3">
-                            <span class="text-zinc-500 text-[9px] font-bold uppercase tracking-widest bg-zinc-200 px-2 py-1 rounded">Expansión de Personal</span>
-                        </div>
-                        <div class="mt-auto pt-4">
-                            <p class="text-[#C57A36] font-black text-2xl mb-4">24,90 €</p>
-                            <button onclick="abrirModalHardware('llavero')" class="block w-full text-center border-2 border-zinc-900 text-zinc-900 font-bold py-2 rounded-lg hover:bg-zinc-900 hover:text-white transition text-sm">
-                                Ampliar Detalles
-                            </button>
-                        </div>
+                    <div>
+                        <div class="text-xl font-black text-white mb-3">49,00 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
+                        <button onclick="abrirModalHardware('expositor')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition">
+                            Ver Especificaciones
+                        </button>
                     </div>
                 </div>
 
-                <!-- Camiseta Suelta -->
-                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl overflow-hidden group hover:border-[#C57A36] hover:shadow-2xl transition duration-500 flex flex-col h-full">
-                    <div class="h-48 overflow-hidden relative bg-white cursor-pointer flex items-center justify-center p-3" onclick="abrirModalHardware('camiseta')">
-                        <img src="camiseta-real.png" alt="Camiseta NFC" class="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-105 transition duration-500">
+                <!-- 2. Llavero Smart -->
+                <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
+                    <div>
+                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
+                            <img src="llavero-real.png" alt="Llavero Cuero NFC" class="max-h-full max-w-full object-contain drop-shadow-md">
+                        </div>
+                        <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Personal de Sala</span>
+                        <h4 class="text-base font-bold text-white mt-1 mb-2">Llavero Cuero Smart NFC</h4>
+                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Acabado en piel cosida, impermeable y resistente a jornadas de alta rotación.</p>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow text-center">
-                        <h3 class="text-lg font-black text-zinc-900 mb-2 min-h-[3.5rem] flex items-center justify-center">Uniforme Smart Anti-Manchas</h3>
-                        <div class="mb-3">
-                            <span class="text-zinc-500 text-[9px] font-bold uppercase tracking-widest bg-zinc-200 px-2 py-1 rounded">Textil Tecnológico</span>
-                        </div>
-                        <div class="mt-auto pt-4">
-                            <p class="text-[#C57A36] font-black text-2xl mb-4">39,90 €</p>
-                            <button onclick="abrirModalHardware('camiseta')" class="block w-full text-center border-2 border-zinc-900 text-zinc-900 font-bold py-2 rounded-lg hover:bg-zinc-900 hover:text-white transition text-sm">
-                                Ampliar Detalles
-                            </button>
-                        </div>
+                    <div>
+                        <div class="text-xl font-black text-white mb-3">24,90 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
+                        <button onclick="abrirModalHardware('llavero')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition">
+                            Ver Especificaciones
+                        </button>
                     </div>
                 </div>
 
-                <!-- Welcome Pack VIP -->
-                <div class="bg-zinc-50 border border-zinc-200 rounded-2xl overflow-hidden group hover:border-[#C57A36] hover:shadow-2xl transition duration-500 flex flex-col h-full relative">
-                    <div class="absolute top-4 right-4 bg-zinc-900 text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full z-20">Regalo VIP</div>
-                    <div class="h-48 overflow-hidden relative bg-white cursor-pointer flex items-center justify-center p-3" onclick="abrirModalHardware('camisetacaja')">
-                        <img src="caja-real.png" alt="Caja Presentación NFC" class="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-105 transition duration-500">
+                <!-- 3. Tarjeta de Madera Noble -->
+                <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
+                    <div>
+                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
+                            <img src="caja-real.png" alt="Tarjeta Madera NFC" class="max-h-full max-w-full object-contain drop-shadow-md">
+                        </div>
+                        <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Networking VIP</span>
+                        <h4 class="text-base font-bold text-white mt-1 mb-2">Tarjeta Madera Noble NFC</h4>
+                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Madera natural grabada con chip invisible. Entrega tus datos de contacto con 1 toque.</p>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow text-center">
-                        <h3 class="text-lg font-black text-zinc-900 mb-2 min-h-[3.5rem] flex items-center justify-center">Welcome Pack: Caja Directivos</h3>
-                        <div class="mb-3">
-                            <span class="text-[#C57A36] text-[9px] font-bold uppercase tracking-widest bg-[#C57A36]/10 px-2 py-1 rounded">Alta Gama</span>
+                    <div>
+                        <div class="text-xl font-black text-white mb-3">39,90 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
+                        <button onclick="abrirModalHardware('tarjeta')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition">
+                            Ver Especificaciones
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Welcome Pack CEO -->
+                <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
+                    <div>
+                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
+                            <img src="caja-real.png" alt="Caja Directivos" class="max-h-full max-w-full object-contain drop-shadow-md">
                         </div>
-                        <div class="mt-auto pt-4">
-                            <p class="text-[#C57A36] font-black text-2xl mb-4">89,00 €</p>
-                            <button onclick="abrirModalHardware('camisetacaja')" class="block w-full text-center border-2 border-zinc-900 text-zinc-900 font-bold py-2 rounded-lg hover:bg-zinc-900 hover:text-white transition text-sm">
-                                Ampliar Detalles
-                            </button>
-                        </div>
+                        <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Edición Especial</span>
+                        <h4 class="text-base font-bold text-white mt-1 mb-2">Welcome Pack Directivos</h4>
+                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Caja rígida imantada con tarjeta de madera, display y dos llaveros de control.</p>
+                    </div>
+                    <div>
+                        <div class="text-xl font-black text-white mb-3">89,00 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
+                        <button onclick="abrirModalHardware('camisetacaja')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 transition">
+                            Ver Especificaciones
+                        </button>
                     </div>
                 </div>
 
@@ -438,192 +465,198 @@
         </div>
     </section>
 
-    <!-- PREGUNTAS FRECUENTES -->
-    <section id="faq" class="py-24 px-6 bg-zinc-50 border-t border-zinc-200 max-w-full">
+    <!-- EL ESTUDIO (MANUEL & MELINA) -->
+    <section id="estudio" class="py-24 px-6 max-w-6xl mx-auto border-t border-white/5">
+        <div class="text-center mb-16">
+            <span class="text-[#D4AF37] font-bold tracking-widest uppercase text-xs">Identidad Local</span>
+            <h2 class="font-display text-3xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">El Equipo Detrás de Studio 42</h2>
+            <p class="text-zinc-400 text-base font-light max-w-xl mx-auto">Ingeniería técnica y diseño visual con sede en Logroño.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <!-- Manuel -->
+            <div class="bg-[#10141E] border border-white/10 rounded-2xl p-8 text-center hover:border-[#D4AF37]/40 transition duration-300">
+                <img src="manuel.jpg" alt="Manuel - Estrategia Técnica" class="w-28 h-28 rounded-full mx-auto mb-6 object-cover border-2 border-[#D4AF37] shadow-lg">
+                <h3 class="text-2xl font-black text-white mb-1">Manuel Ortiz</h3>
+                <p class="text-[#D4AF37] font-bold tracking-widest uppercase text-[10px] mb-4">ESTRATEGIA TÉCNICA & OPERACIONES</p>
+                <p class="text-zinc-400 text-xs font-light leading-relaxed">
+                    Especialista en desarrollo web serverless, SEO Local y piloto de dron certificado por AESA. Coordino la arquitectura digital para que cada chip y redirección funcione con precisión absoluta en tu local.
+                </p>
+            </div>
+
+            <!-- Melina -->
+            <div class="bg-[#10141E] border border-white/10 rounded-2xl p-8 text-center hover:border-[#D4AF37]/40 transition duration-300">
+                <img src="melina.jpg" alt="Melina - Dirección de Arte" class="w-28 h-28 rounded-full mx-auto mb-6 object-cover border-2 border-[#D4AF37] shadow-lg">
+                <h3 class="text-2xl font-black text-white mb-1">Melina</h3>
+                <p class="text-[#D4AF37] font-bold tracking-widest uppercase text-[10px] mb-4">DIRECCIÓN DE ARTE & PACKAGING</p>
+                <p class="text-zinc-400 text-xs font-light leading-relaxed">
+                    Responsable del acabado estético y la presentación física del estudio. Cuido cada textura, empaque de lujo y combinación cromática para que el cliente perciba tu marca como un referente de distinción.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PREGUNTAS FRECUENTES Y BLINDAJE LEGAL -->
+    <section id="faq" class="py-24 px-6 bg-[#080B10] border-t border-white/5">
         <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl font-black text-center text-zinc-950 mb-4 tracking-tight">Resolvemos tus Dudas</h2>
-            <p class="text-center text-zinc-500 mb-16 text-lg font-light">Entiende cómo la tecnología puede multiplicar la facturación de tu local.</p>
-            
-            <div class="grid grid-cols-1 gap-6 md:gap-8">
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
-                    <h3 class="text-xl font-bold text-zinc-950 mb-3 flex items-start"><span class="text-[#C57A36] mr-3 font-black">01.</span> Mi local ya funciona bien, ¿por qué es tan importante Google Maps?</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed">Google Maps es el nuevo "boca a boca". Cuando alguien busca servicios o gastronomía en la zona, Google le muestra primero los locales con más y mejores reseñas. Si no estás arriba, ese cliente entra por la puerta de tu competencia. Nuestro sistema hace que tus clientes satisfechos te dejen 5 estrellas sin esfuerzo, catapultándote en el buscador para atraer clientes nuevos todos los días.</p>
+            <div class="text-center mb-16">
+                <span class="text-[#D4AF37] font-bold tracking-widest uppercase text-xs">Transparencia Total</span>
+                <h2 class="font-display text-3xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">Preguntas Frecuentes & Garantías</h2>
+            </div>
+
+            <div class="space-y-6 text-left">
+                <div class="bg-[#10141E] p-6 rounded-xl border border-white/5">
+                    <h3 class="text-base font-bold text-white mb-2 flex items-center gap-3">
+                        <span class="text-[#D4AF37]">01.</span> ¿Cómo funciona el canal de resolución rápida frente a las quejas?
+                    </h3>
+                    <p class="text-zinc-400 text-xs leading-relaxed font-light">
+                        El sistema prioriza la excelencia en el servicio. Al aproximar el smartphone, el cliente califica su experiencia. Quienes valoran con máxima satisfacción son guiados a tu ficha de Google Maps. Ante cualquier inconformidad, la pantalla despliega un canal de atención privada y directa con el encargado para solucionar el problema en el acto, cuidando la reputación pública de tu establecimiento conforme a la normativa vigente.
+                    </p>
                 </div>
 
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
-                    <h3 class="text-xl font-bold text-zinc-950 mb-3 flex items-start"><span class="text-[#C57A36] mr-3 font-black">02.</span> ¿Cómo funciona exactamente el Escudo contra quejas?</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed">Es tu filtro de seguridad. Al acercar el móvil a nuestro soporte, el cliente ve una pantalla. Si marca 4 o 5 estrellas, va directo a Google para premiarte. Si marca menos, la redirección pública se bloquea y se abre un formulario privado. Tú recibes una alerta inmediata y el sistema le abre un canal de atención directa. Así recuperas al cliente, le ofreces una solución y evitas la mancha pública.</p>
+                <div class="bg-[#10141E] p-6 rounded-xl border border-white/5">
+                    <h3 class="text-base font-bold text-white mb-2 flex items-center gap-3">
+                        <span class="text-[#D4AF37]">02.</span> ¿Qué ocurre si el teléfono del cliente no tiene NFC activado?
+                    </h3>
+                    <p class="text-zinc-400 text-xs leading-relaxed font-light">
+                        Nuestros displays y soportes físicos combinan la antena NFC de alta sensibilidad con un código QR dinámico de alta resolución. Basta con enfocar la cámara del móvil para acceder exactamente al mismo ecosistema, garantizando una cobertura del 100% de dispositivos.
+                    </p>
                 </div>
 
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
-                    <h3 class="text-xl font-bold text-zinc-950 mb-3 flex items-start"><span class="text-[#C57A36] mr-3 font-black">03.</span> ¿Es obligatorio ofrecer descuentos cuando un cliente se queja?</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed">En absoluto. Sabemos que cada negocio tiene sus normas y queremos proteger tu rentabilidad. El envío de bonos compensatorios es una herramienta 100% opcional. Si prefieres no ofrecer descuentos, puedes configurar el sistema para que envíe un mensaje profesional y cercano. Tú tienes el control total sobre cómo quieres cuidar a tus clientes.</p>
-                </div>
-
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
-                    <h3 class="text-xl font-bold text-zinc-950 mb-3 flex items-start"><span class="text-[#C57A36] mr-3 font-black">04.</span> ¿Cómo funcionan las licencias en la nube y las actualizaciones?</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed">Los dispositivos físicos e instalaciones de tu local son 100% de tu propiedad desde el primer día. Para mantener activa la plataforma inteligente (Escudo Anti-Críticas, control remoto de enlaces y servidor de alertas 24/7) el servicio incluye una pequeña suscripción cloud sin permanencia. Además, tu negocio tendrá acceso prioritario a las últimas actualizaciones de hardware y tecnología NFC que incorporemos cada año en Studio 42.</p>
-                </div>
-
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
-                    <h3 class="text-xl font-bold text-zinc-950 mb-3 flex items-start"><span class="text-[#C57A36] mr-3 font-black">05.</span> En horas punta mi personal no tiene tiempo. ¿Es un estorbo?</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed">Todo lo contrario. Está diseñado para no robar ni un segundo. El camarero o dependiente no tiene que explicar nada; el cliente simplemente acerca su móvil al soporte mientras espera la cuenta. Es un proceso rápido e invisible que trabaja para ti sin interrumpir el ritmo del local.</p>
-                </div>
-
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
-                    <h3 class="text-xl font-bold text-zinc-950 mb-3 flex items-start"><span class="text-[#C57A36] mr-3 font-black">06.</span> ¿Qué pasa si el móvil de mi cliente es antiguo y no tiene NFC?</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed">No hay ningún problema. Todos nuestros soportes físicos y tótems incluyen también un código QR elegante y visible. Si el cliente no tiene la tecnología NFC activada, simplemente enfoca con su cámara de fotos y el sistema funciona exactamente igual. Cubrimos el 100% de los teléfonos del mercado.</p>
-                </div>
-
-                <div class="bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
-                    <h3 class="text-xl font-bold text-zinc-950 mb-3 flex items-start"><span class="text-[#C57A36] mr-3 font-black">07.</span> ¿Tengo que daros las contraseñas de mi cuenta de Google?</h3>
-                    <p class="text-zinc-600 font-light leading-relaxed">Nunca. No necesitamos acceder a la privacidad de tus cuentas ni pedirte contraseñas. Nuestro sistema funciona enlazando de forma segura la ruta pública de tu negocio con nuestros servidores. Tú mantienes el control absoluto y la titularidad privada de tu perfil de Google en todo momento.</p>
+                <div class="bg-[#10141E] p-6 rounded-xl border border-white/5">
+                    <h3 class="text-base font-bold text-white mb-2 flex items-center gap-3">
+                        <span class="text-[#D4AF37]">03.</span> ¿Necesitáis mis contraseñas o acceso a mi cuenta de Google?
+                    </h3>
+                    <p class="text-zinc-400 text-xs leading-relaxed font-light">
+                        En ningún caso. Toda la conexión se realiza a través de las rutas públicas verificadas de tu negocio y nuestros servidores en la nube. Mantienes el control y la propiedad total de tus perfiles en todo momento.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CONTACTO WHATSAPP -->
-    <section id="contacto" class="py-24 px-6 bg-[#C57A36] text-white text-center">
-        <div class="max-w-2xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black mb-6 tracking-tight">¿Listo para elevar tu marca?</h2>
-            <p class="text-orange-100 mb-12 text-lg font-light">Escríbenos directamente. Analizamos el estado de tu negocio y te proponemos la mejor estrategia sin compromiso.</p>
+    <!-- CONTACTO DIRECTO POR WHATSAPP -->
+    <section id="contacto" class="py-24 px-6 bg-gradient-to-b from-[#07090E] to-[#121722] text-center border-t border-white/5">
+        <div class="max-w-3xl mx-auto">
+            <span class="text-[#D4AF37] font-bold tracking-widest uppercase text-xs">Contacto Directo</span>
+            <h2 class="font-display text-4xl md:text-5xl font-black text-white mt-2 mb-6 tracking-tight">¿Hablamos sobre tu local?</h2>
+            <p class="text-zinc-400 mb-10 text-base font-light leading-relaxed">
+                Agenda una visita técnica sin coste en tu negocio de Logroño o alrededores. Llevamos la caja de muestras y realizamos la prueba en vivo en tu propio mostrador.
+            </p>
             
-            <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20gustaría%20solicitar%20un%20análisis%20gratuito%20de%20mi%20negocio." target="_blank" class="inline-flex items-center justify-center gap-3 bg-zinc-950 text-white px-8 py-5 font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-zinc-950 transition duration-300 shadow-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
-                </svg>
-                Solicitar Análisis Gratuito
+            <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20gustaría%20agendar%20una%20demostración%20en%20mi%20local." target="_blank" class="btn-gold inline-flex items-center gap-3 px-9 py-4 rounded-full text-xs font-black uppercase tracking-widest shadow-2xl">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Solicitar Demostración en Mostrador</span>
             </a>
         </div>
     </section>
 
-    <!-- FOOTER Y SEO LOCAL -->
-    <footer class="bg-zinc-950 text-zinc-600 py-12 text-sm font-light border-t border-zinc-900">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+    <!-- FOOTER BOUTIQUE -->
+    <footer class="bg-[#05070A] text-zinc-500 py-12 text-xs border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-center md:text-left">
-                <p class="text-zinc-300 font-bold mb-2 uppercase tracking-widest text-xs">Studio 42</p>
-                <p>Calle Carmen Medrano 5</p>
-                <p>Logroño, La Rioja</p>
-                <p class="mt-2 text-[#C57A36] font-semibold">Identidad Inteligente y SEO Local</p>
+                <p class="text-white font-bold tracking-widest uppercase text-xs mb-1">Studio 42 | Identidad Inteligente</p>
+                <p class="text-zinc-500">Calle Carmen Medrano 5 · Logroño, La Rioja</p>
+                <p class="text-zinc-600 mt-1">Ecosistemas Phygital · SEO Local · Piloto Oficial UAS AESA</p>
             </div>
 
             <div class="text-center md:text-right">
-                <p class="mb-3">&copy; 2026 Studio 42. Todos los derechos reservados.</p>
-                <div class="flex flex-col sm:flex-row items-center justify-center md:justify-end gap-3 sm:gap-4">
-                    <a href="/talent/" class="text-[#C57A36] font-semibold hover:text-white transition duration-300">Programa de Closers (Talent)</a>
-                    <span class="hidden sm:inline text-zinc-800">|</span>
-                    <a href="privacidad.html" class="hover:text-white transition duration-300">Aviso Legal y Privacidad</a>
-                    <span class="hidden sm:inline text-zinc-800">|</span>
-                    <a href="cookies.html" class="hover:text-white transition duration-300">Política de Cookies</a>
+                <p class="text-zinc-500 mb-2">&copy; 2026 Studio 42. Todos los derechos reservados.</p>
+                <div class="flex gap-4 justify-center md:justify-end text-zinc-400">
+                    <a href="/talent/" class="hover:text-[#D4AF37] transition">Studio 42 Talent</a>
+                    <span>·</span>
+                    <a href="privacidad.html" class="hover:text-white transition">Privacidad</a>
+                    <span>·</span>
+                    <a href="cookies.html" class="hover:text-white transition">Cookies</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- MODAL INTERACTIVO HARDWARE NFC -->
-    <div id="modal-hardware" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col md:flex-row relative" id="modal-content-box">
-            <button onclick="cerrarModalHardware()" class="absolute top-4 right-4 z-10 bg-white/80 text-zinc-900 hover:text-red-500 w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold shadow-sm transition">
+    <!-- MODAL DE ESPECIFICACIONES DE HARDWARE -->
+    <div id="modal-hardware" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-[#0E121A] border border-[#D4AF37]/30 rounded-3xl w-full max-w-3xl overflow-hidden flex flex-col md:flex-row relative shadow-2xl" id="modal-content-box">
+            <button onclick="cerrarModalHardware()" class="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 text-white w-9 h-9 rounded-full flex items-center justify-center text-lg font-bold transition">
                 &times;
             </button>
 
-            <div class="w-full md:w-5/12 bg-zinc-50 relative flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-zinc-200">
-                <img id="modal-img" src="" alt="Hardware NFC" class="w-full h-64 md:h-full object-contain">
+            <div class="w-full md:w-1/2 bg-black/40 flex items-center justify-center p-8 border-b md:border-b-0 md:border-r border-white/5">
+                <img id="modal-img" src="" alt="Hardware NFC" class="max-h-64 object-contain drop-shadow-xl">
             </div>
 
-            <div class="w-full md:w-7/12 p-8 md:p-10 flex flex-col">
-                <div class="text-[#C57A36] font-bold tracking-widest uppercase text-xs mb-2">Hardware de Expansión</div>
-                <h3 id="modal-title" class="text-3xl font-black text-zinc-900 mb-2">Título</h3>
-                <p id="modal-price" class="text-2xl font-black text-zinc-800 mb-6 border-b border-zinc-200 pb-4">Precio</p>
-                <p id="modal-desc" class="text-zinc-600 font-light mb-6 leading-relaxed"></p>
-
-                <h4 class="font-bold text-zinc-900 mb-4 text-sm uppercase tracking-wide">¿Por qué incorporarlo a tu negocio?</h4>
-                <ul id="modal-features" class="space-y-4 mb-8 flex-grow"></ul>
-
-                <a id="modal-btn" href="#" target="_blank" class="w-full text-center bg-zinc-950 text-white hover:bg-[#C57A36] font-bold py-4 rounded-xl transition duration-300 uppercase tracking-wide text-sm shadow-lg shadow-zinc-950/20">
-                    Comprar Ahora
+            <div class="w-full md:w-1/2 p-8 flex flex-col justify-between">
+                <div>
+                    <span class="text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest">Ficha Técnica Oficial</span>
+                    <h3 id="modal-title" class="text-2xl font-black text-white mt-1 mb-2">Título</h3>
+                    <p id="modal-price" class="text-xl font-black text-[#D4AF37] mb-4 pb-3 border-b border-white/10">Precio</p>
+                    <p id="modal-desc" class="text-zinc-400 text-xs font-light leading-relaxed mb-6"></p>
+                    <ul id="modal-features" class="space-y-3 mb-6 text-xs text-zinc-300"></ul>
+                </div>
+                <a id="modal-btn" href="#" target="_blank" class="btn-gold w-full text-center py-3.5 rounded-xl text-xs font-black uppercase tracking-wider block">
+                    Pedir Vía WhatsApp
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT MULTI-VCARD Y TIENDA NFC -->
+    <!-- SCRIPT DE INTERACCIÓN -->
     <script>
-        // VCARD DINÁMICA DE SEGÚN REF NFC
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const ref = urlParams.get('ref');
-            
-            const btnVcard = document.getElementById('btn-vcard-dinamico');
-            const txtVcard = document.getElementById('txt-vcard-dinamico');
-
-            if (ref === 'melina' && btnVcard) {
-                btnVcard.href = "contacto-melina.vcf";
-                btnVcard.setAttribute("download", "Melina-Studio42.vcf");
-                if (txtVcard) txtVcard.innerText = "Contacto Directo";
-            }
-        });
-
-        // TIENDA / MODAL DE HARDWARE NFC
         const hardwareData = {
             'expositor': {
-                title: 'Display Mostrador Acrílico',
-                price: '49,00 €',
+                title: 'Display Acrílico Inclinado',
+                price: '49,00 € + IVA',
                 img: 'expositor-real.png',
-                desc: 'La forma más accesible de probar el potencial phygital en tu negocio. Este soporte de metacrilato A6 enlaza directamente con tu ficha de Google. Empieza a recolectar reseñas orgánicas hoy, y cuando estés listo, conéctalo a nuestro Ecosistema con Escudo Anti-Críticas.',
+                desc: 'Soporte de metacrilato transparente de alta densidad con chip NFC integrado y QR grabado. Diseñado para situarse frente a la caja o en la barra de atención sin ocupar espacio.',
                 features: [
-                    '<strong>🚀 Entrada sin cuotas:</strong> Prueba la tecnología con un único pago.',
-                    '<strong>💎 Material Premium:</strong> Acrílico cristalino resistente a caídas.',
-                    '<strong>🔄 Escalable:</strong> Totalmente compatible con nuestros Packs Integrales.'
+                    'Antena NFC NTAG213 de lectura ultra rápida a 2 cm.',
+                    'Acrílico cristalino biselado de 3 mm resistente a golpes.',
+                    'Enlace dinámico actualizable remotamente sin coste.'
                 ],
-                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20el%20Display%20Básico%20de%20Mostrador.'
+                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20solicitar%20el%20Display%20Acrílico.'
             },
             'llavero': {
-                title: 'Llavero Smart NFC',
-                price: '24,90 €',
+                title: 'Llavero Cuero Smart NFC',
+                price: '24,90 € + IVA',
                 img: 'llavero-real.png',
-                desc: 'Ideal para expandir el alcance de tu Ecosistema Studio 42 a nuevos empleados, o para directivos que desean una Tarjeta de Visita (VCard) moderna y sin papel. Un toque transfiere tu contacto o abre Google Maps al instante.',
+                desc: 'Accesorio en piel con pespunte perimetral reforzado. Diseñado para el personal de servicio o para el llavero corporativo de la gerencia.',
                 features: [
-                    '<strong>➕ Ampliación de Equipo:</strong> Dota a cada nuevo camarero de su propia herramienta.',
-                    '<strong>📇 VCard Directa:</strong> Perfecto para networking y entrega de contacto corporativo.',
-                    '<strong>💧 100% Impermeable:</strong> Sellado hermético para aguantar el ritmo de tu local.'
+                    'Sellado impermeable y resistencia al desgaste diario.',
+                    'Chip NFC protegido contra interferencias magnéticas.',
+                    'Ideal para solicitar valoraciones directamente en mesa.'
                 ],
-                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Necesito%20ampliar%20con%20Llaveros%20Smart%20NFC.'
+                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20Llaveros%20Smart%20de%20cuero.'
             },
-            'camiseta': {
-                title: 'Uniforme Smart Anti-Manchas',
-                price: '39,90 €',
-                img: 'camiseta-real.png',
-                desc: 'Eleva la presencia de tu equipo. Estas prendas textiles técnicas repelen los líquidos, manteniendo a tu staff impecable en horas pico. Incorporan un chip NFC lavable en la manga que sirve como punto de interacción extra para tu Ecosistema Digital.',
+            'tarjeta': {
+                title: 'Tarjeta Madera Noble NFC',
+                price: '39,90 € + IVA',
+                img: 'caja-real.png',
+                desc: 'Tarjeta de visita ejecutiva en madera natural con chip NFC embebido en el interior. Transmite la ficha de contacto vCard completa con un simple toque al teléfono de tu cliente.',
                 features: [
-                    '<strong>🛡️ Tecnología Anti-Manchas:</strong> Los líquidos resbalan evitando manchas accidentales.',
-                    '<strong>🧺 Chip Lavable:</strong> Resiste lavados industriales sin perder conexión.',
-                    '<strong>📲 Interacción Novedosa:</strong> Facilita que el cliente interactúe directo con el camarero.'
+                    'Madera sostenible tratada y pulida a mano.',
+                    'Reemplaza miles de tarjetas de papel tradicionales.',
+                    'Actualización de número, email o web sin cambiar de tarjeta.'
                 ],
-                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20información%20sobre%20los%20Uniformes%20NFC.'
+                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20la%20Tarjeta%20de%20Madera%20NFC.'
             },
             'camisetacaja': {
-                title: 'Welcome Pack: Caja Directivos',
-                price: '89,00 €',
+                title: 'Welcome Pack Directivos',
+                price: '89,00 € + IVA',
                 img: 'caja-real.png',
-                desc: 'El detalle corporativo definitivo. Diseñado para deslumbrar a socios o nuevos franquiciados. Presentado en una caja rígida premium, incluye una Tarjeta NFC Metálica exclusiva para el propietario y dos llaveros de control para encargados.',
+                desc: 'Caja rígida imantada con acabado mate antihuellas y acolchado troquelado. Incluye una tarjeta de madera noble grabada, display acrílico de sobremesa y dos llaveros de cuero.',
                 features: [
-                    '<strong>💳 Tarjeta Executive Metálica:</strong> Posicionamiento de alto nivel para el gerente.',
-                    '<strong>🎁 Unboxing Boutique:</strong> Espuma troquelada, cierre magnético y branding en estampación.',
-                    '<strong>🤝 Regalo Empresarial:</strong> La presentación perfecta para sellar grandes acuerdos comerciales.'
+                    'Cierre magnético de precisión y presentación boutique.',
+                    'Equipamiento completo para punto físico y networking.',
+                    'Entrega lista para su uso sin necesidad de instalación técnica.'
                 ],
                 whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20el%20Welcome%20Pack%20CEO.'
             }
         };
 
         const modal = document.getElementById('modal-hardware');
-        const contentBox = document.getElementById('modal-content-box');
-        const body = document.body;
 
-        function abrirModalHardware(idProducto) {
-            const data = hardwareData[idProducto];
-            if(!data) return;
+        function abrirModalHardware(id) {
+            const data = hardwareData[id];
+            if (!data) return;
 
             document.getElementById('modal-title').innerText = data.title;
             document.getElementById('modal-price').innerText = data.price;
@@ -633,20 +666,20 @@
 
             const ul = document.getElementById('modal-features');
             ul.innerHTML = '';
-            data.features.forEach(func => {
+            data.features.forEach(feat => {
                 const li = document.createElement('li');
-                li.className = "flex items-start gap-3 text-zinc-700 font-light text-sm";
-                li.innerHTML = `<span class="text-[#C57A36] font-bold mt-1">✓</span> <span>${func}</span>`;
+                li.className = 'flex items-center gap-2';
+                li.innerHTML = '<i class="fa-solid fa-circle-check text-[#D4AF37] text-xs"></i><span>' + feat + '</span>';
                 ul.appendChild(li);
             });
 
             modal.classList.remove('opacity-0', 'pointer-events-none');
-            body.classList.add('modal-open');
+            document.body.classList.add('modal-open');
         }
 
         function cerrarModalHardware() {
             modal.classList.add('opacity-0', 'pointer-events-none');
-            body.classList.remove('modal-open');
+            document.body.classList.remove('modal-open');
         }
 
         modal.addEventListener('click', function(e) {
