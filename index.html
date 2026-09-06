@@ -52,7 +52,6 @@
             background-size: 28px 28px;
         }
 
-        /* Gradiente de alto brillo plateado reflectante */
         .text-silver-gradient {
             background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 40%, #E2E8F0 70%, #CBD5E1 100%);
             -webkit-background-clip: text;
@@ -86,7 +85,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
-        /* Botón Platino Metalizado */
         .btn-silver {
             background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%);
             color: #07080B;
@@ -102,7 +100,6 @@
             filter: brightness(1.08);
         }
 
-        /* Botón vCard Cristal Holográfico */
         .btn-vcard-cyber {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.04) 100%);
             border: 1px solid rgba(196, 196, 196, 0.5);
@@ -117,6 +114,15 @@
             transform: translateY(-1px);
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
         details summary::-webkit-details-marker { display: none; }
         details summary { list-style: none; }
         details[open] summary .faq-chevron { transform: rotate(180deg); color: #FFFFFF; }
@@ -128,13 +134,15 @@
 
 <body class="bg-grid-tech selection:bg-[#C4C4C4] selection:text-black">
 
+    <!-- NAVEGACIÓN BOUTIQUE CON LOGO DESTACADO Y NOTABLE -->
     <nav class="bg-[#07080B]/95 backdrop-blur-2xl fixed w-full z-40 top-0 border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.95)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex justify-between items-center min-h-[78px] md:min-h-[105px]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex justify-between items-center min-h-[85px] sm:min-h-[95px] md:min-h-[110px]">
             
+            <!-- LOGO NOTABLE (ESCALA AJUSTADA) -->
             <a href="/" class="flex items-center shrink-0 group py-1">
                 <img src="studio42-logo.png" 
                      alt="Studio 42 - Identidad Inteligente" 
-                     class="h-14 sm:h-20 md:h-24 w-auto max-w-[180px] sm:max-w-[260px] md:max-w-none object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.95)] group-hover:scale-105 transition-all duration-300"/>
+                     class="h-16 sm:h-20 md:h-24 lg:h-28 w-auto max-w-[210px] sm:max-w-[290px] md:max-w-none object-contain drop-shadow-[0_8px_22px_rgba(0,0,0,0.95)] scale-110 sm:scale-105 origin-left group-hover:scale-115 transition-all duration-300"/>
             </a>
             
             <div class="hidden xl:flex space-x-7 font-semibold text-xs tracking-widest text-zinc-400 uppercase items-center mr-8">
@@ -163,7 +171,8 @@
         </div>
     </nav>
 
-    <header class="relative pt-32 sm:pt-44 md:pt-52 pb-16 px-4 sm:px-6 text-center overflow-hidden">
+    <!-- HERO SECTION -->
+    <header class="relative pt-36 sm:pt-44 md:pt-52 pb-16 px-4 sm:px-6 text-center overflow-hidden">
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[550px] h-[250px] bg-[#C4C4C4]/15 blur-[100px] rounded-full pointer-events-none"></div>
 
         <div class="max-w-5xl mx-auto relative z-10">
@@ -212,10 +221,11 @@
             </div>
         </div>
 
-        <div class="max-w-3xl mx-auto mt-12 relative w-full px-2">
+        <!-- WELCOME PACK (AJUSTADO EN ESCRITORIO SIN RECORTES) -->
+        <div class="max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto mt-12 relative w-full px-4 sm:px-6">
             <div class="card-silver-premium p-3 sm:p-5 flex flex-col items-center">
-                <div class="w-full max-h-[340px] sm:max-h-[420px] rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 flex items-center justify-center">
-                    <img src="caja-real.png" alt="Welcome Pack Studio 42" class="w-full h-full object-contain object-center drop-shadow-2xl">
+                <div class="w-full h-auto max-h-[320px] sm:max-h-[380px] md:max-h-[440px] rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 flex items-center justify-center p-2">
+                    <img src="caja-real.png" alt="Welcome Pack Studio 42" class="w-full h-auto max-h-full object-contain object-center drop-shadow-2xl">
                 </div>
                 <div class="w-full mt-4 pt-3 sm:pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center text-left text-xs text-zinc-400 gap-3">
                     <div class="flex items-center gap-3">
@@ -432,7 +442,7 @@
 
                         <ul class="space-y-3.5 text-zinc-300 text-xs font-light mb-8">
                             <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Micro-Tour Cinematográfico con Dron AESA:</strong> Grabación aérea de interior y fachada optimizada para Google Maps e Instagram.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Welcome Pack Ejecutivo VIP:</strong> Caja rígida imantada con acabado mate y tarjeta en madera grabada.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Welcome Pack VIP:</strong> Caja ejecutiva imantada + Tarjeta de madera noble grabada.</span></li>
                             <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>2 Displays Acrílicos:</strong> Cobertura simultánea para la puerta de entrada y caja de cobro.</span></li>
                             <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>25 Llaveros Smart NFC NTAG216:</strong> Dotación total para flotas de personal y atención en exteriores.</span></li>
                             <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Centro de Mando Personalizado:</strong> Landing multi-utilidad conectada a la nube serverless con Escudo Activo.</span></li>
@@ -749,7 +759,6 @@
     </div>
 
     <script>
-        // CONTROL FLOTANTE INTELIGENTE (NO TAPA EL FOOTER)
         const stickyCta = document.getElementById('sticky-cta');
         const footerSite = document.getElementById('footer-site');
 
@@ -757,16 +766,13 @@
             const footerRect = footerSite.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
 
-            // Si ha bajado más de 300px Y la parte superior del footer aún no entra en pantalla
             if (window.scrollY > 300 && footerRect.top > (viewportHeight - 20)) {
                 stickyCta.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
             } else {
-                // Al llegar al footer o volver arriba se oculta suavemente
                 stickyCta.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
             }
         });
 
-        // SIMULADOR DEMO INTERACTIVA
         function testDemo(stars) {
             const starsContainer = document.querySelectorAll('#demo-stars i');
             const output = document.getElementById('demo-output');
@@ -798,7 +804,6 @@
             }
         }
 
-        // CALCULADORA ROI
         const sliderClientes = document.getElementById('slider-clientes');
         const labelClientes = document.getElementById('label-clientes');
         const calcResenas = document.getElementById('calc-resenas');
@@ -826,7 +831,6 @@
             });
         }
 
-        // HARDWARE DATA MODAL (NTAG216 ACTUALIZADO)
         const hardwareData = {
             'expositor': {
                 title: 'Display Acrílico Inclinado',
