@@ -110,11 +110,11 @@
 
 <body class="bg-grid-tech selection:bg-[#D4AF37] selection:text-black">
 
-    <!-- NAVEGACIÓN BOUTIQUE -->
+    <!-- NAVEGACIÓN BOUTIQUE (LOGO CON RETORNO DIRECTO AL INICIO) -->
     <nav class="bg-[#07090E]/95 backdrop-blur-2xl fixed w-full z-40 top-0 border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center min-h-[95px] md:min-h-[120px]">
             
-            <a href="/" class="flex items-center shrink-0 group py-1">
+            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex items-center shrink-0 group py-1 cursor-pointer">
                 <img src="studio42-logo.png" 
                      alt="Studio 42 - Identidad Inteligente" 
                      class="h-20 sm:h-24 md:h-28 lg:h-32 w-auto max-w-[240px] sm:max-w-[320px] md:max-w-none object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.95)] group-hover:scale-105 transition-all duration-300"/>
@@ -196,10 +196,12 @@
             </div>
         </div>
 
-        <!-- PRODUCTO REAL FÍSICO -->
+        <!-- PRODUCTO REAL FÍSICO HERO (IMAGEN AMPLIA SIN BORDES VACÍOS) -->
         <div class="max-w-4xl mx-auto mt-14 relative w-full">
             <div class="card-gold-premium p-3 sm:p-5 md:p-6 flex flex-col items-center">
-                <img src="caja-real.png" alt="Welcome Pack Studio 42" class="rounded-xl sm:rounded-2xl w-full max-h-[460px] object-cover object-center shadow-2xl">
+                <div class="w-full h-[320px] sm:h-[460px] md:h-[520px] rounded-xl sm:rounded-2xl overflow-hidden relative shadow-2xl bg-black">
+                    <img src="caja-real.png" alt="Welcome Pack Studio 42" class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700">
+                </div>
                 <div class="w-full mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center text-left text-xs text-zinc-400 gap-3">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] shrink-0">
@@ -436,7 +438,7 @@
         </div>
     </section>
 
-    <!-- HARDWARE DE EXPANSIÓN (PIEZAS SUELTAS) -->
+    <!-- HARDWARE DE EXPANSIÓN (PIEZAS SUELTAS) CON ENCUADRE CORREGIDO -->
     <section id="hardware" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#0A0D14] border-t border-white/5">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-14 sm:mb-16">
@@ -450,8 +452,8 @@
                 <!-- 1. Display Acrílico -->
                 <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
                     <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
-                            <img src="expositor-real.png" alt="Display Acrílico NFC" class="max-h-full max-w-full object-contain drop-shadow-md">
+                        <div class="h-56 bg-black/60 rounded-xl mb-4 flex items-center justify-center p-3 border border-white/5 overflow-hidden">
+                            <img src="expositor-real.png" alt="Display Acrílico NFC" class="w-full h-full object-contain drop-shadow-md">
                         </div>
                         <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Mostrador</span>
                         <h4 class="text-base font-bold text-white mt-1 mb-2">Display Acrílico Inclinado</h4>
@@ -468,8 +470,8 @@
                 <!-- 2. Llavero Smart -->
                 <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
                     <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
-                            <img src="llavero-real.png" alt="Llavero Cuero NFC" class="max-h-full max-w-full object-contain drop-shadow-md">
+                        <div class="h-56 bg-black/60 rounded-xl mb-4 flex items-center justify-center p-3 border border-white/5 overflow-hidden">
+                            <img src="llavero-real.png" alt="Llavero Cuero NFC" class="w-full h-full object-contain drop-shadow-md">
                         </div>
                         <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Personal de Sala</span>
                         <h4 class="text-base font-bold text-white mt-1 mb-2">Llavero Cuero Smart NFC</h4>
@@ -483,15 +485,16 @@
                     </div>
                 </div>
 
-                <!-- 3. Tarjeta de Madera Noble -->
+                <!-- 3. Tarjeta de Madera Noble (Plano Detalle / Zoom) -->
                 <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
                     <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
-                            <img src="caja-real.png" alt="Tarjeta Madera NFC" class="max-h-full max-w-full object-contain drop-shadow-md">
+                        <div class="h-56 bg-gradient-to-b from-[#141A28] to-black rounded-xl mb-4 border border-white/5 overflow-hidden relative group">
+                            <img src="caja-real.png" alt="Tarjeta Madera NFC" class="w-full h-full object-cover object-[center_65%] scale-125 group-hover:scale-135 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black/20 pointer-events-none"></div>
                         </div>
                         <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Networking VIP</span>
                         <h4 class="text-base font-bold text-white mt-1 mb-2">Tarjeta Madera Noble NFC</h4>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Madera natural grabada con chip invisible. Entrega tus datos de contacto con 1 toque.</p>
+                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Madera natural tratada con chip invisible integrado. Transmite tu contacto con 1 toque.</p>
                     </div>
                     <div>
                         <div class="text-xl font-black text-white mb-3">39,90 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
@@ -501,15 +504,16 @@
                     </div>
                 </div>
 
-                <!-- 4. Welcome Pack CEO -->
+                <!-- 4. Welcome Pack CEO (Caja Completa Llena el Marco) -->
                 <div class="bg-[#10141E] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#D4AF37]/50 transition duration-300">
                     <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5">
-                            <img src="caja-real.png" alt="Caja Directivos" class="max-h-full max-w-full object-contain drop-shadow-md">
+                        <div class="h-56 bg-gradient-to-b from-[#141A28] to-black rounded-xl mb-4 border border-white/5 overflow-hidden relative group">
+                            <img src="caja-real.png" alt="Caja Directivos" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black/10 pointer-events-none"></div>
                         </div>
                         <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest">Edición Especial</span>
                         <h4 class="text-base font-bold text-white mt-1 mb-2">Welcome Pack Directivos</h4>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Caja rígida imantada con tarjeta de madera, display y dos llaveros de control.</p>
+                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Caja rígida imantada de colección con tarjeta de madera, display y dos llaveros de control.</p>
                     </div>
                     <div>
                         <div class="text-xl font-black text-white mb-3">89,00 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
@@ -717,7 +721,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE ESPECIFICACIONES DE HARDWARE (AJUSTADO VISUALMENTE) -->
+    <!-- MODAL DE ESPECIFICACIONES DE HARDWARE (ENCUADRE COMPLETO Y ALTO RENDIMIENTO) -->
     <div id="modal-hardware" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-[#0E121A] border border-[#D4AF37]/40 rounded-3xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row relative shadow-[0_25px_60px_rgba(0,0,0,0.95)]" id="modal-content-box">
             
@@ -725,10 +729,10 @@
                 &times;
             </button>
 
-            <!-- CONTENEDOR DE IMAGEN DESTACADA CON HALO DORADO -->
-            <div class="w-full md:w-1/2 bg-gradient-to-b from-[#141A28] to-[#080B11] flex items-center justify-center p-4 sm:p-8 border-b md:border-b-0 md:border-r border-white/10 relative overflow-hidden min-h-[280px] sm:min-h-[380px]">
-                <div class="absolute w-56 h-56 bg-[#D4AF37]/20 rounded-full blur-3xl pointer-events-none"></div>
-                <img id="modal-img" src="" alt="Hardware NFC" class="relative z-10 w-full h-full max-h-[340px] sm:max-h-[420px] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)]">
+            <!-- IMAGEN DEL MODAL CON COBERTURA COMPLETA -->
+            <div class="w-full md:w-1/2 bg-gradient-to-b from-[#141A28] to-[#080B11] flex items-center justify-center p-0 border-b md:border-b-0 md:border-r border-white/10 relative overflow-hidden min-h-[300px] sm:min-h-[420px]">
+                <div class="absolute w-64 h-64 bg-[#D4AF37]/20 rounded-full blur-3xl pointer-events-none"></div>
+                <img id="modal-img" src="" alt="Hardware NFC" class="relative z-10 w-full h-full object-cover object-center max-h-[340px] sm:max-h-[460px]">
             </div>
 
             <!-- CONTENIDO DESCRIPTIVO -->
@@ -749,6 +753,12 @@
 
     <!-- SCRIPT DE INTERACCIÓN, DEMO Y CALCULADORA -->
     <script>
+        // RESET DE SCROLL AL RECARGAR
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
         // BARRA FLOTANTE AL HACER SCROLL
         const stickyCta = document.getElementById('sticky-cta');
         window.addEventListener('scroll', () => {
@@ -819,12 +829,13 @@
             });
         }
 
-        // HARDWARE DATA MODAL
+        // HARDWARE DATA MODAL (CONFIGURACIÓN DE ENCUADRE ESPECÍFICO)
         const hardwareData = {
             'expositor': {
                 title: 'Display Acrílico Inclinado',
                 price: '49,00 € + IVA',
                 img: 'expositor-real.png',
+                fit: 'object-contain p-6',
                 desc: 'Soporte de metacrilato transparente de alta densidad con chip NFC integrado y QR grabado. Diseñado para situarse frente a la caja o en la barra de atención sin ocupar espacio.',
                 features: [
                     'Antena NFC NTAG213 de lectura ultra rápida a 2 cm.',
@@ -837,6 +848,7 @@
                 title: 'Llavero Cuero Smart NFC',
                 price: '24,90 € + IVA',
                 img: 'llavero-real.png',
+                fit: 'object-contain p-6',
                 desc: 'Accesorio en piel con pespunte perimetral reforzado. Diseñado para el personal de servicio o para el llavero corporativo de la gerencia.',
                 features: [
                     'Sellado impermeable y resistencia al desgaste diario.',
@@ -849,6 +861,7 @@
                 title: 'Tarjeta Madera Noble NFC',
                 price: '39,90 € + IVA',
                 img: 'caja-real.png',
+                fit: 'object-cover object-[center_65%] scale-125',
                 desc: 'Tarjeta de visita ejecutiva en madera natural con chip NFC embebido en el interior. Transmite la ficha de contacto vCard completa con un simple toque al teléfono de tu cliente.',
                 features: [
                     'Madera sostenible tratada y pulida a mano.',
@@ -861,6 +874,7 @@
                 title: 'Welcome Pack Directivos',
                 price: '89,00 € + IVA',
                 img: 'caja-real.png',
+                fit: 'object-cover object-center',
                 desc: 'Caja rígida imantada con acabado mate antihuellas y acolchado troquelado. Incluye una tarjeta de madera noble grabada, display acrílico de sobremesa y dos llaveros de cuero.',
                 features: [
                     'Cierre magnético de precisión y presentación boutique.',
@@ -872,6 +886,7 @@
         };
 
         const modal = document.getElementById('modal-hardware');
+        const modalImg = document.getElementById('modal-img');
 
         function abrirModalHardware(id) {
             const data = hardwareData[id];
@@ -880,7 +895,10 @@
             document.getElementById('modal-title').innerText = data.title;
             document.getElementById('modal-price').innerText = data.price;
             document.getElementById('modal-desc').innerText = data.desc;
-            document.getElementById('modal-img').src = data.img;
+            
+            modalImg.src = data.img;
+            modalImg.className = `relative z-10 w-full h-full max-h-[340px] sm:max-h-[460px] transition-all duration-300 ${data.fit}`;
+            
             document.getElementById('modal-btn').href = data.whatsapp;
 
             const ul = document.getElementById('modal-features');
