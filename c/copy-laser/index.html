@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Copy Laser | Identidad Inteligente</title>
+    <title>Copy Laser | Hub Phygital de Impresión</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -15,9 +17,16 @@
                 extend: {
                     fontFamily: { sans: ['Montserrat', 'sans-serif'] },
                     colors: {
-                        marcaPrincipal: '#FACC15',
-                        fondoClaro: '#F8F9FA',
-                        textoOscuro: '#1F2937',
+                        laserYellow: '#FACC15',
+                        laserHover: '#EAB308',
+                        techDark: '#0E1117',
+                        cardSurface: '#FFFFFF',
+                        borderMuted: '#E5E7EB'
+                    },
+                    boxShadow: {
+                        'neon-subtle': '0 4px 20px -2px rgba(250, 204, 21, 0.28)',
+                        'neon-active': '0 0 25px rgba(250, 204, 21, 0.45)',
+                        'card-soft': '0 10px 30px -5px rgba(0, 0, 0, 0.04)'
                     }
                 }
             }
@@ -25,138 +34,228 @@
     </script>
     
     <style>
-        .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
-        .star-rating i:active { transform: scale(1.25); }
-        .star-active { color: #FACC15; }
-        .star-inactive { color: #D1D5DB; }
+        * { -webkit-tap-highlight-color: transparent; }
+        
+        .glow-hover {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glow-hover:active {
+            transform: scale(0.985);
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.4);
+        }
 
-        /* Estilos del Modal Empático (Shield Anti-Reseñas) */
-        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-box { background: #1C1C1E; border: 1px solid #FACC15; border-radius: 24px; padding: 25px; max-width: 350px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s ease; color: white; }
-        .modal-icon { font-size: 2.5rem; margin-bottom: 12px; color: #FACC15; }
-        .modal-title { font-size: 1.1rem; font-weight: 800; color: #FACC15; margin-bottom: 10px; text-transform: uppercase; }
-        .modal-text { font-size: 0.85rem; color: #DDD; line-height: 1.5; margin-bottom: 20px; }
-        .modal-btn { background: #FACC15; color: #000; font-weight: 800; padding: 12px 25px; border-radius: 50px; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; transition: 0.2s; display: inline-block; width: 100%; border: none; }
-        .modal-btn:active { transform: scale(0.95); }
+        .star-item {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.15s ease;
+        }
+        .star-item:active {
+            transform: scale(1.35) rotate(-6deg);
+        }
+
+        /* Modal Glassmorphism de Resolución Rápida */
+        #modal-overlay {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease-out;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        #modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
     </style>
 </head>
 
-<body class="bg-fondoClaro min-h-screen flex flex-col items-center justify-center p-6 text-textoOscuro select-none">
+<body class="bg-[#F6F8FA] min-h-screen flex flex-col items-center justify-between p-5 text-gray-800 antialiased select-none">
 
-    <!-- Modal Shield Anti-Reseñas -->
-    <div id="modal-overlay">
-        <div class="modal-box" id="modal-content">
-            <div class="modal-icon"><i class="fa-solid fa-handshake-angle"></i></div>
-            <div class="modal-title">Sentimos no haber cumplido tus expectativas</div>
-            <div class="modal-text">
-                Tu experiencia es lo más importante para nosotros. Queremos escuchar lo sucedido y darte una solución directa.<br><br>
-                Te redirigimos al <b>WhatsApp de dirección</b> para atenderte de forma prioritaria.
+    <!-- Modal Empático / Canal de Resolución Rápida (Ómnibus Compliant) -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 justify-center items-center p-4">
+        <div class="bg-[#12151B] border border-laserYellow/40 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl relative">
+            <div class="w-14 h-14 bg-laserYellow/10 border border-laserYellow/30 text-laserYellow rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fa-solid fa-headset"></i>
             </div>
-            <button class="modal-btn" id="modal-action-btn">Continuar a WhatsApp</button>
+            <h3 class="text-base font-extrabold text-white uppercase tracking-wider mb-2">Canal Prioritario de Dirección</h3>
+            <p class="text-xs text-gray-300 leading-relaxed mb-5">
+                Tu experiencia en mostrador es vital. Queremos resolver al instante cualquier incidencia directamente con gerencia antes de que salgas del local.
+            </p>
+            
+            <button id="modal-wa-btn" class="w-full py-3.5 px-4 bg-laserYellow hover:bg-laserHover text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-neon-subtle mb-3 active:scale-95">
+                Contactar por WhatsApp Directo
+            </button>
+            
+            <!-- Salida legal no restrictiva -->
+            <button onclick="continuarAGoogle()" class="text-[11px] text-gray-400 underline hover:text-gray-200 transition">
+                Prefiero valorar directamente en Google Maps
+            </button>
         </div>
     </div>
 
-    <!-- Cabecera -->
-    <header class="w-full max-w-sm flex flex-col items-center mb-6 text-center">
-        <img src="logo.jpg" alt="Copy Laser Logo" class="h-28 object-contain mb-3" onerror="this.onerror=null; this.src='logo.png';">
-        <h1 class="text-3xl font-extrabold tracking-tight uppercase text-black">COPY LASER</h1>
-        <p class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mt-1">Imprimiendo desde 1987</p>
-    </header>
+    <!-- Contenedor Central Limitado -->
+    <div class="w-full max-w-sm flex flex-col items-center flex-1 justify-center">
 
-    <!-- Menú Principal de Acciones -->
-    <main class="w-full max-w-sm flex flex-col gap-4">
-        
-        <div class="text-xs font-bold uppercase tracking-wider text-gray-400 ml-1">Enviar documentos a tienda</div>
-
-        <!-- Botón WhatsApp Directo -->
-        <a href="https://wa.me/34646546315?text=Hola,%20estoy%20en%20el%20mostrador%20y%20quiero%20imprimir%20estos%20archivos:" 
-           target="_blank"
-           class="flex items-center justify-between w-full py-4 px-6 rounded-2xl shadow-md bg-marcaPrincipal text-black font-extrabold uppercase text-xs tracking-wide transition-all active:scale-95 border border-amber-400">
-            <div class="flex items-center">
-                <i class="fa-brands fa-whatsapp text-2xl mr-3 text-black"></i>
-                <div class="flex flex-col text-left">
-                    <span>Imprimir por WhatsApp</span>
-                    <span class="text-[10px] lowercase font-normal opacity-80">Adjunta tus documentos en el chat</span>
-                </div>
+        <!-- Cabecera de Marca -->
+        <header class="w-full flex flex-col items-center mb-6 text-center">
+            <div class="relative mb-3">
+                <div class="absolute -inset-1.5 bg-laserYellow/20 rounded-full blur-sm"></div>
+                <img src="logo.jpg" alt="Copy Laser" class="relative h-24 object-contain rounded-xl" onerror="this.onerror=null; this.src='logo.png';">
             </div>
-            <i class="fa-solid fa-chevron-right text-black/50 text-xs"></i>
-        </a>
-
-        <!-- Botón Email Directo -->
-        <a href="mailto:copylaser@copylaser.com?subject=Archivos%20para%20imprimir" 
-           class="flex items-center justify-between w-full py-4 px-6 rounded-2xl shadow-sm bg-white border border-gray-200 text-textoOscuro font-bold uppercase text-xs tracking-wide transition-all active:scale-95">
-            <div class="flex items-center">
-                <i class="fa-regular fa-envelope text-xl mr-3 text-gray-400"></i>
-                <div class="flex flex-col text-left">
-                    <span>Enviar por Email</span>
-                    <span class="text-[10px] text-gray-400 lowercase font-normal">copylaser@copylaser.com</span>
-                </div>
-            </div>
-            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
-        </a>
-
-        <div class="w-full border-t border-gray-200 my-2"></div>
-
-        <!-- Bloque interactivo de las 5 Estrellas -->
-        <div class="w-full flex flex-col items-center bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-center">
-            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">¿Te hemos atendido bien?</p>
-            <p class="text-[11px] text-gray-400 mb-3">Valora tu experiencia con nosotros</p>
             
-            <div class="flex justify-center gap-2 text-3xl star-rating mb-2" id="escudo-estrellas">
-                <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(1)"></i>
-                <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(2)"></i>
-                <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(3)"></i>
-                <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(4)"></i>
-                <i class="fa-solid fa-star star-inactive" onclick="procesarResenaReal(5)"></i>
+            <div class="flex items-center gap-2">
+                <h1 class="text-2xl font-black tracking-tight uppercase text-gray-900">COPY LASER</h1>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-laserYellow text-black">PHYGITAL</span>
             </div>
-        </div>
+            
+            <p class="text-[11px] font-bold tracking-[0.25em] text-gray-400 uppercase mt-1">Imprimiendo desde 1987</p>
+        </header>
 
-    </main>
+        <!-- Bloque de Acciones Principales -->
+        <main class="w-full flex flex-col gap-3.5">
+            
+            <div class="flex items-center justify-between px-1">
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-gray-400">Canales de Impresión</span>
+                <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Mostrador Activo
+                </span>
+            </div>
 
-    <!-- Pie de página de marca -->
-    <footer class="mt-8 text-center text-[10px] text-gray-400 font-semibold tracking-widest uppercase">
-        Desarrollado por <span class="text-black font-extrabold">Studio 42</span>
+            <!-- Botón WhatsApp Phygital con selector rápido -->
+            <div class="w-full bg-cardSurface rounded-2xl border border-borderMuted p-4 shadow-card-soft relative overflow-hidden group">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center text-xl">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-black uppercase text-gray-900">Impresión por WhatsApp</div>
+                            <div class="text-[10px] text-gray-400">Atención ágil en mostrador</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input transparente para precargar archivo si el cliente quiere -->
+                <input type="file" id="filePicker" class="hidden" onchange="archivoSeleccionado(this)">
+                
+                <div class="flex gap-2">
+                    <button onclick="enviarDirectoWhatsApp()" 
+                            class="flex-1 py-3 px-4 bg-laserYellow hover:bg-laserHover text-black rounded-xl font-extrabold text-[11px] uppercase tracking-wider transition glow-hover shadow-neon-subtle flex items-center justify-center gap-2">
+                        <span>Abrir Chat Directo</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                    <button onclick="document.getElementById('filePicker').click()" 
+                            title="Seleccionar documento" 
+                            class="p-3 border border-borderMuted hover:border-laserYellow/80 rounded-xl text-gray-500 hover:text-black transition">
+                        <i class="fa-solid fa-paperclip text-sm"></i>
+                    </button>
+                </div>
+                <div id="fileFeedback" class="text-[10px] text-gray-500 font-medium mt-2 hidden text-center truncate"></div>
+            </div>
+
+            <!-- Botón Email -->
+            <a href="mailto:copylaser@copylaser.com?subject=Archivos%20para%20imprimir" 
+               class="flex items-center justify-between w-full py-3.5 px-5 rounded-2xl bg-cardSurface border border-borderMuted shadow-card-soft transition hover:border-gray-300 active:scale-98">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gray-100 text-gray-600 flex items-center justify-center text-sm">
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                    <div class="flex flex-col text-left">
+                        <span class="text-xs font-bold uppercase text-gray-800">Enviar por Correo</span>
+                        <span class="text-[10px] text-gray-400">copylaser@copylaser.com</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+            </a>
+
+            <!-- Módulo de Reseñas / Calificación Dinámica -->
+            <div class="w-full bg-cardSurface p-5 rounded-2xl border border-borderMuted shadow-card-soft text-center mt-1">
+                <p class="text-[11px] font-extrabold text-gray-500 uppercase tracking-wider mb-1">¿Cómo ha sido tu experiencia hoy?</p>
+                <p class="text-[10px] text-gray-400 mb-3">Tu opinión nos ayuda a optimizar el servicio</p>
+                
+                <div class="flex justify-center gap-2.5 text-3xl mb-1" id="starsContainer">
+                    <i class="fa-solid fa-star text-gray-200 cursor-pointer star-item" data-index="1" onclick="evaluar(1)"></i>
+                    <i class="fa-solid fa-star text-gray-200 cursor-pointer star-item" data-index="2" onclick="evaluar(2)"></i>
+                    <i class="fa-solid fa-star text-gray-200 cursor-pointer star-item" data-index="3" onclick="evaluar(3)"></i>
+                    <i class="fa-solid fa-star text-gray-200 cursor-pointer star-item" data-index="4" onclick="evaluar(4)"></i>
+                    <i class="fa-solid fa-star text-gray-200 cursor-pointer star-item" data-index="5" onclick="evaluar(5)"></i>
+                </div>
+                <div id="ratingNotice" class="h-3 text-[10px] font-bold text-laserYellow uppercase tracking-wider"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Pie de Marca Phygital -->
+    <footer class="mt-6 text-center text-[10px] text-gray-400 font-semibold tracking-widest uppercase">
+        Infraestructura por <span class="text-black font-extrabold">Studio 42</span>
     </footer>
 
-    <!-- Lógica de Filtrado Anti-Reseñas -->
+    <!-- Lógica de Operación y Redirecciones -->
     <script>
-        // Sustituye por la URL real de la ficha de Google Maps de Copy Laser
-        const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=TU_PLACE_ID_AQUI";
-        const WHATSAPP_GERENCIA = "https://wa.me/34646546315?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20atención%20en%20Copy%20Laser";
+        // CONFIGURACIÓN DE PUNTOS DE ACCESO
+        const CONFIG = {
+            whatsappNumber: "34646546315",
+            googlePlaceUrl: "https://search.google.com/local/writereview?placeid=TU_PLACE_ID_AQUI"
+        };
 
-        function procesarResenaReal(estrellas) {
-            const stars = document.querySelectorAll('#escudo-estrellas i');
-            stars.forEach((star, index) => {
-                if (index < estrellas) {
-                    star.classList.remove('star-inactive');
-                    star.classList.add('star-active');
+        let documentoAdjunto = "";
+
+        function archivoSeleccionado(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                documentoadjunto = file.name;
+                const feedback = document.getElementById('fileFeedback');
+                feedback.innerText = `Listo para enviar: ${file.name} (${(file.size/1024).toFixed(0)} KB)`;
+                feedback.classList.remove('hidden');
+            }
+        }
+
+        function enviarDirectoWhatsApp() {
+            let mensaje = "Hola, estoy en el mostrador de Copy Laser y deseo imprimir:";
+            if (documentoAdjunto) {
+                mensaje += ` ${documentoAdjunto}`;
+            }
+            window.location.href = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(mensaje)}`;
+        }
+
+        function evaluar(estrellas) {
+            const stars = document.querySelectorAll('#starsContainer i');
+            const notice = document.getElementById('ratingNotice');
+
+            // Feedback visual táctil
+            stars.forEach((star, idx) => {
+                if (idx < estrellas) {
+                    star.classList.remove('text-gray-200');
+                    star.classList.add('text-laserYellow', 'drop-shadow-[0_2px_8px_rgba(250,204,21,0.5)]');
                 } else {
-                    star.classList.remove('star-active');
-                    star.classList.add('star-inactive');
+                    star.classList.remove('text-laserYellow', 'drop-shadow-[0_2px_8px_rgba(250,204,21,0.5)]');
+                    star.classList.add('text-gray-200');
                 }
             });
 
+            notice.innerText = estrellas === 5 ? "¡Excelente! Redirigiendo..." : "Procesando...";
+
             setTimeout(() => {
                 if (estrellas >= 4) {
-                    // 4 o 5 Estrellas -> Redirige a Google Maps
-                    window.location.href = GOOGLE_REVIEW_URL;
+                    window.location.href = CONFIG.googlePlaceUrl;
                 } else {
-                    // 1, 2 o 3 Estrellas -> Abre el Modal Empático para enviar a WhatsApp
-                    mostrarModalShield();
+                    abrirModalEmpatico();
                 }
-            }, 300);
+            }, 350);
         }
 
-        function mostrarModalShield() {
-            const overlay = document.getElementById('modal-overlay');
-            const btn = document.getElementById('modal-action-btn');
-            
-            overlay.style.display = 'flex';
-            setTimeout(() => overlay.style.opacity = '1', 10);
+        function abrirModalEmpatico() {
+            const modal = document.getElementById('modal-overlay');
+            const btnWA = document.getElementById('modal-wa-btn');
 
-            btn.onclick = function() {
-                window.location.href = WHATSAPP_GERENCIA;
+            btnWA.onclick = () => {
+                const msgIncidencia = "Hola, he tenido un detalle con mi servicio en Copy Laser y deseo comentarlo con un responsable:";
+                window.location.href = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msgIncidencia)}`;
             };
+
+            modal.classList.add('active');
+        }
+
+        function continuarAGoogle() {
+            window.location.href = CONFIG.googlePlaceUrl;
         }
     </script>
 </body>
