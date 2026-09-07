@@ -1,318 +1,675 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPXJ4FNYBS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CPXJ4FNYBS');
+    </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selección de Representantes Phygital | Studio 42</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Studio 42 Talent | Programa de Closers de Ventas Phygital en Logroño</title>
+    <meta name="description" content="Únete al equipo comercial de Studio 42 en Logroño. Altas comisiones en el mismo día, horario libre, polo con NFC integrado y venta directa de tecnología phygital de alto impacto.">
+    
+    <!-- Tipografías e Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         :root {
-            --bg-color: #07090E;
-            --card-bg: #12151C;
-            --surface-inner: #181C24;
-            --copper: #D4AF37;
-            --copper-hover: #E5C158;
-            --text-main: #FFFFFF;
-            --text-muted: #8E95A5;
-            --border-color: #262B36;
-            --danger: #FF4D4D;
+            --color-silver: #c4c4c4;
+            --color-silver-light: #ffffff;
+            --color-silver-dark: #8e8e93;
+            --color-silver-glow: rgba(196, 196, 196, 0.4);
+            --bg-dark: #07080b;
+            --bg-card: #0d0f14;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-silver: rgba(196, 196, 196, 0.4);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden !important;
-        }
-
-        .container {
+        html, body {
             width: 100%;
-            max-width: 580px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 32px 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            text-align: left;
+            max-width: 100vw;
+            overflow-x: hidden !important;
+            position: relative;
+            background-color: var(--bg-dark);
+            color: #E2E8F0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        .header { text-align: center; margin-bottom: 24px; }
-        .logo { max-width: 150px; height: auto; margin-bottom: 14px; }
-
-        h1 { font-size: 1.35rem; font-weight: 800; color: var(--text-main); line-height: 1.3; margin-bottom: 8px; }
-        h1 span { color: var(--copper); }
-        p.subtitle { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
-
-        .bot-container {
-            background: var(--surface-inner);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px 20px;
-            margin-top: 20px;
-            min-height: 360px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
         }
 
-        .progress-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; font-size: 0.78rem; color: var(--copper); font-weight: 700;
+        .bg-grid-tech {
+            background-image: radial-gradient(rgba(196, 196, 196, 0.12) 1px, transparent 1px);
+            background-size: 28px 28px;
         }
 
-        .progress-bar {
-            width: 100%; height: 4px; background-color: #20242D;
-            border-radius: 2px; margin-bottom: 20px; overflow: hidden;
+        .text-silver-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 40%, #E2E8F0 70%, #CBD5E1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.25));
         }
 
-        .progress-fill { height: 100%; background-color: var(--copper); width: 12.5%; transition: width 0.3s ease; }
-        .question-title { font-size: 1rem; font-weight: 700; margin-bottom: 18px; line-height: 1.45; color: var(--text-main); }
-        .options-list { display: flex; flex-direction: column; gap: 12px; }
-
-        .btn-option {
-            background-color: #1F242E; border: 1px solid var(--border-color); color: var(--text-main);
-            padding: 14px 16px; border-radius: 10px; font-size: 0.86rem; cursor: pointer;
-            text-align: left; transition: all 0.2s ease; line-height: 1.4;
+        .card-silver-premium {
+            background: linear-gradient(180deg, rgba(22, 25, 34, 0.95) 0%, rgba(11, 13, 18, 0.98) 100%);
+            border: 1px solid rgba(196, 196, 196, 0.45);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(196, 196, 196, 0.22);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .btn-option:hover { border-color: var(--copper); background-color: #272D3A; transform: translateY(-1px); }
-
-        .input-group { display: flex; flex-direction: column; gap: 12px; }
-        .input-field { background-color: #1F242E; border: 1px solid var(--border-color); color: var(--text-main); padding: 14px; border-radius: 8px; font-size: 0.9rem; }
-        .input-field:focus { outline: none; border-color: var(--copper); }
-
-        .btn-submit {
-            background-color: var(--copper); color: #07090E; border: none; padding: 16px;
-            border-radius: 8px; font-weight: 800; font-size: 0.92rem; cursor: pointer; margin-top: 10px; transition: background 0.2s ease;
+        .card-silver-premium:hover {
+            border-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.98), 0 0 45px 0px rgba(196, 196, 196, 0.4);
         }
-        .btn-submit:hover { background-color: var(--copper-hover); }
 
-        .btn-retry {
-            background-color: transparent; color: var(--copper); border: 1px solid var(--copper);
-            padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
-            margin-top: 16px; width: 100%; transition: all 0.2s ease;
+        .card-base {
+            background: rgba(13, 15, 21, 0.85);
+            border: 1px solid var(--border-subtle);
+            border-radius: 22px;
+            transition: all 0.3s ease;
         }
-        .btn-retry:hover { background-color: rgba(212, 175, 55, 0.1); }
 
-        .status-screen { text-align: center; padding: 24px 10px; }
-        .status-icon { font-size: 2.8rem; margin-bottom: 12px; }
-
-        .footer-modern {
-            margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-color);
-            display: flex; flex-direction: column; align-items: center; gap: 14px;
+        .card-base:hover {
+            border-color: rgba(196, 196, 196, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
-        .footer-badges { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        .badge-tech { background-color: var(--surface-inner); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.72rem; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
-        .badge-tech span { color: var(--copper); }
-        .footer-copy { text-align: center; font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; }
+
+        .btn-silver {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%);
+            color: #07080B;
+            font-weight: 800;
+            letter-spacing: 0.9px;
+            box-shadow: 0 6px 22px rgba(196, 196, 196, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .btn-silver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(241, 245, 249, 0.55);
+            filter: brightness(1.08);
+        }
+
+        .btn-vcard-cyber {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.04) 100%);
+            border: 1px solid rgba(196, 196, 196, 0.5);
+            box-shadow: 0 0 20px rgba(196, 196, 196, 0.15), inset 0 0 12px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-vcard-cyber:hover {
+            border-color: #FFFFFF;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.35), inset 0 0 18px rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        details summary::-webkit-details-marker { display: none; }
+        details summary { list-style: none; }
+        details[open] summary .faq-chevron { transform: rotate(180deg); color: #FFFFFF; }
+        details[open] { border-color: rgba(196, 196, 196, 0.5); background-color: rgba(18, 21, 29, 0.95); }
     </style>
 </head>
-<body>
 
-<div class="container">
-    <div class="header">
-        <img src="logo.png" alt="Studio 42" class="logo" onerror="this.style.display='none'">
-        <h1>Selección Oficial <span>Closer Phygital</span></h1>
-        <p class="subtitle">Validación técnica y comercial de 10 segundos para distribución de ecosistemas NFC en Logroño.</p>
-    </div>
+<body class="bg-grid-tech selection:bg-[#C4C4C4] selection:text-black">
 
-    <div class="bot-container" id="botBox">
-        <div>
-            <div class="progress-header">
-                <span id="stepText">PREGUNTA 1 DE 8</span>
-                <span id="percentText">12%</span>
+    <!-- NAVEGACIÓN BOUTIQUE CON LOGO DESTACADO -->
+    <nav class="bg-[#07080B]/95 backdrop-blur-2xl fixed w-full z-40 top-0 border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.95)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex justify-between items-center min-h-[85px] sm:min-h-[95px] md:min-h-[110px]">
+            
+            <a href="/" class="flex items-center shrink-0 group py-1">
+                <img src="../studio42-logo.png" 
+                     alt="Studio 42 - Identidad Inteligente" 
+                     class="h-16 sm:h-20 md:h-24 lg:h-28 w-auto max-w-[210px] sm:max-w-[290px] md:max-w-none object-contain drop-shadow-[0_8px_22px_rgba(0,0,0,0.95)] scale-110 sm:scale-105 origin-left group-hover:scale-115 transition-all duration-300"/>
+            </a>
+            
+            <div class="hidden xl:flex space-x-7 font-semibold text-xs tracking-widest text-zinc-400 uppercase items-center mr-8">
+                <a href="#mision" class="hover:text-white transition duration-300">La Misión</a>
+                <a href="#comisiones" class="hover:text-white transition duration-300">Comisiones</a>
+                <a href="#simulador" class="text-zinc-200 hover:text-white transition duration-300 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span>Simulador Ingresos</span>
+                </a>
+                <a href="#regla-oro" class="hover:text-white transition duration-300">Cobro en el Día</a>
+                <a href="#kit" class="hover:text-white transition duration-300">Kit Closer</a>
+                <a href="#faq" class="hover:text-white transition duration-300">Dudas</a>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div id="quizContent"></div>
-        </div>
-    </div>
 
-    <footer class="footer-modern">
-        <div class="footer-badges">
-            <div class="badge-tech"><span>⚡</span> Demos en 10s</div>
-            <div class="badge-tech"><span>💰</span> 40€ a 150€/cierre</div>
-            <div class="badge-tech"><span>📍</span> Logroño presencial</div>
+            <div class="flex items-center gap-3 sm:gap-4 shrink-0">
+                <a href="/" class="btn-vcard-cyber hidden sm:flex items-center gap-2 text-white text-xs font-bold uppercase tracking-wider py-2 sm:py-2.5 px-3.5 sm:px-4 rounded-full">
+                    <i class="fa-solid fa-arrow-left text-cyan-300 text-xs"></i>
+                    <span>Ver Web Principal</span>
+                </a>
+                <a href="https://wa.me/34672294962?text=Quiero%20hacer%20la%20prueba%20de%20los%2030%20segundos" target="_blank" class="btn-silver px-4 sm:px-5 py-2 sm:py-2.5 text-xs uppercase tracking-wider rounded-full flex items-center gap-1.5 sm:gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>Postularme</span>
+                </a>
+            </div>
         </div>
-        <div class="footer-copy">
-            <strong>Studio 42</strong> © 2026 — Agencia de Identidad Inteligente
+    </nav>
+
+    <!-- HERO SECTION TALENT -->
+    <header class="relative pt-36 sm:pt-44 md:pt-52 pb-16 px-4 sm:px-6 text-center overflow-hidden">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[550px] h-[250px] bg-[#C4C4C4]/15 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="inline-flex items-center gap-2 bg-white/5 border border-[#C4C4C4]/40 px-3.5 py-1.5 rounded-full mb-5 sm:mb-8 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <span class="text-zinc-200 font-bold text-[10px] sm:text-xs uppercase tracking-widest">Convocatoria Activa // Closers B2B en Logroño</span>
+            </div>
+
+            <h1 class="font-display text-3xl sm:text-5xl md:text-7xl font-black mb-5 sm:mb-8 leading-[1.14] tracking-tight text-white">
+                Buscamos un Closer de Ventas: <br class="hidden md:block">
+                <span class="text-silver-gradient block sm:inline mt-1">Comisiones Altas + Horario Libre.</span>
+            </h1>
+
+            <p class="text-sm sm:text-lg md:text-xl text-zinc-300 mb-8 sm:mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+                Olvídate de la puerta fría aburrida y de vender seguros o tarifas de luz. En <strong>Studio 42</strong> creamos tecnología phygital con hardware de lujo que deja con la boca abierta a cualquier dueño de negocio en 10 segundos. Tú plantas la muestra en la barra, haces la demo táctil y cierras.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full max-w-md mx-auto sm:max-w-none">
+                <a href="https://wa.me/34672294962?text=Quiero%20hacer%20la%20prueba%20de%20los%2030%20segundos" target="_blank" class="btn-silver px-8 sm:px-10 py-4 rounded-full text-xs font-black uppercase tracking-widest w-full sm:w-auto shadow-xl text-center flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Hacer la Prueba de los 30 Segundos</span>
+                </a>
+                <a href="#simulador" class="bg-white/5 hover:bg-white/10 text-white border border-white/20 px-6 sm:px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest w-full sm:w-auto transition duration-300 flex items-center justify-center gap-2 text-center">
+                    <i class="fa-solid fa-calculator text-[#C4C4C4] text-xs"></i>
+                    <span>Calcular Cuánto Vas a Ganar</span>
+                </a>
+            </div>
+
+            <!-- TICKER DE BENEFICIOS CLAVE -->
+            <div class="mt-12 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="font-display text-2xl sm:text-3xl font-black text-white">40 € - 150 €</div>
+                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Comisión Limpia / Cierre</div>
+                </div>
+                <div>
+                    <div class="font-display text-2xl sm:text-3xl font-black text-[#C4C4C4]">Mismo Día</div>
+                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Cobro Inmediato por Bizum</div>
+                </div>
+                <div>
+                    <div class="font-display text-2xl sm:text-3xl font-black text-cyan-400">100% Libre</div>
+                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Sin Jefes ni Horarios Fijos</div>
+                </div>
+                <div>
+                    <div class="font-display text-2xl sm:text-3xl font-black text-white">+50 € Extra</div>
+                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Bono Semanal por 5 Ventas</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- LA MISIÓN -->
+    <section id="mision" class="py-20 px-4 sm:px-6 bg-[#0B0D13] border-t border-white/5">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-14">
+                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">La Operativa Diaria</span>
+                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-3">Tu Misión en las Calles de Logroño</h2>
+                <p class="text-zinc-400 text-xs sm:text-sm font-light">Un producto tangible que se vende con los ojos. Cero rollo teórico.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card-base p-6 sm:p-7 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white text-xl mb-5 border border-white/20">
+                        1
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Entras con el Expositor</h3>
+                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
+                        Visitas restaurantes, clínicas, barberías y veterinarias en zonas como San Antón, Gran Vía o Portales[cite: 1]. Plantas el soporte físico en el mostrador[cite: 1].
+                    </p>
+                </div>
+
+                <div class="card-silver-premium p-6 sm:p-7 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white text-xl mb-5 border border-white/40">
+                        2
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">La Demo de 10 Segundos</h3>
+                    <p class="text-zinc-200 text-xs font-light leading-relaxed">
+                        Le pides al gerente que acerque su móvil al metacrilato[cite: 1]. Ve cómo se abre la landing en 1 segundo y cómo el Escudo intercepta quejas[cite: 1]. El producto se vende solo[cite: 1].
+                    </p>
+                </div>
+
+                <div class="card-base p-6 sm:p-7 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white text-xl mb-5 border border-white/20">
+                        3
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Cierre y Cobro Inmediato</h3>
+                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
+                        El cliente abona el 50% de señal allí mismo[cite: 1]. Ese mismo día recibes tu transferencia íntegra[cite: 1]. Sin esperar a fin de mes[cite: 1].
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMISIONES TRANSPARENTES -->
+    <section id="comisiones" class="py-24 px-4 sm:px-6 bg-[#07080B] border-t border-white/5 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 sm:mb-20">
+                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Sin Techo de Ganancias</span>
+                <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">¿Cuánto Ganas Exactamente?</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto text-xs sm:text-sm md:text-base font-light">Tú te llevas una parte gigante del pastel. Sin trampa ni letra pequeña[cite: 1].</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+                <!-- PACK IMÁN -->
+                <div class="card-base p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full inline-block mb-4 border border-white/10">Pack Entrada (149 €)[cite: 1]</span>
+                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Pack Imán</h3>
+                        <p class="text-zinc-400 text-xs font-light mb-6">El producto más fácil de colocar. 1 display de mostrador + 2 llaveros.</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-white/10">
+                            <span class="text-[11px] text-zinc-500 block mb-1">Tu comisión neta:</span>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-white font-black text-4xl sm:text-5xl">40,00 €</span>
+                                <span class="text-zinc-400 text-xs font-semibold">limpios</span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-3 text-zinc-300 text-xs font-light mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Ideal para comercios con un solo mostrador.</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Cierre rápido en menos de 10 minutos.</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Pagado en tu cuenta en el mismo día[cite: 1].</li>
+                        </ul>
+                    </div>
+                    <div class="text-center p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-zinc-300 font-semibold">
+                        2 cierres al día = 80 € diarios
+                    </div>
+                </div>
+
+                <!-- PACK MULTIPLICADOR (MÁS POPULAR) -->
+                <div class="card-silver-premium p-6 sm:p-8 flex flex-col justify-between transform lg:-translate-y-4 shadow-2xl relative">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
+                                Pack Más Vendido (349 €)[cite: 1]
+                            </span>
+                            <span class="bg-gradient-to-r from-zinc-100 to-[#C4C4C4] text-black text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md shrink-0">
+                                ★ TOP VENTAS
+                            </span>
+                        </div>
+
+                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Efecto Multiplicador</h3>
+                        <p class="text-zinc-400 text-xs font-light mb-6">Para restaurantes, clínicas y salones con equipo de sala y camareros[cite: 1].</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-white/10">
+                            <span class="text-[11px] text-zinc-300 block mb-1">Tu comisión neta:</span>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-white font-black text-4xl sm:text-5xl">100,00 €</span>
+                                <span class="text-zinc-300 text-xs font-semibold">limpios</span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-3 text-zinc-200 text-xs font-light mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Incluye 1 display + 10 llaveros + tarjeta madera noble[cite: 1].</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Alto valor percibido que el dueño ve amortizado ya[cite: 1].</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> 1 solo cierre al día = 500 € semanales.</li>
+                        </ul>
+                    </div>
+                    <div class="text-center p-3.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white font-bold">
+                        1 venta al día = 2.000 € / mes
+                    </div>
+                </div>
+
+                <!-- PACK DOMINIO -->
+                <div class="card-base p-6 sm:p-8 flex flex-col justify-between">
+                    <div>
+                        <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full inline-block mb-4 border border-white/10">Pack VIP Boutique (549 €)[cite: 1]</span>
+                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Dominio Total</h3>
+                        <p class="text-zinc-400 text-xs font-light mb-6">Despliegue completo de 25 llaveros, 2 displays, caja ejecutiva y dron[cite: 1].</p>
+                        
+                        <div class="mb-6 pb-6 border-b border-white/10">
+                            <span class="text-[11px] text-zinc-500 block mb-1">Tu comisión neta:</span>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-white font-black text-4xl sm:text-5xl">150,00 €</span>
+                                <span class="text-zinc-400 text-xs font-semibold">limpios</span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-3 text-zinc-300 text-xs font-light mb-8">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Grabación cinematográfica con dron AESA incluida[cite: 1].</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Para los negocios más potentes y de alta facturación.</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> 2 cierres de este pack cubren 300 € limpios.</li>
+                        </ul>
+                    </div>
+                    <div class="text-center p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-zinc-300 font-semibold">
+                        Bono extra semanal activable fácilmente[cite: 1]
+                    </div>
+                </div>
+            </div>
+
+            <!-- BONO EXTRA DESTACADO -->
+            <div class="mt-12 max-w-3xl mx-auto p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-[#C4C4C4]/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-cyan-400/20 text-cyan-300 flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-base">Bono Semanal de Rendimiento (+50 € Extra)[cite: 1]</h4>
+                        <p class="text-zinc-400 text-xs">Si cierras 5 ventas cualquiera en una sola semana, sumas 50 € directos adicionales a tus comisiones[cite: 1].</p>
+                    </div>
+                </div>
+                <div class="text-white font-black text-xl shrink-0">
+                    +50 € / semana[cite: 1]
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIMULADOR INTERACTIVO DE INGRESOS PARA EL CLOSER -->
+    <section id="simulador" class="py-20 px-4 sm:px-6 bg-gradient-to-b from-[#080A0F] to-[#0D1017] border-t border-white/5">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/20 px-3 py-1 rounded-full mb-4">
+                <i class="fa-solid fa-calculator text-[#C4C4C4] text-xs"></i>
+                <span class="text-zinc-200 font-bold text-xs uppercase tracking-widest">Simulador de Ingresos</span>
+            </div>
+            <h2 class="font-display text-2xl sm:text-4xl font-black text-white mb-4 tracking-tight">¿Cuánto Dinero Puedes Generar al Mes?</h2>
+            <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto mb-8 sm:mb-10 font-light">Ajusta el control según las ventas que te propongas cerrar cada semana.</p>
+
+            <div class="bg-[#10131B] border border-[#C4C4C4]/35 p-6 sm:p-8 rounded-3xl shadow-2xl text-left">
+                <div class="mb-6 sm:mb-8">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-3 gap-1">
+                        <label class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Ventas cerradas por semana:</label>
+                        <span id="label-ventas" class="text-lg sm:text-xl font-black text-zinc-100">4 ventas / semana</span>
+                    </div>
+                    <input id="slider-ventas" type="range" min="1" max="15" step="1" value="4" class="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-[#C4C4C4]">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-6 border-t border-white/10 text-center">
+                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
+                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Comisiones Semanales</span>
+                        <span id="calc-semana" class="text-2xl sm:text-3xl font-black text-white">400 €</span>
+                        <span class="text-[10px] text-zinc-400 block mt-1">Directo a tu cuenta[cite: 1]</span>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
+                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Bono por Rendimiento</span>
+                        <span id="calc-bono" class="text-2xl sm:text-3xl font-black text-cyan-300">0 €</span>
+                        <span class="text-[10px] text-zinc-400 block mt-1">Se activa con 5 ventas/sem[cite: 1]</span>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
+                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Ingreso Mensual Estimado</span>
+                        <span id="calc-total" class="text-2xl sm:text-3xl font-black text-emerald-400">1.600 €</span>
+                        <span class="text-[10px] text-zinc-400 block mt-1">Limpio sin deducciones</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LA REGLA DE ORO (COBRO EN EL DÍA) -->
+    <section id="regla-oro" class="py-20 px-4 sm:px-6 bg-[#07080B] border-t border-white/5">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-14">
+                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Transparencia Implacable</span>
+                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-3">La Regla de Oro: Cobras en el Mismo Día[cite: 1]</h2>
+                <p class="text-zinc-400 text-xs sm:text-sm font-light">En ventas, la recompensa debe ser inmediata. No esperamos a fin de mes[cite: 1].</p>
+            </div>
+
+            <div class="card-silver-premium p-6 sm:p-10 relative overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="inline-flex items-center gap-2 bg-white/10 text-cyan-300 px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 border border-white/20">
+                            <i class="fa-solid fa-bolt"></i> Sistema Same-Day Pay[cite: 1]
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-white mb-4">Tú cierras el trato hoy, tú cobras hoy. Fin de la historia[cite: 1].</h3>
+                        <p class="text-zinc-300 text-xs sm:text-sm font-light leading-relaxed mb-4">
+                            El cliente acepta la propuesta y abona en ese instante el 50% de señal en efectivo, tarjeta o Bizum para iniciar su pedido[cite: 1]. En cuanto nos notificas el justificante, nosotros te transferimos tu comisión completa por Bizum o transferencia inmediata[cite: 1].
+                        </p>
+                        <p class="text-zinc-400 text-xs font-light">
+                            Sin papeleos eternos, sin retenciones ocultas y sin sorpresas[cite: 1].
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-black/50 p-4 rounded-2xl border border-white/10 flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0">✓</div>
+                            <div class="text-xs">
+                                <strong class="text-white block">Libertad Total de Horarios[cite: 1]</strong>
+                                <span class="text-zinc-400">Sin jefes vigilándote[cite: 1]. Tú eliges tus rutas y compaginas con tus estudios u otros trabajos[cite: 1].</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-black/50 p-4 rounded-2xl border border-white/10 flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0">✓</div>
+                            <div class="text-xs">
+                                <strong class="text-white block">Cero Riesgo Financiero[cite: 1]</strong>
+                                <span class="text-zinc-400">Empiezas a comisión directa para probar tu talento sin contratos abusivos[cite: 1].</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-black/50 p-4 rounded-2xl border border-white/10 flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0">✓</div>
+                            <div class="text-xs">
+                                <strong class="text-white block">Formación Personal de Cierre[cite: 1]</strong>
+                                <span class="text-zinc-400">Te enseñamos el argumento exacto y las respuestas a las objeciones más comunes en Logroño[cite: 1].</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EL KIT DE AGENCIA -->
+    <section id="kit" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#0A0C12] border-t border-white/5">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/20 px-3 py-1 rounded-full mb-4">
+                <i class="fa-solid fa-shirt text-[#C4C4C4] text-xs"></i>
+                <span class="text-zinc-200 font-bold text-xs uppercase tracking-widest">Herramientas Profesionales</span>
+            </div>
+            <h2 class="font-display text-2xl sm:text-4xl font-black text-white mb-3">Tu Kit de Agencia Oficial[cite: 1]</h2>
+            <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto mb-12 font-light">No vas a salir a la calle con las manos vacías. Te equipamos como a un profesional[cite: 1].</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 hover:border-[#C4C4C4]/40 transition">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-300 text-lg mb-4">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-sm mb-2">Polo con NFC en la Manga[cite: 1]</h4>
+                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
+                        Polo corporativo prémium con un microchip NFC cosido en el puño[cite: 1]. Haces la demo tocando el móvil del cliente con tu propio brazo. Impacto psicológico demoledor[cite: 1].
+                    </p>
+                </div>
+
+                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 hover:border-[#C4C4C4]/40 transition">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-300 text-lg mb-4">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-sm mb-2">Muestras Reales en Mano[cite: 1]</h4>
+                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
+                        Te entregamos el expositor de metacrilato biselado de 3 mm y los llaveros de cuero para que el dueño toque la calidad física antes de decidir[cite: 1].
+                    </p>
+                </div>
+
+                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 hover:border-[#C4C4C4]/40 transition">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-300 text-lg mb-4">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h4 class="text-white font-bold text-sm mb-2">Tu Tarjeta vCard Digital[cite: 1]</h4>
+                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
+                        Tu propia tarjeta inteligente de closer. Con un toque dejas tu contacto y tu catálogo guardados en el WhatsApp de los encargados[cite: 1].
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PREGUNTAS FRECUENTES PARA EL CLOSER -->
+    <section id="faq" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#080A0F] border-t border-white/5">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-14">
+                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Claridad Total</span>
+                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-3">Preguntas Frecuentes de Postulantes</h2>
+                <p class="text-zinc-400 text-xs sm:text-sm font-light">Todo lo que necesitas saber antes de dar el paso.</p>
+            </div>
+
+            <div class="space-y-4 text-left">
+                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
+                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
+                        <span>¿Necesito experiencia previa en ventas B2B?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
+                    </summary>
+                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
+                        No es obligatoria. Buscamos personas con actitud, don de gentes, soltura para hablar en persona y hambre de ganar dinero[cite: 1]. Nosotros te enseñamos el guion de 30 segundos y cómo rebatir objeciones en el café de bienvenida[cite: 1].
+                    </p>
+                </details>
+
+                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
+                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
+                        <span>¿Tengo un horario obligatorio o una zona fija asignada?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
+                    </summary>
+                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
+                        No. Trabajas a tu ritmo[cite: 1]. Puedes salir 2 horas por la mañana antes de ir a clase o dedicarle tardes completas[cite: 1]. Puedes prospectar tu propio barrio o las calles que prefieras de Logroño coordinándote con el equipo[cite: 1].
+                    </p>
+                </details>
+
+                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
+                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
+                        <span>¿Cómo y cuándo recibo el pago de mis comisiones?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
+                    </summary>
+                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
+                        El mismo día que el cliente paga la señal[cite: 1]. Si cierras un Pack Efecto Multiplicador a las 12:00 del mediodía y el cliente abona su 50%, a las pocas horas tienes tus 100 € en tu cuenta[cite: 1].
+                    </p>
+                </details>
+
+                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
+                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
+                        <span>¿En qué consiste exactamente la "Prueba de los 30 Segundos"?</span>
+                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
+                    </summary>
+                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
+                        Es un café rápido de 15 minutos con Manuel y Melina en Logroño[cite: 1]. Te ponemos el expositor en la mesa y te enseñamos cómo hacer la demo táctil[cite: 1]. Si vemos que tienes chispa y ganas, sales ese mismo día con tu kit a reventar el mercado[cite: 1].
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- LLAMADA FINAL A LA ACCIÓN (PRUEBA DE LOS 30 SEGUNDOS) -->
+    <section id="contacto" class="py-20 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-[#07080B] to-[#11141C] text-center border-t border-white/5">
+        <div class="max-w-3xl mx-auto">
+            <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Paso Definitivo</span>
+            <h2 class="font-display text-3xl sm:text-5xl font-black text-white mt-2 mb-6">¿Te Atreves con la "Prueba de los 30 Segundos"?[cite: 1]</h2>
+            <p class="text-zinc-400 mb-8 sm:mb-10 text-xs sm:text-base font-light leading-relaxed">
+                Si tienes morro, ganas de hacer dinero de verdad y quieres probarte en la calle con nosotros[cite: 1]: escríbenos un WhatsApp ahora mismo con la frase exacta y tomamos un café[cite: 1].
+            </p>
+            
+            <a href="https://wa.me/34672294962?text=Quiero%20hacer%20la%20prueba%20de%20los%2030%20segundos" target="_blank" class="btn-silver inline-flex items-center justify-center gap-2.5 sm:gap-3 px-8 sm:px-10 py-4 rounded-full text-xs font-black uppercase tracking-widest shadow-2xl w-full sm:w-auto">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Enviar: "Quiero hacer la prueba de los 30 segundos"[cite: 1]</span>
+            </a>
+
+            <p class="text-zinc-500 text-[11px] mt-6">
+                Manuel & Melina · Fundadores de Studio 42[cite: 1]
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER BOUTIQUE -->
+    <footer id="footer-site" class="bg-[#050608] text-zinc-500 py-12 sm:py-16 text-xs border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-white font-bold tracking-widest uppercase text-xs mb-1">Studio 42 | Programa Talent</p>
+                <p class="text-zinc-500">Calle Carmen Medrano 5 · Logroño, La Rioja</p>
+                <p class="text-zinc-600 mt-1">Estaciones Phygital · Red Comercial B2B · Hardware NFC</p>
+            </div>
+
+            <div class="text-center md:text-right">
+                <p class="text-zinc-500 mb-2">&copy; 2026 Studio 42. Todos los derechos reservados.</p>
+                <div class="flex gap-4 justify-center md:justify-end text-zinc-400">
+                    <a href="/" class="hover:text-white transition">Web Principal</a>
+                    <span>·</span>
+                    <a href="../privacidad.html" class="hover:text-white transition">Privacidad</a>
+                    <span>·</span>
+                    <a href="../cookies.html" class="hover:text-white transition">Cookies</a>
+                </div>
+            </div>
         </div>
     </footer>
-</div>
 
-<script>
-    const CONFIG = {
-        whatsappNumber: "34672294962", // Número directo para recibir candidatos
-        totalQuestions: 8
-    };
-
-    let currentStep = 0;
-    let userData = {
-        q1: '', q2: '', q3: '', q4: '', q5: '', q6: '', q7: '', q8: '',
-        nombre: '', telefono: '', email: ''
-    };
-
-    const questions = [
-        {
-            title: "1. ¿Qué modelo comercial buscas para generar ingresos?",
-            options: [
-                { text: "🚀 Alto rendimiento por comisiones directas (40€ a 150€/venta) con cobro ágil", val: "Comisiones Directas", valid: true },
-                { text: "💼 Busco un sueldo fijo tradicional de 8 horas sentado en oficina", val: "Sueldo Fijo", valid: false }
-            ]
-        },
-        {
-            title: "2. Nuestra solución requiere entrar a locales en Logroño y hacer demostraciones. ¿Tienes soltura?",
-            options: [
-                { text: "😊 Sí, tengo agilidad para entrar, hablar con dueños/encargados y mostrar el valor", val: "Visita Presencial", valid: true },
-                { text: "🖥️ No, únicamente acepto tareas remotas por ordenador o llamadas frías", val: "Solo Remoto", valid: false }
-            ]
-        },
-        {
-            title: "3. Vendemos hardware real (NFC y metacrilato) conectado a la nube. ¿Qué opinas de las demos de 10s?",
-            options: [
-                { text: "🔥 Es la clave. Apoyar la muestra en mostrador y que acerquen el móvil vende solo", val: "Demo Interactiva 10s", valid: true },
-                { text: "📄 Prefiero repartir folletos de papel y esperar sentado a que llamen", val: "Folleto Pasivo", valid: false }
-            ]
-        },
-        {
-            title: "4. Facilitamos polo corporativo con chip NFC en la manga. ¿Qué valor le das a la imagen?",
-            options: [
-                { text: "👕 Fundamental. La estética tecnológica y la autoridad facilitan cerrar tratos", val: "Imagen Alta", valid: true },
-                { text: "🤷 Me da igual, no creo que la presencia afecte a la confianza del cliente", val: "Imagen Baja", valid: false }
-            ]
-        },
-        {
-            title: "5. Studio 42 asume la fabricación técnica, software y soporte. ¿Qué te parece esta división?",
-            options: [
-                { text: "🛡️ Impecable. La agencia blinda el producto y yo me dedico a cerrar y cobrar", val: "Enfoque Comercial", valid: true },
-                { text: "🛠️ Prefiero encargarme yo del soporte informático y programar las etiquetas", val: "Enfoque Técnico", valid: false }
-            ]
-        },
-        {
-            title: "6. Llegas a un local con gente y el encargado te dice: 'No tengo tiempo ahora'. ¿Cómo reaccionas?",
-            options: [
-                { text: "⚡ 'Solo 10 segundos: acerca tu móvil aquí. Si no te impresiona, me voy al instante'", val: "Proactivo 10s", valid: true },
-                { text: "😔 Me doy media vuelta pidiendo perdón y descarto el establecimiento", val: "Abandono Pasivo", valid: false }
-            ]
-        },
-        {
-            title: "7. Cobras tu comisión directa vinculada al cierre de cada pedido. ¿Cómo valoras esta liquidez?",
-            options: [
-                { text: "💰 Excelente. Dinero directo por resultado que premia mi ritmo de visitas diario", val: "Liquidez Ágil", valid: true },
-                { text: "📅 Prefiero esperar semanas o cierres de trimestre para cobrar incentivos", val: "Pago Diferido", valid: false }
-            ]
-        },
-        {
-            title: "8. Los clientes pueden renovar software o ampliar sedes. ¿Te interesa construir cartera?",
-            options: [
-                { text: "🌐 Sí, busco ganar hoy en mano pero también generar relaciones a largo plazo", val: "Visión Cartera", valid: true },
-                { text: "💸 Solo me interesa hacer una venta rápida y olvidarme del cliente para siempre", val: "Cierre Único", valid: false }
-            ]
-        }
-    ];
-
-    function renderStep() {
-        const quizContent = document.getElementById('quizContent');
-        const progressFill = document.getElementById('progressFill');
-        const stepText = document.getElementById('stepText');
-        const percentText = document.getElementById('percentText');
-
-        if (currentStep < questions.length) {
-            const q = questions[currentStep];
-            const percent = Math.round(((currentStep + 1) / CONFIG.totalQuestions) * 100);
-            
-            stepText.innerText = `PREGUNTA ${currentStep + 1} DE ${CONFIG.totalQuestions}`;
-            percentText.innerText = `${percent}%`;
-            progressFill.style.width = `${percent}%`;
-
-            let html = `<div class="question-title">${q.title}</div><div class="options-list">`;
-            q.options.forEach((opt) => {
-                html += `<button class="btn-option" onclick="handleOptionSelection(${opt.valid}, '${opt.val}')">${opt.text}</button>`;
-            });
-            html += `</div>`;
-            quizContent.innerHTML = html;
-        } else {
-            stepText.innerText = "TEST COMPLETADO";
-            percentText.innerText = "100%";
-            progressFill.style.width = "100%";
-            
-            quizContent.innerHTML = `
-                <div class="question-title">🎯 Perfil validado con éxito. Déjanos tus datos para coordinar la entrega de tu kit y la prueba de los 30 segundos:</div>
-                <div class="input-group">
-                    <input type="text" id="inputNombre" class="input-field" placeholder="Nombre y Apellidos" autocomplete="name" required>
-                    <input type="tel" id="inputTel" class="input-field" placeholder="Número de WhatsApp" autocomplete="tel" required>
-                    <input type="email" id="inputEmail" class="input-field" placeholder="Correo electrónico" autocomplete="email" required>
-                    <button class="btn-submit" onclick="submitToWhatsApp()">ENVIAR CANDIDATURA POR WHATSAPP</button>
+    <!-- BARRA FLOTANTE COMERCIAL PARA CLOSERS -->
+    <div id="sticky-cta" class="fixed bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 z-40 transition-all duration-300 transform translate-y-28 opacity-0 pointer-events-none max-w-2xl mx-auto">
+        <div class="bg-[#0A0C12]/95 border border-[#C4C4C4]/40 backdrop-blur-xl p-3 sm:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.95)] flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping hidden sm:block"></div>
+                <div class="text-left">
+                    <span class="text-white font-bold text-xs sm:text-sm block">¿Listo para salir a la calle?</span>
+                    <span class="text-zinc-400 text-[10px] sm:text-xs">Comisiones en el mismo día en Logroño[cite: 1]</span>
                 </div>
-            `;
-        }
-    }
-
-    function handleOptionSelection(isValid, value) {
-        if (!isValid) {
-            const quizContent = document.getElementById('quizContent');
-            quizContent.innerHTML = `
-                <div class="status-screen">
-                    <div class="status-icon">⚠️</div>
-                    <div class="question-title">Perfil Fuera de Alcance</div>
-                    <p class="subtitle">En Studio 42 buscamos personas dinámicas para demostraciones presenciales en locales y cobro ágil por comisión directa.</p>
-                    <button class="btn-retry" onclick="renderStep()">Rectificar respuesta</button>
-                </div>
-            `;
-            return;
-        }
-
-        const keys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8'];
-        userData[keys[currentStep]] = value;
-        currentStep++;
-        renderStep();
-    }
-
-    function submitToWhatsApp() {
-        const nombre = document.getElementById('inputNombre').value.trim();
-        const tel = document.getElementById('inputTel').value.trim();
-        const email = document.getElementById('inputEmail').value.trim();
-
-        if (!nombre || !tel || !email) {
-            alert("Por favor, rellena todos los campos antes de continuar.");
-            return;
-        }
-
-        const mensaje = 
-            `🚀 *NUEVA CANDIDATURA - CLOSER STUDIO 42*\n\n` +
-            `👤 *Nombre:* ${nombre}\n` +
-            `📱 *WhatsApp:* ${tel}\n` +
-            `✉️ *Email:* ${email}\n\n` +
-            `*Respuestas del Test:* 8/8 Compatibles (Presencial / Comisiones / Demo 10s)\n\n` +
-            `_He completado el test y quiero hacer la prueba de los 30 segundos y ver el kit de demostración._`;
-
-        const urlWA = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(mensaje)}`;
-
-        const quizContent = document.getElementById('quizContent');
-        quizContent.innerHTML = `
-            <div class="status-screen">
-                <div class="status-icon">📲</div>
-                <div class="question-title">Conectando con Studio 42</div>
-                <p class="subtitle">Abriendo WhatsApp de Dirección para agendar tu prueba...</p>
             </div>
-        `;
+            <a href="https://wa.me/34672294962?text=Quiero%20hacer%20la%20prueba%20de%20los%2030%20segundos" target="_blank" class="btn-silver px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-xs font-black uppercase tracking-wider shrink-0 flex items-center gap-2">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>Prueba 30s[cite: 1]</span>
+            </a>
+        </div>
+    </div>
 
-        setTimeout(() => {
-            window.location.href = urlWA;
-        }, 1000);
-    }
+    <!-- SCRIPT DE SIMULADOR DE GANANCIAS Y CONTROL FLOTANTE -->
+    <script>
+        const stickyCta = document.getElementById('sticky-cta');
+        const footerSite = document.getElementById('footer-site');
 
-    renderStep();
-</script>
+        window.addEventListener('scroll', () => {
+            const footerRect = footerSite.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
 
+            if (window.scrollY > 300 && footerRect.top > (viewportHeight - 20)) {
+                stickyCta.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
+            } else {
+                stickyCta.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
+            }
+        });
+
+        // SIMULADOR DINÁMICO DE INGRESOS PARA EL CLOSER
+        const sliderVentas = document.getElementById('slider-ventas');
+        const labelVentas = document.getElementById('label-ventas');
+        const calcSemana = document.getElementById('calc-semana');
+        const calcBono = document.getElementById('calc-bono');
+        const calcTotal = document.getElementById('calc-total');
+
+        if (sliderVentas) {
+            sliderVentas.addEventListener('input', (e) => {
+                const ventas = parseInt(e.target.value);
+                labelVentas.innerText = `${ventas} ${ventas === 1 ? 'venta' : 'ventas'} / semana`;
+
+                // Estimación promedio ponderada de comisión: ~100 € por venta (Pack Multiplicador estándar)
+                const comisionSemanal = ventas * 100;
+                calcSemana.innerText = `${comisionSemanal.toLocaleString('es-ES')} €`;
+
+                // Bono semanal si hace 5 o más ventas por semana
+                const bonoSemanal = ventas >= 5 ? 50 : 0;
+                calcBono.innerText = `${bonoSemanal} € / sem`;
+
+                // Total al mes (4 semanas)
+                const ingresoMensual = (comisionSemanal + bonoSemanal) * 4;
+                calcTotal.innerText = `${ingresoMensual.toLocaleString('es-ES')} €`;
+            });
+        }
+    </script>
 </body>
 </html>
