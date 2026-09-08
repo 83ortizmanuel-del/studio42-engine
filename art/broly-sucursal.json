@@ -2,34 +2,36 @@
   "obra_id": "ART-ANIME-002",
   "titulo_obra": "Broly SSJ4 // Furia Primordial",
   "personaje": "Broly (Super Saiyan 4)",
-  "serie_anime": "Dragon Ball Heroes × La Sucursal",
-  "edicion_limitada": "Edición Limitada // Pieza 01 de 10",
-  "artista": "Studio 42 Art Division × La Sucursal",
+  "serie_anime": "Dragon Ball Z / Heroes",
+  "edicion_limitada": "Edición Limitada // Pieza 02 de 25",
+  "artista": "Studio 42 Art Division",
   "fecha_creacion": "Septiembre, 2026",
   
   "estetica": {
-    "color_primario": "#A3E635",
-    "color_acento": "#F43F5E",
-    "color_fondo": "#050705",
-    "aura_neon": "rgba(163, 230, 53, 0.85)"
+    "color_primario": "#84CC16",
+    "color_acento": "#E11D48",
+    "color_fondo": "#070B06",
+    "aura_neon": "rgba(132, 204, 22, 0.75)"
   },
 
   "imagen_lienzo": "broly-ssj4.png",
   
   "audio_experience": {
-    "titulo_track": "Despertar del Berserker (Ki Legendario)",
+    "titulo_track": "Banda Sonora de la Obra",
     "voice_over_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    "transcripcion_lore": "La combinación definitiva entre el instinto primario del gran simio y la energía desbordante del Super Saiyan Legendario. La corona de La Sucursal sella una pieza concebida para alterar la energía de cualquier estancia física."
+    "transcripcion_lore": "El poder destructivo definitivo liberado en su estado más salvaje. La fusión entre el ki legendario y la esencia pura ozaru da vida a esta pieza irrepetible."
   },
 
   "voces_personaje": {
-    "frase_texto": "«¡Mi poder no conoce límites... desborda, destruye y aplasta todo a su paso!»"
+    "frase_texto": "«¡Mi poder no conoce límites... desborda, destruye y aplasta todo a su paso!»",
+    "audio_espanol": "",
+    "audio_japones": ""
   },
 
   "certificado_autenticidad": {
-    "codigo_verificacion": "S42-SUC-BROLY-7702",
+    "codigo_verificacion": "S42-BLOCK-7709-BROLY",
     "estado": "ORIGINAL VERIFICADO POR NFC",
-    "propietario_registrado": "Coleccionista La Sucursal #01"
+    "propietario_registrado": "Coleccionista VIP #02"
   },
 
   "easter_eggs": {
@@ -37,7 +39,7 @@
   },
 
   "club_coleccionistas": {
-    "mensaje": "Registra este lienzo oficial a tu nombre para reclamar tu certificado físico impreso y acceso a drops exclusivos.",
-    "whatsapp_artista": "https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20registrar%20mi%20cuadro%20Phygital%20de%20Broly%20SSJ4%20(Certificado%20S42-SUC-BROLY-7702)"
+    "mensaje": "Registra este lienzo oficial a tu nombre para reclamar tu certificado impreso.",
+    "whatsapp_artista": "https://wa.me/34672294962?text=Hola,%20quiero%20registrar%20mi%20cuadro%20Phygital%20de%20Broly%20SSJ4"
   }
 }
