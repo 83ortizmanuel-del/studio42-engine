@@ -1,0 +1,29 @@
+Actúa como Director Técnico y Diseñador de Experiencia Phygital para Studio 42 Art Division.
+
+Necesito que generes ÚNICAMENTE un archivo JSON válido y formateado para una obra phygital de arte.
+
+Datos del personaje:
+- Personaje: [Ej: Roronoa Zoro]
+- Serie / Universo: [Ej: One Piece]
+- Edición: [Ej: 01/10 - Edición Limitada]
+- Propietario inicial: [Ej: Pendiente de Registro / Coleccionista Privado]
+
+Requisitos técnicos del JSON:
+1. "estetica": Elige una paleta cromática HEX y RGBA que represente fielmente la energía visual y aura del personaje (color_primario, color_acento, color_fondo oscuro profundo, aura_neon con transparencia adecuada).
+2. "imagen_lienzo": Nómbralo con el slug del personaje en minúsculas y guiones (ej: "zoro-katana.webp").
+3. "audio_experience": 
+   - "titulo_track": Título épico u OST temático del personaje.
+   - "voice_over_url": URL o archivo local (ej: "zoro-voice.mp3").
+   - "transcripcion_lore": Texto narrativo inmersivo (lore o reflexión del personaje) de 2 a 3 líneas.
+4. "voces_personaje":
+   - "frase_texto": Una de sus citas más memorables o impactantes entre comillas latinas « ».
+5. "certificado_autenticidad":
+   - "codigo_verificacion": Formato "S42-[INICIALES]-[AÑO]-[ID]" (ej: S42-ZOR-2026-001).
+   - "estado": "VERIFICADO".
+   - "propietario_registrado": Nombre o "Sin registrar".
+6. "easter_eggs":
+   - "wallpaper_4k_download": Nombre del archivo 4K (ej: "zoro-4k-exclusive.jpg").
+7. "club_coleccionistas":
+   - "whatsapp_artista": Enlace wa.me de Studio 42 (https://wa.me/34672294962?text=Hola%20Studio42%20he%20adquirido%20el%20lienzo...).
+
+Devuélveme exclusivamente el bloque de código JSON sin explicaciones ni markdown innecesario.
