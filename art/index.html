@@ -11,7 +11,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 | Phygital Art Gallery</title>
+    <title>Phygital Art Gallery</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,16 +115,7 @@
 
 <body class="min-h-screen bg-tech-grid flex flex-col items-center justify-between p-4 selection:bg-white selection:text-black select-none">
 
-    <header class="w-full max-w-md pt-3 pb-2 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2 text-zinc-400 hover:text-white transition">
-            <img src="../studio42-logo.png" alt="Studio 42" class="h-8 w-auto object-contain">
-        </a>
-        <span class="text-[10px] font-bold tracking-widest uppercase bg-white/5 border border-white/10 px-3 py-1 rounded-full text-zinc-300">
-            NFC Certified
-        </span>
-    </header>
-
-    <div class="w-full max-w-md art-card-wrapper my-auto">
+    <div class="w-full max-w-md art-card-wrapper my-auto mt-4 sm:mt-6">
         <main class="art-content p-5 sm:p-6 text-center">
             
             <!-- BADGE DE AUTENTICIDAD -->
@@ -141,7 +132,7 @@
 
             <!-- TÍTULO Y DETALLES -->
             <h1 id="obra-titulo" class="font-display text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight">Cargando...</h1>
-            <p id="obra-sub" class="text-xs font-bold uppercase tracking-widest mt-1 mb-4" style="color: var(--color-primario);">Studio 42 Art Division</p>
+            <p id="obra-sub" class="text-xs font-bold uppercase tracking-widest mt-1 mb-4" style="color: var(--color-primario);"></p>
 
             <!-- REPRODUCTOR DE AUDIO / LORE -->
             <div id="contenedor-audio" class="hidden bg-white/5 p-4 rounded-2xl border border-white/10 mb-4 text-left">
@@ -187,8 +178,9 @@
         </main>
     </div>
 
-    <footer class="text-center text-[10px] text-zinc-500 font-semibold tracking-widest uppercase py-4">
-        Phygital Art Engine // Powered by <span class="text-zinc-300 font-bold">Studio 42</span>
+    <!-- FOOTER ULTRA DISCRETO -->
+    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-5">
+        Experiencia Phygital &bull; Concepto y desarrollo de arte por <a href="/" class="text-zinc-400 hover:text-zinc-200 transition">Studio 42</a>
     </footer>
 
     <script>
