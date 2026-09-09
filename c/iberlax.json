@@ -13,7 +13,7 @@
           "nombre": "Promo Exclusiva Llavero Smart",
           "descripcion": "15% dto. directo + Almohada viscoelástica de regalo",
           "icono": "fa-solid fa-tag",
-          "url": "https://wa.me/34600000000?text=Hola%20Iberlax,%20tengo%20el%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
+          "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20tengo%20el%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
           "estiloIcono": "background-color: rgba(255, 193, 7, 0.15); color: #FFC107;",
           "destacado": true
         },
@@ -46,14 +46,14 @@
           "nombre": "¿Algo no salió perfecto?",
           "descripcion": "Atención personalizada y solución directa con Gerencia",
           "icono": "fa-solid fa-comment-dots",
-          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20visita%20en%20Iberlax",
+          "url": "https://wa.me/346643186453?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20visita%20en%20Iberlax",
           "estiloIcono": "background-color: rgba(255, 59, 48, 0.1); color: #ff3b30;"
         },
         {
           "nombre": "Déjanos 5 Estrellas en Google",
           "descripcion": "Tu valoración nos ayuda a seguir recomendando el mejor descanso",
           "icono": "fa-brands fa-google",
-          "url": "https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4",
+          "url": "https://search.google.com/local/writereview?placeid=ChIJXy9Psu6qWg0R2MztIZPHsPQ",
           "estiloIcono": "background-color: rgba(255, 180, 0, 0.1); color: #ffb400;",
           "estrellas": true
         }
