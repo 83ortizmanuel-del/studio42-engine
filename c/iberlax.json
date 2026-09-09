@@ -1,7 +1,7 @@
 {
   "nombre": "IBERLAX COLCHONES",
   "subtitulo": "Especialistas en Descanso & Ergonomía",
-  "subtituloOverlay": "Bienvenido a Iberlax Colchones",
+  "subtituloOverlay": "Bienvenido al Ecosistema Iberlax",
   "logo": "iberlax-logo.jpg",
   "colorPrincipal": "#0F2C59",
   "audioFondo": "ambiente2.mp3",
@@ -18,18 +18,18 @@
           "destacado": true
         },
         {
-          "nombre": "Asesor de Firmeza & Medidas",
-          "descripcion": "Configura tu colchón y base ideal en 3 pasos",
+          "nombre": "Test Ergonómico: Firmeza & Medidas",
+          "descripcion": "Configura en 3 pasos tu colchón y base adecuada",
           "icono": "fa-solid fa-bed-pulse",
           "url": "#",
           "estiloIcono": "background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;"
         },
         {
-          "nombre": "Envío, Montaje & Retirada de Colchón Viejo",
-          "descripcion": "Consulta plazos y retirada gratuita de tus antiguos enseres",
+          "nombre": "Tasador de Entrega & Retirada",
+          "descripcion": "Calcula condiciones de transporte y retirada de tu colchón viejo",
           "icono": "fa-solid fa-truck-ramp-box",
-          "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20quisiera%20consultar%20condiciones%20de%20env%C3%ADo%20y%20retirada%20de%20mi%20colch%C3%B3n%20antiguo",
-          "estiloIcono": "background-color: rgba(0, 123, 255, 0.15); color: #007BFF;"
+          "url": "#",
+          "estiloIcono": "background-color: rgba(48, 209, 88, 0.15); color: #30d158;"
         },
         {
           "nombre": "¿Dónde aparqué?",
@@ -38,7 +38,7 @@
           "url": "#"
         },
         {
-          "nombre": "Guardar Asesor en Agenda",
+          "nombre": "Guardar Contacto en Agenda",
           "descripcion": "Añade el WhatsApp y teléfono directo a tus contactos",
           "icono": "fa-solid fa-address-card",
           "url": "./contacto.vcf",
