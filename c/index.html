@@ -121,11 +121,11 @@
         </div>
     </div>
 
-    <!-- MODAL WOW 1: ASESOR DE FIRMEZA -->
+    <!-- MODAL WOW 1: TEST ERGONÓMICO -->
     <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
         <div class="modal-box" style="max-width: 380px;">
             <div style="color: var(--color-cyan); font-size: 2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
-            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Asesor de Firmeza</h3>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Test Ergonómico</h3>
             <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 18px;">Configuración de descanso en 3 toques</p>
             
             <div class="selector-box">
@@ -163,12 +163,12 @@
 
             <div class="modal-actions">
                 <a id="btn-probar-tienda" href="#" class="modal-btn-primary" style="padding: 12px 15px; font-size: 0.85rem;"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
-                <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar Asesor</button>
+                <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL WOW 2: TASADOR LOGÍSTICA & RETIRADA -->
+    <!-- MODAL WOW 2: TASADOR LOGÍSTICO -->
     <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
         <div class="modal-box" style="max-width: 380px;">
             <div style="color: #30d158; font-size: 2rem; margin-bottom: 8px;"><i class="fa-solid fa-truck-ramp-box"></i></div>
@@ -214,10 +214,8 @@
         </div>
     </div>
 
-    <!-- BOTÓN AUDIO FLOTANTE -->
     <button id="btn-audio" onclick="alternarAudio()"><i id="icono-audio" class="fa-solid fa-volume-high"></i></button>
 
-    <!-- HUB PRINCIPAL -->
     <div class="hub-container">
         <div class="logo-container" id="hub-logo-box"><img id="hub-logo" alt="Logo"></div>
         <h1 id="client-name">STUDIO 42</h1>
@@ -374,10 +372,11 @@
                             sec.botones.forEach(btn => {
                                 const nLower = btn.nombre.toLowerCase();
 
-                                if (nLower.includes('asesor') || nLower.includes('firmeza')) {
+                                // 1. TEST ERGONÓMICO (Sin colisión con la agenda)
+                                if ((nLower.includes('firmeza') || nLower.includes('ergonómico') || nLower.includes('ergonomico')) && !nLower.includes('agenda') && !nLower.includes('contacto')) {
                                     block.innerHTML += `
                                         <a class="app-btn destacado" onclick="abrirAsesor(event)">
-                                            <div class="app-icon" style="background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;"><i class="fa-solid fa-bed-pulse"></i></div>
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="fa-solid fa-bed-pulse"></i></div>
                                             <div class="app-info">
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Configurador interactivo de descanso'}</div>
@@ -385,10 +384,12 @@
                                             <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
                                         </a>
                                     `;
-                                } else if (nLower.includes('envío') || nLower.includes('retirada') || nLower.includes('montaje')) {
+                                } 
+                                // 2. TASADOR LOGÍSTICO
+                                else if (nLower.includes('tasador') || nLower.includes('retirada') || nLower.includes('entrega')) {
                                     block.innerHTML += `
                                         <a class="app-btn" onclick="abrirEnvio(event)">
-                                            <div class="app-icon" style="background-color: rgba(48, 209, 88, 0.15); color: #30d158;"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="fa-solid fa-truck-ramp-box"></i></div>
                                             <div class="app-info">
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Calcula condiciones de reparto y retirada'}</div>
@@ -396,7 +397,9 @@
                                             <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
                                         </a>
                                     `;
-                                } else if (btn.tipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
+                                } 
+                                // 3. PARKING GPS
+                                else if (btn.tipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
                                     block.innerHTML += `
                                         <a class="app-btn" onclick="gestionarParking(event)">
                                             <div class="app-icon" id="parking-box" style="background: rgba(142,142,147,0.1); color: #8e8e93;"><i id="parking-icon" class="fa-solid fa-location-crosshairs"></i></div>
@@ -407,7 +410,9 @@
                                             <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
                                         </a>
                                     `;
-                                } else {
+                                } 
+                                // 4. VCARD Y OTROS BOTONES
+                                else {
                                     let estrellasHTML = btn.estrellas ? '<div class="stars-active" style="font-size: 0.75rem; margin-top: 4px; color:#ffb400;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>' : '';
                                     
                                     if(btn.url && (btn.url.includes('writereview') || btn.url.includes('google.com') || btn.url.includes('maps.google'))) googleReviewUrlGlobal = btn.url;
