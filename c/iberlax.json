@@ -1,35 +1,35 @@
 {
   "nombre": "IBERLAX COLCHONES",
   "subtitulo": "Especialistas en Descanso & Ergonomía",
-  "subtituloOverlay": "Bienvenido a Iberlax Colchones",
+  "subtituloOverlay": "Bienvenido al Ecosistema Iberlax",
   "logo": "./iberlax-logo.jpg",
   "colorPrincipal": "#0F2C59",
   "audioFondo": "ambiente2.mp3",
   "secciones": [
     {
-      "titulo": "Promociones & Soluciones en Tienda",
+      "titulo": "Soluciones de Descanso & Ofertas",
       "botones": [
         {
           "nombre": "Promo Exclusiva Llavero Smart",
           "descripcion": "15% dto. directo + Almohada viscoelástica de regalo al canjear aquí",
           "icono": "fa-solid fa-tag",
-          "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20tengo%20el%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
+          "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20vengo%20del%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
           "estiloIcono": "background-color: rgba(255, 180, 0, 0.15); color: #FFB400;",
           "destacado": true
         },
         {
+          "nombre": "Garantía Digital & Cuidados del Colchón",
+          "descripcion": "Tu certificado de descanso, prueba de adaptación y guía de volteo",
+          "icono": "fa-solid fa-certificate",
+          "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20quiero%20activar%20la%20garant%C3%ADa%20digital%20de%20mi%20colch%C3%B3n",
+          "estiloIcono": "background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;"
+        },
+        {
           "nombre": "Envío, Montaje & Retirada de Colchón Viejo",
-          "descripcion": "Consulta plazos y recogida directa en tu domicilio",
+          "descripcion": "Consulta plazos y retirada gratuita de tus antiguos enseres",
           "icono": "fa-solid fa-truck-ramp-box",
           "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20quisiera%20consultar%20condiciones%20de%20env%C3%ADo%20y%20retirada%20de%20mi%20colch%C3%B3n%20antiguo",
           "estiloIcono": "background-color: rgba(0, 123, 255, 0.15); color: #007BFF;"
-        },
-        {
-          "nombre": "Asesor de Medidas & Canapés",
-          "descripcion": "Comprueba compatibilidades de bases y colchones",
-          "icono": "fa-solid fa-bed",
-          "url": "https://iberlax.com/",
-          "estiloIcono": "background-color: rgba(15, 44, 89, 0.2); color: #00A8E8;"
         },
         {
           "nombre": "¿Dónde aparqué?",
@@ -38,8 +38,8 @@
           "url": "#"
         },
         {
-          "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Añade el WhatsApp y teléfono directo a tu móvil",
+          "nombre": "Guardar Asesor en Agenda",
+          "descripcion": "Añade el WhatsApp y teléfono directo a tus contactos",
           "icono": "fa-solid fa-address-card",
           "url": "./contacto.vcf",
           "estiloIcono": "background-color: rgba(0, 229, 255, 0.15); color: #00E5FF;"
