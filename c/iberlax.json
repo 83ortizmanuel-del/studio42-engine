@@ -2,7 +2,7 @@
   "nombre": "IBERLAX COLCHONES",
   "subtitulo": "Especialistas en Descanso & Ergonomía",
   "subtituloOverlay": "Bienvenido a Iberlax Colchones",
-  "logo": "./iberlax-logo.jpg",
+  "logo": "iberlax-logo.jpg",
   "colorPrincipal": "#0056B3",
   "audioFondo": "ambiente.mp3",
   "secciones": [
