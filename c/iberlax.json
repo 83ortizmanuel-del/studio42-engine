@@ -1,7 +1,7 @@
 {
   "nombre": "IBERLAX COLCHONES",
   "subtitulo": "Especialistas en Descanso & Ergonomía",
-  "subtituloOverlay": "Bienvenido al Ecosistema Phygital de Iberlax",
+  "subtituloOverlay": "Bienvenido a Iberlax Colchones",
   "logo": "https://iberlax.com/wp-content/uploads/2021/04/Logo.jpg",
   "colorPrincipal": "#0056B3",
   "glowColor": "rgba(0, 86, 179, 0.25)",
@@ -12,40 +12,26 @@
       "botones": [
         {
           "nombre": "Promo Exclusiva Llavero Smart",
-          "descripcion": "Descuento directo del 15% + Almohada viscoelástica de regalo al canjear aquí",
+          "descripcion": "15% dto. directo + Almohada viscoelástica de regalo al canjear aquí",
           "icono": "fa-solid fa-tag",
           "url": "https://wa.me/34600000000?text=Hola%20Iberlax,%20tengo%20el%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
-          "estiloIcono": "background-color: rgba(255, 193, 7, 0.18); color: #FFC107;",
+          "estiloIcono": "background-color: rgba(255, 193, 7, 0.15); color: #FFC107;",
           "destacado": true,
           "badge": "Exclusivo"
         },
         {
           "nombre": "Asesor de Firmeza & Medidas",
-          "descripcion": "Test express en 30 segundos para elegir tu colchón ideal según peso y postura",
+          "descripcion": "Elige tu colchón ideal según peso, postura y preferencias",
           "icono": "fa-solid fa-bed",
-          "url": "https://iberlax.com/#test-descanso",
+          "url": "https://iberlax.com/",
           "estiloIcono": "background-color: rgba(0, 86, 179, 0.15); color: #0056B3;"
         },
         {
-          "nombre": "¿Dónde aparqué?",
-          "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir de la tienda",
-          "icono": "fa-solid fa-location-crosshairs",
-          "url": "javascript:gestionarParking(event)",
-          "estiloIcono": "background-color: rgba(142, 142, 147, 0.15); color: #8E8E93;"
-        },
-        {
-          "nombre": "Envío & Retirada de Colchón Viejo",
-          "descripcion": "Consulta las condiciones de transporte y recogida gratuita de tus antiguos enseres",
-          "icono": "fa-solid fa-truck-fast",
-          "url": "https://wa.me/34600000000?text=Hola%20Iberlax,%20quisiera%20consultar%20plazos%20de%20entrega%20y%20retirada%20de%20colchón%20viejo",
-          "estiloIcono": "background-color: rgba(0, 86, 179, 0.12); color: #0056B3;"
-        },
-        {
-          "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Añade el WhatsApp directo de tu asesor Iberlax a tu teléfono",
+          "nombre": "Guardar Contacto",
+          "descripcion": "Añade el WhatsApp y tienda de Iberlax a tu agenda",
           "icono": "fa-solid fa-address-card",
           "url": "./contacto.vcf",
-          "estiloIcono": "background-color: rgba(0, 229, 255, 0.12); color: #00E5FF;"
+          "estiloIcono": "background-color: rgba(0, 229, 255, 0.15); color: #00E5FF;"
         }
       ]
     },
@@ -54,17 +40,17 @@
       "botones": [
         {
           "nombre": "¿Algo no salió perfecto?",
-          "descripcion": "Buzón prioritario de atención y solución con Gerencia",
-          "icono": "fa-solid fa-shield-halved",
-          "url": "https://wa.me/34600000000?text=Hola%20Gerencia%20Iberlax,%20quisiera%20comentar%20una%20incidencia%20con%20mi%20compra/visita",
-          "estiloIcono": "background-color: rgba(255, 59, 48, 0.15); color: #FF3B30;"
+          "descripcion": "Atención personalizada y solución directa con Gerencia",
+          "icono": "fa-solid fa-comment-dots",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20visita%20en%20Iberlax",
+          "estiloIcono": "background-color: rgba(255, 59, 48, 0.1); color: #ff3b30;"
         },
         {
-          "nombre": "Valóranos con 5 Estrellas en Google",
-          "descripcion": "Tu experiencia ayuda a más familias a descansar mejor",
+          "nombre": "Déjanos 5 Estrellas en Google",
+          "descripcion": "Tu valoración nos ayuda a seguir recomendando el mejor descanso",
           "icono": "fa-brands fa-google",
-          "url": "https://search.google.com/local/writereview?placeid=IBERLAX_PLACE_ID",
-          "estiloIcono": "background-color: rgba(255, 193, 7, 0.18); color: #FFC107;",
+          "url": "https://maps.google.com/?q=Iberlax+Colchones",
+          "estiloIcono": "background-color: rgba(255, 180, 0, 0.1); color: #ffb400;",
           "estrellas": true
         }
       ]
