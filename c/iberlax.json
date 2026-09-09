@@ -11,7 +11,7 @@
       "botones": [
         {
           "nombre": "Promo Exclusiva Llavero Smart",
-          "descripcion": "15% dto. directo + Almohada viscoelástica de regalo al canjear aquí",
+          "descripcion": "15% dto. directo + Almohada viscoelástica de regalo",
           "icono": "fa-solid fa-tag",
           "url": "https://wa.me/34600000000?text=Hola%20Iberlax,%20tengo%20el%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
           "estiloIcono": "background-color: rgba(255, 193, 7, 0.15); color: #FFC107;",
@@ -19,7 +19,7 @@
         },
         {
           "nombre": "Asesor de Firmeza & Medidas",
-          "descripcion": "Elige tu colchón ideal según peso, postura y preferencias",
+          "descripcion": "Elige tu colchón ideal según peso y postura",
           "icono": "fa-solid fa-bed",
           "url": "https://iberlax.com/",
           "estiloIcono": "background-color: rgba(0, 86, 179, 0.15); color: #0056B3;"
@@ -27,11 +27,12 @@
         {
           "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir",
-          "icono": "fa-solid fa-location-crosshairs"
+          "icono": "fa-solid fa-location-crosshairs",
+          "url": "#"
         },
         {
           "nombre": "Guardar Contacto",
-          "descripcion": "Añade el teléfono y dirección de Iberlax a tu agenda",
+          "descripcion": "Añade el teléfono y WhatsApp de Iberlax a tu agenda",
           "icono": "fa-solid fa-address-card",
           "url": "./contacto.vcf",
           "estiloIcono": "background-color: rgba(0, 229, 255, 0.15); color: #00E5FF;"
@@ -40,9 +41,23 @@
     },
     {
       "titulo": "Tu Opinión Nos Importa",
-      "escudoResenas": true,
-      "placeIdGoogle": "ChIJN1t_tDeuEmsRUsoyG83frY4",
-      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia%20Iberlax,%20tengo%20una%20sugerencia%20sobre%20mi%20visita"
+      "botones": [
+        {
+          "nombre": "¿Algo no salió perfecto?",
+          "descripcion": "Atención personalizada y solución directa con Gerencia",
+          "icono": "fa-solid fa-comment-dots",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20visita%20en%20Iberlax",
+          "estiloIcono": "background-color: rgba(255, 59, 48, 0.1); color: #ff3b30;"
+        },
+        {
+          "nombre": "Déjanos 5 Estrellas en Google",
+          "descripcion": "Tu valoración nos ayuda a seguir recomendando el mejor descanso",
+          "icono": "fa-brands fa-google",
+          "url": "https://search.google.com/local/writereview?placeid=ChIJN1t_tDeuEmsRUsoyG83frY4",
+          "estiloIcono": "background-color: rgba(255, 180, 0, 0.1); color: #ffb400;",
+          "estrellas": true
+        }
+      ]
     }
   ]
 }
