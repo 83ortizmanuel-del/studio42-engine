@@ -214,13 +214,16 @@
         </div>
     </div>
 
+    <!-- BOTÓN AUDIO FLOTANTE -->
     <button id="btn-audio" onclick="alternarAudio()"><i id="icono-audio" class="fa-solid fa-volume-high"></i></button>
 
+    <!-- HUB PRINCIPAL -->
     <div class="hub-container">
         <div class="logo-container" id="hub-logo-box"><img id="hub-logo" alt="Logo"></div>
         <h1 id="client-name">STUDIO 42</h1>
         <div class="propietario" id="client-subtitle">ELIMINA TUS CUELLOS DE BOTELLA</div>
 
+        <!-- PANEL DE FRICCIONES / CONTROL MODO DEMO -->
         <div id="fricciones-section">
             <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
             <div class="friccion-grid" id="friccion-grid"></div>
@@ -309,20 +312,28 @@
                 reproductor.src = pistaAudio;
                 reproductor.load();
 
-                datosFriccionesGlobales = {
-                    'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:#00e5ff;"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
-                    'resenas': { icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>', titulo: 'Protección de Reputación', texto: 'Una sola queja pública en Google aleja clientes.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas hacia tu WhatsApp Privado.' },
-                    'embudos': { icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>', titulo: 'Embudos Directos', texto: 'Las webs tradicionales son lentas.<br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión directamente en la mano del cliente.' },
-                    'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real para que recuerden tu marca tras la compra.' }
-                };
+                // CONTROL INTERRUPTOR MODO DEMO / PRESENTACIÓN COMERCIAL
+                const seccionFricciones = document.getElementById('fricciones-section');
+                if (data.modoDemo === true) {
+                    seccionFricciones.style.display = 'block';
 
-                const gridContainer = document.getElementById('friccion-grid');
-                gridContainer.innerHTML = `
-                    <div class="friccion-card" onclick="mostrarExplicacion('contactos')"><div class="friccion-icon" style="color: #00e5ff;"><i class="fa-solid fa-user-xmark"></i></div><div class="friccion-title">Fuga de Contactos</div></div>
-                    <div class="friccion-card" onclick="mostrarExplicacion('resenas')"><div class="friccion-icon" style="color: #ff3b30;"><i class="fa-solid fa-star-half-stroke"></i></div><div class="friccion-title">Reputación Vulnerable</div></div>
-                    <div class="friccion-card" onclick="mostrarExplicacion('embudos')"><div class="friccion-icon" style="color: #30d158;"><i class="fa-solid fa-filter-circle-xmark"></i></div><div class="friccion-title">Embudos Rotos</div></div>
-                    <div class="friccion-card" onclick="mostrarExplicacion('experiencia')"><div class="friccion-icon" style="color: #bf5af2;"><i class="fa-solid fa-map-location-dot"></i></div><div class="friccion-title">Olvido del Cliente</div></div>
-                `;
+                    datosFriccionesGlobales = {
+                        'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:#00e5ff;"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
+                        'resenas': { icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>', titulo: 'Protección de Reputación', texto: 'Una sola queja pública en Google aleja clientes.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas hacia tu WhatsApp Privado.' },
+                        'embudos': { icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>', titulo: 'Embudos Directos', texto: 'Las webs tradicionales son lentas.<br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión directamente en la mano del cliente.' },
+                        'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real para que recuerden tu marca tras la compra.' }
+                    };
+
+                    const gridContainer = document.getElementById('friccion-grid');
+                    gridContainer.innerHTML = `
+                        <div class="friccion-card" onclick="mostrarExplicacion('contactos')"><div class="friccion-icon" style="color: #00e5ff;"><i class="fa-solid fa-user-xmark"></i></div><div class="friccion-title">Fuga de Contactos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('resenas')"><div class="friccion-icon" style="color: #ff3b30;"><i class="fa-solid fa-star-half-stroke"></i></div><div class="friccion-title">Reputación Vulnerable</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('embudos')"><div class="friccion-icon" style="color: #30d158;"><i class="fa-solid fa-filter-circle-xmark"></i></div><div class="friccion-title">Embudos Rotos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('experiencia')"><div class="friccion-icon" style="color: #bf5af2;"><i class="fa-solid fa-map-location-dot"></i></div><div class="friccion-title">Olvido del Cliente</div></div>
+                    `;
+                } else {
+                    seccionFricciones.style.display = 'none';
+                }
 
                 const menuContainer = document.getElementById('dynamic-menu');
                 menuContainer.innerHTML = '';
@@ -404,7 +415,7 @@
                                         <a class="app-btn" onclick="gestionarParking(event)">
                                             <div class="app-icon" id="parking-box" style="background: rgba(142,142,147,0.1); color: #8e8e93;"><i id="parking-icon" class="fa-solid fa-location-crosshairs"></i></div>
                                             <div class="app-info">
-                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                                <div class="app-name">${btn.nombre || '¿Dónde aparqué?'}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Guarda tu coche por GPS'}</div>
                                             </div>
                                             <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
