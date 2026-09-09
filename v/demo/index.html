@@ -11,7 +11,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 | Demo Phygital Interactiva</title>
+    <title>Studio 42 | Demo Phygital</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,321 +31,571 @@
             --border-silver: rgba(196, 196, 196, 0.4);
         }
 
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden !important;
-            background-color: var(--bg-dark);
-            color: #E2E8F0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            padding: 0;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: #E2E8F0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 15px; 
+            user-select: none; 
+            background-image: radial-gradient(rgba(196, 196, 196, 0.12) 1px, transparent 1px);
+            background-size: 28px 28px;
         }
 
         .font-display {
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        .bg-grid-tech {
-            background-image: radial-gradient(rgba(196, 196, 196, 0.12) 1px, transparent 1px);
-            background-size: 28px 28px;
+        /* OVERLAY DE DESBLOQUEO SENSORIAL (SPLASH) */
+        #splash-screen {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100vh; 
+            background: linear-gradient(180deg, #0d0f14 0%, #07080b 100%);
+            z-index: 10000; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+            padding: 20px;
         }
 
-        .text-silver-gradient {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 40%, #E2E8F0 70%, #CBD5E1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.25));
-        }
-
-        .card-silver-premium {
-            background: linear-gradient(180deg, rgba(22, 25, 34, 0.95) 0%, rgba(11, 13, 18, 0.98) 100%);
-            border: 1px solid rgba(196, 196, 196, 0.45);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(196, 196, 196, 0.22);
-            border-radius: 24px;
-            transition: all 0.3s ease;
-        }
-
-        .card-base {
-            background: rgba(13, 15, 21, 0.85);
-            border: 1px solid var(--border-subtle);
-            border-radius: 20px;
-            transition: all 0.25s ease;
-        }
-
-        .btn-silver {
+        .btn-desbloqueo {
             background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%);
-            color: #07080B;
-            font-weight: 800;
-            letter-spacing: 0.9px;
+            color: #07080B; 
+            border: none; 
+            padding: 16px 36px; 
+            border-radius: 50px; 
+            font-size: 0.9rem; 
+            font-weight: 800; 
+            letter-spacing: 1.2px; 
+            text-transform: uppercase; 
+            cursor: pointer; 
             box-shadow: 0 6px 22px rgba(196, 196, 196, 0.35);
             transition: all 0.25s ease;
-            cursor: pointer;
+        }
+        .btn-desbloqueo:active { 
+            transform: scale(0.95); 
+            box-shadow: 0 0 10px rgba(196, 196, 196, 0.2); 
         }
 
-        .btn-silver:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(241, 245, 249, 0.55);
-            filter: brightness(1.08);
+        .pulse-logo { 
+            animation: pulse 2s infinite; 
+        }
+        @keyframes pulse { 
+            0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(196, 196, 196, 0.4); } 
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(196, 196, 196, 0); } 
+            100% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(196, 196, 196, 0); } 
         }
 
-        .btn-vcard-cyber {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.04) 100%);
-            border: 1px solid rgba(196, 196, 196, 0.5);
-            box-shadow: 0 0 20px rgba(196, 196, 196, 0.15), inset 0 0 12px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
+        /* HUB PRINCIPAL */
+        .hub-container { 
+            background: linear-gradient(180deg, rgba(22, 25, 34, 0.95) 0%, rgba(11, 13, 18, 0.98) 100%); 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 28px; 
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(196, 196, 196, 0.22); 
+            padding: 30px 20px; 
+            text-align: center; 
+            border: 1px solid var(--border-silver); 
+            backdrop-filter: blur(14px);
         }
 
-        .star-item {
-            transition: color 0.15s ease, transform 0.15s ease;
-            cursor: pointer;
+        .logo-container { 
+            width: 86px; 
+            height: 86px; 
+            margin: 0 auto 15px auto; 
+            border-radius: 24px; 
+            border: 1px solid var(--border-silver); 
+            overflow: hidden; 
+            background-color: #000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            box-shadow: 0 8px 22px rgba(0,0,0,0.8);
         }
-        .star-item:hover {
-            transform: scale(1.2);
+        .logo-container img { 
+            width: 75%; 
+            height: 75%; 
+            object-fit: contain; 
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+        h1 { 
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.45rem; 
+            font-weight: 900; 
+            letter-spacing: 1.5px; 
+            margin-bottom: 2px; 
+            text-transform: uppercase; 
+            color: #ffffff;
         }
-        .animate-fade-in {
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .propietario { 
+            color: var(--color-silver); 
+            font-size: 0.8rem; 
+            margin-bottom: 20px; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            text-transform: uppercase;
+        }
+
+        .section-title { 
+            text-align: left; 
+            font-size: 0.72rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            color: var(--color-silver-dark); 
+            margin: 20px 0 10px 4px; 
+            font-weight: 800; 
+        }
+
+        /* PANEL DE FRICCIONES (GRID 2x2) */
+        .friccion-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+        }
+        .friccion-card { 
+            background: rgba(13, 15, 21, 0.85); 
+            border-radius: 18px; 
+            padding: 15px 10px; 
+            text-align: center; 
+            border: 1px solid var(--border-subtle); 
+            cursor: pointer; 
+            transition: all 0.25s ease; 
+        }
+        .friccion-card:active { 
+            transform: scale(0.96); 
+            border-color: var(--color-silver); 
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .friccion-icon { 
+            font-size: 1.7rem; 
+            margin-bottom: 8px; 
+        }
+        .friccion-title { 
+            font-size: 0.72rem; 
+            font-weight: 700; 
+            color: #ffffff; 
+            line-height: 1.25; 
+        }
+
+        /* LISTA DE APPS NORMALES */
+        .apps-menu { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+        .app-btn { 
+            display: flex; 
+            align-items: center; 
+            padding: 14px 16px; 
+            border-radius: 18px; 
+            background-color: rgba(13, 15, 21, 0.85); 
+            border: 1px solid var(--border-subtle); 
+            transition: all 0.25s ease; 
+            cursor: pointer; 
+            text-align: left; 
+        }
+        .app-btn:active { 
+            transform: scale(0.97); 
+            border-color: var(--border-silver); 
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .app-icon { 
+            width: 42px; 
+            height: 42px; 
+            border-radius: 12px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-right: 14px; 
+            font-size: 1.2rem; 
+            flex-shrink: 0; 
+            border: 1px solid var(--border-subtle);
+        }
+        .app-info { 
+            flex-grow: 1; 
+        }
+        .app-name { 
+            font-size: 0.92rem; 
+            font-weight: 700; 
+            color: #ffffff; 
+            margin-bottom: 2px; 
+        }
+        .app-desc { 
+            font-size: 0.72rem; 
+            color: var(--color-silver-dark); 
+        }
+
+        /* ESCUDO ANTI-RESEÑAS */
+        .stars-container { 
+            font-size: 1.8rem; 
+            margin-top: 10px; 
+            display: flex; 
+            justify-content: center; 
+            gap: 8px; 
+            width: 100%; 
+        }
+        .star-rating i { 
+            cursor: pointer; 
+            transition: color 0.2s, transform 0.2s; 
+        }
+        .star-rating i:active { 
+            transform: scale(1.3); 
+        }
+        .star-active { 
+            color: #ffffff; 
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); 
+        }
+        .star-inactive { 
+            color: #333842; 
+        }
+
+        /* MODAL EXPLICATIVO (GLASSMORPHISM) */
+        #modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100vh; 
+            background: rgba(0,0,0,0.8); 
+            backdrop-filter: blur(10px); 
+            z-index: 10001; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+            opacity: 0; 
+            transition: opacity 0.3s ease; 
+        }
+        .modal-box { 
+            background: linear-gradient(180deg, #161922 0%, #0d0f14 100%); 
+            border: 1px solid var(--border-silver); 
+            border-radius: 24px; 
+            padding: 25px 22px; 
+            max-width: 350px; 
+            text-align: center; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.95), 0 0 30px rgba(196,196,196,0.2); 
+            transform: translateY(20px); 
+            transition: transform 0.3s ease; 
+        }
+        .modal-icon { 
+            font-size: 2.4rem; 
+            margin-bottom: 14px; 
+        }
+        .modal-title { 
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem; 
+            font-weight: 800; 
+            color: #ffffff; 
+            margin-bottom: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+        }
+        .modal-text { 
+            font-size: 0.85rem; 
+            color: #CBD5E1; 
+            line-height: 1.55; 
+            margin-bottom: 22px; 
+        }
+        .modal-close { 
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%); 
+            color: #07080B; 
+            border: none; 
+            padding: 10px 32px; 
+            border-radius: 50px; 
+            font-weight: 800; 
+            font-size: 0.8rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            cursor: pointer; 
+            transition: 0.2s; 
+            box-shadow: 0 4px 15px rgba(196, 196, 196, 0.3);
+        }
+        .modal-close:active { 
+            transform: scale(0.96); 
+        }
+
+        /* BOTÓN FLOTANTE AUDIO */
+        #btn-audio { 
+            display: none; 
+            position: fixed; 
+            bottom: 25px; 
+            right: 25px; 
+            z-index: 999; 
+            background: rgba(13, 15, 21, 0.85); 
+            border: 1px solid var(--border-silver); 
+            color: var(--color-silver); 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            font-size: 1.15rem; 
+            cursor: pointer; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8), 0 0 15px rgba(196,196,196,0.2); 
+            backdrop-filter: blur(8px); 
+            align-items: center; 
+            justify-content: center; 
+            transition: all 0.3s; 
         }
     </style>
 </head>
+<body>
 
-<body class="bg-grid-tech min-h-screen flex flex-col items-center justify-between p-4 selection:bg-[#C4C4C4] selection:text-black select-none">
+    <!-- MP3 LOCAL -->
+    <audio id="audio-fondo" loop><source src="ambiente.mp3" type="audio/mpeg"></audio>
 
-    <div class="w-full max-w-md my-auto mt-2 sm:mt-4 space-y-4">
-        
-        <!-- CABECERA DE MARCA OFICIAL -->
-        <header class="text-center pt-2 pb-1">
-            <div class="inline-flex p-3 rounded-2xl bg-black/60 border border-[#C4C4C4]/40 shadow-2xl mb-3" style="box-shadow: 0 0 25px rgba(196, 196, 196, 0.2);">
-                <img src="/studio42-logo.png" alt="Studio 42" class="w-14 h-14 object-contain" onerror="this.src='/logo.png';">
-            </div>
-            <h1 class="font-display text-xl font-black uppercase tracking-wider text-white">
-                STUDIO 42 <span class="text-silver-gradient">· IDENTIDAD INTELIGENTE</span>
-            </h1>
-            <p class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mt-1">
-                ¿Cuánto dinero pierde tu negocio cada semana sin tecnología phygital?
-            </p>
-        </header>
-
-        <!-- SECCIÓN 1: PROBLEMAS REALES DEL DÍA A DÍA -->
-        <div class="grid grid-cols-2 gap-2.5">
-            <div class="card-base p-3.5 flex flex-col justify-between">
-                <div class="w-8 h-8 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-2 text-[#C4C4C4]">
-                    <i class="fa-solid fa-user-xmark text-sm"></i>
-                </div>
-                <div>
-                    <h2 class="text-xs font-bold text-white leading-tight">Clientes que no vuelven</h2>
-                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Salen por la puerta y no te recuerdan. Cero fidelización activa.</p>
-                </div>
-            </div>
-
-            <div class="card-base p-3.5 flex flex-col justify-between">
-                <div class="w-8 h-8 rounded-xl bg-red-500/15 border border-red-500/30 flex items-center justify-center mb-2 text-red-400">
-                    <i class="fa-solid fa-shield-virus text-sm"></i>
-                </div>
-                <div>
-                    <h2 class="text-xs font-bold text-white leading-tight">Reseñas injustas</h2>
-                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Una mala crítica pública en Google Maps reduce clientes y ventas.</p>
-                </div>
-            </div>
-
-            <div class="card-base p-3.5 flex flex-col justify-between">
-                <div class="w-8 h-8 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-2 text-[#C4C4C4]">
-                    <i class="fa-solid fa-clock-rotate-left text-sm"></i>
-                </div>
-                <div>
-                    <h2 class="text-xs font-bold text-white leading-tight">Preguntas repetitivas</h2>
-                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Carta, horarios, Wi-Fi, reservas... Tu personal pierde tiempo crítico.</p>
-                </div>
-            </div>
-
-            <div class="card-base p-3.5 flex flex-col justify-between">
-                <div class="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center mb-2 text-cyan-400">
-                    <i class="fa-solid fa-store-slash text-sm"></i>
-                </div>
-                <div>
-                    <h2 class="text-xs font-bold text-white leading-tight">Fuga de clientes</h2>
-                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Si no estás en el top local, tu competencia capta tus clientes.</p>
-                </div>
-            </div>
+    <!-- SPLASH SCREEN -->
+    <div id="splash-screen">
+        <div class="logo-container pulse-logo" style="width: 110px; height: 110px; margin-bottom: 22px;">
+            <img src="studio42-logo.png" alt="Studio 42" onerror="this.src='logo.png'">
         </div>
-
-        <!-- SECCIÓN 2: SOLUCIONES EN VIVO INTERACTIVAS -->
-        <div class="space-y-3 pt-2">
-            <div class="flex items-center justify-between px-1">
-                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Prueba la interactividad en vivo</span>
-                <span class="text-[9px] font-bold btn-vcard-cyber text-zinc-200 px-2.5 py-0.5 rounded-full">Sistema NTAG216</span>
-            </div>
-
-            <!-- Escudo Inteligente de Reseñas -->
-            <div class="card-silver-premium p-4 space-y-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[#C4C4C4]">
-                        <i class="fa-brands fa-google text-sm"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-black uppercase text-white">Escudo Inteligente de Reputación</h3>
-                        <p class="text-[10px] text-zinc-400">Toca las estrellas para probar el filtro activo:</p>
-                    </div>
-                </div>
-
-                <div class="flex justify-center items-center gap-3 py-1.5 text-2xl text-zinc-600" id="star-container">
-                    <i class="fa-solid fa-star star-item" data-val="1"></i>
-                    <i class="fa-solid fa-star star-item" data-val="2"></i>
-                    <i class="fa-solid fa-star star-item" data-val="3"></i>
-                    <i class="fa-solid fa-star star-item" data-val="4"></i>
-                    <i class="fa-solid fa-star star-item" data-val="5"></i>
-                </div>
-
-                <div id="escudo-feedback" class="hidden p-3.5 rounded-xl text-[11px] leading-relaxed transition-all"></div>
-            </div>
-
-            <!-- Desplegable de Asistencias Integradas -->
-            <div class="card-base p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleDemoTools()">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-xl bg-white/10 text-[#C4C4C4] flex items-center justify-center text-sm border border-white/10">
-                        <i class="fa-solid fa-microchip"></i>
-                    </div>
-                    <div class="text-left">
-                        <p class="text-xs font-bold text-white">Módulos de Retención y Gestión</p>
-                        <p class="text-[10px] text-zinc-400">Wi-Fi en 1 Toque · Ubicación GPS · Carta Express</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-zinc-500 text-xs transition-transform" id="tools-chevron"></i>
-            </div>
-
-            <div id="demo-tools" class="hidden space-y-2 pl-2">
-                <div class="p-3 bg-[#0D0F14] rounded-xl border border-white/10 flex items-center justify-between text-xs">
-                    <span class="text-zinc-300 font-semibold"><i class="fa-solid fa-wifi text-[#C4C4C4] mr-2"></i> Conexión Wi-Fi sin escribir clave</span>
-                    <span class="text-[10px] text-zinc-200 font-bold bg-white/10 border border-white/20 px-2 py-0.5 rounded">Activo</span>
-                </div>
-                <div class="p-3 bg-[#0D0F14] rounded-xl border border-white/10 flex items-center justify-between text-xs">
-                    <span class="text-zinc-300 font-semibold"><i class="fa-solid fa-location-arrow text-[#C4C4C4] mr-2"></i> Recordar dónde aparqué el coche</span>
-                    <span class="text-[10px] text-zinc-200 font-bold bg-white/10 border border-white/20 px-2 py-0.5 rounded">Activo</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- SECCIÓN 3: PROTOCOLO DE ACTIVACIÓN EN VIVO -->
-        <div class="pt-2">
-            <div class="card-silver-premium p-5 text-center space-y-3.5">
-                <span class="inline-block text-[9px] font-black tracking-widest text-black bg-[#C4C4C4] px-3 py-1 rounded-full uppercase shadow-md">
-                    Instalación en Mostrador
-                </span>
-                <h3 class="font-display text-base sm:text-lg font-black uppercase text-white leading-tight">
-                    ¿Quieres este sistema con el nombre de tu negocio hoy?
-                </h3>
-                <p class="text-xs text-zinc-300 leading-relaxed font-light">
-                    Tu asesor de Studio 42 activará tu arquitectura en caliente en menos de 60 segundos con su llave inteligente.
-                </p>
-                
-                <button type="button" onclick="abrirProtocoloActivacion()" class="w-full py-4 text-center rounded-2xl btn-silver text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-key text-xs"></i> Solicitar Activación a mi Asesor
-                </button>
-            </div>
-        </div>
-
+        <h2 style="color: #ffffff; font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 6px; letter-spacing: 3px; font-weight: 900;">STUDIO 42</h2>
+        <p style="color: var(--color-silver-dark); font-size: 0.82rem; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;">Identidad Inteligente</p>
+        <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
-    <!-- MODAL PROTOCOLO DE LLAVE MAESTRA -->
-    <div id="modal-activacion" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md hidden animate-fade-in">
-        <div class="card-silver-premium max-w-sm w-full p-6 text-center space-y-5 border-2 border-[#C4C4C4]">
-            
-            <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
-                <div class="absolute inset-0 rounded-full bg-white/10 animate-ping"></div>
-                <div class="w-16 h-16 rounded-full bg-black border-2 border-[#C4C4C4] flex items-center justify-center text-white text-2xl shadow-xl">
-                    <i class="fa-solid fa-nfc-symbol text-cyan-300"></i>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="font-display text-base font-black uppercase text-white tracking-wide">Protocolo de Llave Maestra</h3>
-                <p class="text-xs text-zinc-300 mt-2 font-light leading-relaxed">
-                    Pídele a tu asesor de <strong>Studio 42</strong> que aproxime su <span class="text-white font-semibold">Llave NFC de Asesor</span> a tu teléfono para compilar tu estación en este mismo instante.
-                </p>
-            </div>
-
-            <div class="p-3 bg-white/5 rounded-xl border border-white/10 text-[10px] text-zinc-400">
-                <i class="fa-solid fa-shield-check text-emerald-400 mr-1"></i> Terminal seguro Studio 42 Engine
-            </div>
-
-            <button type="button" onclick="cerrarProtocoloActivacion()" class="text-xs text-zinc-500 uppercase font-bold tracking-widest hover:text-white transition">
-                Volver a la Demo
-            </button>
+    <!-- MODAL DE FRICCIONES -->
+    <div id="modal-overlay" onclick="cerrarModal(event)">
+        <div class="modal-box" id="modal-content">
+            <div id="modal-icon" class="modal-icon"></div>
+            <div id="modal-title" class="modal-title"></div>
+            <div id="modal-text" class="modal-text"></div>
+            <button class="modal-close" onclick="cerrarModalBtn()">Entendido</button>
         </div>
     </div>
 
-    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-5">
-        Ecosistema Phygital &bull; Concepto y tecnología por <a href="/" class="text-zinc-400 hover:text-white transition">Studio 42</a>
-    </footer>
+    <!-- BOTÓN AUDIO FLOTANTE -->
+    <button id="btn-audio" onclick="alternarAudio()"><i id="icono-audio" class="fa-solid fa-volume-high"></i></button>
+
+    <!-- HUB PRINCIPAL -->
+    <div class="hub-container">
+        <div class="logo-container">
+            <img src="studio42-logo.png" alt="Logo" onerror="this.src='logo.png'">
+        </div>
+        <h1>STUDIO 42</h1>
+        <div class="propietario">ELIMINA TUS CUELLOS DE BOTELLA</div>
+
+        <!-- DASHBOARD DE FRICCIONES CON LENGUAJE CLARO Y DIRECTO -->
+        <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
+        <div class="friccion-grid">
+            <div class="friccion-card" onclick="mostrarExplicacion('contactos')">
+                <div class="friccion-icon" style="color: #c4c4c4;"><i class="fa-solid fa-user-xmark"></i></div>
+                <div class="friccion-title">Clientes que no vuelven</div>
+            </div>
+            <div class="friccion-card" onclick="mostrarExplicacion('resenas')">
+                <div class="friccion-icon" style="color: #f87171;"><i class="fa-solid fa-shield-virus"></i></div>
+                <div class="friccion-title">Reseñas injustas</div>
+            </div>
+            <div class="friccion-card" onclick="mostrarExplicacion('embudos')">
+                <div class="friccion-icon" style="color: #c4c4c4;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <div class="friccion-title">Preguntas repetitivas</div>
+            </div>
+            <div class="friccion-card" onclick="mostrarExplicacion('experiencia')">
+                <div class="friccion-icon" style="color: #38bdf8;"><i class="fa-solid fa-store-slash"></i></div>
+                <div class="friccion-title">Fuga de clientes</div>
+            </div>
+        </div>
+
+        <div class="apps-menu">
+            <div class="section-title">Prueba las Soluciones en Vivo</div>
+
+            <!-- GESTOR DE PARKING -->
+            <a class="app-btn" onclick="gestionarParking(event)">
+                <div class="app-icon" id="parking-box" style="background: rgba(255,255,255,0.05); color: #c4c4c4;"><i id="parking-icon" class="fa-solid fa-location-crosshairs"></i></div>
+                <div class="app-info">
+                    <div class="app-name" id="parking-name">¿Dónde aparqué?</div>
+                    <div class="app-desc" id="parking-desc">Guardamos tu coche por GPS</div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color: #8e8e93; font-size: 0.75rem;"></i>
+            </a>
+
+            <!-- ESCUDO ANTI-RESEÑAS -->
+            <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start; border: 1px solid var(--border-silver); background: rgba(255, 255, 255, 0.03);">
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <div class="app-icon" style="background: rgba(255,255,255,0.08); color: #ffffff;"><i class="fa-brands fa-google"></i></div>
+                    <div class="app-info">
+                        <div class="app-name" style="color: #ffffff;">Escudo de Reseñas</div>
+                        <div class="app-desc">Toca las estrellas para probarlo</div>
+                    </div>
+                </div>
+                <div class="stars-container star-rating" id="escudo-estrellas">
+                    <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(1)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(2)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(3)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(4)"></i>
+                    <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(5)"></i>
+                </div>
+                <p id="mensaje-filtro" style="font-size: 0.75rem; color: #c4c4c4; text-align: center; width: 100%; margin-top: 10px; display: none; font-weight: 600;">Procesando...</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const stars = document.querySelectorAll('.star-item');
-        const feedback = document.getElementById('escudo-feedback');
+        // --- 1. AUDIO Y SPLASH SCREEN ---
+        const reproductor = document.getElementById('audio-fondo');
+        const splash = document.getElementById('splash-screen');
+        const btnAudio = document.getElementById('btn-audio');
+        const iconoAudio = document.getElementById('icono-audio');
+        let audioMuteado = false;
 
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const val = parseInt(star.getAttribute('data-val'));
-                
-                stars.forEach(s => {
-                    const sVal = parseInt(s.getAttribute('data-val'));
-                    if (sVal <= val) {
-                        s.classList.remove('text-zinc-600');
-                        s.style.color = '#FFFFFF';
-                        s.style.filter = 'drop-shadow(0 0 8px rgba(255,255,255,0.8))';
-                    } else {
-                        s.style.color = '';
-                        s.style.filter = '';
-                        s.classList.add('text-zinc-600');
-                    }
-                });
-
-                feedback.classList.remove('hidden');
-
-                if (val <= 3) {
-                    feedback.className = "p-3.5 rounded-xl text-[11px] leading-relaxed bg-red-950/40 border border-red-500/40 text-red-200 block animate-fade-in";
-                    feedback.innerHTML = `
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-shield-halved text-red-400 text-sm mt-0.5"></i>
-                            <div>
-                                <strong class="text-white block uppercase tracking-wider text-[10px]">Escudo Activado (${val} estrellas)</strong>
-                                Google queda bloqueado. El sistema deriva la queja de forma privada al WhatsApp de gerencia para solucionar el incidente sin manchar tu nota media.
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    feedback.className = "p-3.5 rounded-xl text-[11px] leading-relaxed bg-[#10131A] border border-[#C4C4C4]/50 text-zinc-200 block animate-fade-in";
-                    feedback.innerHTML = `
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-circle-check text-cyan-300 text-sm mt-0.5"></i>
-                            <div>
-                                <strong class="text-white block uppercase tracking-wider text-[10px]">Impulso 5 Estrellas Directo (${val} estrellas)</strong>
-                                El móvil del cliente abre directamente la ventana oficial de Google Maps con las 5 estrellas marcadas para publicar con un solo clic.
-                            </div>
-                        </div>
-                    `;
-                }
+        function iniciarMagia() {
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.display = 'none'; }, 600);
+            reproductor.play().then(() => { 
+                btnAudio.style.display = 'flex'; 
+            }).catch(e => { 
+                btnAudio.style.display = 'flex'; 
             });
-        });
-
-        function toggleDemoTools() {
-            const tools = document.getElementById('demo-tools');
-            const chevron = document.getElementById('tools-chevron');
-            tools.classList.toggle('hidden');
-            chevron.classList.toggle('rotate-90');
         }
 
-        function abrirProtocoloActivacion() {
-            document.getElementById('modal-activacion').classList.remove('hidden');
+        function alternarAudio() {
+            if (audioMuteado) {
+                reproductor.play(); 
+                iconoAudio.className = "fa-solid fa-volume-high"; 
+                btnAudio.style.color = "var(--color-silver)"; 
+                btnAudio.style.borderColor = "var(--border-silver)";
+            } else {
+                reproductor.pause(); 
+                iconoAudio.className = "fa-solid fa-volume-xmark"; 
+                btnAudio.style.color = "var(--color-silver-dark)"; 
+                btnAudio.style.borderColor = "var(--border-subtle)";
+            }
+            audioMuteado = !audioMuteado;
         }
 
-        function cerrarProtocoloActivacion() {
-            document.getElementById('modal-activacion').classList.add('hidden');
+        // --- 2. LÓGICA DEL PANEL DE FRICCIONES (MODAL) ---
+        const datosFricciones = {
+            'contactos': {
+                icono: '<i class="fa-solid fa-address-card" style="color:#c4c4c4;"></i>',
+                titulo: 'Clientes que no vuelven',
+                texto: 'El 80% de las personas que entran a tu local jamás guardan tu teléfono y te olvidan a los pocos días.<br><br><b>La Solución Studio 42:</b> Guardamos tu contacto completo (vCard) directamente en la agenda de su teléfono en 1 toque. Cero fricción y fidelización directa.'
+            },
+            'resenas': {
+                icono: '<i class="fa-solid fa-shield-halved" style="color:#f87171;"></i>',
+                titulo: 'Reseñas injustas en Google',
+                texto: 'Una sola reseña de 1 estrella baja tu media pública y espanta a decenas de clientes potenciales en el mapa.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente detecta notas de 1 a 3 estrellas y abre un chat privado de WhatsApp para resolverlo contigo sin manchar tu Google Maps. Las de 4 y 5 van directas a publicar.'
+            },
+            'embudos': {
+                icono: '<i class="fa-solid fa-clock-rotate-left" style="color:#c4c4c4;"></i>',
+                titulo: 'Preguntas repetitivas',
+                texto: 'Dar la clave del Wi-Fi, explicar la carta o contestar dudas básicas satura a tu personal y genera colas innecesarias.<br><br><b>La Solución Studio 42:</b> Ponemos en la mano del cliente la conexión Wi-Fi sin escribir clave, la carta o el servicio estrella al instante.'
+            },
+            'experiencia': {
+                icono: '<i class="fa-solid fa-store-slash" style="color:#38bdf8;"></i>',
+                titulo: 'Tu competencia se los lleva',
+                texto: 'Si tu local no destaca en Google Maps con 5 estrellas y utilidades que sorprendan, el cliente elige al de la acera de enfrente.<br><br><b>La Solución Studio 42:</b> Entregamos herramientas útiles como el Gestor GPS de Parking y estaciones físicas premium para que tu negocio sea inolvidable.'
+            }
+        };
+
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+
+        function mostrarExplicacion(tipo) {
+            document.getElementById('modal-icon').innerHTML = datosFricciones[tipo].icono;
+            document.getElementById('modal-title').innerText = datosFricciones[tipo].titulo;
+            document.getElementById('modal-text').innerHTML = datosFricciones[tipo].texto;
+            
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => { 
+                modalOverlay.style.opacity = '1'; 
+                modalContent.style.transform = 'translateY(0)';
+            }, 10);
         }
+
+        function cerrarModal(e) {
+            if(e.target === modalOverlay) cerrarModalBtn();
+        }
+
+        function cerrarModalBtn() {
+            modalOverlay.style.opacity = '0';
+            modalContent.style.transform = 'translateY(20px)';
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // --- 3. ESCUDO ANTI-RESEÑAS (DEMO) ---
+        function simularFiltro(nota) {
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { 
+                e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; 
+            });
+            
+            mensaje.style.display = 'block';
+            mensaje.innerText = "Analizando valoración...";
+
+            setTimeout(() => {
+                mensaje.style.display = 'none';
+                if (nota <= 3) {
+                    mostrarExplicacion('resenas');
+                    document.getElementById('modal-title').innerText = "🛡️ ESCUDO ACTIVADO";
+                    document.getElementById('modal-text').innerHTML = "El cliente valoró con " + nota + " estrella(s).<br><br>El sistema ha bloqueado el paso a Google Maps y le habría abierto tu <b>WhatsApp Privado</b> para disculparte y arreglar la queja.<br><br>¡Tu reputación pública queda blindada!";
+                } else {
+                    mostrarExplicacion('resenas');
+                    document.getElementById('modal-title').innerText = "⭐ IMPULSO 5 ESTRELLAS";
+                    document.getElementById('modal-text').innerHTML = "El cliente valoró con " + nota + " estrellas.<br><br>Al estar satisfecho, el sistema abre directamente tu ficha oficial de <b>Google Maps</b> con las 5 estrellas marcadas para mejorar tu ranking en el mapa.";
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google" style="color:#ffffff;"></i>';
+                }
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
+            }, 600);
+        }
+
+        // --- 4. GESTOR PARKING GPS ---
+        function actualizarInterfazParking() {
+            const lat = localStorage.getItem('demo_gps_lat');
+            const iconBox = document.getElementById('parking-box');
+            const icon = document.getElementById('parking-icon');
+            const title = document.getElementById('parking-name');
+            const desc = document.getElementById('parking-desc');
+
+            if (lat) {
+                iconBox.style.background = "rgba(255, 255, 255, 0.15)"; 
+                iconBox.style.color = "#ffffff";
+                icon.className = "fa-solid fa-person-walking";
+                title.innerText = "Ir a mi coche (Ruta GPS)"; 
+                title.style.color = "#ffffff";
+                desc.innerText = "Toca para abrir Maps y volver a pie";
+            } else {
+                iconBox.style.background = "rgba(255, 255, 255, 0.05)"; 
+                iconBox.style.color = "#c4c4c4";
+                icon.className = "fa-solid fa-location-crosshairs";
+                title.innerText = "¿Dónde aparqué?"; 
+                title.style.color = "#ffffff";
+                desc.innerText = "Guardamos tu coche por GPS";
+            }
+        }
+
+        function gestionarParking(e) {
+            e.preventDefault();
+            if (localStorage.getItem('demo_gps_lat')) {
+                mostrarExplicacion('experiencia');
+                document.getElementById('modal-title').innerText = "📍 RUTA AL VEHÍCULO";
+                document.getElementById('modal-text').innerHTML = "El cliente tocaría aquí al salir de tu local.<br><br>Se le abre Google Maps guiándolo a pie hasta donde aparcó el vehículo.<br><br><em>(Ubicación restablecida para la demo)</em>";
+                localStorage.removeItem('demo_gps_lat');
+                actualizarInterfazParking();
+            } else {
+                mostrarExplicacion('experiencia');
+                document.getElementById('modal-title').innerText = "🚗 VEHÍCULO GUARDADO";
+                document.getElementById('modal-text').innerHTML = "Coordenada satelital memorizada con éxito.<br><br>El botón ha cambiado de estado. El cliente cierra la ventana, disfruta de tu local y lo usa para volver a su coche cuando se marche.";
+                localStorage.setItem('demo_gps_lat', "demo");
+                actualizarInterfazParking();
+            }
+        }
+
+        actualizarInterfazParking();
     </script>
 </body>
 </html>
