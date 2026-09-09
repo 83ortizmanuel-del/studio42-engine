@@ -1,8 +1,8 @@
 {
   "nombre": "IBERLAX COLCHONES",
   "subtitulo": "Especialistas en Descanso & Ergonomía",
-  "subtituloOverlay": "Bienvenido al Ecosistema Iberlax",
-  "logo": "./iberlax-logo.jpg",
+  "subtituloOverlay": "Bienvenido a Iberlax Colchones",
+  "logo": "iberlax-logo.jpg",
   "colorPrincipal": "#0F2C59",
   "audioFondo": "ambiente2.mp3",
   "secciones": [
@@ -49,6 +49,7 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com/?q=Iberlax+Sistemas+de+Descanso",
       "placeIdGoogle": "ChIJXy9Psu6qWg0R2MztIZPHsPQ",
       "whatsappGerencia": "https://wa.me/346643186453?text=Hola%20Gerencia%20Iberlax,%20quisiera%20comentar%20una%20disconformidad%20con%20mi%20visita"
     }
