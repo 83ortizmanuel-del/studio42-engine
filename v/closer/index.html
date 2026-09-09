@@ -11,20 +11,20 @@
 
     <style>
         :root {
-            /* VALORES POR DEFECTO (STUDIO 42 GOLD) */
-            --color-accent: #facc15;
-            --color-glow: rgba(250, 204, 21, 0.45);
+            /* PALETA TITANIUM STUDIO 42 (Reemplaza al antiguo Gold) */
+            --color-accent: #c4c4c4;
+            --color-glow: rgba(196, 196, 196, 0.4);
             --color-fondo: #050507;
             --gradient-conic: conic-gradient(
                 transparent 0%, transparent 45%, 
-                rgba(250, 204, 21, 0.6) 50%, rgba(255, 255, 255, 0.8) 52%, rgba(250, 204, 21, 0.6) 54%, 
+                rgba(196, 196, 196, 0.6) 50%, rgba(255, 255, 255, 0.8) 52%, rgba(196, 196, 196, 0.6) 54%, 
                 transparent 60%, transparent 100%
             );
-            --gradient-btn: linear-gradient(135deg, #facc15 0%, #eab308 50%, #ca8a04 100%);
-            --btn-text-color: #000000;
+            --gradient-btn: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 40%, #c4c4c4 70%, #94A3B8 100%);
+            --btn-text-color: #07080B;
         }
 
-        /* PALETA EXCLUSIVA BRANDING MELINA (Se activa al detectar MEL42) */
+        /* PALETA EXCLUSIVA BRANDING MELINA (Se activa automáticamente al detectar MEL42) */
         body.theme-melina {
             --color-accent: #FF2E9B;
             --color-glow: rgba(255, 46, 155, 0.5);
@@ -238,7 +238,7 @@
                     <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
                         Branding, Paleta de Colores y Redes
                     </label>
-                    <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#FF0000), IG @comercio..." class="input-cyber" required>
+                    <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#C4C4C4), IG @comercio..." class="input-cyber" required>
                 </div>
 
                 <div>
