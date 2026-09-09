@@ -1,328 +1,352 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPXJ4FNYBS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CPXJ4FNYBS');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 | Diagnóstico Phygital Cyber-Engine</title>
+    <title>Studio 42 | Diagnóstico Phygital Closer</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         :root {
-            /* VALORES POR DEFECTO (STUDIO 42 GOLD) */
-            --color-accent: #facc15;
-            --color-glow: rgba(250, 204, 21, 0.45);
-            --color-fondo: #050507;
-            --gradient-conic: conic-gradient(
-                transparent 0%, transparent 45%, 
-                rgba(250, 204, 21, 0.6) 50%, rgba(255, 255, 255, 0.8) 52%, rgba(250, 204, 21, 0.6) 54%, 
-                transparent 60%, transparent 100%
-            );
-            --gradient-btn: linear-gradient(135deg, #facc15 0%, #eab308 50%, #ca8a04 100%);
-            --btn-text-color: #000000;
+            --color-silver: #c4c4c4;
+            --color-silver-light: #ffffff;
+            --color-silver-dark: #8e8e93;
+            --color-silver-glow: rgba(196, 196, 196, 0.4);
+            --bg-dark: #07080b;
+            --bg-card: #0d0f14;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-silver: rgba(196, 196, 196, 0.4);
         }
 
-        /* PALETA EXCLUSIVA BRANDING MELINA (Se activa al detectar MEL42) */
-        body.theme-melina {
-            --color-accent: #FF2E9B;
-            --color-glow: rgba(255, 46, 155, 0.5);
-            --gradient-conic: conic-gradient(
-                transparent 0%, #FF2E9B 30%, transparent 50%, #A855F7 70%, transparent 100%
-            );
-            --gradient-btn: linear-gradient(135deg, #FF2E9B 0%, #A855F7 100%);
-            --btn-text-color: #ffffff;
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden !important;
+            background-color: var(--bg-dark);
+            color: #E2E8F0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--color-fondo);
-            color: #ffffff;
-            overflow-x: hidden;
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
         }
 
-        .bg-tech-grid {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+        .bg-grid-tech {
+            background-image: radial-gradient(rgba(196, 196, 196, 0.12) 1px, transparent 1px);
             background-size: 28px 28px;
         }
 
-        .neon-card-wrapper {
-            position: relative;
-            border-radius: 28px;
-            overflow: hidden;
-            padding: 1.5px;
-            background: rgba(20, 20, 22, 0.8);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 25px var(--color-glow);
+        .text-silver-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 40%, #E2E8F0 70%, #CBD5E1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.25));
         }
 
-        .neon-card-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: var(--gradient-conic);
-            animation: rotateNeonSutil 8s linear infinite;
-            z-index: 0;
+        .card-silver-premium {
+            background: linear-gradient(180deg, rgba(22, 25, 34, 0.95) 0%, rgba(11, 13, 18, 0.98) 100%);
+            border: 1px solid rgba(196, 196, 196, 0.45);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(196, 196, 196, 0.22);
+            border-radius: 24px;
         }
 
-        @keyframes rotateNeonSutil {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .card-base {
+            background: rgba(13, 15, 21, 0.85);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            transition: all 0.25s ease;
         }
 
-        .neon-card-content {
-            position: relative;
-            background: rgba(14, 14, 17, 0.96);
-            border-radius: 26.5px;
-            z-index: 1;
-            backdrop-filter: blur(16px);
-        }
-
-        .logo-hero {
-            height: 105px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 0 16px var(--color-glow));
-            animation: logoAura 3.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes logoAura {
-            0% { filter: drop-shadow(0 0 10px var(--color-glow)); transform: scale(1); }
-            100% { filter: drop-shadow(0 0 22px var(--color-glow)); transform: scale(1.02); }
-        }
-
-        .title-phygital {
-            font-size: 1.15rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #ffffff;
-            text-transform: uppercase;
-            line-height: 1.2;
-        }
-
-        .subtitle-phygital {
-            color: var(--color-accent);
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .input-cyber {
+        .option-chip {
+            border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-            border-radius: 16px;
-            padding: 14px 16px;
-            width: 100%;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-cyber:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--color-accent);
-            box-shadow: 0 0 15px var(--color-glow);
-        }
-
-        .input-locked {
-            background: rgba(255, 255, 255, 0.03) !important;
-            border-color: var(--color-accent) !important;
-            color: var(--color-accent) !important;
-            cursor: not-allowed;
-            text-shadow: 0 0 6px var(--color-glow);
-        }
-
-        .btn-cyber-submit {
-            background: var(--gradient-btn);
-            color: var(--btn-text-color);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border-radius: 50px;
-            padding: 16px;
-            width: 100%;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 25px var(--color-glow);
-            border: none;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
         }
 
-        .btn-cyber-submit::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
-            transform: rotate(30deg);
-            animation: btnTextureShimmer 4s infinite;
+        .option-chip:hover {
+            border-color: rgba(196, 196, 196, 0.5);
+            transform: translateY(-1px);
         }
 
-        @keyframes btnTextureShimmer {
-            0% { transform: translateX(-100%) rotate(30deg); }
-            20% { transform: translateX(100%) rotate(30deg); }
-            100% { transform: translateX(100%) rotate(30deg); }
+        .option-chip.selected {
+            border-color: #FFFFFF;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.06) 100%);
+            box-shadow: 0 0 20px rgba(196, 196, 196, 0.25), inset 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
-        .badge-closer {
-            background-color: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--color-accent);
-            color: var(--color-accent);
+        .btn-silver {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%);
+            color: #07080B;
+            font-weight: 800;
+            letter-spacing: 0.9px;
+            box-shadow: 0 6px 22px rgba(196, 196, 196, 0.35);
+            transition: all 0.25s ease;
         }
 
-        .dot-pulse {
-            background-color: var(--color-accent);
+        .btn-silver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(241, 245, 249, 0.55);
+            filter: brightness(1.08);
+        }
+
+        .btn-vcard-cyber {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.04) 100%);
+            border: 1px solid rgba(196, 196, 196, 0.5);
+            box-shadow: 0 0 20px rgba(196, 196, 196, 0.15), inset 0 0 12px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+        }
+
+        .input-silver {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #FFFFFF;
+            transition: all 0.2s ease;
+        }
+
+        .input-silver:focus {
+            outline: none;
+            border-color: #C4C4C4;
+            box-shadow: 0 0 15px rgba(196, 196, 196, 0.25);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
 
-<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-center p-4 text-white select-none">
+<body class="bg-grid-tech min-h-screen flex flex-col items-center justify-between p-4 selection:bg-[#C4C4C4] selection:text-black select-none">
 
-    <div class="w-full max-w-sm neon-card-wrapper">
-        <main class="neon-card-content p-6 sm:p-7">
+    <div class="w-full max-w-md my-auto mt-2 sm:mt-4 space-y-4">
+        
+        <header class="text-center pt-2 pb-1">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full btn-vcard-cyber mb-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-200">Studio 42 Engine &bull; Closer Terminal</span>
+            </div>
+            <h1 class="font-display text-xl font-black uppercase tracking-wider text-white">
+                DIAGNÓSTICO <span class="text-silver-gradient">PHYGITAL EXPRÉS</span>
+            </h1>
+            <p class="text-[11px] font-medium text-zinc-400 mt-0.5">
+                Configuración de impacto en mostrador (Tiempo estimado: 45 seg)
+            </p>
+        </header>
+
+        <form id="form-diagnostico" class="space-y-3.5">
             
-            <header class="w-full flex flex-col items-center mb-6 text-center space-y-2">
-                <div class="relative inline-flex items-center justify-center p-1">
-                    <div class="absolute inset-0 blur-2xl rounded-full" style="background: var(--color-glow);"></div>
-                    <img src="/logo.png" alt="Studio 42 Logo" class="relative logo-hero" onerror="this.onerror=null; this.src='logo.png';">
-                </div>
-
+            <div class="card-base p-4 space-y-2.5">
+                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
+                    <i class="fa-solid fa-store text-[#C4C4C4]"></i> 1. Identificación del Negocio
+                </label>
                 <div>
-                    <h1 class="title-phygital">Diagnóstico Phygital</h1>
-                    <p class="subtitle-phygital mt-0.5">Engine v2 // Identidad Inteligente</p>
+                    <input type="text" id="nombre-negocio" required placeholder="Nombre comercial (Ej. Bar El Laurel)" 
+                        class="w-full px-3.5 py-2.5 rounded-xl input-silver text-xs font-semibold placeholder:text-zinc-600">
                 </div>
-                
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full badge-closer shadow-md mt-1">
-                    <span class="w-1.5 h-1.5 rounded-full dot-pulse animate-ping"></span>
-                    <span class="text-[9px] font-black uppercase tracking-widest">Acceso Exclusivo Closer</span>
-                </div>
-            </header>
-
-            <form id="form-diagnostico" class="space-y-4">
-                
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1 ml-1" style="color: var(--color-accent);">
-                        ID Responsable (Closer)
-                    </label>
-                    <div class="relative">
-                        <input type="text" id="closer_id" name="closer_id" value="MEL42" class="input-cyber input-locked font-black text-sm" readonly required>
-                        <i class="fa-solid fa-lock absolute right-4 top-4 text-xs" style="color: var(--color-accent);"></i>
+                    <input type="tel" id="whatsapp-negocio" required placeholder="WhatsApp de Gerencia / Dueño (Ej. 672000000)" 
+                        class="w-full px-3.5 py-2.5 rounded-xl input-silver text-xs font-semibold placeholder:text-zinc-600">
+                </div>
+            </div>
+
+            <div class="card-base p-4 space-y-2.5">
+                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-[#C4C4C4]"></i> 2. Sector Comercial
+                </label>
+                <div class="grid grid-cols-2 gap-2" id="selector-sector">
+                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2 selected" data-value="Hostelería / Bares / Restaurantes">
+                        <i class="fa-solid fa-utensils text-[#C4C4C4] text-xs"></i>
+                        <span class="text-[11px] font-bold text-zinc-200">Hostelería</span>
                     </div>
-                    <p class="text-[9px] text-gray-400 mt-1 ml-1">🔒 Llave maestra asignada CTO/CEO Studio42.</p>
+                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2" data-value="Barbería / Estética / Cuidado">
+                        <i class="fa-solid fa-scissors text-[#C4C4C4] text-xs"></i>
+                        <span class="text-[11px] font-bold text-zinc-200">Barbería / Belleza</span>
+                    </div>
+                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2" data-value="Clínica / Salud / Dental">
+                        <i class="fa-solid fa-stethoscope text-[#C4C4C4] text-xs"></i>
+                        <span class="text-[11px] font-bold text-zinc-200">Salud / Clínicas</span>
+                    </div>
+                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2" data-value="Movilidad / Alquiler / Taller">
+                        <i class="fa-solid fa-car text-[#C4C4C4] text-xs"></i>
+                        <span class="text-[11px] font-bold text-zinc-200">Automoción</span>
+                    </div>
                 </div>
+                <input type="hidden" id="sector-seleccionado" value="Hostelería / Bares / Restaurantes">
+            </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Nombre Comercial / Sector
-                    </label>
-                    <input type="text" id="nombre_sector" name="nombre_sector" placeholder="Ej: Óptica San José / Salud" class="input-cyber" required>
+            <div class="card-base p-4 space-y-2.5">
+                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-red-400"></i> 3. Fricción Principal a Resolver
+                </label>
+                
+                <div class="space-y-2" id="selector-friccion">
+                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5 selected" data-value="Miedo a malas notas y necesidad de blindar Google Maps con reseñas 5 estrellas">
+                        <i class="fa-solid fa-shield-virus text-red-400 text-sm mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-bold text-white">Blindar Reputación / Escudo Google</p>
+                            <p class="text-[10px] text-zinc-400 leading-snug">Evitar que quejas puntuales dañen la nota; dirigir a clientes contentos a 5 estrellas directas.</p>
+                        </div>
+                    </div>
+
+                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5" data-value="Colas y personal respondiendo lo mismo: clave Wi-Fi, carta, horarios y dudas frecuentes">
+                        <i class="fa-solid fa-clock-rotate-left text-[#C4C4C4] text-sm mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-bold text-white">Preguntas Repetitivas y Esperas</p>
+                            <p class="text-[10px] text-zinc-400 leading-snug">Wi-Fi en 1 toque, carta en móvil o consultas frecuentes sin saturar a los empleados.</p>
+                        </div>
+                    </div>
+
+                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5" data-value="Clientes que consumen una vez y no vuelven: nula fidelización y olvido fuera del local">
+                        <i class="fa-solid fa-user-xmark text-cyan-400 text-sm mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-bold text-white">Cero Fidelización / Clientes que Olvidan</p>
+                            <p class="text-[10px] text-zinc-400 leading-snug">Guardar contacto en agenda, GPS para volver o canal WhatsApp de promociones.</p>
+                        </div>
+                    </div>
+
+                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5" data-value="Pérdida de reservas o citas por falta de un canal directo en un toque de móvil">
+                        <i class="fa-solid fa-calendar-check text-emerald-400 text-sm mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-bold text-white">Fricción de Reservas o Citas Previas</p>
+                            <p class="text-[10px] text-zinc-400 leading-snug">Facilitar que el cliente agende su próxima mesa, corte o cita antes de salir por la puerta.</p>
+                        </div>
+                    </div>
                 </div>
+                <input type="hidden" id="friccion-seleccionada" value="Miedo a malas notas y necesidad de blindar Google Maps con reseñas 5 estrellas">
+            </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Fricción o Quejas de los Clientes
-                    </label>
-                    <textarea id="fricciones" name="fricciones" rows="3" placeholder="Fricciones detectadas en el comercio..." class="input-cyber" required></textarea>
-                </div>
+            <div class="card-base p-4 space-y-2">
+                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
+                    <i class="fa-brands fa-google text-[#C4C4C4]"></i> 4. Enlace Google Business / Maps
+                </label>
+                <input type="url" id="google-url" placeholder="https://maps.app.goo.gl/... o https://g.page/..." 
+                    class="w-full px-3.5 py-2.5 rounded-xl input-silver text-xs font-semibold placeholder:text-zinc-600">
+                <p class="text-[9px] text-zinc-500 italic">Opcional: Si no lo tiene a mano, el sistema genera la búsqueda automática del negocio.</p>
+            </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Branding, Paleta de Colores y Redes
-                    </label>
-                    <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#FF0000), IG @comercio..." class="input-cyber" required>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        URL del Logo / Observaciones Extra
-                    </label>
-                    <input type="text" id="logo_extra" name="logo_extra" placeholder="Ej: Link al logo en Web/Drive o notas..." class="input-cyber">
-                </div>
-
-                <button type="submit" id="btn-enviar" class="btn-cyber-submit mt-4">
-                    Registrar Diagnóstico
+            <div class="pt-2">
+                <button type="submit" id="btn-compilar" class="w-full py-4 text-center rounded-2xl btn-silver text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bolt-lightning text-sm"></i> Compilar Ecosistema Phygital (IA)
                 </button>
-            </form>
+            </div>
 
-            <div id="mensaje-estado" class="hidden mt-4 p-4 rounded-2xl text-center text-xs font-bold"></div>
+        </form>
 
-        </main>
+        <div id="loading-overlay" class="hidden card-silver-premium p-6 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full border-2 border-t-transparent border-white animate-spin mx-auto"></div>
+            <div>
+                <h3 class="font-display text-sm font-black uppercase text-white">Compilando Arquitectura Phygital</h3>
+                <p class="text-xs text-zinc-400 mt-1" id="loading-status">Generando estructura JSON personalizada...</p>
+            </div>
+        </div>
+
     </div>
 
-    <footer class="mt-6 text-center text-[10px] text-gray-500 font-bold tracking-widest uppercase">
-        Engine v2 // Desarrollado por <span style="color: var(--color-accent);" class="font-black">Studio 42</span>
+    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-4">
+        Terminal Operativo Studio 42 Engine &bull; Redirección Segura
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const closerCod = urlParams.get('cod') || 'MEL42';
-            
-            document.getElementById('closer_id').value = closerCod.toUpperCase();
-
-            // DETECCIÓN AUTOMÁTICA DE LA PALETA DE BRANDING DE MELINA
-            if (closerCod.toUpperCase().includes('MEL')) {
-                document.body.classList.add('theme-melina');
-            }
+        const chipsSector = document.querySelectorAll('#selector-sector .option-chip');
+        const inputSector = document.getElementById('sector-seleccionado');
+        
+        chipsSector.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chipsSector.forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+                inputSector.value = chip.getAttribute('data-value');
+            });
         });
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsKQpR9iWP4HnrBHt31Y4hNTvFDszp0GUITguP6KslwK6gfum8ODKupoJB6imDQnMn/exec";
+        const chipsFriccion = document.querySelectorAll('#selector-friccion .option-chip');
+        const inputFriccion = document.getElementById('friccion-seleccionada');
+
+        chipsFriccion.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chipsFriccion.forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+                inputFriccion.value = chip.getAttribute('data-value');
+            });
+        });
 
         const form = document.getElementById('form-diagnostico');
-        const btnEnviar = document.getElementById('btn-enviar');
-        const mensajeEstado = document.getElementById('mensaje-estado');
+        const loading = document.getElementById('loading-overlay');
+        const statusText = document.getElementById('loading-status');
 
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            btnEnviar.disabled = true;
-            btnEnviar.innerText = "Sincronizando con Sheet...";
-            btnEnviar.style.opacity = "0.7";
 
-            const formData = new FormData(form);
-            const params = new URLSearchParams(formData);
+            const nombre = document.getElementById('nombre-negocio').value.trim();
+            const whatsapp = document.getElementById('whatsapp-negocio').value.trim();
+            const sector = inputSector.value;
+            const friccion = inputFriccion.value;
+            const googleUrl = document.getElementById('google-url').value.trim() || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre)}`;
 
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: params.toString()
-            })
-            .then(() => {
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white";
-                mensajeEstado.innerText = "¡Diagnóstico registrado con éxito en la Base de Datos!";
-                mensajeEstado.classList.remove('hidden');
+            const slug = nombre.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
 
-                const closerActual = document.getElementById('closer_id').value;
-                form.reset();
-                document.getElementById('closer_id').value = closerActual;
-            })
-            .catch(error => {
-                console.error('Error enviando diagnóstico:', error);
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-red-500/10 border border-red-500/40 text-red-400";
-                mensajeEstado.innerText = "Error al conectar con la red. Revisa la conexión.";
-                mensajeEstado.classList.remove('hidden');
-            })
-            .finally(() => {
-                btnEnviar.disabled = false;
-                btnEnviar.innerText = "Registrar Diagnóstico";
-                btnEnviar.style.opacity = "1";
+            form.classList.add('hidden');
+            loading.classList.remove('hidden');
+
+            const SCRIPT_URL = "PEGA_AQUI_LA_URL_WEB_APP_DE_APPS_SCRIPT";
+
+            const payload = {
+                slug: slug,
+                negocio: nombre,
+                whatsapp: whatsapp,
+                sector: sector,
+                friccion: friccion,
+                googleUrl: googleUrl,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                statusText.innerText = "Registrando diagnóstico en Google Sheets...";
+                
+                if (SCRIPT_URL && !SCRIPT_URL.includes("PEGA_AQUI")) {
+                    await fetch(SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                }
+
+                statusText.innerText = "IA generando archivo JSON y módulos activos...";
                 
                 setTimeout(() => {
-                    mensajeEstado.classList.add('hidden');
-                }, 4000);
-            });
+                    statusText.innerText = "¡Listo! Abriendo entorno personalizado...";
+                    setTimeout(() => {
+                        window.location.href = `/v/?id=${slug}`;
+                    }, 800);
+                }, 1500);
+
+            } catch (err) {
+                console.error("Error en registro:", err);
+                window.location.href = `/v/?id=${slug}`;
+            }
         });
     </script>
 </body>
