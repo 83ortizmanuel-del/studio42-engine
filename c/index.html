@@ -14,6 +14,8 @@
             --color-boton: #1a1a1a; 
             --color-texto: #ffffff;
             --color-gris: #8e8e93;
+            --color-cyan: #00A8E8;
+            --color-blue: #007BFF;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -27,7 +29,7 @@
             transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px;
         }
         .btn-desbloqueo {
-            background: linear-gradient(135deg, #007BFF, #0F2C59); color: #fff; border: 1px solid rgba(255,255,255,0.2); 
+            background: linear-gradient(135deg, var(--color-blue), var(--color-oro)); color: #fff; border: 1px solid rgba(255,255,255,0.2); 
             padding: 16px 36px; border-radius: 50px; font-size: 0.95rem; font-weight: 800; letter-spacing: 1.5px; 
             text-transform: uppercase; cursor: pointer; box-shadow: 0 0 25px rgba(0, 123, 255, 0.4);
             transition: all 0.2s ease;
@@ -47,7 +49,7 @@
         .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         
         h1 { font-size: 1.5rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; color: #fff; }
-        .propietario { color: #00A8E8; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; letter-spacing: 1px; }
+        .propietario { color: var(--color-cyan); font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; letter-spacing: 1px; }
         
         .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 700; }
         
@@ -62,7 +64,7 @@
         .apps-menu { display: flex; flex-direction: column; gap: 12px; }
         .app-btn { display: flex; align-items: center; padding: 14px 18px; border-radius: 18px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; }
         .app-btn:active { transform: scale(0.97); background-color: #222; }
-        .app-btn.destacado { border: 1px solid #007BFF; box-shadow: 0 0 15px rgba(0, 123, 255, 0.35); }
+        .app-btn.destacado { border: 1px solid var(--color-blue); box-shadow: 0 0 15px rgba(0, 123, 255, 0.35); }
         .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; flex-shrink: 0; }
         .app-info { flex-grow: 1; }
         .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
@@ -75,9 +77,9 @@
         .star-active { color: #ffb400; text-shadow: 0 0 10px rgba(255, 180, 0, 0.5); }
         .star-inactive { color: #333; }
 
-        /* MODAL EXPLICATIVO (GLASSMORPHISM) */
-        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-box { background: #161616; border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; padding: 25px; max-width: 360px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; }
+        /* MODALES */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: #161616; border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; padding: 25px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; }
         .modal-icon { font-size: 2.5rem; margin-bottom: 15px; }
         .modal-title { font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; }
         .modal-text { font-size: 0.88rem; color: #ddd; line-height: 1.5; margin-bottom: 20px; }
@@ -87,11 +89,19 @@
         .modal-btn-google { background: #ffb400; color: #000; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 800; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: block; }
         .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.2); padding: 10px 18px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; }
 
+        /* ESTILOS ESPECÍFICOS ASESOR WOW */
+        .selector-box { text-align: left; margin-bottom: 15px; }
+        .selector-label { font-size: 0.75rem; color: var(--color-cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .selector-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .pill-btn { background: #222; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 4px; font-size: 0.75rem; color: #fff; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .pill-btn.active { background: var(--color-blue); border-color: var(--color-cyan); font-weight: 700; box-shadow: 0 0 10px rgba(0, 168, 232, 0.4); }
+        .card-resultado { background: rgba(0, 123, 255, 0.1); border: 1px dashed var(--color-cyan); border-radius: 16px; padding: 12px; margin: 15px 0; text-align: left; }
+
         /* BOTÓN FLOTANTE AUDIO */
-        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(10, 10, 10, 0.8); border: 1px solid #007BFF; color: #007BFF; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; transition: all 0.3s; }
+        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(10, 10, 10, 0.8); border: 1px solid var(--color-blue); color: var(--color-blue); width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; transition: all 0.3s; }
         
         .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-gris); letter-spacing: 1px; }
-        .footer-brand span { color: #00A8E8; font-weight: 700; }
+        .footer-brand span { color: var(--color-cyan); font-weight: 700; }
     </style>
 </head>
 <body>
@@ -108,14 +118,65 @@
         <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
-    <!-- MODAL -->
-    <div id="modal-overlay" onclick="cerrarModal(event)">
+    <!-- MODAL GENERAL (FRICCIONES Y ESCUDO) -->
+    <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
             <div id="modal-icon" class="modal-icon"></div>
             <div id="modal-title" class="modal-title"></div>
             <div id="modal-text" class="modal-text"></div>
             <div id="modal-actions" class="modal-actions">
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL WOW: ASESOR DE FIRMEZA & MEDIDAS -->
+    <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <div style="color: var(--color-cyan); font-size: 2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Asesor de Firmeza</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 18px;">Configuración de descanso en 3 toques</p>
+            
+            <!-- Pregunta 1: Postura -->
+            <div class="selector-box">
+                <span class="selector-label">1. ¿Cómo duermes habitualmente?</span>
+                <div class="selector-pills" id="pills-postura">
+                    <div class="pill-btn active" onclick="seleccionarOpcion('postura', 'De Lado', this)"><i class="fa-solid fa-person"></i><br>De Lado</div>
+                    <div class="pill-btn" onclick="seleccionarOpcion('postura', 'Boca Arriba', this)"><i class="fa-solid fa-bed"></i><br>De Espalda</div>
+                    <div class="pill-btn" onclick="seleccionarOpcion('postura', 'Boca Abajo', this)"><i class="fa-solid fa-child"></i><br>Boca Abajo</div>
+                </div>
+            </div>
+
+            <!-- Pregunta 2: Peso -->
+            <div class="selector-box">
+                <span class="selector-label">2. Complexión / Peso</span>
+                <div class="selector-pills" id="pills-peso">
+                    <div class="pill-btn" onclick="seleccionarOpcion('peso', 'Ligero (-70kg)', this)">-70 kg</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcion('peso', 'Medio (70-90kg)', this)">70-90 kg</div>
+                    <div class="pill-btn" onclick="seleccionarOpcion('peso', 'Robusto (+90kg)', this)">+90 kg</div>
+                </div>
+            </div>
+
+            <!-- Pregunta 3: Medida -->
+            <div class="selector-box">
+                <span class="selector-label">3. Medida Deseada</span>
+                <div class="selector-pills" id="pills-medida">
+                    <div class="pill-btn" onclick="seleccionarOpcion('medida', '135x190', this)">135x190</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcion('medida', '150x190', this)">150x190</div>
+                    <div class="pill-btn" onclick="seleccionarOpcion('medida', '180x200', this)">180x200</div>
+                </div>
+            </div>
+
+            <!-- Resultado Dinámico WOW -->
+            <div class="card-resultado" id="resultado-asesor">
+                <div style="font-size: 0.72rem; color: var(--color-cyan); font-weight: 700; text-transform: uppercase;">Recomendación Ergonómica:</div>
+                <div id="diag-firmeza" style="font-size: 0.95rem; font-weight: 800; color: #fff; margin-top: 2px;">Firmeza Media Adaptable</div>
+                <div id="diag-tecnologia" style="font-size: 0.75rem; color: #ddd; margin-top: 4px;">Muelles Ensacados + Viscoelástica transpirable sobre Base Tapizada 3D.</div>
+            </div>
+
+            <div class="modal-actions">
+                <a id="btn-probar-tienda" href="#" class="modal-btn-primary" style="padding: 12px 15px; font-size: 0.85rem;"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
+                <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar Asesor</button>
             </div>
         </div>
     </div>
@@ -143,12 +204,37 @@
         let datosFriccionesGlobales = {};
         let googleReviewUrlGlobal = "https://maps.google.com/?q=Iberlax+Sistemas+de+Descanso";
         let whatsappGerenciaGlobal = "https://wa.me/346643186453";
+        let whatsappTiendaGlobal = "https://wa.me/346643186453";
+
+        // Estado del Asesor WOW
+        let estadoAsesor = { postura: 'De Lado', peso: 'Medio (70-90kg)', medida: '150x190' };
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
         const btnAudio = document.getElementById('btn-audio');
         const iconoAudio = document.getElementById('icono-audio');
         let audioMuteado = false;
+
+        // CONTROL TOTAL DE PAUSA AL SALIR O MINIMIZAR
+        function silenciarAudioCompleto() {
+            if (reproductor) {
+                reproductor.pause();
+                reproductor.currentTime = 0;
+            }
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (reproductor) reproductor.pause();
+            } else {
+                if (!audioMuteado && splash.style.display === 'none' && reproductor && reproductor.src) {
+                    reproductor.play().catch(e => {});
+                }
+            }
+        });
+
+        window.addEventListener('pagehide', silenciarAudioCompleto);
+        window.addEventListener('beforeunload', silenciarAudioCompleto);
 
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -175,7 +261,7 @@
                 document.getElementById('splash-subtitle').innerText = subtituloText;
                 document.getElementById('client-subtitle').innerText = subtituloText;
 
-                // Carga directa del logo sin bloqueos
+                // Carga directa del logo
                 const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "iberlax-logo.jpg";
                 const splashImg = document.getElementById('splash-logo');
                 const hubImg = document.getElementById('hub-logo');
@@ -184,7 +270,6 @@
                 hubImg.src = logoPath;
                 
                 splashImg.onerror = function() {
-                    // Intento alternativo con ./ si falló directo
                     if (!this.src.includes('./')) this.src = './' + logoPath;
                 };
                 hubImg.onerror = function() {
@@ -199,7 +284,7 @@
                     'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:#00e5ff;"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
                     'resenas': { icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>', titulo: 'Protección de Reputación', texto: 'Una sola queja pública en Google aleja clientes.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas hacia tu WhatsApp Privado.' },
                     'embudos': { icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>', titulo: 'Embudos Directos', texto: 'Las webs tradicionales son lentas.<br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión directamente en la mano del cliente.' },
-                    'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real, como el Gestor GPS de Parking, para que mantengan tu marca guardada.' }
+                    'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real, como el Gestor GPS de Parking y el Asesor Ergonómico, para que recuerden tu marca.' }
                 };
 
                 const gridContainer = document.getElementById('friccion-grid');
@@ -222,7 +307,6 @@
                         const block = document.createElement('div');
                         block.className = 'apps-menu';
 
-                        // Captura robusta de URL de Google
                         if (sec.urlGoogleResenas) {
                             googleReviewUrlGlobal = sec.urlGoogleResenas;
                         } else if (sec.placeIdGoogle) {
@@ -257,7 +341,21 @@
                             `;
                         } else if (sec.botones && Array.isArray(sec.botones)) {
                             sec.botones.forEach(btn => {
-                                if (btn.tipo === 'parking' || btn.nombre.toLowerCase().includes('aparqué') || btn.nombre.toLowerCase().includes('parking')) {
+                                // 1. DETECCIÓN ASESOR DE FIRMEZA (EFECTO WOW)
+                                if (btn.nombre.toLowerCase().includes('asesor') || btn.nombre.toLowerCase().includes('firmeza')) {
+                                    block.innerHTML += `
+                                        <a class="app-btn destacado" onclick="abrirAsesor(event)">
+                                            <div class="app-icon" style="background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;"><i class="fa-solid fa-bed-pulse"></i></div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || 'Calcula tu colchón ideal en 3 toques'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                } 
+                                // 2. DETECCIÓN BOTÓN PARKING GPS
+                                else if (btn.tipo === 'parking' || btn.nombre.toLowerCase().includes('aparqué') || btn.nombre.toLowerCase().includes('parking')) {
                                     block.innerHTML += `
                                         <a class="app-btn" onclick="gestionarParking(event)">
                                             <div class="app-icon" id="parking-box" style="background: rgba(142,142,147,0.1); color: #8e8e93;"><i id="parking-icon" class="fa-solid fa-location-crosshairs"></i></div>
@@ -268,11 +366,16 @@
                                             <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
                                         </a>
                                     `;
-                                } else {
+                                } 
+                                // 3. BOTONES NORMALES
+                                else {
                                     let estrellasHTML = btn.estrellas ? '<div class="stars-active" style="font-size: 0.75rem; margin-top: 4px; color:#ffb400;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>' : '';
                                     
                                     if(btn.url && (btn.url.includes('writereview') || btn.url.includes('google.com') || btn.url.includes('maps.google'))) googleReviewUrlGlobal = btn.url;
-                                    if(btn.url && btn.url.includes('wa.me')) whatsappGerenciaGlobal = btn.url;
+                                    if(btn.url && btn.url.includes('wa.me')) {
+                                        whatsappGerenciaGlobal = btn.url;
+                                        whatsappTiendaGlobal = btn.url.split('?')[0]; // Guarda base del número
+                                    }
 
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
@@ -294,6 +397,7 @@
                 }
 
                 actualizarInterfazParking();
+                actualizarCalculoAsesor();
 
             } catch (err) {
                 console.error(err);
@@ -301,6 +405,7 @@
             }
         }
 
+        // DESBLOQUEO SENSORIAL
         function iniciarMagia() {
             splash.style.opacity = '0';
             setTimeout(() => { splash.style.display = 'none'; }, 600);
@@ -359,6 +464,57 @@
             modalOverlay.style.opacity = '0';
             modalContent.style.transform = 'translateY(20px)';
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // LÓGICA ASESOR INTERACTIVO WOW
+        const modalAsesor = document.getElementById('modal-asesor');
+
+        function abrirAsesor(e) {
+            e.preventDefault();
+            modalAsesor.style.display = 'flex';
+            setTimeout(() => { 
+                modalAsesor.style.opacity = '1'; 
+                modalAsesor.querySelector('.modal-box').style.transform = 'translateY(0)'; 
+            }, 10);
+        }
+
+        function cerrarAsesor(e) { if(e.target === modalAsesor) cerrarAsesorBtn(); }
+        function cerrarAsesorBtn() {
+            modalAsesor.style.opacity = '0';
+            modalAsesor.querySelector('.modal-box').style.transform = 'translateY(20px)';
+            setTimeout(() => { modalAsesor.style.display = 'none'; }, 300);
+        }
+
+        function seleccionarOpcion(grupo, valor, elemento) {
+            estadoAsesor[grupo] = valor;
+            const contenedor = elemento.parentElement;
+            contenedor.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoAsesor();
+        }
+
+        function actualizarCalculoAsesor() {
+            const diagFirmeza = document.getElementById('diag-firmeza');
+            const diagTecnologia = document.getElementById('diag-tecnologia');
+            const btnProbar = document.getElementById('btn-probar-tienda');
+
+            let firmeza = "Firmeza Media Adaptable";
+            let tecnologia = "Muelles Ensacados 7 Zonas + Viscoelástica transpirable.";
+            let base = "Base Tapizada 3D o Canapé Abatible";
+
+            if (estadoAsesor.peso.includes('+90kg') || estadoAsesor.postura === 'Boca Arriba') {
+                firmeza = "Firmeza Alta Ergonómica";
+                tecnologia = "Núcleo reforzado Titanium Pocket + Refuerzo lumbar periférico.";
+            } else if (estadoAsesor.postura === 'De Lado' && estadoAsesor.peso.includes('-70kg')) {
+                firmeza = "Firmeza Media-Suave Acogedora";
+                tecnologia = "Viscoelástica de alta densidad con efecto gravedad cero para hombros y cadera.";
+            }
+
+            diagFirmeza.innerText = firmeza;
+            diagTecnologia.innerText = `${tecnologia} Recomendado sobre ${base} (Medida: ${estadoAsesor.medida}).`;
+
+            const mensajeWA = `Hola Iberlax, acabo de usar el Asesor Smart en la tienda:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0A*Resultado:* ${firmeza}.%0A¿Qué modelo exacto puedo probar ahora mismo?`;
+            btnProbar.href = `${whatsappTiendaGlobal}?text=${mensajeWA}`;
         }
 
         // REDIRECCIÓN DIRECTA A GOOGLE MAPS SIN ERRORES
