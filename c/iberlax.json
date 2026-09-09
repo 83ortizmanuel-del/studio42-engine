@@ -2,27 +2,34 @@
   "nombre": "IBERLAX COLCHONES",
   "subtitulo": "Especialistas en Descanso & Ergonomía",
   "subtituloOverlay": "Bienvenido a Iberlax Colchones",
-  "logo": "iberlax-logo.jpg",
-  "colorPrincipal": "#0056B3",
+  "logo": "./iberlax-logo.jpg",
+  "colorPrincipal": "#0F2C59",
   "audioFondo": "ambiente2.mp3",
   "secciones": [
     {
-      "titulo": "Promociones & Catálogo",
+      "titulo": "Promociones & Soluciones en Tienda",
       "botones": [
         {
           "nombre": "Promo Exclusiva Llavero Smart",
-          "descripcion": "15% dto. directo + Almohada viscoelástica de regalo",
+          "descripcion": "15% dto. directo + Almohada viscoelástica de regalo al canjear aquí",
           "icono": "fa-solid fa-tag",
           "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20tengo%20el%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
-          "estiloIcono": "background-color: rgba(255, 193, 7, 0.15); color: #FFC107;",
+          "estiloIcono": "background-color: rgba(255, 180, 0, 0.15); color: #FFB400;",
           "destacado": true
         },
         {
-          "nombre": "Asesor de Firmeza & Medidas",
-          "descripcion": "Elige tu colchón ideal según peso y postura",
+          "nombre": "Envío, Montaje & Retirada de Colchón Viejo",
+          "descripcion": "Consulta plazos y recogida directa en tu domicilio",
+          "icono": "fa-solid fa-truck-ramp-box",
+          "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20quisiera%20consultar%20condiciones%20de%20env%C3%ADo%20y%20retirada%20de%20mi%20colch%C3%B3n%20antiguo",
+          "estiloIcono": "background-color: rgba(0, 123, 255, 0.15); color: #007BFF;"
+        },
+        {
+          "nombre": "Asesor de Medidas & Canapés",
+          "descripcion": "Comprueba compatibilidades de bases y colchones",
           "icono": "fa-solid fa-bed",
           "url": "https://iberlax.com/",
-          "estiloIcono": "background-color: rgba(0, 86, 179, 0.15); color: #0056B3;"
+          "estiloIcono": "background-color: rgba(15, 44, 89, 0.2); color: #00A8E8;"
         },
         {
           "nombre": "¿Dónde aparqué?",
@@ -31,8 +38,8 @@
           "url": "#"
         },
         {
-          "nombre": "Guardar Contacto",
-          "descripcion": "Añade el teléfono y WhatsApp de Iberlax a tu agenda",
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade el WhatsApp y teléfono directo a tu móvil",
           "icono": "fa-solid fa-address-card",
           "url": "./contacto.vcf",
           "estiloIcono": "background-color: rgba(0, 229, 255, 0.15); color: #00E5FF;"
@@ -41,23 +48,9 @@
     },
     {
       "titulo": "Tu Opinión Nos Importa",
-      "botones": [
-        {
-          "nombre": "¿Algo no salió perfecto?",
-          "descripcion": "Atención personalizada y solución directa con Gerencia",
-          "icono": "fa-solid fa-comment-dots",
-          "url": "https://wa.me/346643186453?text=Hola,%20quisiera%20comentar%20un%20detalle%20de%20mi%20visita%20en%20Iberlax",
-          "estiloIcono": "background-color: rgba(255, 59, 48, 0.1); color: #ff3b30;"
-        },
-        {
-          "nombre": "Déjanos 5 Estrellas en Google",
-          "descripcion": "Tu valoración nos ayuda a seguir recomendando el mejor descanso",
-          "icono": "fa-brands fa-google",
-          "url": "https://search.google.com/local/writereview?placeid=ChIJXy9Psu6qWg0R2MztIZPHsPQ",
-          "estiloIcono": "background-color: rgba(255, 180, 0, 0.1); color: #ffb400;",
-          "estrellas": true
-        }
-      ]
+      "escudoResenas": true,
+      "placeIdGoogle": "ChIJXy9Psu6qWg0R2MztIZPHsPQ",
+      "whatsappGerencia": "https://wa.me/346643186453?text=Hola%20Gerencia%20Iberlax,%20quisiera%20comentar%20una%20disconformidad%20con%20mi%20visita"
     }
   ]
 }
