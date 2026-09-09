@@ -11,7 +11,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 | Diagnóstico Phygital Closer</title>
+    <title>Studio 42 | Demo Phygital Interactiva</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,6 +63,7 @@
             border: 1px solid rgba(196, 196, 196, 0.45);
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(196, 196, 196, 0.22);
             border-radius: 24px;
+            transition: all 0.3s ease;
         }
 
         .card-base {
@@ -72,24 +73,6 @@
             transition: all 0.25s ease;
         }
 
-        .option-chip {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.03);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
-        }
-
-        .option-chip:hover {
-            border-color: rgba(196, 196, 196, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .option-chip.selected {
-            border-color: #FFFFFF;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.06) 100%);
-            box-shadow: 0 0 20px rgba(196, 196, 196, 0.25), inset 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
         .btn-silver {
             background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%);
             color: #07080B;
@@ -97,6 +80,7 @@
             letter-spacing: 0.9px;
             box-shadow: 0 6px 22px rgba(196, 196, 196, 0.35);
             transition: all 0.25s ease;
+            cursor: pointer;
         }
 
         .btn-silver:hover {
@@ -112,17 +96,12 @@
             backdrop-filter: blur(12px);
         }
 
-        .input-silver {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #FFFFFF;
-            transition: all 0.2s ease;
+        .star-item {
+            transition: color 0.15s ease, transform 0.15s ease;
+            cursor: pointer;
         }
-
-        .input-silver:focus {
-            outline: none;
-            border-color: #C4C4C4;
-            box-shadow: 0 0 15px rgba(196, 196, 196, 0.25);
+        .star-item:hover {
+            transform: scale(1.2);
         }
 
         @keyframes fadeIn {
@@ -139,215 +118,234 @@
 
     <div class="w-full max-w-md my-auto mt-2 sm:mt-4 space-y-4">
         
+        <!-- CABECERA DE MARCA OFICIAL -->
         <header class="text-center pt-2 pb-1">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full btn-vcard-cyber mb-2">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-200">Studio 42 Engine &bull; Closer Terminal</span>
+            <div class="inline-flex p-3 rounded-2xl bg-black/60 border border-[#C4C4C4]/40 shadow-2xl mb-3" style="box-shadow: 0 0 25px rgba(196, 196, 196, 0.2);">
+                <img src="/studio42-logo.png" alt="Studio 42" class="w-14 h-14 object-contain" onerror="this.src='/logo.png';">
             </div>
             <h1 class="font-display text-xl font-black uppercase tracking-wider text-white">
-                DIAGNÓSTICO <span class="text-silver-gradient">PHYGITAL EXPRÉS</span>
+                STUDIO 42 <span class="text-silver-gradient">· IDENTIDAD INTELIGENTE</span>
             </h1>
-            <p class="text-[11px] font-medium text-zinc-400 mt-0.5">
-                Configuración de impacto en mostrador (Tiempo estimado: 45 seg)
+            <p class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mt-1">
+                ¿Cuánto dinero pierde tu negocio cada semana sin tecnología phygital?
             </p>
         </header>
 
-        <form id="form-diagnostico" class="space-y-3.5">
-            
-            <div class="card-base p-4 space-y-2.5">
-                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
-                    <i class="fa-solid fa-store text-[#C4C4C4]"></i> 1. Identificación del Negocio
-                </label>
-                <div>
-                    <input type="text" id="nombre-negocio" required placeholder="Nombre comercial (Ej. Bar El Laurel)" 
-                        class="w-full px-3.5 py-2.5 rounded-xl input-silver text-xs font-semibold placeholder:text-zinc-600">
+        <!-- SECCIÓN 1: PROBLEMAS REALES DEL DÍA A DÍA -->
+        <div class="grid grid-cols-2 gap-2.5">
+            <div class="card-base p-3.5 flex flex-col justify-between">
+                <div class="w-8 h-8 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-2 text-[#C4C4C4]">
+                    <i class="fa-solid fa-user-xmark text-sm"></i>
                 </div>
                 <div>
-                    <input type="tel" id="whatsapp-negocio" required placeholder="WhatsApp de Gerencia / Dueño (Ej. 672000000)" 
-                        class="w-full px-3.5 py-2.5 rounded-xl input-silver text-xs font-semibold placeholder:text-zinc-600">
+                    <h2 class="text-xs font-bold text-white leading-tight">Clientes que no vuelven</h2>
+                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Salen por la puerta y no te recuerdan. Cero fidelización activa.</p>
                 </div>
             </div>
 
-            <div class="card-base p-4 space-y-2.5">
-                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
-                    <i class="fa-solid fa-layer-group text-[#C4C4C4]"></i> 2. Sector Comercial
-                </label>
-                <div class="grid grid-cols-2 gap-2" id="selector-sector">
-                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2 selected" data-value="Hostelería / Bares / Restaurantes">
-                        <i class="fa-solid fa-utensils text-[#C4C4C4] text-xs"></i>
-                        <span class="text-[11px] font-bold text-zinc-200">Hostelería</span>
-                    </div>
-                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2" data-value="Barbería / Estética / Cuidado">
-                        <i class="fa-solid fa-scissors text-[#C4C4C4] text-xs"></i>
-                        <span class="text-[11px] font-bold text-zinc-200">Barbería / Belleza</span>
-                    </div>
-                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2" data-value="Clínica / Salud / Dental">
-                        <i class="fa-solid fa-stethoscope text-[#C4C4C4] text-xs"></i>
-                        <span class="text-[11px] font-bold text-zinc-200">Salud / Clínicas</span>
-                    </div>
-                    <div class="option-chip p-2.5 rounded-xl text-left flex items-center gap-2" data-value="Movilidad / Alquiler / Taller">
-                        <i class="fa-solid fa-car text-[#C4C4C4] text-xs"></i>
-                        <span class="text-[11px] font-bold text-zinc-200">Automoción</span>
-                    </div>
+            <div class="card-base p-3.5 flex flex-col justify-between">
+                <div class="w-8 h-8 rounded-xl bg-red-500/15 border border-red-500/30 flex items-center justify-center mb-2 text-red-400">
+                    <i class="fa-solid fa-shield-virus text-sm"></i>
                 </div>
-                <input type="hidden" id="sector-seleccionado" value="Hostelería / Bares / Restaurantes">
+                <div>
+                    <h2 class="text-xs font-bold text-white leading-tight">Reseñas injustas</h2>
+                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Una mala crítica pública en Google Maps reduce clientes y ventas.</p>
+                </div>
             </div>
 
-            <div class="card-base p-4 space-y-2.5">
-                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved text-red-400"></i> 3. Fricción Principal a Resolver
-                </label>
+            <div class="card-base p-3.5 flex flex-col justify-between">
+                <div class="w-8 h-8 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-2 text-[#C4C4C4]">
+                    <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                </div>
+                <div>
+                    <h2 class="text-xs font-bold text-white leading-tight">Preguntas repetitivas</h2>
+                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Carta, horarios, Wi-Fi, reservas... Tu personal pierde tiempo crítico.</p>
+                </div>
+            </div>
+
+            <div class="card-base p-3.5 flex flex-col justify-between">
+                <div class="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center mb-2 text-cyan-400">
+                    <i class="fa-solid fa-store-slash text-sm"></i>
+                </div>
+                <div>
+                    <h2 class="text-xs font-bold text-white leading-tight">Fuga de clientes</h2>
+                    <p class="text-[10px] text-zinc-400 mt-1 leading-snug">Si no estás en el top local, tu competencia capta tus clientes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: SOLUCIONES EN VIVO INTERACTIVAS -->
+        <div class="space-y-3 pt-2">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Prueba la interactividad en vivo</span>
+                <span class="text-[9px] font-bold btn-vcard-cyber text-zinc-200 px-2.5 py-0.5 rounded-full">Sistema NTAG216</span>
+            </div>
+
+            <!-- Escudo Inteligente de Reseñas -->
+            <div class="card-silver-premium p-4 space-y-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center text-[#C4C4C4]">
+                        <i class="fa-brands fa-google text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-black uppercase text-white">Escudo Inteligente de Reputación</h3>
+                        <p class="text-[10px] text-zinc-400">Toca las estrellas para probar el filtro activo:</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center items-center gap-3 py-1.5 text-2xl text-zinc-600" id="star-container">
+                    <i class="fa-solid fa-star star-item" data-val="1"></i>
+                    <i class="fa-solid fa-star star-item" data-val="2"></i>
+                    <i class="fa-solid fa-star star-item" data-val="3"></i>
+                    <i class="fa-solid fa-star star-item" data-val="4"></i>
+                    <i class="fa-solid fa-star star-item" data-val="5"></i>
+                </div>
+
+                <div id="escudo-feedback" class="hidden p-3.5 rounded-xl text-[11px] leading-relaxed transition-all"></div>
+            </div>
+
+            <!-- Desplegable de Asistencias Integradas -->
+            <div class="card-base p-3.5 flex items-center justify-between cursor-pointer" onclick="toggleDemoTools()">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 text-[#C4C4C4] flex items-center justify-center text-sm border border-white/10">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs font-bold text-white">Módulos de Retención y Gestión</p>
+                        <p class="text-[10px] text-zinc-400">Wi-Fi en 1 Toque · Ubicación GPS · Carta Express</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-zinc-500 text-xs transition-transform" id="tools-chevron"></i>
+            </div>
+
+            <div id="demo-tools" class="hidden space-y-2 pl-2">
+                <div class="p-3 bg-[#0D0F14] rounded-xl border border-white/10 flex items-center justify-between text-xs">
+                    <span class="text-zinc-300 font-semibold"><i class="fa-solid fa-wifi text-[#C4C4C4] mr-2"></i> Conexión Wi-Fi sin escribir clave</span>
+                    <span class="text-[10px] text-zinc-200 font-bold bg-white/10 border border-white/20 px-2 py-0.5 rounded">Activo</span>
+                </div>
+                <div class="p-3 bg-[#0D0F14] rounded-xl border border-white/10 flex items-center justify-between text-xs">
+                    <span class="text-zinc-300 font-semibold"><i class="fa-solid fa-location-arrow text-[#C4C4C4] mr-2"></i> Recordar dónde aparqué el coche</span>
+                    <span class="text-[10px] text-zinc-200 font-bold bg-white/10 border border-white/20 px-2 py-0.5 rounded">Activo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: PROTOCOLO DE ACTIVACIÓN EN VIVO -->
+        <div class="pt-2">
+            <div class="card-silver-premium p-5 text-center space-y-3.5">
+                <span class="inline-block text-[9px] font-black tracking-widest text-black bg-[#C4C4C4] px-3 py-1 rounded-full uppercase shadow-md">
+                    Instalación en Mostrador
+                </span>
+                <h3 class="font-display text-base sm:text-lg font-black uppercase text-white leading-tight">
+                    ¿Quieres este sistema con el nombre de tu negocio hoy?
+                </h3>
+                <p class="text-xs text-zinc-300 leading-relaxed font-light">
+                    Tu asesor de Studio 42 activará tu arquitectura en caliente en menos de 60 segundos con su llave inteligente.
+                </p>
                 
-                <div class="space-y-2" id="selector-friccion">
-                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5 selected" data-value="Miedo a malas notas y necesidad de blindar Google Maps con reseñas 5 estrellas">
-                        <i class="fa-solid fa-shield-virus text-red-400 text-sm mt-0.5"></i>
-                        <div>
-                            <p class="text-xs font-bold text-white">Blindar Reputación / Escudo Google</p>
-                            <p class="text-[10px] text-zinc-400 leading-snug">Evitar que quejas puntuales dañen la nota; dirigir a clientes contentos a 5 estrellas directas.</p>
-                        </div>
-                    </div>
-
-                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5" data-value="Colas y personal respondiendo lo mismo: clave Wi-Fi, carta, horarios y dudas frecuentes">
-                        <i class="fa-solid fa-clock-rotate-left text-[#C4C4C4] text-sm mt-0.5"></i>
-                        <div>
-                            <p class="text-xs font-bold text-white">Preguntas Repetitivas y Esperas</p>
-                            <p class="text-[10px] text-zinc-400 leading-snug">Wi-Fi en 1 toque, carta en móvil o consultas frecuentes sin saturar a los empleados.</p>
-                        </div>
-                    </div>
-
-                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5" data-value="Clientes que consumen una vez y no vuelven: nula fidelización y olvido fuera del local">
-                        <i class="fa-solid fa-user-xmark text-cyan-400 text-sm mt-0.5"></i>
-                        <div>
-                            <p class="text-xs font-bold text-white">Cero Fidelización / Clientes que Olvidan</p>
-                            <p class="text-[10px] text-zinc-400 leading-snug">Guardar contacto en agenda, GPS para volver o canal WhatsApp de promociones.</p>
-                        </div>
-                    </div>
-
-                    <div class="option-chip p-3 rounded-xl flex items-start gap-2.5" data-value="Pérdida de reservas o citas por falta de un canal directo en un toque de móvil">
-                        <i class="fa-solid fa-calendar-check text-emerald-400 text-sm mt-0.5"></i>
-                        <div>
-                            <p class="text-xs font-bold text-white">Fricción de Reservas o Citas Previas</p>
-                            <p class="text-[10px] text-zinc-400 leading-snug">Facilitar que el cliente agende su próxima mesa, corte o cita antes de salir por la puerta.</p>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" id="friccion-seleccionada" value="Miedo a malas notas y necesidad de blindar Google Maps con reseñas 5 estrellas">
-            </div>
-
-            <div class="card-base p-4 space-y-2">
-                <label class="text-[10px] font-black uppercase tracking-widest text-zinc-300 flex items-center gap-2">
-                    <i class="fa-brands fa-google text-[#C4C4C4]"></i> 4. Enlace Google Business / Maps
-                </label>
-                <input type="url" id="google-url" placeholder="https://maps.app.goo.gl/... o https://g.page/..." 
-                    class="w-full px-3.5 py-2.5 rounded-xl input-silver text-xs font-semibold placeholder:text-zinc-600">
-                <p class="text-[9px] text-zinc-500 italic">Opcional: Si no lo tiene a mano, el sistema genera la búsqueda automática del negocio.</p>
-            </div>
-
-            <div class="pt-2">
-                <button type="submit" id="btn-compilar" class="w-full py-4 text-center rounded-2xl btn-silver text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-bolt-lightning text-sm"></i> Compilar Ecosistema Phygital (IA)
+                <button type="button" onclick="abrirProtocoloActivacion()" class="w-full py-4 text-center rounded-2xl btn-silver text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-key text-xs"></i> Solicitar Activación a mi Asesor
                 </button>
-            </div>
-
-        </form>
-
-        <div id="loading-overlay" class="hidden card-silver-premium p-6 text-center space-y-4">
-            <div class="w-12 h-12 rounded-full border-2 border-t-transparent border-white animate-spin mx-auto"></div>
-            <div>
-                <h3 class="font-display text-sm font-black uppercase text-white">Compilando Arquitectura Phygital</h3>
-                <p class="text-xs text-zinc-400 mt-1" id="loading-status">Generando estructura JSON personalizada...</p>
             </div>
         </div>
 
     </div>
 
-    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-4">
-        Terminal Operativo Studio 42 Engine &bull; Redirección Segura
+    <!-- MODAL PROTOCOLO DE LLAVE MAESTRA -->
+    <div id="modal-activacion" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md hidden animate-fade-in">
+        <div class="card-silver-premium max-w-sm w-full p-6 text-center space-y-5 border-2 border-[#C4C4C4]">
+            
+            <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full bg-white/10 animate-ping"></div>
+                <div class="w-16 h-16 rounded-full bg-black border-2 border-[#C4C4C4] flex items-center justify-center text-white text-2xl shadow-xl">
+                    <i class="fa-solid fa-nfc-symbol text-cyan-300"></i>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-display text-base font-black uppercase text-white tracking-wide">Protocolo de Llave Maestra</h3>
+                <p class="text-xs text-zinc-300 mt-2 font-light leading-relaxed">
+                    Pídele a tu asesor de <strong>Studio 42</strong> que aproxime su <span class="text-white font-semibold">Llave NFC de Asesor</span> a tu teléfono para compilar tu estación en este mismo instante.
+                </p>
+            </div>
+
+            <div class="p-3 bg-white/5 rounded-xl border border-white/10 text-[10px] text-zinc-400">
+                <i class="fa-solid fa-shield-check text-emerald-400 mr-1"></i> Terminal seguro Studio 42 Engine
+            </div>
+
+            <button type="button" onclick="cerrarProtocoloActivacion()" class="text-xs text-zinc-500 uppercase font-bold tracking-widest hover:text-white transition">
+                Volver a la Demo
+            </button>
+        </div>
+    </div>
+
+    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-5">
+        Ecosistema Phygital &bull; Concepto y tecnología por <a href="/" class="text-zinc-400 hover:text-white transition">Studio 42</a>
     </footer>
 
     <script>
-        const chipsSector = document.querySelectorAll('#selector-sector .option-chip');
-        const inputSector = document.getElementById('sector-seleccionado');
-        
-        chipsSector.forEach(chip => {
-            chip.addEventListener('click', () => {
-                chipsSector.forEach(c => c.classList.remove('selected'));
-                chip.classList.add('selected');
-                inputSector.value = chip.getAttribute('data-value');
-            });
-        });
+        const stars = document.querySelectorAll('.star-item');
+        const feedback = document.getElementById('escudo-feedback');
 
-        const chipsFriccion = document.querySelectorAll('#selector-friccion .option-chip');
-        const inputFriccion = document.getElementById('friccion-seleccionada');
-
-        chipsFriccion.forEach(chip => {
-            chip.addEventListener('click', () => {
-                chipsFriccion.forEach(c => c.classList.remove('selected'));
-                chip.classList.add('selected');
-                inputFriccion.value = chip.getAttribute('data-value');
-            });
-        });
-
-        const form = document.getElementById('form-diagnostico');
-        const loading = document.getElementById('loading-overlay');
-        const statusText = document.getElementById('loading-status');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const nombre = document.getElementById('nombre-negocio').value.trim();
-            const whatsapp = document.getElementById('whatsapp-negocio').value.trim();
-            const sector = inputSector.value;
-            const friccion = inputFriccion.value;
-            const googleUrl = document.getElementById('google-url').value.trim() || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre)}`;
-
-            const slug = nombre.toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                .replace(/[^a-z0-9]/g, '-')
-                .replace(/-+/g, '-')
-                .replace(/^-|-$/g, '');
-
-            form.classList.add('hidden');
-            loading.classList.remove('hidden');
-
-            const SCRIPT_URL = "PEGA_AQUI_LA_URL_WEB_APP_DE_APPS_SCRIPT";
-
-            const payload = {
-                slug: slug,
-                negocio: nombre,
-                whatsapp: whatsapp,
-                sector: sector,
-                friccion: friccion,
-                googleUrl: googleUrl,
-                timestamp: new Date().toISOString()
-            };
-
-            try {
-                statusText.innerText = "Registrando diagnóstico en Google Sheets...";
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const val = parseInt(star.getAttribute('data-val'));
                 
-                if (SCRIPT_URL && !SCRIPT_URL.includes("PEGA_AQUI")) {
-                    await fetch(SCRIPT_URL, {
-                        method: "POST",
-                        mode: "no-cors",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
+                stars.forEach(s => {
+                    const sVal = parseInt(s.getAttribute('data-val'));
+                    if (sVal <= val) {
+                        s.classList.remove('text-zinc-600');
+                        s.style.color = '#FFFFFF';
+                        s.style.filter = 'drop-shadow(0 0 8px rgba(255,255,255,0.8))';
+                    } else {
+                        s.style.color = '';
+                        s.style.filter = '';
+                        s.classList.add('text-zinc-600');
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+
+                if (val <= 3) {
+                    feedback.className = "p-3.5 rounded-xl text-[11px] leading-relaxed bg-red-950/40 border border-red-500/40 text-red-200 block animate-fade-in";
+                    feedback.innerHTML = `
+                        <div class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-shield-halved text-red-400 text-sm mt-0.5"></i>
+                            <div>
+                                <strong class="text-white block uppercase tracking-wider text-[10px]">Escudo Activado (${val} estrellas)</strong>
+                                Google queda bloqueado. El sistema deriva la queja de forma privada al WhatsApp de gerencia para solucionar el incidente sin manchar tu nota media.
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    feedback.className = "p-3.5 rounded-xl text-[11px] leading-relaxed bg-[#10131A] border border-[#C4C4C4]/50 text-zinc-200 block animate-fade-in";
+                    feedback.innerHTML = `
+                        <div class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-cyan-300 text-sm mt-0.5"></i>
+                            <div>
+                                <strong class="text-white block uppercase tracking-wider text-[10px]">Impulso 5 Estrellas Directo (${val} estrellas)</strong>
+                                El móvil del cliente abre directamente la ventana oficial de Google Maps con las 5 estrellas marcadas para publicar con un solo clic.
+                            </div>
+                        </div>
+                    `;
                 }
-
-                statusText.innerText = "IA generando archivo JSON y módulos activos...";
-                
-                setTimeout(() => {
-                    statusText.innerText = "¡Listo! Abriendo entorno personalizado...";
-                    setTimeout(() => {
-                        window.location.href = `/v/?id=${slug}`;
-                    }, 800);
-                }, 1500);
-
-            } catch (err) {
-                console.error("Error en registro:", err);
-                window.location.href = `/v/?id=${slug}`;
-            }
+            });
         });
+
+        function toggleDemoTools() {
+            const tools = document.getElementById('demo-tools');
+            const chevron = document.getElementById('tools-chevron');
+            tools.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-90');
+        }
+
+        function abrirProtocoloActivacion() {
+            document.getElementById('modal-activacion').classList.remove('hidden');
+        }
+
+        function cerrarProtocoloActivacion() {
+            document.getElementById('modal-activacion').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
