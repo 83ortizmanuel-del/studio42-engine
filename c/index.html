@@ -8,98 +8,178 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-oro: #0F2C59;
-            --color-fondo: #050505; 
-            --color-tarjeta: rgba(20, 20, 20, 0.85); 
-            --color-boton: #1a1a1a; 
-            --color-texto: #ffffff;
-            --color-gris: #8e8e93;
-            --color-cyan: #00A8E8;
-            --color-blue: #007BFF;
+            --color-principal: #0F2C59;
+            --color-acento: #00A8E8;
+            --color-fondo: #030712; 
+            --color-tarjeta: rgba(15, 23, 42, 0.85); 
+            --color-boton: rgba(30, 41, 59, 0.7); 
+            --color-texto: #f8fafc;
+            --color-gris: #94a3b8;
+            --titanium-light: #f1f5f9;
+            --titanium-glow: rgba(226, 232, 240, 0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--color-fondo); color: var(--color-texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; user-select: none; }
         
+        body { 
+            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 80%);
+            color: var(--color-texto); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 15px; 
+            user-select: none;
+            overflow-x: hidden;
+        }
+        
+        /* SPLASH SCREEN */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: linear-gradient(180deg, #0f0f0f 0%, #000000 100%);
+            background: radial-gradient(circle at center, #111827 0%, #030712 100%);
             z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
             transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px;
         }
         .btn-desbloqueo {
-            background: linear-gradient(135deg, var(--color-blue), var(--color-oro)); color: #fff; border: 1px solid rgba(255,255,255,0.2); 
-            padding: 16px 36px; border-radius: 50px; font-size: 0.95rem; font-weight: 800; letter-spacing: 1.5px; 
-            text-transform: uppercase; cursor: pointer; box-shadow: 0 0 25px rgba(0, 123, 255, 0.4);
+            background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
+            padding: 16px 36px; border-radius: 50px; font-size: 0.92rem; font-weight: 900; letter-spacing: 1.5px; 
+            text-transform: uppercase; cursor: pointer; 
+            box-shadow: 0 0 30px var(--titanium-glow);
             transition: all 0.2s ease;
         }
         .btn-desbloqueo:active { transform: scale(0.95); }
-        .pulse-logo { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.95); } 70% { transform: scale(1.03); } 100% { transform: scale(0.95); } }
 
+        /* HUB PRINCIPAL */
         .hub-container { 
-            background: var(--color-tarjeta); width: 100%; max-width: 400px; border-radius: 28px; 
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9); padding: 30px 20px; text-align: center; 
-            border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px);
+            background: var(--color-tarjeta); 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 32px; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 0, 0, 0.6); 
+            padding: 28px 20px; 
+            text-align: center; 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(20px);
+            position: relative;
+        }
+
+        /* LUZ STATUS TITANIUM TECH PULSANTE */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: rgba(241, 245, 249, 0.06);
+            border: 1px solid rgba(226, 232, 240, 0.22);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: var(--titanium-light);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .ping-light {
+            position: relative;
+            width: 7px;
+            height: 7px;
+            background-color: var(--titanium-light);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--titanium-light);
+        }
+        .ping-light::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background-color: var(--titanium-glow);
+            animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
+        }
+        @keyframes radarTitanium {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(2.8); opacity: 0; }
         }
         
-        .logo-container { width: 90px; height: 90px; margin: 0 auto 15px auto; border-radius: 22px; border: 2px solid rgba(255,255,255,0.15); overflow: hidden; background-color: #fff; display: flex; justify-content: center; align-items: center; }
+        .logo-container { 
+            width: 92px; height: 92px; margin: 0 auto 14px auto; 
+            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.2); 
+            overflow: hidden; background-color: #ffffff; 
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+        }
         .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         
-        h1 { font-size: 1.5rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; color: #fff; }
-        .propietario { color: var(--color-cyan); font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; letter-spacing: 1px; }
+        h1 { font-size: 1.45rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; }
+        .propietario { color: var(--color-acento); font-size: 0.8rem; margin-bottom: 18px; font-weight: 600; letter-spacing: 0.8px; }
         
-        .section-title { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 700; }
+        .section-title { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--color-gris); margin: 22px 0 10px 6px; font-weight: 700; }
         
+        /* PITCH DEMO COMERCIAL */
         .friccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
-        .friccion-card { background: var(--color-boton); border-radius: 18px; padding: 15px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: all 0.2s ease; }
-        .friccion-card:active { transform: scale(0.95); background-color: #222; }
-        .friccion-icon { font-size: 1.8rem; margin-bottom: 8px; }
-        .friccion-title { font-size: 0.75rem; font-weight: 700; color: var(--color-texto); line-height: 1.2; }
+        .friccion-card { background: var(--color-boton); border-radius: 20px; padding: 15px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s ease; }
+        .friccion-card:active { transform: scale(0.95); background-color: #1e293b; border-color: var(--color-acento); }
+        .friccion-icon { font-size: 1.7rem; margin-bottom: 8px; }
+        .friccion-title { font-size: 0.74rem; font-weight: 700; color: var(--color-texto); line-height: 1.2; }
 
+        /* LISTA DE BOTONES */
         .apps-menu { display: flex; flex-direction: column; gap: 12px; }
-        .app-btn { display: flex; align-items: center; padding: 14px 18px; border-radius: 18px; background-color: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; }
-        .app-btn:active { transform: scale(0.97); background-color: #222; }
-        .app-btn.destacado { border: 1px solid var(--color-blue); box-shadow: 0 0 15px rgba(0, 123, 255, 0.35); }
-        .app-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; flex-shrink: 0; }
+        .app-btn { 
+            display: flex; align-items: center; padding: 14px 18px; border-radius: 20px; 
+            background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-align: left; text-decoration: none; 
+            backdrop-filter: blur(10px);
+        }
+        .app-btn:active { transform: scale(0.97); background: rgba(30, 41, 59, 0.95); border-color: var(--color-acento); }
+        .app-btn.destacado { 
+            border: 1px solid var(--color-acento); 
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(15, 23, 42, 0.8));
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
+        }
+        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; flex-shrink: 0; }
         .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.95rem; font-weight: 600; color: var(--color-texto); margin-bottom: 2px; }
-        .app-desc { font-size: 0.75rem; color: var(--color-gris); }
+        .app-name { font-size: 0.92rem; font-weight: 700; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.73rem; color: var(--color-gris); }
         
+        /* ESCUDO ANTI-RESEÑAS */
         .stars-container { font-size: 2rem; margin-top: 12px; display: flex; justify-content: center; gap: 10px; width: 100%; }
         .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
-        .star-rating i:active { transform: scale(1.35); }
-        .star-active { color: #ffb400; text-shadow: 0 0 10px rgba(255, 180, 0, 0.5); }
-        .star-inactive { color: #333; }
+        .star-rating i:active { transform: scale(1.4); }
+        .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
+        .star-inactive { color: #334155; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-box { background: #161616; border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; padding: 25px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; }
-        .modal-icon { font-size: 2.5rem; margin-bottom: 15px; }
-        .modal-title { font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; }
-        .modal-text { font-size: 0.88rem; color: #ddd; line-height: 1.5; margin-bottom: 20px; }
+        /* MODALES */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 26px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal-icon { font-size: 2.6rem; margin-bottom: 14px; }
+        .modal-title { font-size: 1.15rem; font-weight: 900; color: #fff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-text { font-size: 0.86rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 22px; }
         
         .modal-actions { display: flex; flex-direction: column; gap: 10px; }
-        .modal-btn-primary { background: #25D366; color: #fff; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 700; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: block; }
-        .modal-btn-google { background: #ffb400; color: #000; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 800; font-size: 0.9rem; cursor: pointer; text-decoration: none; display: block; }
-        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.2); padding: 10px 18px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; }
+        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 800; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: block; }
+        .modal-btn-google { background: linear-gradient(135deg, #ffb400, #f59e0b); color: #020617; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 900; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: block; box-shadow: 0 0 20px rgba(255, 180, 0, 0.4); }
+        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 18px; border-radius: 50px; font-size: 0.76rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; }
 
         .selector-box { text-align: left; margin-bottom: 15px; }
-        .selector-label { font-size: 0.75rem; color: var(--color-cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .selector-label { font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .selector-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .pill-btn { background: #222; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 4px; font-size: 0.75rem; color: #fff; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .pill-btn.active { background: var(--color-blue); border-color: var(--color-cyan); font-weight: 700; box-shadow: 0 0 10px rgba(0, 168, 232, 0.4); }
-        .card-resultado { background: rgba(0, 123, 255, 0.1); border: 1px dashed var(--color-cyan); border-radius: 16px; padding: 12px; margin: 15px 0; text-align: left; }
+        .pill-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px 4px; font-size: 0.74rem; color: #fff; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .pill-btn.active { background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; font-weight: 800; border-color: #fff; }
+        .card-resultado { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.3); border-radius: 18px; padding: 14px; margin: 15px 0; text-align: left; }
 
-        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(10, 10, 10, 0.8); border: 1px solid var(--color-blue); color: var(--color-blue); width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.8); backdrop-filter: blur(5px); align-items: center; justify-content: center; transition: all 0.3s; }
+        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--titanium-light); color: var(--titanium-light); width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 20px var(--titanium-glow); backdrop-filter: blur(8px); align-items: center; justify-content: center; transition: all 0.3s; }
         
-        .footer-brand { margin-top: 30px; font-size: 0.75rem; color: var(--color-gris); letter-spacing: 1px; }
-        .footer-brand span { color: var(--color-cyan); font-weight: 700; }
+        .footer-brand { margin-top: 30px; font-size: 0.72rem; color: var(--color-gris); letter-spacing: 1.2px; }
+        .footer-brand span { color: var(--titanium-light); font-weight: 800; }
     </style>
 </head>
 <body>
 
     <audio id="audio-fondo" loop preload="auto"></audio>
 
+    <!-- SPLASH SCREEN -->
     <div id="splash-screen">
         <div class="logo-container pulse-logo" id="splash-logo-box" style="width: 110px; height: 110px; margin-bottom: 25px;">
             <img id="splash-logo" alt="Logo">
@@ -121,11 +201,11 @@
         </div>
     </div>
 
-    <!-- MODAL WOW 1: TEST ERGONÓMICO -->
+    <!-- MODAL WOW 1: ERGONOMÍA -->
     <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
         <div class="modal-box" style="max-width: 380px;">
-            <div style="color: var(--color-cyan); font-size: 2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
-            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Test Ergonómico</h3>
+            <div style="color: var(--color-acento); font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Test Ergonómico</h3>
             <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 18px;">Configuración de descanso en 3 toques</p>
             
             <div class="selector-box">
@@ -156,9 +236,9 @@
             </div>
 
             <div class="card-resultado">
-                <div style="font-size: 0.72rem; color: var(--color-cyan); font-weight: 700; text-transform: uppercase;">Recomendación Ergonómica:</div>
-                <div id="diag-firmeza" style="font-size: 0.95rem; font-weight: 800; color: #fff; margin-top: 2px;">Firmeza Media Adaptable</div>
-                <div id="diag-tecnologia" style="font-size: 0.75rem; color: #ddd; margin-top: 4px;">Muelles Ensacados + Viscoelástica transpirable.</div>
+                <div style="font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase;">Recomendación Ergonómica:</div>
+                <div id="diag-firmeza" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Firmeza Media Adaptable</div>
+                <div id="diag-tecnologia" style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px;">Muelles Ensacados + Viscoelástica transpirable.</div>
             </div>
 
             <div class="modal-actions">
@@ -168,11 +248,11 @@
         </div>
     </div>
 
-    <!-- MODAL WOW 2: TASADOR LOGÍSTICO -->
+    <!-- MODAL WOW 2: LOGÍSTICA & RETIRADA -->
     <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
         <div class="modal-box" style="max-width: 380px;">
-            <div style="color: #30d158; font-size: 2rem; margin-bottom: 8px;"><i class="fa-solid fa-truck-ramp-box"></i></div>
-            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">Entrega & Retirada</h3>
+            <div style="color: #30d158; font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Entrega & Retirada</h3>
             <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 18px;">Tasador logístico previo a la compra</p>
             
             <div class="selector-box">
@@ -202,9 +282,9 @@
             </div>
 
             <div class="card-resultado" style="border-color: #30d158; background: rgba(48, 209, 88, 0.08);">
-                <div style="font-size: 0.72rem; color: #30d158; font-weight: 700; text-transform: uppercase;">Condición Estimada:</div>
-                <div id="diag-envio-titulo" style="font-size: 0.95rem; font-weight: 800; color: #fff; margin-top: 2px;">Servicio Bonificado en Tienda</div>
-                <div id="diag-envio-desc" style="font-size: 0.75rem; color: #ddd; margin-top: 4px;">Ruta directa a domicilio con subida a habitación (consulta condiciones según compra).</div>
+                <div style="font-size: 0.72rem; color: #30d158; font-weight: 800; text-transform: uppercase;">Condición Estimada:</div>
+                <div id="diag-envio-titulo" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Servicio Bonificado en Tienda</div>
+                <div id="diag-envio-desc" style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px;">Ruta directa a domicilio con subida a habitación (consulta condiciones según compra).</div>
             </div>
 
             <div class="modal-actions">
@@ -219,9 +299,15 @@
 
     <!-- HUB PRINCIPAL -->
     <div class="hub-container">
+        <!-- LUZ STATUS TITANIUM TECH PULSANTE -->
+        <div class="status-badge">
+            <span class="ping-light"></span>
+            <span id="badge-text">Sistema Conectado · Mostrador Activo</span>
+        </div>
+
         <div class="logo-container" id="hub-logo-box"><img id="hub-logo" alt="Logo"></div>
         <h1 id="client-name">STUDIO 42</h1>
-        <div class="propietario" id="client-subtitle">ELIMINA TUS CUELLOS DE BOTELLA</div>
+        <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
         <!-- PANEL DE FRICCIONES / CONTROL MODO DEMO -->
         <div id="fricciones-section">
@@ -271,7 +357,7 @@
 
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'sunshine').toLowerCase().trim();
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
 
             try {
                 let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
@@ -282,8 +368,12 @@
 
                 const data = await response.json();
 
+                // 1. BRANDING DINÁMICO
                 if (data.colorPrincipal) {
-                    document.documentElement.style.setProperty('--color-oro', data.colorPrincipal);
+                    document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
+                }
+                if (data.colorAcento) {
+                    document.documentElement.style.setProperty('--color-acento', data.colorAcento);
                 }
 
                 document.getElementById('page-title').innerText = `${data.nombre || 'Studio 42'} | Identidad Inteligente`;
@@ -294,31 +384,31 @@
                 document.getElementById('splash-subtitle').innerText = subtituloText;
                 document.getElementById('client-subtitle').innerText = subtituloText;
 
+                if (data.textoBadge) {
+                    document.getElementById('badge-text').innerText = data.textoBadge;
+                }
+
                 const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "iberlax-logo.jpg";
                 const splashImg = document.getElementById('splash-logo');
                 const hubImg = document.getElementById('hub-logo');
-                
                 splashImg.src = logoPath;
                 hubImg.src = logoPath;
-                
-                splashImg.onerror = function() {
-                    if (!this.src.includes('./')) this.src = './' + logoPath;
-                };
-                hubImg.onerror = function() {
-                    if (!this.src.includes('./')) this.src = './' + logoPath;
-                };
+                splashImg.onerror = function() { if (!this.src.includes('./')) this.src = './' + logoPath; };
+                hubImg.onerror = function() { if (!this.src.includes('./')) this.src = './' + logoPath; };
 
-                const pistaAudio = (data.audioFondo && data.audioFondo.trim() !== "") ? data.audioFondo : "ambiente2.mp3";
-                reproductor.src = pistaAudio;
-                reproductor.load();
+                const pistaAudio = data.audioFondo && data.audioFondo.trim() !== "" ? data.audioFondo : "ambiente2.mp3";
+                if (pistaAudio) {
+                    reproductor.src = pistaAudio;
+                    reproductor.load();
+                }
 
-                // CONTROL MODO DEMO COMERCIAL
+                // 2. MODO DEMO / PRESENTACIÓN COMERCIAL
                 const seccionFricciones = document.getElementById('fricciones-section');
                 if (data.modoDemo === true) {
                     seccionFricciones.style.display = 'block';
 
                     datosFriccionesGlobales = {
-                        'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:#00e5ff;"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
+                        'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:var(--color-acento);"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
                         'resenas': { icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>', titulo: 'Protección de Reputación', texto: 'Una sola queja pública en Google aleja clientes.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas hacia tu WhatsApp Privado.' },
                         'embudos': { icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>', titulo: 'Embudos Directos', texto: 'Las webs tradicionales son lentas.<br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión directamente en la mano del cliente.' },
                         'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real, como el Gestor GPS de Parking, para que mantengan tu marca guardada.' }
@@ -326,7 +416,7 @@
 
                     const gridContainer = document.getElementById('friccion-grid');
                     gridContainer.innerHTML = `
-                        <div class="friccion-card" onclick="mostrarExplicacion('contactos')"><div class="friccion-icon" style="color: #00e5ff;"><i class="fa-solid fa-user-xmark"></i></div><div class="friccion-title">Fuga de Contactos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('contactos')"><div class="friccion-icon" style="color: var(--color-acento);"><i class="fa-solid fa-user-xmark"></i></div><div class="friccion-title">Fuga de Contactos</div></div>
                         <div class="friccion-card" onclick="mostrarExplicacion('resenas')"><div class="friccion-icon" style="color: #ff3b30;"><i class="fa-solid fa-star-half-stroke"></i></div><div class="friccion-title">Reputación Vulnerable</div></div>
                         <div class="friccion-card" onclick="mostrarExplicacion('embudos')"><div class="friccion-icon" style="color: #30d158;"><i class="fa-solid fa-filter-circle-xmark"></i></div><div class="friccion-title">Embudos Rotos</div></div>
                         <div class="friccion-card" onclick="mostrarExplicacion('experiencia')"><div class="friccion-icon" style="color: #bf5af2;"><i class="fa-solid fa-map-location-dot"></i></div><div class="friccion-title">Olvido del Cliente</div></div>
@@ -335,6 +425,7 @@
                     seccionFricciones.style.display = 'none';
                 }
 
+                // 3. RENDERIZADO DE BOTONES Y SECCIONES
                 const menuContainer = document.getElementById('dynamic-menu');
                 menuContainer.innerHTML = '';
 
@@ -355,13 +446,14 @@
                         
                         if (sec.whatsappGerencia) {
                             whatsappGerenciaGlobal = sec.whatsappGerencia;
+                            whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
                         }
 
                         const esSeccionEscudo = sec.escudoResenas || (sec.titulo && sec.titulo.toLowerCase().includes('opinión'));
 
                         if (esSeccionEscudo && (!sec.botones || sec.botones.length === 0)) {
                             block.innerHTML += `
-                                <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start; border: 1px solid rgba(255,255,255,0.15); background: rgba(15, 44, 89, 0.15); padding: 18px 16px;">
+                                <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start; border: 1px solid rgba(255,180,0,0.3); background: rgba(255, 180, 0, 0.05); padding: 18px 16px;">
                                     <div style="display: flex; align-items: center; width: 100%;">
                                         <div class="app-icon" style="background: rgba(255,180,0,0.15); color: #ffb400;"><i class="fa-brands fa-google"></i></div>
                                         <div class="app-info">
@@ -376,18 +468,18 @@
                                         <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(4)"></i>
                                         <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(5)"></i>
                                     </div>
-                                    <p id="mensaje-filtro" style="font-size: 0.75rem; color: #00A8E8; text-align: center; width: 100%; margin-top: 10px; display: none; font-weight:600;">Procesando...</p>
+                                    <p id="mensaje-filtro" style="font-size: 0.75rem; color: var(--color-acento); text-align: center; width: 100%; margin-top: 10px; display: none; font-weight:700;">Conectando con Google Maps...</p>
                                 </div>
                             `;
                         } else if (sec.botones && Array.isArray(sec.botones)) {
                             sec.botones.forEach(btn => {
                                 const nLower = btn.nombre.toLowerCase();
 
-                                // 1. TEST ERGONÓMICO
-                                if ((nLower.includes('firmeza') || nLower.includes('ergonómico') || nLower.includes('ergonomico')) && !nLower.includes('agenda') && !nLower.includes('contacto')) {
+                                // 1. DETECCIÓN TEST ERGONÓMICO (Sin colisión con la agenda)
+                                if ((btn.tipo === 'ergonomia' || nLower.includes('ergonómico') || nLower.includes('ergonomico') || nLower.includes('firmeza')) && !nLower.includes('agenda') && !nLower.includes('contacto')) {
                                     block.innerHTML += `
                                         <a class="app-btn destacado" onclick="abrirAsesor(event)">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="fa-solid fa-bed-pulse"></i></div>
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
                                             <div class="app-info">
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Configurador interactivo de descanso'}</div>
@@ -396,11 +488,11 @@
                                         </a>
                                     `;
                                 } 
-                                // 2. TASADOR LOGÍSTICO
-                                else if (nLower.includes('tasador') || nLower.includes('retirada') || nLower.includes('entrega')) {
+                                // 2. DETECCIÓN TASADOR LOGÍSTICO
+                                else if (btn.tipo === 'logistica' || nLower.includes('tasador') || nLower.includes('retirada') || nLower.includes('entrega')) {
                                     block.innerHTML += `
                                         <a class="app-btn" onclick="abrirEnvio(event)">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
                                             <div class="app-info">
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Calcula condiciones de reparto y retirada'}</div>
@@ -424,23 +516,18 @@
                                         </a>
                                     `;
                                 } 
-                                // 4. VCARD Y OTROS BOTONES
+                                // 4. VCARD Y BOTONES CONVENCIONALES
                                 else {
-                                    let estrellasHTML = btn.estrellas ? '<div class="stars-active" style="font-size: 0.75rem; margin-top: 4px; color:#ffb400;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>' : '';
-                                    
-                                    if(btn.url && (btn.url.includes('writereview') || btn.url.includes('google.com') || btn.url.includes('maps.google'))) googleReviewUrlGlobal = btn.url;
-                                    if(btn.url && btn.url.includes('wa.me')) {
-                                        whatsappGerenciaGlobal = btn.url;
+                                    if(btn.url && btn.url.includes('wa.me') && !whatsappTiendaGlobal) {
                                         whatsappTiendaGlobal = btn.url.split('?')[0];
                                     }
 
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
-                                            <div class="app-icon" style="${btn.estiloIcono || ''}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
                                             <div class="app-info">
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || ''}</div>
-                                                ${estrellasHTML}
                                             </div>
                                             <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
                                         </a>
@@ -459,7 +546,7 @@
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('client-subtitle').innerText = "Error: archivo JSON no encontrado";
+                document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
             }
         }
 
@@ -486,8 +573,8 @@
             if (audioMuteado) {
                 reproductor.play().catch(e => console.error(e));
                 iconoAudio.className = "fa-solid fa-volume-high";
-                btnAudio.style.color = "#007BFF";
-                btnAudio.style.borderColor = "#007BFF";
+                btnAudio.style.color = "var(--titanium-light)";
+                btnAudio.style.borderColor = "var(--titanium-light)";
             } else {
                 reproductor.pause();
                 iconoAudio.className = "fa-solid fa-volume-xmark";
@@ -557,11 +644,16 @@
                 tecnologia = "Viscoelástica suave con alivio de presión en caderas y hombros.";
             }
 
-            document.getElementById('diag-firmeza').innerText = firmeza;
-            document.getElementById('diag-tecnologia').innerText = `${tecnologia} (Medida sugerida: ${estadoAsesor.medida}).`;
+            const elFirmeza = document.getElementById('diag-firmeza');
+            const elTecno = document.getElementById('diag-tecnologia');
+            if (elFirmeza) elFirmeza.innerText = firmeza;
+            if (elTecno) elTecno.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
 
-            const mensajeWA = `Hola Iberlax, acabo de usar el Asesor Smart en la tienda:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0A*Resultado:* ${firmeza}.%0A¿Qué modelo exacto puedo probar en exposición?`;
-            document.getElementById('btn-probar-tienda').href = `${whatsappTiendaGlobal}?text=${mensajeWA}`;
+            const btnProbar = document.getElementById('btn-probar-tienda');
+            if (btnProbar) {
+                const mensajeWA = `Hola Iberlax, acabo de usar el Asesor Smart en la tienda:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0A*Resultado:* ${firmeza}.%0A¿Qué modelo exacto puedo probar en exposición?`;
+                btnProbar.href = `${whatsappTiendaGlobal}?text=${mensajeWA}`;
+            }
         }
 
         // LÓGICA TASADOR LOGÍSTICO
@@ -593,16 +685,21 @@
             if (estadoEnvio.acceso.includes('3º o superior') || estadoEnvio.acceso.includes('Esc. Alta')) {
                 titulo = "Suplemento de Acceso / 2 Operarios";
                 desc = "Requiere coordinación logística especial para subida por escalera estrecha.";
-            } else if (estadoEnvio.zona.includes('Rioja') || estadoEnvio.zona.includes('Otras')) {
+            } else if (estadoEnvio.zona.includes('Rioja') || estadoEnvio.zona.includes('Comarca') || estadoEnvio.zona.includes('Otras')) {
                 titulo = "Ruta Interurbana / Comarcal";
                 desc = "Consolidado en rutas semanales programadas por comarca.";
             }
 
-            document.getElementById('diag-envio-titulo').innerText = titulo;
-            document.getElementById('diag-envio-desc').innerText = desc;
+            const elTitulo = document.getElementById('diag-envio-titulo');
+            const elDesc = document.getElementById('diag-envio-desc');
+            if (elTitulo) elTitulo.innerText = titulo;
+            if (elDesc) elDesc.innerText = desc;
 
-            const mensajeWA = `Hola Iberlax, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}%0A- Retirada de viejo: ${estadoEnvio.retirada}%0A¿Me podéis confirmar condiciones y disponibilidad de ruta?`;
-            document.getElementById('btn-confirmar-envio').href = `${whatsappTiendaGlobal}?text=${mensajeWA}`;
+            const btnConfirmar = document.getElementById('btn-confirmar-envio');
+            if (btnConfirmar) {
+                const mensajeWA = `Hola Iberlax, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}%0A- Retirada de viejo: ${estadoEnvio.retirada}%0A¿Me podéis confirmar condiciones y disponibilidad de ruta?`;
+                btnConfirmar.href = `${whatsappTiendaGlobal}?text=${mensajeWA}`;
+            }
         }
 
         // ESCUDO STUDIO 42
@@ -612,7 +709,6 @@
             estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
             
             mensaje.style.display = 'block';
-            mensaje.innerText = "Conectando...";
 
             setTimeout(() => {
                 mensaje.style.display = 'none';
@@ -654,7 +750,7 @@
             }, 300);
         }
 
-        // LÓGICA COMPLETA DEL GESTOR DE PARKING GPS REAL
+        // GESTOR DE PARKING GPS REAL
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
             const iconBox = document.getElementById('parking-icon-container');
@@ -665,10 +761,10 @@
             if (!iconBox) return;
 
             if (lat) {
-                iconBox.style.background = "rgba(0, 123, 255, 0.25)";
-                iconBox.style.color = "#007BFF";
+                iconBox.style.background = "rgba(226, 232, 240, 0.2)";
+                iconBox.style.color = "var(--titanium-light)";
                 icon.className = "fa-solid fa-person-walking";
-                if(title) { title.innerText = "Volver a mi coche (Ruta GPS)"; title.style.color = "#00A8E8"; }
+                if(title) { title.innerText = "Volver a mi coche (Ruta GPS)"; title.style.color = "var(--titanium-light)"; }
                 if(desc) desc.innerText = "Toca para abrir Maps y volver a pie";
             } else {
                 iconBox.style.background = "rgba(142,142,147,0.1)";
@@ -685,16 +781,12 @@
             const lng = localStorage.getItem('parking_lng');
 
             if (lat && lng) {
-                // SEGUNDO TOQUE: ABRE GOOGLE MAPS DIRECTAMENTE CON RUTA A PIE
                 const urlNavegacion = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
                 window.open(urlNavegacion, '_blank');
-                
-                // Limpia la posición guardada tras iniciar la ruta
                 localStorage.removeItem('parking_lat');
                 localStorage.removeItem('parking_lng');
                 actualizarInterfazParking();
             } else {
-                // PRIMER TOQUE: CAPTURA COORDENADA GPS REAL VÍA NAVEGADOR
                 if ("geolocation" in navigator) {
                     const desc = document.getElementById('parking-desc');
                     if (desc) desc.innerText = "Obteniendo señal GPS satelital...";
@@ -704,11 +796,10 @@
                             localStorage.setItem('parking_lat', pos.coords.latitude);
                             localStorage.setItem('parking_lng', pos.coords.longitude);
                             actualizarInterfazParking();
-                            alert("📍 ¡Ubicación de tu coche guardada con éxito! Al salir de la tienda toca este botón para abrir la ruta a pie.");
+                            alert("📍 ¡Ubicación de tu coche guardada! Al salir pulsa este botón para volver a pie.");
                         },
                         (err) => {
                             console.warn(err);
-                            // Simulación de respaldo si el usuario tiene los permisos GPS denegados
                             localStorage.setItem('parking_lat', "42.4667");
                             localStorage.setItem('parking_lng', "-2.4500");
                             actualizarInterfazParking();
