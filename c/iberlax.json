@@ -18,10 +18,10 @@
           "destacado": true
         },
         {
-          "nombre": "Garantía Digital & Cuidados del Colchón",
-          "descripcion": "Tu certificado de descanso, prueba de adaptación y guía de volteo",
-          "icono": "fa-solid fa-certificate",
-          "url": "https://wa.me/346643186453?text=Hola%20Iberlax,%20quiero%20activar%20la%20garant%C3%ADa%20digital%20de%20mi%20colch%C3%B3n",
+          "nombre": "Asesor de Firmeza & Medidas",
+          "descripcion": "Configura tu colchón y base ideal en 3 pasos",
+          "icono": "fa-solid fa-bed-pulse",
+          "url": "#",
           "estiloIcono": "background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;"
         },
         {
@@ -49,8 +49,7 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "https://maps.google.com/?q=Iberlax+Sistemas+de+Descanso",
-      "placeIdGoogle": "ChIJXy9Psu6qWg0R2MztIZPHsPQ",
+      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJXy9Psu6qWg0R2MztIZPHsPQ",
       "whatsappGerencia": "https://wa.me/346643186453?text=Hola%20Gerencia%20Iberlax,%20quisiera%20comentar%20una%20disconformidad%20con%20mi%20visita"
     }
   ]
