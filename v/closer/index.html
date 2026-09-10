@@ -265,7 +265,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            // Detecta ?cod= o ?closer= o asigna MEL42 por defecto
             const closerCod = urlParams.get('cod') || urlParams.get('closer') || 'MEL42';
             
             const inputCloser = document.getElementById('closer_id');
@@ -273,7 +272,6 @@
                 inputCloser.value = closerCod.toUpperCase().trim();
             }
 
-            // Detección de tema rosa/violeta para Melina
             if (closerCod.toUpperCase().includes('MEL')) {
                 document.body.classList.add('theme-melina');
             }
@@ -292,14 +290,12 @@
             btnEnviar.innerText = "Compilando Phygital Engine...";
             btnEnviar.style.opacity = "0.7";
 
-            // Extracción manual directa de los inputs
             const closerVal     = (document.getElementById('closer_id').value || 'MEL42').trim();
             const nombreSector  = document.getElementById('nombre_sector').value.trim();
             const friccionesVal = document.getElementById('fricciones').value.trim();
             const brandingVal   = document.getElementById('branding').value.trim();
             const logoExtraVal  = document.getElementById('logo_extra').value.trim();
 
-            // Slug idéntico al generado por el backend
             const nombreComercial = nombreSector.split('/')[0].trim();
             const slugCalculado = nombreComercial.toLowerCase()
                 .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -307,21 +303,19 @@
                 .trim()
                 .replace(/[\s_-]+/g, '-');
 
-            // Construcción manual de parámetros URL-encoded
-            const params = new URLSearchParams();
-            params.append("closer_id", closerVal);
-            params.append("nombre_sector", nombreSector);
-            params.append("fricciones", friccionesVal);
-            params.append("branding", brandingVal);
-            params.append("logo_extra", logoExtraVal);
+            const payloadData = {
+                closer_id: closerVal,
+                nombre_sector: nombreSector,
+                fricciones: friccionesVal,
+                branding: brandingVal,
+                logo_extra: logoExtraVal
+            };
 
-            fetch(SCRIPT_URL, {
+            const queryUrl = SCRIPT_URL + "?" + new URLSearchParams(payloadData).toString();
+
+            fetch(queryUrl, {
                 method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: params.toString()
+                mode: 'no-cors'
             })
             .then(() => {
                 const demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
