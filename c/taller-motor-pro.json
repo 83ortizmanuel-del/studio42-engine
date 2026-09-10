@@ -1,0 +1,41 @@
+{
+  "nombre": "TALLER MOTOR PRO",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Mecanica",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#121212",
+  "colorAcento": "#FF003F",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Cita Previa / Recordatorio de Revision",
+          "descripcion": "Reserva tu turno y gestiona el mantenimiento de tu vehiculo",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita%20o%20consultar%20revision",
+          "destacado": true
+        },
+        {
+          "nombre": "¿Donde aparque?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
