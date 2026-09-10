@@ -1,199 +1,499 @@
-// =======================================================
-// STUDIO 42 - PHYGITAL ENGINE COMPILADOR V3
-// =======================================================
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">Studio 42 | Ecosistema Phygital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-principal: #0F172A;
+            --color-acento: #00E5FF;
+            --color-fondo: #030712; 
+            --color-tarjeta: rgba(15, 23, 42, 0.85); 
+            --color-boton: rgba(30, 41, 59, 0.7); 
+            --color-texto: #f8fafc;
+            --color-gris: #94a3b8;
+            --titanium-light: #f1f5f9;
+            --titanium-glow: rgba(226, 232, 240, 0.5);
+        }
 
-const GEMINI_API_KEY = "AIzaSyCBfP9rK2MGdsx-d7tS_TVMbZ76-9chbToI";
-const GITHUB_TOKEN   = "ghp_gI4IhcMgsNsSjYr808kNJvqvJb5kk62g8oZ2";
-const REPO_NAME      = "83ortizmanuel-del/studio42-engine";
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 80%);
+            color: var(--color-texto); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 15px; 
+            user-select: none;
+            overflow-x: hidden;
+        }
+        
+        /* SPLASH SCREEN */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            background: radial-gradient(circle at center, #111827 0%, #030712 100%);
+            z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px;
+        }
+        .btn-desbloqueo {
+            background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
+            padding: 16px 36px; border-radius: 50px; font-size: 0.92rem; font-weight: 900; letter-spacing: 1.5px; 
+            text-transform: uppercase; cursor: pointer; 
+            box-shadow: 0 0 30px var(--titanium-glow);
+            transition: all 0.2s ease;
+        }
+        .btn-desbloqueo:active { transform: scale(0.95); }
 
-function doGet(e) {
-  return ContentService.createTextOutput("Studio 42 Phygital Engine Activo y Operativo");
-}
+        /* HUB PRINCIPAL */
+        .hub-container { 
+            background: var(--color-tarjeta); 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 32px; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 0, 0, 0.6); 
+            padding: 28px 20px; 
+            text-align: center; 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(20px);
+            position: relative;
+        }
 
-function doPost(e) {
-  try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    var p = (e && e.parameter) ? e.parameter : {};
-    var fecha = new Date();
+        /* LUZ STATUS TITANIUM TECH */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: rgba(241, 245, 249, 0.06);
+            border: 1px solid rgba(226, 232, 240, 0.22);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: var(--titanium-light);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .ping-light {
+            position: relative;
+            width: 7px;
+            height: 7px;
+            background-color: var(--titanium-light);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--titanium-light);
+        }
+        .ping-light::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background-color: var(--titanium-glow);
+            animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
+        }
+        @keyframes radarTitanium {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(2.8); opacity: 0; }
+        }
+        
+        .logo-container { 
+            width: 92px; height: 92px; margin: 0 auto 14px auto; 
+            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.2); 
+            overflow: hidden; background-color: #ffffff; 
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+        }
+        .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+        
+        h1 { font-size: 1.45rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; }
+        .propietario { color: var(--color-acento); font-size: 0.8rem; margin-bottom: 18px; font-weight: 600; letter-spacing: 0.8px; }
+        
+        .section-title { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--color-gris); margin: 22px 0 10px 6px; font-weight: 700; }
+        
+        /* PITCH DEMO COMERCIAL */
+        .friccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        .friccion-card { background: var(--color-boton); border-radius: 20px; padding: 15px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s ease; }
+        .friccion-card:active { transform: scale(0.95); background-color: #1e293b; border-color: var(--color-acento); }
+        .friccion-icon { font-size: 1.7rem; margin-bottom: 8px; }
+        .friccion-title { font-size: 0.74rem; font-weight: 700; color: var(--color-texto); line-height: 1.2; }
 
-    var closerId     = (p.closer_id || "MEL42").toString().trim();
-    var nombreSector = (p.nombre_sector || "Comercio").toString().trim();
-    var fricciones   = (p.fricciones || "Fricciones generales").toString().trim();
-    var branding     = (p.branding || "Estilo neutro").toString().trim();
-    var logoExtra    = (p.logo_extra || "").toString().trim();
+        /* LISTA DE BOTONES */
+        .apps-menu { display: flex; flex-direction: column; gap: 12px; }
+        .app-btn { 
+            display: flex; align-items: center; padding: 14px 18px; border-radius: 20px; 
+            background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-align: left; text-decoration: none; 
+            backdrop-filter: blur(10px);
+        }
+        .app-btn:active { transform: scale(0.97); background: rgba(30, 41, 59, 0.95); border-color: var(--color-acento); }
+        .app-btn.destacado { 
+            border: 1px solid var(--color-acento); 
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(15, 23, 42, 0.8));
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
+        }
+        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; flex-shrink: 0; }
+        .app-info { flex-grow: 1; }
+        .app-name { font-size: 0.92rem; font-weight: 700; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.73rem; color: var(--color-gris); }
+        
+        /* ESCUDO ANTI-RESEÑAS */
+        .stars-container { font-size: 2rem; margin-top: 12px; display: flex; justify-content: center; gap: 10px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .star-rating i:active { transform: scale(1.4); }
+        .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
+        .star-inactive { color: #334155; }
 
-    // 1. Limpieza de slug para la URL
-    var nombreComercial = nombreSector.split('/')[0].trim();
-    var slug = nombreComercial.toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/[\s_-]+/g, '-');
+        /* MODALES */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 26px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal-icon { font-size: 2.6rem; margin-bottom: 14px; }
+        .modal-title { font-size: 1.15rem; font-weight: 900; color: #fff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-text { font-size: 0.86rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 22px; }
+        
+        .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 800; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: block; }
+        .modal-btn-google { background: linear-gradient(135deg, #ffb400, #f59e0b); color: #020617; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 900; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: block; box-shadow: 0 0 20px rgba(255, 180, 0, 0.4); }
+        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 18px; border-radius: 50px; font-size: 0.76rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; }
 
-    var sectorLimpio = nombreSector.split('/')[1] ? nombreSector.split('/')[1].trim() : "Servicios";
+        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--titanium-light); color: var(--titanium-light); width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 20px var(--titanium-glow); backdrop-filter: blur(8px); align-items: center; justify-content: center; transition: all 0.3s; }
+        
+        .footer-brand { margin-top: 30px; font-size: 0.72rem; color: var(--color-gris); letter-spacing: 1.2px; }
+        .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+    </style>
+</head>
+<body>
 
-    // 2. Prompt estricto para Gemini
-    var prompt = "Eres el compilador JSON estricto para Studio 42 Phygital Engine.\n" +
-      "Devuelve EXCLUSIVAMENTE un objeto JSON valido (sin markdown, sin ```json, sin explicaciones extra) con esta estructura exacta para el comercio:\n" +
-      "Nombre: " + nombreComercial + "\n" +
-      "Sector: " + sectorLimpio + "\n" +
-      "Fricciones: " + fricciones + "\n" +
-      "Branding: " + branding + "\n\n" +
-      "Estructura JSON requerida:\n" +
-      "{\n" +
-      '  "nombre": "' + nombreComercial.toUpperCase() + '",\n' +
-      '  "modoDemo": true,\n' +
-      '  "subtitulo": "Especialistas en ' + sectorLimpio + '",\n' +
-      '  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",\n' +
-      '  "logo": "' + (logoExtra.startsWith('http') ? logoExtra : 'logo.png') + '",\n' +
-      '  "colorPrincipal": "#0A0F1D",\n' +
-      '  "colorAcento": "#00E5FF",\n' +
-      '  "secciones": [\n' +
-      '    {\n' +
-      '      "titulo": "Servicios & Soluciones Directas",\n' +
-      '      "botones": [\n' +
-      '        {\n' +
-      '          "nombre": "Cita Previa / Atención Inmediata",\n' +
-      '          "descripcion": "Reserva tu turno directamente",\n' +
-      '          "icono": "fa-solid fa-calendar-check",\n' +
-      '          "url": "[https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita](https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita)",\n' +
-      '          "destacado": true\n' +
-      '        },\n' +
-      '        {\n' +
-      '          "nombre": "¿Dónde aparqué?",\n' +
-      '          "tipo": "parking",\n' +
-      '          "descripcion": "Guarda la posición GPS de tu vehículo",\n' +
-      '          "icono": "fa-solid fa-location-crosshairs"\n' +
-      '        },\n' +
-      '        {\n' +
-      '          "nombre": "Guardar Contacto en Agenda",\n' +
-      '          "descripcion": "Añade nuestro teléfono y datos a tus contactos",\n' +
-      '          "icono": "fa-solid fa-address-card",\n' +
-      '          "url": "./contacto.vcf"\n' +
-      '        }\n' +
-      '      ]\n' +
-      '    },\n' +
-      '    {\n' +
-      '      "titulo": "Tu Opinión Nos Importa",\n' +
-      '      "escudoResenas": true,\n' +
-      '      "urlGoogleResenas": "[https://maps.google.com](https://maps.google.com)",\n' +
-      '      "whatsappGerencia": "[https://wa.me/34600000000?text=Hola%20Gerencia](https://wa.me/34600000000?text=Hola%20Gerencia)"\n' +
-      '    }\n' +
-      '  ]\n' +
-      "}";
+    <audio id="audio-fondo" loop preload="auto"></audio>
 
-    // 3. Petición a Gemini
-    var geminiUrl = "[https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=](https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=)" + GEMINI_API_KEY;
-    var geminiPayload = {
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { responseMimeType: "application/json" }
-    };
+    <!-- SPLASH SCREEN -->
+    <div id="splash-screen">
+        <div class="logo-container" id="splash-logo-box" style="width: 110px; height: 110px; margin-bottom: 25px;">
+            <img id="splash-logo" alt="Logo">
+        </div>
+        <h2 id="splash-title" style="color: #fff; font-size: 1.5rem; margin-bottom: 8px; letter-spacing: 3px; font-weight: 900;">STUDIO 42</h2>
+        <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.9rem; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1px;">Ecosistema Phygital</p>
+        <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
+    </div>
 
-    var geminiOptions = {
-      method: "post",
-      contentType: "application/json",
-      payload: JSON.stringify(geminiPayload),
-      muteHttpExceptions: true
-    };
+    <!-- MODAL GENERAL -->
+    <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
+        <div class="modal-box" id="modal-content">
+            <div id="modal-icon" class="modal-icon"></div>
+            <div id="modal-title" class="modal-title"></div>
+            <div id="modal-text" class="modal-text"></div>
+            <div id="modal-actions" class="modal-actions">
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
+            </div>
+        </div>
+    </div>
 
-    var geminiResponse = UrlFetchApp.fetch(geminiUrl, geminiOptions);
-    var geminiCode = geminiResponse.getResponseCode();
-    var geminiText = geminiResponse.getContentText();
+    <!-- BOTÓN AUDIO FLOTANTE -->
+    <button id="btn-audio" onclick="alternarAudio()"><i id="icono-audio" class="fa-solid fa-volume-high"></i></button>
 
-    if (geminiCode !== 200) {
-      throw new Error("Fallo en Gemini API (" + geminiCode + "): " + geminiText);
-    }
+    <!-- HUB PRINCIPAL -->
+    <div class="hub-container">
+        <div class="status-badge">
+            <span class="ping-light"></span>
+            <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
+        </div>
 
-    var geminiData = JSON.parse(geminiText);
-    var rawJson = geminiData.candidates[0].content.parts[0].text.trim();
+        <div class="logo-container" id="hub-logo-box"><img id="hub-logo" alt="Logo"></div>
+        <h1 id="client-name">STUDIO 42</h1>
+        <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-    // Limpieza por si Gemini devolviera bloques markdown
-    if (rawJson.startsWith("```json")) {
-      rawJson = rawJson.replace(/^```json\s*/, "").replace(/\s*```$/, "");
-    } else if (rawJson.startsWith("```")) {
-      rawJson = rawJson.replace(/^```\s*/, "").replace(/\s*```$/, "");
-    }
+        <!-- PANEL DE FRICCIONES / MODO DEMO -->
+        <div id="fricciones-section">
+            <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
+            <div class="friccion-grid" id="friccion-grid"></div>
+        </div>
 
-    // 4. Subida / Commit en GitHub dentro de la carpeta /c/
-    var filePath = "c/" + slug + ".json";
-    var githubUrl = "[https://api.github.com/repos/](https://api.github.com/repos/)" + REPO_NAME + "/contents/" + filePath;
-    var base64Content = Utilities.base64Encode(rawJson, Utilities.Charset.UTF_8);
+        <div id="dynamic-menu"></div>
 
-    var sha = null;
-    try {
-      var checkRes = UrlFetchApp.fetch(githubUrl, {
-        method: "get",
-        headers: {
-          "Authorization": "Bearer " + GITHUB_TOKEN,
-          "User-Agent": "Studio42-Engine"
-        },
-        muteHttpExceptions: true
-      });
-      if (checkRes.getResponseCode() === 200) {
-        sha = JSON.parse(checkRes.getContentText()).sha;
-      }
-    } catch (eCheck) {}
+        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+    </div>
 
-    var githubPayload = {
-      message: "Deploy Phygital Engine: " + slug,
-      content: base64Content
-    };
-    if (sha) githubPayload.sha = sha;
+    <script>
+        let datosFriccionesGlobales = {};
+        let googleReviewUrlGlobal = "https://maps.google.com";
+        let whatsappGerenciaGlobal = "https://wa.me/34600000000";
+        let nombreNegocioGlobal = "Comercio";
 
-    var githubRes = UrlFetchApp.fetch(githubUrl, {
-      method: "put",
-      contentType: "application/json",
-      headers: {
-        "Authorization": "Bearer " + GITHUB_TOKEN,
-        "User-Agent": "Studio42-Engine"
-      },
-      payload: JSON.stringify(githubPayload),
-      muteHttpExceptions: true
-    });
+        const reproductor = document.getElementById('audio-fondo');
+        const splash = document.getElementById('splash-screen');
+        const btnAudio = document.getElementById('btn-audio');
+        const iconoAudio = document.getElementById('icono-audio');
+        let audioMuteado = false;
 
-    var githubCode = githubRes.getResponseCode();
-    if (githubCode !== 200 && githubCode !== 201) {
-      throw new Error("Fallo en GitHub API (" + githubCode + "): " + githubRes.getContentText());
-    }
+        async function cargarEnginePhygital() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
 
-    var finalUrl = "[https://studio42.es/c/?cod=](https://studio42.es/c/?cod=)" + slug;
+            try {
+                let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok) {
+                    response = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
+                }
+                if (!response.ok) throw new Error(`No se encontró ${clienteCod}.json`);
 
-    // 5. Registro completo en la hoja de cálculo
-    sheet.appendRow([fecha, closerId, nombreSector, fricciones, branding, logoExtra, finalUrl, rawJson]);
+                const data = await response.json();
+                nombreNegocioGlobal = data.nombre || "Comercio";
 
-    // 6. Retorno exitoso
-    var salida = {
-      result: "success",
-      status: "success",
-      slug: slug,
-      url: finalUrl
-    };
+                if (data.colorPrincipal) document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
+                if (data.colorAcento) document.documentElement.style.setProperty('--color-acento', data.colorAcento);
 
-    return ContentService.createTextOutput(JSON.stringify(salida))
-      .setMimeType(ContentService.MimeType.JSON);
+                document.getElementById('page-title').innerText = `${nombreNegocioGlobal} | Identidad Inteligente`;
+                document.getElementById('splash-title').innerText = nombreNegocioGlobal;
+                document.getElementById('client-name').innerText = nombreNegocioGlobal;
+                
+                const subtituloText = data.subtitulo || 'Ecosistema Phygital';
+                document.getElementById('splash-subtitle').innerText = subtituloText;
+                document.getElementById('client-subtitle').innerText = subtituloText;
 
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({
-      result: "error",
-      error: error.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
-  }
-}
+                if (data.textoBadge) {
+                    document.getElementById('badge-text').innerText = data.textoBadge;
+                }
 
-// =======================================================
-// FUNCIÓN PARA PROBAR DIRECTAMENTE DESDE EL EDITOR
-// =======================================================
-function probarDiagnosticoDirecto() {
-  var e = {
-    parameter: {
-      closer_id: "MO001",
-      nombre_sector: "Taller Motor Pro / Mecanica",
-      fricciones: "Revisiones olvidadas por los clientes y llamadas constantes",
-      branding: "Negro mate y rojo fluor",
-      logo_extra: ""
-    }
-  };
-  
-  var res = doPost(e);
-  Logger.log("RESULTADO: " + res.getContent());
-}
+                const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "logo.png";
+                document.getElementById('splash-logo').src = logoPath;
+                document.getElementById('hub-logo').src = logoPath;
+
+                // Modo Demo
+                const seccionFricciones = document.getElementById('fricciones-section');
+                if (data.modoDemo === true) {
+                    seccionFricciones.style.display = 'block';
+                    datosFriccionesGlobales = {
+                        'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:var(--color-acento);"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
+                        'resenas': { icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>', titulo: 'Protección de Reputación', texto: 'Una sola queja pública en Google aleja clientes.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas hacia tu WhatsApp Privado.' },
+                        'embudos': { icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>', titulo: 'Embudos Directos', texto: 'Las webs tradicionales son lentas.<br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión directamente en la mano del cliente.' },
+                        'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real, como el Gestor GPS de Parking, para que mantengan tu marca guardada.' }
+                    };
+
+                    document.getElementById('friccion-grid').innerHTML = `
+                        <div class="friccion-card" onclick="mostrarExplicacion('contactos')"><div class="friccion-icon" style="color: var(--color-acento);"><i class="fa-solid fa-user-xmark"></i></div><div class="friccion-title">Fuga de Contactos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('resenas')"><div class="friccion-icon" style="color: #ff3b30;"><i class="fa-solid fa-star-half-stroke"></i></div><div class="friccion-title">Reputación Vulnerable</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('embudos')"><div class="friccion-icon" style="color: #30d158;"><i class="fa-solid fa-filter-circle-xmark"></i></div><div class="friccion-title">Embudos Rotos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('experiencia')"><div class="friccion-icon" style="color: #bf5af2;"><i class="fa-solid fa-map-location-dot"></i></div><div class="friccion-title">Olvido del Cliente</div></div>
+                    `;
+                } else {
+                    seccionFricciones.style.display = 'none';
+                }
+
+                // Render Dinámico de Botones
+                const menuContainer = document.getElementById('dynamic-menu');
+                menuContainer.innerHTML = '';
+
+                if (data.secciones && Array.isArray(data.secciones)) {
+                    data.secciones.forEach(sec => {
+                        if (sec.titulo) menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
+
+                        const block = document.createElement('div');
+                        block.className = 'apps-menu';
+
+                        if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
+                        if (sec.whatsappGerencia) whatsappGerenciaGlobal = sec.whatsappGerencia;
+
+                        const esSeccionEscudo = sec.escudoResenas || (sec.titulo && sec.titulo.toLowerCase().includes('opinión'));
+
+                        if (esSeccionEscudo && (!sec.botones || sec.botones.length === 0)) {
+                            block.innerHTML += `
+                                <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start; border: 1px solid rgba(255,180,0,0.3); background: rgba(255, 180, 0, 0.05); padding: 18px 16px;">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <div class="app-icon" style="background: rgba(255,180,0,0.15); color: #ffb400;"><i class="fa-brands fa-google"></i></div>
+                                        <div class="app-info">
+                                            <div class="app-name" style="color: #fff;">Escudo de Reputación</div>
+                                            <div class="app-desc">Toca las estrellas según tu experiencia</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars-container star-rating" id="escudo-estrellas">
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(1)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(2)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(3)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(4)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(5)"></i>
+                                    </div>
+                                    <p id="mensaje-filtro" style="font-size: 0.75rem; color: var(--color-acento); text-align: center; width: 100%; margin-top: 10px; display: none; font-weight:700;">Conectando con Google Maps...</p>
+                                </div>
+                            `;
+                        } else if (sec.botones && Array.isArray(sec.botones)) {
+                            sec.botones.forEach(btn => {
+                                const nLower = btn.nombre.toLowerCase();
+
+                                if (btn.tipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
+                                    block.innerHTML += `
+                                        <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
+                                            <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.1); color: #8e8e93;">
+                                                <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda tu coche para volver'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                } else {
+                                    block.innerHTML += `
+                                        <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || ''}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                }
+                            });
+                        }
+                        menuContainer.appendChild(block);
+                    });
+                }
+                actualizarInterfazParking();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
+            }
+        }
+
+        function iniciarMagia() {
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.display = 'none'; }, 600);
+            if (reproductor.src) reproductor.play().catch(() => {});
+        }
+
+        function alternarAudio() {
+            if (audioMuteado) {
+                reproductor.play().catch(e => console.error(e));
+                iconoAudio.className = "fa-solid fa-volume-high";
+            } else {
+                reproductor.pause();
+                iconoAudio.className = "fa-solid fa-volume-xmark";
+            }
+            audioMuteado = !audioMuteado;
+        }
+
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalActions = document.getElementById('modal-actions');
+
+        function mostrarExplicacion(tipo) {
+            if (datosFriccionesGlobales[tipo]) {
+                document.getElementById('modal-icon').innerHTML = datosFriccionesGlobales[tipo].icono;
+                document.getElementById('modal-title').innerText = datosFriccionesGlobales[tipo].titulo;
+                document.getElementById('modal-text').innerHTML = datosFriccionesGlobales[tipo].texto;
+                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+                modalOverlay.style.display = 'flex';
+                setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
+            }
+        }
+
+        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
+        function cerrarModalBtn() {
+            modalOverlay.style.opacity = '0';
+            modalContent.style.transform = 'translateY(20px)';
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // ESCUDO TOTALMENTE DINÁMICO
+        function simularFiltro(nota) {
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
+            mensaje.style.display = 'block';
+
+            setTimeout(() => {
+                mensaje.style.display = 'none';
+                if (nota <= 3) {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>';
+                    document.getElementById('modal-title').innerText = "LAMENTAMOS TU EXPERIENCIA";
+                    document.getElementById('modal-text').innerHTML = `
+                        Has valorado con <b>${nota} estrella(s)</b>.<br><br>
+                        En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Gerencia para resolverlo:
+                    `;
+                    modalActions.innerHTML = `
+                        <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Gerencia por WhatsApp</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" rel="noopener noreferrer" class="modal-btn-secondary">Prefiero continuar y publicar en Google Maps</a>
+                    `;
+                } else {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google" style="color:#ffb400;"></i>';
+                    document.getElementById('modal-title').innerText = "¡GRACIAS POR TU VALORACIÓN!";
+                    document.getElementById('modal-text').innerHTML = `
+                        ¡Nos alegra saber que tu experiencia fue excelente con <b>${nota} estrellas</b>!<br><br>
+                        Pulsa abajo para confirmar tu reseña en Google Maps:
+                    `;
+                    modalActions.innerHTML = `
+                        <a href="${googleReviewUrlGlobal}" target="_blank" rel="noopener noreferrer" class="modal-btn-google"><i class="fa-solid fa-star"></i> Abrir Google Maps (5 Estrellas)</a>
+                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                    `;
+                }
+                modalOverlay.style.display = 'flex';
+                setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
+            }, 300);
+        }
+
+        // GESTOR DE PARKING GPS
+        function actualizarInterfazParking() {
+            const lat = localStorage.getItem('parking_lat');
+            const iconBox = document.getElementById('parking-icon-container');
+            const icon = document.getElementById('parking-icon');
+            const title = document.getElementById('parking-name');
+            const desc = document.getElementById('parking-desc');
+
+            if (!iconBox) return;
+            if (lat) {
+                iconBox.style.background = "rgba(226, 232, 240, 0.2)";
+                iconBox.style.color = "var(--titanium-light)";
+                icon.className = "fa-solid fa-person-walking";
+                if(title) { title.innerText = "Volver a mi coche (Ruta GPS)"; title.style.color = "var(--titanium-light)"; }
+                if(desc) desc.innerText = "Toca para abrir Maps y volver a pie";
+            } else {
+                iconBox.style.background = "rgba(142,142,147,0.1)";
+                iconBox.style.color = "#8e8e93";
+                icon.className = "fa-solid fa-location-crosshairs";
+                if(title) { title.innerText = "¿Dónde aparqué?"; title.style.color = "var(--color-texto)"; }
+                if(desc) desc.innerText = "Guarda tu coche para volver";
+            }
+        }
+
+        function gestionarParking(e) {
+            e.preventDefault();
+            const lat = localStorage.getItem('parking_lat');
+            const lng = localStorage.getItem('parking_lng');
+
+            if (lat && lng) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
+                localStorage.removeItem('parking_lat');
+                localStorage.removeItem('parking_lng');
+                actualizarInterfazParking();
+            } else {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            localStorage.setItem('parking_lat', pos.coords.latitude);
+                            localStorage.setItem('parking_lng', pos.coords.longitude);
+                            actualizarInterfazParking();
+                            alert("📍 ¡Ubicación guardada! Al salir pulsa este botón para volver a pie.");
+                        },
+                        () => {
+                            alert("No se pudo obtener la señal GPS.");
+                        },
+                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                    );
+                } else {
+                    alert("Tu navegador no soporta geolocalización.");
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
+    </script>
+</body>
+</html>
