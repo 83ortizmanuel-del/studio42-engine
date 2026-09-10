@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<htm<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -306,8 +305,8 @@
                     
                     mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
                     mensajeEstado.innerHTML = `
-                        <p class="text-emerald-400">⚡ ¡Diagnóstico e IA generados con éxito!</p>
-                        <a href="${demoUrl}" target="_blank" class="block w-full py-3 bg-white text-black font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider transition-transform active:scale-95">
+                        <p class="text-emerald-400 font-black">⚡ ¡DIAGNÓSTICO E IA ACTIVADOS!</p>
+                        <a href="${demoUrl}" target="_blank" class="block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider transition-transform active:scale-95">
                             👉 Abrir Demo Phygital
                         </a>
                     `;
@@ -317,312 +316,19 @@
                     form.reset();
                     document.getElementById('closer_id').value = closerActual;
                 } else {
-                    throw new Error(data.error || data.message || "Error desconocido en el servidor");
+                    throw new Error(data.error || "Error en el servidor");
                 }
             })
             .catch(error => {
                 console.error('Error enviando diagnóstico:', error);
                 mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-red-500/10 border border-red-500/40 text-red-400";
-                mensajeEstado.innerText = "Error al procesar: " + (error.message || "Revisa la conexión.");
+                mensajeEstado.innerText = "Error de sincronización con la red. Revisa la conexión.";
                 mensajeEstado.classList.remove('hidden');
             })
             .finally(() => {
                 btnEnviar.disabled = false;
                 btnEnviar.innerText = "Registrar Diagnóstico";
                 btnEnviar.style.opacity = "1";
-            });
-        });
-    </script>
-</body>
-</html>
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--color-fondo);
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        .bg-tech-grid {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
-            background-size: 28px 28px;
-        }
-
-        .neon-card-wrapper {
-            position: relative;
-            border-radius: 28px;
-            overflow: hidden;
-            padding: 1.5px;
-            background: rgba(20, 20, 22, 0.8);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 25px var(--color-glow);
-        }
-
-        .neon-card-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: var(--gradient-conic);
-            animation: rotateNeonSutil 8s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes rotateNeonSutil {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .neon-card-content {
-            position: relative;
-            background: rgba(14, 14, 17, 0.96);
-            border-radius: 26.5px;
-            z-index: 1;
-            backdrop-filter: blur(16px);
-        }
-
-        .logo-hero {
-            height: 105px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 0 16px var(--color-glow));
-            animation: logoAura 3.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes logoAura {
-            0% { filter: drop-shadow(0 0 10px var(--color-glow)); transform: scale(1); }
-            100% { filter: drop-shadow(0 0 22px var(--color-glow)); transform: scale(1.02); }
-        }
-
-        .title-phygital {
-            font-size: 1.15rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #ffffff;
-            text-transform: uppercase;
-            line-height: 1.2;
-        }
-
-        .subtitle-phygital {
-            color: var(--color-accent);
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .input-cyber {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-            border-radius: 16px;
-            padding: 14px 16px;
-            width: 100%;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-cyber:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--color-accent);
-            box-shadow: 0 0 15px var(--color-glow);
-        }
-
-        .input-locked {
-            background: rgba(255, 255, 255, 0.03) !important;
-            border-color: var(--color-accent) !important;
-            color: var(--color-accent) !important;
-            cursor: not-allowed;
-            text-shadow: 0 0 6px var(--color-glow);
-        }
-
-        .btn-cyber-submit {
-            background: var(--gradient-btn);
-            color: var(--btn-text-color);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border-radius: 50px;
-            padding: 16px;
-            width: 100%;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 25px var(--color-glow);
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-cyber-submit::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
-            transform: rotate(30deg);
-            animation: btnTextureShimmer 4s infinite;
-        }
-
-        @keyframes btnTextureShimmer {
-            0% { transform: translateX(-100%) rotate(30deg); }
-            20% { transform: translateX(100%) rotate(30deg); }
-            100% { transform: translateX(100%) rotate(30deg); }
-        }
-
-        .badge-closer {
-            background-color: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--color-accent);
-            color: var(--color-accent);
-        }
-
-        .dot-pulse {
-            background-color: var(--color-accent);
-        }
-    </style>
-</head>
-
-<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-center p-4 text-white select-none">
-
-    <div class="w-full max-w-sm neon-card-wrapper">
-        <main class="neon-card-content p-6 sm:p-7">
-            
-            <header class="w-full flex flex-col items-center mb-6 text-center space-y-2">
-                <div class="relative inline-flex items-center justify-center p-1">
-                    <div class="absolute inset-0 blur-2xl rounded-full" style="background: var(--color-glow);"></div>
-                    <img src="/logo.png" alt="Studio 42 Logo" class="relative logo-hero" onerror="this.onerror=null; this.src='logo.png';">
-                </div>
-
-                <div>
-                    <h1 class="title-phygital">Diagnóstico Phygital</h1>
-                    <p class="subtitle-phygital mt-0.5">Engine v2 // Identidad Inteligente</p>
-                </div>
-                
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full badge-closer shadow-md mt-1">
-                    <span class="w-1.5 h-1.5 rounded-full dot-pulse animate-ping"></span>
-                    <span class="text-[9px] font-black uppercase tracking-widest">Acceso Exclusivo Closer</span>
-                </div>
-            </header>
-
-            <form id="form-diagnostico" class="space-y-4">
-                
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-1 ml-1" style="color: var(--color-accent);">
-                        ID Responsable (Closer)
-                    </label>
-                    <div class="relative">
-                        <input type="text" id="closer_id" name="closer_id" value="MEL42" class="input-cyber input-locked font-black text-sm" readonly required>
-                        <i class="fa-solid fa-lock absolute right-4 top-4 text-xs" style="color: var(--color-accent);"></i>
-                    </div>
-                    <p class="text-[9px] text-gray-400 mt-1 ml-1">🔒 Llave maestra asignada CTO/CEO Studio42.</p>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Nombre Comercial / Sector
-                    </label>
-                    <input type="text" id="nombre_sector" name="nombre_sector" placeholder="Ej: Óptica San José / Salud" class="input-cyber" required>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Fricción o Quejas de los Clientes
-                    </label>
-                    <textarea id="fricciones" name="fricciones" rows="3" placeholder="Fricciones detectadas en el comercio..." class="input-cyber" required></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Branding, Paleta de Colores y Redes
-                    </label>
-                    <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#C4C4C4), IG @comercio..." class="input-cyber" required>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        URL del Logo / Observaciones Extra
-                    </label>
-                    <input type="text" id="logo_extra" name="logo_extra" placeholder="Ej: Link al logo en Web/Drive o notas..." class="input-cyber">
-                </div>
-
-                <button type="submit" id="btn-enviar" class="btn-cyber-submit mt-4">
-                    Registrar Diagnóstico
-                </button>
-            </form>
-
-            <div id="mensaje-estado" class="hidden mt-4 p-4 rounded-2xl text-center text-xs font-bold"></div>
-
-        </main>
-    </div>
-
-    <footer class="mt-6 text-center text-[10px] text-gray-500 font-bold tracking-widest uppercase">
-        Engine v2 // Desarrollado por <span style="color: var(--color-accent);" class="font-black">Studio 42</span>
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const closerCod = urlParams.get('cod') || 'MEL42';
-            
-            document.getElementById('closer_id').value = closerCod.toUpperCase();
-
-            // DETECCIÓN AUTOMÁTICA DE LA PALETA DE BRANDING DE MELINA
-            if (closerCod.toUpperCase().includes('MEL')) {
-                document.body.classList.add('theme-melina');
-            }
-        });
-
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsKQpR9iWP4HnrBHt31Y4hNTvFDszp0GUITguP6KslwK6gfum8ODKupoJB6imDQnMn/exec";
-
-        const form = document.getElementById('form-diagnostico');
-        const btnEnviar = document.getElementById('btn-enviar');
-        const mensajeEstado = document.getElementById('mensaje-estado');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            btnEnviar.disabled = true;
-            btnEnviar.innerText = "Sincronizando con Sheet...";
-            btnEnviar.style.opacity = "0.7";
-
-            const formData = new FormData(form);
-            const params = new URLSearchParams(formData);
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: params.toString()
-            })
-            .then(() => {
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white";
-                mensajeEstado.innerText = "¡Diagnóstico registrado con éxito en la Base de Datos!";
-                mensajeEstado.classList.remove('hidden');
-
-                const closerActual = document.getElementById('closer_id').value;
-                form.reset();
-                document.getElementById('closer_id').value = closerActual;
-            })
-            .catch(error => {
-                console.error('Error enviando diagnóstico:', error);
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-red-500/10 border border-red-500/40 text-red-400";
-                mensajeEstado.innerText = "Error al conectar con la red. Revisa la conexión.";
-                mensajeEstado.classList.remove('hidden');
-            })
-            .finally(() => {
-                btnEnviar.disabled = false;
-                btnEnviar.innerText = "Registrar Diagnóstico";
-                btnEnviar.style.opacity = "1";
-                
-                setTimeout(() => {
-                    mensajeEstado.classList.add('hidden');
-                }, 4000);
             });
         });
     </script>
