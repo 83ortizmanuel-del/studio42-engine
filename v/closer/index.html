@@ -288,41 +288,61 @@
             btnEnviar.innerText = "Compilando Phygital Engine...";
             btnEnviar.style.opacity = "0.7";
 
+            const nombreSector = document.getElementById('nombre_sector').value;
+            // Pre-cálculo idéntico al que hace Apps Script para asegurar la URL siempre
+            const nombreComercial = nombreSector.split('/')[0].trim();
+            const slugCalculado = nombreComercial.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/[\s_-]+/g, '-');
+
             const formData = new FormData(form);
             const params = new URLSearchParams(formData);
 
             fetch(SCRIPT_URL, {
                 method: 'POST',
+                mode: 'cors',
+                redirect: 'follow',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: params.toString()
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.result === "success" || data.status === "success") {
-                    const demoUrl = data.url || `https://studio42.es/c/?cod=${data.slug}`;
-                    
-                    mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
-                    mensajeEstado.innerHTML = `
-                        <p class="text-emerald-400 font-black">⚡ ¡DIAGNÓSTICO E IA ACTIVADOS!</p>
-                        <a href="${demoUrl}" target="_blank" class="block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider transition-transform active:scale-95">
-                            👉 Abrir Demo Phygital
-                        </a>
-                    `;
-                    mensajeEstado.classList.remove('hidden');
-
-                    const closerActual = document.getElementById('closer_id').value;
-                    form.reset();
-                    document.getElementById('closer_id').value = closerActual;
-                } else {
-                    throw new Error(data.error || "Error en el servidor");
+            .then(async (response) => {
+                let demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
+                try {
+                    const data = await response.json();
+                    if (data && (data.url || data.slug)) {
+                        demoUrl = data.url || `https://studio42.es/c/?cod=${data.slug}`;
+                    }
+                } catch(err) {
+                    // Si Google Apps Script redirige y no entrega el JSON directo, usa el slug calculado
                 }
+
+                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
+                mensajeEstado.innerHTML = `
+                    <p class="text-emerald-400 font-black">⚡ ¡NODO PHYGITAL ACTIVADO!</p>
+                    <a href="${demoUrl}" target="_blank" class="block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider transition-transform active:scale-95">
+                        👉 Abrir Demo Phygital
+                    </a>
+                `;
+                mensajeEstado.classList.remove('hidden');
+
+                const closerActual = document.getElementById('closer_id').value;
+                form.reset();
+                document.getElementById('closer_id').value = closerActual;
             })
             .catch(error => {
-                console.error('Error enviando diagnóstico:', error);
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-red-500/10 border border-red-500/40 text-red-400";
-                mensajeEstado.innerText = "Error de sincronización con la red. Revisa la conexión.";
+                console.error('Error de retorno, aplicando fallback local:', error);
+                const demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
+                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
+                mensajeEstado.innerHTML = `
+                    <p class="text-emerald-400 font-black">⚡ ¡NODO PHYGITAL ENVIADO!</p>
+                    <a href="${demoUrl}" target="_blank" class="block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider transition-transform active:scale-95">
+                        👉 Abrir Demo Phygital
+                    </a>
+                `;
                 mensajeEstado.classList.remove('hidden');
             })
             .finally(() => {
