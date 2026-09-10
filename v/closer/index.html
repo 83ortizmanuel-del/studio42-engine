@@ -284,7 +284,7 @@
         const mensajeEstado = document.getElementById('mensaje-estado');
 
         function iniciarCuentaRegresiva(urlDestino) {
-            let segundosRestantes = 25;
+            let segundosRestantes = 35; // Tiempo óptimo para propagación en GitHub Pages móvil
 
             mensajeEstado.className = "mt-4 p-5 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
             mensajeEstado.innerHTML = `
@@ -292,8 +292,8 @@
                     <p class="text-emerald-400 font-black tracking-wider uppercase">⚡ Nodo Phygital Compilado</p>
                     <p class="text-[10px] text-gray-300 font-normal">Sincronizando satélite en tiempo real con GitHub...</p>
                 </div>
-                <button id="btn-countdown" disabled class="block w-full py-3.5 bg-white/10 text-gray-300 font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider cursor-not-allowed border border-white/10 transition-all">
-                    ⏳ Desplegando Demo (<span id="reloj-segundos">25</span>s)
+                <button id="btn-countdown" disabled class="block w-full py-3.5 bg-white/20 text-gray-300 font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider cursor-not-allowed border border-white/10 transition-all">
+                    ⏳ Desplegando Demo (<span id="reloj-segundos">${segundosRestantes}</span>s)
                 </button>
             `;
             mensajeEstado.classList.remove('hidden');
@@ -310,7 +310,13 @@
                         btnCuenta.disabled = false;
                         btnCuenta.className = "block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-2xl text-[11px] tracking-wider transition-transform active:scale-95 cursor-pointer animate-pulse hover:bg-gray-200";
                         btnCuenta.innerHTML = "👉 ¡Ver Demo en Vivo!";
-                        btnCuenta.onclick = () => window.open(urlDestino, '_blank');
+                        
+                        btnCuenta.onclick = () => {
+                            // Cache-Busting: fuerza al navegador móvil a traer el archivo fresco
+                            const separador = urlDestino.includes('?') ? '&' : '?';
+                            const urlFresca = `${urlDestino}${separador}_v=${Date.now()}`;
+                            window.open(urlFresca, '_blank');
+                        };
                     }
                 }
             }, 1000);
@@ -360,7 +366,7 @@
                 document.getElementById('closer_id').value = closerActual;
             })
             .catch(error => {
-                console.warn('Fallback por redirección segura:', error);
+                console.warn('Respuesta vía fallback seguro:', error);
                 const urlFallback = `https://studio42.es/c/?cod=${slugCalculado}`;
                 iniciarCuentaRegresiva(urlFallback);
             })
