@@ -1,0 +1,41 @@
+{
+  "nombre": "CONCESIONARIO TOYOTA",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Servicios",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#002C5F",
+  "colorAcento": "#EB0A1E",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Cita Previa / Atencion Inmediata",
+          "descripcion": "Reserva tu turno directamente",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita",
+          "destacado": true
+        },
+        {
+          "nombre": "¿Donde aparque?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
