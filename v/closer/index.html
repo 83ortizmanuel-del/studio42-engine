@@ -265,11 +265,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const closerCod = urlParams.get('cod') || 'MEL42';
+            // Detecta ?cod= o ?closer= o asigna MEL42 por defecto
+            const closerCod = urlParams.get('cod') || urlParams.get('closer') || 'MEL42';
             
-            document.getElementById('closer_id').value = closerCod.toUpperCase();
+            const inputCloser = document.getElementById('closer_id');
+            if (inputCloser) {
+                inputCloser.value = closerCod.toUpperCase().trim();
+            }
 
-            // DETECCIÓN AUTOMÁTICA DE LA PALETA DE BRANDING DE MELINA
+            // Detección de tema rosa/violeta para Melina
             if (closerCod.toUpperCase().includes('MEL')) {
                 document.body.classList.add('theme-melina');
             }
@@ -288,8 +292,14 @@
             btnEnviar.innerText = "Compilando Phygital Engine...";
             btnEnviar.style.opacity = "0.7";
 
-            const nombreSector = document.getElementById('nombre_sector').value;
-            // Pre-cálculo idéntico al que hace Apps Script para asegurar la URL siempre
+            // Extracción manual directa de los inputs
+            const closerVal     = (document.getElementById('closer_id').value || 'MEL42').trim();
+            const nombreSector  = document.getElementById('nombre_sector').value.trim();
+            const friccionesVal = document.getElementById('fricciones').value.trim();
+            const brandingVal   = document.getElementById('branding').value.trim();
+            const logoExtraVal  = document.getElementById('logo_extra').value.trim();
+
+            // Slug idéntico al generado por el backend
             const nombreComercial = nombreSector.split('/')[0].trim();
             const slugCalculado = nombreComercial.toLowerCase()
                 .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -297,29 +307,24 @@
                 .trim()
                 .replace(/[\s_-]+/g, '-');
 
-            const formData = new FormData(form);
-            const params = new URLSearchParams(formData);
+            // Construcción manual de parámetros URL-encoded
+            const params = new URLSearchParams();
+            params.append("closer_id", closerVal);
+            params.append("nombre_sector", nombreSector);
+            params.append("fricciones", friccionesVal);
+            params.append("branding", brandingVal);
+            params.append("logo_extra", logoExtraVal);
 
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'cors',
-                redirect: 'follow',
+                mode: 'no-cors',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: params.toString()
             })
-            .then(async (response) => {
-                let demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
-                try {
-                    const data = await response.json();
-                    if (data && (data.url || data.slug)) {
-                        demoUrl = data.url || `https://studio42.es/c/?cod=${data.slug}`;
-                    }
-                } catch(err) {
-                    // Si Google Apps Script redirige y no entrega el JSON directo, usa el slug calculado
-                }
-
+            .then(() => {
+                const demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
                 mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
                 mensajeEstado.innerHTML = `
                     <p class="text-emerald-400 font-black">⚡ ¡NODO PHYGITAL ACTIVADO!</p>
@@ -334,7 +339,7 @@
                 document.getElementById('closer_id').value = closerActual;
             })
             .catch(error => {
-                console.error('Error de retorno, aplicando fallback local:', error);
+                console.error('Error en envío:', error);
                 const demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
                 mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
                 mensajeEstado.innerHTML = `
