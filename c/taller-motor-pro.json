@@ -5,16 +5,16 @@
   "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
   "logo": "logo.png",
   "colorPrincipal": "#121212",
-  "colorAcento": "#FF003F",
+  "colorAcento": "#FF0033",
   "secciones": [
     {
       "titulo": "Servicios & Soluciones Directas",
       "botones": [
         {
-          "nombre": "Cita Previa / Recordatorio de Revision",
-          "descripcion": "Reserva tu turno y gestiona el mantenimiento de tu vehiculo",
+          "nombre": "Cita Previa / Atención Inmediata",
+          "descripcion": "Reserva tu revisión sin llamadas ni esperas",
           "icono": "fa-solid fa-calendar-check",
-          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita%20o%20consultar%20revision",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita%20de%20revision",
           "destacado": true
         },
         {
