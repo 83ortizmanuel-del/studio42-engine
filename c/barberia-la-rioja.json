@@ -1,0 +1,53 @@
+{
+  "nombre": "BARBERIA LA RIOJA",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Belleza",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0A0F1D",
+  "colorAcento": "#00E5FF",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Cita Previa / Atencion Inmediata",
+          "descripcion": "Reserva tu turno directamente",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita",
+          "destacado": true
+        },
+        {
+          "nombre": "Pago Rápido por Bizum",
+          "tipo": "bizum",
+          "descripcion": "Copia el número para pagar por Bizum",
+          "icono": "fa-solid fa-mobile-screen-button"
+        },
+        {
+          "nombre": "Ver Nuestros Trabajos",
+          "descripcion": "Explora nuestros cortes en Redes Sociales",
+          "icono": "fa-brands fa-instagram",
+          "url": "https://instagram.com"
+        },
+        {
+          "nombre": "¿Donde aparque?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
