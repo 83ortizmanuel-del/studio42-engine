@@ -1,0 +1,53 @@
+{
+  "nombre": "CLÍNICA DENTAL MAZO RUIZ",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Odontología & Salud Bucal",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0F0F0F",
+  "colorAcento": "#8DB600",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Cita Previa / Atención Inmediata",
+          "descripcion": "Reserva o gestiona tu turno en tiempo real",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita",
+          "destacado": true
+        },
+        {
+          "nombre": "Catálogo de Tratamientos",
+          "descripcion": "Conoce nuestras especialidades y procedimientos",
+          "icono": "fa-solid fa-tooth",
+          "url": "https://wa.me/34600000000?text=Hola,%20deseo%20información%20sobre%20tratamientos"
+        },
+        {
+          "nombre": "Preparación para Procedimientos",
+          "descripcion": "Guía pre y post operatoria para tu tratamiento",
+          "icono": "fa-solid fa-notes-medical",
+          "url": "https://wa.me/34600000000?text=Hola,%20necesito%20instrucciones%20para%20mi%20procedimiento"
+        },
+        {
+          "nombre": "¿Donde aparqué?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posición GPS de tu vehículo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro teléfono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia,%20quisiera%20dar%20mi%20opinión"
+    }
+  ]
+}
