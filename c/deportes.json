@@ -1,0 +1,48 @@
+{
+  "nombre": "DEPORTES",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Servicios Deportivos",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#121212",
+  "colorAcento": "#FF1E27",
+  "secciones": [
+    {
+      "titulo": "Servicios Exclusivos & Fidelización",
+      "botones": [
+        {
+          "nombre": "Club VIP · Ventajas Exclusivas en Tienda",
+          "descripcion": "Únete para recibir descuentos y superar precios online",
+          "icono": "fa-solid fa-gem",
+          "url": "https://wa.me/34600000000?text=Hola,%20quiero%20unirme%20al%20Club%20VIP",
+          "destacado": true
+        },
+        {
+          "nombre": "Cita Previa / Asesoramiento Técnico",
+          "descripcion": "Reserva tu turno con nuestros expertos",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita",
+          "destacado": false
+        },
+        {
+          "nombre": "¿Donde aparque?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
