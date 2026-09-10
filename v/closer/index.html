@@ -253,7 +253,7 @@
                 </button>
             </form>
 
-            <div id="mensaje-estado" class="hidden mt-4 p-4 rounded-2xl text-center text-xs font-bold"></div>
+            <div id="mensaje-estado" class="hidden mt-4 p-5 rounded-2xl text-center text-xs font-black"></div>
 
         </main>
     </div>
@@ -283,6 +283,39 @@
         const btnEnviar = document.getElementById('btn-enviar');
         const mensajeEstado = document.getElementById('mensaje-estado');
 
+        function iniciarCuentaRegresiva(urlDestino) {
+            let segundosRestantes = 25;
+
+            mensajeEstado.className = "mt-4 p-5 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
+            mensajeEstado.innerHTML = `
+                <div class="space-y-1">
+                    <p class="text-emerald-400 font-black tracking-wider uppercase">⚡ Nodo Phygital Compilado</p>
+                    <p class="text-[10px] text-gray-300 font-normal">Sincronizando satélite en tiempo real con GitHub...</p>
+                </div>
+                <button id="btn-countdown" disabled class="block w-full py-3.5 bg-white/10 text-gray-300 font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider cursor-not-allowed border border-white/10 transition-all">
+                    ⏳ Desplegando Demo (<span id="reloj-segundos">25</span>s)
+                </button>
+            `;
+            mensajeEstado.classList.remove('hidden');
+
+            const intervalo = setInterval(() => {
+                segundosRestantes--;
+                const reloj = document.getElementById('reloj-segundos');
+                if (reloj) reloj.innerText = segundosRestantes;
+
+                if (segundosRestantes <= 0) {
+                    clearInterval(intervalo);
+                    const btnCuenta = document.getElementById('btn-countdown');
+                    if (btnCuenta) {
+                        btnCuenta.disabled = false;
+                        btnCuenta.className = "block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-2xl text-[11px] tracking-wider transition-transform active:scale-95 cursor-pointer animate-pulse hover:bg-gray-200";
+                        btnCuenta.innerHTML = "👉 ¡Ver Demo en Vivo!";
+                        btnCuenta.onclick = () => window.open(urlDestino, '_blank');
+                    }
+                }
+            }, 1000);
+        }
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -303,46 +336,33 @@
                 .trim()
                 .replace(/[\s_-]+/g, '-');
 
-            const payloadData = {
-                closer_id: closerVal,
-                nombre_sector: nombreSector,
-                fricciones: friccionesVal,
-                branding: brandingVal,
-                logo_extra: logoExtraVal
-            };
+            const params = new URLSearchParams();
+            params.append("closer_id", closerVal);
+            params.append("nombre_sector", nombreSector);
+            params.append("fricciones", friccionesVal);
+            params.append("branding", brandingVal);
+            params.append("logo_extra", logoExtraVal);
 
-            const queryUrl = SCRIPT_URL + "?" + new URLSearchParams(payloadData).toString();
-
-            fetch(queryUrl, {
+            fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors'
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params.toString()
             })
-            .then(() => {
-                const demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
-                mensajeEstado.innerHTML = `
-                    <p class="text-emerald-400 font-black">⚡ ¡NODO PHYGITAL ACTIVADO!</p>
-                    <a href="${demoUrl}" target="_blank" class="block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider transition-transform active:scale-95">
-                        👉 Abrir Demo Phygital
-                    </a>
-                `;
-                mensajeEstado.classList.remove('hidden');
+            .then(response => response.json())
+            .then(data => {
+                const urlFinal = data.url || `https://studio42.es/c/?cod=${data.slug || slugCalculado}`;
+                iniciarCuentaRegresiva(urlFinal);
 
                 const closerActual = document.getElementById('closer_id').value;
                 form.reset();
                 document.getElementById('closer_id').value = closerActual;
             })
             .catch(error => {
-                console.error('Error en envío:', error);
-                const demoUrl = `https://studio42.es/c/?cod=${slugCalculado}`;
-                mensajeEstado.className = "mt-4 p-4 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
-                mensajeEstado.innerHTML = `
-                    <p class="text-emerald-400 font-black">⚡ ¡NODO PHYGITAL ENVIADO!</p>
-                    <a href="${demoUrl}" target="_blank" class="block w-full py-3.5 bg-white text-black font-black uppercase rounded-full shadow-lg text-[11px] tracking-wider transition-transform active:scale-95">
-                        👉 Abrir Demo Phygital
-                    </a>
-                `;
-                mensajeEstado.classList.remove('hidden');
+                console.warn('Fallback por redirección segura:', error);
+                const urlFallback = `https://studio42.es/c/?cod=${slugCalculado}`;
+                iniciarCuentaRegresiva(urlFallback);
             })
             .finally(() => {
                 btnEnviar.disabled = false;
