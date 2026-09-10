@@ -1,0 +1,41 @@
+{
+  "nombre": "NAILS & GLOW STUDIO",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Estética y Manicura",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0A0F1D",
+  "colorAcento": "#FF007F",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Cita Previa / Reserva Inmediata",
+          "descripcion": "Reserva tu turno directamente por WhatsApp",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita%20en%20Nails%20%26%20Glow%20Studio",
+          "destacado": true
+        },
+        {
+          "nombre": "¿Donde aparqué?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
