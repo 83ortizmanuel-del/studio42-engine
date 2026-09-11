@@ -139,13 +139,13 @@
         <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Piezas Numeradas Autenticadas por NFC</p>
     </header>
 
-    <!-- SWITCH MAESTRO: LÍNEA WEAR VS ART -->
+    <!-- SWITCH MAESTRO: LÍNEA ART VS WEAR (POR DEFECTO ART ACTIVO) -->
     <div class="w-full max-w-sm flex items-center bg-black/70 p-1.5 rounded-full border border-white/15 mb-4 shadow-xl backdrop-blur-md">
-        <button id="tab-wear" onclick="cambiarLinea('WEAR')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active">
-            <i class="fa-solid fa-shirt mr-1.5"></i> Wear (Ropa)
-        </button>
-        <button id="tab-art" onclick="cambiarLinea('ART')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all">
+        <button id="tab-art" onclick="cambiarLinea('ART')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active">
             <i class="fa-solid fa-palette mr-1.5"></i> Art (Cuadros)
+        </button>
+        <button id="tab-wear" onclick="cambiarLinea('WEAR')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all">
+            <i class="fa-solid fa-shirt mr-1.5"></i> Wear (Ropa)
         </button>
     </div>
 
@@ -190,7 +190,7 @@
     <!-- GRID DE PRODUCTOS -->
     <section class="w-full max-w-lg mt-4">
         <div class="flex items-center justify-between mb-3 px-1">
-            <h2 id="catalogo-titulo" class="font-display text-sm font-black uppercase tracking-wider text-white">Galería Wear (Ropa)</h2>
+            <h2 id="catalogo-titulo" class="font-display text-sm font-black uppercase tracking-wider text-white">Galería Art (Cuadros)</h2>
             <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Stock en Vivo</span>
         </div>
 
@@ -234,19 +234,60 @@
 
         // CATÁLOGO MAESTRO DE PRODUCTOS
         const PRODUCTOS = [
-            // --- WEAR (CAMISETAS) ---
+            // ==========================================
+            // --- ART (CUADROS Y LIENZOS PHYGITAL) ---
+            // ==========================================
             {
-                id: "vegeta-wear",
-                tipo: "WEAR",
+                id: "vegeta-prince",
+                tipo: "ART",
                 universo: "anime",
-                titulo: "Vegeta // Orgullo Saiyan",
+                titulo: "Vegeta // Orgullo del Príncipe",
                 edicion: "Edición Limitada // Pieza Única 01/01",
                 precio: "40,00 €",
+                estado: "VENDIDO", // <-- Cinta activa de adquisición privada
+                propietario: "Coleccionista VIP #01",
+                imagen: "/art/vegeta-majin.png",
+                descripcion: "Lienzo de galería montado sobre bastidor con chip NFC en placa metálica. Desbloquea medidor de Ki, lore en audio y certificado de autenticidad. Esta pieza única 01/01 ya forma parte de una colección privada."
+            },
+            {
+                id: "broly-sucursal",
+                tipo: "ART",
+                universo: "anime",
+                titulo: "Broly SSJ4 // Furia Primordial",
+                edicion: "Edición Limitada // Pieza 02 de 25",
+                precio: "135,00 €",
+                estado: "DISPONIBLE",
+                propietario: "Disponible para Adquisición",
+                imagen: "/art/broly-ssj4.png",
+                descripcion: "Lienzo de gran formato enmarcado en madera noble con aura verde neón. Autenticado por NFC en el bastidor con acceso al lore y audio del Saiyan Legendario."
+            },
+            {
+                id: "poatan-art",
+                tipo: "ART",
+                universo: "fighters",
+                titulo: "Hands of Stone // UFC 300",
+                edicion: "Pieza Única 01/01",
+                precio: "160,00 €",
+                estado: "PROXIMO",
+                imagen: "/art/vegeta-majin.png",
+                descripcion: "Cuadro de edición museo con placa de titanio y chip NFC. Acceso al Fighter Pass VIP."
+            },
+            {
+                id: "dexter-art",
+                tipo: "ART",
+                universo: "cartoon",
+                titulo: "Dexter Secret Vault",
+                edicion: "Pieza 01 de 10",
+                precio: "110,00 €",
                 estado: "VENDIDO",
                 propietario: "Coleccionista VIP #01",
                 imagen: "/art/vegeta-majin.png",
-                descripcion: "Camiseta premium de alto gramaje con microchip NFC integrado al pecho. Desbloquea medidor de Ki y certificación de autenticidad en vivo. Pieza irrepetible 01/01 en custodia privada."
+                descripcion: "Lienzo acabado en resina brillo retro. Certificado por NFC."
             },
+
+            // ==========================================
+            // --- WEAR (CAMISETAS Y PRENDAS PHYGITAL) ---
+            // ==========================================
             {
                 id: "poatan-wear",
                 tipo: "WEAR",
@@ -302,72 +343,26 @@
                 estado: "DISPONIBLE",
                 imagen: "/art/vegeta-majin.png",
                 descripcion: "Tributo en algodón peinado. El chip NFC reproduce el videoclip oficial directamente al apoyar el teléfono en el corazón."
-            },
-
-            // --- ART (CUADROS REALES EN /art/) ---
-            {
-                id: "vegeta-prince",
-                tipo: "ART",
-                universo: "anime",
-                titulo: "Vegeta // Orgullo del Príncipe",
-                edicion: "Pieza 01 de 25",
-                precio: "120,00 €",
-                estado: "DISPONIBLE",
-                imagen: "/art/vegeta-majin.png",
-                descripcion: "Lienzo de galería montado en bastidor con placa NFC oculta. Desbloquea su medidor de Ki, banda sonora y certificado de coleccionista."
-            },
-            {
-                id: "broly-sucursal",
-                tipo: "ART",
-                universo: "anime",
-                titulo: "Broly SSJ4 // Furia Primordial",
-                edicion: "Pieza 02 de 25",
-                precio: "135,00 €",
-                estado: "DISPONIBLE",
-                imagen: "/art/broly-ssj4.png",
-                descripcion: "Lienzo acabado en madera noble con aura verde neón. Autenticado por NFC en el bastidor con acceso al lore y audio del Saiyan Legendario."
-            },
-            {
-                id: "poatan-art",
-                tipo: "ART",
-                universo: "fighters",
-                titulo: "Hands of Stone // UFC 300",
-                edicion: "Pieza Única 01/01",
-                precio: "160,00 €",
-                estado: "PROXIMO",
-                imagen: "/art/vegeta-majin.png",
-                descripcion: "Cuadro de edición museo con placa de titanio y chip NFC. Acceso al Fighter Pass VIP."
-            },
-            {
-                id: "dexter-art",
-                tipo: "ART",
-                universo: "cartoon",
-                titulo: "Dexter Secret Vault",
-                edicion: "Pieza 01 de 10",
-                precio: "110,00 €",
-                estado: "VENDIDO",
-                propietario: "Coleccionista VIP #01",
-                imagen: "/art/vegeta-majin.png",
-                descripcion: "Lienzo acabado en resina brillo retro. Certificado por NFC."
             }
         ];
 
-        let lineaActual = 'WEAR';
+        // INICIALIZACIÓN: Abre directamente en ART (Cuadros)
+        let lineaActual = 'ART';
         let universoActual = 'todos';
 
         function cambiarLinea(linea) {
             lineaActual = linea;
-            document.getElementById('tab-wear').className = linea === 'WEAR' 
-                ? 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active'
-                : 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all';
-            
             document.getElementById('tab-art').className = linea === 'ART'
                 ? 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active'
                 : 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all';
 
-            document.getElementById('catalogo-titulo').innerText = linea === 'WEAR' 
-                ? 'Galería Wear (Ropa)' 
-                : 'Galería Art (Cuadros)';
+            document.getElementById('tab-wear').className = linea === 'WEAR' 
+                ? 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active'
+                : 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all';
+
+            document.getElementById('catalogo-titulo').innerText = linea === 'ART' 
+                ? 'Galería Art (Cuadros)' 
+                : 'Galería Wear (Ropa)';
             renderizarCatalogo();
         }
 
@@ -419,7 +414,7 @@
                                 <i class="fa-solid fa-shield-halved text-[8px]"></i> COLECCIÓN PRIVADA
                             </span>
                             <span class="text-[8px] font-mono text-zinc-400">
-                                Pieza Única 01/01 &bull; ${prod.precio}
+                                ${prod.edicion.includes('01/01') ? 'Pieza Única 01/01' : prod.edicion} &bull; ${prod.precio}
                             </span>
                         </div>
                     `;
@@ -515,7 +510,7 @@
             const diff = fechaMeta - ahora;
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diff % (1000 * 60)) / (1000 * 60));
+            const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const segundos = Math.floor((diff % (1000 * 60)) / 1000);
             const el = document.getElementById('mystery-countdown');
             if (el) el.innerText = `${dias}d ${horas}h ${minutos}m ${segundos}s`;
@@ -529,6 +524,9 @@
 
             if (paramLinea) {
                 cambiarLinea(paramLinea.toUpperCase());
+            } else {
+                // Por defecto abre en Cuadros (ART)
+                cambiarLinea('ART');
             }
 
             if (paramUniverso) {
