@@ -76,7 +76,6 @@
             backdrop-filter: blur(20px);
         }
 
-        /* Silueta de misterio del Drop del Mes */
         .silhouette-mystery {
             filter: brightness(0) drop-shadow(0 0 16px var(--color-primario));
             animation: mysteryPulse 3s infinite alternate ease-in-out;
@@ -87,7 +86,6 @@
             100% { transform: scale(1.02); filter: brightness(0) drop-shadow(0 0 25px var(--color-acento)); }
         }
 
-        /* Badges de Estado */
         .badge-sold {
             background: rgba(225, 29, 72, 0.2);
             border: 1px solid #E11D48;
@@ -154,8 +152,8 @@
     <!-- FILTRO DE UNIVERSOS (PÍLDORAS HORIZONTALES) -->
     <div class="w-full max-w-lg flex gap-2 overflow-x-auto pb-3 pt-1 px-1 no-scrollbar text-[11px] font-bold uppercase tracking-wider">
         <button onclick="filtrarUniverso('todos')" id="pill-todos" class="btn-universe btn-universe-active px-4 py-2 rounded-xl bg-white/5 border border-white/10 whitespace-nowrap transition">Todos</button>
-        <button onclick="filtrarUniverso('fighters')" id="pill-fighters" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Fighters / MMA</button>
         <button onclick="filtrarUniverso('anime')" id="pill-anime" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Anime</button>
+        <button onclick="filtrarUniverso('fighters')" id="pill-fighters" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Fighters / MMA</button>
         <button onclick="filtrarUniverso('marvel')" id="pill-marvel" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Marvel / Cómics</button>
         <button onclick="filtrarUniverso('cartoon')" id="pill-cartoon" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Cartoon 90s</button>
         <button onclick="filtrarUniverso('musica')" id="pill-musica" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Música / Leyendas</button>
@@ -174,7 +172,7 @@
             <!-- Silueta Misteriosa -->
             <div class="relative bg-black/90 rounded-2xl h-52 flex items-center justify-center overflow-hidden border border-white/10 mb-3">
                 <i class="fa-solid fa-question text-7xl text-white/10 absolute z-0"></i>
-                <img id="mystery-img" src="../c/vegeta-majin.png" alt="Pieza Oculta" class="h-44 object-contain silhouette-mystery relative z-10" onerror="this.onerror=null; this.src='https://placehold.co/300x400/000000/333333?text=?';">
+                <img id="mystery-img" src="/art/vegeta-majin.png" alt="Pieza Oculta" class="h-44 object-contain silhouette-mystery relative z-10" onerror="this.onerror=null; this.src='https://placehold.co/300x400/000000/333333?text=?';">
                 <div class="absolute bottom-2.5 bg-black/80 px-3.5 py-1 rounded-lg border border-white/10 backdrop-blur-sm z-20">
                     <span class="text-[10px] font-mono font-bold text-zinc-300">Desbloqueo en: <span id="mystery-countdown" class="text-amber-400 font-black">---</span></span>
                 </div>
@@ -183,7 +181,7 @@
             <h3 class="font-display text-lg font-black uppercase tracking-wide text-white">¿Quién dominará el próximo Drop?</h3>
             <p class="text-xs text-zinc-400 mt-0.5 mb-3">Pieza numerada única. Los miembros que poseen una camiseta o cuadro tienen reserva prioritaria.</p>
 
-            <a href="https://wa.me/34600000000?text=Hola,%20tengo%20una%20pieza%20Phygital%20y%20quiero%20entrar%20en%20la%20lista%20VIP%20del%20próximo%20Drop" target="_blank" class="block w-full py-3 bg-white text-black font-black uppercase text-xs rounded-full tracking-wider shadow-xl hover:bg-zinc-200 transition">
+            <a href="https://wa.me/34643186453?text=Hola,%20tengo%20una%20pieza%20Phygital%20y%20quiero%20entrar%20en%20la%20lista%20VIP%20del%20próximo%20Drop" target="_blank" class="block w-full py-3 bg-white text-black font-black uppercase text-xs rounded-full tracking-wider shadow-xl hover:bg-zinc-200 transition">
                 <i class="fa-brands fa-whatsapp mr-1 text-sm"></i> Notificarme al Abrir Drop
             </a>
         </div>
@@ -209,7 +207,7 @@
             </button>
 
             <div class="bg-black/60 rounded-2xl p-3 border border-white/10 mb-3 flex items-center justify-center min-h-[190px]">
-                <img id="modal-img" src="" class="max-h-48 object-contain">
+                <img id="modal-img" src="" class="max-h-48 object-contain" alt="Mockup">
             </div>
 
             <div id="modal-badge" class="inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2"></div>
@@ -232,41 +230,43 @@
     </footer>
 
     <script>
+        const WHATSAPP_NUM = "34643186453";
+
         // CATÁLOGO MAESTRO DE PRODUCTOS
         const PRODUCTOS = [
             // --- WEAR (CAMISETAS) ---
             {
-                id: "poatan",
+                id: "vegeta-wear",
+                tipo: "WEAR",
+                universo: "anime",
+                titulo: "Vegeta // Orgullo Saiyan",
+                edicion: "Edición Limitada // Pieza Única 01/01",
+                precio: "40,00 €",
+                estado: "VENDIDO",
+                imagen: "/art/vegeta-majin.png",
+                descripcion: "Camiseta premium de alto gramaje con microchip NFC integrado al pecho. Desbloquea medidor de Ki y certificación de autenticidad. Esta pieza exclusiva 01/01 ya ha sido adquirida por un coleccionista privado."
+            },
+            {
+                id: "poatan-wear",
                 tipo: "WEAR",
                 universo: "fighters",
                 titulo: "Alex Pereira // Poatan",
                 edicion: "Edición Limitada 50 Piezas",
                 precio: "49,00 €",
-                estado: "DISPONIBLE", // DISPONIBLE | PROXIMO | VENDIDO
-                imagen: "../c/vegeta-majin.png",
+                estado: "DISPONIBLE",
+                imagen: "/art/vegeta-majin.png",
                 descripcion: "Camiseta oversize 260 GSM con chip NFC en el pecho. Desbloquea su Tale of the Tape oficial, récord de KOs y el grito de batalla en vídeo."
             },
             {
-                id: "topuria",
+                id: "topuria-wear",
                 tipo: "WEAR",
                 universo: "fighters",
                 titulo: "Ilia Topuria // El Matador",
                 edicion: "Edición 25 Piezas",
                 precio: "49,00 €",
                 estado: "PROXIMO",
-                imagen: "../c/vegeta-majin.png",
+                imagen: "/art/vegeta-majin.png",
                 descripcion: "Tributo al campeón invicto. Incluye NFC vinculado a su documental de preparación y pesajes."
-            },
-            {
-                id: "vegeta-wear",
-                tipo: "WEAR",
-                universo: "anime",
-                titulo: "Vegeta Saiyan Pride",
-                edicion: "Edición 30 Piezas",
-                precio: "45,00 €",
-                estado: "DISPONIBLE",
-                imagen: "../c/vegeta-majin.png",
-                descripcion: "Camiseta premium de alto gramaje con chip NFC que activa el medidor de Ki y banda sonora oficial."
             },
             {
                 id: "spiderman-2099",
@@ -276,7 +276,7 @@
                 edicion: "Edición 50 Piezas",
                 precio: "45,00 €",
                 estado: "VENDIDO",
-                imagen: "../c/vegeta-majin.png",
+                imagen: "/art/vegeta-majin.png",
                 descripcion: "Corte boxy fit con tintas reflectantes y designación de variante Tierra-928. Agotado en el drop inicial."
             },
             {
@@ -287,7 +287,7 @@
                 edicion: "Edición 20 Piezas",
                 precio: "42,00 €",
                 estado: "DISPONIBLE",
-                imagen: "../c/vegeta-majin.png",
+                imagen: "/art/vegeta-majin.png",
                 descripcion: "Camiseta retro nostalgia con chip que reproduce la intro y la frase 'Omelette du fromage' en tu móvil."
             },
             {
@@ -298,21 +298,32 @@
                 edicion: "Edición 40 Piezas",
                 precio: "49,00 €",
                 estado: "DISPONIBLE",
-                imagen: "../c/vegeta-majin.png",
+                imagen: "/art/vegeta-majin.png",
                 descripcion: "Tributo en algodón peinado. El chip NFC reproduce el videoclip oficial directamente al apoyar el teléfono en el corazón."
             },
 
-            // --- ART (CUADROS) ---
+            // --- ART (CUADROS REALES EN /art/) ---
             {
-                id: "vegeta-art",
+                id: "vegeta-prince",
                 tipo: "ART",
                 universo: "anime",
                 titulo: "Vegeta // Orgullo del Príncipe",
                 edicion: "Pieza 01 de 25",
                 precio: "120,00 €",
                 estado: "DISPONIBLE",
-                imagen: "../c/vegeta-majin.png",
-                descripcion: "Lienzo de galería montado en bastidor con chip NFC oculto en placa metálica. Desbloquea su audio lore y certificado de autenticidad."
+                imagen: "/art/vegeta-majin.png",
+                descripcion: "Lienzo de galería montado en bastidor con placa NFC oculta. Desbloquea su medidor de Ki, banda sonora y certificado de coleccionista."
+            },
+            {
+                id: "broly-sucursal",
+                tipo: "ART",
+                universo: "anime",
+                titulo: "Broly SSJ4 // Furia Primordial",
+                edicion: "Pieza 02 de 25",
+                precio: "135,00 €",
+                estado: "DISPONIBLE",
+                imagen: "/art/broly-ssj4.png",
+                descripcion: "Lienzo acabado en madera noble con aura verde neón. Autenticado por NFC en el bastidor con acceso al lore y audio del Saiyan Legendario."
             },
             {
                 id: "poatan-art",
@@ -322,7 +333,7 @@
                 edicion: "Pieza Única 01/01",
                 precio: "160,00 €",
                 estado: "PROXIMO",
-                imagen: "../c/vegeta-majin.png",
+                imagen: "/art/vegeta-majin.png",
                 descripcion: "Cuadro de edición museo con placa de titanio y chip NFC. Acceso al Fighter Pass VIP."
             },
             {
@@ -333,7 +344,7 @@
                 edicion: "Pieza 01 de 10",
                 precio: "110,00 €",
                 estado: "VENDIDO",
-                imagen: "../c/vegeta-majin.png",
+                imagen: "/art/vegeta-majin.png",
                 descripcion: "Lienzo acabado en resina brillo retro. Certificado por NFC."
             }
         ];
@@ -396,7 +407,16 @@
                 if (prod.estado === 'VENDIDO') {
                     badgeClass = 'badge-sold';
                     badgeText = 'SOLD OUT';
-                    overlayVendido = `<div class="absolute inset-0 bg-black/65 flex items-center justify-center z-10"><span class="font-display font-black text-rose-500 text-xs tracking-widest uppercase border-2 border-rose-500 px-2.5 py-0.5 rounded rotate-[-12deg] bg-black/80">Vendido</span></div>`;
+                    overlayVendido = `
+                        <div class="absolute inset-0 bg-black/75 flex flex-col items-center justify-center z-20 backdrop-blur-[1px] p-2 text-center">
+                            <span class="font-display font-black text-rose-500 text-[11px] sm:text-xs tracking-widest uppercase border-2 border-rose-500 px-2.5 py-1 rounded-lg rotate-[-10deg] bg-black/90 shadow-[0_0_15px_rgba(225,29,72,0.6)]">
+                                VENDIDO // PIEZA ÚNICA
+                            </span>
+                            <span class="text-[9px] font-mono font-bold text-zinc-300 mt-2 tracking-wider">
+                                Adquirido por ${prod.precio}
+                            </span>
+                        </div>
+                    `;
                 } else if (prod.estado === 'PROXIMO') {
                     badgeClass = 'badge-drop';
                     badgeText = 'PRÓXIMO';
@@ -409,7 +429,7 @@
                 card.innerHTML = `
                     ${overlayVendido}
                     <div class="relative bg-black/40 rounded-xl p-2 mb-2 flex items-center justify-center min-h-[120px]">
-                        <img src="${prod.imagen}" class="max-h-28 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/200x200/111111/ffffff?text=Studio+42';">
+                        <img src="${prod.imagen}" class="max-h-28 object-contain" alt="${prod.titulo}" onerror="this.onerror=null; this.src='https://placehold.co/200x200/111111/ffffff?text=Studio+42';">
                     </div>
                     <div>
                         <div class="flex items-center justify-between mb-1">
@@ -438,20 +458,20 @@
                 badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-sold';
                 badge.innerText = 'PIEZA ARCHIVADA / VENDIDA';
                 btnAction.className = 'block w-full py-3 bg-zinc-800 text-zinc-500 font-black uppercase text-xs rounded-full tracking-wider cursor-not-allowed';
-                btnAction.innerText = 'Sold Out // Edición Agotada';
+                btnAction.innerText = `Sold Out // Adquirida por ${prod.precio}`;
                 btnAction.href = '#';
             } else if (prod.estado === 'PROXIMO') {
                 badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-drop';
                 badge.innerText = 'PRÓXIMO DROP EXCLUSIVO';
                 btnAction.className = 'block w-full py-3 bg-amber-400 text-black font-black uppercase text-xs rounded-full tracking-wider hover:bg-amber-300';
                 btnAction.innerText = 'Reservar Turno en WhatsApp';
-                btnAction.href = `https://wa.me/34600000000?text=Hola,%20quiero%20reservar%20el%20próximo%20drop%20de%20${encodeURIComponent(prod.titulo)}`;
+                btnAction.href = `https://wa.me/${WHATSAPP_NUM}?text=Hola,%20quiero%20reservar%20el%20próximo%20drop%20de%20${encodeURIComponent(prod.titulo)}`;
             } else {
                 badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-available';
                 badge.innerText = 'DISPONIBLE EN STOCK';
                 btnAction.className = 'block w-full py-3 bg-emerald-500 text-white font-black uppercase text-xs rounded-full tracking-wider hover:bg-emerald-400';
                 btnAction.innerText = `Comprar / Reservar (${prod.precio})`;
-                btnAction.href = `https://wa.me/34600000000?text=Hola,%20quiero%20comprar%20la%20pieza%20${encodeURIComponent(prod.titulo)}%20(${encodeURIComponent(prod.precio)})`;
+                btnAction.href = `https://wa.me/${WHATSAPP_NUM}?text=Hola,%20quiero%20comprar%20la%20pieza%20${encodeURIComponent(prod.titulo)}%20(${encodeURIComponent(prod.precio)})`;
             }
 
             document.getElementById('modal-producto').classList.remove('hidden');
@@ -461,20 +481,20 @@
             document.getElementById('modal-producto').classList.add('hidden');
         }
 
-        // Cuenta regresiva del misterio (14 días desde hoy)
+        // Cuenta regresiva del misterio (14 días fijos)
         const fechaMeta = new Date().getTime() + (14 * 24 * 60 * 60 * 1000);
         setInterval(() => {
             const ahora = new Date().getTime();
             const diff = fechaMeta - ahora;
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const minutos = Math.floor((diff % (1000 * 60)) / (1000 * 60));
             const segundos = Math.floor((diff % (1000 * 60)) / 1000);
             const el = document.getElementById('mystery-countdown');
             if (el) el.innerText = `${dias}d ${horas}h ${minutos}m ${segundos}s`;
         }, 1000);
 
-        // Auto-filtro al cargar según parámetros de la URL
+        // Auto-filtro al cargar según parámetros de URL
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const paramLinea = urlParams.get('linea');
