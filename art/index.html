@@ -1,43 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPXJ4FNYBS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CPXJ4FNYBS');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Phygital Art Gallery</title>
+    <title>Phygital Experience // Studio 42</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         :root {
-            --color-primario: #84CC16;
-            --color-acento: #E11D48;
-            --color-fondo: #070B06;
-            --aura-neon: rgba(132, 204, 22, 0.75);
+            --color-primario: #3B82F6;
+            --color-acento: #A855F7;
+            --color-fondo: #05070F;
+            --aura-neon: rgba(59, 130, 246, 0.65);
         }
 
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden !important;
-            position: relative;
+        body {
             background-color: var(--color-fondo);
             color: #ffffff;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.4s ease;
+            overflow-x: hidden;
         }
 
         .font-display {
@@ -46,7 +32,7 @@
 
         .bg-tech-grid {
             background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-            background-size: 28px 28px;
+            background-size: 26px 26px;
         }
 
         .art-card-wrapper {
@@ -55,7 +41,7 @@
             overflow: hidden;
             padding: 2px;
             background: rgba(18, 22, 30, 0.85);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.95), 0 0 40px var(--aura-neon);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.95), 0 0 35px var(--aura-neon);
             transition: box-shadow 0.4s ease;
         }
 
@@ -73,7 +59,7 @@
                 var(--color-acento) 55%, 
                 transparent 100%
             );
-            animation: rotateNeon 8s linear infinite;
+            animation: rotateNeon 9s linear infinite;
             z-index: 0;
         }
 
@@ -90,123 +76,126 @@
             backdrop-filter: blur(20px);
         }
 
-        .glow-image {
-            filter: drop-shadow(0 0 25px var(--aura-neon));
-            transition: filter 0.4s ease;
-        }
-
-        .btn-phygital {
+        .btn-vault-access {
             background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-acento) 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 4s ease infinite;
             color: #ffffff;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border-radius: 50px;
             box-shadow: 0 0 25px var(--aura-neon);
-            transition: transform 0.2s ease, filter 0.2s ease;
         }
 
-        .btn-phygital:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.08);
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
 
-<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-between p-4 selection:bg-white selection:text-black select-none">
+<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-between p-3 sm:p-5 select-none">
 
-    <div class="w-full max-w-md art-card-wrapper my-auto mt-4 sm:mt-6">
-        <main class="art-content p-5 sm:p-6 text-center">
+    <div class="w-full max-w-md art-card-wrapper my-auto mt-3 sm:mt-5">
+        <main class="art-content p-5 text-center">
             
-            <!-- BADGE DE AUTENTICIDAD -->
-            <div class="inline-flex items-center gap-2 bg-black/80 px-3.5 py-1.5 rounded-full border border-white/15 mb-4 shadow-lg">
-                <i class="fa-solid fa-shield-halved text-emerald-400 text-xs"></i>
-                <span id="obra-edicion" class="text-[9px] font-black uppercase tracking-widest text-zinc-200">Verificando Certificado...</span>
+            <!-- BADGE DE AUTENTICIDAD NFC -->
+            <div class="flex items-center justify-between bg-black/80 px-3.5 py-1.5 rounded-full border border-white/15 mb-4 shadow-lg">
+                <div class="inline-flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span id="nfc-sensor-tag" class="text-[9px] font-black uppercase tracking-widest text-emerald-300">NFC Verificado</span>
+                </div>
+                <span id="obra-edicion" class="text-[9px] font-black uppercase tracking-widest text-zinc-300">Cargando Certificado...</span>
             </div>
 
-            <!-- LIENZO / OBRA DE ARTE -->
-            <div class="relative overflow-hidden rounded-2xl border border-white/10 mb-4 bg-black/60 min-h-[260px] flex items-center justify-center p-3">
-                <img id="obra-img" src="" alt="Lienzo Phygital" class="w-full h-auto max-h-[380px] object-contain glow-image hidden">
-                <span id="loader-img" class="text-xs font-bold uppercase tracking-wider text-zinc-400 animate-pulse">Sincronizando Lienzo Phygital...</span>
+            <!-- MEDIA CONTAINER: VÍDEO YOUTUBE O IMAGEN MOCKUP -->
+            <div id="contenedor-video" class="hidden rounded-2xl overflow-hidden border border-white/15 mb-4 shadow-2xl bg-black">
+                <div class="relative pt-[56.25%]">
+                    <iframe id="video-frame" class="absolute inset-0 w-full h-full" src="" title="Media Phygital" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="p-2 bg-zinc-950 flex items-center justify-between text-[10px] text-zinc-400">
+                    <span class="font-bold uppercase tracking-wider text-white"><i class="fa-solid fa-play text-red-500 mr-1"></i> Clip / Track Oficial</span>
+                    <span class="text-zinc-500">Phygital Sync</span>
+                </div>
             </div>
 
-            <!-- TÍTULO Y DETALLES -->
-            <h1 id="obra-titulo" class="font-display text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight">Cargando...</h1>
-            <p id="obra-sub" class="text-xs font-bold uppercase tracking-widest mt-1 mb-4" style="color: var(--color-primario);"></p>
-
-            <!-- REPRODUCTOR DE AUDIO / LORE -->
-            <div id="contenedor-audio" class="hidden bg-white/5 p-4 rounded-2xl border border-white/10 mb-4 text-left">
-                <p class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-2">
-                    <i class="fa-solid fa-compact-disc text-white animate-spin"></i> Track: <span id="track-nombre" class="text-white">Banda Sonora</span>
-                </p>
-                <audio id="obra-audio" controls class="w-full h-9 mt-2 accent-white"></audio>
-                <p id="obra-lore" class="text-xs text-zinc-300 italic font-normal mt-3 border-t border-white/10 pt-2 leading-relaxed"></p>
+            <div id="contenedor-img" class="relative overflow-hidden rounded-2xl border border-white/10 mb-4 bg-black/60 min-h-[220px] flex items-center justify-center p-3">
+                <img id="obra-img" src="" alt="Pieza Phygital" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl hidden">
+                <span id="loader-img" class="text-xs font-bold uppercase tracking-wider text-zinc-400 animate-pulse">Sincronizando Identidad Digital...</span>
             </div>
 
-            <!-- FRASES ICÓNICAS -->
-            <div id="contenedor-voces" class="hidden bg-white/5 p-4 rounded-2xl border border-white/10 mb-4 text-center">
+            <!-- AUDIO TRACK SECUNDARIO (SI APLICA) -->
+            <div id="contenedor-audio" class="hidden bg-white/5 p-3 rounded-2xl border border-white/10 mb-4 text-left">
+                <audio id="obra-audio" controls class="w-full h-8"></audio>
+            </div>
+
+            <!-- TÍTULO Y SUBTÍTULO -->
+            <h1 id="obra-titulo" class="font-display text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight">Cargando Pieza...</h1>
+            <p id="obra-sub" class="text-xs font-bold uppercase tracking-widest mt-1 mb-3" style="color: var(--color-primario);"></p>
+
+            <!-- CONTENEDOR POLIMÓRFICO: SE TRANSFORMA SEGÚN LA CATEGORÍA -->
+            <div id="modulo-polimorfico" class="mb-4">
+                <!-- Se inyecta la ficha de Fighter, Anime, Comics, Cartoon o Música -->
+            </div>
+
+            <!-- FRASE ICÓNICA O LORE -->
+            <div id="contenedor-lore" class="hidden bg-white/5 p-3 rounded-2xl border border-white/10 mb-4 text-center">
                 <p id="frase-texto" class="text-xs font-bold text-zinc-100 italic leading-snug">«...»</p>
             </div>
 
-            <!-- CERTIFICADO DE VERIFICACIÓN -->
-            <div class="bg-black/60 p-3.5 rounded-2xl border border-white/10 text-left mb-5 text-[10px] space-y-1.5 font-mono">
+            <!-- CERTIFICADO DE BLOQUE -->
+            <div class="bg-black/70 p-3 rounded-2xl border border-white/10 text-left mb-4 text-[10px] space-y-1 font-mono">
                 <div class="flex justify-between items-center">
-                    <span class="text-zinc-400 font-bold uppercase">Código Verificación:</span>
+                    <span class="text-zinc-400 uppercase">Hash Verificación:</span>
                     <span id="cert-codigo" class="text-white font-black">---</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-zinc-400 font-bold uppercase">Estado:</span>
-                    <span id="cert-estado" class="text-emerald-400 font-bold">VERIFICADO</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-zinc-400 font-bold uppercase">Propietario:</span>
-                    <span id="cert-dueno" class="text-zinc-200 font-bold">---</span>
+                    <span class="text-zinc-400 uppercase">Titular Registrado:</span>
+                    <span id="cert-dueno" class="text-emerald-400 font-bold">---</span>
                 </div>
             </div>
 
-            <!-- ACCIONES -->
-            <div class="space-y-3">
-                <a id="btn-wallpaper" href="#" download="" target="_blank" class="block w-full py-3.5 text-center text-xs btn-phygital shadow-xl">
-                    <i class="fa-solid fa-download mr-1.5"></i> Descargar Wallpaper 4K / 8K Exclusivo
+            <!-- BOTONERA DE ACCIÓN Y EMBUDO HACIA THE VAULT -->
+            <div class="space-y-3 pt-1">
+                <!-- BOTÓN MAESTRO AL VAULT FILTRADO -->
+                <a href="../vault/" id="btn-vault" class="block w-full py-3.5 px-4 text-center text-xs font-display font-black uppercase tracking-wider rounded-full btn-vault-access transition transform active:scale-95 shadow-2xl">
+                    <div class="flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-vault text-sm"></i>
+                        <span id="btn-vault-text">Entrar a The Vault // Catálogo & Drops</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </div>
                 </a>
 
-                <a id="btn-whatsapp" href="#" target="_blank" class="block w-full py-3.5 text-center text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase rounded-full tracking-wider shadow-lg transition duration-200">
-                    <i class="fa-brands fa-whatsapp mr-1.5 text-sm"></i> Registrar Lienzo en WhatsApp VIP
-                </a>
+                <!-- BENEFICIOS VIP -->
+                <div class="grid grid-cols-2 gap-2">
+                    <a id="btn-wallpaper" href="#" download="" target="_blank" class="py-2.5 px-2 text-center text-[10px] bg-white/10 hover:bg-white/15 border border-white/15 text-white font-black uppercase rounded-2xl tracking-wider transition">
+                        <i class="fa-solid fa-download mr-1 text-emerald-400"></i> Wallpaper 4K
+                    </a>
+                    <a id="btn-whatsapp" href="#" target="_blank" class="py-2.5 px-2 text-center text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase rounded-2xl tracking-wider transition">
+                        <i class="fa-brands fa-whatsapp mr-1 text-sm"></i> WhatsApp VIP
+                    </a>
+                </div>
             </div>
 
         </main>
     </div>
 
-    <!-- FOOTER ULTRA DISCRETO -->
-    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-5">
-        Experiencia Phygital &bull; Concepto y desarrollo de arte por <a href="/" class="text-zinc-400 hover:text-zinc-200 transition">Studio 42</a>
+    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-3">
+        Phygital Member Tag &bull; Studio 42 Engine
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const obraId = urlParams.get('id') || 'broly-sucursal';
-            const audioEl = document.getElementById('obra-audio');
-
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden && audioEl) {
-                    audioEl.pause();
-                }
-            });
-
-            window.addEventListener('pagehide', () => {
-                if (audioEl) {
-                    audioEl.pause();
-                }
-            });
+            // Soporta ?cod= o ?id=
+            const obraId = urlParams.get('cod') || urlParams.get('id') || 'poatan';
 
             try {
-                const response = await fetch(`./${obraId}.json?v=${new Date().getTime()}`);
-                if (!response.ok) throw new Error("JSON no encontrado");
+                // Cache-busting para obligar la lectura fresca
+                const response = await fetch(`./${obraId}.json?t=${Date.now()}`);
+                if (!response.ok) throw new Error("JSON de pieza no encontrado");
                 
                 const data = await response.json();
 
+                // 1. Inyección de Paleta
                 if (data.estetica) {
                     if (data.estetica.color_primario) document.documentElement.style.setProperty('--color-primario', data.estetica.color_primario);
                     if (data.estetica.color_acento) document.documentElement.style.setProperty('--color-acento', data.estetica.color_acento);
@@ -214,60 +203,162 @@
                     if (data.estetica.aura_neon) document.documentElement.style.setProperty('--aura-neon', data.estetica.aura_neon);
                 }
 
+                // 2. Cabeceras
                 document.getElementById('obra-titulo').innerText = data.titulo_obra || "Sin Título";
-                document.getElementById('obra-sub').innerText = `${data.personaje || ''} // ${data.serie_anime || ''}`;
-                document.getElementById('obra-edicion').innerText = data.edicion_limitada || "Edición Única";
+                document.getElementById('obra-sub').innerText = `${data.subtitulo \vert{}\vert{} data.personaje \vert{}\vert{} ''} //${data.categoria || ''}`;
+                document.getElementById('obra-edicion').innerText = data.edicion_limitada || "Edición Exclusiva";
 
-                const imgEl = document.getElementById('obra-img');
-                const loaderEl = document.getElementById('loader-img');
-                const srcImg = data.imagen_lienzo.startsWith('http') || data.imagen_lienzo.startsWith('./') 
-                    ? data.imagen_lienzo 
-                    : `./${data.imagen_lienzo}`;
+                // Sensor Tag
+                if (data.tipo_producto === 'WEAR') {
+                    document.getElementById('nfc-sensor-tag').innerText = "NFC Tejido al Pecho";
+                } else if (data.tipo_producto === 'ART') {
+                    document.getElementById('nfc-sensor-tag').innerText = "NFC Placa Bastidor";
+                }
 
-                imgEl.src = srcImg;
-                imgEl.onload = () => {
-                    imgEl.classList.remove('hidden');
-                    if (loaderEl) loaderEl.classList.add('hidden');
-                };
+                // 3. Media: YouTube vs Imagen
+                if (data.media && data.media.youtube_embed) {
+                    const frame = document.getElementById('video-frame');
+                    frame.src = data.media.youtube_embed;
+                    document.getElementById('contenedor-video').classList.remove('hidden');
+                    document.getElementById('contenedor-img').classList.add('hidden');
+                } else if (data.imagen_lienzo || (data.media && data.media.mockup)) {
+                    const imgSrc = data.imagen_lienzo || data.media.mockup;
+                    const imgEl = document.getElementById('obra-img');
+                    const loaderEl = document.getElementById('loader-img');
+                    imgEl.src = imgSrc;
+                    imgEl.onload = () => {
+                        imgEl.classList.remove('hidden');
+                        if (loaderEl) loaderEl.classList.add('hidden');
+                    };
+                }
 
-                if (data.audio_experience && data.audio_experience.voice_over_url) {
-                    document.getElementById('track-nombre').innerText = data.audio_experience.titulo_track || "Banda Sonora";
-                    audioEl.src = data.audio_experience.voice_over_url;
-                    document.getElementById('obra-lore').innerText = `"${data.audio_experience.transcripcion_lore}"`;
+                // Audio Track auxiliar
+                if (data.media && data.media.audio_track) {
+                    const audioEl = document.getElementById('obra-audio');
+                    audioEl.src = data.media.audio_track;
                     document.getElementById('contenedor-audio').classList.remove('hidden');
                 }
 
-                if (data.voces_personaje && data.voces_personaje.frase_texto) {
-                    document.getElementById('frase-texto').innerText = data.voces_personaje.frase_texto;
-                    document.getElementById('contenedor-voces').classList.remove('hidden');
+                // 4. Inyección del Módulo Polimórfico según Categoría
+                renderModuloPolimorfico(data);
+
+                // 5. Frase / Lore
+                const frase = (data.modulo_especifico && data.modulo_especifico.frase) || 
+                              (data.voces_personaje && data.voces_personaje.frase_texto);
+                if (frase) {
+                    document.getElementById('frase-texto').innerText = frase;
+                    document.getElementById('contenedor-lore').classList.remove('hidden');
                 }
 
-                if (data.certificado_autenticidad) {
-                    document.getElementById('cert-codigo').innerText = data.certificado_autenticidad.codigo_verificacion || 'S42-NFC-VERIFIED';
-                    document.getElementById('cert-estado').innerText = data.certificado_autenticidad.estado || 'VERIFICADO';
-                    document.getElementById('cert-dueno').innerText = data.certificado_autenticidad.propietario_registrado || 'Sin registrar';
+                // 6. Certificado
+                if (data.certificado) {
+                    document.getElementById('cert-codigo').innerText = data.certificado.codigo || 'S42-VERIFIED';
+                    document.getElementById('cert-dueno').innerText = data.certificado.propietario || 'Coleccionista VIP';
                 }
 
+                // 7. Enlace hacia The Vault (Filtrado Inteligente)
+                const linea = (data.tipo_producto || 'wear').toLowerCase();
+                const categoria = (data.categoria || 'anime').toLowerCase().replace(/\s+/g, '');
+                const btnVault = document.getElementById('btn-vault');
+                const btnVaultText = document.getElementById('btn-vault-text');
+                
+                btnVault.href = `../vault/?linea=${linea}&universo=${categoria}`;
+                btnVaultText.innerText = `Ver Más en The Vault // ${data.categoria || 'Colecciones'}`;
+
+                // 8. Enlaces VIP
                 const btnWall = document.getElementById('btn-wallpaper');
-                if (data.easter_eggs && data.easter_eggs.wallpaper_4k_download) {
-                    const srcWall = data.easter_eggs.wallpaper_4k_download.startsWith('http') || data.easter_eggs.wallpaper_4k_download.startsWith('./') 
-                        ? data.easter_eggs.wallpaper_4k_download 
-                        : `./${data.easter_eggs.wallpaper_4k_download}`;
-                    btnWall.href = srcWall;
-                    btnWall.setAttribute('download', data.easter_eggs.wallpaper_4k_download);
-                } else if (data.imagen_lienzo) {
-                    btnWall.href = srcImg;
-                    btnWall.setAttribute('download', data.imagen_lienzo);
+                const wallUrl = (data.easter_eggs && data.easter_eggs.wallpaper_4k_download) || (data.media && data.media.wallpaper_download);
+                if (wallUrl) {
+                    btnWall.href = wallUrl;
+                    btnWall.setAttribute('download', wallUrl);
+                } else {
+                    btnWall.classList.add('hidden');
                 }
 
-                if (data.club_coleccionistas && data.club_coleccionistas.whatsapp_artista) {
-                    document.getElementById('btn-whatsapp').href = data.club_coleccionistas.whatsapp_artista;
+                const btnWp = document.getElementById('btn-whatsapp');
+                const wpUrl = (data.club_coleccionistas && data.club_coleccionistas.whatsapp_artista) || (data.enlaces && data.enlaces.whatsapp_vip);
+                if (wpUrl) {
+                    btnWp.href = wpUrl;
                 }
 
             } catch (err) {
-                console.error("Error cargando el JSON:", err);
+                console.error("Error al desplegar la pieza:", err);
             }
         });
+
+        function renderModuloPolimorfico(data) {
+            const container = document.getElementById('modulo-polimorfico');
+            const cat = (data.categoria || '').toLowerCase();
+            const mod = data.modulo_especifico || {};
+
+            if (cat.includes('fight') || cat.includes('box') || cat.includes('mma')) {
+                // MUTACIÓN 1: TALE OF THE TAPE DE PELEADOR
+                container.innerHTML = `
+                    <div class="bg-black/80 border border-amber-500/40 p-3.5 rounded-2xl text-left space-y-2 font-mono shadow-lg">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-1.5">
+                            <span class="text-[10px] text-zinc-400 uppercase font-bold"><i class="fa-solid fa-trophy text-amber-400 mr-1"></i> Récord Oficial:</span>
+                            <span class="text-xs text-amber-400 font-black">${mod.record || 'Invicto'}</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-white/10 pb-1.5">
+                            <span class="text-[10px] text-zinc-400 uppercase font-bold"><i class="fa-solid fa-hand-fist text-rose-400 mr-1"></i> Estilo:</span>
+                            <span class="text-xs text-white font-bold">${mod.estilo || 'Artes Marciales Mixtas'}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-zinc-400 uppercase font-bold"><i class="fa-solid fa-bolt text-yellow-400 mr-1"></i> Arma de KO:</span>
+                            <span class="text-xs text-rose-500 font-black uppercase">${mod.finalizacion_icono || 'Golpe Letal'}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (cat.includes('anime')) {
+                // MUTACIÓN 2: MEDIDOR DE KI / CHAKRA
+                container.innerHTML = `
+                    <div class="bg-blue-950/20 border border-blue-500/40 p-3.5 rounded-2xl text-center space-y-2">
+                        <div class="flex justify-between text-[10px] font-black uppercase tracking-widest text-blue-400">
+                            <span><i class="fa-solid fa-fire text-amber-400 mr-1"></i> Nivel de Energía</span>
+                            <span>${mod.rango_ki || '9.999.999+'}</span>
+                        </div>
+                        <div class="w-full bg-black/60 rounded-full h-2.5 overflow-hidden border border-blue-500/30">
+                            <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-amber-400 h-full w-[94%] animate-pulse"></div>
+                        </div>
+                        <p class="text-[10px] font-bold text-zinc-300 uppercase tracking-wider pt-1">
+                            Técnica Maestra: <span class="text-white">${mod.tecnica_maestra || 'Poder Definitivo'}</span>
+                        </p>
+                    </div>
+                `;
+            } else if (cat.includes('cartoon')) {
+                // MUTACIÓN 3: TELEVISOR RETRO 90S NOSTALGIA
+                container.innerHTML = `
+                    <div class="bg-zinc-900 border-2 border-yellow-400 p-3.5 rounded-2xl text-center shadow-[0_0_20px_rgba(250,204,21,0.25)]">
+                        <span class="text-[9px] font-black uppercase px-2.5 py-0.5 bg-yellow-400 text-black rounded-full mb-1.5 inline-block">
+                            <i class="fa-solid fa-tv mr-1"></i> Vintage Cartoon Vault
+                        </span>
+                        <p class="text-xs font-bold text-white mt-1">Sintonía Oficial & Colección de Época</p>
+                    </div>
+                `;
+            } else if (cat.includes('comic') || cat.includes('marvel') || cat.includes('dc')) {
+                // MUTACIÓN 4: VARIANTE MULTIVERSAL DE CÓMIC
+                container.innerHTML = `
+                    <div class="bg-red-950/30 border border-red-500/40 p-3.5 rounded-2xl text-left space-y-1">
+                        <span class="text-[9px] font-black text-red-400 uppercase tracking-widest flex items-center gap-1">
+                            <i class="fa-solid fa-atom"></i> Designación Multiversal
+                        </span>
+                        <h4 class="text-xs font-bold text-white">${mod.tierra || 'Tierra-616'} // Grado de Rareza A+</h4>
+                        <p class="text-[10px] text-zinc-400">Edición clasificada bajo registro Phygital.</p>
+                    </div>
+                `;
+            } else if (cat.includes('music') || cat.includes('música')) {
+                // MUTACIÓN 5: MASTER TRACK DE MÚSICA
+                container.innerHTML = `
+                    <div class="bg-amber-950/20 border border-amber-500/40 p-3.5 rounded-2xl text-left space-y-1">
+                        <span class="text-[9px] font-black text-amber-400 uppercase tracking-widest flex items-center gap-1">
+                            <i class="fa-solid fa-record-vinyl animate-spin"></i> Grabación Master de Colección
+                        </span>
+                        <h4 class="text-xs font-bold text-white">${mod.album || 'Edición Histórica'}</h4>
+                        <p class="text-[10px] text-zinc-400">Audio oficial y remasterización en vivo.</p>
+                    </div>
+                `;
+            }
+        }
     </script>
 </body>
 </html>
