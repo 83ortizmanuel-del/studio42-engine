@@ -1,0 +1,64 @@
+{
+  "nombre": "BARBERIA HARD",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Estilo Urbano",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0A0F1D",
+  "colorAcento": "#00E5FF",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Reserva Tu Cita Directa",
+          "descripcion": "Agenda tu turno de forma rápida sin esperas",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita%20en%20Barberia%20Hard",
+          "destacado": true
+        },
+        {
+          "nombre": "Pago Seguro por Bizum",
+          "descripcion": "Consulta el número de Bizum para pagos al instante",
+          "icono": "fa-solid fa-mobile-screen-button",
+          "url": "https://wa.me/34600000000?text=Hola,%20necesito%20el%20numero%20de%20Bizum"
+        },
+        {
+          "nombre": "¿Donde aparque?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Comunidad & Redes Sociales",
+      "botones": [
+        {
+          "nombre": "Instagram Oficial",
+          "descripcion": "Descubre nuestros mejores cortes y tendencias",
+          "icono": "fa-brands fa-instagram",
+          "url": "https://instagram.com"
+        },
+        {
+          "nombre": "TikTok",
+          "descripcion": "Videos de transformaciones y estilo urbano",
+          "icono": "fa-brands fa-tiktok",
+          "url": "https://tiktok.com"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
