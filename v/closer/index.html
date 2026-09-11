@@ -82,7 +82,7 @@
         }
 
         .logo-hero {
-            height: 105px;
+            height: 100px;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 16px var(--color-glow));
@@ -116,7 +116,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #ffffff;
             border-radius: 16px;
-            padding: 14px 16px;
+            padding: 13px 16px;
             width: 100%;
             font-size: 0.85rem;
             transition: all 0.3s ease;
@@ -135,6 +135,35 @@
             color: var(--color-accent) !important;
             cursor: not-allowed;
             text-shadow: 0 0 6px var(--color-glow);
+        }
+
+        /* Chips interactivos de selección */
+        .chip-friccion {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #d1d5db;
+            font-size: 0.72rem;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip-friccion.active {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--color-accent);
+            color: #ffffff;
+            box-shadow: 0 0 12px var(--color-glow);
+            transform: scale(1.02);
+        }
+
+        .chip-friccion.active i {
+            color: var(--color-accent);
         }
 
         .btn-cyber-submit {
@@ -182,15 +211,57 @@
         .dot-pulse {
             background-color: var(--color-accent);
         }
+
+        /* Botón de Audio Flotante Cyber */
+        .audio-toggle-btn {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            z-index: 9999;
+            background: rgba(14, 14, 17, 0.85);
+            border: 1.5px solid var(--color-accent);
+            color: var(--color-accent);
+            box-shadow: 0 0 15px var(--color-glow);
+            backdrop-filter: blur(8px);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-toggle-btn.playing {
+            animation: audioPulse 2s infinite alternate;
+        }
+
+        @keyframes audioPulse {
+            0% { box-shadow: 0 0 8px var(--color-glow); transform: scale(1); }
+            100% { box-shadow: 0 0 20px var(--color-glow); transform: scale(1.08); }
+        }
     </style>
 </head>
 
-<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-center p-4 text-white select-none">
+<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-center p-3 sm:p-4 text-white select-none">
 
-    <div class="w-full max-w-sm neon-card-wrapper">
-        <main class="neon-card-content p-6 sm:p-7">
+    <!-- Audio de ambiente -->
+    <audio id="audio-ambiente" loop preload="auto">
+        <source src="c/ambiente2.mp3" type="audio/mp3">
+        <source src="/c/ambiente2.mp3" type="audio/mp3">
+        <source src="ambiente2.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Botón flotante para mutear/activar audio -->
+    <button id="btn-audio-toggle" class="audio-toggle-btn" title="Control Música Phygital">
+        <i id="audio-icon" class="fa-solid fa-volume-xmark text-sm"></i>
+    </button>
+
+    <div class="w-full max-w-md neon-card-wrapper my-4">
+        <main class="neon-card-content p-5 sm:p-7">
             
-            <header class="w-full flex flex-col items-center mb-6 text-center space-y-2">
+            <header class="w-full flex flex-col items-center mb-5 text-center space-y-2">
                 <div class="relative inline-flex items-center justify-center p-1">
                     <div class="absolute inset-0 blur-2xl rounded-full" style="background: var(--color-glow);"></div>
                     <img src="/logo.png" alt="Studio 42 Logo" class="relative logo-hero" onerror="this.onerror=null; this.src='logo.png';">
@@ -198,7 +269,7 @@
 
                 <div>
                     <h1 class="title-phygital">Diagnóstico Phygital</h1>
-                    <p class="subtitle-phygital mt-0.5">Engine v2 // Identidad Inteligente</p>
+                    <p class="subtitle-phygital mt-0.5">Engine v3 // Identidad Inteligente</p>
                 </div>
                 
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full badge-closer shadow-md mt-1">
@@ -209,6 +280,7 @@
 
             <form id="form-diagnostico" class="space-y-4">
                 
+                <!-- ID Closer -->
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-1 ml-1" style="color: var(--color-accent);">
                         ID Responsable (Closer)
@@ -220,32 +292,74 @@
                     <p class="text-[9px] text-gray-400 mt-1 ml-1">🔒 Llave maestra asignada CTO/CEO Studio42.</p>
                 </div>
 
+                <!-- Nombre del Comercio -->
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Nombre Comercial / Sector
+                        Nombre Comercial del Negocio
                     </label>
-                    <input type="text" id="nombre_sector" name="nombre_sector" placeholder="Ej: Óptica San José / Salud" class="input-cyber" required>
+                    <input type="text" id="nombre_comercio" placeholder="Ej: Centro Veterinario Norte" class="input-cyber" required>
                 </div>
 
+                <!-- Selector de Sector -->
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Fricción o Quejas de los Clientes
+                        Sector del Negocio
                     </label>
-                    <textarea id="fricciones" name="fricciones" rows="3" placeholder="Fricciones detectadas en el comercio..." class="input-cyber" required></textarea>
+                    <select id="sector_select" class="input-cyber font-semibold text-gray-200" required>
+                        <option value="" disabled selected>-- Selecciona el Sector del Cliente --</option>
+                        <option value="Hostelería y Restauración">🍽️ Hostelería, Cafetería o Restauración</option>
+                        <option value="Salud y Clínicas">🩺 Salud, Odontología, Fisio o Médica</option>
+                        <option value="Belleza y Estética">✂️ Belleza, Barbería, Peluquería o Spa</option>
+                        <option value="Automoción y Talleres">🚗 Automoción, Taller Mecánico o Concesionario</option>
+                        <option value="Comercio y Retail">🛍️ Comercio Minorista, Moda o Tienda Local</option>
+                        <option value="Servicios Profesionales">💼 Asesoría, Abogados, Inmobiliaria o Consultoría</option>
+                        <option value="Otros">✨ Otros (Sector Novedoso / Personalizado)</option>
+                    </select>
                 </div>
 
+                <!-- Campo dinámico para Sector Personalizado si eligen 'Otros' -->
+                <div id="campo-otro-sector-container" class="hidden">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-1 ml-1">
+                        Especifica el Sector Novedoso
+                    </label>
+                    <input type="text" id="sector_otro_input" placeholder="Ej: Escuela de Buceo, Floristería de Autor..." class="input-cyber border-emerald-500/40">
+                </div>
+
+                <!-- Cuestionario de Fricciones Guiadas -->
+                <div id="cuestionario-sector-container" class="hidden space-y-2 p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-emerald-400">
+                            <i class="fa-solid fa-crosshairs mr-1"></i> Fricciones Detectadas en el Pitch
+                        </span>
+                        <span class="text-[9px] text-gray-400">Toca para marcar</span>
+                    </div>
+                    <p class="text-[9px] text-gray-400 leading-tight">Selecciona las dificultades reales que reconoce el dueño durante la conversación:</p>
+                    
+                    <div id="chips-fricciones" class="flex flex-wrap gap-1.5 pt-1"></div>
+
+                    <div class="pt-2">
+                        <input type="text" id="fricciones_extra" placeholder="Otra fricción específica comentada por el cliente..." class="input-cyber text-[11px] py-2">
+                    </div>
+                </div>
+
+                <!-- Paleta de Colores con Previsualizador LED -->
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
-                        Branding, Paleta de Colores y Redes
+                        Identidad Visual / Paleta de Colores
                     </label>
-                    <input type="text" id="branding" name="branding" placeholder="Ej: Colores Hex (#C4C4C4), IG @comercio..." class="input-cyber" required>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="branding" name="branding" placeholder="Ej: Azul eléctrico y blanco titanio / #0070F3" class="input-cyber" required>
+                        <input type="color" id="color-picker" value="#00E5FF" class="h-10 w-12 rounded-xl bg-transparent cursor-pointer border border-white/10">
+                    </div>
+                    <p class="text-[9px] text-gray-400 mt-1 ml-1">Toca el cuadro para elegir el color clave que iluminará la landing del cliente.</p>
                 </div>
 
+                <!-- Logo / Observaciones Extra -->
                 <div>
                     <label class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 ml-1">
                         URL del Logo / Observaciones Extra
                     </label>
-                    <input type="text" id="logo_extra" name="logo_extra" placeholder="Ej: Link al logo en Web/Drive o notas..." class="input-cyber">
+                    <input type="text" id="logo_extra" name="logo_extra" placeholder="Ej: Enlace a su web, IG o enlace a Drive..." class="input-cyber">
                 </div>
 
                 <button type="submit" id="btn-enviar" class="btn-cyber-submit mt-4">
@@ -258,11 +372,114 @@
         </main>
     </div>
 
-    <footer class="mt-6 text-center text-[10px] text-gray-500 font-bold tracking-widest uppercase">
-        Engine v2 // Desarrollado por <span style="color: var(--color-accent);" class="font-black">Studio 42</span>
+    <footer class="mt-4 mb-8 text-center text-[10px] text-gray-500 font-bold tracking-widest uppercase">
+        Engine v3 // Desarrollado por <span style="color: var(--color-accent);" class="font-black">Studio 42</span>
     </footer>
 
     <script>
+        // --- BANCO DE PREGUNTAS / FRICCIONES SEGÚN EL SECTOR ---
+        const FRICCIONES_POR_SECTOR = {
+            "Hostelería y Restauración": [
+                "Clientes piden la carta QR y no carga o está desactualizada",
+                "Falta de reseñas en Google Maps tras visitas satisfechas",
+                "Gestión de reservas saturada por llamadas y WhatsApp a deshoras",
+                "Dificultad para mostrar promociones o plato del día en vivo",
+                "Pérdida de clientes por no tener pago o propina digital ágil"
+            ],
+            "Salud y Clínicas": [
+                "Pacientes olvidan las citas o no confirman a tiempo",
+                "Miedo a reseñas negativas públicas por tiempos de espera",
+                "Llamadas constantes solo para consultar horarios y tarifas",
+                "Falta de canal directo para seguimiento post-tratamiento",
+                "Catálogo de especialidades desconocido por los propios pacientes"
+            ],
+            "Belleza y Estética": [
+                "Citas canceladas a última hora sin previo aviso",
+                "Clientes preguntan precios por mensaje privado y no reservan",
+                "Pocas valoraciones en Google respecto al volumen diario",
+                "Dificultad para mostrar portfolio de trabajos antes y después",
+                "Saturación contestando mensajes fuera del horario comercial"
+            ],
+            "Automoción y Talleres": [
+                "Clientes olvidan revisiones periódicas, ITV o cambios de aceite",
+                "Consultas repetitivas sobre el estado del vehículo en reparación",
+                "Falta de presupuestos transparentes o aprobación rápida por WhatsApp",
+                "Poco tráfico de valoraciones 5 estrellas en su ficha de Google",
+                "Pérdida de contacto con el cliente una vez entrega el coche"
+            ],
+            "Comercio y Retail": [
+                "Clientes miran en tienda pero compran online a la competencia",
+                "Poco conocimiento del catálogo completo o novedades de temporada",
+                "Dificultad para fidelizar al comprador esporádico",
+                "Falta de canal directo VIP para avisos de ofertas exclusivas",
+                "Pocas reseñas de clientes locales satisfechos"
+            ],
+            "Servicios Profesionales": [
+                "Fuga de contactos calificados por no responder en los primeros minutos",
+                "Dificultad para transmitir confianza técnica antes de la primera reunión",
+                "Falta de un enlace directo con vCard que se guarde en la agenda",
+                "Procesos manuales para solicitar presupuestos o información",
+                "Presencia en Google desactualizada frente a nuevos competidores"
+            ],
+            "Otros": [
+                "Fuga de contactos que no se convierten en clientes recurrentes",
+                "Falta de presencia digital interactiva en el punto de encuentro",
+                "Procesos manuales que quitan tiempo a la operativa principal",
+                "Dificultad para recibir reseñas positivas de forma automática",
+                "Falta de un canal ágil y directo de contacto y fidelización",
+                "El cliente no percibe el valor exclusivo que ofrece el negocio"
+            ]
+        };
+
+        // --- SISTEMA DE AUDIO AMBIENTAL CON GESTIÓN DE AUTOPLAY Y APAGADO ---
+        const audio = document.getElementById('audio-ambiente');
+        const btnAudio = document.getElementById('btn-audio-toggle');
+        const audioIcon = document.getElementById('audio-icon');
+        let audioIniciado = false;
+
+        function reproducirAudio() {
+            audio.volume = 0.35;
+            audio.play().then(() => {
+                audioIniciado = true;
+                btnAudio.classList.add('playing');
+                audioIcon.className = "fa-solid fa-volume-high text-sm";
+            }).catch(() => {});
+        }
+
+        function apagarAudioInmediato() {
+            if (audio && !audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+                btnAudio.classList.remove('playing');
+                audioIcon.className = "fa-solid fa-volume-xmark text-sm";
+            }
+        }
+
+        btnAudio.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (audio.paused) {
+                reproducirAudio();
+            } else {
+                apagarAudioInmediato();
+            }
+        });
+
+        // Inicio tras el primer toque en pantalla
+        window.addEventListener('touchstart', () => {
+            if (!audioIniciado) reproducirAudio();
+        }, { once: true });
+        window.addEventListener('click', () => {
+            if (!audioIniciado) reproducirAudio();
+        }, { once: true });
+
+        // Apagado al cambiar de pestaña, minimizar o salir de la página
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) apagarAudioInmediato();
+        });
+        window.addEventListener('pagehide', apagarAudioInmediato);
+        window.addEventListener('beforeunload', apagarAudioInmediato);
+
+        // --- MANEJO DE CLOSER ID Y PALETA MELINA ---
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const closerCod = urlParams.get('cod') || urlParams.get('closer') || 'MEL42';
@@ -277,6 +494,63 @@
             }
         });
 
+        // --- DESPLIEGUE DINÁMICO DE SECTOR Y PREGUNTAS GUIADAS ---
+        const sectorSelect = document.getElementById('sector_select');
+        const campoOtroContainer = document.getElementById('campo-otro-sector-container');
+        const sectorOtroInput = document.getElementById('sector_otro_input');
+        const cuestionarioContainer = document.getElementById('cuestionario-sector-container');
+        const chipsContainer = document.getElementById('chips-fricciones');
+
+        sectorSelect.addEventListener('change', () => {
+            const sector = sectorSelect.value;
+            chipsContainer.innerHTML = '';
+
+            // Si selecciona "Otros", mostrar campo de texto para especificar
+            if (sector === 'Otros') {
+                campoOtroContainer.classList.remove('hidden');
+                sectorOtroInput.required = true;
+            } else {
+                campoOtroContainer.classList.add('hidden');
+                sectorOtroInput.required = false;
+                sectorOtroInput.value = '';
+            }
+            
+            if (FRICCIONES_POR_SECTOR[sector]) {
+                cuestionarioContainer.classList.remove('hidden');
+                
+                FRICCIONES_POR_SECTOR[sector].forEach(friccion => {
+                    const chip = document.createElement('div');
+                    chip.className = 'chip-friccion';
+                    chip.innerHTML = `<i class="fa-regular fa-square"></i> <span>${friccion}</span>`;
+                    
+                    chip.addEventListener('click', () => {
+                        chip.classList.toggle('active');
+                        const icon = chip.querySelector('i');
+                        if (chip.classList.contains('active')) {
+                            icon.className = "fa-solid fa-square-check";
+                        } else {
+                            icon.className = "fa-regular fa-square";
+                        }
+                    });
+                    
+                    chipsContainer.appendChild(chip);
+                });
+            } else {
+                cuestionarioContainer.classList.add('hidden');
+            }
+        });
+
+        // --- COLOR PICKER INTERACTIVO ---
+        const colorPicker = document.getElementById('color-picker');
+        const inputBranding = document.getElementById('branding');
+
+        colorPicker.addEventListener('input', (e) => {
+            const hex = e.target.value;
+            inputBranding.value = `${hex} // Tono Neón Corporativo`;
+            document.documentElement.style.setProperty('--color-glow', hex + '88');
+        });
+
+        // --- ENVÍO Y COMPILACIÓN HACIA APPS SCRIPT ---
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsKQpR9iWP4HnrBHt31Y4hNTvFDszp0GUITguP6KslwK6gfum8ODKupoJB6imDQnMn/exec";
 
         const form = document.getElementById('form-diagnostico');
@@ -284,7 +558,7 @@
         const mensajeEstado = document.getElementById('mensaje-estado');
 
         function iniciarCuentaRegresiva(urlDestino) {
-            let segundosRestantes = 35; // Tiempo óptimo para propagación en GitHub Pages móvil
+            let segundosRestantes = 35;
 
             mensajeEstado.className = "mt-4 p-5 rounded-2xl text-center text-xs font-black bg-white/10 border border-white/20 text-white space-y-3";
             mensajeEstado.innerHTML = `
@@ -312,7 +586,7 @@
                         btnCuenta.innerHTML = "👉 ¡Ver Demo en Vivo!";
                         
                         btnCuenta.onclick = () => {
-                            // Cache-Busting: fuerza al navegador móvil a traer el archivo fresco
+                            apagarAudioInmediato();
                             const separador = urlDestino.includes('?') ? '&' : '?';
                             const urlFresca = `${urlDestino}${separador}_v=${Date.now()}`;
                             window.open(urlFresca, '_blank');
@@ -329,14 +603,28 @@
             btnEnviar.innerText = "Compilando Phygital Engine...";
             btnEnviar.style.opacity = "0.7";
 
-            const closerVal     = (document.getElementById('closer_id').value || 'MEL42').trim();
-            const nombreSector  = document.getElementById('nombre_sector').value.trim();
-            const friccionesVal = document.getElementById('fricciones').value.trim();
+            const closerVal      = (document.getElementById('closer_id').value || 'MEL42').trim();
+            const nombreComercio = document.getElementById('nombre_comercio').value.trim();
+            let sectorVal        = document.getElementById('sector_select').value;
+            
+            // Si eligió 'Otros', tomamos el valor del campo personalizado
+            if (sectorVal === 'Otros') {
+                const sectorEspecifico = sectorOtroInput.value.trim();
+                sectorVal = sectorEspecifico ? `Otros (${sectorEspecifico})` : 'Sector Novedoso';
+            }
+            
+            const chipsActivos = Array.from(document.querySelectorAll('.chip-friccion.active span')).map(s => s.innerText);
+            const friccionExtra = document.getElementById('fricciones_extra').value.trim();
+            if (friccionExtra) chipsActivos.push(friccionExtra);
+
+            const textoFricciones = chipsActivos.length > 0 ? chipsActivos.join(" | ") : "Optimización integral de presencia y reservas online";
+
             const brandingVal   = document.getElementById('branding').value.trim();
             const logoExtraVal  = document.getElementById('logo_extra').value.trim();
 
-            const nombreComercial = nombreSector.split('/')[0].trim();
-            const slugCalculado = nombreComercial.toLowerCase()
+            const campoNombreSector = `${nombreComercio} / ${sectorVal}`;
+
+            const slugCalculado = nombreComercio.toLowerCase()
                 .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .replace(/[^a-z0-9\s-]/g, '')
                 .trim()
@@ -344,8 +632,8 @@
 
             const params = new URLSearchParams();
             params.append("closer_id", closerVal);
-            params.append("nombre_sector", nombreSector);
-            params.append("fricciones", friccionesVal);
+            params.append("nombre_sector", campoNombreSector);
+            params.append("fricciones", textoFricciones);
             params.append("branding", brandingVal);
             params.append("logo_extra", logoExtraVal);
 
@@ -364,6 +652,8 @@
                 const closerActual = document.getElementById('closer_id').value;
                 form.reset();
                 document.getElementById('closer_id').value = closerActual;
+                cuestionarioContainer.classList.add('hidden');
+                campoOtroContainer.classList.add('hidden');
             })
             .catch(error => {
                 console.warn('Respuesta vía fallback seguro:', error);
