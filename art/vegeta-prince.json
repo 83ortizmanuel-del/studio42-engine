@@ -1,8 +1,9 @@
 {
   "obra_id": "ART-ANIME-001",
+  "tipo_producto": "ART",
+  "categoria": "Anime",
   "titulo_obra": "Vegeta // Orgullo del Príncipe",
-  "personaje": "Vegeta (Super Saiyan)",
-  "serie_anime": "Dragon Ball Z / Super",
+  "subtitulo": "Vegeta (Super Saiyan) // Dragon Ball Z",
   "edicion_limitada": "Edición Limitada // Pieza 01 de 25",
   "artista": "Studio 42 Art Division",
   "fecha_creacion": "Agosto, 2026",
@@ -16,30 +17,29 @@
 
   "imagen_lienzo": "vegeta-majin.png",
   
-  "audio_experience": {
-    "titulo_track": "Banda Sonora de la Obra",
-    "voice_over_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    "transcripcion_lore": "Cada trazo de esta obra rinde homenaje al orgullo inquebrantable de la estirpe Saiyan. Una pieza diseñada para dominar el espacio y conectar con el espíritu del guerrero."
+  "media": {
+    "mockup": "vegeta-majin.png",
+    "audio_track": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "wallpaper_download": "vegeta-majin.png"
   },
 
-  "voces_personaje": {
-    "frase_texto": "«¡Servirás de alfombra para el Príncipe de los Saiyans!»",
-    "audio_espanol": "",
-    "audio_japones": ""
+  "modulo_especifico": {
+    "rango_ki": "9.999.999+ (Modo Berserker)",
+    "tecnica_maestra": "Final Flash // Big Bang Attack",
+    "frase": "«¡Servirás de alfombra para el Príncipe de los Saiyans!»"
   },
 
-  "certificado_autenticidad": {
-    "codigo_verificacion": "S42-BLOCK-7708-VEGETA",
+  "certificado": {
+    "codigo": "S42-BLOCK-7708-VEGETA",
     "estado": "ORIGINAL VERIFICADO POR NFC",
-    "propietario_registrado": "Coleccionista VIP #01"
+    "propietario": "Coleccionista VIP #01"
   },
 
   "easter_eggs": {
     "wallpaper_4k_download": "vegeta-majin.png"
   },
 
-  "club_coleccionistas": {
-    "mensaje": "Registra este lienzo oficial a tu nombre para reclamar tu certificado impreso.",
-    "whatsapp_artista": "https://wa.me/34600000000?text=Hola,%20quiero%20registrar%20mi%20cuadro%20Phygital%20de%20Vegeta"
+  "enlaces": {
+    "whatsapp_vip": "https://wa.me/34600000000?text=Hola,%20quiero%20registrar%20mi%20cuadro%20Phygital%20de%20Vegeta"
   }
 }
