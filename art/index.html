@@ -132,9 +132,7 @@
             <p id="obra-sub" class="text-xs font-bold uppercase tracking-widest mt-1 mb-3" style="color: var(--color-primario);"></p>
 
             <!-- CONTENEDOR POLIMÓRFICO: SE TRANSFORMA SEGÚN LA CATEGORÍA -->
-            <div id="modulo-polimorfico" class="mb-4">
-                <!-- Se inyecta la ficha de Fighter, Anime, Comics, Cartoon o Música -->
-            </div>
+            <div id="modulo-polimorfico" class="mb-4"></div>
 
             <!-- FRASE ICÓNICA O LORE -->
             <div id="contenedor-lore" class="hidden bg-white/5 p-3 rounded-2xl border border-white/10 mb-4 text-center">
@@ -185,17 +183,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            // Soporta ?cod= o ?id=
-            const obraId = urlParams.get('cod') || urlParams.get('id') || 'poatan';
+            const obraId = urlParams.get('cod') || urlParams.get('id') || 'vegeta-prince';
 
             try {
-                // Cache-busting para obligar la lectura fresca
+                // Forzar lectura fresca evitando caché de GitHub Pages
                 const response = await fetch(`./${obraId}.json?t=${Date.now()}`);
                 if (!response.ok) throw new Error("JSON de pieza no encontrado");
                 
                 const data = await response.json();
 
-                // 1. Inyección de Paleta
+                // 1. Inyección de Paleta Cromática
                 if (data.estetica) {
                     if (data.estetica.color_primario) document.documentElement.style.setProperty('--color-primario', data.estetica.color_primario);
                     if (data.estetica.color_acento) document.documentElement.style.setProperty('--color-acento', data.estetica.color_acento);
@@ -203,43 +200,62 @@
                     if (data.estetica.aura_neon) document.documentElement.style.setProperty('--aura-neon', data.estetica.aura_neon);
                 }
 
-                // 2. Cabeceras
+                // 2. Cabeceras corregidas
+                const subTexto = data.subtitulo || data.personaje || '';
+                const catTexto = data.categoria || data.serie_anime || '';
                 document.getElementById('obra-titulo').innerText = data.titulo_obra || "Sin Título";
-                document.getElementById('obra-sub').innerText = `${data.subtitulo \vert{}\vert{} data.personaje \vert{}\vert{} ''} //${data.categoria || ''}`;
+                document.getElementById('obra-sub').innerText = `${subTexto} // ${catTexto}`;
                 document.getElementById('obra-edicion').innerText = data.edicion_limitada || "Edición Exclusiva";
 
-                // Sensor Tag
-                if (data.tipo_producto === 'WEAR') {
-                    document.getElementById('nfc-sensor-tag').innerText = "NFC Tejido al Pecho";
-                } else if (data.tipo_producto === 'ART') {
-                    document.getElementById('nfc-sensor-tag').innerText = "NFC Placa Bastidor";
-                }
+                // Tipo de sensor según producto
+                const tipoProd = (data.tipo_producto || 'ART').toUpperCase();
+                document.getElementById('nfc-sensor-tag').innerText = tipoProd === 'WEAR' ? "NFC Tejido al Pecho" : "NFC Placa Bastidor";
 
-                // 3. Media: YouTube vs Imagen
+                // 3. Carga Robusta de Media (YouTube vs Imagen)
                 if (data.media && data.media.youtube_embed) {
                     const frame = document.getElementById('video-frame');
                     frame.src = data.media.youtube_embed;
                     document.getElementById('contenedor-video').classList.remove('hidden');
                     document.getElementById('contenedor-img').classList.add('hidden');
-                } else if (data.imagen_lienzo || (data.media && data.media.mockup)) {
-                    const imgSrc = data.imagen_lienzo || data.media.mockup;
+                } else {
+                    const imgUrl = data.imagen_lienzo || (data.media && data.media.mockup);
                     const imgEl = document.getElementById('obra-img');
                     const loaderEl = document.getElementById('loader-img');
-                    imgEl.src = imgSrc;
-                    imgEl.onload = () => {
-                        imgEl.classList.remove('hidden');
-                        if (loaderEl) loaderEl.classList.add('hidden');
-                    };
+
+                    if (imgUrl && imgEl) {
+                        let rutaFinal = imgUrl;
+                        if (!rutaFinal.startsWith('http') && !rutaFinal.startsWith('/') && !rutaFinal.startsWith('./')) {
+                            rutaFinal = './' + rutaFinal;
+                        }
+
+                        const mostrarImagen = () => {
+                            imgEl.classList.remove('hidden');
+                            if (loaderEl) loaderEl.classList.add('hidden');
+                        };
+
+                        imgEl.onload = mostrarImagen;
+                        imgEl.onerror = () => {
+                            if (loaderEl) loaderEl.innerText = "Error al cargar lienzo";
+                        };
+                        imgEl.src = rutaFinal;
+
+                        // Si el navegador ya la tenía en caché
+                        if (imgEl.complete && imgEl.naturalWidth > 0) {
+                            mostrarImagen();
+                        }
+                    }
                 }
 
                 // Audio Track auxiliar
-                if (data.media && data.media.audio_track) {
+                const audioUrl = (data.media && data.media.audio_track) || 
+                                 (data.audio_experience && data.audio_experience.voice_over_url);
+                if (audioUrl) {
                     const audioEl = document.getElementById('obra-audio');
-                    audioEl.src = data.media.audio_track;
+                    audioEl.src = audioUrl;
                     document.getElementById('contenedor-audio').classList.remove('hidden');
                 }
 
-                // 4. Inyección del Módulo Polimórfico según Categoría
+                // 4. Inyección del Módulo Polimórfico
                 renderModuloPolimorfico(data);
 
                 // 5. Frase / Lore
@@ -251,52 +267,60 @@
                 }
 
                 // 6. Certificado
-                if (data.certificado) {
-                    document.getElementById('cert-codigo').innerText = data.certificado.codigo || 'S42-VERIFIED';
-                    document.getElementById('cert-dueno').innerText = data.certificado.propietario || 'Coleccionista VIP';
+                const cert = data.certificado || data.certificado_autenticidad;
+                if (cert) {
+                    document.getElementById('cert-codigo').innerText = cert.codigo || cert.codigo_verificacion || 'S42-VERIFIED';
+                    document.getElementById('cert-dueno').innerText = cert.propietario || cert.propietario_registrado || 'Coleccionista VIP';
                 }
 
                 // 7. Enlace hacia The Vault (Filtrado Inteligente)
-                const linea = (data.tipo_producto || 'wear').toLowerCase();
-                const categoria = (data.categoria || 'anime').toLowerCase().replace(/\s+/g, '');
+                const linea = tipoProd.toLowerCase();
+                const categoriaFiltro = (data.categoria || 'anime').toLowerCase().replace(/\s+/g, '');
                 const btnVault = document.getElementById('btn-vault');
                 const btnVaultText = document.getElementById('btn-vault-text');
                 
-                btnVault.href = `../vault/?linea=${linea}&universo=${categoria}`;
+                btnVault.href = `../vault/?linea=${linea}&universo=${categoriaFiltro}`;
                 btnVaultText.innerText = `Ver Más en The Vault // ${data.categoria || 'Colecciones'}`;
 
                 // 8. Enlaces VIP
                 const btnWall = document.getElementById('btn-wallpaper');
                 const wallUrl = (data.easter_eggs && data.easter_eggs.wallpaper_4k_download) || (data.media && data.media.wallpaper_download);
                 if (wallUrl) {
-                    btnWall.href = wallUrl;
+                    let wallRuta = wallUrl;
+                    if (!wallRuta.startsWith('http') && !wallRuta.startsWith('/') && !wallRuta.startsWith('./')) {
+                        wallRuta = './' + wallRuta;
+                    }
+                    btnWall.href = wallRuta;
                     btnWall.setAttribute('download', wallUrl);
                 } else {
                     btnWall.classList.add('hidden');
                 }
 
                 const btnWp = document.getElementById('btn-whatsapp');
-                const wpUrl = (data.club_coleccionistas && data.club_coleccionistas.whatsapp_artista) || (data.enlaces && data.enlaces.whatsapp_vip);
+                const wpUrl = (data.club_coleccionistas && data.club_coleccionistas.whatsapp_artista) || 
+                              (data.enlaces && data.enlaces.whatsapp_vip);
                 if (wpUrl) {
                     btnWp.href = wpUrl;
                 }
 
             } catch (err) {
                 console.error("Error al desplegar la pieza:", err);
+                const loaderEl = document.getElementById('loader-img');
+                if (loaderEl) loaderEl.innerText = "Pieza no encontrada o error de red";
             }
         });
 
         function renderModuloPolimorfico(data) {
             const container = document.getElementById('modulo-polimorfico');
-            const cat = (data.categoria || '').toLowerCase();
+            const cat = ((data.categoria || '') + ' ' + (data.serie_anime || '')).toLowerCase();
             const mod = data.modulo_especifico || {};
 
             if (cat.includes('fight') || cat.includes('box') || cat.includes('mma')) {
-                // MUTACIÓN 1: TALE OF THE TAPE DE PELEADOR
+                // TALE OF THE TAPE DE PELEADOR
                 container.innerHTML = `
                     <div class="bg-black/80 border border-amber-500/40 p-3.5 rounded-2xl text-left space-y-2 font-mono shadow-lg">
                         <div class="flex justify-between items-center border-b border-white/10 pb-1.5">
-                            <span class="text-[10px] text-zinc-400 uppercase font-bold"><i class="fa-solid fa-trophy text-amber-400 mr-1"></i> Récord Oficial:</span>
+                            <span class="text-[10px] text-zinc-400 uppercase font-bold"><i class="fa-solid fa-trophy text-amber-400 mr-1"></i> Récord:</span>
                             <span class="text-xs text-amber-400 font-black">${mod.record || 'Invicto'}</span>
                         </div>
                         <div class="flex justify-between items-center border-b border-white/10 pb-1.5">
@@ -309,24 +333,24 @@
                         </div>
                     </div>
                 `;
-            } else if (cat.includes('anime')) {
-                // MUTACIÓN 2: MEDIDOR DE KI / CHAKRA
+            } else if (cat.includes('anime') || cat.includes('dragon ball')) {
+                // MEDIDOR DE KI / ENERGÍA
                 container.innerHTML = `
                     <div class="bg-blue-950/20 border border-blue-500/40 p-3.5 rounded-2xl text-center space-y-2">
                         <div class="flex justify-between text-[10px] font-black uppercase tracking-widest text-blue-400">
                             <span><i class="fa-solid fa-fire text-amber-400 mr-1"></i> Nivel de Energía</span>
-                            <span>${mod.rango_ki || '9.999.999+'}</span>
+                            <span>${mod.rango_ki || '∞ (Ki Ilimitado)'}</span>
                         </div>
                         <div class="w-full bg-black/60 rounded-full h-2.5 overflow-hidden border border-blue-500/30">
-                            <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-amber-400 h-full w-[94%] animate-pulse"></div>
+                            <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-amber-400 h-full w-[95%] animate-pulse"></div>
                         </div>
                         <p class="text-[10px] font-bold text-zinc-300 uppercase tracking-wider pt-1">
-                            Técnica Maestra: <span class="text-white">${mod.tecnica_maestra || 'Poder Definitivo'}</span>
+                            Técnica Maestra: <span class="text-white">${mod.tecnica_maestra || 'Ataque Definitivo'}</span>
                         </p>
                     </div>
                 `;
             } else if (cat.includes('cartoon')) {
-                // MUTACIÓN 3: TELEVISOR RETRO 90S NOSTALGIA
+                // TV RETRO 90S
                 container.innerHTML = `
                     <div class="bg-zinc-900 border-2 border-yellow-400 p-3.5 rounded-2xl text-center shadow-[0_0_20px_rgba(250,204,21,0.25)]">
                         <span class="text-[9px] font-black uppercase px-2.5 py-0.5 bg-yellow-400 text-black rounded-full mb-1.5 inline-block">
@@ -336,7 +360,7 @@
                     </div>
                 `;
             } else if (cat.includes('comic') || cat.includes('marvel') || cat.includes('dc')) {
-                // MUTACIÓN 4: VARIANTE MULTIVERSAL DE CÓMIC
+                // VARIANTE MULTIVERSAL
                 container.innerHTML = `
                     <div class="bg-red-950/30 border border-red-500/40 p-3.5 rounded-2xl text-left space-y-1">
                         <span class="text-[9px] font-black text-red-400 uppercase tracking-widest flex items-center gap-1">
@@ -347,7 +371,7 @@
                     </div>
                 `;
             } else if (cat.includes('music') || cat.includes('música')) {
-                // MUTACIÓN 5: MASTER TRACK DE MÚSICA
+                // MASTER RECORD
                 container.innerHTML = `
                     <div class="bg-amber-950/20 border border-amber-500/40 p-3.5 rounded-2xl text-left space-y-1">
                         <span class="text-[9px] font-black text-amber-400 uppercase tracking-widest flex items-center gap-1">
