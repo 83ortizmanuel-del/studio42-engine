@@ -1,0 +1,53 @@
+{
+  "nombre": "BARBERÍA ALEJO",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Belleza y Estética",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0A0F1D",
+  "colorAcento": "#982abc",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Reserva de Cita & Precios",
+          "descripcion": "Consulta tarifas y reserva tu turno al instante",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20consultar%20precios%20y%20reservar%20mi%20cita",
+          "destacado": true
+        },
+        {
+          "nombre": "Portfolio Antes y Después",
+          "descripcion": "Mira nuestros trabajos de corte y arreglo de barba",
+          "icono": "fa-solid fa-scissors",
+          "url": "https://instagram.com"
+        },
+        {
+          "nombre": "Horarios y FAQ",
+          "descripcion": "Resuelve tus dudas y política de cancelaciones 24/7",
+          "icono": "fa-solid fa-clock",
+          "url": "https://wa.me/34600000000?text=Hola,%20tengo%20una%20consulta%20sobre%20horarios%20y%20citas"
+        },
+        {
+          "nombre": "¿Donde aparque?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
