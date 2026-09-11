@@ -1,0 +1,53 @@
+{
+  "nombre": "CEJAS CRISTINA",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Belleza y Estética",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0A0F1D",
+  "colorAcento": "#FF00FF",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Reserva Cita 24/7 (Cejas al Instante)",
+          "descripcion": "Gestiona tu turno inmediato y política de cancelación",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita%20para%20cejas",
+          "destacado": true
+        },
+        {
+          "nombre": "Ver Carta de Precios & Tratamientos",
+          "descripcion": "Consulta todas las tarifas sin esperas por mensaje",
+          "icono": "fa-solid fa-list-check",
+          "url": "https://wa.me/34600000000?text=Hola,%20quiero%20informacion%20sobre%20los%20precios"
+        },
+        {
+          "nombre": "Portfolio Antes / Después",
+          "descripcion": "Descubre nuestros resultados de diseño de mirada",
+          "icono": "fa-solid fa-wand-magic-sparkles",
+          "url": "https://instagram.com"
+        },
+        {
+          "nombre": "¿Donde aparque?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posicion GPS de tu vehiculo",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro telefono y datos a tus contactos",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinion Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia"
+    }
+  ]
+}
