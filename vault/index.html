@@ -207,8 +207,8 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <div class="bg-black/60 rounded-2xl p-3 border border-white/10 mb-3 flex items-center justify-center min-h-[190px]">
-                <img id="modal-img" src="" class="max-h-48 object-contain" alt="Mockup">
+            <div id="modal-img-container" class="bg-black/60 rounded-2xl p-3 border border-white/10 mb-3 flex items-center justify-center min-h-[190px]">
+                <img id="modal-img" src="" class="max-h-48 object-contain hidden" alt="Mockup">
             </div>
 
             <div id="modal-badge" class="inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2"></div>
@@ -233,7 +233,7 @@
     <script>
         const WHATSAPP_NUM = "34643186453";
 
-        // CATÁLOGO MAESTRO CON RUTAS DIFERENCIADAS
+        // CATÁLOGO MAESTRO
         const PRODUCTOS = [
             // ==========================================
             // --- ART (CUADROS / LIENZOS PHYGITAL) ---
@@ -270,7 +270,7 @@
                 edicion: "Pieza Única 01/01",
                 precio: "160,00 €",
                 estado: "PROXIMO",
-                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%23111827'/><circle cx='150' cy='130' r='60' fill='%23EAB308' opacity='0.2'/><text x='50%25' y='135' font-size='32' font-family='sans-serif' font-weight='900' fill='%23FBBF24' text-anchor='middle'>FIGHTERS</text><text x='50%25' y='170' font-size='16' font-family='sans-serif' font-weight='700' fill='%239CA3AF' text-anchor='middle'>CUADRO MUSEO 01/01</text></svg>",
+                imagen: "",
                 descripcion: "Cuadro de edición museo con placa de titanio y chip NFC. Acceso al Fighter Pass VIP."
             },
             {
@@ -282,7 +282,7 @@
                 precio: "110,00 €",
                 estado: "VENDIDO",
                 propietario: "Coleccionista VIP #01",
-                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2318181B'/><circle cx='150' cy='130' r='60' fill='%23A855F7' opacity='0.2'/><text x='50%25' y='135' font-size='32' font-family='sans-serif' font-weight='900' fill='%23C084FC' text-anchor='middle'>CARTOON</text><text x='50%25' y='170' font-size='16' font-family='sans-serif' font-weight='700' fill='%239CA3AF' text-anchor='middle'>LIENZO RETRO RESINA</text></svg>",
+                imagen: "",
                 descripcion: "Lienzo acabado en resina brillo retro. Certificado por NFC."
             },
 
@@ -297,7 +297,7 @@
                 edicion: "Edición Limitada 50 Piezas",
                 precio: "49,00 €",
                 estado: "DISPONIBLE",
-                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%2327272A'/><text x='50%25' y='145' font-size='24' font-family='sans-serif' font-weight='900' fill='%23EAB308' text-anchor='middle'>CHAMA 260GSM</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23A1A1AA' text-anchor='middle'>NFC SMART TEE</text></svg>",
+                imagen: "",
                 descripcion: "Camiseta oversize 260 GSM con chip NFC en el pecho. Desbloquea su Tale of the Tape oficial, récord de KOs y el grito de batalla en vídeo."
             },
             {
@@ -308,7 +308,7 @@
                 edicion: "Edición 25 Piezas",
                 precio: "49,00 €",
                 estado: "PROXIMO",
-                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%2327272A'/><text x='50%25' y='145' font-size='24' font-family='sans-serif' font-weight='900' fill='%23EF4444' text-anchor='middle'>MATADOR</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23A1A1AA' text-anchor='middle'>EDICIÓN 25 PCS</text></svg>",
+                imagen: "",
                 descripcion: "Tributo al campeón invicto. Incluye NFC vinculado a su documental de preparación y pesajes."
             },
             {
@@ -320,7 +320,7 @@
                 precio: "45,00 €",
                 estado: "VENDIDO",
                 propietario: "Coleccionista Privado (Tierra-928)",
-                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%231E1B4B'/><text x='50%25' y='145' font-size='22' font-family='sans-serif' font-weight='900' fill='%2338BDF8' text-anchor='middle'>TIERRA-928</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23818CF8' text-anchor='middle'>NEON REFLECTIVE</text></svg>",
+                imagen: "",
                 descripcion: "Corte boxy fit con tintas reflectantes y designación de variante multiversal. Agotado en el drop inicial."
             },
             {
@@ -331,7 +331,7 @@
                 edicion: "Edición 20 Piezas",
                 precio: "42,00 €",
                 estado: "DISPONIBLE",
-                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%233F2C06'/><text x='50%25' y='145' font-size='22' font-family='sans-serif' font-weight='900' fill='%23FACC15' text-anchor='middle'>RETRO 90S</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23FDE047' text-anchor='middle'>FRENCH PHRASE NFC</text></svg>",
+                imagen: "",
                 descripcion: "Camiseta retro nostalgia con chip que reproduce la intro y la frase 'Omelette du fromage' en tu móvil."
             },
             {
@@ -342,7 +342,7 @@
                 edicion: "Edición 40 Piezas",
                 precio: "49,00 €",
                 estado: "DISPONIBLE",
-                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%231C1917'/><text x='50%25' y='145' font-size='22' font-family='sans-serif' font-weight='900' fill='%23F59E0B' text-anchor='middle'>2PAC MASTER</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23D97706' text-anchor='middle'>HEARTBEAT NFC</text></svg>",
+                imagen: "",
                 descripcion: "Tributo en algodón peinado. El chip NFC reproduce el videoclip oficial directamente al apoyar el teléfono en el corazón."
             }
         ];
@@ -353,7 +353,6 @@
         function cambiarLinea(linea) {
             lineaActual = linea.toUpperCase();
 
-            // Estilos de los botones de pestañas
             document.getElementById('tab-art').className = lineaActual === 'ART'
                 ? 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all btn-line-active'
                 : 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
@@ -366,7 +365,6 @@
                 ? 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all btn-line-active'
                 : 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
 
-            // Actualizar el título dinámico
             if (lineaActual === 'ART') {
                 document.getElementById('catalogo-titulo').innerText = 'Galería Art (Cuadros)';
             } else if (lineaActual === 'WEAR') {
@@ -381,7 +379,6 @@
         function filtrarUniverso(universo) {
             universoActual = universo.toLowerCase();
 
-            // Si el usuario pulsa "todos", desbloquear la vista para que muestre todo el inventario
             if (universoActual === 'todos') {
                 lineaActual = 'TODOS';
                 document.getElementById('tab-art').className = 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
@@ -448,14 +445,29 @@
                     badgeText = 'PRÓXIMO';
                 }
 
+                // Render de media: Imagen real o Placeholder técnico
+                let mediaElement = '';
+                if (prod.imagen && prod.imagen.trim() !== '') {
+                    mediaElement = `<img src="${prod.imagen}" class="max-h-28 object-contain" alt="${prod.titulo}">`;
+                } else {
+                    const iconClass = prod.tipo === 'WEAR' ? 'fa-shirt text-amber-500/70' : 'fa-palette text-blue-500/70';
+                    mediaElement = `
+                        <div class="flex flex-col items-center justify-center py-5 space-y-1.5 text-center">
+                            <i class="fa-solid ${iconClass} text-3xl"></i>
+                            <span class="text-[9px] font-mono font-bold tracking-widest text-zinc-400 uppercase">Drop Oficial</span>
+                            <span class="text-[8px] font-mono text-zinc-600 uppercase">Studio 42 Engine</span>
+                        </div>
+                    `;
+                }
+
                 const card = document.createElement('div');
                 card.className = 'bg-black/60 rounded-2xl border border-white/10 p-3 text-left relative overflow-hidden flex flex-col justify-between cursor-pointer hover:border-white/30 transition shadow-lg';
                 card.onclick = () => abrirModal(prod);
 
                 card.innerHTML = `
                     ${overlayVendido}
-                    <div class="relative bg-black/40 rounded-xl p-2 mb-2 flex items-center justify-center min-h-[120px]">
-                        <img src="${prod.imagen}" class="max-h-28 object-contain" alt="${prod.titulo}" onerror="this.onerror=null; this.src='https://placehold.co/200x200/111111/ffffff?text=Studio+42';">
+                    <div class="relative bg-black/40 rounded-xl p-2 mb-2 flex items-center justify-center min-h-[120px] border border-white/5">
+                        ${mediaElement}
                     </div>
                     <div>
                         <div class="flex items-center justify-between mb-1">
@@ -471,7 +483,28 @@
         }
 
         function abrirModal(prod) {
-            document.getElementById('modal-img').src = prod.imagen;
+            const container = document.getElementById('modal-img-container');
+            const imgEl = document.getElementById('modal-img');
+            const fallbackPrevio = document.getElementById('modal-fallback-box');
+            if (fallbackPrevio) fallbackPrevio.remove();
+
+            if (prod.imagen && prod.imagen.trim() !== '') {
+                imgEl.src = prod.imagen;
+                imgEl.classList.remove('hidden');
+            } else {
+                imgEl.classList.add('hidden');
+                const placeholder = document.createElement('div');
+                placeholder.id = 'modal-fallback-box';
+                placeholder.className = 'py-8 flex flex-col items-center justify-center text-center';
+                const iconClass = prod.tipo === 'WEAR' ? 'fa-shirt text-amber-500/70' : 'fa-palette text-blue-500/70';
+                placeholder.innerHTML = `
+                    <i class="fa-solid ${iconClass} text-5xl mb-2"></i>
+                    <span class="text-[10px] font-mono tracking-widest uppercase text-zinc-300 font-bold">Mockup Oficial en Proceso</span>
+                    <span class="text-[8px] font-mono text-zinc-500 uppercase mt-0.5">Certificado Phygital Studio 42</span>
+                `;
+                container.appendChild(placeholder);
+            }
+
             document.getElementById('modal-titulo').innerText = prod.titulo;
             document.getElementById('modal-categoria').innerText = `${prod.tipo} // ${prod.universo.toUpperCase()} // ${prod.edicion}`;
             document.getElementById('modal-precio').innerText = prod.precio;
