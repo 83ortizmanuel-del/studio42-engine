@@ -139,13 +139,16 @@
         <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Piezas Numeradas Autenticadas por NFC</p>
     </header>
 
-    <!-- SWITCH MAESTRO: LÍNEA ART VS WEAR (POR DEFECTO ART ACTIVO) -->
-    <div class="w-full max-w-sm flex items-center bg-black/70 p-1.5 rounded-full border border-white/15 mb-4 shadow-xl backdrop-blur-md">
-        <button id="tab-art" onclick="cambiarLinea('ART')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active">
-            <i class="fa-solid fa-palette mr-1.5"></i> Art (Cuadros)
+    <!-- SWITCH MAESTRO: LÍNEA ART / WEAR / TODOS -->
+    <div class="w-full max-w-md flex items-center bg-black/70 p-1.5 rounded-full border border-white/15 mb-4 shadow-xl backdrop-blur-md">
+        <button id="tab-art" onclick="cambiarLinea('ART')" class="flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all btn-line-active">
+            <i class="fa-solid fa-palette mr-1"></i> Cuadros
         </button>
-        <button id="tab-wear" onclick="cambiarLinea('WEAR')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all">
-            <i class="fa-solid fa-shirt mr-1.5"></i> Wear (Ropa)
+        <button id="tab-wear" onclick="cambiarLinea('WEAR')" class="flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all">
+            <i class="fa-solid fa-shirt mr-1"></i> Ropa
+        </button>
+        <button id="tab-todos-linea" onclick="cambiarLinea('TODOS')" class="flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all">
+            <i class="fa-solid fa-border-all mr-1"></i> Todo
         </button>
     </div>
 
@@ -159,7 +162,7 @@
         <button onclick="filtrarUniverso('musica')" id="pill-musica" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Música / Leyendas</button>
     </div>
 
-    <!-- DROP DEL MES / PIEZA ÚNICA (CARD DE EXPECTATIVA MISTERIOSA) -->
+    <!-- DROP DEL MES / PIEZA ÚNICA -->
     <section class="w-full max-w-lg art-card-wrapper my-3">
         <div class="art-content p-5 text-center">
             <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
@@ -191,12 +194,10 @@
     <section class="w-full max-w-lg mt-4">
         <div class="flex items-center justify-between mb-3 px-1">
             <h2 id="catalogo-titulo" class="font-display text-sm font-black uppercase tracking-wider text-white">Galería Art (Cuadros)</h2>
-            <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Stock en Vivo</span>
+            <span id="catalogo-conteo" class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Stock en Vivo</span>
         </div>
 
-        <div id="grid-productos" class="grid grid-cols-2 gap-3">
-            <!-- Renderizado dinámico -->
-        </div>
+        <div id="grid-productos" class="grid grid-cols-2 gap-3"></div>
     </section>
 
     <!-- MODAL QUICK VIEW / FICHA DE CUSTODIA -->
@@ -232,10 +233,10 @@
     <script>
         const WHATSAPP_NUM = "34643186453";
 
-        // CATÁLOGO MAESTRO DE PRODUCTOS
+        // CATÁLOGO MAESTRO CON RUTAS DIFERENCIADAS
         const PRODUCTOS = [
             // ==========================================
-            // --- ART (CUADROS Y LIENZOS PHYGITAL) ---
+            // --- ART (CUADROS / LIENZOS PHYGITAL) ---
             // ==========================================
             {
                 id: "vegeta-prince",
@@ -244,7 +245,7 @@
                 titulo: "Vegeta // Orgullo del Príncipe",
                 edicion: "Edición Limitada // Pieza Única 01/01",
                 precio: "40,00 €",
-                estado: "VENDIDO", // <-- Cinta activa de adquisición privada
+                estado: "VENDIDO",
                 propietario: "Coleccionista VIP #01",
                 imagen: "/art/vegeta-majin.png",
                 descripcion: "Lienzo de galería montado sobre bastidor con chip NFC en placa metálica. Desbloquea medidor de Ki, lore en audio y certificado de autenticidad. Esta pieza única 01/01 ya forma parte de una colección privada."
@@ -269,7 +270,7 @@
                 edicion: "Pieza Única 01/01",
                 precio: "160,00 €",
                 estado: "PROXIMO",
-                imagen: "/art/vegeta-majin.png",
+                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%23111827'/><circle cx='150' cy='130' r='60' fill='%23EAB308' opacity='0.2'/><text x='50%25' y='135' font-size='32' font-family='sans-serif' font-weight='900' fill='%23FBBF24' text-anchor='middle'>FIGHTERS</text><text x='50%25' y='170' font-size='16' font-family='sans-serif' font-weight='700' fill='%239CA3AF' text-anchor='middle'>CUADRO MUSEO 01/01</text></svg>",
                 descripcion: "Cuadro de edición museo con placa de titanio y chip NFC. Acceso al Fighter Pass VIP."
             },
             {
@@ -281,7 +282,7 @@
                 precio: "110,00 €",
                 estado: "VENDIDO",
                 propietario: "Coleccionista VIP #01",
-                imagen: "/art/vegeta-majin.png",
+                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2318181B'/><circle cx='150' cy='130' r='60' fill='%23A855F7' opacity='0.2'/><text x='50%25' y='135' font-size='32' font-family='sans-serif' font-weight='900' fill='%23C084FC' text-anchor='middle'>CARTOON</text><text x='50%25' y='170' font-size='16' font-family='sans-serif' font-weight='700' fill='%239CA3AF' text-anchor='middle'>LIENZO RETRO RESINA</text></svg>",
                 descripcion: "Lienzo acabado en resina brillo retro. Certificado por NFC."
             },
 
@@ -296,7 +297,7 @@
                 edicion: "Edición Limitada 50 Piezas",
                 precio: "49,00 €",
                 estado: "DISPONIBLE",
-                imagen: "/art/vegeta-majin.png",
+                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%2327272A'/><text x='50%25' y='145' font-size='24' font-family='sans-serif' font-weight='900' fill='%23EAB308' text-anchor='middle'>CHAMA 260GSM</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23A1A1AA' text-anchor='middle'>NFC SMART TEE</text></svg>",
                 descripcion: "Camiseta oversize 260 GSM con chip NFC en el pecho. Desbloquea su Tale of the Tape oficial, récord de KOs y el grito de batalla en vídeo."
             },
             {
@@ -307,7 +308,7 @@
                 edicion: "Edición 25 Piezas",
                 precio: "49,00 €",
                 estado: "PROXIMO",
-                imagen: "/art/vegeta-majin.png",
+                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%2327272A'/><text x='50%25' y='145' font-size='24' font-family='sans-serif' font-weight='900' fill='%23EF4444' text-anchor='middle'>MATADOR</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23A1A1AA' text-anchor='middle'>EDICIÓN 25 PCS</text></svg>",
                 descripcion: "Tributo al campeón invicto. Incluye NFC vinculado a su documental de preparación y pesajes."
             },
             {
@@ -319,7 +320,7 @@
                 precio: "45,00 €",
                 estado: "VENDIDO",
                 propietario: "Coleccionista Privado (Tierra-928)",
-                imagen: "/art/vegeta-majin.png",
+                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%231E1B4B'/><text x='50%25' y='145' font-size='22' font-family='sans-serif' font-weight='900' fill='%2338BDF8' text-anchor='middle'>TIERRA-928</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23818CF8' text-anchor='middle'>NEON REFLECTIVE</text></svg>",
                 descripcion: "Corte boxy fit con tintas reflectantes y designación de variante multiversal. Agotado en el drop inicial."
             },
             {
@@ -330,7 +331,7 @@
                 edicion: "Edición 20 Piezas",
                 precio: "42,00 €",
                 estado: "DISPONIBLE",
-                imagen: "/art/vegeta-majin.png",
+                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%233F2C06'/><text x='50%25' y='145' font-size='22' font-family='sans-serif' font-weight='900' fill='%23FACC15' text-anchor='middle'>RETRO 90S</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23FDE047' text-anchor='middle'>FRENCH PHRASE NFC</text></svg>",
                 descripcion: "Camiseta retro nostalgia con chip que reproduce la intro y la frase 'Omelette du fromage' en tu móvil."
             },
             {
@@ -341,33 +342,54 @@
                 edicion: "Edición 40 Piezas",
                 precio: "49,00 €",
                 estado: "DISPONIBLE",
-                imagen: "/art/vegeta-majin.png",
+                imagen: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><rect width='100%25' height='100%25' fill='%2309090B'/><path d='M80 70 L150 40 L220 70 L200 240 L100 240 Z' fill='%231C1917'/><text x='50%25' y='145' font-size='22' font-family='sans-serif' font-weight='900' fill='%23F59E0B' text-anchor='middle'>2PAC MASTER</text><text x='50%25' y='175' font-size='14' font-family='sans-serif' font-weight='700' fill='%23D97706' text-anchor='middle'>HEARTBEAT NFC</text></svg>",
                 descripcion: "Tributo en algodón peinado. El chip NFC reproduce el videoclip oficial directamente al apoyar el teléfono en el corazón."
             }
         ];
 
-        // INICIALIZACIÓN: Abre directamente en ART (Cuadros)
         let lineaActual = 'ART';
         let universoActual = 'todos';
 
         function cambiarLinea(linea) {
-            lineaActual = linea;
-            document.getElementById('tab-art').className = linea === 'ART'
-                ? 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active'
-                : 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all';
+            lineaActual = linea.toUpperCase();
 
-            document.getElementById('tab-wear').className = linea === 'WEAR' 
-                ? 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active'
-                : 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all';
+            // Estilos de los botones de pestañas
+            document.getElementById('tab-art').className = lineaActual === 'ART'
+                ? 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all btn-line-active'
+                : 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
 
-            document.getElementById('catalogo-titulo').innerText = linea === 'ART' 
-                ? 'Galería Art (Cuadros)' 
-                : 'Galería Wear (Ropa)';
+            document.getElementById('tab-wear').className = lineaActual === 'WEAR'
+                ? 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all btn-line-active'
+                : 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
+
+            document.getElementById('tab-todos-linea').className = lineaActual === 'TODOS'
+                ? 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all btn-line-active'
+                : 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
+
+            // Actualizar el título dinámico
+            if (lineaActual === 'ART') {
+                document.getElementById('catalogo-titulo').innerText = 'Galería Art (Cuadros)';
+            } else if (lineaActual === 'WEAR') {
+                document.getElementById('catalogo-titulo').innerText = 'Galería Wear (Ropa)';
+            } else {
+                document.getElementById('catalogo-titulo').innerText = 'Galería Completa (Cuadros & Ropa)';
+            }
+
             renderizarCatalogo();
         }
 
         function filtrarUniverso(universo) {
             universoActual = universo.toLowerCase();
+
+            // Si el usuario pulsa "todos", desbloquear la vista para que muestre todo el inventario
+            if (universoActual === 'todos') {
+                lineaActual = 'TODOS';
+                document.getElementById('tab-art').className = 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
+                document.getElementById('tab-wear').className = 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider text-zinc-400 transition-all';
+                document.getElementById('tab-todos-linea').className = 'flex-1 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all btn-line-active';
+                document.getElementById('catalogo-titulo').innerText = 'Galería Completa (Todos los Drops)';
+            }
+
             document.querySelectorAll('.btn-universe').forEach(btn => {
                 if (btn.id === `pill-${universoActual}`) {
                     btn.className = 'btn-universe btn-universe-active px-4 py-2 rounded-xl bg-white/5 border border-white/10 whitespace-nowrap transition';
@@ -375,6 +397,7 @@
                     btn.className = 'btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition';
                 }
             });
+
             renderizarCatalogo();
         }
 
@@ -383,15 +406,17 @@
             grid.innerHTML = '';
 
             const filtrados = PRODUCTOS.filter(p => {
-                const matchLinea = p.tipo === lineaActual;
-                const matchUniverso = universoActual === 'todos' || p.universo.toLowerCase() === universoActual;
+                const matchLinea = (lineaActual === 'TODOS') || (p.tipo === lineaActual);
+                const matchUniverso = (universoActual === 'todos') || (p.universo.toLowerCase() === universoActual);
                 return matchLinea && matchUniverso;
             });
 
+            document.getElementById('catalogo-conteo').innerText = `${filtrados.length} Piezas en Vivo`;
+
             if (filtrados.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-2 text-center py-8 text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                        No hay piezas en este filtro actualmente.
+                    <div class="col-span-2 text-center py-10 text-zinc-500 text-xs font-bold uppercase tracking-widest">
+                        No hay piezas disponibles en este filtro.
                     </div>
                 `;
                 return;
@@ -434,7 +459,7 @@
                     </div>
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <span class="text-[8px] font-bold text-zinc-400 uppercase">${prod.universo}</span>
+                            <span class="text-[8px] font-bold text-zinc-400 uppercase">${prod.tipo} &bull; ${prod.universo}</span>
                             <span class="text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${badgeClass}">${badgeText}</span>
                         </div>
                         <h4 class="font-display text-xs font-black uppercase text-white truncate">${prod.titulo}</h4>
@@ -525,7 +550,6 @@
             if (paramLinea) {
                 cambiarLinea(paramLinea.toUpperCase());
             } else {
-                // Por defecto abre en Cuadros (ART)
                 cambiarLinea('ART');
             }
 
