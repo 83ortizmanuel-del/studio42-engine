@@ -199,7 +199,7 @@
         </div>
     </section>
 
-    <!-- MODAL QUICK VIEW -->
+    <!-- MODAL QUICK VIEW / FICHA DE CUSTODIA -->
     <div id="modal-producto" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-zinc-950 border border-white/20 rounded-3xl p-5 w-full max-w-sm text-center relative shadow-2xl">
             <button onclick="cerrarModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white text-lg">
@@ -213,10 +213,10 @@
             <div id="modal-badge" class="inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2"></div>
             <h3 id="modal-titulo" class="font-display text-lg font-black uppercase text-white"></h3>
             <p id="modal-categoria" class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2"></p>
-            <p id="modal-desc" class="text-xs text-zinc-300 leading-relaxed mb-4 text-left bg-white/5 p-3 rounded-xl border border-white/10"></p>
+            <div id="modal-desc" class="text-xs text-zinc-300 leading-relaxed mb-4 text-left bg-white/5 p-3 rounded-xl border border-white/10"></div>
 
             <div class="flex items-center justify-between border-t border-white/10 pt-3 mb-3">
-                <span class="text-xs font-bold uppercase text-zinc-400">Precio Oficial:</span>
+                <span class="text-xs font-bold uppercase text-zinc-400">Valor de Adquisición:</span>
                 <span id="modal-precio" class="text-base font-black font-display text-white"></span>
             </div>
 
@@ -243,8 +243,9 @@
                 edicion: "Edición Limitada // Pieza Única 01/01",
                 precio: "40,00 €",
                 estado: "VENDIDO",
+                propietario: "Coleccionista VIP #01",
                 imagen: "/art/vegeta-majin.png",
-                descripcion: "Camiseta premium de alto gramaje con microchip NFC integrado al pecho. Desbloquea medidor de Ki y certificación de autenticidad. Esta pieza exclusiva 01/01 ya ha sido adquirida por un coleccionista privado."
+                descripcion: "Camiseta premium de alto gramaje con microchip NFC integrado al pecho. Desbloquea medidor de Ki y certificación de autenticidad en vivo. Pieza irrepetible 01/01 en custodia privada."
             },
             {
                 id: "poatan-wear",
@@ -276,8 +277,9 @@
                 edicion: "Edición 50 Piezas",
                 precio: "45,00 €",
                 estado: "VENDIDO",
+                propietario: "Coleccionista Privado (Tierra-928)",
                 imagen: "/art/vegeta-majin.png",
-                descripcion: "Corte boxy fit con tintas reflectantes y designación de variante Tierra-928. Agotado en el drop inicial."
+                descripcion: "Corte boxy fit con tintas reflectantes y designación de variante multiversal. Agotado en el drop inicial."
             },
             {
                 id: "dexter-wear",
@@ -344,6 +346,7 @@
                 edicion: "Pieza 01 de 10",
                 precio: "110,00 €",
                 estado: "VENDIDO",
+                propietario: "Coleccionista VIP #01",
                 imagen: "/art/vegeta-majin.png",
                 descripcion: "Lienzo acabado en resina brillo retro. Certificado por NFC."
             }
@@ -406,14 +409,17 @@
 
                 if (prod.estado === 'VENDIDO') {
                     badgeClass = 'badge-sold';
-                    badgeText = 'SOLD OUT';
+                    badgeText = 'ADQUIRIDA';
                     overlayVendido = `
-                        <div class="absolute inset-0 bg-black/75 flex flex-col items-center justify-center z-20 backdrop-blur-[1px] p-2 text-center">
-                            <span class="font-display font-black text-rose-500 text-[11px] sm:text-xs tracking-widest uppercase border-2 border-rose-500 px-2.5 py-1 rounded-lg rotate-[-10deg] bg-black/90 shadow-[0_0_15px_rgba(225,29,72,0.6)]">
-                                VENDIDO // PIEZA ÚNICA
+                        <div class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-20 backdrop-blur-[1.5px] p-2 text-center">
+                            <span class="font-display font-black text-rose-500 text-[10px] sm:text-xs tracking-widest uppercase border-2 border-rose-500 px-2.5 py-1 rounded-lg rotate-[-8deg] bg-black/95 shadow-[0_0_20px_rgba(225,29,72,0.7)]">
+                                <i class="fa-solid fa-lock mr-1"></i> PIEZA ADQUIRIDA
                             </span>
-                            <span class="text-[9px] font-mono font-bold text-zinc-300 mt-2 tracking-wider">
-                                Adquirido por ${prod.precio}
+                            <span class="text-[9px] font-mono font-black text-emerald-400 mt-2 tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-shield-halved text-[8px]"></i> COLECCIÓN PRIVADA
+                            </span>
+                            <span class="text-[8px] font-mono text-zinc-400">
+                                Pieza Única 01/01 &bull; ${prod.precio}
                             </span>
                         </div>
                     `;
@@ -448,27 +454,48 @@
             document.getElementById('modal-img').src = prod.imagen;
             document.getElementById('modal-titulo').innerText = prod.titulo;
             document.getElementById('modal-categoria').innerText = `${prod.tipo} // ${prod.universo.toUpperCase()} // ${prod.edicion}`;
-            document.getElementById('modal-desc').innerText = prod.descripcion;
             document.getElementById('modal-precio').innerText = prod.precio;
 
             const badge = document.getElementById('modal-badge');
+            const desc = document.getElementById('modal-desc');
             const btnAction = document.getElementById('modal-btn-action');
 
             if (prod.estado === 'VENDIDO') {
-                badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-sold';
-                badge.innerText = 'PIEZA ARCHIVADA / VENDIDA';
-                btnAction.className = 'block w-full py-3 bg-zinc-800 text-zinc-500 font-black uppercase text-xs rounded-full tracking-wider cursor-not-allowed';
-                btnAction.innerText = `Sold Out // Adquirida por ${prod.precio}`;
+                badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 bg-rose-950/40 border border-rose-500 text-rose-400';
+                badge.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> ARCHIVADO EN BÓVEDA PRIVADA';
+                
+                desc.innerHTML = `
+                    <p class="mb-3">${prod.descripcion}</p>
+                    <div class="pt-2 border-t border-white/10 text-[10px] font-mono space-y-1 bg-black/60 p-2.5 rounded-xl border border-white/5">
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Régimen:</span>
+                            <span class="text-white font-bold">${prod.edicion}</span>
+                        </div>
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Titular:</span>
+                            <span class="text-emerald-400 font-bold">${prod.propietario || 'Coleccionista Privado'} (NFC Verificado)</span>
+                        </div>
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Estado de Custodia:</span>
+                            <span class="text-amber-400 font-bold">FUERA DE MERCADO</span>
+                        </div>
+                    </div>
+                `;
+
+                btnAction.className = 'block w-full py-3.5 bg-zinc-900 border border-zinc-700 text-zinc-400 font-black uppercase text-xs rounded-full tracking-wider cursor-not-allowed shadow-inner';
+                btnAction.innerHTML = '<i class="fa-solid fa-lock mr-1.5 text-zinc-500"></i> Propiedad Privada // Adquirida';
                 btnAction.href = '#';
             } else if (prod.estado === 'PROXIMO') {
                 badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-drop';
                 badge.innerText = 'PRÓXIMO DROP EXCLUSIVO';
+                desc.innerText = prod.descripcion;
                 btnAction.className = 'block w-full py-3 bg-amber-400 text-black font-black uppercase text-xs rounded-full tracking-wider hover:bg-amber-300';
                 btnAction.innerText = 'Reservar Turno en WhatsApp';
                 btnAction.href = `https://wa.me/${WHATSAPP_NUM}?text=Hola,%20quiero%20reservar%20el%20próximo%20drop%20de%20${encodeURIComponent(prod.titulo)}`;
             } else {
                 badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-available';
                 badge.innerText = 'DISPONIBLE EN STOCK';
+                desc.innerText = prod.descripcion;
                 btnAction.className = 'block w-full py-3 bg-emerald-500 text-white font-black uppercase text-xs rounded-full tracking-wider hover:bg-emerald-400';
                 btnAction.innerText = `Comprar / Reservar (${prod.precio})`;
                 btnAction.href = `https://wa.me/${WHATSAPP_NUM}?text=Hola,%20quiero%20comprar%20la%20pieza%20${encodeURIComponent(prod.titulo)}%20(${encodeURIComponent(prod.precio)})`;
