@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Studio 42 | The Vault // Colecciones Phygital</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --color-primario: #3B82F6;
+            --color-acento: #A855F7;
+            --color-fondo: #05070F;
+            --aura-neon: rgba(59, 130, 246, 0.65);
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .bg-tech-grid {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .art-card-wrapper {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            padding: 2px;
+            background: rgba(18, 22, 30, 0.85);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.95), 0 0 35px var(--aura-neon);
+            transition: all 0.3s ease;
+        }
+
+        .art-card-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent 0%, 
+                var(--color-primario) 45%, 
+                #ffffff 50%, 
+                var(--color-acento) 55%, 
+                transparent 100%
+            );
+            animation: rotateNeon 9s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateNeon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .art-content {
+            position: relative;
+            background: rgba(9, 11, 16, 0.96);
+            border-radius: 26px;
+            z-index: 1;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Silueta de misterio del Drop del Mes */
+        .silhouette-mystery {
+            filter: brightness(0) drop-shadow(0 0 16px var(--color-primario));
+            animation: mysteryPulse 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes mysteryPulse {
+            0% { transform: scale(0.97); filter: brightness(0) drop-shadow(0 0 10px var(--color-primario)); }
+            100% { transform: scale(1.02); filter: brightness(0) drop-shadow(0 0 25px var(--color-acento)); }
+        }
+
+        /* Badges de Estado */
+        .badge-sold {
+            background: rgba(225, 29, 72, 0.2);
+            border: 1px solid #E11D48;
+            color: #FDA4AF;
+        }
+
+        .badge-drop {
+            background: rgba(234, 179, 8, 0.2);
+            border: 1px solid #EAB308;
+            color: #FDE047;
+        }
+
+        .badge-available {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10B981;
+            color: #6EE7B7;
+        }
+
+        .btn-line-active {
+            background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-acento) 100%);
+            color: #ffffff;
+            box-shadow: 0 0 18px var(--aura-neon);
+        }
+
+        .btn-universe-active {
+            border-color: var(--color-primario) !important;
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px var(--aura-neon);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-tech-grid flex flex-col items-center justify-start p-3 sm:p-5 select-none">
+
+    <!-- HEADER / IDENTIDAD -->
+    <header class="w-full max-w-lg flex flex-col items-center text-center my-3">
+        <div class="inline-flex items-center gap-2 bg-black/80 px-4 py-1 rounded-full border border-white/10 mb-2 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-[10px] font-black uppercase tracking-widest text-zinc-300">Phygital Vault & Gallery</span>
+        </div>
+        <h1 class="font-display text-2xl sm:text-3xl font-black uppercase tracking-wider text-white">The Vault // Archivo de Culto</h1>
+        <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Piezas Numeradas Autenticadas por NFC</p>
+    </header>
+
+    <!-- SWITCH MAESTRO: LÍNEA WEAR VS ART -->
+    <div class="w-full max-w-sm flex items-center bg-black/70 p-1.5 rounded-full border border-white/15 mb-4 shadow-xl backdrop-blur-md">
+        <button id="tab-wear" onclick="cambiarLinea('WEAR')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active">
+            <i class="fa-solid fa-shirt mr-1.5"></i> Wear (Ropa)
+        </button>
+        <button id="tab-art" onclick="cambiarLinea('ART')" class="flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all">
+            <i class="fa-solid fa-palette mr-1.5"></i> Art (Cuadros)
+        </button>
+    </div>
+
+    <!-- FILTRO DE UNIVERSOS (PÍLDORAS HORIZONTALES) -->
+    <div class="w-full max-w-lg flex gap-2 overflow-x-auto pb-3 pt-1 px-1 no-scrollbar text-[11px] font-bold uppercase tracking-wider">
+        <button onclick="filtrarUniverso('todos')" id="pill-todos" class="btn-universe btn-universe-active px-4 py-2 rounded-xl bg-white/5 border border-white/10 whitespace-nowrap transition">Todos</button>
+        <button onclick="filtrarUniverso('fighters')" id="pill-fighters" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Fighters / MMA</button>
+        <button onclick="filtrarUniverso('anime')" id="pill-anime" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Anime</button>
+        <button onclick="filtrarUniverso('marvel')" id="pill-marvel" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Marvel / Cómics</button>
+        <button onclick="filtrarUniverso('cartoon')" id="pill-cartoon" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Cartoon 90s</button>
+        <button onclick="filtrarUniverso('musica')" id="pill-musica" class="btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition">Música / Leyendas</button>
+    </div>
+
+    <!-- DROP DEL MES / PIEZA ÚNICA (CARD DE EXPECTATIVA MISTERIOSA) -->
+    <section class="w-full max-w-lg art-card-wrapper my-3">
+        <div class="art-content p-5 text-center">
+            <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+                <span class="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-400">
+                    <i class="fa-solid fa-crown"></i> Drop Exclusivo del Mes
+                </span>
+                <span class="text-[9px] font-black uppercase tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full text-zinc-300">Pieza 01 / 01 Única</span>
+            </div>
+
+            <!-- Silueta Misteriosa -->
+            <div class="relative bg-black/90 rounded-2xl h-52 flex items-center justify-center overflow-hidden border border-white/10 mb-3">
+                <i class="fa-solid fa-question text-7xl text-white/10 absolute z-0"></i>
+                <img id="mystery-img" src="../c/vegeta-majin.png" alt="Pieza Oculta" class="h-44 object-contain silhouette-mystery relative z-10" onerror="this.onerror=null; this.src='https://placehold.co/300x400/000000/333333?text=?';">
+                <div class="absolute bottom-2.5 bg-black/80 px-3.5 py-1 rounded-lg border border-white/10 backdrop-blur-sm z-20">
+                    <span class="text-[10px] font-mono font-bold text-zinc-300">Desbloqueo en: <span id="mystery-countdown" class="text-amber-400 font-black">---</span></span>
+                </div>
+            </div>
+
+            <h3 class="font-display text-lg font-black uppercase tracking-wide text-white">¿Quién dominará el próximo Drop?</h3>
+            <p class="text-xs text-zinc-400 mt-0.5 mb-3">Pieza numerada única. Los miembros que poseen una camiseta o cuadro tienen reserva prioritaria.</p>
+
+            <a href="https://wa.me/34600000000?text=Hola,%20tengo%20una%20pieza%20Phygital%20y%20quiero%20entrar%20en%20la%20lista%20VIP%20del%20próximo%20Drop" target="_blank" class="block w-full py-3 bg-white text-black font-black uppercase text-xs rounded-full tracking-wider shadow-xl hover:bg-zinc-200 transition">
+                <i class="fa-brands fa-whatsapp mr-1 text-sm"></i> Notificarme al Abrir Drop
+            </a>
+        </div>
+    </section>
+
+    <!-- GRID DE PRODUCTOS -->
+    <section class="w-full max-w-lg mt-4">
+        <div class="flex items-center justify-between mb-3 px-1">
+            <h2 id="catalogo-titulo" class="font-display text-sm font-black uppercase tracking-wider text-white">Galería Wear (Ropa)</h2>
+            <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Stock en Vivo</span>
+        </div>
+
+        <div id="grid-productos" class="grid grid-cols-2 gap-3">
+            <!-- Renderizado dinámico -->
+        </div>
+    </section>
+
+    <!-- MODAL QUICK VIEW -->
+    <div id="modal-producto" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-white/20 rounded-3xl p-5 w-full max-w-sm text-center relative shadow-2xl">
+            <button onclick="cerrarModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="bg-black/60 rounded-2xl p-3 border border-white/10 mb-3 flex items-center justify-center min-h-[190px]">
+                <img id="modal-img" src="" class="max-h-48 object-contain">
+            </div>
+
+            <div id="modal-badge" class="inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2"></div>
+            <h3 id="modal-titulo" class="font-display text-lg font-black uppercase text-white"></h3>
+            <p id="modal-categoria" class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2"></p>
+            <p id="modal-desc" class="text-xs text-zinc-300 leading-relaxed mb-4 text-left bg-white/5 p-3 rounded-xl border border-white/10"></p>
+
+            <div class="flex items-center justify-between border-t border-white/10 pt-3 mb-3">
+                <span class="text-xs font-bold uppercase text-zinc-400">Precio Oficial:</span>
+                <span id="modal-precio" class="text-base font-black font-display text-white"></span>
+            </div>
+
+            <a id="modal-btn-action" href="#" target="_blank" class="block w-full py-3 font-black uppercase text-xs rounded-full tracking-wider shadow-lg transition"></a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="text-center text-[9px] tracking-widest uppercase text-zinc-600 font-medium py-6 mt-auto">
+        Phygital Engine &bull; Vault & Gallery Division por Studio 42
+    </footer>
+
+    <script>
+        // CATÁLOGO MAESTRO DE PRODUCTOS
+        const PRODUCTOS = [
+            // --- WEAR (CAMISETAS) ---
+            {
+                id: "poatan",
+                tipo: "WEAR",
+                universo: "fighters",
+                titulo: "Alex Pereira // Poatan",
+                edicion: "Edición Limitada 50 Piezas",
+                precio: "49,00 €",
+                estado: "DISPONIBLE", // DISPONIBLE | PROXIMO | VENDIDO
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Camiseta oversize 260 GSM con chip NFC en el pecho. Desbloquea su Tale of the Tape oficial, récord de KOs y el grito de batalla en vídeo."
+            },
+            {
+                id: "topuria",
+                tipo: "WEAR",
+                universo: "fighters",
+                titulo: "Ilia Topuria // El Matador",
+                edicion: "Edición 25 Piezas",
+                precio: "49,00 €",
+                estado: "PROXIMO",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Tributo al campeón invicto. Incluye NFC vinculado a su documental de preparación y pesajes."
+            },
+            {
+                id: "vegeta-wear",
+                tipo: "WEAR",
+                universo: "anime",
+                titulo: "Vegeta Saiyan Pride",
+                edicion: "Edición 30 Piezas",
+                precio: "45,00 €",
+                estado: "DISPONIBLE",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Camiseta premium de alto gramaje con chip NFC que activa el medidor de Ki y banda sonora oficial."
+            },
+            {
+                id: "spiderman-2099",
+                tipo: "WEAR",
+                universo: "marvel",
+                titulo: "Spider-Man 2099 Neon",
+                edicion: "Edición 50 Piezas",
+                precio: "45,00 €",
+                estado: "VENDIDO",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Corte boxy fit con tintas reflectantes y designación de variante Tierra-928. Agotado en el drop inicial."
+            },
+            {
+                id: "dexter-wear",
+                tipo: "WEAR",
+                universo: "cartoon",
+                titulo: "El Laboratorio de Dexter 90s",
+                edicion: "Edición 20 Piezas",
+                precio: "42,00 €",
+                estado: "DISPONIBLE",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Camiseta retro nostalgia con chip que reproduce la intro y la frase 'Omelette du fromage' en tu móvil."
+            },
+            {
+                id: "tupac-wear",
+                tipo: "WEAR",
+                universo: "musica",
+                titulo: "Tupac // All Eyez on Me",
+                edicion: "Edición 40 Piezas",
+                precio: "49,00 €",
+                estado: "DISPONIBLE",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Tributo en algodón peinado. El chip NFC reproduce el videoclip oficial directamente al apoyar el teléfono en el corazón."
+            },
+
+            // --- ART (CUADROS) ---
+            {
+                id: "vegeta-art",
+                tipo: "ART",
+                universo: "anime",
+                titulo: "Vegeta // Orgullo del Príncipe",
+                edicion: "Pieza 01 de 25",
+                precio: "120,00 €",
+                estado: "DISPONIBLE",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Lienzo de galería montado en bastidor con chip NFC oculto en placa metálica. Desbloquea su audio lore y certificado de autenticidad."
+            },
+            {
+                id: "poatan-art",
+                tipo: "ART",
+                universo: "fighters",
+                titulo: "Hands of Stone // UFC 300",
+                edicion: "Pieza Única 01/01",
+                precio: "160,00 €",
+                estado: "PROXIMO",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Cuadro de edición museo con placa de titanio y chip NFC. Acceso al Fighter Pass VIP."
+            },
+            {
+                id: "dexter-art",
+                tipo: "ART",
+                universo: "cartoon",
+                titulo: "Dexter Secret Vault",
+                edicion: "Pieza 01 de 10",
+                precio: "110,00 €",
+                estado: "VENDIDO",
+                imagen: "../c/vegeta-majin.png",
+                descripcion: "Lienzo acabado en resina brillo retro. Certificado por NFC."
+            }
+        ];
+
+        let lineaActual = 'WEAR';
+        let universoActual = 'todos';
+
+        function cambiarLinea(linea) {
+            lineaActual = linea;
+            document.getElementById('tab-wear').className = linea === 'WEAR' 
+                ? 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active'
+                : 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all';
+            
+            document.getElementById('tab-art').className = linea === 'ART'
+                ? 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all btn-line-active'
+                : 'flex-1 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-zinc-400 transition-all';
+
+            document.getElementById('catalogo-titulo').innerText = linea === 'WEAR' 
+                ? 'Galería Wear (Ropa)' 
+                : 'Galería Art (Cuadros)';
+            renderizarCatalogo();
+        }
+
+        function filtrarUniverso(universo) {
+            universoActual = universo.toLowerCase();
+            document.querySelectorAll('.btn-universe').forEach(btn => {
+                if (btn.id === `pill-${universoActual}`) {
+                    btn.className = 'btn-universe btn-universe-active px-4 py-2 rounded-xl bg-white/5 border border-white/10 whitespace-nowrap transition';
+                } else {
+                    btn.className = 'btn-universe px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 whitespace-nowrap transition';
+                }
+            });
+            renderizarCatalogo();
+        }
+
+        function renderizarCatalogo() {
+            const grid = document.getElementById('grid-productos');
+            grid.innerHTML = '';
+
+            const filtrados = PRODUCTOS.filter(p => {
+                const matchLinea = p.tipo === lineaActual;
+                const matchUniverso = universoActual === 'todos' || p.universo.toLowerCase() === universoActual;
+                return matchLinea && matchUniverso;
+            });
+
+            if (filtrados.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-2 text-center py-8 text-zinc-500 text-xs font-bold uppercase tracking-widest">
+                        No hay piezas en este filtro actualmente.
+                    </div>
+                `;
+                return;
+            }
+
+            filtrados.forEach(prod => {
+                let badgeClass = 'badge-available';
+                let badgeText = prod.precio;
+                let overlayVendido = '';
+
+                if (prod.estado === 'VENDIDO') {
+                    badgeClass = 'badge-sold';
+                    badgeText = 'SOLD OUT';
+                    overlayVendido = `<div class="absolute inset-0 bg-black/65 flex items-center justify-center z-10"><span class="font-display font-black text-rose-500 text-xs tracking-widest uppercase border-2 border-rose-500 px-2.5 py-0.5 rounded rotate-[-12deg] bg-black/80">Vendido</span></div>`;
+                } else if (prod.estado === 'PROXIMO') {
+                    badgeClass = 'badge-drop';
+                    badgeText = 'PRÓXIMO';
+                }
+
+                const card = document.createElement('div');
+                card.className = 'bg-black/60 rounded-2xl border border-white/10 p-3 text-left relative overflow-hidden flex flex-col justify-between cursor-pointer hover:border-white/30 transition shadow-lg';
+                card.onclick = () => abrirModal(prod);
+
+                card.innerHTML = `
+                    ${overlayVendido}
+                    <div class="relative bg-black/40 rounded-xl p-2 mb-2 flex items-center justify-center min-h-[120px]">
+                        <img src="${prod.imagen}" class="max-h-28 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/200x200/111111/ffffff?text=Studio+42';">
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[8px] font-bold text-zinc-400 uppercase">${prod.universo}</span>
+                            <span class="text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <h4 class="font-display text-xs font-black uppercase text-white truncate">${prod.titulo}</h4>
+                        <p class="text-[9px] text-zinc-400 truncate">${prod.edicion}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function abrirModal(prod) {
+            document.getElementById('modal-img').src = prod.imagen;
+            document.getElementById('modal-titulo').innerText = prod.titulo;
+            document.getElementById('modal-categoria').innerText = `${prod.tipo} // ${prod.universo.toUpperCase()} // ${prod.edicion}`;
+            document.getElementById('modal-desc').innerText = prod.descripcion;
+            document.getElementById('modal-precio').innerText = prod.precio;
+
+            const badge = document.getElementById('modal-badge');
+            const btnAction = document.getElementById('modal-btn-action');
+
+            if (prod.estado === 'VENDIDO') {
+                badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-sold';
+                badge.innerText = 'PIEZA ARCHIVADA / VENDIDA';
+                btnAction.className = 'block w-full py-3 bg-zinc-800 text-zinc-500 font-black uppercase text-xs rounded-full tracking-wider cursor-not-allowed';
+                btnAction.innerText = 'Sold Out // Edición Agotada';
+                btnAction.href = '#';
+            } else if (prod.estado === 'PROXIMO') {
+                badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-drop';
+                badge.innerText = 'PRÓXIMO DROP EXCLUSIVO';
+                btnAction.className = 'block w-full py-3 bg-amber-400 text-black font-black uppercase text-xs rounded-full tracking-wider hover:bg-amber-300';
+                btnAction.innerText = 'Reservar Turno en WhatsApp';
+                btnAction.href = `https://wa.me/34600000000?text=Hola,%20quiero%20reservar%20el%20próximo%20drop%20de%20${encodeURIComponent(prod.titulo)}`;
+            } else {
+                badge.className = 'inline-block text-[9px] font-black uppercase px-2.5 py-1 rounded-full mb-2 badge-available';
+                badge.innerText = 'DISPONIBLE EN STOCK';
+                btnAction.className = 'block w-full py-3 bg-emerald-500 text-white font-black uppercase text-xs rounded-full tracking-wider hover:bg-emerald-400';
+                btnAction.innerText = `Comprar / Reservar (${prod.precio})`;
+                btnAction.href = `https://wa.me/34600000000?text=Hola,%20quiero%20comprar%20la%20pieza%20${encodeURIComponent(prod.titulo)}%20(${encodeURIComponent(prod.precio)})`;
+            }
+
+            document.getElementById('modal-producto').classList.remove('hidden');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-producto').classList.add('hidden');
+        }
+
+        // Cuenta regresiva del misterio (14 días desde hoy)
+        const fechaMeta = new Date().getTime() + (14 * 24 * 60 * 60 * 1000);
+        setInterval(() => {
+            const ahora = new Date().getTime();
+            const diff = fechaMeta - ahora;
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+            const el = document.getElementById('mystery-countdown');
+            if (el) el.innerText = `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+        }, 1000);
+
+        // Auto-filtro al cargar según parámetros de la URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramLinea = urlParams.get('linea');
+            const paramUniverso = urlParams.get('universo');
+
+            if (paramLinea) {
+                cambiarLinea(paramLinea.toUpperCase());
+            }
+
+            if (paramUniverso) {
+                filtrarUniverso(paramUniverso);
+            } else {
+                renderizarCatalogo();
+            }
+        });
+    </script>
+</body>
+</html>
