@@ -32,6 +32,13 @@
       "titulo": "Herramientas de Control Maternal (WOW)",
       "botones": [
         {
+          "tipo": "teleconsulta_triaje",
+          "nombre": "Solicitar Teleconsulta Médica",
+          "descripcion": "Orientación médica o protocolo de emergencia SOS",
+          "icono": "fa-solid fa-user-doctor",
+          "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;"
+        },
+        {
           "tipo": "calculadora_embarazo",
           "nombre": "Calculadora Gestacional",
           "descripcion": "Calcula tus semanas exactas y fecha probable de parto",
