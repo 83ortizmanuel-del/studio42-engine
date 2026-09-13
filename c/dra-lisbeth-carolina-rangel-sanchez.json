@@ -1,5 +1,5 @@
 {
-  "nombre": "DRA LISBETH CAROLINA RANGEL SANCHEZ",
+  "nombre": "DRA. LISBETH CAROLINA RANGEL SÁNCHEZ",
   "modoDemo": true,
   "subtitulo": "Ginecología & Obstetricia · Cuidado Prenatal",
   "textoBadge": "NODO PHYGITAL MATERNAL · CONEXIÓN DIRECTA",
@@ -8,32 +8,99 @@
   "colorAcento": "#00FFFF",
   "secciones": [
     {
-      "titulo": "Soluciones & Cuidado Prenatal Directo",
+      "titulo": "Contacto Directo & Agenda",
       "botones": [
         {
-          "nombre": "Cita Previa / Atención Inmediata",
-          "descripcion": "Reserva tu valoración prenatal o ginecológica al instante",
-          "icono": "fa-solid fa-calendar-check",
-          "url": "https://wa.me/34600000000?text=Hola%20Dra.%20Lisbeth,%20quisiera%20reservar%20mi%20cita%20prenatal",
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Descarga mi vCard directa al móvil en 1 toque",
+          "icono": "fa-solid fa-address-card",
+          "estiloIcono": "background: rgba(0, 255, 255, 0.15); color: #00FFFF;",
+          "url": "./contacto.vcf",
           "destacado": true
         },
         {
-          "nombre": "Guía Prenatal & Información Directa",
-          "descripcion": "Resuelve tus dudas técnicas y solicita información sobre la consulta",
+          "nombre": "WhatsApp Médico Directo",
+          "descripcion": "Atención y resolución de dudas en consulta",
+          "icono": "fa-brands fa-whatsapp",
+          "estiloIcono": "background: rgba(37, 211, 102, 0.15); color: #25D366;",
+          "url": "https://wa.me/584120000000?text=Hola%20Dra.%20Lisbeth,%20le%20escribo%20desde%20mi%20llavero%20maternal",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "Herramientas de Control Maternal (WOW)",
+      "botones": [
+        {
+          "tipo": "calculadora_embarazo",
+          "nombre": "Calculadora Gestacional",
+          "descripcion": "Calcula tus semanas exactas y fecha probable de parto",
           "icono": "fa-solid fa-baby",
-          "url": "https://wa.me/34600000000?text=Hola%20Dra.%20Lisbeth,%20deseo%20informaci%C3%B3n%20sobre%20los%20servicios%20prenatales"
+          "estiloIcono": "background: rgba(244, 114, 182, 0.18); color: #F472B6;"
         },
         {
-          "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Añade mi contacto directo a tu agenda telefónica",
-          "icono": "fa-solid fa-address-card",
-          "url": "./contacto.vcf"
+          "tipo": "triaje_urgencias",
+          "nombre": "Semáforo de Signos de Alarma",
+          "descripcion": "Identifica síntomas de alerta y avísame al instante",
+          "icono": "fa-solid fa-shield-heart",
+          "estiloIcono": "background: rgba(225, 29, 72, 0.22); color: #E11D48;"
         },
         {
-          "nombre": "¿Dónde aparqué?",
+          "tipo": "contador_contracciones",
+          "nombre": "Contador de Contracciones",
+          "descripcion": "Cronómetro en tiempo real para trabajo de parto",
+          "icono": "fa-solid fa-stopwatch",
+          "estiloIcono": "background: rgba(168, 85, 247, 0.18); color: #A855F7;"
+        },
+        {
+          "tipo": "checklist_parto",
+          "nombre": "Maleta para el Parto",
+          "descripcion": "Checklist interactivo guardado en tu móvil",
+          "icono": "fa-solid fa-clipboard-check",
+          "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;"
+        }
+      ]
+    },
+    {
+      "titulo": "Consultas & Facturación Privada",
+      "botones": [
+        {
+          "nombre": "Ecosonograma Morfológico / 4D",
+          "descripcion": "Evaluación estructural fetal detallada con fotos",
+          "icono": "fa-solid fa-eye",
+          "estiloIcono": "background: rgba(0, 255, 255, 0.15); color: #00FFFF;",
+          "url": "https://wa.me/584120000000?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20Ecosonograma%20Morfol%C3%B3gico%20privado",
+          "destacado": false
+        },
+        {
+          "nombre": "Control Prenatal Privado (Sin Esperas)",
+          "descripcion": "Revisión integral sin colas y con ecografía",
+          "icono": "fa-solid fa-stethoscope",
+          "estiloIcono": "background: rgba(56, 189, 248, 0.15); color: #38BDF8;",
+          "url": "https://wa.me/584120000000?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20consulta%20prenatal%20privada",
+          "destacado": false
+        },
+        {
+          "nombre": "Citología & Chequeo Ginecológico",
+          "descripcion": "Despistaje preventivo y valoración clínica",
+          "icono": "fa-solid fa-microscope",
+          "estiloIcono": "background: rgba(168, 85, 247, 0.15); color: #A855F7;",
+          "url": "https://wa.me/584120000000?text=Hola%20Dra.%20Lisbeth,%20deseo%20cita%20para%20citolog%C3%ADa%20y%20chequeo",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "Utilidades en Consulta",
+      "botones": [
+        {
           "tipo": "parking",
-          "descripcion": "Guarda la posición GPS de tu vehículo durante la consulta",
-          "icono": "fa-solid fa-location-crosshairs"
+          "nombre": "¿Dónde aparqué?",
+          "descripcion": "Guarda la posición GPS de tu vehículo al llegar",
+          "icono": "fa-solid fa-location-crosshairs",
+          "estiloIcono": "background: rgba(142, 142, 147, 0.15); color: #8e8e93;",
+          "url": "#",
+          "destacado": false
         }
       ]
     },
@@ -41,7 +108,7 @@
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
       "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Dra.%20Lisbeth"
+      "whatsappGerencia": "https://wa.me/584120000000?text=Hola%20Dra.%20Lisbeth,%20tengo%20una%20sugerencia%20sobre%20mi%20atenci%C3%B3n"
     }
   ]
 }
