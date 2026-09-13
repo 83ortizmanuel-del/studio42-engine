@@ -28,13 +28,13 @@
             min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
         }
         
-        #splash-screen {
+        #splash-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
             background: radial-gradient(circle at center, #111827 0%, #030712 100%);
             z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
             transition: opacity 0.5s ease; padding: 20px;
         }
-        .btn-desbloqueo {
+        .btn-desbloqueo { 
             background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
             padding: 16px 36px; border-radius: 50px; font-size: 0.9rem; font-weight: 900; letter-spacing: 1.2px; 
             text-transform: uppercase; cursor: pointer; box-shadow: 0 0 30px var(--titanium-glow);
@@ -49,22 +49,22 @@
             backdrop-filter: blur(20px); position: relative;
         }
 
-        .status-badge {
+        .status-badge { 
             display: inline-flex; align-items: center; gap: 8px;
             background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
             padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
             letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 16px; text-transform: uppercase;
         }
-        .ping-light {
+        .ping-light { 
             position: relative; width: 7px; height: 7px; background-color: var(--titanium-light);
             border-radius: 50%; box-shadow: 0 0 8px var(--titanium-light);
         }
-        .ping-light::after {
+        .ping-light::after { 
             content: ''; position: absolute; top: -3px; left: -3px; width: 13px; height: 13px;
             border-radius: 50%; background-color: var(--titanium-glow);
             animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
         }
-        @keyframes radarTitanium {
+        @keyframes radarTitanium { 
             0% { transform: scale(0.6); opacity: 1; }
             100% { transform: scale(2.8); opacity: 0; }
         }
@@ -175,9 +175,10 @@
     <script>
         let datosFriccionesGlobales = {};
         let googleReviewUrlGlobal = "https://maps.google.com";
-        let whatsappGerenciaGlobal = "https://wa.me/34643186453";
+        let whatsappGerenciaGlobal = "https://wa.me/34672294962";
         let nombreNegocioGlobal = "Profesional";
-        let whatsappMedicoGlobal = "34643186453";
+        let whatsappMedicoGlobal = "584120000000";
+        let timerTeleconsultaGlobal = null;
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
@@ -267,14 +268,29 @@
                             `;
                         } else if (sec.botones && Array.isArray(sec.botones)) {
                             sec.botones.forEach(btn => {
-                                // Extraer WhatsApp del primer botón disponible para herramientas
+                                // Captura inteligente de teléfono médico para herramientas nativas
                                 if (btn.url && btn.url.includes('wa.me/')) {
                                     const match = btn.url.match(/wa\.me\/([0-9]+)/);
                                     if (match && match[1]) whatsappMedicoGlobal = match[1];
                                 }
 
+                                // 0. TELECONSULTA TRIAJE (CON TEMPORIZADOR Y SOS)
+                                if (btn.tipo === 'teleconsulta_triaje') {
+                                    block.innerHTML += `
+                                        <div class="app-btn border border-sky-500/30 bg-sky-950/20" onclick="abrirModalTeleconsulta()">
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(14,165,233,0.18); color: #0EA5E9;'}">
+                                                <i class="${btn.icono || 'fa-solid fa-user-doctor'}"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name text-sky-300">${btn.nombre || 'Solicitar Teleconsulta'}</div>
+                                                <div class="app-desc">${btn.descripcion || 'Orientación médica o alerta SOS'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right text-sky-400 text-xs"></i>
+                                        </div>
+                                    `;
+                                }
                                 // 1. CALCULADORA GESTACIONAL
-                                if (btn.tipo === 'calculadora_embarazo') {
+                                else if (btn.tipo === 'calculadora_embarazo') {
                                     block.innerHTML += `
                                         <div class="app-btn destacado" onclick="abrirCalculadoraEmbarazo()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(244,114,182,0.15); color: #F472B6;'}">
@@ -403,9 +419,107 @@
 
         function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
         function cerrarModalBtn() {
+            if (timerTeleconsultaGlobal) {
+                clearInterval(timerTeleconsultaGlobal);
+                timerTeleconsultaGlobal = null;
+            }
             modalOverlay.style.opacity = '0';
             modalContent.style.transform = 'translateY(20px)';
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // ==========================================
+        // 0. TELECONSULTA CON TRIAJE Y CRONÓMETRO
+        // ==========================================
+        function abrirModalTeleconsulta() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-user-doctor text-sky-400"></i>';
+            document.getElementById('modal-title').innerText = "Teleconsulta Médica";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="mb-4 text-xs text-zinc-300">Para brindarte una atención médica óptima, selecciona el motivo de tu solicitud:</p>
+                <div class="space-y-2.5 text-left">
+                    <button onclick="ejecutarTeleconsultaNormal()" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-emerald-500/30 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-xs text-white">Consulta / Revisión General</div>
+                            <div class="text-[10px] text-zinc-400">Dudas de recetas, citas o exámenes (No urgente)</div>
+                        </div>
+                    </button>
+
+                    <button onclick="ejecutarTeleconsultaUrgencia()" class="w-full p-3 rounded-2xl bg-rose-950/30 border border-rose-500/40 flex items-center gap-3 cursor-pointer hover:bg-rose-950/50 transition">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-500 flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-xs text-rose-300">🚨 Signo de Alarma / Urgencia SOS</div>
+                            <div class="text-[10px] text-rose-200/70">Dolor fuerte, pérdida de líquido o sangrado</div>
+                        </div>
+                    </button>
+                </div>
+            `;
+
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Volver</button>`;
+            abrirModalCustom();
+        }
+
+        function ejecutarTeleconsultaNormal() {
+            const fur = localStorage.getItem('fur_embarazo');
+            let infoSem = "";
+            if (fur) {
+                const diffDias = Math.floor((new Date() - new Date(fur)) / (1000 * 60 * 60 * 24));
+                infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
+            }
+            const msg = encodeURIComponent(`Hola Doctora, le escribo desde mi llavero maternal para solicitar una Teleconsulta de control${infoSem}. Ya tengo mis dudas y exámenes a mano.`);
+            window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+            document.getElementById('modal-title').innerText = "¡Mensaje Notificado!";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-3">La Doctora ha recibido tu solicitud. Para darte una valoración rigurosa, se preparará revisando tu ficha clínica.</p>
+                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 mb-2">
+                    <div class="text-[10px] text-cyan-400 uppercase font-mono tracking-wider mb-1">Tiempo Estimado de Preparación</div>
+                    <div id="chrono-teleconsulta" class="text-3xl font-mono font-black text-white">30:00</div>
+                </div>
+                <p class="text-[11px] text-zinc-400">Si tus síntomas se intensifican, pulsa el botón de urgencia.</p>
+            `;
+
+            modalActions.innerHTML = `<button class="modal-btn-primary" onclick="cerrarModalBtn()">Entendido</button>`;
+
+            let segs = 30 * 60;
+            if (timerTeleconsultaGlobal) clearInterval(timerTeleconsultaGlobal);
+            timerTeleconsultaGlobal = setInterval(() => {
+                segs--;
+                const m = String(Math.floor(segs / 60)).padStart(2, '0');
+                const s = String(segs % 60).padStart(2, '0');
+                const rel = document.getElementById('chrono-teleconsulta');
+                if (rel) rel.innerText = `${m}:${s}`;
+                if (segs <= 0) {
+                    clearInterval(timerTeleconsultaGlobal);
+                    timerTeleconsultaGlobal = null;
+                }
+            }, 1000);
+        }
+
+        function ejecutarTeleconsultaUrgencia() {
+            const fur = localStorage.getItem('fur_embarazo');
+            let infoSem = "";
+            if (fur) {
+                const diffDias = Math.floor((new Date() - new Date(fur)) / (1000 * 60 * 60 * 24));
+                infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
+            }
+            const msgSOS = encodeURIComponent(`🚨 URGENCIA OBSTÉTRICA SOS: Doctora, presento un síntoma de alarma grave${infoSem} y requiero su asistencia o llamada urgente a este número.`);
+            window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msgSOS}`, '_blank');
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Alerta SOS Disparada";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-rose-200 mb-4">Se ha enviado la alerta prioritaria por WhatsApp. Si la Doctora está en quirófano o necesitas enlazar de inmediato por llamada de voz:</p>
+                <a href="tel:+${whatsappMedicoGlobal}" class="flex items-center justify-center gap-2 p-3 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-bold text-xs shadow-lg shadow-rose-900/50">
+                    <i class="fa-solid fa-phone"></i> Llamar Directo a la Doctora
+                </a>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
         }
 
         // ==========================================
