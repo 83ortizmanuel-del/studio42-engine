@@ -1,0 +1,47 @@
+{
+  "nombre": "DRA LISBETH CAROLINA RANGEL SANCHEZ",
+  "modoDemo": true,
+  "subtitulo": "Ginecología & Obstetricia · Cuidado Prenatal",
+  "textoBadge": "NODO PHYGITAL MATERNAL · CONEXIÓN DIRECTA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0A0F1D",
+  "colorAcento": "#00FFFF",
+  "secciones": [
+    {
+      "titulo": "Soluciones & Cuidado Prenatal Directo",
+      "botones": [
+        {
+          "nombre": "Cita Previa / Atención Inmediata",
+          "descripcion": "Reserva tu valoración prenatal o ginecológica al instante",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34600000000?text=Hola%20Dra.%20Lisbeth,%20quisiera%20reservar%20mi%20cita%20prenatal",
+          "destacado": true
+        },
+        {
+          "nombre": "Guía Prenatal & Información Directa",
+          "descripcion": "Resuelve tus dudas técnicas y solicita información sobre la consulta",
+          "icono": "fa-solid fa-baby",
+          "url": "https://wa.me/34600000000?text=Hola%20Dra.%20Lisbeth,%20deseo%20informaci%C3%B3n%20sobre%20los%20servicios%20prenatales"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade mi contacto directo a tu agenda telefónica",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        },
+        {
+          "nombre": "¿Dónde aparqué?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posición GPS de tu vehículo durante la consulta",
+          "icono": "fa-solid fa-location-crosshairs"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Dra.%20Lisbeth"
+    }
+  ]
+}
