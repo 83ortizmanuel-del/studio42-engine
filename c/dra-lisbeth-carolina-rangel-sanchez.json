@@ -23,7 +23,7 @@
           "descripcion": "Atención y resolución de dudas en consulta",
           "icono": "fa-brands fa-whatsapp",
           "estiloIcono": "background: rgba(94, 119, 103, 0.2); color: #7E9F89;",
-          "url": "https://wa.me/584120344533?text=Hola%20Dra.%20Lisbeth,%20le%20escribo%20desde%20mi%20llavero%20maternal",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20le%20escribo%20desde%20mi%20llavero%20maternal",
           "destacado": false
         }
       ]
@@ -76,7 +76,7 @@
           "descripcion": "Evaluación estructural fetal detallada con fotos",
           "icono": "fa-solid fa-eye",
           "estiloIcono": "background: rgba(217, 136, 138, 0.18); color: #D9888A;",
-          "url": "https://wa.me/584120344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20Ecosonograma%20Morfol%C3%B3gico%20privado",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20Ecosonograma%20Morfol%C3%B3gico%20privado",
           "destacado": false
         },
         {
@@ -84,7 +84,7 @@
           "descripcion": "Revisión integral sin colas y con ecografía",
           "icono": "fa-solid fa-stethoscope",
           "estiloIcono": "background: rgba(94, 119, 103, 0.2); color: #7E9F89;",
-          "url": "https://wa.me/584120344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20consulta%20prenatal%20privada",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20consulta%20prenatal%20privada",
           "destacado": false
         },
         {
@@ -92,7 +92,7 @@
           "descripcion": "Despistaje preventivo y valoración clínica",
           "icono": "fa-solid fa-microscope",
           "estiloIcono": "background: rgba(201, 168, 106, 0.18); color: #C9A86A;",
-          "url": "https://wa.me/584120344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20cita%20para%20citolog%C3%ADa%20y%20chequeo",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20cita%20para%20citolog%C3%ADa%20y%20chequeo",
           "destacado": false
         }
       ]
@@ -115,7 +115,7 @@
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
       "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/584120344533?text=Hola%20Dra%2042,%20tengo%20una%20sugerencia%20sobre%20la%20atencion%20de%20recibida%20el dia.%20de hoy"
+      "whatsappGerencia": "https://wa.me/584140344533?text=Hola%20Dra%2042,%20tengo%20una%20sugerencia%20sobre%20la%20atencion%20de%20recibida%20el dia.%20de hoy"
     }
   ]
 }
