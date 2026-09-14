@@ -1,7 +1,7 @@
 {
   "nombre": "DRA. LISBETH CAROLINA RANGEL SÁNCHEZ",
   "modoDemo": false,
-  "subtitulo": "Ginecología & Obstetricia · Cuidado Prenatal Humanizado",
+  "subtitulo": "Ginecología & Obstetricia · Cuidado Prenatal",
   "textoBadge": "PASAPORTE PHYGITAL MATERNAL · ATENCIÓN DIRECTA",
   "logo": "./logo-dra-lisbeth.png",
   "colorPrincipal": "#0F1A15",
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "titulo": "Herramientas de Control Maternal (WOW)",
+      "titulo": "Herramientas de Control Maternal",
       "botones": [
         {
           "tipo": "teleconsulta_triaje",
