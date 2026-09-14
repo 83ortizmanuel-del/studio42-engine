@@ -1,7 +1,7 @@
 {
   "nombre": "DRA. LISBETH CAROLINA RANGEL SÁNCHEZ",
   "modoDemo": false,
-  "subtitulo": "Ginecología & Obstetricia · Cuidado Prenatal",
+  "subtitulo": "Ginecología & Obstetricia · Cuidado Prenatal Humanizado",
   "textoBadge": "PASAPORTE PHYGITAL MATERNAL · ATENCIÓN DIRECTA",
   "logo": "./logo-dra-lisbeth.png",
   "colorPrincipal": "#0F1A15",
@@ -13,36 +13,29 @@
   },
   "secciones": [
     {
-      "titulo": "Contacto Directo & Agenda",
+      "titulo": "Contacto Directo & Citas",
       "botones": [
         {
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Descarga mi vCard directa al móvil en 1 toque",
+          "descripcion": "Descarga mi ficha médica directa al móvil en 1 toque",
           "icono": "fa-solid fa-address-card",
           "estiloIcono": "background: rgba(217, 136, 138, 0.18); color: #D9888A;",
           "url": "./dra-lisbeth-carolina-rangel-sanchez.vcf",
           "destacado": true
         },
         {
-          "nombre": "WhatsApp Médico Directo",
-          "descripcion": "Atención y resolución de dudas en consulta",
+          "nombre": "Citas Presenciales & Secretaría",
+          "descripcion": "Información de horarios, ubicación y agenda en clínica",
           "icono": "fa-brands fa-whatsapp",
           "estiloIcono": "background: rgba(94, 119, 103, 0.2); color: #7E9F89;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20le%20escribo%20desde%20mi%20llavero%20maternal",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20le%20escribo%20para%20solicitar%20informaci%C3%B3n%20y%20agendar%20cita%20presencial",
           "destacado": false
         }
       ]
     },
     {
-      "titulo": "Herramientas de Control Maternal",
+      "titulo": "Herramientas de Cuidado Maternal",
       "botones": [
-        {
-          "tipo": "teleconsulta_triaje",
-          "nombre": "Solicitar Teleconsulta Médica",
-          "descripcion": "Orientación médica con abono previo o alerta SOS",
-          "icono": "fa-solid fa-user-doctor",
-          "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;"
-        },
         {
           "tipo": "calculadora_embarazo",
           "nombre": "Calculadora Gestacional",
@@ -74,40 +67,48 @@
       ]
     },
     {
-      "titulo": "Consultas Privadas",
+      "titulo": "Consultas Médicas & Teleorientación",
       "botones": [
         {
-          "nombre": "Ecosonograma Morfológico / 4D",
-          "descripcion": "Evaluación estructural fetal detallada con fotos",
-          "icono": "fa-solid fa-eye",
-          "estiloIcono": "background: rgba(217, 136, 138, 0.18); color: #D9888A;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20Ecosonograma%20Morfol%C3%B3gico%20privado",
-          "destacado": false
+          "tipo": "teleconsulta_triaje",
+          "nombre": "Teleconsulta Médica Prioritaria",
+          "descripcion": "Orientación médica a distancia o protocolo SOS de urgencia",
+          "icono": "fa-solid fa-user-doctor",
+          "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;",
+          "destacado": true
         },
         {
-          "nombre": "Control Prenatal Privado (Sin Esperas)",
-          "descripcion": "Revisión integral sin colas y con ecografía",
+          "nombre": "Control Prenatal Integral",
+          "descripcion": "Evaluación médica continua, analíticas y ecografía",
           "icono": "fa-solid fa-stethoscope",
           "estiloIcono": "background: rgba(94, 119, 103, 0.2); color: #7E9F89;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20consulta%20prenatal%20privada",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20control%20prenatal%20integral",
           "destacado": false
         },
         {
-          "nombre": "Citología & Chequeo Ginecológico",
-          "descripcion": "Despistaje preventivo y valoración clínica",
+          "nombre": "Ecosonograma Morfológico / 4D",
+          "descripcion": "Evaluación estructural fetal detallada en alta resolución",
+          "icono": "fa-solid fa-eye",
+          "estiloIcono": "background: rgba(217, 136, 138, 0.18); color: #D9888A;",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20Ecosonograma%20Morfol%C3%B3gico",
+          "destacado": false
+        },
+        {
+          "nombre": "Chequeo Ginecológico & Citología",
+          "descripcion": "Despistaje preventivo y valoración clínica anual",
           "icono": "fa-solid fa-microscope",
           "estiloIcono": "background: rgba(201, 168, 106, 0.18); color: #C9A86A;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20cita%20para%20citolog%C3%ADa%20y%20chequeo",
+          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20chequeo%20ginecol%C3%B3gico%20y%20citolog%C3%ADa",
           "destacado": false
         }
       ]
     },
     {
-      "titulo": "Asistencia en Ruta & Medicación",
+      "titulo": "Asistencia en Ruta",
       "botones": [
         {
           "nombre": "Farmacias Cercanas por GPS",
-          "descripcion": "Encuentra farmacias y turnos abiertos cerca de ti",
+          "descripcion": "Localiza turnos y farmacias abiertas a tu alrededor",
           "icono": "fa-solid fa-prescription-bottle-medical",
           "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
           "url": "https://www.google.com/maps/search/farmacia+cercana/",
@@ -119,7 +120,7 @@
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
       "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20tengo%20una%20sugerencia%20sobre%20la%20atenci%C3%B3n%20recibida%20el%20d%C3%ADa%20de%20hoy"
+      "whatsappGerencia": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20tengo%20una%20sugerencia%20sobre%20la%20atenci%C3%B3n%20recibida"
     }
   ]
 }
