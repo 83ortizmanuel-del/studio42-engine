@@ -109,7 +109,7 @@
 
         /* MODALES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 28px; padding: 24px; max-width: 370px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; }
+        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 28px; padding: 24px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; }
         .modal-icon { font-size: 2.4rem; margin-bottom: 12px; }
         .modal-title { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
         .modal-text { font-size: 0.82rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 18px; }
@@ -177,11 +177,26 @@
         let googleReviewUrlGlobal = "https://maps.google.com";
         let whatsappGerenciaGlobal = "https://wa.me/34672294962";
         let nombreNegocioGlobal = "Profesional";
-        let whatsappMedicoGlobal = "584120000000";
+        let whatsappMedicoGlobal = "584140344533";
         let timerTeleconsultaGlobal = null;
+        let esNodoMaternal = false;
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
+
+        function obtenerFrutoGestacional(semanas) {
+            if (semanas < 6) return { nombre: "una semilla de amapola", icono: "🌱", tam: "2 mm" };
+            if (semanas <= 7) return { nombre: "un arándano silvestre", icono: "🫐", tam: "1 cm" };
+            if (semanas === 8) return { nombre: "una frambuesa", icono: "🍓", tam: "1.6 cm" };
+            if (semanas <= 10) return { nombre: "una fresa dulce", icono: "🍓", tam: "3 cm" };
+            if (semanas <= 12) return { nombre: "una ciruela", icono: "🍑", tam: "5.4 cm" };
+            if (semanas <= 15) return { nombre: "un melocotón", icono: "🍑", tam: "10 cm" };
+            if (semanas <= 19) return { nombre: "un aguacate", icono: "🥑", tam: "15 cm" };
+            if (semanas <= 24) return { nombre: "una mazorca de maíz", icono: "🌽", tam: "30 cm" };
+            if (semanas <= 28) return { nombre: "una berenjena", icono: "🍆", tam: "37 cm" };
+            if (semanas <= 34) return { nombre: "una piña tropical", icono: "🍍", tam: "45 cm" };
+            return { nombre: "una sandía dulce", icono: "🍉", tam: "50 cm" };
+        }
 
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -268,10 +283,14 @@
                             `;
                         } else if (sec.botones && Array.isArray(sec.botones)) {
                             sec.botones.forEach(btn => {
-                                // Captura inteligente de teléfono médico para herramientas nativas
                                 if (btn.url && btn.url.includes('wa.me/')) {
                                     const match = btn.url.match(/wa\.me\/([0-9]+)/);
                                     if (match && match[1]) whatsappMedicoGlobal = match[1];
+                                }
+
+                                // Detectar si este perfil tiene herramientas de control maternal
+                                if (btn.tipo === 'calculadora_embarazo' || btn.tipo === 'teleconsulta_triaje') {
+                                    esNodoMaternal = true;
                                 }
 
                                 // 0. TELECONSULTA TRIAJE (CON TEMPORIZADOR Y SOS)
@@ -364,7 +383,7 @@
                                         </a>
                                     `;
                                 } 
-                                // 6. BOTONES ESTÁNDAR / CONVERSIÓN
+                                // 6. BOTONES ESTÁNDAR / CONVERSIÓN / FARMACIA
                                 else {
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
@@ -392,10 +411,86 @@
             }
         }
 
+        // DESBLOQUEO INTELIGENTE: VIBRACIÓN + RITUAL DE ALTA MÉDICA
         function iniciarMagia() {
+            if ("vibrate" in navigator) {
+                try { navigator.vibrate([40, 60, 40]); } catch(e) {}
+            }
+
             splash.style.opacity = '0';
             setTimeout(() => { splash.style.display = 'none'; }, 500);
             if (reproductor.src) reproductor.play().catch(() => {});
+
+            if (!esNodoMaternal) return;
+
+            const furGuardada = localStorage.getItem('fur_embarazo');
+            
+            // Si es la primera vez que acerca el llavero en consulta, le pide la FUR
+            if (!furGuardada) {
+                setTimeout(() => {
+                    abrirModalAltaMaternal();
+                }, 400);
+            } else {
+                // Si ya la tiene guardada, calcula y muestra su bienvenida personalizada
+                const diffDias = calcularDiasGestacion(furGuardada);
+                if (diffDias >= 0 && diffDias <= 294) {
+                    const semanas = Math.floor(diffDias / 7);
+                    const fruto = obtenerFrutoGestacional(semanas);
+                    
+                    const badge = document.getElementById('badge-text');
+                    if (badge) {
+                        badge.innerHTML = `SEMANA ${semanas} · TAMAÑO DE ${fruto.nombre.toUpperCase()}`;
+                    }
+
+                    setTimeout(() => {
+                        document.getElementById('modal-icon').innerHTML = `<span class="text-4xl">${fruto.icono}</span>`;
+                        document.getElementById('modal-title').innerText = `¡Semana ${semanas} de Gestación!`;
+                        document.getElementById('modal-text').innerHTML = `
+                            <p class="text-sm font-semibold text-pink-300 mb-2">Tu bebé tiene el tamaño de <b>${fruto.nombre}</b> (~${fruto.tam}).</p>
+                            <p class="text-xs text-zinc-300">Bienvenida a tu Pasaporte Maternal. Tienes control de síntomas, cronómetro y contacto directo con la Doctora.</p>
+                        `;
+                        modalActions.innerHTML = `<button class="modal-btn-primary bg-pink-500 hover:bg-pink-600" onclick="cerrarModalBtn()">Entrar al Panel Maternal</button>`;
+                        abrirModalCustom();
+                    }, 500);
+                }
+            }
+        }
+
+        function calcularDiasGestacion(fechaStr) {
+            const partes = fechaStr.split('-');
+            const fur = new Date(partes[0], partes[1] - 1, partes[2]);
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            return Math.floor((hoy - fur) / (1000 * 60 * 60 * 24));
+        }
+
+        // Modal cuando se escanea por primera vez
+        function abrirModalAltaMaternal() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-baby text-pink-400"></i>';
+            document.getElementById('modal-title').innerText = "Bienvenida a Mamá Segura";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="mb-3 text-xs text-zinc-300">Para activar tu pasaporte personalizado, introduce la fecha de tu <b>Última Regla (FUR)</b>:</p>
+                <input type="date" id="input-fur-alta" class="w-full p-2.5 rounded-xl bg-slate-900 border border-pink-500/50 text-white text-center font-bold mb-2">
+                <p class="text-[11px] text-zinc-400">Esto calculará tus semanas exactas y fechas de estudios clave.</p>
+            `;
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="guardarAltaMaternal()">Activar Mi Pasaporte Maternal</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Hacerlo más tarde</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function guardarAltaMaternal() {
+            const input = document.getElementById('input-fur-alta');
+            if (!input || !input.value) return alert("Por favor indica la fecha de tu última regla.");
+            const diffDias = calcularDiasGestacion(input.value);
+            if (diffDias < 0 || diffDias > 294) return alert("Fecha fuera del rango válido de gestación.");
+            
+            localStorage.setItem('fur_embarazo', input.value);
+            actualizarResumenEmbarazo();
+            
+            // Abre directamente el modal con el hito y el fruto
+            mostrarModalHitoClinico(input.value);
         }
 
         const modalOverlay = document.getElementById('modal-overlay');
@@ -467,7 +562,7 @@
             const fur = localStorage.getItem('fur_embarazo');
             let infoSem = "";
             if (fur) {
-                const diffDias = Math.floor((new Date() - new Date(fur)) / (1000 * 60 * 60 * 24));
+                const diffDias = calcularDiasGestacion(fur);
                 infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
             const msg = encodeURIComponent(`Hola Doctora, le escribo desde mi llavero maternal para solicitar una Teleconsulta de control${infoSem}. Ya tengo mis dudas y exámenes a mano.`);
@@ -505,7 +600,7 @@
             const fur = localStorage.getItem('fur_embarazo');
             let infoSem = "";
             if (fur) {
-                const diffDias = Math.floor((new Date() - new Date(fur)) / (1000 * 60 * 60 * 24));
+                const diffDias = calcularDiasGestacion(fur);
                 infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
             const msgSOS = encodeURIComponent(`🚨 URGENCIA OBSTÉTRICA SOS: Doctora, presento un síntoma de alarma grave${infoSem} y requiero su asistencia o llamada urgente a este número.`);
@@ -523,7 +618,7 @@
         }
 
         // ==========================================
-        // 1. CALCULADORA GESTACIONAL
+        // 1. CALCULADORA GESTACIONAL & HITOS CLÍNICOS
         // ==========================================
         function abrirCalculadoraEmbarazo() {
             const furGuardada = localStorage.getItem('fur_embarazo') || '';
@@ -532,55 +627,108 @@
             document.getElementById('modal-text').innerHTML = `
                 <p class="mb-3 text-xs text-zinc-300">Fecha de tu <b>Última Regla (FUR)</b>:</p>
                 <input type="date" id="input-fur" value="${furGuardada}" class="w-full p-2.5 rounded-xl bg-slate-900 border border-pink-500/40 text-white text-center font-bold mb-3">
-                <div id="resultado-semanas" class="p-3 bg-white/5 rounded-xl border border-white/10 text-left text-xs font-mono space-y-1 ${furGuardada ? '' : 'hidden'}"></div>
+                <p class="text-[11px] text-zinc-400">Introduce o actualiza tu fecha para calcular las semanas exactas y tu próximo estudio.</p>
             `;
 
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600" onclick="procesarCalculoEmbarazo()">Calcular Semanas</button>
+                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="procesarCalculoEmbarazo()">Calcular y Ver Estudio</button>
+                ${furGuardada ? '<button class="modal-btn-secondary border-red-500/30 text-rose-400" onclick="borrarFurGuardada()">Cambiar / Borrar Fecha</button>' : ''}
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
-            if (furGuardada) procesarCalculoEmbarazo();
             abrirModalCustom();
+        }
+
+        function borrarFurGuardada() {
+            localStorage.removeItem('fur_embarazo');
+            const label = document.getElementById('calculadora-resumen');
+            if (label) label.innerText = "Calcula tus semanas y fecha de parto";
+            const badge = document.getElementById('badge-text');
+            if (badge) badge.innerText = "PASAPORTE PHYGITAL MATERNAL · ATENCIÓN DIRECTA";
+            abrirCalculadoraEmbarazo();
         }
 
         function procesarCalculoEmbarazo() {
             const inputFur = document.getElementById('input-fur');
-            const resBox = document.getElementById('resultado-semanas');
             if (!inputFur || !inputFur.value) return alert("Introduce la fecha de tu última regla.");
 
-            const fur = new Date(inputFur.value);
-            const diffDias = Math.floor((new Date() - fur) / (1000 * 60 * 60 * 24));
+            const diffDias = calcularDiasGestacion(inputFur.value);
             if (diffDias < 0 || diffDias > 294) return alert("Fecha fuera de rango válido de gestación.");
 
             localStorage.setItem('fur_embarazo', inputFur.value);
+            actualizarResumenEmbarazo();
+            mostrarModalHitoClinico(inputFur.value);
+        }
 
+        // Modal de Alto Impacto con Llamado a la Acción hacia tu Hermana
+        function mostrarModalHitoClinico(fechaStr) {
+            const diffDias = calcularDiasGestacion(fechaStr);
             const semanas = Math.floor(diffDias / 7);
             const dias = diffDias % 7;
+            const partes = fechaStr.split('-');
+            const fur = new Date(partes[0], partes[1] - 1, partes[2]);
             const fpp = new Date(fur.getTime() + (280 * 24 * 60 * 60 * 1000));
             const opcionesFecha = { year: 'numeric', month: 'short', day: 'numeric' };
+            const fruto = obtenerFrutoGestacional(semanas);
 
-            let hitoClinico = "Monitoreo general";
-            if (semanas >= 11 && semanas <= 14) hitoClinico = "⚠️ Clave: Eco Genético 1er Trimestre";
-            if (semanas >= 20 && semanas <= 24) hitoClinico = "⚠️ Clave: Eco Morfológico Estructural 4D";
-            if (semanas >= 35) hitoClinico = "⚠️ Clave: Valoración preparto y monitoreo";
+            let estudioTitulo = "Control Prenatal Periódico";
+            let estudioDesc = "Revisión clínica, toma de tensión arterial, analíticas de rutina y ecografía de bienestar fetal.";
+            let mensajeWp = `Hola Dra. Lisbeth, me encuentro en mi Semana ${semanas} y deseo agendar mi consulta de control prenatal.`;
+            let textoBtn = "Agendar Control Prenatal con la Dra.";
 
-            resBox.classList.remove('hidden');
-            resBox.innerHTML = `
-                <div class="flex justify-between text-zinc-300"><span>Tiempo:</span><span class="text-pink-400 font-black">${semanas} Semanas + ${dias} Días</span></div>
-                <div class="flex justify-between text-zinc-300"><span>Fecha de Parto:</span><span class="text-emerald-400 font-bold">${fpp.toLocaleDateString('es-ES', opcionesFecha)}</span></div>
-                <div class="pt-2 text-[10px] text-amber-300 font-bold border-t border-white/10 mt-1">${hitoClinico}</div>
+            if (semanas >= 11 && semanas <= 14) {
+                estudioTitulo = "⚠️ Eco Genético del 1er Trimestre (Clave)";
+                estudioDesc = "Momento vital: Evaluación de translucencia nucal y despistaje genético cromosómico temprano.";
+                mensajeWp = `Hola Dra. Lisbeth, estoy en mi Semana ${semanas} y necesito agendar mi Ecosonograma Genético del 1er Trimestre.`;
+                textoBtn = "Agendar Eco Genético con la Dra.";
+            } else if (semanas >= 20 && semanas <= 24) {
+                estudioTitulo = "🌟 Eco Morfológico Estructural 4D (Clave)";
+                estudioDesc = "Estudio anatómico integral de órganos fetales, corazón, columna y evaluación en alta resolución 4D.";
+                mensajeWp = `Hola Dra. Lisbeth, estoy en mi Semana ${semanas} y deseo agendar mi Ecosonograma Morfológico Estructural 4D.`;
+                textoBtn = "Agendar Eco Morfológico 4D";
+            } else if (semanas >= 35) {
+                estudioTitulo = "🩺 Monitoreo Preparto & Plan de Nacimiento";
+                estudioDesc = "Valoración de líquido amniótico, posición fetal, signos preparto y preparación de maleta.";
+                mensajeWp = `Hola Dra. Lisbeth, estoy en mi Semana ${semanas} y requiero agendar valoración preparto y monitoreo.`;
+                textoBtn = "Agendar Valoración Preparto";
+            }
+
+            document.getElementById('modal-icon').innerHTML = `<span class="text-4xl">${fruto.icono}</span>`;
+            document.getElementById('modal-title').innerText = `Semana ${semanas} + ${dias} Días`;
+            document.getElementById('modal-text').innerHTML = `
+                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 text-left space-y-1.5 mb-3 text-xs">
+                    <div class="flex justify-between"><span class="text-zinc-400">Tamaño del bebé:</span><span class="text-pink-300 font-bold">${fruto.nombre} (~${fruto.tam})</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-400">Fecha probable parto:</span><span class="text-emerald-400 font-bold">${fpp.toLocaleDateString('es-ES', opcionesFecha)}</span></div>
+                </div>
+                <div class="p-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 text-left">
+                    <div class="text-xs font-bold text-amber-300 mb-1">${estudioTitulo}</div>
+                    <div class="text-[11px] text-zinc-300 leading-snug">${estudioDesc}</div>
+                </div>
             `;
-            actualizarResumenEmbarazo();
+
+            modalActions.innerHTML = `
+                <a href="https://wa.me/${whatsappMedicoGlobal}?text=${encodeURIComponent(mensajeWp)}" target="_blank" class="modal-btn-primary bg-emerald-600 hover:bg-emerald-700 font-black flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> ${textoBtn}
+                </a>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Volver al Panel</button>
+            `;
+            abrirModalCustom();
         }
 
         function actualizarResumenEmbarazo() {
             const furGuardada = localStorage.getItem('fur_embarazo');
             const label = document.getElementById('calculadora-resumen');
             if (furGuardada && label) {
-                const fur = new Date(furGuardada);
-                const diffDias = Math.floor((new Date() - fur) / (1000 * 60 * 60 * 24));
-                const sem = Math.floor(diffDias / 7);
-                label.innerText = `Semana ${sem} de gestación (Toca para ver)`;
+                const diffDias = calcularDiasGestacion(furGuardada);
+                if (diffDias >= 0 && diffDias <= 294) {
+                    const sem = Math.floor(diffDias / 7);
+                    const fruto = obtenerFrutoGestacional(sem);
+                    label.innerText = `Semana ${sem} · ${fruto.nombre} ${fruto.icono} (Toca para ver)`;
+                    
+                    const badge = document.getElementById('badge-text');
+                    if (badge) {
+                        badge.innerHTML = `SEMANA ${sem} · TAMAÑO DE ${fruto.nombre.toUpperCase()}`;
+                    }
+                }
             }
         }
 
@@ -624,7 +772,7 @@
             const fur = localStorage.getItem('fur_embarazo');
             let infoSem = "";
             if (fur) {
-                const diffDias = Math.floor((new Date() - new Date(fur)) / (1000 * 60 * 60 * 24));
+                const diffDias = calcularDiasGestacion(fur);
                 infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
             const sintoma = opt ? opt.value : "un síntoma de alarma no especificado";
@@ -702,7 +850,7 @@
             const fur = localStorage.getItem('fur_embarazo');
             let infoSem = "";
             if (fur) {
-                const diffDias = Math.floor((new Date() - new Date(fur)) / (1000 * 60 * 60 * 24));
+                const diffDias = calcularDiasGestacion(fur);
                 infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
             const durText = segsContraccion > 0 ? ` con duración aprox de ${segsContraccion} segundos` : '';
