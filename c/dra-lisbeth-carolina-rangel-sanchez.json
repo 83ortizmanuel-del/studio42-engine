@@ -6,6 +6,11 @@
   "logo": "./logo-dra-lisbeth.png",
   "colorPrincipal": "#0F1A15",
   "colorAcento": "#D9888A",
+  "datosPago": {
+    "pagoMovil": "0414-0344533 · Banesco · V-12345678",
+    "zelle": "contacto@dralisbethrangel.com",
+    "tarifa": "Honorarios Teleconsulta: $20 (o al cambio oficial BCV)"
+  },
   "secciones": [
     {
       "titulo": "Contacto Directo & Agenda",
@@ -34,7 +39,7 @@
         {
           "tipo": "teleconsulta_triaje",
           "nombre": "Solicitar Teleconsulta Médica",
-          "descripcion": "Orientación médica o protocolo de emergencia SOS",
+          "descripcion": "Orientación médica con abono previo o alerta SOS",
           "icono": "fa-solid fa-user-doctor",
           "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;"
         },
