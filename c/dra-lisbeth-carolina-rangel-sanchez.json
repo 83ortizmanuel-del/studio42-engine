@@ -98,15 +98,14 @@
       ]
     },
     {
-      "titulo": "Utilidades en Consulta",
+      "titulo": "Asistencia en Ruta & Medicación",
       "botones": [
         {
-          "tipo": "parking",
-          "nombre": "¿Dónde aparqué?",
-          "descripcion": "Guarda la posición GPS de tu vehículo al llegar",
-          "icono": "fa-solid fa-location-crosshairs",
-          "estiloIcono": "background: rgba(142, 142, 147, 0.15); color: #8e8e93;",
-          "url": "#",
+          "nombre": "Farmacias Cercanas por GPS",
+          "descripcion": "Encuentra farmacias y turnos abiertos cerca de ti",
+          "icono": "fa-solid fa-prescription-bottle-medical",
+          "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
+          "url": "https://www.google.com/maps/search/farmacia+cercana/",
           "destacado": false
         }
       ]
