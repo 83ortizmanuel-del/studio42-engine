@@ -78,7 +78,20 @@
         .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         
         h1 { font-size: 1.4rem; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; color: #fff; }
-        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 16px; font-weight: 700; letter-spacing: 0.8px; }
+        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.8px; }
+
+        /* TARJETA PACIENTE EN CABECERA */
+        .paciente-header-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(217, 136, 138, 0.35);
+            border-radius: 18px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+        }
         
         .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 800; }
         
@@ -109,10 +122,10 @@
 
         /* MODALES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 28px; padding: 24px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; }
-        .modal-icon { font-size: 2.4rem; margin-bottom: 12px; }
+        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 28px; padding: 22px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; max-height: 90vh; overflow-y: auto; }
+        .modal-icon { font-size: 2.2rem; margin-bottom: 10px; }
         .modal-title { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
-        .modal-text { font-size: 0.82rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 18px; }
+        .modal-text { font-size: 0.82rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 16px; }
         
         .modal-actions { display: flex; flex-direction: column; gap: 9px; }
         .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 800; font-size: 0.84rem; cursor: pointer; text-decoration: none; display: block; }
@@ -160,6 +173,22 @@
         <h1 id="client-name">STUDIO 42</h1>
         <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
+        <!-- TARJETA CABECERA DE LA PACIENTE (SOLO VISIBLE CUANDO ESTÁ CONFIGURADA) -->
+        <div id="card-paciente-header" class="paciente-header-card hidden">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-person-pregnant"></i>
+                </div>
+                <div>
+                    <div id="header-nombre-paciente" class="text-xs font-bold text-white">Mamá Segura</div>
+                    <div id="header-datos-paciente" class="text-[10px] text-pink-300 font-mono">Semana Gestacional</div>
+                </div>
+            </div>
+            <button onclick="abrirFichaEmergenciaModal()" class="text-[10px] bg-white/10 hover:bg-white/20 text-zinc-300 px-2.5 py-1.5 rounded-lg border border-white/10">
+                <i class="fa-solid fa-notes-medical text-rose-400 mr-1"></i> Ficha SOS
+            </button>
+        </div>
+
         <!-- MODO DEMO COMERCIAL (SE OCULTA CUANDO modoDemo ES FALSE) -->
         <div id="fricciones-section" style="display:none;">
             <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
@@ -179,6 +208,7 @@
         let nombreNegocioGlobal = "Profesional";
         let whatsappMedicoGlobal = "584140344533";
         let timerTeleconsultaGlobal = null;
+        let esNodoMaternal = false;
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
@@ -296,6 +326,10 @@
                                     if (match && match[1]) whatsappMedicoGlobal = match[1];
                                 }
 
+                                if (btn.tipo === 'calculadora_embarazo' || btn.tipo === 'teleconsulta_triaje') {
+                                    esNodoMaternal = true;
+                                }
+
                                 // 0. TELECONSULTA TRIAJE (CON TEMPORIZADOR Y SOS)
                                 if (btn.tipo === 'teleconsulta_triaje') {
                                     block.innerHTML += `
@@ -408,25 +442,187 @@
                 }
                 actualizarInterfazParking();
                 actualizarResumenEmbarazo();
+                actualizarTarjetaCabeceraPaciente();
             } catch (err) {
                 console.error(err);
                 document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
             }
         }
 
-        // DESBLOQUEO DIRECTO Y LIMPIO
+        // DESBLOQUEO INTELIGENTE: VIBRACIÓN + RITUAL DE ALTA COMPLETO
         function iniciarMagia() {
             if ("vibrate" in navigator) {
                 try { navigator.vibrate([40, 60, 40]); } catch(e) {}
             }
 
             splash.style.opacity = '0';
-            setTimeout(() => { 
-                splash.style.display = 'none'; 
-            }, 500);
-
+            setTimeout(() => { splash.style.display = 'none'; }, 500);
             if (reproductor.src) reproductor.play().catch(() => {});
+
+            if (!esNodoMaternal) return;
+
+            const furGuardada = localStorage.getItem('fur_embarazo');
+            
+            // Si es la primera vez que acerca el llavero, abre el formulario completo de alta
+            if (!furGuardada) {
+                setTimeout(() => {
+                    abrirModalAltaMaternalCompleta();
+                }, 350);
+            } else {
+                actualizarResumenEmbarazo();
+                actualizarTarjetaCabeceraPaciente();
+            }
+        }
+
+        // FORMULARIO DE ALTA MÉDICA Y PERSONALIZACIÓN COMPLETA
+        function abrirModalAltaMaternalCompleta() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-card-clip text-pink-400"></i>';
+            document.getElementById('modal-title').innerText = "Activación Pasaporte Maternal";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-3">Registra tus datos vitales para personalizar tu seguimiento y protegerte ante cualquier emergencia:</p>
+                
+                <div class="space-y-2 text-left text-xs">
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1">Nombre y Apellido de la Mamá:</label>
+                        <input type="text" id="reg-nombre" placeholder="Ej: Andrea Gómez" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white font-semibold">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] text-zinc-400 mb-1">Grupo Sanguíneo:</label>
+                            <select id="reg-sangre" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white font-semibold">
+                                <option value="O+">O Positivo (O+)</option>
+                                <option value="O-">O Negativo (O-)</option>
+                                <option value="A+">A Positivo (A+)</option>
+                                <option value="A-">A Negativo (A-)</option>
+                                <option value="B+">B Positivo (B+)</option>
+                                <option value="B-">B Negativo (B-)</option>
+                                <option value="AB+">AB Positivo (AB+)</option>
+                                <option value="AB-">AB Negativo (AB-)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-zinc-400 mb-1">Alergias Conocidas:</label>
+                            <input type="text" id="reg-alergias" placeholder="Ninguna o medicamentos" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1">Acompañante / Contacto de Emergencia:</label>
+                        <input type="text" id="reg-contacto-nombre" placeholder="Nombre (ej: Pareja o Madre)" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white mb-1.5">
+                        <input type="tel" id="reg-contacto-tel" placeholder="Teléfono de emergencia" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                    </div>
+
+                    <div class="pt-2 border-t border-white/10">
+                        <label class="block text-[11px] text-pink-300 font-bold mb-1">Fecha de Última Regla (FUR):</label>
+                        <input type="date" id="reg-fur" class="w-full p-2.5 rounded-xl bg-slate-900 border border-pink-500/50 text-white text-center font-bold">
+                    </div>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="guardarAltaMaternalCompleta()">Activar Mi Pasaporte Maternal</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Hacerlo después</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function guardarAltaMaternalCompleta() {
+            const nombre = document.getElementById('reg-nombre').value.trim();
+            const sangre = document.getElementById('reg-sangre').value;
+            const alergias = document.getElementById('reg-alergias').value.trim() || 'Ninguna reportada';
+            const contactoNombre = document.getElementById('reg-contacto-nombre').value.trim();
+            const contactoTel = document.getElementById('reg-contacto-tel').value.trim();
+            const fur = document.getElementById('reg-fur').value;
+
+            if (!nombre) return alert("Por favor indica tu nombre.");
+            if (!fur) return alert("Por favor indica la fecha de tu última regla.");
+
+            const diffDias = calcularDiasGestacion(fur);
+            if (diffDias < 0 || diffDias > 294) return alert("Fecha de última regla fuera del rango gestacional válido.");
+
+            // Guardar datos en el dispositivo de la mamá
+            localStorage.setItem('paciente_nombre', nombre);
+            localStorage.setItem('paciente_sangre', sangre);
+            localStorage.setItem('paciente_alergias', alergias);
+            localStorage.setItem('paciente_contacto_nombre', contactoNombre);
+            localStorage.setItem('paciente_contacto_tel', contactoTel);
+            localStorage.setItem('fur_embarazo', fur);
+
+            actualizarTarjetaCabeceraPaciente();
             actualizarResumenEmbarazo();
+
+            // Salta directamente el modal de bienvenida WOW con el estudio y fruto
+            mostrarModalHitoClinico(fur);
+        }
+
+        // Actualiza el widget de la paciente en la cabecera
+        function actualizarTarjetaCabeceraPaciente() {
+            const nombre = localStorage.getItem('paciente_nombre');
+            const fur = localStorage.getItem('fur_embarazo');
+            const sangre = localStorage.getItem('paciente_sangre') || 'O+';
+            const headerCard = document.getElementById('card-paciente-header');
+            const lblNombre = document.getElementById('header-nombre-paciente');
+            const lblDatos = document.getElementById('header-datos-paciente');
+
+            if (!headerCard) return;
+
+            if (nombre && fur) {
+                const diffDias = calcularDiasGestacion(fur);
+                const sem = Math.floor(diffDias / 7);
+                const fruto = obtenerFrutoGestacional(sem);
+
+                headerCard.classList.remove('hidden');
+                if (lblNombre) lblNombre.innerText = `Mamá: ${nombre}`;
+                if (lblDatos) lblDatos.innerText = `Semana ${sem} · ${fruto.icono} ${fruto.nombre} · Grupo ${sangre}`;
+            } else {
+                headerCard.classList.add('hidden');
+            }
+        }
+
+        // Ver Ficha Médica de Emergencia en Bloqueo
+        function abrirFichaEmergenciaModal() {
+            const nombre = localStorage.getItem('paciente_nombre') || 'No registrado';
+            const sangre = localStorage.getItem('paciente_sangre') || 'No especificado';
+            const alergias = localStorage.getItem('paciente_alergias') || 'Ninguna reportada';
+            const cNombre = localStorage.getItem('paciente_contacto_nombre') || 'Acompañante';
+            const cTel = localStorage.getItem('paciente_contacto_tel') || '';
+            const fur = localStorage.getItem('fur_embarazo');
+
+            let semInfo = "Semana no calculada";
+            if (fur) {
+                const diffDias = calcularDiasGestacion(fur);
+                const sem = Math.floor(diffDias / 7);
+                semInfo = `Semana ${sem} de gestación`;
+            }
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-notes-medical text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Ficha Médica de Emergencia SOS";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 text-left text-xs space-y-2 mb-3">
+                    <div class="flex justify-between"><span class="text-zinc-400">Paciente:</span><span class="text-white font-bold">${nombre}</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-400">Estado:</span><span class="text-pink-300 font-bold">${semInfo}</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-400">Grupo Sanguíneo:</span><span class="text-rose-400 font-bold">${sangre}</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-400">Alergias:</span><span class="text-amber-300 font-semibold">${alergias}</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-400">Obstetra:</span><span class="text-cyan-300 font-bold">Dra. Lisbeth Rangel</span></div>
+                </div>
+
+                ${cTel ? `
+                    <a href="tel:${cTel}" class="w-full p-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold flex items-center justify-center gap-2 mb-2 text-xs">
+                        <i class="fa-solid fa-phone"></i> Llamar a Acompañante (${cNombre})
+                    </a>
+                ` : ''}
+
+                <a href="tel:+${whatsappMedicoGlobal}" class="w-full p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold flex items-center justify-center gap-2 text-xs">
+                    <i class="fa-solid fa-user-doctor"></i> Llamar Directo a la Doctora
+                </a>
+            `;
+
+            modalActions.innerHTML = `
+                <button class="modal-btn-secondary" onclick="abrirModalAltaMaternalCompleta()">Editar Ficha</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
         }
 
         const modalOverlay = document.getElementById('modal-overlay');
@@ -501,7 +697,8 @@
                 const diffDias = calcularDiasGestacion(fur);
                 if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
-            const msg = encodeURIComponent(`Hola Dra. Lisbeth, le escribo desde mi llavero maternal para solicitar una Teleconsulta de control${infoSem}. Ya tengo mis dudas y exámenes a mano.`);
+            const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
+            const msg = encodeURIComponent(`Hola Dra. Lisbeth, le escribe ${nombre} desde mi llavero maternal para solicitar una Teleconsulta de control${infoSem}. Ya tengo mis dudas y exámenes a mano.`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
@@ -539,7 +736,8 @@
                 const diffDias = calcularDiasGestacion(fur);
                 if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
-            const msgSOS = encodeURIComponent(`🚨 URGENCIA OBSTÉTRICA SOS: Doctora, presento un síntoma de alarma grave${infoSem} y requiero su asistencia o llamada urgente a este número.`);
+            const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
+            const msgSOS = encodeURIComponent(`🚨 URGENCIA OBSTÉTRICA SOS: Doctora, le escribe ${nombre}, presento un síntoma de alarma grave${infoSem} y requiero su asistencia o llamada urgente a este número.`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msgSOS}`, '_blank');
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
@@ -568,19 +766,14 @@
 
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="procesarCalculoEmbarazo()">Calcular Semanas y Ver Estudio</button>
-                ${furGuardada ? '<button class="modal-btn-secondary border-red-500/30 text-rose-400" onclick="borrarFurGuardada()">Cambiar / Borrar Fecha</button>' : ''}
+                <button class="modal-btn-secondary border-red-500/30 text-rose-400" onclick="borrarFurGuardada()">Modificar Datos / Ficha</button>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
 
         function borrarFurGuardada() {
-            localStorage.removeItem('fur_embarazo');
-            const label = document.getElementById('calculadora-resumen');
-            if (label) label.innerText = "Calcula tus semanas y fecha de parto";
-            const badge = document.getElementById('badge-text');
-            if (badge) badge.innerText = "PASAPORTE PHYGITAL MATERNAL · ATENCIÓN DIRECTA";
-            abrirCalculadoraEmbarazo();
+            abrirModalAltaMaternalCompleta();
         }
 
         function procesarCalculoEmbarazo() {
@@ -592,6 +785,7 @@
 
             localStorage.setItem('fur_embarazo', inputFur.value);
             actualizarResumenEmbarazo();
+            actualizarTarjetaCabeceraPaciente();
             mostrarModalHitoClinico(inputFur.value);
         }
 
@@ -604,26 +798,27 @@
             const fpp = new Date(fur.getTime() + (280 * 24 * 60 * 60 * 1000));
             const opcionesFecha = { year: 'numeric', month: 'short', day: 'numeric' };
             const fruto = obtenerFrutoGestacional(semanas);
+            const nombre = localStorage.getItem('paciente_nombre') || 'Mamá';
 
             let estudioTitulo = "Control Prenatal Regular";
             let estudioDesc = "Revisión integral, toma de tensión arterial y ecografía de bienestar fetal.";
-            let mensajeWp = `Hola Dra. Lisbeth, me encuentro en mi Semana ${semanas} y deseo agendar mi consulta de control prenatal.`;
+            let mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Me encuentro en mi Semana ${semanas} y deseo agendar mi consulta de control prenatal.`;
             let textoBtn = "Agendar Control con la Dra.";
 
             if (semanas >= 11 && semanas <= 14) {
                 estudioTitulo = "⚠️ Eco Genético 1er Trimestre (Clave)";
                 estudioDesc = "Despistaje cromosómico y evaluación estructural temprana.";
-                mensajeWp = `Hola Dra. Lisbeth, estoy en mi Semana ${semanas} y necesito agendar mi Ecosonograma Genético del 1er Trimestre.`;
+                mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Estoy en mi Semana ${semanas} y necesito agendar mi Ecosonograma Genético del 1er Trimestre.`;
                 textoBtn = "Agendar Eco Genético con la Dra.";
             } else if (semanas >= 20 && semanas <= 24) {
                 estudioTitulo = "🌟 Eco Morfológico Estructural 4D (Clave)";
                 estudioDesc = "Evaluación detallada de anatomía fetal, corazón y columna en 4D.";
-                mensajeWp = `Hola Dra. Lisbeth, estoy en mi Semana ${semanas} y deseo agendar mi Ecosonograma Morfológico Estructural 4D.`;
+                mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Estoy en mi Semana ${semanas} y deseo agendar mi Ecosonograma Morfológico Estructural 4D.`;
                 textoBtn = "Agendar Eco Morfológico 4D";
             } else if (semanas >= 35) {
                 estudioTitulo = "🩺 Monitoreo Preparto";
                 estudioDesc = "Evaluación preparto, bienestar fetal y preparación para el nacimiento.";
-                mensajeWp = `Hola Dra. Lisbeth, estoy en mi Semana ${semanas} y requiero agendar valoración preparto y monitoreo.`;
+                mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Estoy en mi Semana ${semanas} y requiero agendar valoración preparto y monitoreo.`;
                 textoBtn = "Agendar Valoración Preparto";
             }
 
@@ -710,8 +905,9 @@
                 const diffDias = calcularDiasGestacion(fur);
                 if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
+            const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
             const sintoma = opt ? opt.value : "un síntoma de alarma no especificado";
-            const msg = encodeURIComponent(`Hola Doctora, presento ${sintoma}${infoSem}. Por favor indíqueme qué debo hacer.`);
+            const msg = encodeURIComponent(`Hola Doctora, le escribe ${nombre}. Presento ${sintoma}${infoSem}. Por favor indíqueme qué debo hacer.`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
         }
 
@@ -788,8 +984,9 @@
                 const diffDias = calcularDiasGestacion(fur);
                 if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
+            const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
             const durText = segsContraccion > 0 ? ` con duración aprox de ${segsContraccion} segundos` : '';
-            const msg = encodeURIComponent(`Hola Doctora, estoy registrando contracciones continuas${durText}${infoSem}. ¿Debo acudir a la clínica?`);
+            const msg = encodeURIComponent(`Hola Doctora, le escribe ${nombre}. Estoy registrando contracciones continuas${durText}${infoSem}. ¿Debo acudir a la clínica?`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
         }
 
@@ -831,7 +1028,7 @@
         }
 
         // ==========================================
-        // 5. PARKING GPS (Seguro si no existe botón)
+        // 5. PARKING GPS (Seguro)
         // ==========================================
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
