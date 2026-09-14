@@ -80,7 +80,7 @@
         h1 { font-size: 1.4rem; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; color: #fff; }
         .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.8px; }
 
-        /* TARJETA PACIENTE EN CABECERA */
+        /* TARJETA PACIENTE CABECERA */
         .paciente-header-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(217, 136, 138, 0.35);
@@ -173,7 +173,7 @@
         <h1 id="client-name">STUDIO 42</h1>
         <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-        <!-- TARJETA CABECERA DE LA PACIENTE (SOLO VISIBLE CUANDO ESTÁ CONFIGURADA) -->
+        <!-- TARJETA PACIENTE CABECERA -->
         <div id="card-paciente-header" class="paciente-header-card hidden">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -209,6 +209,12 @@
         let whatsappMedicoGlobal = "584140344533";
         let timerTeleconsultaGlobal = null;
         let esNodoMaternal = false;
+
+        let datosPagoGlobal = {
+            pagoMovil: "0414-0344533 · Banesco · V-12345678",
+            zelle: "contacto@dralisbethrangel.com",
+            tarifa: "Honorarios Teleconsulta: $20 (o al cambio oficial BCV)"
+        };
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
@@ -250,6 +256,10 @@
 
                 if (data.colorPrincipal) document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
                 if (data.colorAcento) document.documentElement.style.setProperty('--color-acento', data.colorAcento);
+
+                if (data.datosPago) {
+                    datosPagoGlobal = { ...datosPagoGlobal, ...data.datosPago };
+                }
 
                 document.getElementById('page-title').innerText = `${nombreNegocioGlobal} | Identidad Digital`;
                 document.getElementById('splash-title').innerText = nombreNegocioGlobal;
@@ -330,7 +340,7 @@
                                     esNodoMaternal = true;
                                 }
 
-                                // 0. TELECONSULTA TRIAJE (CON TEMPORIZADOR Y SOS)
+                                // 0. TELECONSULTA TRIAJE (CON PAGO Y SOS)
                                 if (btn.tipo === 'teleconsulta_triaje') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-sky-500/30 bg-sky-950/20" onclick="abrirModalTeleconsulta()">
@@ -405,7 +415,7 @@
                                         </div>
                                     `;
                                 }
-                                // 5. PARKING GPS (Si existe en el JSON)
+                                // 5. PARKING GPS (Si existe en JSON)
                                 else if (btn.tipo === 'parking') {
                                     block.innerHTML += `
                                         <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
@@ -420,7 +430,7 @@
                                         </a>
                                     `;
                                 } 
-                                // 6. BOTONES ESTÁNDAR / CONVERSIÓN / FARMACIA
+                                // 6. BOTONES ESTÁNDAR / FARMACIAS / CITAS
                                 else {
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
@@ -449,21 +459,24 @@
             }
         }
 
-        // DESBLOQUEO INTELIGENTE: VIBRACIÓN + RITUAL DE ALTA COMPLETO
+        // DESBLOQUEO INTELIGENTE: VIBRACIÓN + RITUAL DE ALTA MÉDICA
         function iniciarMagia() {
             if ("vibrate" in navigator) {
                 try { navigator.vibrate([40, 60, 40]); } catch(e) {}
             }
 
             splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; }, 500);
+            setTimeout(() => { 
+                splash.style.display = 'none'; 
+            }, 500);
+
             if (reproductor.src) reproductor.play().catch(() => {});
 
             if (!esNodoMaternal) return;
 
             const furGuardada = localStorage.getItem('fur_embarazo');
             
-            // Si es la primera vez que acerca el llavero, abre el formulario completo de alta
+            // Si es la primera vez que acerca el llavero en consulta
             if (!furGuardada) {
                 setTimeout(() => {
                     abrirModalAltaMaternalCompleta();
@@ -474,7 +487,7 @@
             }
         }
 
-        // FORMULARIO DE ALTA MÉDICA Y PERSONALIZACIÓN COMPLETA
+        // ALTA MÉDICA COMPLETA AL PRIMER TOQUE
         function abrirModalAltaMaternalCompleta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-card-clip text-pink-400"></i>';
             document.getElementById('modal-title').innerText = "Activación Pasaporte Maternal";
@@ -508,9 +521,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1">Acompañante / Contacto de Emergencia:</label>
+                        <label class="block text-[11px] text-zinc-400 mb-1">Acompañante / Emergencia:</label>
                         <input type="text" id="reg-contacto-nombre" placeholder="Nombre (ej: Pareja o Madre)" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white mb-1.5">
-                        <input type="tel" id="reg-contacto-tel" placeholder="Teléfono de emergencia" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                        <input type="tel" id="reg-contacto-tel" placeholder="Teléfono de contacto rápido" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
                     </div>
 
                     <div class="pt-2 border-t border-white/10">
@@ -539,9 +552,8 @@
             if (!fur) return alert("Por favor indica la fecha de tu última regla.");
 
             const diffDias = calcularDiasGestacion(fur);
-            if (diffDias < 0 || diffDias > 294) return alert("Fecha de última regla fuera del rango gestacional válido.");
+            if (diffDias < 0 || diffDias > 294) return alert("Fecha fuera del rango gestacional válido.");
 
-            // Guardar datos en el dispositivo de la mamá
             localStorage.setItem('paciente_nombre', nombre);
             localStorage.setItem('paciente_sangre', sangre);
             localStorage.setItem('paciente_alergias', alergias);
@@ -551,12 +563,9 @@
 
             actualizarTarjetaCabeceraPaciente();
             actualizarResumenEmbarazo();
-
-            // Salta directamente el modal de bienvenida WOW con el estudio y fruto
             mostrarModalHitoClinico(fur);
         }
 
-        // Actualiza el widget de la paciente en la cabecera
         function actualizarTarjetaCabeceraPaciente() {
             const nombre = localStorage.getItem('paciente_nombre');
             const fur = localStorage.getItem('fur_embarazo');
@@ -580,7 +589,6 @@
             }
         }
 
-        // Ver Ficha Médica de Emergencia en Bloqueo
         function abrirFichaEmergenciaModal() {
             const nombre = localStorage.getItem('paciente_nombre') || 'No registrado';
             const sangre = localStorage.getItem('paciente_sangre') || 'No especificado';
@@ -656,7 +664,7 @@
         }
 
         // ==========================================
-        // 0. TELECONSULTA CON TRIAJE Y CRONÓMETRO
+        // 0. TELECONSULTA: FILTRO DE PAGO PREVIO & SOS
         // ==========================================
         function abrirModalTeleconsulta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-user-doctor text-sky-400"></i>';
@@ -664,13 +672,13 @@
             document.getElementById('modal-text').innerHTML = `
                 <p class="mb-4 text-xs text-zinc-300">Para brindarte una atención médica óptima, selecciona el motivo de tu solicitud:</p>
                 <div class="space-y-2.5 text-left">
-                    <button onclick="ejecutarTeleconsultaNormal()" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-emerald-500/30 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition">
+                    <button onclick="ejecutarPasarelaPagoTeleconsulta()" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-emerald-500/30 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition">
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg shrink-0">
-                            <i class="fa-brands fa-whatsapp"></i>
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
                         </div>
                         <div>
                             <div class="font-bold text-xs text-white">Consulta / Revisión General</div>
-                            <div class="text-[10px] text-zinc-400">Dudas de recetas, citas o exámenes (No urgente)</div>
+                            <div class="text-[10px] text-zinc-400">Validación de pago y agendamiento (No urgente)</div>
                         </div>
                     </button>
 
@@ -680,7 +688,7 @@
                         </div>
                         <div>
                             <div class="font-bold text-xs text-rose-300">🚨 Signo de Alarma / Urgencia SOS</div>
-                            <div class="text-[10px] text-rose-200/70">Dolor fuerte, pérdida de líquido o sangrado</div>
+                            <div class="text-[10px] text-rose-200/70">Dolor fuerte, pérdida de líquido o sangrado (Sin pagos)</div>
                         </div>
                     </button>
                 </div>
@@ -690,7 +698,58 @@
             abrirModalCustom();
         }
 
-        function ejecutarTeleconsultaNormal() {
+        function ejecutarPasarelaPagoTeleconsulta() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i>';
+            document.getElementById('modal-title').innerText = "Validación de Consulta";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-3">Para ingresar a la agenda prioritaria y enfocar la sesión 100% en tu caso clínico, formaliza tu abono:</p>
+                
+                <div class="p-3 bg-slate-900 rounded-2xl border border-emerald-500/30 text-left text-xs space-y-2 mb-3">
+                    <div class="text-[11px] text-emerald-300 font-bold border-b border-white/10 pb-1">${datosPagoGlobal.tarifa}</div>
+                    
+                    <div>
+                        <span class="text-zinc-400 text-[10px] block">Pago Móvil:</span>
+                        <div class="flex justify-between items-center bg-black/30 p-1.5 rounded-lg font-mono text-[11px] text-zinc-200">
+                            <span>${datosPagoGlobal.pagoMovil}</span>
+                            <button onclick="copiarAlPortapapeles('${datosPagoGlobal.pagoMovil}')" class="text-cyan-400 text-xs px-2 py-0.5 hover:text-white"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                    </div>
+
+                    ${datosPagoGlobal.zelle ? `
+                    <div>
+                        <span class="text-zinc-400 text-[10px] block">Zelle / Correo:</span>
+                        <div class="flex justify-between items-center bg-black/30 p-1.5 rounded-lg font-mono text-[11px] text-zinc-200">
+                            <span>${datosPagoGlobal.zelle}</span>
+                            <button onclick="copiarAlPortapapeles('${datosPagoGlobal.zelle}')" class="text-cyan-400 text-xs px-2 py-0.5 hover:text-white"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        </div>
+                    </div>` : ''}
+                </div>
+
+                <div class="text-left mb-2">
+                    <label class="block text-[11px] text-pink-300 font-bold mb-1">Nº de Referencia o Banco Emisor:</label>
+                    <input type="text" id="input-ref-pago" placeholder="Ej: 4 últimos dígitos o Ref: 9834" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center font-bold">
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-700 font-bold" onclick="confirmarPagoYEnviar()">Confirmar y Notificar a la Dra.</button>
+                <button class="modal-btn-secondary" onclick="abrirModalTeleconsulta()">Volver</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function copiarAlPortapapeles(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("📋 Datos de pago copiados al portapapeles.");
+            }).catch(() => {
+                prompt("Copia los datos manualmente:", texto);
+            });
+        }
+
+        function confirmarPagoYEnviar() {
+            const ref = document.getElementById('input-ref-pago').value.trim();
+            if (!ref) return alert("Por favor indica el número o comprobante de tu referencia para que la Doctora lo verifique.");
+
             const fur = localStorage.getItem('fur_embarazo');
             let infoSem = "";
             if (fur) {
@@ -698,18 +757,20 @@
                 if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
             }
             const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
-            const msg = encodeURIComponent(`Hola Dra. Lisbeth, le escribe ${nombre} desde mi llavero maternal para solicitar una Teleconsulta de control${infoSem}. Ya tengo mis dudas y exámenes a mano.`);
+
+            const msg = encodeURIComponent(`Hola Dra. Lisbeth, le escribe ${nombre} desde mi llavero maternal para formalizar mi Teleconsulta de control${infoSem}.\n\n💳 Ref. de Pago: ${ref}\n\nYa tengo mis dudas y estudios a mano.`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
 
+            // Pasa al reloj de 30 minutos
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
-            document.getElementById('modal-title').innerText = "¡Mensaje Notificado!";
+            document.getElementById('modal-title').innerText = "¡Comprobante Notificado!";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">La Doctora ha recibido tu solicitud. Para darte una valoración rigurosa, se preparará revisando tu ficha clínica.</p>
+                <p class="text-xs text-zinc-300 mb-3">La Doctora ha recibido tu comprobante y revisará tu expediente clínico antes de enlazarse contigo.</p>
                 <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 mb-2">
                     <div class="text-[10px] text-cyan-400 uppercase font-mono tracking-wider mb-1">Tiempo Estimado de Preparación</div>
                     <div id="chrono-teleconsulta" class="text-3xl font-mono font-black text-white">30:00</div>
                 </div>
-                <p class="text-[11px] text-zinc-400">Si tus síntomas se intensifican, pulsa el botón de urgencia.</p>
+                <p class="text-[11px] text-zinc-400">Si presentas un síntoma de alarma grave, activa la opción SOS.</p>
             `;
 
             modalActions.innerHTML = `<button class="modal-btn-primary" onclick="cerrarModalBtn()">Entendido</button>`;
