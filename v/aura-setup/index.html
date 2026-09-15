@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AURA | Activación de Red</title>
+    <title>AURA | Protocolo de Activación</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -12,8 +12,8 @@
             --card-surface: rgba(22, 11, 38, 0.92);
             --violeta-base: #7b2cbf;
             --magenta-neon: #e056fd;
-            --magenta-glow: rgba(224, 86, 253, 0.35);
-            --borde-sutil: rgba(224, 86, 253, 0.22);
+            --magenta-glow: rgba(224, 86, 253, 0.4);
+            --borde-sutil: rgba(224, 86, 253, 0.25);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -36,6 +36,23 @@
             padding: 24px 18px;
             text-align: center;
             backdrop-filter: blur(18px);
+        }
+
+        /* LUZ NEÓN MAGENTA PARPADEANTE NATIVA */
+        .neon-dot {
+            width: 9px;
+            height: 9px;
+            background-color: var(--magenta-neon);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px var(--magenta-neon);
+            animation: auraPulse 1.4s infinite ease-in-out;
+        }
+
+        @keyframes auraPulse {
+            0% { opacity: 0.3; transform: scale(0.85); box-shadow: 0 0 4px var(--magenta-neon); }
+            50% { opacity: 1; transform: scale(1.25); box-shadow: 0 0 14px var(--magenta-neon); }
+            100% { opacity: 0.3; transform: scale(0.85); box-shadow: 0 0 4px var(--magenta-neon); }
         }
 
         /* LOGO AURA */
@@ -101,9 +118,9 @@
 <body>
 
     <div class="hub-container">
-        <!-- BADGE STATUS -->
-        <div class="inline-flex items-center gap-2 bg-fuchsia-950/40 border border-fuchsia-500/35 px-3 py-1 rounded-full text-[10px] font-mono text-fuchsia-300 mb-3 tracking-wider uppercase">
-            <span class="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse shadow-[0_0_8px_#e056fd]"></span>
+        <!-- BADGE CON LUZ PARPADEANTE CORREGIDA -->
+        <div class="inline-flex items-center gap-2 bg-fuchsia-950/50 border border-fuchsia-500/40 px-3.5 py-1.5 rounded-full text-[11px] font-mono text-fuchsia-300 mb-3 tracking-wider uppercase">
+            <span class="neon-dot"></span>
             Red de Protección Silenciosa
         </div>
 
@@ -113,18 +130,19 @@
             <i id="fallback-icon" class="fa-solid fa-ribbon text-4xl text-fuchsia-400" style="display: none;"></i>
         </div>
 
-        <h1 class="text-xl font-black tracking-tight text-white mb-1 uppercase">Activación de Red</h1>
+        <!-- TÍTULO OFICIAL DESTACADO -->
+        <h1 class="text-xl font-black tracking-tight text-white mb-1 uppercase">PROTOCOLO DE ACTIVACIÓN</h1>
         <p class="text-xs text-purple-200/80 mb-5 leading-relaxed">
-            Conecta el sistema silencioso con tu contacto de confianza en 3 pasos rápidos.
+            Sigue estos 3 pasos para conectar tu sistema de acompañamiento con tu contacto de confianza.
         </p>
 
         <!-- PASO 1 -->
         <div class="step-card">
             <div class="step-badge bg-fuchsia-500/20 text-fuchsia-300">
-                <i class="fa-solid fa-paper-plane text-xs"></i> Paso 1: Enviar enlace a tu persona de confianza
+                <i class="fa-solid fa-paper-plane text-xs"></i> Paso 1: Enviar invitación
             </div>
             <p class="text-[11px] text-purple-100/90 mb-3 leading-snug">
-                Toca el botón para compartirle por Telegram la invitación a tu contacto (familiar o amistad):
+                Toca el botón para compartirle por Telegram el enlace de conexión a tu persona de confianza (madre, amiga o red de apoyo):
             </p>
             <a id="btn-share-telegram" href="#" target="_blank" class="btn-tg-share">
                 <i class="fa-brands fa-telegram text-base"></i>
@@ -135,23 +153,23 @@
         <!-- PASO 2 -->
         <div class="step-card">
             <div class="step-badge bg-purple-500/20 text-purple-300">
-                <i class="fa-solid fa-robot text-xs"></i> Paso 2: Tu contacto envía /start y te da su ID
+                <i class="fa-solid fa-robot text-xs"></i> Paso 2: Tu contacto te da su ID
             </div>
             <p class="text-[11px] text-purple-100/90 mb-2 leading-snug">
-                Al abrir el enlace, tu contacto caerá directo en el bot con el texto <b>/start</b> ya listo en pantalla. Solo debe darle a <b>Enviar</b> y el bot le devolverá su <b>número de ID</b>.
+                Tu contacto recibirá el enlace con el texto <b>/start</b> listo para pulsar enviar. En respuesta, el bot le mostrará su <b>número de ID</b>.
             </p>
             <div class="p-2.5 bg-black/50 rounded-xl border border-fuchsia-500/20 text-[11px] text-purple-200 text-left">
-                <span class="text-fuchsia-300 font-bold">👉 ¿Qué hace tu contacto?</span> Solo debe copiarte ese número de ID y enviártelo a ti.
+                <span class="text-fuchsia-300 font-bold">👉 ¿Qué hace tu contacto?</span> Solo te copia ese número de ID y te lo envía a ti.
             </div>
         </div>
 
         <!-- PASO 3 -->
         <div class="step-card">
             <div class="step-badge bg-emerald-500/20 text-emerald-300">
-                <i class="fa-solid fa-shield-check text-xs"></i> Paso 3: Pegar el ID en tus Ajustes
+                <i class="fa-solid fa-shield-check text-xs"></i> Paso 3: Guardar ID en Ajustes
             </div>
             <p class="text-[11px] text-purple-100/90 mb-3 leading-snug">
-                Abre la pantalla camuflada, toca en <b>«Servidor principal»</b> y pega el número que te envió tu contacto:
+                Abre la pantalla camuflada, toca en <b>«Servidor principal»</b> y pega el número que te facilitó tu contacto:
             </p>
             <a href="./index.html?cod=aura" class="btn-activate">
                 <i class="fa-solid fa-gear"></i>
@@ -159,11 +177,11 @@
             </a>
         </div>
 
-        <!-- RESUMEN CLARO DEL RASTREO -->
+        <!-- CONFIRMACIÓN DE FUNCIONAMIENTO -->
         <div class="mt-4 p-2.5 bg-black/50 rounded-xl border border-fuchsia-500/20 text-[10px] text-purple-300 text-left flex items-start gap-2">
             <i class="fa-solid fa-circle-check text-emerald-400 text-xs mt-0.5"></i>
             <div>
-                <b>¡Todo listo!</b> Cuando pegues el ID, tu persona de confianza empezará a recibir tus confirmaciones de llegada y alertas SOS cuando uses tu dispositivo.
+                <b>Canal blindado:</b> A partir de ese momento, cada vez que uses los botones camuflados o la alarma SOS, tu contacto de confianza recibirá tus reportes en tiempo real.
             </div>
         </div>
 
@@ -174,14 +192,10 @@
 
     <script>
         const BOT_USERNAME = "Auramanuel_bot";
-
-        // Enlace optimizado: abre el bot cargando /start directamente en la caja de texto
         const LINK_BOT_CON_COMANDO = `https://t.me/${BOT_USERNAME}?text=%2Fstart`;
 
-        // Mensaje precargado que recibe la persona de confianza
         const MENSAJE_COMPARTIR = `Hola, te elijo como mi persona de confianza en mi sistema de seguridad AURA.\n\nPor favor entra a este enlace oficial en Telegram y pulsa ENVIAR al comando /start que te aparecerá listo en pantalla:\n👉 ${LINK_BOT_CON_COMANDO}\n\nEn cuanto te devuelva tu número de ID, cópialo y envíamelo para conectarnos.`;
 
-        // Genera la acción oficial de Telegram para compartir en 1 toque
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(LINK_BOT_CON_COMANDO)}&text=${encodeURIComponent(MENSAJE_COMPARTIR)}`;
         
         document.getElementById('btn-share-telegram').href = shareUrl;
