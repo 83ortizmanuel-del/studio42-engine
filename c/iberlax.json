@@ -8,13 +8,13 @@
   "audioFondo": "ambiente2.mp3",
   "secciones": [
     {
-      "titulo": "Asesoría & Compra en Tienda",
+      "titulo": "Diagnóstico & Asesoría en Tienda",
       "botones": [
         {
-          "nombre": "Promo Exclusiva Llavero Smart",
-          "descripcion": "15% dto. directo + Almohada viscoelástica de regalo al canjear aquí",
-          "icono": "fa-solid fa-tag",
-          "url": "https://wa.me/34945601573?text=Hola%20Iberlax,%20vengo%20del%20Llavero%20Smart%20y%20quiero%20activar%20mi%20descuento%20exclusivo",
+          "tipo": "test_desgaste",
+          "nombre": "Diagnóstico de Fatiga del Colchón",
+          "descripcion": "Calcula el desgaste biomecánico y pérdida de soporte de tu cama actual",
+          "icono": "fa-solid fa-microscope",
           "estiloIcono": "background-color: rgba(255, 180, 0, 0.15); color: #FFB400;",
           "destacado": true
         },
@@ -27,8 +27,8 @@
         },
         {
           "tipo": "tasador_retirada",
-          "nombre": "Tasador de Entrega & Retirada",
-          "descripcion": "Calcula condiciones de transporte y retirada de tu colchón viejo",
+          "nombre": "Servicio de Logística & Entrega",
+          "descripcion": "Consulta accesos, transporte y plazos para tu domicilio",
           "icono": "fa-solid fa-truck-ramp-box",
           "estiloIcono": "background-color: rgba(48, 209, 88, 0.15); color: #30d158;"
         },
@@ -42,18 +42,18 @@
       ]
     },
     {
-      "titulo": "Club VIP & Servicios Posventa",
+      "titulo": "Servicios VIP & Prescripción",
       "botones": [
         {
           "nombre": "🔑 Devolución de Llaves Perdidas",
-          "descripcion": "¿Has encontrado estas llaves? Pulsa aquí para avisar a Iberlax y devolverlas",
+          "descripcion": "¿Has encontrado estas llaves? Pulsa aquí para avisar a Iberlax y coordinar la entrega",
           "icono": "fa-solid fa-key",
           "url": "https://wa.me/34945601573?text=Hola%20Iberlax,%20he%20encontrado%20un%20llavero%20con%20llaves%20de%20un%20cliente%20vuestro%20y%20quiero%20coordinar%20su%20devolución",
           "estiloIcono": "background-color: rgba(14, 165, 233, 0.15); color: #0EA5E9;"
         },
         {
-          "nombre": "Bono Amigo: Regala 50 € de Descuento",
-          "descripcion": "Pasa tu contacto y regala 50 € a un amigo para su próximo colchón",
+          "nombre": "Club Embajador: Regala 50 € a un Amigo",
+          "descripcion": "Comparte un bono exclusivo de 50 € para el nuevo descanso de un familiar o amigo",
           "icono": "fa-solid fa-gift",
           "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20bono%20exclusivo%20de%2050%20€%20de%20descuento%20para%20tu%20nuevo%20colchón%20en%20Iberlax.%20Pruébalo%20aquí:%20https://wa.me/34945601573",
           "estiloIcono": "background-color: rgba(168, 85, 247, 0.15); color: #A855F7;"
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "titulo": "Tu Opinión Nos Importa",
+      "titulo": "Tu Experiencia en Iberlax",
       "escudoResenas": true,
       "urlGoogleResenas": "https://www.google.com/search?q=Iberlax+Colchones+Opiniones",
       "whatsappGerencia": "https://wa.me/34643186453?text=Hola%20Gerencia%20Iberlax,%20quisiera%20comentar%20una%20disconformidad%20con%20mi%20visita"
