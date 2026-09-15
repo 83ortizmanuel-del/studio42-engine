@@ -243,15 +243,15 @@
     let currentStep = 0;
     let userData = {
         q1: '', q2: '', q3: '', q4: '', q5: '', q6: '', q7: '', q8: '',
-        nombre: '', telefono: '', email: '', universidad: ''
+        nombre: '', telefono: '', email: '', universidad: '', perfil: ''
     };
 
     const questions = [
         {
-            title: "1. ¿Qué modelo comercial buscas para generar ingresos?",
+            title: "1. ¿Cuál es tu situación administrativa actual para colaborar y generar ingresos?",
             options: [
-                { text: "🚀 Alto rendimiento por comisiones directas (40€ a 150€/venta) con cobro ágil en el día", val: "Comisiones Directas", valid: true },
-                { text: "💼 Busco un sueldo fijo tradicional de 8 horas sentado en oficina", val: "Sueldo Fijo", valid: false }
+                { text: "💼 Ya soy autónomo / profesional con capacidad de facturar mis comisiones", val: "Autónomo Activo", valid: true },
+                { text: "🚀 Busco empezar como captador/embajador a prueba y formalizarme al consolidar ventas", val: "Captador Inicial", valid: true }
             ]
         },
         {
@@ -338,6 +338,11 @@
                     <input type="tel" id="inputTel" class="input-field" placeholder="Teléfono / WhatsApp de contacto" autocomplete="tel" required>
                     <input type="email" id="inputEmail" class="input-field" placeholder="Correo Electrónico" autocomplete="email" required>
                     <input type="text" id="inputUni" class="input-field" placeholder="Universidad / Ciudad de residencia" required>
+                    <select id="inputPerfil" class="input-field" required>
+                        <option value="" disabled selected>Selecciona tu perfil de colaboración</option>
+                        <option value="Autónomo con RETA / Agente Comercial">Ya soy Autónomo / Agente Comercial</option>
+                        <option value="Estudiante / Captador Inicial a Prueba">Estudiante / Captador Inicial a Prueba</option>
+                    </select>
                     <button class="btn-silver-submit" onclick="submitCandidaturaEmail()">ENVIAR CANDIDATURA A DIRECCIÓN</button>
                 </div>
             `;
@@ -371,9 +376,11 @@
         const tel = document.getElementById('inputTel').value.trim();
         const email = document.getElementById('inputEmail').value.trim();
         const uni = document.getElementById('inputUni').value.trim();
+        const perfilSelect = document.getElementById('inputPerfil');
+        const perfil = perfilSelect ? perfilSelect.value : userData.q1;
 
-        if (!nombre || !tel || !email || !uni) {
-            alert("Por favor, completa todos los campos para tramitar tu solicitud.");
+        if (!nombre || !tel || !email || !uni || !perfil) {
+            alert("Por favor, completa todos los campos (incluyendo tu perfil de colaboración) para tramitar tu solicitud.");
             return;
         }
 
@@ -384,9 +391,11 @@
             `• Nombre: ${nombre}\n` +
             `• Teléfono/WhatsApp: ${tel}\n` +
             `• Correo: ${email}\n` +
-            `• Universidad / Ubicación: ${uni}\n\n` +
+            `• Universidad / Ubicación: ${uni}\n` +
+            `• Modalidad Administrativa: ${perfil}\n\n` +
             `RESULTADOS DEL TEST:\n` +
             `• Puntuación: 8/8 Respuestas Compatibles (Aprobado)\n` +
+            `• Tipo de Respuesta Q1: ${userData.q1}\n` +
             `• Enfoque: Venta presencial B2B + Comisiones en el día + Demo 10s\n\n` +
             `El aspirante ha superado la prueba de los 30 segundos y solicita cita presencial para entrega de polo corporativo y muestras físicas.`
         );
