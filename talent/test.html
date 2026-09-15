@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección Oficial Talent | Studio 42</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #07090E;
+            --card-bg: #12151C;
+            --surface-inner: #181C24;
+            --copper: #D4AF37;
+            --copper-hover: #E5C158;
+            --text-main: #FFFFFF;
+            --text-muted: #8E95A5;
+            --border-color: #262B36;
+            --danger: #FF4D4D;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 580px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            text-align: left;
+        }
+
+        .header { text-align: center; margin-bottom: 24px; }
+        .logo { max-width: 150px; height: auto; margin-bottom: 14px; }
+
+        h1 { font-size: 1.35rem; font-weight: 800; color: var(--text-main); line-height: 1.3; margin-bottom: 8px; }
+        h1 span { color: var(--copper); }
+        p.subtitle { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+        .bot-container {
+            background: var(--surface-inner);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px 20px;
+            margin-top: 20px;
+            min-height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .progress-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; font-size: 0.78rem; color: var(--copper); font-weight: 700;
+        }
+
+        .progress-bar {
+            width: 100%; height: 4px; background-color: #20242D;
+            border-radius: 2px; margin-bottom: 20px; overflow: hidden;
+        }
+
+        .progress-fill { height: 100%; background-color: var(--copper); width: 12.5%; transition: width 0.3s ease; }
+        .question-title { font-size: 1rem; font-weight: 700; margin-bottom: 18px; line-height: 1.45; color: var(--text-main); }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .btn-option {
+            background-color: #1F242E; border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 14px 16px; border-radius: 10px; font-size: 0.86rem; cursor: pointer;
+            text-align: left; transition: all 0.2s ease; line-height: 1.4;
+        }
+
+        .btn-option:hover { border-color: var(--copper); background-color: #272D3A; transform: translateY(-1px); }
+
+        .input-group { display: flex; flex-direction: column; gap: 12px; }
+        .input-field { background-color: #1F242E; border: 1px solid var(--border-color); color: var(--text-main); padding: 14px; border-radius: 8px; font-size: 0.9rem; }
+        .input-field:focus { outline: none; border-color: var(--copper); }
+
+        .btn-submit {
+            background-color: var(--copper); color: #07090E; border: none; padding: 16px;
+            border-radius: 8px; font-weight: 800; font-size: 0.92rem; cursor: pointer; margin-top: 10px; transition: background 0.2s ease;
+        }
+        .btn-submit:hover { background-color: var(--copper-hover); }
+
+        .btn-retry {
+            background-color: transparent; color: var(--copper); border: 1px solid var(--copper);
+            padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+            margin-top: 16px; width: 100%; transition: all 0.2s ease;
+        }
+        .btn-retry:hover { background-color: rgba(212, 175, 55, 0.1); }
+
+        .status-screen { text-align: center; padding: 24px 10px; }
+        .status-icon { font-size: 2.8rem; margin-bottom: 12px; }
+
+        .footer-modern {
+            margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-color);
+            display: flex; flex-direction: column; align-items: center; gap: 14px;
+        }
+        .footer-badges { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .badge-tech { background-color: var(--surface-inner); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.72rem; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
+        .badge-tech span { color: var(--copper); }
+        .footer-copy { text-align: center; font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <img src="logo.png" alt="Studio 42" class="logo" onerror="this.style.display='none'">
+        <h1>Selección Oficial <span>Closer Phygital</span></h1>
+        <p class="subtitle">Validación técnica y comercial de 30 segundos para representación de ecosistemas NFC.</p>
+    </div>
+
+    <div class="bot-container" id="botBox">
+        <div>
+            <div class="progress-header">
+                <span id="stepText">PREGUNTA 1 DE 8</span>
+                <span id="percentText">12%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="quizContent"></div>
+        </div>
+    </div>
+
+    <footer class="footer-modern">
+        <div class="footer-badges">
+            <div class="badge-tech"><span>⚡</span> Demos en 10s</div>
+            <div class="badge-tech"><span>💰</span> 40€ a 150€/cierre</div>
+            <div class="badge-tech"><span>📍</span> Expansión Universidades</div>
+        </div>
+        <div class="footer-copy">
+            <strong>Studio 42</strong> © 2026 — Agencia de Identidad Inteligente
+        </div>
+    </footer>
+</div>
+
+<script>
+    const CONFIG = {
+        agencyEmail: "info@studio42.es", // Correo oficial de recepción de la agencia
+        whatsappNumber: "34672294962",    // WhatsApp de dirección
+        totalQuestions: 8
+    };
+
+    let currentStep = 0;
+    let userData = {
+        q1: '', q2: '', q3: '', q4: '', q5: '', q6: '', q7: '', q8: '',
+        nombre: '', telefono: '', email: '', universidad: ''
+    };
+
+    const questions = [
+        {
+            title: "1. ¿Qué modelo comercial buscas para generar ingresos?",
+            options: [
+                { text: "🚀 Alto rendimiento por comisiones directas (40€ a 150€/venta) con cobro ágil", val: "Comisiones Directas", valid: true },
+                { text: "💼 Busco un sueldo fijo tradicional de 8 horas sentado en oficina", val: "Sueldo Fijo", valid: false }
+            ]
+        },
+        {
+            title: "2. Nuestra solución requiere entrar a locales y hacer demostraciones. ¿Tienes soltura?",
+            options: [
+                { text: "😊 Sí, tengo agilidad para entrar, hablar con dueños/encargados y mostrar el valor", val: "Visita Presencial", valid: true },
+                { text: "🖥️ No, únicamente acepto tareas remotas por ordenador o llamadas frías", val: "Solo Remoto", valid: false }
+            ]
+        },
+        {
+            title: "3. Vendemos hardware real (NFC y metacrilato) conectado a la nube. ¿Qué opinas de las demos de 10s?",
+            options: [
+                { text: "🔥 Es la clave. Apoyar la muestra en mostrador y que acerquen el móvil vende solo", val: "Demo Interactiva 10s", valid: true },
+                { text: "📄 Prefiero repartir folletos de papel y esperar sentado a que llamen", val: "Folleto Pasivo", valid: false }
+            ]
+        },
+        {
+            title: "4. Facilitamos polo corporativo con chip NFC en la manga. ¿Qué valor le das a la imagen?",
+            options: [
+                { text: "👕 Fundamental. La estética tecnológica y la autoridad facilitan cerrar tratos", val: "Imagen Alta", valid: true },
+                { text: "🤷 Me da igual, no creo que la presencia afecte a la confianza del cliente", val: "Imagen Baja", valid: false }
+            ]
+        },
+        {
+            title: "5. Studio 42 asume la fabricación técnica, software y soporte. ¿Qué te parece esta división?",
+            options: [
+                { text: "🛡️ Impecable. La agencia blinda el producto y yo me dedico a cerrar y cobrar", val: "Enfoque Comercial", valid: true },
+                { text: "🛠️ Prefiero encargarme yo del soporte informático y programar las etiquetas", val: "Enfoque Técnico", valid: false }
+            ]
+        },
+        {
+            title: "6. Llegas a un local con gente y el encargado te dice: 'No tengo tiempo ahora'. ¿Cómo reaccionas?",
+            options: [
+                { text: "⚡ 'Solo 10 segundos: acerca tu móvil aquí. Si no te impresiona, me voy al instante'", val: "Proactivo 10s", valid: true },
+                { text: "😔 Me doy media vuelta pidiendo perdón y descarto el establecimiento", val: "Abandono Pasivo", valid: false }
+            ]
+        },
+        {
+            title: "7. Cobras tu comisión directa vinculada al cierre de cada pedido. ¿Cómo valoras esta liquidez?",
+            options: [
+                { text: "💰 Excelente. Dinero directo por resultado que premia mi ritmo de visitas diario", val: "Liquidez Ágil", valid: true },
+                { text: "📅 Prefiero esperar semanas o cierres de trimestre para cobrar incentivos", val: "Pago Diferido", valid: false }
+            ]
+        },
+        {
+            title: "8. Los clientes pueden renovar software o ampliar sedes. ¿Te interesa construir cartera?",
+            options: [
+                { text: "🌐 Sí, busco ganar hoy en mano pero también generar relaciones a largo plazo", val: "Visión Cartera", valid: true },
+                { text: "💸 Solo me interesa hacer una venta rápida y olvidarme del cliente para siempre", val: "Cierre Único", valid: false }
+            ]
+        }
+    ];
+
+    function renderStep() {
+        const quizContent = document.getElementById('quizContent');
+        const progressFill = document.getElementById('progressFill');
+        const stepText = document.getElementById('stepText');
+        const percentText = document.getElementById('percentText');
+
+        if (currentStep < questions.length) {
+            const q = questions[currentStep];
+            const percent = Math.round(((currentStep + 1) / CONFIG.totalQuestions) * 100);
+            
+            stepText.innerText = `PREGUNTA ${currentStep + 1} DE ${CONFIG.totalQuestions}`;
+            percentText.innerText = `${percent}%`;
+            progressFill.style.width = `${percent}%`;
+
+            let html = `<div class="question-title">${q.title}</div><div class="options-list">`;
+            q.options.forEach((opt) => {
+                html += `<button class="btn-option" onclick="handleOptionSelection(${opt.valid}, '${opt.val}')">${opt.text}</button>`;
+            });
+            html += `</div>`;
+            quizContent.innerHTML = html;
+        } else {
+            stepText.innerText = "TEST COMPLETADO";
+            percentText.innerText = "100%";
+            progressFill.style.width = "100%";
+            
+            quizContent.innerHTML = `
+                <div class="question-title">🎯 Perfil 100% compatible. Ingresa tus datos para registrar tu candidatura en la agencia:</div>
+                <div class="input-group">
+                    <input type="text" id="inputNombre" class="input-field" placeholder="Nombre y Apellidos" autocomplete="name" required>
+                    <input type="tel" id="inputTel" class="input-field" placeholder="Número de Teléfono / WhatsApp" autocomplete="tel" required>
+                    <input type="email" id="inputEmail" class="input-field" placeholder="Correo Electrónico" autocomplete="email" required>
+                    <input type="text" id="inputUni" class="input-field" placeholder="Universidad / Ciudad actual" required>
+                    <button class="btn-submit" onclick="submitCandidaturaEmail()">ENVIAR CANDIDATURA A STUDIO 42</button>
+                </div>
+            `;
+        }
+    }
+
+    function handleOptionSelection(isValid, value) {
+        if (!isValid) {
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="status-screen">
+                    <div class="status-icon">⚠️</div>
+                    <div class="question-title">Perfil Fuera de Alcance</div>
+                    <p class="subtitle">En Studio 42 buscamos personas con perfil comercial activo para demostraciones de impacto en locales y comisiones directas.</p>
+                    <button class="btn-retry" onclick="renderStep()">Rectificar respuesta</button>
+                </div>
+            `;
+            return;
+        }
+
+        const keys = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8'];
+        userData[keys[currentStep]] = value;
+        currentStep++;
+        renderStep();
+    }
+
+    function submitCandidaturaEmail() {
+        const nombre = document.getElementById('inputNombre').value.trim();
+        const tel = document.getElementById('inputTel').value.trim();
+        const email = document.getElementById('inputEmail').value.trim();
+        const uni = document.getElementById('inputUni').value.trim();
+
+        if (!nombre || !tel || !email || !uni) {
+            alert("Por favor, rellena todos los campos antes de enviar tu candidatura.");
+            return;
+        }
+
+        const asunto = encodeURIComponent(`Candidatura Closer Phygital Talent - ${nombre} (${uni})`);
+        const cuerpo = encodeURIComponent(
+            `NUEVA CANDIDATURA DE TALENTO UNIVERSITARIO - STUDIO 42\n\n` +
+            `DATOS DEL ASPIRANTE:\n` +
+            `• Nombre: ${nombre}\n` +
+            `• Teléfono/WhatsApp: ${tel}\n` +
+            `• Correo: ${email}\n` +
+            `• Universidad / Ubicación: ${uni}\n\n` +
+            `RESULTADO DEL TEST:\n` +
+            `• Puntuación: 8/8 Respuestas Compatibles Aprobadas\n` +
+            `• Modalidad: Comisiones Directas + Demos Presenciales 10s\n\n` +
+            `El aspirante ha superado la prueba de los 30 segundos y solicita revisión para asignación de kit de demostración.`
+        );
+
+        // Envío directo al correo de la agencia
+        const mailtoUrl = `mailto:${CONFIG.agencyEmail}?subject=${asunto}&body=${cuerpo}`;
+
+        const quizContent = document.getElementById('quizContent');
+        quizContent.innerHTML = `
+            <div class="status-screen">
+                <div class="status-icon">📩</div>
+                <div class="question-title">Candidatura Registrada</div>
+                <p class="subtitle">Abriendo tu gestor de correo para enviar tu ficha oficial a Dirección de Studio 42...</p>
+                <button class="btn-retry" style="margin-top: 15px;" onclick="window.location.href='${mailtoUrl}'">Si no abre solo, pulsa aquí para enviar correo</button>
+            </div>
+        `;
+
+        setTimeout(() => {
+            window.location.href = mailtoUrl;
+        }, 800);
+    }
+
+    renderStep();
+</script>
+
+</body>
+</html>
