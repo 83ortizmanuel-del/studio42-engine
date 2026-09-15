@@ -8,10 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --bg-deep: #08030F;               /* Fondo violeta noche casi negro */
-            --card-surface: rgba(22, 11, 38, 0.88); /* Superficie morado noche */
-            --violeta-base: #7b2cbf;          /* Violeta institucional */
-            --magenta-neon: #e056fd;          /* Acento magenta neón */
+            --bg-deep: #08030F;
+            --card-surface: rgba(22, 11, 38, 0.88);
+            --violeta-base: #7b2cbf;
+            --magenta-neon: #e056fd;
             --magenta-glow: rgba(224, 86, 253, 0.35);
             --borde-sutil: rgba(224, 86, 253, 0.22);
         }
@@ -39,7 +39,7 @@
             position: relative;
         }
 
-        /* CONTENEDOR EXCLUSIVO PARA EL LOGO DE AURA */
+        /* CONTENEDOR PARA EL LOGO AURA */
         .logo-aura-box {
             width: 90px; height: 90px;
             margin: 0 auto 14px auto;
@@ -75,7 +75,7 @@
             margin-bottom: 8px;
         }
 
-        /* BOTONES DE LLAMADO A LA ACCIÓN */
+        /* BOTONES DE ACCIÓN */
         .btn-tg-share {
             background: linear-gradient(135deg, #9d4edd, var(--magenta-neon));
             color: #ffffff;
@@ -114,10 +114,9 @@
             Red de Protección Silenciosa
         </div>
 
-        <!-- ESPACIO DEDICADO PARA EL LOGO -->
+        <!-- ESPACIO DEL LOGO (aura.png) -->
         <div class="logo-aura-box">
-            <!-- Si existe logo-aura.png lo muestra; si aún no lo has subido, activa el lazo protector violeta -->
-            <img src="./logo-aura.png" alt="Logo AURA" onerror="this.onerror=null; this.style.display='none'; document.getElementById('fallback-icon').style.display='block';">
+            <img src="./aura.png" alt="Logo AURA" onerror="this.onerror=null; this.style.display='none'; document.getElementById('fallback-icon').style.display='block';">
             <i id="fallback-icon" class="fa-solid fa-ribbon text-4xl text-fuchsia-400" style="display: none;"></i>
         </div>
 
@@ -132,7 +131,7 @@
                 <i class="fa-solid fa-paper-plane text-xs"></i> Paso 1: Enviar invitación de enlace
             </div>
             <p class="text-[11px] text-purple-100/90 mb-3 leading-snug">
-                Pulsa el botón para compartir el enlace oficial por Telegram con tu persona de confianza (madre, amiga o red de apoyo):
+                Pulsa el botón para compartir la invitación directa por Telegram con tu persona de confianza (madre, amiga o red de apoyo):
             </p>
             <a id="btn-share-telegram" href="#" target="_blank" class="btn-tg-share">
                 <i class="fa-brands fa-telegram text-base"></i>
@@ -146,10 +145,10 @@
                 <i class="fa-solid fa-key text-xs"></i> Paso 2: Tu contacto obtiene su ID
             </div>
             <p class="text-[11px] text-purple-100/90 mb-2 leading-snug">
-                Tu contacto recibirá la solicitud. Al pulsar <b>«INICIAR»</b> en el bot, este le responderá al instante con su <b>ID numérico personal</b>.
+                Tu contacto recibirá la invitación. Al entrar y pulsar <b>«INICIAR»</b>, el bot le devolverá su <b>código de identificación numérico</b>.
             </p>
             <div class="p-2.5 bg-black/40 rounded-xl border border-fuchsia-500/20 text-[11px] font-mono text-fuchsia-300 text-center">
-                Ejemplo: Tu contacto te copiará: «987654321»
+                Ejemplo: Tu guardián te facilitará: «987654321»
             </div>
         </div>
 
@@ -159,7 +158,7 @@
                 <i class="fa-solid fa-shield-check text-xs"></i> Paso 3: Pegar ID en Ajustes
             </div>
             <p class="text-[11px] text-purple-100/90 mb-3 leading-snug">
-                Entra a la pantalla camuflada de Ajustes, toca en <b>«Servidor principal»</b> y pega ese número. El canal quedará blindado.
+                Entra a la pantalla camuflada de Ajustes, toca en <b>«Servidor principal»</b> y guarda ese número. El canal quedará blindado.
             </p>
             <a href="./index.html?cod=aura" class="btn-activate">
                 <i class="fa-solid fa-gear"></i>
@@ -167,11 +166,11 @@
             </a>
         </div>
 
-        <!-- GARANTÍA DE PRIVACIDAD LOCAL -->
+        <!-- NOTA DE PRIVACIDAD LOCAL -->
         <div class="mt-4 p-2.5 bg-black/50 rounded-xl border border-fuchsia-500/20 text-[10px] text-purple-300 text-left flex items-start gap-2">
             <i class="fa-solid fa-lock text-fuchsia-400 text-xs mt-0.5"></i>
             <div>
-                <b>Seguridad Cero Rastros:</b> El identificador numérico se aloja de forma cifrada en la memoria interna de tu dispositivo (`localStorage`), sin servidores de almacenamiento externo.
+                <b>Seguridad Cero Rastros:</b> El identificador numérico se guarda únicamente en la memoria interna de este móvil (`localStorage`), sin pasar por servidores de terceros.
             </div>
         </div>
 
@@ -181,13 +180,11 @@
     </div>
 
     <script>
-        // CONFIGURA AQUÍ EL USERNAME DE TU BOT EN TELEGRAM (Sin el @)
-        const BOT_USERNAME = "AuraAlert_Bot"; 
+        // IDENTIFICADOR OFICIAL VERIFICADO DE TU BOT
+        const BOT_USERNAME = "Auramanuel_bot";
 
-        // MENSAJE PRECARGADO PARA EL CONTACTO DE CONFIANZA
         const MENSAJE_COMPARTIR = `Hola, te elijo como mi persona de confianza en mi sistema de acompañamiento y seguridad AURA.\n\nPor favor, abre este enlace oficial en Telegram y pulsa el botón 'INICIAR' para que el bot te devuelva tu ID numérico:\n👉 https://t.me/${BOT_USERNAME}\n\nEn cuanto te aparezca el número en el chat, cópialo y dímelo para enlazar mi dispositivo contigo.`;
 
-        // Genera el enlace directo de compartir en Telegram
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(`https://t.me/${BOT_USERNAME}`)}&text=${encodeURIComponent(MENSAJE_COMPARTIR)}`;
         
         document.getElementById('btn-share-telegram').href = shareUrl;
