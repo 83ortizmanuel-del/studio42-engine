@@ -80,7 +80,6 @@
         h1 { font-size: 1.4rem; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; color: #fff; }
         .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.8px; }
 
-        /* TARJETA PACIENTE CABECERA */
         .paciente-header-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(217, 136, 138, 0.35);
@@ -173,7 +172,7 @@
         <h1 id="client-name">STUDIO 42</h1>
         <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-        <!-- TARJETA PACIENTE CABECERA -->
+        <!-- TARJETA PACIENTE CABECERA (SOLO SE ACTIVA EN MODO MATERNAL) -->
         <div id="card-paciente-header" class="paciente-header-card hidden">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -189,7 +188,7 @@
             </button>
         </div>
 
-        <!-- MODO DEMO COMERCIAL (SE OCULTA CUANDO modoDemo ES FALSE) -->
+        <!-- MODO DEMO COMERCIAL -->
         <div id="fricciones-section" style="display:none;">
             <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
             <div class="grid grid-cols-2 gap-2 mb-3" id="friccion-grid"></div>
@@ -206,14 +205,14 @@
         let googleReviewUrlGlobal = "https://maps.google.com";
         let whatsappGerenciaGlobal = "https://wa.me/34672294962";
         let nombreNegocioGlobal = "Profesional";
-        let whatsappMedicoGlobal = "584140344533";
+        let whatsappMedicoGlobal = "";
         let timerTeleconsultaGlobal = null;
         let esNodoMaternal = false;
 
         let datosPagoGlobal = {
-            pagoMovil: "0414-0344533 · Banesco · V-12345678",
-            zelle: "contacto@dralisbethrangel.com",
-            tarifa: "Honorarios Teleconsulta: $20 (o al cambio oficial BCV)"
+            pagoMovil: "",
+            zelle: "",
+            tarifa: "Honorarios Teleconsulta"
         };
 
         const reproductor = document.getElementById('audio-fondo');
@@ -254,6 +253,10 @@
                 const data = await response.json();
                 nombreNegocioGlobal = data.nombre || "Profesional";
 
+                // REINICIO DE ESTADO ENTRE CLIENTES
+                esNodoMaternal = false;
+                document.getElementById('card-paciente-header').classList.add('hidden');
+
                 if (data.colorPrincipal) document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
                 if (data.colorAcento) document.documentElement.style.setProperty('--color-acento', data.colorAcento);
 
@@ -275,21 +278,23 @@
                 document.getElementById('splash-logo').src = logoPath;
                 document.getElementById('hub-logo').src = logoPath;
 
+                if (data.audioFondo) reproductor.src = data.audioFondo;
+
                 // MODO DEMO
                 const seccionFricciones = document.getElementById('fricciones-section');
                 if (data.modoDemo === true) {
                     seccionFricciones.style.display = 'block';
                     datosFriccionesGlobales = {
-                        'contactos': { icono: '<i class="fa-solid fa-user-check text-cyan-400"></i>', titulo: 'Retención Inmediata', texto: 'El 70% de pacientes no guarda números manualmente.<br><br><b>Solución:</b> Descarga directa de vCard al móvil en 1 toque.' },
-                        'resenas': { icono: '<i class="fa-solid fa-shield-halved text-rose-500"></i>', titulo: 'Escudo de Reputación', texto: 'Las quejas públicas en Google alejan pacientes.<br><br><b>Solución:</b> Intercepta valoraciones bajas (1-3★) directo a WhatsApp privado.' },
-                        'clinica': { icono: '<i class="fa-solid fa-baby text-pink-400"></i>', titulo: 'Herramientas Clínicas', texto: 'Calculadora Gestacional, Semáforo de Alarma y Cronómetro de Contracciones para acompañar el embarazo a diario.' },
-                        'facturacion': { icono: '<i class="fa-solid fa-bolt text-purple-400"></i>', titulo: 'Facturación Directa', texto: 'Llamados a la acción para agendar Ecos 4D, morfológicos y controles sin pasar por listas de espera.' }
+                        'contactos': { icono: '<i class="fa-solid fa-user-check text-cyan-400"></i>', titulo: 'Retención Inmediata', texto: 'El 70% de clientes no guarda números manualmente.<br><br><b>Solución:</b> Descarga directa de vCard al móvil en 1 toque.' },
+                        'resenas': { icono: '<i class="fa-solid fa-shield-halved text-rose-500"></i>', titulo: 'Escudo de Reputación', texto: 'Las quejas públicas en Google alejan clientes.<br><br><b>Solución:</b> Intercepta valoraciones bajas (1-3★) directo a WhatsApp privado.' },
+                        'herramientas': { icono: '<i class="fa-solid fa-toolbox text-amber-400"></i>', titulo: 'Herramientas de Valor', texto: 'Herramientas interactivas y asesoramiento táctil que resuelven dudas en mostrador en 10 segundos.' },
+                        'facturacion': { icono: '<i class="fa-solid fa-bolt text-purple-400"></i>', titulo: 'Facturación Directa', texto: 'Llamados a la acción para agendar y canjear promociones de forma directa.' }
                     };
 
                     document.getElementById('friccion-grid').innerHTML = `
                         <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('contactos')"><i class="fa-solid fa-user-xmark text-cyan-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Fuga Contactos</div></div>
                         <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('resenas')"><i class="fa-solid fa-star-half-stroke text-rose-500 text-xl mb-1"></i><div class="text-[11px] font-bold">Reputación</div></div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('clinica')"><i class="fa-solid fa-toolbox text-pink-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
+                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('herramientas')"><i class="fa-solid fa-toolbox text-amber-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
                         <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('facturacion')"><i class="fa-solid fa-bolt text-purple-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Facturación</div></div>
                     `;
                 } else {
@@ -333,14 +338,14 @@
                             sec.botones.forEach(btn => {
                                 if (btn.url && btn.url.includes('wa.me/')) {
                                     const match = btn.url.match(/wa\.me\/([0-9]+)/);
-                                    if (match && match[1]) whatsappMedicoGlobal = match[1];
+                                    if (match && match[1] && !whatsappMedicoGlobal) whatsappMedicoGlobal = match[1];
                                 }
 
+                                // DETECCIÓN DINÁMICA: ¿ESTE CLIENTE ES MATERNAL?
                                 if (btn.tipo === 'calculadora_embarazo' || btn.tipo === 'teleconsulta_triaje') {
                                     esNodoMaternal = true;
                                 }
 
-                                // 0. TELECONSULTA TRIAJE (CON PAGO Y SOS)
                                 if (btn.tipo === 'teleconsulta_triaje') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-sky-500/30 bg-sky-950/20" onclick="abrirModalTeleconsulta()">
@@ -354,9 +359,7 @@
                                             <i class="fa-solid fa-chevron-right text-sky-400 text-xs"></i>
                                         </div>
                                     `;
-                                }
-                                // 1. CALCULADORA GESTACIONAL
-                                else if (btn.tipo === 'calculadora_embarazo') {
+                                } else if (btn.tipo === 'calculadora_embarazo') {
                                     block.innerHTML += `
                                         <div class="app-btn destacado" onclick="abrirCalculadoraEmbarazo()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(244,114,182,0.15); color: #F472B6;'}">
@@ -369,9 +372,7 @@
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
-                                } 
-                                // 2. SEMÁFORO DE SIGNOS DE ALARMA
-                                else if (btn.tipo === 'triaje_urgencias') {
+                                } else if (btn.tipo === 'triaje_urgencias') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-rose-500/30 bg-rose-950/20" onclick="abrirTriajeUrgencias()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(225,29,72,0.2); color: #E11D48;'}">
@@ -384,9 +385,7 @@
                                             <i class="fa-solid fa-chevron-right text-rose-400 text-xs"></i>
                                         </div>
                                     `;
-                                }
-                                // 3. CONTADOR DE CONTRACCIONES
-                                else if (btn.tipo === 'contador_contracciones') {
+                                } else if (btn.tipo === 'contador_contracciones') {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirContadorContracciones()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(168,85,247,0.15); color: #A855F7;'}">
@@ -399,9 +398,7 @@
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
-                                }
-                                // 4. CHECKLIST MALETA DE PARTO
-                                else if (btn.tipo === 'checklist_parto') {
+                                } else if (btn.tipo === 'checklist_parto') {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirChecklistParto()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16,185,129,0.15); color: #10B981;'}">
@@ -414,9 +411,7 @@
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
-                                }
-                                // 5. PARKING GPS (Si existe en JSON)
-                                else if (btn.tipo === 'parking') {
+                                } else if (btn.tipo === 'parking' || (btn.nombre && btn.nombre.includes('aparqué'))) {
                                     block.innerHTML += `
                                         <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
                                             <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.1); color: #8e8e93;">
@@ -429,9 +424,7 @@
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </a>
                                     `;
-                                } 
-                                // 6. BOTONES ESTÁNDAR / FARMACIAS / CITAS
-                                else {
+                                } else {
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
@@ -450,56 +443,86 @@
                         menuContainer.appendChild(block);
                     });
                 }
+                
                 actualizarInterfazParking();
-                actualizarResumenEmbarazo();
-                actualizarTarjetaCabeceraPaciente();
+                
+                // SOLO SI ES NODO MATERNAL SE REVISAN DATOS CLÍNICOS
+                if (esNodoMaternal) {
+                    actualizarResumenEmbarazo();
+                    actualizarTarjetaCabeceraPaciente();
+                }
+
             } catch (err) {
                 console.error(err);
                 document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
             }
         }
 
-        // DESBLOQUEO INTELIGENTE: VIBRACIÓN + RITUAL DE ALTA MÉDICA
+        // DESBLOQUEO INTELIGENTE
         function iniciarMagia() {
             if ("vibrate" in navigator) {
                 try { navigator.vibrate([40, 60, 40]); } catch(e) {}
             }
 
             splash.style.opacity = '0';
-            setTimeout(() => { 
-                splash.style.display = 'none'; 
-            }, 500);
+            setTimeout(() => { splash.style.display = 'none'; }, 500);
 
             if (reproductor.src) reproductor.play().catch(() => {});
 
+            // SI NO ES MATERNAL (COMO IBERLAX), AQUÍ SE ACABA
             if (!esNodoMaternal) return;
 
             const furGuardada = localStorage.getItem('fur_embarazo');
-            
-            // Si es la primera vez que acerca el llavero en consulta
             if (!furGuardada) {
-                setTimeout(() => {
-                    abrirModalAltaMaternalCompleta();
-                }, 350);
+                setTimeout(() => { abrirModalAltaMaternalCompleta(); }, 350);
             } else {
                 actualizarResumenEmbarazo();
                 actualizarTarjetaCabeceraPaciente();
             }
         }
 
-        // ALTA MÉDICA COMPLETA AL PRIMER TOQUE
+        // MODAL BASE
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalActions = document.getElementById('modal-actions');
+
+        function mostrarExplicacion(tipo) {
+            if (datosFriccionesGlobales[tipo]) {
+                document.getElementById('modal-icon').innerHTML = datosFriccionesGlobales[tipo].icono;
+                document.getElementById('modal-title').innerText = datosFriccionesGlobales[tipo].titulo;
+                document.getElementById('modal-text').innerHTML = datosFriccionesGlobales[tipo].texto;
+                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+                abrirModalCustom();
+            }
+        }
+
+        function abrirModalCustom() {
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
+        }
+
+        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
+        function cerrarModalBtn() {
+            if (timerTeleconsultaGlobal) {
+                clearInterval(timerTeleconsultaGlobal);
+                timerTeleconsultaGlobal = null;
+            }
+            modalOverlay.style.opacity = '0';
+            modalContent.style.transform = 'translateY(20px)';
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // FUNCIONES MÉDICAS (ACTIVAS SI EL CLIENTE ES LA DOCTORA)
         function abrirModalAltaMaternalCompleta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-card-clip text-pink-400"></i>';
             document.getElementById('modal-title').innerText = "Activación Pasaporte Maternal";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Registra tus datos vitales para personalizar tu seguimiento y protegerte ante cualquier emergencia:</p>
-                
+                <p class="text-xs text-zinc-300 mb-3">Registra tus datos vitales para personalizar tu seguimiento obstétrico:</p>
                 <div class="space-y-2 text-left text-xs">
                     <div>
                         <label class="block text-[11px] text-zinc-400 mb-1">Nombre y Apellido de la Mamá:</label>
                         <input type="text" id="reg-nombre" placeholder="Ej: Andrea Gómez" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white font-semibold">
                     </div>
-
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="block text-[11px] text-zinc-400 mb-1">Grupo Sanguíneo:</label>
@@ -515,26 +538,24 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[11px] text-zinc-400 mb-1">Alergias Conocidas:</label>
-                            <input type="text" id="reg-alergias" placeholder="Ninguna o medicamentos" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                            <label class="block text-[11px] text-zinc-400 mb-1">Alergias:</label>
+                            <input type="text" id="reg-alergias" placeholder="Ninguna reportada" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
                         </div>
                     </div>
-
                     <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1">Acompañante / Emergencia:</label>
-                        <input type="text" id="reg-contacto-nombre" placeholder="Nombre (ej: Pareja o Madre)" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white mb-1.5">
-                        <input type="tel" id="reg-contacto-tel" placeholder="Teléfono de contacto rápido" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                        <label class="block text-[11px] text-zinc-400 mb-1">Contacto de Emergencia:</label>
+                        <input type="text" id="reg-contacto-nombre" placeholder="Nombre acompañante" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white mb-1.5">
+                        <input type="tel" id="reg-contacto-tel" placeholder="Teléfono de contacto" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
                     </div>
-
                     <div class="pt-2 border-t border-white/10">
-                        <label class="block text-[11px] text-pink-300 font-bold mb-1">Fecha de Última Regla (FUR):</label>
+                        <label class="block text-[11px] text-pink-300 font-bold mb-1">Fecha Última Regla (FUR):</label>
                         <input type="date" id="reg-fur" class="w-full p-2.5 rounded-xl bg-slate-900 border border-pink-500/50 text-white text-center font-bold">
                     </div>
                 </div>
             `;
 
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="guardarAltaMaternalCompleta()">Activar Mi Pasaporte Maternal</button>
+                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="guardarAltaMaternalCompleta()">Guardar Mi Pasaporte</button>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Hacerlo después</button>
             `;
             abrirModalCustom();
@@ -567,6 +588,7 @@
         }
 
         function actualizarTarjetaCabeceraPaciente() {
+            if (!esNodoMaternal) return;
             const nombre = localStorage.getItem('paciente_nombre');
             const fur = localStorage.getItem('fur_embarazo');
             const sangre = localStorage.getItem('paciente_sangre') || 'O+';
@@ -605,14 +627,13 @@
             }
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-notes-medical text-rose-500"></i>';
-            document.getElementById('modal-title').innerText = "Ficha Médica de Emergencia SOS";
+            document.getElementById('modal-title').innerText = "Ficha Médica SOS";
             document.getElementById('modal-text').innerHTML = `
                 <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 text-left text-xs space-y-2 mb-3">
                     <div class="flex justify-between"><span class="text-zinc-400">Paciente:</span><span class="text-white font-bold">${nombre}</span></div>
                     <div class="flex justify-between"><span class="text-zinc-400">Estado:</span><span class="text-pink-300 font-bold">${semInfo}</span></div>
                     <div class="flex justify-between"><span class="text-zinc-400">Grupo Sanguíneo:</span><span class="text-rose-400 font-bold">${sangre}</span></div>
                     <div class="flex justify-between"><span class="text-zinc-400">Alergias:</span><span class="text-amber-300 font-semibold">${alergias}</span></div>
-                    <div class="flex justify-between"><span class="text-zinc-400">Obstetra:</span><span class="text-cyan-300 font-bold">Dra. Lisbeth Rangel</span></div>
                 </div>
 
                 ${cTel ? `
@@ -622,7 +643,7 @@
                 ` : ''}
 
                 <a href="tel:+${whatsappMedicoGlobal}" class="w-full p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold flex items-center justify-center gap-2 text-xs">
-                    <i class="fa-solid fa-user-doctor"></i> Llamar Directo a la Doctora
+                    <i class="fa-solid fa-user-doctor"></i> Contactar con Doctora
                 </a>
             `;
 
@@ -633,52 +654,19 @@
             abrirModalCustom();
         }
 
-        const modalOverlay = document.getElementById('modal-overlay');
-        const modalContent = document.getElementById('modal-content');
-        const modalActions = document.getElementById('modal-actions');
-
-        function mostrarExplicacion(tipo) {
-            if (datosFriccionesGlobales[tipo]) {
-                document.getElementById('modal-icon').innerHTML = datosFriccionesGlobales[tipo].icono;
-                document.getElementById('modal-title').innerText = datosFriccionesGlobales[tipo].titulo;
-                document.getElementById('modal-text').innerHTML = datosFriccionesGlobales[tipo].texto;
-                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
-                abrirModalCustom();
-            }
-        }
-
-        function abrirModalCustom() {
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
-        }
-
-        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
-        function cerrarModalBtn() {
-            if (timerTeleconsultaGlobal) {
-                clearInterval(timerTeleconsultaGlobal);
-                timerTeleconsultaGlobal = null;
-            }
-            modalOverlay.style.opacity = '0';
-            modalContent.style.transform = 'translateY(20px)';
-            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
-        }
-
-        // ==========================================
-        // 0. TELECONSULTA: FILTRO DE PAGO PREVIO & SOS
-        // ==========================================
         function abrirModalTeleconsulta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-user-doctor text-sky-400"></i>';
             document.getElementById('modal-title').innerText = "Teleconsulta Médica";
             document.getElementById('modal-text').innerHTML = `
-                <p class="mb-4 text-xs text-zinc-300">Para brindarte una atención médica óptima, selecciona el motivo de tu solicitud:</p>
+                <p class="mb-4 text-xs text-zinc-300">Selecciona el motivo de tu solicitud:</p>
                 <div class="space-y-2.5 text-left">
                     <button onclick="ejecutarPasarelaPagoTeleconsulta()" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-emerald-500/30 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition">
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg shrink-0">
                             <i class="fa-solid fa-file-invoice-dollar"></i>
                         </div>
                         <div>
-                            <div class="font-bold text-xs text-white">Consulta / Revisión General</div>
-                            <div class="text-[10px] text-zinc-400">Validación de pago y agendamiento (No urgente)</div>
+                            <div class="font-bold text-xs text-white">Consulta General</div>
+                            <div class="text-[10px] text-zinc-400">Validación de comprobante y cita</div>
                         </div>
                     </button>
 
@@ -687,13 +675,12 @@
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <div>
-                            <div class="font-bold text-xs text-rose-300">🚨 Signo de Alarma / Urgencia SOS</div>
-                            <div class="text-[10px] text-rose-200/70">Dolor fuerte, pérdida de líquido o sangrado (Sin pagos)</div>
+                            <div class="font-bold text-xs text-rose-300">🚨 Signo de Alarma SOS</div>
+                            <div class="text-[10px] text-rose-200/70">Pérdida de líquido, sangrado o dolor fuerte</div>
                         </div>
                     </button>
                 </div>
             `;
-
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Volver</button>`;
             abrirModalCustom();
         }
@@ -702,119 +689,37 @@
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i>';
             document.getElementById('modal-title').innerText = "Validación de Consulta";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Para ingresar a la agenda prioritaria y enfocar la sesión 100% en tu caso clínico, formaliza tu abono:</p>
-                
+                <p class="text-xs text-zinc-300 mb-3">Datos bancarios para formalizar la sesión:</p>
                 <div class="p-3 bg-slate-900 rounded-2xl border border-emerald-500/30 text-left text-xs space-y-2 mb-3">
                     <div class="text-[11px] text-emerald-300 font-bold border-b border-white/10 pb-1">${datosPagoGlobal.tarifa}</div>
-                    
-                    <div>
-                        <span class="text-zinc-400 text-[10px] block">Pago Móvil:</span>
-                        <div class="flex justify-between items-center bg-black/30 p-1.5 rounded-lg font-mono text-[11px] text-zinc-200">
-                            <span>${datosPagoGlobal.pagoMovil}</span>
-                            <button onclick="copiarAlPortapapeles('${datosPagoGlobal.pagoMovil}')" class="text-cyan-400 text-xs px-2 py-0.5 hover:text-white"><i class="fa-regular fa-copy"></i> Copiar</button>
-                        </div>
-                    </div>
-
-                    ${datosPagoGlobal.zelle ? `
-                    <div>
-                        <span class="text-zinc-400 text-[10px] block">Zelle / Correo:</span>
-                        <div class="flex justify-between items-center bg-black/30 p-1.5 rounded-lg font-mono text-[11px] text-zinc-200">
-                            <span>${datosPagoGlobal.zelle}</span>
-                            <button onclick="copiarAlPortapapeles('${datosPagoGlobal.zelle}')" class="text-cyan-400 text-xs px-2 py-0.5 hover:text-white"><i class="fa-regular fa-copy"></i> Copiar</button>
-                        </div>
-                    </div>` : ''}
+                    ${datosPagoGlobal.pagoMovil ? `<div><span class="text-zinc-400 text-[10px] block">Pago Móvil:</span><div class="text-[11px] text-zinc-200 font-mono">${datosPagoGlobal.pagoMovil}</div></div>` : ''}
+                    ${datosPagoGlobal.zelle ? `<div><span class="text-zinc-400 text-[10px] block">Zelle:</span><div class="text-[11px] text-zinc-200 font-mono">${datosPagoGlobal.zelle}</div></div>` : ''}
                 </div>
-
-                <div class="text-left mb-2">
-                    <label class="block text-[11px] text-pink-300 font-bold mb-1">Nº de Referencia o Banco Emisor:</label>
-                    <input type="text" id="input-ref-pago" placeholder="Ej: 4 últimos dígitos o Ref: 9834" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center font-bold">
-                </div>
+                <input type="text" id="input-ref-pago" placeholder="Nº de Referencia" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center font-bold">
             `;
-
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-700 font-bold" onclick="confirmarPagoYEnviar()">Confirmar y Notificar a la Dra.</button>
+                <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-700 font-bold" onclick="confirmarPagoYEnviar()">Notificar Referencia</button>
                 <button class="modal-btn-secondary" onclick="abrirModalTeleconsulta()">Volver</button>
             `;
             abrirModalCustom();
         }
 
-        function copiarAlPortapapeles(texto) {
-            navigator.clipboard.writeText(texto).then(() => {
-                alert("📋 Datos de pago copiados al portapapeles.");
-            }).catch(() => {
-                prompt("Copia los datos manualmente:", texto);
-            });
-        }
-
         function confirmarPagoYEnviar() {
             const ref = document.getElementById('input-ref-pago').value.trim();
-            if (!ref) return alert("Por favor indica el número o comprobante de tu referencia para que la Doctora lo verifique.");
-
-            const fur = localStorage.getItem('fur_embarazo');
-            let infoSem = "";
-            if (fur) {
-                const diffDias = calcularDiasGestacion(fur);
-                if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
-            }
+            if (!ref) return alert("Indica el número de referencia.");
             const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
-
-            const msg = encodeURIComponent(`Hola Dra. Lisbeth, le escribe ${nombre} desde mi llavero maternal para formalizar mi Teleconsulta de control${infoSem}.\n\n💳 Ref. de Pago: ${ref}\n\nYa tengo mis dudas y estudios a mano.`);
+            const msg = encodeURIComponent(`Hola Doctora, le escribe ${nombre}.\n\n💳 Ref. Pago: ${ref}\n\nQuedo atenta para mi teleconsulta.`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
-
-            // Pasa al reloj de 30 minutos
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
-            document.getElementById('modal-title').innerText = "¡Comprobante Notificado!";
-            document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">La Doctora ha recibido tu comprobante y revisará tu expediente clínico antes de enlazarse contigo.</p>
-                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 mb-2">
-                    <div class="text-[10px] text-cyan-400 uppercase font-mono tracking-wider mb-1">Tiempo Estimado de Preparación</div>
-                    <div id="chrono-teleconsulta" class="text-3xl font-mono font-black text-white">30:00</div>
-                </div>
-                <p class="text-[11px] text-zinc-400">Si presentas un síntoma de alarma grave, activa la opción SOS.</p>
-            `;
-
-            modalActions.innerHTML = `<button class="modal-btn-primary" onclick="cerrarModalBtn()">Entendido</button>`;
-
-            let segs = 30 * 60;
-            if (timerTeleconsultaGlobal) clearInterval(timerTeleconsultaGlobal);
-            timerTeleconsultaGlobal = setInterval(() => {
-                segs--;
-                const m = String(Math.floor(segs / 60)).padStart(2, '0');
-                const s = String(segs % 60).padStart(2, '0');
-                const rel = document.getElementById('chrono-teleconsulta');
-                if (rel) rel.innerText = `${m}:${s}`;
-                if (segs <= 0) {
-                    clearInterval(timerTeleconsultaGlobal);
-                    timerTeleconsultaGlobal = null;
-                }
-            }, 1000);
+            cerrarModalBtn();
         }
 
         function ejecutarTeleconsultaUrgencia() {
-            const fur = localStorage.getItem('fur_embarazo');
-            let infoSem = "";
-            if (fur) {
-                const diffDias = calcularDiasGestacion(fur);
-                if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
-            }
             const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
-            const msgSOS = encodeURIComponent(`🚨 URGENCIA OBSTÉTRICA SOS: Doctora, le escribe ${nombre}, presento un síntoma de alarma grave${infoSem} y requiero su asistencia o llamada urgente a este número.`);
-            window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msgSOS}`, '_blank');
-
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
-            document.getElementById('modal-title').innerText = "Alerta SOS Disparada";
-            document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-rose-200 mb-4">Se ha enviado la alerta prioritaria por WhatsApp. Si la Doctora está en quirófano o necesitas enlazar de inmediato por llamada de voz:</p>
-                <a href="tel:+${whatsappMedicoGlobal}" class="flex items-center justify-center gap-2 p-3 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-bold text-xs shadow-lg shadow-rose-900/50">
-                    <i class="fa-solid fa-phone"></i> Llamar Directo a la Doctora
-                </a>
-            `;
-            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            const msg = encodeURIComponent(`🚨 URGENCIA OBSTÉTRICA SOS: Doctora, le escribe ${nombre}, presento un síntoma de alarma y requiero asistencia médica.`);
+            window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
+            cerrarModalBtn();
         }
 
-        // ==========================================
-        // 1. CALCULADORA GESTACIONAL & HITOS CLÍNICOS
-        // ==========================================
         function abrirCalculadoraEmbarazo() {
             const furGuardada = localStorage.getItem('fur_embarazo') || '';
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-baby text-pink-400"></i>';
@@ -822,27 +727,19 @@
             document.getElementById('modal-text').innerHTML = `
                 <p class="mb-3 text-xs text-zinc-300">Fecha de tu <b>Última Regla (FUR)</b>:</p>
                 <input type="date" id="input-fur" value="${furGuardada}" class="w-full p-2.5 rounded-xl bg-slate-900 border border-pink-500/40 text-white text-center font-bold mb-3">
-                <p class="text-[11px] text-zinc-400">Calcula tus semanas exactas y el estudio que te corresponde.</p>
             `;
-
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="procesarCalculoEmbarazo()">Calcular Semanas y Ver Estudio</button>
-                <button class="modal-btn-secondary border-red-500/30 text-rose-400" onclick="borrarFurGuardada()">Modificar Datos / Ficha</button>
+                <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="procesarCalculoEmbarazo()">Calcular Semanas</button>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
 
-        function borrarFurGuardada() {
-            abrirModalAltaMaternalCompleta();
-        }
-
         function procesarCalculoEmbarazo() {
             const inputFur = document.getElementById('input-fur');
-            if (!inputFur || !inputFur.value) return alert("Introduce la fecha de tu última regla.");
-
+            if (!inputFur || !inputFur.value) return alert("Introduce la fecha.");
             const diffDias = calcularDiasGestacion(inputFur.value);
-            if (diffDias < 0 || diffDias > 294) return alert("Fecha fuera de rango válido de gestación.");
+            if (diffDias < 0 || diffDias > 294) return alert("Fecha fuera de rango válido.");
 
             localStorage.setItem('fur_embarazo', inputFur.value);
             actualizarResumenEmbarazo();
@@ -854,58 +751,21 @@
             const diffDias = calcularDiasGestacion(fechaStr);
             const semanas = Math.floor(diffDias / 7);
             const dias = diffDias % 7;
-            const partes = fechaStr.split('-');
-            const fur = new Date(partes[0], partes[1] - 1, partes[2]);
-            const fpp = new Date(fur.getTime() + (280 * 24 * 60 * 60 * 1000));
-            const opcionesFecha = { year: 'numeric', month: 'short', day: 'numeric' };
             const fruto = obtenerFrutoGestacional(semanas);
-            const nombre = localStorage.getItem('paciente_nombre') || 'Mamá';
-
-            let estudioTitulo = "Control Prenatal Regular";
-            let estudioDesc = "Revisión integral, toma de tensión arterial y ecografía de bienestar fetal.";
-            let mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Me encuentro en mi Semana ${semanas} y deseo agendar mi consulta de control prenatal.`;
-            let textoBtn = "Agendar Control con la Dra.";
-
-            if (semanas >= 11 && semanas <= 14) {
-                estudioTitulo = "⚠️ Eco Genético 1er Trimestre (Clave)";
-                estudioDesc = "Despistaje cromosómico y evaluación estructural temprana.";
-                mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Estoy en mi Semana ${semanas} y necesito agendar mi Ecosonograma Genético del 1er Trimestre.`;
-                textoBtn = "Agendar Eco Genético con la Dra.";
-            } else if (semanas >= 20 && semanas <= 24) {
-                estudioTitulo = "🌟 Eco Morfológico Estructural 4D (Clave)";
-                estudioDesc = "Evaluación detallada de anatomía fetal, corazón y columna en 4D.";
-                mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Estoy en mi Semana ${semanas} y deseo agendar mi Ecosonograma Morfológico Estructural 4D.`;
-                textoBtn = "Agendar Eco Morfológico 4D";
-            } else if (semanas >= 35) {
-                estudioTitulo = "🩺 Monitoreo Preparto";
-                estudioDesc = "Evaluación preparto, bienestar fetal y preparación para el nacimiento.";
-                mensajeWp = `Hola Dra. Lisbeth, le escribe ${nombre}. Estoy en mi Semana ${semanas} y requiero agendar valoración preparto y monitoreo.`;
-                textoBtn = "Agendar Valoración Preparto";
-            }
 
             document.getElementById('modal-icon').innerHTML = `<span class="text-4xl">${fruto.icono}</span>`;
             document.getElementById('modal-title').innerText = `Semana ${semanas} + ${dias} Días`;
             document.getElementById('modal-text').innerHTML = `
-                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 text-left space-y-1.5 mb-3 text-xs">
-                    <div class="flex justify-between"><span class="text-zinc-400">Tamaño estimado:</span><span class="text-pink-300 font-bold">${fruto.nombre} (~${fruto.tam})</span></div>
-                    <div class="flex justify-between"><span class="text-zinc-400">Fecha probable parto:</span><span class="text-emerald-400 font-bold">${fpp.toLocaleDateString('es-ES', opcionesFecha)}</span></div>
-                </div>
-                <div class="p-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 text-left">
-                    <div class="text-xs font-bold text-amber-300 mb-1">${estudioTitulo}</div>
-                    <div class="text-[11px] text-zinc-300 leading-snug">${estudioDesc}</div>
+                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 text-center text-xs space-y-1">
+                    <div>Tamaño del bebé: <b class="text-pink-300">${fruto.nombre}</b> (~${fruto.tam})</div>
                 </div>
             `;
-
-            modalActions.innerHTML = `
-                <a href="https://wa.me/${whatsappMedicoGlobal}?text=${encodeURIComponent(mensajeWp)}" target="_blank" class="modal-btn-primary bg-emerald-600 hover:bg-emerald-700 font-black flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-base"></i> ${textoBtn}
-                </a>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Volver al Panel</button>
-            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
             abrirModalCustom();
         }
 
         function actualizarResumenEmbarazo() {
+            if (!esNodoMaternal) return;
             const furGuardada = localStorage.getItem('fur_embarazo');
             const label = document.getElementById('calculadora-resumen');
             if (furGuardada && label) {
@@ -913,184 +773,90 @@
                 if (diffDias >= 0 && diffDias <= 294) {
                     const sem = Math.floor(diffDias / 7);
                     const fruto = obtenerFrutoGestacional(sem);
-                    label.innerText = `Semana ${sem} · ${fruto.nombre} ${fruto.icono} (Toca para ver)`;
-                    
-                    const badge = document.getElementById('badge-text');
-                    if (badge) {
-                        badge.innerHTML = `SEMANA ${sem} · TAMAÑO DE ${fruto.nombre.toUpperCase()}`;
-                    }
+                    label.innerText = `Semana ${sem} · ${fruto.nombre} ${fruto.icono}`;
                 }
             }
         }
 
-        // ==========================================
-        // 2. SEMÁFORO DE SIGNOS DE ALARMA
-        // ==========================================
         function abrirTriajeUrgencias() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-heart text-rose-500"></i>';
             document.getElementById('modal-title').innerText = "Signos de Alarma";
             document.getElementById('modal-text').innerHTML = `
-                <p class="mb-3 text-xs text-zinc-300">Selecciona si presentas alguno de estos síntomas:</p>
                 <div class="space-y-2 text-left text-xs">
                     <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10 cursor-pointer">
-                        <input type="radio" name="alarma_opt" value="Sangrado genital o pérdida de líquido" class="accent-rose-500">
+                        <input type="radio" name="alarma_opt" value="Sangrado o pérdida de líquido" class="accent-rose-500" checked>
                         <span>Sangrado vaginal o pérdida de líquido</span>
                     </label>
                     <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10 cursor-pointer">
-                        <input type="radio" name="alarma_opt" value="Dolor de cabeza intenso con lucecitas" class="accent-rose-500">
+                        <input type="radio" name="alarma_opt" value="Dolor de cabeza intenso" class="accent-rose-500">
                         <span>Dolor de cabeza intenso / visión borrosa</span>
-                    </label>
-                    <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10 cursor-pointer">
-                        <input type="radio" name="alarma_opt" value="Disminución de movimientos fetales" class="accent-rose-500">
-                        <span>El bebé no se mueve desde hace horas</span>
-                    </label>
-                    <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10 cursor-pointer">
-                        <input type="radio" name="alarma_opt" value="Dolor abdominal tipo contracción intensa" class="accent-rose-500">
-                        <span>Dolor de vientre fuerte o fiebre</span>
                     </label>
                 </div>
             `;
-
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-rose-600 hover:bg-rose-700 font-black" onclick="enviarAlarmaMedico()">Avisar a la Doctora por WhatsApp</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">No presento alarmas</button>
+                <button class="modal-btn-primary bg-rose-600 hover:bg-rose-700 font-bold" onclick="enviarAlarmaMedico()">Avisar a la Doctora</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
 
         function enviarAlarmaMedico() {
             const opt = document.querySelector('input[name="alarma_opt"]:checked');
-            const fur = localStorage.getItem('fur_embarazo');
-            let infoSem = "";
-            if (fur) {
-                const diffDias = calcularDiasGestacion(fur);
-                if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
-            }
-            const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
-            const sintoma = opt ? opt.value : "un síntoma de alarma no especificado";
-            const msg = encodeURIComponent(`Hola Doctora, le escribe ${nombre}. Presento ${sintoma}${infoSem}. Por favor indíqueme qué debo hacer.`);
+            const sintoma = opt ? opt.value : "alarma";
+            const msg = encodeURIComponent(`Hola Doctora, presento ${sintoma}. ¿Qué debo hacer?`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
         }
 
-        // ==========================================
-        // 3. CONTADOR DE CONTRACCIONES
-        // ==========================================
         let contraccionTimer = null;
         let segsContraccion = 0;
-
         function abrirContadorContracciones() {
             segsContraccion = 0;
             if (contraccionTimer) clearInterval(contraccionTimer);
-
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-stopwatch text-purple-400"></i>';
-            document.getElementById('modal-title').innerText = "Cronómetro de Contracciones";
+            document.getElementById('modal-title').innerText = "Contracciones";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Toca al iniciar el dolor y al calmarse:</p>
                 <div id="chrono-display" class="text-3xl font-mono font-black text-purple-400 my-3">00:00</div>
-                <div id="chrono-status" class="text-[11px] text-zinc-400 mb-2">Listo para registrar</div>
-                <div class="flex gap-2 justify-center">
-                    <button id="btn-start-chrono" class="px-4 py-2 bg-purple-600 rounded-full font-bold text-xs" onclick="toggleChrono()">Iniciar Dolor</button>
-                    <button class="px-4 py-2 bg-zinc-800 rounded-full font-bold text-xs text-zinc-400" onclick="resetChrono()">Reset</button>
-                </div>
+                <button id="btn-start-chrono" class="px-4 py-2 bg-purple-600 rounded-full font-bold text-xs" onclick="toggleChrono()">Iniciar Dolor</button>
             `;
-
-            modalActions.innerHTML = `
-                <button class="modal-btn-primary" onclick="notificarPartoMedico()">Notificar Contracciones a la Dra.</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
-            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
             abrirModalCustom();
         }
 
         function toggleChrono() {
             const btn = document.getElementById('btn-start-chrono');
-            const status = document.getElementById('chrono-status');
             const display = document.getElementById('chrono-display');
-
             if (!contraccionTimer) {
                 segsContraccion = 0;
                 btn.innerText = "Detener Dolor";
                 btn.className = "px-4 py-2 bg-rose-600 rounded-full font-bold text-xs animate-pulse";
-                status.innerText = "Midiendo duración de contracción...";
                 contraccionTimer = setInterval(() => {
                     segsContraccion++;
-                    const m = String(Math.floor(segsContraccion / 60)).padStart(2, '0');
-                    const s = String(segsContraccion % 60).padStart(2, '0');
-                    display.innerText = `${m}:${s}`;
+                    display.innerText = `${String(Math.floor(segsContraccion / 60)).padStart(2, '0')}:${String(segsContraccion % 60).padStart(2, '0')}`;
                 }, 1000);
             } else {
                 clearInterval(contraccionTimer);
                 contraccionTimer = null;
                 btn.innerText = "Iniciar Nuevo Dolor";
                 btn.className = "px-4 py-2 bg-purple-600 rounded-full font-bold text-xs";
-                status.innerText = `Contracción registrada: ${segsContraccion} segundos. Si se repiten cada 5 min durante 1 hora, acude a consulta.`;
             }
         }
 
-        function resetChrono() {
-            if (contraccionTimer) clearInterval(contraccionTimer);
-            contraccionTimer = null;
-            segsContraccion = 0;
-            const d = document.getElementById('chrono-display');
-            const s = document.getElementById('chrono-status');
-            const b = document.getElementById('btn-start-chrono');
-            if (d) d.innerText = "00:00";
-            if (s) s.innerText = "Listo para registrar";
-            if (b) { b.innerText = "Iniciar Dolor"; b.className = "px-4 py-2 bg-purple-600 rounded-full font-bold text-xs"; }
-        }
-
-        function notificarPartoMedico() {
-            const fur = localStorage.getItem('fur_embarazo');
-            let infoSem = "";
-            if (fur) {
-                const diffDias = calcularDiasGestacion(fur);
-                if (diffDias >= 0) infoSem = ` (Semana ${Math.floor(diffDias / 7)})`;
-            }
-            const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
-            const durText = segsContraccion > 0 ? ` con duración aprox de ${segsContraccion} segundos` : '';
-            const msg = encodeURIComponent(`Hola Doctora, le escribe ${nombre}. Estoy registrando contracciones continuas${durText}${infoSem}. ¿Debo acudir a la clínica?`);
-            window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
-        }
-
-        // ==========================================
-        // 4. CHECKLIST MALETA DE PARTO
-        // ==========================================
         function abrirChecklistParto() {
-            const items = [
-                { id: 'chk_1', text: 'Documento de identidad y carpeta de ecos' },
-                { id: 'chk_2', text: '3 mudas completas de recién nacido' },
-                { id: 'chk_3', text: 'Pañales para recién nacido y toallitas' },
-                { id: 'chk_4', text: 'Camisón / pijama cómodo de lactancia' },
-                { id: 'chk_5', text: 'Artículos de higiene y toallas maternales' },
-                { id: 'chk_6', text: 'Manta o arrullo para el alta médica' }
-            ];
-
-            let htmlLista = '<div class="text-left space-y-2 mb-4 max-h-60 overflow-y-auto pr-1">';
-            items.forEach(it => {
-                const checked = localStorage.getItem(it.id) === 'true' ? 'checked' : '';
-                htmlLista += `
-                    <label class="flex items-center gap-2.5 p-2 bg-slate-900 rounded-xl border border-white/5 text-xs text-zinc-200 cursor-pointer">
-                        <input type="checkbox" id="${it.id}" onchange="guardarChecklist('${it.id}')" ${checked} class="accent-emerald-500 w-4 h-4">
-                        <span>${it.text}</span>
-                    </label>
-                `;
+            const items = ['Documento y carpeta médica', '3 mudas de recién nacido', 'Pañales y toallitas', 'Ropa cómoda de lactancia'];
+            let html = '<div class="text-left space-y-2 mb-4 text-xs">';
+            items.forEach((it, idx) => {
+                const c = localStorage.getItem('chk_' + idx) === 'true' ? 'checked' : '';
+                html += `<label class="flex items-center gap-2 p-2 bg-slate-900 rounded-xl border border-white/5"><input type="checkbox" onchange="localStorage.setItem('chk_${idx}', this.checked)" ${c} class="accent-emerald-500"> <span>${it}</span></label>`;
             });
-            htmlLista += '</div>';
-
+            html += '</div>';
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-clipboard-check text-emerald-400"></i>';
-            document.getElementById('modal-title').innerText = "Maleta para el Parto";
-            document.getElementById('modal-text').innerHTML = htmlLista;
-            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Guardar y Volver</button>`;
+            document.getElementById('modal-title').innerText = "Maleta de Parto";
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
             abrirModalCustom();
         }
 
-        function guardarChecklist(id) {
-            const el = document.getElementById(id);
-            if (el) localStorage.setItem(id, el.checked);
-        }
-
-        // ==========================================
-        // 5. PARKING GPS (Seguro)
-        // ==========================================
+        // PARKING GPS UNIVERSAL
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
             const iconBox = document.getElementById('parking-icon-container');
@@ -1131,7 +897,7 @@
                             localStorage.setItem('parking_lat', pos.coords.latitude);
                             localStorage.setItem('parking_lng', pos.coords.longitude);
                             actualizarInterfazParking();
-                            alert("📍 ¡Ubicación guardada! Al salir pulsa este botón para volver a pie.");
+                            alert("📍 ¡Ubicación guardada! Al salir pulsa este botón para volver a pie a tu coche.");
                         },
                         () => alert("No se pudo obtener la señal GPS."),
                         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
@@ -1142,9 +908,7 @@
             }
         }
 
-        // ==========================================
-        // 6. ESCUDO RESEÑAS
-        // ==========================================
+        // ESCUDO DE RESEÑAS
         function simularFiltro(nota) {
             const estrellas = document.querySelectorAll('#escudo-estrellas i');
             const mensaje = document.getElementById('mensaje-filtro');
@@ -1156,15 +920,15 @@
                 if (nota <= 3) {
                     document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
                     document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
-                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente para atender tu caso:`;
+                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección para resolver tu caso:`;
                     modalActions.innerHTML = `
-                        <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Atención Directa</a>
+                        <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
                         <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
                     `;
                 } else {
                     document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
                     document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
-                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Confirma tu valoración oficial en Google Maps:`;
+                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial en Google Maps:`;
                     modalActions.innerHTML = `
                         <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
                         <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
