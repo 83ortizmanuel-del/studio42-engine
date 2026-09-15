@@ -8,7 +8,7 @@
   "audioFondo": "ambiente2.mp3",
   "secciones": [
     {
-      "titulo": "Soluciones de Descanso & Ofertas",
+      "titulo": "Asesoría & Compra en Tienda",
       "botones": [
         {
           "nombre": "Promo Exclusiva Llavero Smart",
@@ -38,6 +38,25 @@
           "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir",
           "icono": "fa-solid fa-location-crosshairs",
           "url": "#"
+        }
+      ]
+    },
+    {
+      "titulo": "Club VIP & Servicios Posventa",
+      "botones": [
+        {
+          "nombre": "🔑 Devolución de Llaves Perdidas",
+          "descripcion": "¿Has encontrado estas llaves? Pulsa aquí para avisar a Iberlax y devolverlas",
+          "icono": "fa-solid fa-key",
+          "url": "https://wa.me/34945601573?text=Hola%20Iberlax,%20he%20encontrado%20un%20llavero%20con%20llaves%20de%20un%20cliente%20vuestro%20y%20quiero%20coordinar%20su%20devolución",
+          "estiloIcono": "background-color: rgba(14, 165, 233, 0.15); color: #0EA5E9;"
+        },
+        {
+          "nombre": "Bono Amigo: Regala 50 € de Descuento",
+          "descripcion": "Pasa tu contacto y regala 50 € a un amigo para su próximo colchón",
+          "icono": "fa-solid fa-gift",
+          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20bono%20exclusivo%20de%2050%20€%20de%20descuento%20para%20tu%20nuevo%20colchón%20en%20Iberlax.%20Pruébalo%20aquí:%20https://wa.me/34945601573",
+          "estiloIcono": "background-color: rgba(168, 85, 247, 0.15); color: #A855F7;"
         },
         {
           "nombre": "Guardar Contacto en Agenda",
