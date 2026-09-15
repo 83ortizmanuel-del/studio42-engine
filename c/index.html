@@ -316,12 +316,18 @@
 
                         if (sec.escudoResenas) {
                             block.innerHTML += `
-                                <div class="app-btn flex-col items-center p-5 border border-amber-400/35 bg-gradient-to-b from-amber-500/10 to-transparent cursor-default rounded-3xl shadow-lg shadow-amber-500/5">
-                                    <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-2 shadow-inner">
-                                        <i class="fa-solid fa-medal"></i>
+                                <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
+                                    <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
+                                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                            <path fill="none" d="M0 0h48v48H0z"/>
+                                        </svg>
                                     </div>
                                     <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal cuidamos de tu descanso?</div>
-                                    <div class="text-xs text-amber-200/80 text-center font-medium mb-2">Tu valoración nos ayuda a seguir mejorando cada día</div>
+                                    <div class="text-xs text-slate-300 text-center font-medium mb-2">Tu valoración nos ayuda a seguir mejorando cada día</div>
                                     
                                     <div class="stars-container star-rating my-1" id="escudo-estrellas">
                                         <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
@@ -351,7 +357,7 @@
                                     esNodoMaternal = true;
                                 }
 
-                                // 0. TEST DE DESGASTE / FATIGA DEL COLCHÓN (NUEVO)
+                                // 0. TEST DE DESGASTE / FATIGA DEL COLCHÓN
                                 if (btnTipo === 'test_desgaste' || btnNombre.includes('fatiga') || btnNombre.includes('desgaste')) {
                                     block.innerHTML += `
                                         <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirTestDesgaste()">
@@ -404,8 +410,8 @@
                                                 <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
                                             </div>
                                             <div class="app-info">
-                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
+                                                <div class="app-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                                <div class="app-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
                                             </div>
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
@@ -564,7 +570,7 @@
         }
 
         // ==========================================
-        // 0. DIAGNÓSTICO CLÍNICO DE DESGASTE (NUEVO)
+        // 0. DIAGNÓSTICO CLÍNICO DE DESGASTE
         // ==========================================
         function abrirTestDesgaste() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-microscope text-amber-400"></i>';
@@ -620,7 +626,6 @@
             const p4 = parseInt(document.getElementById('desgaste-hotel').value);
 
             const total = p1 + p2 + p3 + p4;
-            // Puntuación de 4 a 12
             let estado = "";
             let porcentaje = 0;
             let consejo = "";
