@@ -19,20 +19,21 @@
           "destacado": true
         },
         {
+          "tipo": "test_ergonomico",
           "nombre": "Test Ergonómico: Firmeza & Medidas",
           "descripcion": "Configura en 3 pasos tu colchón y base adecuada",
           "icono": "fa-solid fa-bed-pulse",
-          "url": "#",
           "estiloIcono": "background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;"
         },
         {
+          "tipo": "tasador_retirada",
           "nombre": "Tasador de Entrega & Retirada",
           "descripcion": "Calcula condiciones de transporte y retirada de tu colchón viejo",
           "icono": "fa-solid fa-truck-ramp-box",
-          "url": "#",
           "estiloIcono": "background-color: rgba(48, 209, 88, 0.15); color: #30d158;"
         },
         {
+          "tipo": "parking",
           "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir",
           "icono": "fa-solid fa-location-crosshairs",
@@ -50,7 +51,7 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJXy9Psu6qWg0R2MztIZPHsPQ",
+      "urlGoogleResenas": "https://www.google.com/search?q=Iberlax+Colchones+Opiniones",
       "whatsappGerencia": "https://wa.me/34643186453?text=Hola%20Gerencia%20Iberlax,%20quisiera%20comentar%20una%20disconformidad%20con%20mi%20visita"
     }
   ]
