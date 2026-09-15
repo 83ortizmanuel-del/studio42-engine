@@ -172,7 +172,7 @@
         <h1 id="client-name">STUDIO 42</h1>
         <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-        <!-- TARJETA PACIENTE CABECERA (SOLO SE ACTIVA EN MODO MATERNAL) -->
+        <!-- TARJETA PACIENTE CABECERA (SOLO EN MODO MATERNAL) -->
         <div id="card-paciente-header" class="paciente-header-card hidden">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -204,6 +204,7 @@
         let datosFriccionesGlobales = {};
         let googleReviewUrlGlobal = "https://maps.google.com";
         let whatsappGerenciaGlobal = "https://wa.me/34672294962";
+        let whatsappComercialGlobal = "34945601573";
         let nombreNegocioGlobal = "Profesional";
         let whatsappMedicoGlobal = "";
         let timerTeleconsultaGlobal = null;
@@ -253,7 +254,7 @@
                 const data = await response.json();
                 nombreNegocioGlobal = data.nombre || "Profesional";
 
-                // REINICIO DE ESTADO ENTRE CLIENTES
+                // REINICIO DE ESTADO
                 esNodoMaternal = false;
                 document.getElementById('card-paciente-header').classList.add('hidden');
 
@@ -336,17 +337,68 @@
                             `;
                         } else if (sec.botones && Array.isArray(sec.botones)) {
                             sec.botones.forEach(btn => {
+                                const btnNombre = (btn.nombre || "").toLowerCase();
+                                const btnTipo = (btn.tipo || "").toLowerCase();
+
                                 if (btn.url && btn.url.includes('wa.me/')) {
                                     const match = btn.url.match(/wa\.me\/([0-9]+)/);
-                                    if (match && match[1] && !whatsappMedicoGlobal) whatsappMedicoGlobal = match[1];
+                                    if (match && match[1]) {
+                                        whatsappComercialGlobal = match[1];
+                                        if (!whatsappMedicoGlobal) whatsappMedicoGlobal = match[1];
+                                    }
                                 }
 
-                                // DETECCIÓN DINÁMICA: ¿ESTE CLIENTE ES MATERNAL?
-                                if (btn.tipo === 'calculadora_embarazo' || btn.tipo === 'teleconsulta_triaje') {
+                                if (btnTipo === 'calculadora_embarazo' || btnTipo === 'teleconsulta_triaje') {
                                     esNodoMaternal = true;
                                 }
 
-                                if (btn.tipo === 'teleconsulta_triaje') {
+                                // 1. TEST ERGONÓMICO (Coincidencia por tipo o por nombre)
+                                if (btnTipo === 'test_ergonomico' || btnNombre.includes('ergonómico') || btnNombre.includes('ergonomico')) {
+                                    block.innerHTML += `
+                                        <div class="app-btn" onclick="abrirTestErgonomico()">
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 168, 232, 0.15); color: #00A8E8;'}">
+                                                <i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || ''}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                        </div>
+                                    `;
+                                } 
+                                // 2. TASADOR RETIRADA (Coincidencia por tipo o por nombre)
+                                else if (btnTipo === 'tasador_retirada' || btnNombre.includes('tasador') || btnNombre.includes('retirada')) {
+                                    block.innerHTML += `
+                                        <div class="app-btn" onclick="abrirTasadorRetirada()">
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(48, 209, 88, 0.15); color: #30d158;'}">
+                                                <i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || ''}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                        </div>
+                                    `;
+                                }
+                                // 3. PARKING GPS
+                                else if (btnTipo === 'parking' || btnNombre.includes('aparqué') || btnNombre.includes('aparque')) {
+                                    block.innerHTML += `
+                                        <div onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
+                                            <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.1); color: #8e8e93;">
+                                                <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                        </div>
+                                    `;
+                                }
+                                // 4. HERRAMIENTAS MÉDICAS
+                                else if (btnTipo === 'teleconsulta_triaje') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-sky-500/30 bg-sky-950/20" onclick="abrirModalTeleconsulta()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(14,165,233,0.18); color: #0EA5E9;'}">
@@ -359,7 +411,7 @@
                                             <i class="fa-solid fa-chevron-right text-sky-400 text-xs"></i>
                                         </div>
                                     `;
-                                } else if (btn.tipo === 'calculadora_embarazo') {
+                                } else if (btnTipo === 'calculadora_embarazo') {
                                     block.innerHTML += `
                                         <div class="app-btn destacado" onclick="abrirCalculadoraEmbarazo()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(244,114,182,0.15); color: #F472B6;'}">
@@ -372,7 +424,7 @@
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
-                                } else if (btn.tipo === 'triaje_urgencias') {
+                                } else if (btnTipo === 'triaje_urgencias') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-rose-500/30 bg-rose-950/20" onclick="abrirTriajeUrgencias()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(225,29,72,0.2); color: #E11D48;'}">
@@ -385,7 +437,7 @@
                                             <i class="fa-solid fa-chevron-right text-rose-400 text-xs"></i>
                                         </div>
                                     `;
-                                } else if (btn.tipo === 'contador_contracciones') {
+                                } else if (btnTipo === 'contador_contracciones') {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirContadorContracciones()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(168,85,247,0.15); color: #A855F7;'}">
@@ -398,7 +450,7 @@
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
-                                } else if (btn.tipo === 'checklist_parto') {
+                                } else if (btnTipo === 'checklist_parto') {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirChecklistParto()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16,185,129,0.15); color: #10B981;'}">
@@ -411,20 +463,9 @@
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
-                                } else if (btn.tipo === 'parking' || (btn.nombre && btn.nombre.includes('aparqué'))) {
-                                    block.innerHTML += `
-                                        <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
-                                            <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.1); color: #8e8e93;">
-                                                <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </a>
-                                    `;
-                                } else {
+                                } 
+                                // 5. ENLACES EXTERNOS / VCARD / PROMOS
+                                else {
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
@@ -446,7 +487,6 @@
                 
                 actualizarInterfazParking();
                 
-                // SOLO SI ES NODO MATERNAL SE REVISAN DATOS CLÍNICOS
                 if (esNodoMaternal) {
                     actualizarResumenEmbarazo();
                     actualizarTarjetaCabeceraPaciente();
@@ -458,7 +498,7 @@
             }
         }
 
-        // DESBLOQUEO INTELIGENTE
+        // DESBLOQUEO INICIAL
         function iniciarMagia() {
             if ("vibrate" in navigator) {
                 try { navigator.vibrate([40, 60, 40]); } catch(e) {}
@@ -469,7 +509,6 @@
 
             if (reproductor.src) reproductor.play().catch(() => {});
 
-            // SI NO ES MATERNAL (COMO IBERLAX), AQUÍ SE ACABA
             if (!esNodoMaternal) return;
 
             const furGuardada = localStorage.getItem('fur_embarazo');
@@ -512,7 +551,201 @@
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
 
-        // FUNCIONES MÉDICAS (ACTIVAS SI EL CLIENTE ES LA DOCTORA)
+        // ==========================================
+        // HERRAMIENTAS INTERACTIVAS IBERLAX COLCHONES
+        // ==========================================
+        function abrirTestErgonomico() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bed-pulse text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Configurador Ergonómico";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-3">Encuentra tu firmeza ideal en 3 selecciones rápidas:</p>
+                <div class="space-y-2.5 text-left text-xs">
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">1. ¿Cómo duermes habitualmente?</label>
+                        <select id="test-postura" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
+                            <option value="De lado (adaptación en hombros y caderas)">De lado</option>
+                            <option value="Boca arriba (soporte lumbar recto)">Boca arriba</option>
+                            <option value="Boca abajo / Mixto (firmeza media-alta)">Boca abajo / Variado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">2. Sensación de Firmeza buscada:</label>
+                        <select id="test-firmeza" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
+                            <option value="Firmeza Media con efecto nube (Viscoelástica)">Firmeza Media (Efecto nube / Acogida)</option>
+                            <option value="Firmeza Alta con soporte ergonómico (Muelles Ensacados)">Firmeza Alta (Máxima estabilidad y frescor)</option>
+                            <option value="Terapéutico (Alivio dolor de espalda y lumbar)">Terapéutico (Alivio lumbar)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">3. Medida de tu cama:</label>
+                        <select id="test-medida" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
+                            <option value="150 x 190/200 cm (Matrimonio estándar)">150 x 190/200 cm (Queen)</option>
+                            <option value="135 x 190 cm (Matrimonio compacto)">135 x 190 cm</option>
+                            <option value="180 x 200 cm (King Size)">180 x 200 cm (King Size)</option>
+                            <option value="90 o 105 cm (Individual / Juvenil)">90 / 105 cm (Individual)</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="finalizarTestErgonomico()">Ver Recomendación en Tienda</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function finalizarTestErgonomico() {
+            const postura = document.getElementById('test-postura').value;
+            const firmeza = document.getElementById('test-firmeza').value;
+            const medida = document.getElementById('test-medida').value;
+
+            const mensaje = encodeURIComponent(
+                `Hola Iberlax, acabo de realizar el Test Ergonómico en el soporte de la tienda:\n\n` +
+                `• Postura: ${postura}\n` +
+                `• Firmeza: ${firmeza}\n` +
+                `• Medida: ${medida}\n\n` +
+                `¿Qué modelo de la exposición me recomendáis probar con esta configuración?`
+            );
+
+            window.open(`https://wa.me/${whatsappComercialGlobal}?text=${mensaje}`, '_blank');
+            cerrarModalBtn();
+        }
+
+        function abrirTasadorRetirada() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-truck-ramp-box text-emerald-400"></i>';
+            document.getElementById('modal-title').innerText = "Plan Renove: Retirada";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-3">Calcula el servicio de retirada ecológica de tu colchón antiguo:</p>
+                <div class="space-y-2.5 text-left text-xs">
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">Tipo de vivienda / Acceso:</label>
+                        <select id="tasador-acceso" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
+                            <option value="Piso con ascensor amplio">Piso con ascensor</option>
+                            <option value="Piso por escalera (sin ascensor)">Piso sin ascensor (por escalera)</option>
+                            <option value="Casa / Chalet planta baja">Vivienda unifamiliar / Chalet</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">Elemento a retirar:</label>
+                        <select id="tasador-elemento" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
+                            <option value="Solo colchón viejo">Solo colchón antiguo</option>
+                            <option value="Colchón + Somier / Base tapizada">Colchón + Somier / Base</option>
+                            <option value="Canapé abatible (desmontaje)">Canapé abatible (con desmontaje)</option>
+                        </select>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] leading-snug">
+                        ✓ <b>Promoción Activa:</b> Retirada y reciclaje 100% Bonificado (0 €) con la compra de tu nuevo equipo de descanso Iberlax.
+                    </div>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold" onclick="finalizarTasadorRetirada()">Consultar Cita de Entrega</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function finalizarTasadorRetirada() {
+            const acceso = document.getElementById('tasador-acceso').value;
+            const elemento = document.getElementById('tasador-elemento').value;
+
+            const mensaje = encodeURIComponent(
+                `Hola Iberlax, he consultado el Tasador de Retirada en la tienda:\n\n` +
+                `• Acceso: ${acceso}\n` +
+                `• A retirar: ${elemento}\n\n` +
+                `Quisiera confirmar los plazos de entrega y la retirada bonificada en mi domicilio.`
+            );
+
+            window.open(`https://wa.me/${whatsappComercialGlobal}?text=${mensaje}`, '_blank');
+            cerrarModalBtn();
+        }
+
+        // PARKING GPS UNIVERSAL
+        function actualizarInterfazParking() {
+            const lat = localStorage.getItem('parking_lat');
+            const iconBox = document.getElementById('parking-icon-container');
+            const icon = document.getElementById('parking-icon');
+            const title = document.getElementById('parking-name');
+            const desc = document.getElementById('parking-desc');
+
+            if (!iconBox || !icon) return;
+            if (lat) {
+                iconBox.style.background = "rgba(226, 232, 240, 0.2)";
+                iconBox.style.color = "var(--titanium-light)";
+                icon.className = "fa-solid fa-person-walking";
+                if(title) { title.innerText = "Volver a mi coche (Ruta GPS)"; title.style.color = "var(--titanium-light)"; }
+                if(desc) desc.innerText = "Toca para abrir Maps y volver a pie";
+            } else {
+                iconBox.style.background = "rgba(142,142,147,0.1)";
+                iconBox.style.color = "#8e8e93";
+                icon.className = "fa-solid fa-location-crosshairs";
+                if(title) { title.innerText = "¿Dónde aparqué?"; title.style.color = "var(--color-texto)"; }
+                if(desc) desc.innerText = "Guarda tu coche al llegar";
+            }
+        }
+
+        function gestionarParking(e) {
+            if (e) e.preventDefault();
+            const lat = localStorage.getItem('parking_lat');
+            const lng = localStorage.getItem('parking_lng');
+
+            if (lat && lng) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
+                localStorage.removeItem('parking_lat');
+                localStorage.removeItem('parking_lng');
+                actualizarInterfazParking();
+            } else {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            localStorage.setItem('parking_lat', pos.coords.latitude);
+                            localStorage.setItem('parking_lng', pos.coords.longitude);
+                            actualizarInterfazParking();
+                            alert("📍 ¡Ubicación guardada! Al salir pulsa este botón para volver a pie a tu coche.");
+                        },
+                        () => alert("No se pudo obtener la señal GPS."),
+                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                    );
+                } else {
+                    alert("Tu móvil no soporta geolocalización.");
+                }
+            }
+        }
+
+        // ESCUDO DE RESEÑAS
+        function simularFiltro(nota) {
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
+            mensaje.classList.remove('hidden');
+
+            setTimeout(() => {
+                mensaje.classList.add('hidden');
+                if (nota <= 3) {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
+                    document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
+                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección para resolver tu caso:`;
+                    modalActions.innerHTML = `
+                        <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
+                    `;
+                } else {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
+                    document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
+                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial en Google Maps:`;
+                    modalActions.innerHTML = `
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
+                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                    `;
+                }
+                abrirModalCustom();
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
+            }, 300);
+        }
+
+        // FUNCIONES MÉDICAS (DRA. LISBETH)
         function abrirModalAltaMaternalCompleta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-card-clip text-pink-400"></i>';
             document.getElementById('modal-title').innerText = "Activación Pasaporte Maternal";
@@ -854,89 +1087,6 @@
             document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
             abrirModalCustom();
-        }
-
-        // PARKING GPS UNIVERSAL
-        function actualizarInterfazParking() {
-            const lat = localStorage.getItem('parking_lat');
-            const iconBox = document.getElementById('parking-icon-container');
-            const icon = document.getElementById('parking-icon');
-            const title = document.getElementById('parking-name');
-            const desc = document.getElementById('parking-desc');
-
-            if (!iconBox || !icon) return;
-            if (lat) {
-                iconBox.style.background = "rgba(226, 232, 240, 0.2)";
-                iconBox.style.color = "var(--titanium-light)";
-                icon.className = "fa-solid fa-person-walking";
-                if(title) { title.innerText = "Volver a mi coche (Ruta GPS)"; title.style.color = "var(--titanium-light)"; }
-                if(desc) desc.innerText = "Toca para abrir Maps y volver a pie";
-            } else {
-                iconBox.style.background = "rgba(142,142,147,0.1)";
-                iconBox.style.color = "#8e8e93";
-                icon.className = "fa-solid fa-location-crosshairs";
-                if(title) { title.innerText = "¿Dónde aparqué?"; title.style.color = "var(--color-texto)"; }
-                if(desc) desc.innerText = "Guarda tu coche al llegar";
-            }
-        }
-
-        function gestionarParking(e) {
-            e.preventDefault();
-            const lat = localStorage.getItem('parking_lat');
-            const lng = localStorage.getItem('parking_lng');
-
-            if (lat && lng) {
-                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
-                localStorage.removeItem('parking_lat');
-                localStorage.removeItem('parking_lng');
-                actualizarInterfazParking();
-            } else {
-                if ("geolocation" in navigator) {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            localStorage.setItem('parking_lat', pos.coords.latitude);
-                            localStorage.setItem('parking_lng', pos.coords.longitude);
-                            actualizarInterfazParking();
-                            alert("📍 ¡Ubicación guardada! Al salir pulsa este botón para volver a pie a tu coche.");
-                        },
-                        () => alert("No se pudo obtener la señal GPS."),
-                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                    );
-                } else {
-                    alert("Tu móvil no soporta geolocalización.");
-                }
-            }
-        }
-
-        // ESCUDO DE RESEÑAS
-        function simularFiltro(nota) {
-            const estrellas = document.querySelectorAll('#escudo-estrellas i');
-            const mensaje = document.getElementById('mensaje-filtro');
-            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
-            mensaje.classList.remove('hidden');
-
-            setTimeout(() => {
-                mensaje.classList.add('hidden');
-                if (nota <= 3) {
-                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
-                    document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
-                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección para resolver tu caso:`;
-                    modalActions.innerHTML = `
-                        <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
-                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
-                    `;
-                } else {
-                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
-                    document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
-                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial en Google Maps:`;
-                    modalActions.innerHTML = `
-                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
-                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
-                    `;
-                }
-                abrirModalCustom();
-                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
-            }, 300);
         }
 
         document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
