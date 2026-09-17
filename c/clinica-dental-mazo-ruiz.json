@@ -14,20 +14,20 @@
           "nombre": "Cita Previa / Atención Inmediata",
           "descripcion": "Reserva o gestiona tu turno en tiempo real",
           "icono": "fa-solid fa-calendar-check",
-          "url": "https://wa.me/34600000000?text=Hola,%20quisiera%20reservar%20mi%20cita",
+          "url": "https://wa.me/346691613796?text=Hola,%20quisiera%20reservar%20mi%20cita",
           "destacado": true
         },
         {
           "nombre": "Catálogo de Tratamientos",
           "descripcion": "Conoce nuestras especialidades y procedimientos",
           "icono": "fa-solid fa-tooth",
-          "url": "https://wa.me/34600000000?text=Hola,%20deseo%20información%20sobre%20tratamientos"
+          "url": "https://ruizmazo.es/tratamientos-dentales/"
         },
         {
           "nombre": "Preparación para Procedimientos",
           "descripcion": "Guía pre y post operatoria para tu tratamiento",
           "icono": "fa-solid fa-notes-medical",
-          "url": "https://wa.me/34600000000?text=Hola,%20necesito%20instrucciones%20para%20mi%20procedimiento"
+          "url": "https://wa.me/346691613796?text=Hola,%20necesito%20instrucciones%20para%20mi%20procedimiento"
         },
         {
           "nombre": "¿Donde aparqué?",
@@ -47,7 +47,7 @@
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
       "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/34600000000?text=Hola%20Gerencia,%20quisiera%20dar%20mi%20opinión"
+      "whatsappGerencia": "https://wa.me/346691613796?text=Hola%20Gerencia,%20quisiera%20dar%20mi%20opinión"
     }
   ]
 }
