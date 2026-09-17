@@ -1,44 +1,56 @@
 {
   "nombre": "CLÍNICA DENTAL MAZO RUIZ",
-  "modoDemo": true,
+  "modoDemo": false,
   "subtitulo": "Especialistas en Odontología & Salud Bucal",
-  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "textoBadge": "NODO CLÍNICO ACTIVO · ATENCIÓN INTEGRAL",
   "logo": "logo.png",
-  "colorPrincipal": "#0F0F0F",
+  "colorPrincipal": "#0A0E14",
   "colorAcento": "#8DB600",
+  "audioFondo": "ambiente_clinica.mp3",
   "secciones": [
     {
-      "titulo": "Servicios & Soluciones Directas",
+      "titulo": "Atención Clínica & Diagnóstico",
       "botones": [
         {
-          "nombre": "Cita Previa / Atención Inmediata",
-          "descripcion": "Reserva o gestiona tu turno en tiempo real",
-          "icono": "fa-solid fa-calendar-check",
-          "url": "https://wa.me/346691613796?text=Hola,%20quisiera%20reservar%20mi%20cita",
+          "tipo": "urgencia_dental",
+          "nombre": "🚨 SOS Dolor / Urgencia Dental",
+          "descripcion": "Triaje rápido para roturas o dolor agudo con cita prioritaria",
+          "icono": "fa-solid fa-tooth",
+          "estiloIcono": "background: rgba(225, 29, 72, 0.18); color: #E11D48;",
+          "url": "https://wa.me/34669161379?text=🚨%20URGENCIA%20DENTAL:%20Hola,%20presento%20molestia%20o%20dolor%20agudo%20y%20necesito%20atención%20lo%20antes%20posible.",
           "destacado": true
         },
         {
-          "nombre": "Catálogo de Tratamientos",
-          "descripcion": "Conoce nuestras especialidades y procedimientos",
-          "icono": "fa-solid fa-tooth",
-          "url": "https://ruizmazo.es/tratamientos-dentales/"
+          "nombre": "Cita Previa / Revisión Anual",
+          "descripcion": "Agenda tu revisión diagnóstica y limpieza bucal",
+          "icono": "fa-solid fa-calendar-check",
+          "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
+          "url": "https://wa.me/34669161379?text=Hola%20Mazo%20Ruiz,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
+        }
+      ]
+    },
+    {
+      "titulo": "Espacio del Paciente VIP",
+      "botones": [
+        {
+          "tipo": "recordatorio_cita",
+          "nombre": "📅 Guardar Cita en Mi Calendario",
+          "descripcion": "Añade tu próximo turno con alarma en tu móvil",
+          "icono": "fa-solid fa-calendar-plus",
+          "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;"
         },
         {
-          "nombre": "Preparación para Procedimientos",
-          "descripcion": "Guía pre y post operatoria para tu tratamiento",
+          "nombre": "Guía Pre y Post Operatoria",
+          "descripcion": "Indicaciones para extracciones, implantes y ortodoncia",
           "icono": "fa-solid fa-notes-medical",
-          "url": "https://wa.me/346691613796?text=Hola,%20necesito%20instrucciones%20para%20mi%20procedimiento"
-        },
-        {
-          "nombre": "¿Donde aparqué?",
-          "tipo": "parking",
-          "descripcion": "Guarda la posición GPS de tu vehículo",
-          "icono": "fa-solid fa-location-crosshairs"
+          "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;",
+          "url": "https://ruizmazo.es/cuidados-post-tratamiento/"
         },
         {
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Añade nuestro teléfono y datos a tus contactos",
+          "descripcion": "Descarga directa de vCard con teléfono y WhatsApp",
           "icono": "fa-solid fa-address-card",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #fff;",
           "url": "./contacto.vcf"
         }
       ]
@@ -47,7 +59,7 @@
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
       "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/346691613796?text=Hola%20Gerencia,%20quisiera%20dar%20mi%20opinión"
+      "whatsappGerencia": "https://wa.me/34669161379?text=Hola%20Dirección%20Mazo%20Ruiz,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20consulta."
     }
   ]
 }
