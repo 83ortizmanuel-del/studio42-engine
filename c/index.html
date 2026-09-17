@@ -133,6 +133,28 @@
 
         .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
         .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+
+        /* CONTROL FLOTANTE MUTE */
+        .btn-audio-toggle {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--color-gris);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            z-index: 50;
+        }
+        .btn-audio-toggle:active { transform: scale(0.9); }
+        .btn-audio-toggle.active { color: var(--color-acento); border-color: var(--color-acento); }
     </style>
 </head>
 <body>
@@ -163,6 +185,11 @@
 
     <!-- HUB PRINCIPAL -->
     <div class="hub-container">
+        <!-- BOTÓN CONTROL SILENCIO SUTIL -->
+        <button id="btn-audio-control" class="btn-audio-toggle" onclick="alternarAudioManual()" title="Silenciar / Activar Música">
+            <i id="btn-audio-icon" class="fa-solid fa-volume-high"></i>
+        </button>
+
         <div class="status-badge">
             <span class="ping-light"></span>
             <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
@@ -209,6 +236,7 @@
         let whatsappMedicoGlobal = "";
         let timerTeleconsultaGlobal = null;
         let esNodoMaternal = false;
+        let audioIniciadoPorUsuario = false;
 
         let datosPagoGlobal = {
             pagoMovil: "",
@@ -218,6 +246,66 @@
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
+
+        // ==========================================================
+        // GESTIÓN INTELIGENTE DEL AUDIO: SILENCIO AL SALIR O MINIMIZAR
+        // ==========================================================
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                // Se oculta la pestaña, minimiza, bloquea o se abre WhatsApp/Maps
+                if (reproductor && !reproductor.paused) {
+                    reproductor.pause();
+                }
+            } else {
+                // Al volver a la app, si ya había iniciado la música y el splash terminó, se reanuda
+                if (audioIniciadoPorUsuario && reproductor && reproductor.src && splash.style.display === 'none') {
+                    reproductor.play().catch(() => {});
+                    actualizarIconoAudio(true);
+                }
+            }
+        });
+
+        // Pausar y resetear al cambiar de página o cerrar navegador
+        window.addEventListener("pagehide", () => {
+            if (reproductor) {
+                reproductor.pause();
+                reproductor.currentTime = 0;
+            }
+        });
+
+        window.addEventListener("beforeunload", () => {
+            if (reproductor) {
+                reproductor.pause();
+            }
+        });
+
+        function alternarAudioManual() {
+            if (!reproductor || !reproductor.src) return;
+            if (reproductor.paused) {
+                reproductor.play().then(() => {
+                    audioIniciadoPorUsuario = true;
+                    actualizarIconoAudio(true);
+                }).catch(() => {});
+            } else {
+                reproductor.pause();
+                audioIniciadoPorUsuario = false;
+                actualizarIconoAudio(false);
+            }
+        }
+
+        function actualizarIconoAudio(estaReproduciendo) {
+            const btn = document.getElementById('btn-audio-control');
+            const icon = document.getElementById('btn-audio-icon');
+            if (!btn || !icon) return;
+
+            if (estaReproduciendo) {
+                btn.classList.add('active');
+                icon.className = "fa-solid fa-volume-high";
+            } else {
+                btn.classList.remove('active');
+                icon.className = "fa-solid fa-volume-xmark";
+            }
+        }
 
         function obtenerFrutoGestacional(semanas) {
             if (semanas < 6) return { nombre: "una semilla de amapola", icono: "🌱", tam: "2 mm" };
@@ -278,7 +366,12 @@
                 document.getElementById('splash-logo').src = logoPath;
                 document.getElementById('hub-logo').src = logoPath;
 
-                if (data.audioFondo) reproductor.src = data.audioFondo;
+                if (data.audioFondo) {
+                    reproductor.src = data.audioFondo;
+                    document.getElementById('btn-audio-control').style.display = 'flex';
+                } else {
+                    document.getElementById('btn-audio-control').style.display = 'none';
+                }
 
                 // MODO DEMO
                 const seccionFricciones = document.getElementById('fricciones-section');
@@ -526,7 +619,15 @@
             splash.style.opacity = '0';
             setTimeout(() => { splash.style.display = 'none'; }, 500);
 
-            if (reproductor.src) reproductor.play().catch(() => {});
+            if (reproductor && reproductor.src) {
+                reproductor.play().then(() => {
+                    audioIniciadoPorUsuario = true;
+                    actualizarIconoAudio(true);
+                }).catch(() => {
+                    audioIniciadoPorUsuario = false;
+                    actualizarIconoAudio(false);
+                });
+            }
 
             if (!esNodoMaternal) return;
 
