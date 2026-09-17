@@ -139,17 +139,17 @@
             position: absolute;
             top: 18px;
             right: 18px;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             color: var(--color-gris);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             transition: all 0.2s;
             z-index: 50;
         }
@@ -248,16 +248,14 @@
         const splash = document.getElementById('splash-screen');
 
         // ==========================================================
-        // GESTIÓN INTELIGENTE DEL AUDIO: SILENCIO AL SALIR O MINIMIZAR
+        // GESTIÓN INTELIGENTE DEL AUDIO (SILENCIO EN SEGUNDO PLANO)
         // ==========================================================
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
-                // Se oculta la pestaña, minimiza, bloquea o se abre WhatsApp/Maps
                 if (reproductor && !reproductor.paused) {
                     reproductor.pause();
                 }
             } else {
-                // Al volver a la app, si ya había iniciado la música y el splash terminó, se reanuda
                 if (audioIniciadoPorUsuario && reproductor && reproductor.src && splash.style.display === 'none') {
                     reproductor.play().catch(() => {});
                     actualizarIconoAudio(true);
@@ -265,7 +263,6 @@
             }
         });
 
-        // Pausar y resetear al cambiar de página o cerrar navegador
         window.addEventListener("pagehide", () => {
             if (reproductor) {
                 reproductor.pause();
@@ -419,7 +416,7 @@
                                             <path fill="none" d="M0 0h48v48H0z"/>
                                         </svg>
                                     </div>
-                                    <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal cuidamos de tu descanso?</div>
+                                    <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal ha sido tu experiencia?</div>
                                     <div class="text-xs text-slate-300 text-center font-medium mb-2">Tu valoración nos ayuda a seguir mejorando cada día</div>
                                     
                                     <div class="stars-container star-rating my-1" id="escudo-estrellas">
@@ -429,7 +426,7 @@
                                         <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
                                         <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
                                     </div>
-                                    <p class="text-[11px] text-zinc-400 text-center mt-1">Toca las estrellas para calificar tu experiencia</p>
+                                    <p class="text-[11px] text-zinc-400 text-center mt-1">Toca las estrellas para calificar el servicio</p>
                                     <p id="mensaje-filtro" class="text-xs text-cyan-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
                                 </div>
                             `;
@@ -450,8 +447,23 @@
                                     esNodoMaternal = true;
                                 }
 
-                                // 0. TEST DE DESGASTE / FATIGA DEL COLCHÓN
-                                if (btnTipo === 'test_desgaste' || btnNombre.includes('fatiga') || btnNombre.includes('desgaste')) {
+                                // CALENDARIO UNIVERSAL
+                                if (btnTipo === 'recordatorio_cita' || btnNombre.includes('calendario') || btnNombre.includes('guardar cita')) {
+                                    block.innerHTML += `
+                                        <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalCalendario()">
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(141, 182, 0, 0.18); color: #8DB600;'}">
+                                                <i class="${btn.icono || 'fa-solid fa-calendar-plus'}"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || ''}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                        </div>
+                                    `;
+                                }
+                                // TEST DE DESGASTE COLCHÓN
+                                else if (btnTipo === 'test_desgaste' || btnNombre.includes('fatiga') || btnNombre.includes('desgaste')) {
                                     block.innerHTML += `
                                         <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirTestDesgaste()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 180, 0, 0.15); color: #FFB400;'}">
@@ -465,7 +477,7 @@
                                         </div>
                                     `;
                                 }
-                                // 1. TEST ERGONÓMICO
+                                // TEST ERGONÓMICO
                                 else if (btnTipo === 'test_ergonomico' || btnNombre.includes('ergonómico') || btnNombre.includes('ergonomico')) {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirTestErgonomico()">
@@ -480,7 +492,7 @@
                                         </div>
                                     `;
                                 } 
-                                // 2. TASADOR LOGÍSTICA
+                                // TASADOR LOGÍSTICA
                                 else if (btnTipo === 'tasador_retirada' || btnNombre.includes('tasador') || btnNombre.includes('retirada') || btnNombre.includes('logística')) {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirTasadorRetirada()">
@@ -495,22 +507,22 @@
                                         </div>
                                     `;
                                 }
-                                // 3. PARKING GPS
+                                // PARKING GPS
                                 else if (btnTipo === 'parking' || btnNombre.includes('aparqué') || btnNombre.includes('aparque')) {
                                     block.innerHTML += `
                                         <div onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
-                                            <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.1); color: #8e8e93;">
+                                            <div class="app-icon" id="parking-icon-container" style="${btn.estiloIcono || 'background: rgba(142,142,147,0.1); color: #8e8e93;'}">
                                                 <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
                                             </div>
                                             <div class="app-info">
-                                                <div class="app-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
+                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
                                             </div>
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 }
-                                // 4. HERRAMIENTAS MÉDICAS (DRA. LISBETH)
+                                // TELECONSULTA TRIAJE (MÉDICO)
                                 else if (btnTipo === 'teleconsulta_triaje') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-sky-500/30 bg-sky-950/20" onclick="abrirModalTeleconsulta()">
@@ -577,7 +589,7 @@
                                         </div>
                                     `;
                                 } 
-                                // 5. ENLACES GENERALES / VCARD
+                                // BOTONES GENERALES / VCARD
                                 else {
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
@@ -671,6 +683,138 @@
         }
 
         // ==========================================
+        // CALENDARIO UNIVERSAL (GOOGLE & .ICS)
+        // ==========================================
+        function abrirModalCalendario() {
+            const manana = new Date();
+            manana.setDate(manana.getDate() + 1);
+            const fechaDefecto = manana.toISOString().split('T')[0];
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calendar-plus text-lime-400"></i>';
+            document.getElementById('modal-title').innerText = "Guardar Tu Cita";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-4">Guarda tu turno en el calendario de tu móvil con alarmas automáticas:</p>
+                <div class="space-y-3 text-left text-xs">
+                    <div>
+                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">1. Motivo del Turno:</label>
+                        <select id="cal-motivo" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white font-semibold">
+                            <option value="Revisión General / Turno">Revisión General / Consulta</option>
+                            <option value="Tratamiento Odontológico / Médico">Tratamiento / Intervención</option>
+                            <option value="Seguimiento Especializado">Seguimiento / Control</option>
+                            <option value="Urgencia / Diagnóstico">Urgencia / Diagnóstico</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] text-zinc-400 mb-1 font-bold">2. Fecha:</label>
+                            <input type="date" id="cal-fecha" value="${fechaDefecto}" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white font-bold text-center">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-zinc-400 mb-1 font-bold">3. Hora:</label>
+                            <input type="time" id="cal-hora" value="10:00" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white font-bold text-center">
+                        </div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-800/80 border border-white/10 text-[11px] text-zinc-300 leading-snug">
+                        🔔 El evento se guardará con recordatorios nativos 24h y 2h antes de tu turno.
+                    </div>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-lime-600 hover:bg-lime-500 font-black text-slate-950 flex items-center justify-center gap-2 shadow-lg shadow-lime-900/40" onclick="generarEventoCalendario('ics')">
+                    <i class="fa-brands fa-apple text-base"></i> Guardar en iPhone / Móvil (.ics)
+                </button>
+                <button class="modal-btn-secondary flex items-center justify-center gap-2 text-white border-white/20 hover:border-amber-400" onclick="generarEventoCalendario('google')">
+                    <i class="fa-brands fa-google text-amber-400"></i> Guardar en Google Calendar
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cancelar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function generarEventoCalendario(formato) {
+            const motivo = document.getElementById('cal-motivo').value;
+            const fecha = document.getElementById('cal-fecha').value;
+            const hora = document.getElementById('cal-hora').value;
+
+            if (!fecha || !hora) {
+                alert("Por favor selecciona una fecha y hora válidas.");
+                return;
+            }
+
+            const duracionMinutos = 45;
+            const titulo = `Cita: ${motivo} - ${nombreNegocioGlobal}`;
+            const ubicacion = `${nombreNegocioGlobal}, Centro de Atención`;
+            const descripcion = `Cita programada en ${nombreNegocioGlobal}. Por favor acude 5 minutos antes. En caso de no poder asistir, avisa con antelación.`;
+
+            const dataInicio = new Date(`${fecha}T${hora}:00`);
+            const dataFin = new Date(dataInicio.getTime() + (duracionMinutos * 60 * 1000));
+
+            const formatToICSValue = (date) => {
+                const pad = (n) => (n < 10 ? '0' + n : n);
+                return date.getUTCFullYear() +
+                       pad(date.getUTCMonth() + 1) +
+                       pad(date.getUTCDate()) + 'T' +
+                       pad(date.getUTCHours()) +
+                       pad(date.getUTCMinutes()) +
+                       pad(date.getUTCSeconds()) + 'Z';
+            };
+
+            if (formato === 'google') {
+                const urlGoogle = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titulo)}&dates=${formatToICSValue(dataInicio)}/${formatToICSValue(dataFin)}&details=${encodeURIComponent(descripcion)}&location=${encodeURIComponent(ubicacion)}&sf=true&output=xml`;
+                window.open(urlGoogle, '_blank');
+                cerrarModalBtn();
+            } else {
+                const icsContent = [
+                    'BEGIN:VCALENDAR',
+                    'VERSION:2.0',
+                    'PRODID:-//Studio 42//Ecosistema Phygital//ES',
+                    'CALSCALE:GREGORIAN',
+                    'METHOD:PUBLISH',
+                    'BEGIN:VEVENT',
+                    `SUMMARY:${titulo}`,
+                    `DESCRIPTION:${descripcion.replace(/\n/g, '\\n')}`,
+                    `LOCATION:${ubicacion}`,
+                    `DTSTART:${formatToICSValue(dataInicio)}`,
+                    `DTEND:${formatToICSValue(dataFin)}`,
+                    'STATUS:CONFIRMED',
+                    'SEQUENCE:0',
+                    'BEGIN:VALARM',
+                    'TRIGGER:-P1D',
+                    'ACTION:DISPLAY',
+                    'DESCRIPTION:Recordatorio de Cita',
+                    'END:VALARM',
+                    'BEGIN:VALARM',
+                    'TRIGGER:-PT2H',
+                    'ACTION:DISPLAY',
+                    'DESCRIPTION:Tu cita es en 2 horas',
+                    'END:VALARM',
+                    'END:VEVENT',
+                    'END:VCALENDAR'
+                ].join('\r\n');
+
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+                if (isIOS) {
+                    const reader = new FileReader();
+                    reader.onloadend = function () {
+                        window.open(reader.result, '_blank');
+                    };
+                    reader.readAsDataURL(blob);
+                } else {
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.setAttribute('download', `cita-${nombreNegocioGlobal.toLowerCase().replace(/[^a-z0-9]/g, '_')}.ics`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+                cerrarModalBtn();
+            }
+        }
+
+        // ==========================================
         // 0. DIAGNÓSTICO CLÍNICO DE DESGASTE
         // ==========================================
         function abrirTestDesgaste() {
@@ -735,7 +879,7 @@
             if (total <= 5) {
                 porcentaje = 25;
                 estado = "Estado Óptimo / Desgaste Leve";
-                consejo = "Tu colchón aún conserva resiliencia ergonómica. Recuerda rotarlo cada 3 meses para prolongar su vida útil.";
+                consejo = "Tu colchón aún conserva resiliencia ergonómica. Recuerda rotarlo periódicamente para prolongar su vida útil.";
                 colorClase = "text-emerald-400";
             } else if (total <= 8) {
                 porcentaje = 65;
@@ -759,12 +903,12 @@
                     <p class="text-[11px] text-zinc-300 leading-snug">${consejo}</p>
                 </div>
                 <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] leading-snug text-left">
-                    💡 <b>Solución en Exposición:</b> Los especialistas de Iberlax pueden recomendarte el grado de firmeza y núcleo exacto para corregir esta sobrecarga.
+                    💡 <b>Solución en Exposición:</b> Los especialistas de ${nombreNegocioGlobal} pueden recomendarte el grado de firmeza y núcleo exacto para corregir esta sobrecarga.
                 </div>
             `;
 
             const msg = encodeURIComponent(
-                `Hola Iberlax, he completado el Diagnóstico de Fatiga en el soporte de la tienda:\n\n` +
+                `Hola ${nombreNegocioGlobal}, he completado el Diagnóstico de Fatiga en el soporte de la tienda:\n\n` +
                 `• Índice de Desgaste: ${porcentaje}%\n` +
                 `• Diagnóstico: ${estado}\n` +
                 `• Síntomas: ${consejo}\n\n` +
@@ -829,7 +973,7 @@
             const medida = document.getElementById('test-medida').value;
 
             const mensaje = encodeURIComponent(
-                `Hola Iberlax, acabo de realizar el Test Ergonómico en el soporte de la tienda:\n\n` +
+                `Hola ${nombreNegocioGlobal}, acabo de realizar el Test Ergonómico en el soporte de la tienda:\n\n` +
                 `• Postura: ${postura}\n` +
                 `• Firmeza: ${firmeza}\n` +
                 `• Medida: ${medida}\n\n` +
@@ -883,7 +1027,7 @@
             const elemento = document.getElementById('tasador-elemento').value;
 
             const mensaje = encodeURIComponent(
-                `Hola Iberlax, he consultado las condiciones de logística en el soporte de la tienda:\n\n` +
+                `Hola ${nombreNegocioGlobal}, he consultado las condiciones de logística en el soporte de la tienda:\n\n` +
                 `• Tipo de vivienda: ${acceso}\n` +
                 `• Servicio: ${elemento}\n\n` +
                 `¿Podríais confirmarme las condiciones y plazos de entrega para mi zona?`
