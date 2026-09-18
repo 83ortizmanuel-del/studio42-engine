@@ -2,7 +2,7 @@
   "nombre": "CLÍNICA DENTAL MAZO RUIZ",
   "modoDemo": false,
   "subtitulo": "Especialistas en Odontología & Salud Bucal",
-  "textoBadge": "NODO CLÍNICO ACTIVO · ATENCIÓN INTEGRAL",
+  "textoBadge": "NODO CLÍNICO CONECTADO · RED ACTIVA",
   "logo": "logo.png",
   "colorPrincipal": "#0A0E14",
   "colorAcento": "#8DB600",
@@ -26,25 +26,32 @@
           "icono": "fa-solid fa-calendar-check",
           "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
           "url": "https://wa.me/34669161379?text=Hola%20Mazo%20Ruiz,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
-        }
-      ]
-    },
-    {
-      "titulo": "Espacio del Paciente VIP",
-      "botones": [
+        },
         {
           "tipo": "recordatorio_cita",
           "nombre": "📅 Guardar Cita en Mi Calendario",
           "descripcion": "Añade tu próximo turno con alarma en tu móvil",
           "icono": "fa-solid fa-calendar-plus",
           "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;"
-        },
+        }
+      ]
+    },
+    {
+      "titulo": "Espacio del Paciente & Cuidados",
+      "botones": [
         {
           "nombre": "Guía Pre y Post Operatoria",
           "descripcion": "Indicaciones para extracciones, implantes y ortodoncia",
           "icono": "fa-solid fa-notes-medical",
           "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;",
-          "url": "https://ruizmazo.es/cuidados-post-tratamiento/"
+          "url": "https://ruizmazo.es/tratamientos-dentales/"
+        },
+        {
+          "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
+          "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir",
+          "icono": "fa-solid fa-location-crosshairs",
+          "estiloIcono": "background: rgba(142, 142, 147, 0.15); color: #94A3B8;"
         },
         {
           "nombre": "Guardar Contacto en Agenda",
