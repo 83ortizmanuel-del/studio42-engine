@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Ruiz Mazo;Clínica Dental;;;
+FN:Clínica Dental Ruiz Mazo
+ORG:Clínica Dental Ruiz Mazo
+TITLE:Odontología Avanzada & Urgencias
+TEL;TYPE=WORK,VOICE:+941583060
+TEL;TYPE=CELL,VOICE:+34669161379
+EMAIL;TYPE=PREF,INTERNET:clinica@ruizmazo.es
+URL:https://ruizmazo.es
+ADR;TYPE=WORK:;;C. Vara de Rey, 51;Logroño;La Rioja;26002;España
+NOTE:Atención Odontológica, Implantes, Ortodoncia y Urgencias Dentales en Logroño.
+END:VCARD
