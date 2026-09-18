@@ -17,7 +17,7 @@
           "descripcion": "Triaje prioritario para dolor agudo, flemón o rotura de pieza",
           "icono": "fa-solid fa-tooth",
           "estiloIcono": "background: rgba(225, 29, 72, 0.18); color: #E11D48;",
-          "url": "https://wa.me/34669161379?text=🚨%20URGENCIA%20DENTAL:%20Hola,%20presento%20molestia%20o%20dolor%20agudo%20y%20necesito%20atención%20prioritaria.",
+          "url": "https://wa.me/34691613796?text=🚨%20URGENCIA%20DENTAL:%20Hola,%20presento%20molestia%20o%20dolor%20agudo%20y%20necesito%20atención%20prioritaria.",
           "destacado": true
         },
         {
@@ -25,14 +25,14 @@
           "descripcion": "Calcula tu presupuesto estimado para implantes u ortodoncia invisible",
           "icono": "fa-solid fa-calculator",
           "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;",
-          "url": "https://wa.me/34669161379?text=Hola,%20quisiera%20consultar%20las%20opciones%20de%20financiación%20a%20medida%20para%20un%20tratamiento."
+          "url": "https://wa.me/34691613796?text=Hola,%20quisiera%20consultar%20las%20opciones%20de%20financiación%20a%20medida%20para%20un%20tratamiento."
         },
         {
           "nombre": "Cita Previa / Revisión General",
           "descripcion": "Agenda tu diagnóstico digital y limpieza bucodental preventiva",
           "icono": "fa-solid fa-calendar-check",
           "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
-          "url": "https://wa.me/34669161379?text=Hola%20Ruiz%20Mazo,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
+          "url": "https://wa.me/34691613796?text=Hola%20Ruiz%20Mazo,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
         }
       ]
     },
@@ -81,7 +81,7 @@
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
       "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJyxr-bESrWg0RqSInorqaJuw",
-      "whatsappGerencia": "https://wa.me/34669161379?text=Hola%20Dirección%20Ruiz%20Mazo,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20atención."
+      "whatsappGerencia": "https://wa.me/34691613796?text=Hola%20Dirección%20Ruiz%20Mazo,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20atención."
     }
   ]
 }
