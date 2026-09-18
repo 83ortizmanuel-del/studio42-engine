@@ -1,61 +1,76 @@
 {
-  "nombre": "CLÍNICA DENTAL MAZO RUIZ",
+  "nombre": "CLÍNICA DENTAL RUIZ MAZO",
   "modoDemo": false,
-  "subtitulo": "Especialistas en Odontología & Salud Bucal",
-  "textoBadge": "NODO CLÍNICO CONECTADO · RED ACTIVA",
-  "logo": "https://ruizmazo.es/wp-content/uploads/2025/11/clinica-dental-ruiz-mazo-logo-logrono.png",
+  "subtitulo": "Odontología Avanzada & Salud Bucal",
+  "textoBadge": "NODO CLÍNICO ACTIVO · VARA DE REY 51",
+  "logo": "logo.png",
   "colorPrincipal": "#0A0E14",
   "colorAcento": "#8DB600",
   "audioFondo": "ambiente_clinica.mp3",
   "secciones": [
     {
-      "titulo": "Atención Clínica & Diagnóstico",
+      "titulo": "Atención Inmediata & Diagnóstico",
       "botones": [
         {
           "tipo": "urgencia_dental",
           "nombre": "🚨 SOS Dolor / Urgencia Dental",
-          "descripcion": "Triaje rápido para roturas o dolor agudo con cita prioritaria",
+          "descripcion": "Triaje prioritario para dolor agudo, flemón o rotura de pieza",
           "icono": "fa-solid fa-tooth",
           "estiloIcono": "background: rgba(225, 29, 72, 0.18); color: #E11D48;",
-          "url": "https://wa.me/34669161379?text=🚨%20URGENCIA%20DENTAL:%20Hola,%20presento%20molestia%20o%20dolor%20agudo%20y%20necesito%20atención%20lo%20antes%20posible.",
+          "url": "https://wa.me/34669161379?text=🚨%20URGENCIA%20DENTAL:%20Hola,%20presento%20molestia%20o%20dolor%20agudo%20y%20necesito%20atención%20prioritaria.",
           "destacado": true
         },
         {
-          "nombre": "Cita Previa / Revisión Anual",
-          "descripcion": "Agenda tu revisión diagnóstica y limpieza bucal",
-          "icono": "fa-solid fa-calendar-check",
-          "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
-          "url": "https://wa.me/34669161379?text=Hola%20Mazo%20Ruiz,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
+          "nombre": "Simulador: Tratamiento en Cómodas Cuotas",
+          "descripcion": "Calcula tu presupuesto estimado para implantes u ortodoncia invisible",
+          "icono": "fa-solid fa-calculator",
+          "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;",
+          "url": "https://wa.me/34669161379?text=Hola,%20quisiera%20consultar%20las%20opciones%20de%20financiación%20a%20medida%20para%20un%20tratamiento."
         },
         {
-          "tipo": "recordatorio_cita",
-          "nombre": "📅 Guardar Cita en Mi Calendario",
-          "descripcion": "Añade tu próximo turno con alarma en tu móvil",
-          "icono": "fa-solid fa-calendar-plus",
-          "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;"
+          "nombre": "Cita Previa / Revisión General",
+          "descripcion": "Agenda tu diagnóstico digital y limpieza bucodental preventiva",
+          "icono": "fa-solid fa-calendar-check",
+          "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
+          "url": "https://wa.me/34669161379?text=Hola%20Ruiz%20Mazo,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
         }
       ]
     },
     {
-      "titulo": "Espacio del Paciente & Cuidados",
+      "titulo": "Espacio del Paciente & Utilidades",
       "botones": [
         {
+          "tipo": "recordatorio_cita",
+          "nombre": "📅 Guardar Cita en Mi Calendario",
+          "descripcion": "Añade tu próximo turno con recordatorio nativo en tu smartphone",
+          "icono": "fa-solid fa-calendar-plus",
+          "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;",
+          "destacado": true
+        },
+        {
           "nombre": "Guía Pre y Post Operatoria",
-          "descripcion": "Indicaciones para extracciones, implantes y ortodoncia",
+          "descripcion": "Pautas de medicación y dieta tras cirugías, extracciones o implantes",
           "icono": "fa-solid fa-notes-medical",
           "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;",
           "url": "https://ruizmazo.es/tratamientos-dentales/"
         },
         {
+          "nombre": "Bono Amigo: Comparte 30 € de Descuento",
+          "descripcion": "Recomienda la clínica a un familiar o amigo para su primer tratamiento",
+          "icono": "fa-solid fa-gift",
+          "estiloIcono": "background: rgba(168, 85, 247, 0.18); color: #A855F7;",
+          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20contacto%20de%20confianza%20para%20tu%20salud%20dental%20en%20Logroño.%20Tienen%20revisión%20completa%20y%20tecnología%20digital:%20https://ruizmazo.es"
+        },
+        {
           "tipo": "parking",
           "nombre": "¿Dónde aparqué?",
-          "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir",
+          "descripcion": "Guarda la ubicación GPS de tu coche en el centro de Logroño",
           "icono": "fa-solid fa-location-crosshairs",
           "estiloIcono": "background: rgba(142, 142, 147, 0.15); color: #94A3B8;"
         },
         {
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Descarga directa de vCard con teléfono y WhatsApp",
+          "descripcion": "Descarga directa de vCard con teléfono de urgencias y WhatsApp",
           "icono": "fa-solid fa-address-card",
           "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #fff;",
           "url": "./contacto.vcf"
@@ -65,8 +80,8 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/34669161379?text=Hola%20Dirección%20Mazo%20Ruiz,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20consulta."
+      "urlGoogleResenas": "ChIJyxr-bESrWg0RqSInorqaJuw",
+      "whatsappGerencia": "https://wa.me/34669161379?text=Hola%20Dirección%20Ruiz%20Mazo,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20atención."
     }
   ]
 }
