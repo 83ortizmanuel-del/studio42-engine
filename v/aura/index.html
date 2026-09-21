@@ -8,7 +8,7 @@
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || navigator.vendor || window.opera) && !window.MSStream;
         
-        // 1. CAPTURA AUTOMÁTICA DE VINCULACIÓN DE RED EN 1 CLIC (?set_id=-100...)
+        // 1. CAPTURA AUTOMÁTICA DE VINCULACIÓN EN 1 CLIC (?set_id=...)
         const urlParams = new URLSearchParams(window.location.search);
         const autoSetId = urlParams.get('set_id');
 
@@ -104,9 +104,8 @@
     <script>
         document.body.classList.add(isIOS ? 'theme-ios' : 'theme-android');
 
-        const TELEGRAM_TOKEN = "8883189745:AAFpBiz8u10Gdr9Ce_OAolk2iHhvf6awIkU"; 
-        let activeWatchId = null;
-        let lastLiveMessageId = null;
+        // TU ENDPOINT SEGURO EN GOOGLE APPS SCRIPT (EL TOKEN YA NO APARECE EN TU WEB)
+        const AURA_API_URL = "https://script.google.com/macros/s/AKfycbzXOHQPHS2p71v6Z4u1cIGD3ZF2XYSXUQrwFVU6AJG2l5wnjul9rsebPS1Oc-S_c2XdKg/exec";
 
         // Salida rápida de emergencia: al tocar el título "Ajustes" redirige a Google
         document.getElementById('client-name').addEventListener('click', function() {
@@ -152,7 +151,6 @@
                             a.onclick = (e) => {
                                 e.preventDefault();
                                 
-                                // Micro-animación visual: parpadeo suave nativo
                                 a.classList.add('btn-pressed');
                                 setTimeout(() => a.classList.remove('btn-pressed'), 250);
 
@@ -180,27 +178,49 @@
             }
         }
 
-        // FUNCIONES DE CONTROL RASTREO / TELEGRAM
+        // FUNCIONES DE CONTROL DE IDENTIDAD
         function configurarContactoPrivado() {
-            // Se pasa siempre una cadena vacía "" para no mostrar ningún número expuesto
             let contacto = prompt("Introduzca su ID numérico de Telegram (o déjelo en blanco para desvincular):", "");
             
             if (contacto !== null) {
                 const valorLimpio = contacto.trim();
                 if (valorLimpio === "") {
-                    // Borra definitivamente la memoria del teléfono
                     localStorage.removeItem("aura_contacto_confianza");
                     alert("🔴 Dispositivo desvinculado de la red.");
                 } else {
-                    // Guarda el nuevo ID sobrescribiendo cualquier anterior
                     localStorage.setItem("aura_contacto_confianza", valorLimpio);
                     alert("🟢 Parámetros de red actualizados correctamente.");
                 }
             }
         }
 
+        // FUNCIÓN CENTRALIZADA DE ENVÍO SEGURO
+        async function enviarAlertaServidor(texto, lat = null, lng = null) {
+            const destinoPrivado = localStorage.getItem("aura_contacto_confianza");
+            if (!destinoPrivado) return false;
+
+            try {
+                // Se envía a tu script de Google en modo no-cors para evitar bloqueos
+                await fetch(AURA_API_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "alerta_aura",
+                        chatId: destinoPrivado,
+                        texto: texto,
+                        lat: lat,
+                        lng: lng
+                    })
+                });
+                return true;
+            } catch(e) {
+                return false;
+            }
+        }
+
         async function lanzarHitoAura(estado) {
-            // 1. CONFIRMACIÓN HÁPTICA AL PULSAR (Pulso de 60ms en la mano)
+            // Confirmación háptica al pulsar
             if ("vibrate" in navigator) {
                 navigator.vibrate(60);
             }
@@ -216,76 +236,26 @@
             if (estado === 'inicio') etiqueta = "🟢 Inicio de trayecto";
             if (estado === 'ping') etiqueta = "📍 Punto de control";
             if (estado === 'fin') etiqueta = "✅ Llegada segura";
-            if (estado === 'sos') etiqueta = "🔴 ALERTA DE AUXILIO";
+            if (estado === 'sos') etiqueta = "🔴 ALERTA DE AUXILIO PRIORITARIA";
 
-            // Si se marca fin de ruta, detener el seguimiento de posición activo
-            if (estado === 'fin' && activeWatchId !== null) {
-                navigator.geolocation.clearWatch(activeWatchId);
-                activeWatchId = null;
-                if (lastLiveMessageId) {
-                    try {
-                        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/stopMessageLiveLocation`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ chat_id: destinoPrivado, message_id: lastLiveMessageId })
-                        });
-                    } catch(e) {}
+            // Si es fin de ruta o el navegador no tiene geolocalización
+            if (estado === 'fin' || !navigator.geolocation) {
+                await enviarAlertaServidor(etiqueta);
+                return;
+            }
+
+            // Obtener coordenadas y despachar al servidor de Google
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                await enviarAlertaServidor(etiqueta, pos.coords.latitude, pos.coords.longitude);
+                
+                // Confirmación háptica doble tras procesar
+                if ("vibrate" in navigator) {
+                    navigator.vibrate([30, 50, 30]);
                 }
-            }
-
-            try {
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ chat_id: destinoPrivado, text: etiqueta })
-                });
-            } catch(e) {}
-
-            if (navigator.geolocation && estado !== 'fin') {
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    try {
-                        const resp = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendLocation`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                chat_id: destinoPrivado,
-                                latitude: pos.coords.latitude,
-                                longitude: pos.coords.longitude,
-                                live_period: 3600
-                            })
-                        });
-                        const result = await resp.json();
-                        if (result.ok) {
-                            lastLiveMessageId = result.result.message_id;
-                            inicieSeguimientoContinuo(destinoPrivado);
-
-                            // 2. CONFIRMACIÓN HÁPTICA AL CONFIRMAR TELEGRAM (Doble toque imperceptible)
-                            if ("vibrate" in navigator) {
-                                navigator.vibrate([30, 50, 30]);
-                            }
-                        }
-                    } catch (err) {}
-                });
-            }
-        }
-
-        function inicieSeguimientoContinuo(chatId) {
-            if (activeWatchId !== null) navigator.geolocation.clearWatch(activeWatchId);
-            activeWatchId = navigator.geolocation.watchPosition(async (pos) => {
-                if (!lastLiveMessageId) return;
-                try {
-                    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageLiveLocation`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            chat_id: chatId,
-                            message_id: lastLiveMessageId,
-                            latitude: pos.coords.latitude,
-                            longitude: pos.coords.longitude
-                        })
-                    });
-                } catch(e) {}
-            }, (err) => {}, { enableHighAccuracy: true, maximumAge: 5000 });
+            }, async (err) => {
+                // Si el GPS falla o está desactivado, al menos envía la alerta de texto
+                await enviarAlertaServidor(etiqueta + " (Sin señal GPS precisa)");
+            }, { enableHighAccuracy: true, timeout: 8000 });
         }
 
         function abrirRastreoNativoLive() {
