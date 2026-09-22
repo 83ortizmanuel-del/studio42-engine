@@ -6,7 +6,6 @@
   "logo": "logo-ruizmazo.png",
   "colorPrincipal": "#0A0E14",
   "colorAcento": "#8DB600",
-  "audioFondo": "ambiente_clinica.mp3",
   "secciones": [
     {
       "titulo": "Atención Inmediata & Diagnóstico",
