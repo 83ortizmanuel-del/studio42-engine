@@ -28,7 +28,6 @@
             min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
         }
         
-        /* Nace oculto para eliminar el parpadeo de carga en clientes sin música */
         #splash-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
             background: radial-gradient(circle at center, #111827 0%, #030712 100%);
@@ -115,7 +114,6 @@
         .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
         .app-desc { font-size: 0.72rem; color: var(--color-gris); }
         
-        /* ESTRELLAS RESEÑAS & ANIMACIÓN */
         .stars-container { font-size: 2rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
         .star-rating i { 
             cursor: pointer; 
@@ -126,24 +124,6 @@
         .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
         .star-inactive { color: #334155; }
 
-        .stars-container i:nth-child(1) { animation: starPulse 2.2s infinite ease-in-out 0.1s; }
-        .stars-container i:nth-child(2) { animation: starPulse 2.2s infinite ease-in-out 0.2s; }
-        .stars-container i:nth-child(3) { animation: starPulse 2.2s infinite ease-in-out 0.3s; }
-        .stars-container i:nth-child(4) { animation: starPulse 2.2s infinite ease-in-out 0.4s; }
-        .stars-container i:nth-child(5) { animation: starPulse 2.2s infinite ease-in-out 0.5s; }
-
-        @keyframes starPulse {
-            0%, 100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
-            }
-            50% {
-                transform: scale(1.16);
-                filter: drop-shadow(0 0 8px var(--color-acento));
-            }
-        }
-
-        /* MODALES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
         .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 28px; padding: 22px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; max-height: 90vh; overflow-y: auto; }
         .modal-icon { font-size: 2.2rem; margin-bottom: 10px; }
@@ -158,24 +138,11 @@
         .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
         .footer-brand span { color: var(--titanium-light); font-weight: 800; }
 
-        /* CONTROL FLOTANTE MUTE */
         .btn-audio-toggle {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--color-gris);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-            z-index: 50;
+            position: absolute; top: 18px; right: 18px; width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--color-gris); display: none; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.8rem; transition: all 0.2s; z-index: 50;
         }
         .btn-audio-toggle:active { transform: scale(0.9); }
         .btn-audio-toggle.active { color: var(--color-acento); border-color: var(--color-acento); }
@@ -185,7 +152,6 @@
 
     <audio id="audio-fondo" loop preload="auto"></audio>
 
-    <!-- SPLASH SCREEN -->
     <div id="splash-screen">
         <div class="logo-container" id="splash-logo-box" style="width: 100px; height: 100px; margin-bottom: 20px;">
             <img id="splash-logo" alt="Logo">
@@ -195,7 +161,6 @@
         <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
-    <!-- MODAL GENERAL / INTERACTIVO -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
             <div id="modal-icon" class="modal-icon"></div>
@@ -207,9 +172,7 @@
         </div>
     </div>
 
-    <!-- HUB PRINCIPAL -->
     <div class="hub-container">
-        <!-- BOTÓN CONTROL SILENCIO -->
         <button id="btn-audio-control" class="btn-audio-toggle" onclick="alternarAudioManual()" title="Silenciar / Activar Música">
             <i id="btn-audio-icon" class="fa-solid fa-volume-high"></i>
         </button>
@@ -223,7 +186,6 @@
         <h1 id="client-name">STUDIO 42</h1>
         <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-        <!-- TARJETA PACIENTE CABECERA (SOLO EN MODO MATERNAL) -->
         <div id="card-paciente-header" class="paciente-header-card hidden">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -239,13 +201,11 @@
             </button>
         </div>
 
-        <!-- MODO DEMO COMERCIAL -->
         <div id="fricciones-section" style="display:none;">
             <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
             <div class="grid grid-cols-2 gap-2 mb-3" id="friccion-grid"></div>
         </div>
 
-        <!-- RENDER DINÁMICO DE SECCIONES Y HERRAMIENTAS -->
         <div id="dynamic-menu"></div>
 
         <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
@@ -262,6 +222,9 @@
         let esNodoMaternal = false;
         let audioIniciadoPorUsuario = false;
 
+        let alertasSemaforoGlobal = [];
+        let checklistPartoGlobal = null;
+
         let datosPagoGlobal = {
             pagoMovil: "",
             zelle: "",
@@ -271,12 +234,9 @@
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
 
-        // GESTIÓN INTELIGENTE DEL AUDIO EN SEGUNDO PLANO
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
-                if (reproductor && !reproductor.paused) {
-                    reproductor.pause();
-                }
+                if (reproductor && !reproductor.paused) reproductor.pause();
             } else {
                 if (audioIniciadoPorUsuario && reproductor && reproductor.src && splash.style.display === 'none') {
                     reproductor.play().catch(() => {});
@@ -310,7 +270,6 @@
             const btn = document.getElementById('btn-audio-control');
             const icon = document.getElementById('btn-audio-icon');
             if (!btn || !icon) return;
-
             if (estaReproduciendo) {
                 btn.classList.add('active');
                 icon.className = "fa-solid fa-volume-high";
@@ -379,7 +338,6 @@
                 document.getElementById('splash-logo').src = logoPath;
                 document.getElementById('hub-logo').src = logoPath;
 
-                // GESTIÓN INTELIGENTE DEL SPLASH
                 if (data.audioFondo && data.audioFondo.trim() !== "") {
                     reproductor.src = data.audioFondo;
                     document.getElementById('btn-audio-control').style.display = 'flex';
@@ -391,7 +349,6 @@
                     splash.style.pointerEvents = 'none';
                 }
 
-                // MODO DEMO
                 const seccionFricciones = document.getElementById('fricciones-section');
                 if (data.modoDemo === true) {
                     seccionFricciones.style.display = 'block';
@@ -412,7 +369,6 @@
                     seccionFricciones.style.display = 'none';
                 }
 
-                // Render Dinámico
                 const menuContainer = document.getElementById('dynamic-menu');
                 menuContainer.innerHTML = '';
 
@@ -464,11 +420,17 @@
                                     }
                                 }
 
-                                if (btnTipo === 'calculadora_embarazo' || btnTipo === 'teleconsulta_triaje') {
+                                if (btnTipo === 'calculadora_embarazo' || btnTipo === 'teleconsulta_triaje' || btnTipo === 'triaje_urgencias' || btnTipo === 'checklist_parto') {
                                     esNodoMaternal = true;
                                 }
 
-                                // 1. CALENDARIO UNIVERSAL
+                                if (btnTipo === 'triaje_urgencias' && btn.alertas) {
+                                    alertasSemaforoGlobal = btn.alertas;
+                                }
+                                if (btnTipo === 'checklist_parto' && btn.checklist) {
+                                    checklistPartoGlobal = btn.checklist;
+                                }
+
                                 if (btnTipo === 'recordatorio_cita' || btnNombre.includes('calendario') || btnNombre.includes('guardar cita')) {
                                     block.innerHTML += `
                                         <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalCalendario()">
@@ -483,7 +445,6 @@
                                         </div>
                                     `;
                                 }
-                                // 2. PARKING GPS UNIVERSAL
                                 else if (btnTipo === 'parking' || btnNombre.includes('aparqué') || btnNombre.includes('aparque')) {
                                     block.innerHTML += `
                                         <div onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
@@ -498,7 +459,6 @@
                                         </div>
                                     `;
                                 }
-                                // 3. DESGASTE / COLCHONES
                                 else if (btnTipo === 'test_desgaste' || btnNombre.includes('fatiga') || btnNombre.includes('desgaste')) {
                                     block.innerHTML += `
                                         <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirTestDesgaste()">
@@ -513,7 +473,6 @@
                                         </div>
                                     `;
                                 }
-                                // 4. TEST ERGONÓMICO
                                 else if (btnTipo === 'test_ergonomico' || btnNombre.includes('ergonómico') || btnNombre.includes('ergonomico')) {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirTestErgonomico()">
@@ -528,7 +487,6 @@
                                         </div>
                                     `;
                                 } 
-                                // 5. LOGÍSTICA / TASADOR
                                 else if (btnTipo === 'tasador_retirada' || btnNombre.includes('tasador') || btnNombre.includes('retirada') || btnNombre.includes('logística')) {
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirTasadorRetirada()">
@@ -543,7 +501,6 @@
                                         </div>
                                     `;
                                 }
-                                // 6. MATERNAL / GINECOLOGÍA
                                 else if (btnTipo === 'teleconsulta_triaje') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-sky-500/30 bg-sky-950/20 ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalTeleconsulta()">
@@ -610,7 +567,6 @@
                                         </div>
                                     `;
                                 } 
-                                // 7. BOTONES GENERALES / VCARD
                                 else {
                                     block.innerHTML += `
                                         <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
@@ -707,7 +663,6 @@
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
 
-        // CALENDARIO UNIVERSAL (.ICS & GOOGLE)
         function abrirModalCalendario() {
             const manana = new Date();
             manana.setDate(manana.getDate() + 1);
@@ -835,7 +790,6 @@
             }
         }
 
-        // PARKING GPS UNIVERSAL
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
             const iconBox = document.getElementById('parking-icon-container');
@@ -887,7 +841,6 @@
             }
         }
 
-        // ESCUDO DE RESEÑAS
         function simularFiltro(nota) {
             const estrellas = document.querySelectorAll('#escudo-estrellas i');
             const mensaje = document.getElementById('mensaje-filtro');
@@ -918,7 +871,6 @@
             }, 300);
         }
 
-        // FUNCIONES MÉDICAS (MODO MATERNAL)
         function abrirModalAltaMaternalCompleta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-card-clip text-pink-400"></i>';
             document.getElementById('modal-title').innerText = "Activación Pasaporte Maternal";
@@ -1184,20 +1136,37 @@
             }
         }
 
+        // ==========================================
+        // SEMÁFORO DE ALARMAS TOTALMENTE DINÁMICO
+        // ==========================================
         function abrirTriajeUrgencias() {
+            const listaSintomas = alertasSemaforoGlobal && alertasSemaforoGlobal.length > 0 
+                ? alertasSemaforoGlobal 
+                : [
+                    "TMF (Tono / Movimientos Fetales) insatisfactorio",
+                    "Dolor intenso o constante en bajo vientre",
+                    "Pérdida de líquido amniótico o sangrado vaginal",
+                    "Cefalea intensa persistente o alteraciones visuales",
+                    "Disminución drástica de los movimientos fetales"
+                ];
+
+            let htmlOpciones = '<div class="space-y-2 text-left text-xs max-h-60 overflow-y-auto pr-1">';
+            listaSintomas.forEach((sintoma, idx) => {
+                const checked = idx === 0 ? 'checked' : '';
+                htmlOpciones += `
+                    <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900 border border-white/10 cursor-pointer hover:border-rose-500/40 transition">
+                        <input type="radio" name="alarma_opt" value="${sintoma}" class="accent-rose-500" ${checked}>
+                        <span class="text-zinc-200 font-medium">${sintoma}</span>
+                    </label>
+                `;
+            });
+            htmlOpciones += '</div>';
+
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-heart text-rose-500"></i>';
             document.getElementById('modal-title').innerText = "Signos de Alarma";
             document.getElementById('modal-text').innerHTML = `
-                <div class="space-y-2 text-left text-xs">
-                    <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10 cursor-pointer">
-                        <input type="radio" name="alarma_opt" value="Sangrado o pérdida de líquido" class="accent-rose-500" checked>
-                        <span>Sangrado vaginal o pérdida de líquido</span>
-                    </label>
-                    <label class="flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-white/10 cursor-pointer">
-                        <input type="radio" name="alarma_opt" value="Dolor de cabeza intenso" class="accent-rose-500">
-                        <span>Dolor de cabeza intenso / visión borrosa</span>
-                    </label>
-                </div>
+                <p class="text-xs text-zinc-300 mb-3">Selecciona el síntoma para notificar de inmediato:</p>
+                ${htmlOpciones}
             `;
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-rose-600 hover:bg-rose-700 font-bold" onclick="enviarAlarmaMedico()">Avisar a la Doctora</button>
@@ -1208,8 +1177,9 @@
 
         function enviarAlarmaMedico() {
             const opt = document.querySelector('input[name="alarma_opt"]:checked');
-            const sintoma = opt ? opt.value : "alarma";
-            const msg = encodeURIComponent(`Hola Doctora, presento ${sintoma}. ¿Qué debo hacer?`);
+            const sintoma = opt ? opt.value : "signo de alarma";
+            const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
+            const msg = encodeURIComponent(`🚨 URGENCIA OBSTÉTRICA: Hola Doctora Lisbeth, le escribe ${nombre}. Presento: "${sintoma}". ¿Cómo debo proceder?`);
             window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${msg}`, '_blank');
         }
 
@@ -1247,14 +1217,51 @@
             }
         }
 
+        // ==========================================
+        // MALETA DE PARTO TOTALMENTE DINÁMICA
+        // ==========================================
         function abrirChecklistParto() {
-            const items = ['Documento y carpeta médica', '3 mudas de recién nacido', 'Pañales y toallitas', 'Ropa cómoda de lactancia'];
-            let html = '<div class="text-left space-y-2 mb-4 text-xs">';
-            items.forEach((it, idx) => {
-                const c = localStorage.getItem('chk_' + idx) === 'true' ? 'checked' : '';
-                html += `<label class="flex items-center gap-2 p-2 bg-slate-900 rounded-xl border border-white/5"><input type="checkbox" onchange="localStorage.setItem('chk_${idx}', this.checked)" ${c} class="accent-emerald-500"> <span>${it}</span></label>`;
-            });
+            let html = '<div class="text-left space-y-3 mb-4 text-xs max-h-[60vh] overflow-y-auto pr-1">';
+            
+            if (checklistPartoGlobal && typeof checklistPartoGlobal === 'object') {
+                let itemIndex = 0;
+                for (const [categoria, items] of Object.entries(checklistPartoGlobal)) {
+                    html += `<div class="font-bold text-emerald-400 uppercase tracking-wider text-[10px] mt-2 border-b border-emerald-500/20 pb-1">${categoria}</div>`;
+                    if (Array.isArray(items)) {
+                        items.forEach((it) => {
+                            const c = localStorage.getItem('chk_din_' + itemIndex) === 'true' ? 'checked' : '';
+                            html += `
+                                <label class="flex items-start gap-2.5 p-2 bg-slate-900 rounded-xl border border-white/5 cursor-pointer hover:border-emerald-500/30 transition">
+                                    <input type="checkbox" onchange="localStorage.setItem('chk_din_${itemIndex}', this.checked)" ${c} class="accent-emerald-500 mt-0.5"> 
+                                    <span class="text-zinc-200 leading-snug">${it}</span>
+                                </label>
+                            `;
+                            itemIndex++;
+                        });
+                    }
+                }
+            } else {
+                const itemsDefault = [
+                    'Documento de identidad (cédula o DNI) tuyo y de tu acompañante',
+                    'Carné de control prenatal, exámenes y ecografías',
+                    'Mudas de ropa de recién nacido de algodón',
+                    'Pañales desechables y toallitas húmedas sin alcohol',
+                    'Ropa cómoda y de lactancia para la madre',
+                    'Cargador de móvil con cable largo'
+                ];
+                itemsDefault.forEach((it, idx) => {
+                    const c = localStorage.getItem('chk_din_' + idx) === 'true' ? 'checked' : '';
+                    html += `
+                        <label class="flex items-start gap-2.5 p-2 bg-slate-900 rounded-xl border border-white/5 cursor-pointer">
+                            <input type="checkbox" onchange="localStorage.setItem('chk_din_${idx}', this.checked)" ${c} class="accent-emerald-500 mt-0.5"> 
+                            <span class="text-zinc-200 leading-snug">${it}</span>
+                        </label>
+                    `;
+                });
+            }
+            
             html += '</div>';
+
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-clipboard-check text-emerald-400"></i>';
             document.getElementById('modal-title').innerText = "Maleta de Parto";
             document.getElementById('modal-text').innerHTML = html;
@@ -1262,7 +1269,6 @@
             abrirModalCustom();
         }
 
-        // FUNCIONES TEST COLCHÓN / LOGÍSTICA
         function abrirTestDesgaste() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-microscope text-amber-400"></i>';
             document.getElementById('modal-title').innerText = "Diagnóstico de Fatiga";
