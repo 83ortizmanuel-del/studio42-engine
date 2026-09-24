@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Studio 42 | Diagnóstico Phygital Cyber-Engine</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="[https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap)" rel="stylesheet">
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
 
     <style>
         :root {
@@ -377,7 +377,6 @@
     </footer>
 
     <script>
-        // --- BANCO DE PREGUNTAS / FRICCIONES SEGÚN EL SECTOR ---
         const FRICCIONES_POR_SECTOR = {
             "Hostelería y Restauración": [
                 "Clientes piden la carta QR y no carga o está desactualizada",
@@ -431,7 +430,6 @@
             ]
         };
 
-        // --- SISTEMA DE AUDIO AMBIENTAL CON GESTIÓN DE AUTOPLAY Y APAGADO ---
         const audio = document.getElementById('audio-ambiente');
         const btnAudio = document.getElementById('btn-audio-toggle');
         const audioIcon = document.getElementById('audio-icon');
@@ -464,7 +462,6 @@
             }
         });
 
-        // Inicio tras el primer toque en pantalla
         window.addEventListener('touchstart', () => {
             if (!audioIniciado) reproducirAudio();
         }, { once: true });
@@ -472,14 +469,12 @@
             if (!audioIniciado) reproducirAudio();
         }, { once: true });
 
-        // Apagado al cambiar de pestaña, minimizar o salir de la página
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) apagarAudioInmediato();
         });
         window.addEventListener('pagehide', apagarAudioInmediato);
         window.addEventListener('beforeunload', apagarAudioInmediato);
 
-        // --- MANEJO DE CLOSER ID Y PALETA MELINA ---
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const closerCod = urlParams.get('cod') || urlParams.get('closer') || 'MEL42';
@@ -494,7 +489,6 @@
             }
         });
 
-        // --- DESPLIEGUE DINÁMICO DE SECTOR Y PREGUNTAS GUIADAS ---
         const sectorSelect = document.getElementById('sector_select');
         const campoOtroContainer = document.getElementById('campo-otro-sector-container');
         const sectorOtroInput = document.getElementById('sector_otro_input');
@@ -505,7 +499,6 @@
             const sector = sectorSelect.value;
             chipsContainer.innerHTML = '';
 
-            // Si selecciona "Otros", mostrar campo de texto para especificar
             if (sector === 'Otros') {
                 campoOtroContainer.classList.remove('hidden');
                 sectorOtroInput.required = true;
@@ -540,7 +533,6 @@
             }
         });
 
-        // --- COLOR PICKER INTERACTIVO ---
         const colorPicker = document.getElementById('color-picker');
         const inputBranding = document.getElementById('branding');
 
@@ -550,8 +542,8 @@
             document.documentElement.style.setProperty('--color-glow', hex + '88');
         });
 
-        // --- ENVÍO Y COMPILACIÓN HACIA APPS SCRIPT ---
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec";
+        // URL DE TU IMPLEMENTACIÓN DE APPS SCRIPT
+        const SCRIPT_URL = "[https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec](https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec)";
 
         const form = document.getElementById('form-diagnostico');
         const btnEnviar = document.getElementById('btn-enviar');
@@ -607,7 +599,6 @@
             const nombreComercio = document.getElementById('nombre_comercio').value.trim();
             let sectorVal        = document.getElementById('sector_select').value;
             
-            // Si eligió 'Otros', tomamos el valor del campo personalizado
             if (sectorVal === 'Otros') {
                 const sectorEspecifico = sectorOtroInput.value.trim();
                 sectorVal = sectorEspecifico ? `Otros (${sectorEspecifico})` : 'Sector Novedoso';
@@ -637,16 +628,17 @@
             params.append("branding", brandingVal);
             params.append("logo_extra", logoExtraVal);
 
+            // ENVÍO CON NO-CORS PARA GARANTIZAR LLEGADA A GOOGLE APPS SCRIPT
             fetch(SCRIPT_URL, {
                 method: 'POST',
+                mode: 'no-cors',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: params.toString()
             })
-            .then(response => response.json())
-            .then(data => {
-                const urlFinal = data.url || `https://studio42.es/c/?cod=${data.slug || slugCalculado}`;
+            .then(() => {
+                const urlFinal = `[https://studio42.es/c/?cod=$](https://studio42.es/c/?cod=$){slugCalculado}`;
                 iniciarCuentaRegresiva(urlFinal);
 
                 const closerActual = document.getElementById('closer_id').value;
@@ -656,8 +648,8 @@
                 campoOtroContainer.classList.add('hidden');
             })
             .catch(error => {
-                console.warn('Respuesta vía fallback seguro:', error);
-                const urlFallback = `https://studio42.es/c/?cod=${slugCalculado}`;
+                console.error("Error detectado en envío:", error);
+                const urlFallback = `[https://studio42.es/c/?cod=$](https://studio42.es/c/?cod=$){slugCalculado}`;
                 iniciarCuentaRegresiva(urlFallback);
             })
             .finally(() => {
