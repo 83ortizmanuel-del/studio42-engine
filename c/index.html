@@ -440,7 +440,7 @@
                                     }
                                 }
 
-                                if (btnTipo === 'calculadora_embarazo' || btnTipo === 'teleconsulta_triaje' || btnTipo === 'triaje_urgencias' || btnTipo === 'checklist_parto' || btnTipo === 'carnet_vacunas' || btnTipo === 'calculadora_imc') {
+                                if (btnTipo === 'calculadora_embarazo' || btnTipo === 'teleconsulta_triaje' || btnTipo === 'triaje_urgencias' || btnTipo === 'checklist_parto' || btnTipo === 'carnet_vacunas' || btnTipo === 'calculadora_imc' || btnTipo === 'asistencia_ruta') {
                                     esNodoMaternal = true;
                                 }
 
@@ -521,9 +521,9 @@
                                         </div>
                                     `;
                                 }
-                                else if (btnTipo === 'asistencia_ruta' || btnNombre.includes('farmacia') || btnNombre.includes('salud en ruta') || btnNombre.includes('urgencias cercanas')) {
+                                else if (btnTipo === 'asistencia_ruta' || btnNombre.includes('salud en ruta') || btnNombre.includes('urgencias & salud') || btnNombre.includes('farmacia')) {
                                     block.innerHTML += `
-                                        <div class="app-btn" onclick="abrirModalAsistenciaRuta()">
+                                        <div class="app-btn cursor-pointer" onclick="abrirModalAsistenciaRuta()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16, 185, 129, 0.18); color: #10B981;'}">
                                                 <i class="${btn.icono || 'fa-solid fa-map-location-dot'}"></i>
                                             </div>
@@ -728,7 +728,7 @@
         // ==========================================
         function abrirModalAsistenciaRuta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-map-location-dot text-emerald-400"></i>';
-            document.getElementById('modal-title').innerText = "Asistencia en Ruta GPS";
+            document.getElementById('modal-title').innerText = "Urgencias & Salud en Ruta";
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-xs text-zinc-300 mb-4">Localiza puntos de atención médica inmediata a tu alrededor con 1 toque:</p>
                 <div class="space-y-3 text-left">
@@ -758,12 +758,26 @@
         }
 
         function buscarPuntosRuta(tipo) {
-            let busqueda = tipo === 'hospital' 
-                ? 'hospital o clinica de urgencias cercana' 
-                : 'farmacia abierta cercana';
+            const termino = tipo === 'hospital' ? 'hospital+clinica+urgencias' : 'farmacia+abierta';
             
-            window.open(`https://www.google.com/maps/search/${encodeURIComponent(busqueda)}/`, '_blank');
-            cerrarModalBtn();
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        window.open(`https://www.google.com/maps/search/${termino}/@${lat},${lng},14z`, '_blank');
+                        cerrarModalBtn();
+                    },
+                    () => {
+                        window.open(`https://www.google.com/maps/search/${termino}+cercana/`, '_blank');
+                        cerrarModalBtn();
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            } else {
+                window.open(`https://www.google.com/maps/search/${termino}+cercana/`, '_blank');
+                cerrarModalBtn();
+            }
         }
 
         function abrirModalCalendario() {
