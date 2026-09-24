@@ -51,7 +51,7 @@
           "icono": "fa-solid fa-shield-heart",
           "estiloIcono": "background: rgba(225, 29, 72, 0.22); color: #E11D48;",
           "alertas": [
-            "TMF (Test / Movimientos Fetales) insatisfactorio",
+            "TMF (Tono / Movimientos Fetales) insatisfactorio",
             "Dolor intenso o constante en bajo vientre",
             "Pérdida de líquido amniótico o sangrado vaginal",
             "Cefalea intensa persistente o alteraciones visuales",
@@ -61,14 +61,14 @@
         {
           "tipo": "carnet_vacunas",
           "nombre": "Carnet de Vacunación Maternal",
-          "descripcion": "Esquema gestacional completo con envío por WhatsApp o Email",
-          "icono": "fa-solid fa-syringe",
+          "descripcion": "Esquema oficial de vacunas de la embarazada (Toxoide, Hep B, Influenza, COVID)",
+          "icono": "fa-solid fa-id-badge",
           "estiloIcono": "background: rgba(56, 189, 248, 0.18); color: #38BDF8;"
         },
         {
           "tipo": "calculadora_imc",
           "nombre": "Control de Peso & Ganancia Gestacional",
-          "descripcion": "Calcula tu IMC previo y los kilos recomendados para el embarazo",
+          "descripcion": "Calcula tu IMC preconcepcional y la ganancia de peso recomendada",
           "icono": "fa-solid fa-weight-scale",
           "estiloIcono": "background: rgba(234, 179, 8, 0.18); color: #EAB308;"
         },
@@ -82,7 +82,7 @@
         {
           "tipo": "checklist_parto",
           "nombre": "Maleta para el Parto",
-          "descripcion": "Checklist interactivo esencial para madre y bebé guardado en tu móvil",
+          "descripcion": "Checklist interactivo guardado en tu móvil para madre y bebé",
           "icono": "fa-solid fa-clipboard-check",
           "estiloIcono": "background: rgba(94, 119, 103, 0.22); color: #7E9F89;",
           "checklist": {
@@ -155,11 +155,11 @@
       "titulo": "Asistencia en Ruta",
       "botones": [
         {
-          "nombre": "Farmacias Cercanas por GPS",
-          "descripcion": "Localiza turnos y farmacias abiertas a tu alrededor",
-          "icono": "fa-solid fa-prescription-bottle-medical",
+          "tipo": "asistencia_ruta",
+          "nombre": "Urgencias & Salud en Ruta",
+          "descripcion": "Localiza hospitales, clínicas o farmacias por GPS en 1 clic",
+          "icono": "fa-solid fa-map-location-dot",
           "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
-          "url": "https://www.google.com/maps/search/farmacia+cercana/",
           "destacado": false
         }
       ]
