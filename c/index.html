@@ -115,7 +115,7 @@
         .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
         .app-desc { font-size: 0.72rem; color: var(--color-gris); }
         
-        /* ESTRELLAS RESEÑAS CON EFECTO NEÓN RESTAURADO */
+        /* ESTRELLAS RESEÑAS CON EFECTO NEÓN */
         .stars-container { font-size: 2rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
         .star-rating i { 
             cursor: pointer; 
@@ -590,11 +590,11 @@
                                     block.innerHTML += `
                                         <div class="app-btn" onclick="abrirCarnetVacunacion()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56,189,248,0.18); color: #38BDF8;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-syringe'}"></i>
+                                                <i class="${btn.icono || 'fa-solid fa-id-badge'}"></i>
                                             </div>
                                             <div class="app-info">
                                                 <div class="app-name">${btn.nombre || 'Carnet de Vacunación'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Control de dosis y esquema gestacional'}</div>
+                                                <div class="app-desc">${btn.descripcion || 'Control de esquema oficial gestacional'}</div>
                                             </div>
                                             <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
@@ -1081,7 +1081,7 @@
             let rhWarning = "";
             if (sangreMadre.includes('-') && (sangrePadre.includes('+') || sangrePadre === 'No reportado')) {
                 rhWarning = `
-                    <div class="p-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[10px] text-amber-300 text-left leading-tight">
+                    <div class="p-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[10px] text-amber-300 text-left leading-tight mb-2">
                         ⚠️ <b>Atención Rh:</b> Madre Rh(-) y Padre ${sangrePadre}. Consultar a la Dra. Lisbeth sobre profilaxis anti-D (semana 28).
                     </div>
                 `;
@@ -1369,43 +1369,92 @@
             abrirModalCustom();
         }
 
-        // ==========================================
-        // CARNET DE VACUNACIÓN MATERNA
-        // ==========================================
-        const VACUNAS_GESTACIONALES = [
-            { id: "vac_influenza", nombre: "Influenza (Gripe)", momento: "Cualquier trimestre", desc: "Dosis única estacional recomendada" },
-            { id: "vac_dtpa", nombre: "dTpa (Tosferina, Tétanos, Difteria)", momento: "Semana 27 a 36", desc: "Protección crucial para transferir anticuerpos al feto" },
-            { id: "vac_td", nombre: "Toxoide Tetánico / Difteria (Td)", momento: "Según esquema previo", desc: "Si no cuenta con esquema completo vigente" },
-            { id: "vac_hepb", nombre: "Hepatitis B", momento: "Población de riesgo", desc: "3 dosis si no está inmunizada" },
-            { id: "vac_covid", nombre: "COVID-19 Refuerzo", momento: "Cualquier trimestre", desc: "Plataforma ARNm autorizada en gestación" }
+        // ========================================================
+        // CARNET DE VACUNAS DE LA EMBARAZADA (ESQUEMA OFICIAL)
+        // ========================================================
+        const ESQUEMA_VACUNAL_OFICIAL = [
+            {
+                id: "vac_toxoide",
+                nombre: "Toxoide Tetánico / Diftérico",
+                subtitulo: "Prevención de Tétanos Neonatal y Difteria",
+                momento: "A partir de la semana 20 (2 dosis o refuerzo)",
+                badge: "Obligatoria"
+            },
+            {
+                id: "vac_hepb",
+                nombre: "Anti Hepatitis B",
+                subtitulo: "Protección materna e inmunización vertical",
+                momento: "Esquema según antecedente (1ª, 2ª o 3ª dosis)",
+                badge: "Fundamental"
+            },
+            {
+                id: "vac_influenza",
+                nombre: "Influenza Estacional",
+                subtitulo: "Prevención de complicaciones respiratorias agudas",
+                momento: "Cualquier trimestre de gestación (Dosis única)",
+                badge: "Recomendada"
+            },
+            {
+                id: "vac_covid",
+                nombre: "COVID-19",
+                subtitulo: "Refuerzo o esquema de protección biológica",
+                momento: "Cualquier edad gestacional",
+                badge: "Protocolo"
+            }
         ];
 
         function abrirCarnetVacunacion() {
-            let htmlVacunas = '<div class="space-y-2.5 text-left text-xs max-h-[55vh] overflow-y-auto pr-1">';
-            VACUNAS_GESTACIONALES.forEach((v) => {
+            const nombre = localStorage.getItem('paciente_nombre') || 'Mamá';
+            
+            let totalCumplidas = 0;
+            ESQUEMA_VACUNAL_OFICIAL.forEach(v => {
+                if (localStorage.getItem(v.id) === 'true') totalCumplidas++;
+            });
+            const porcentaje = Math.round((totalCumplidas / ESQUEMA_VACUNAL_OFICIAL.length) * 100);
+
+            let htmlVacunas = `
+                <div class="mb-3 p-3 bg-slate-900/90 rounded-2xl border border-sky-500/30 text-left">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-[10px] uppercase font-bold text-sky-400 tracking-wider">Estado de Inmunización</span>
+                        <span class="text-xs font-mono font-black ${porcentaje === 100 ? 'text-emerald-400' : 'text-sky-300'}">${porcentaje}% Cumplido</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-sky-500 to-emerald-400 transition-all duration-300" style="width: ${porcentaje}%"></div>
+                    </div>
+                </div>
+                <div class="space-y-2.5 text-left text-xs max-h-[50vh] overflow-y-auto pr-1">
+            `;
+
+            ESQUEMA_VACUNAL_OFICIAL.forEach((v) => {
                 const aplicada = localStorage.getItem(v.id) === 'true';
                 htmlVacunas += `
-                    <div class="p-2.5 rounded-xl bg-slate-900 border border-white/10 flex items-start justify-between gap-2">
+                    <div class="p-3 rounded-2xl bg-slate-900 border ${aplicada ? 'border-emerald-500/40 bg-emerald-950/10' : 'border-white/10'} flex items-center justify-between gap-3 transition">
                         <div class="flex-grow">
-                            <div class="font-bold text-white text-[11px]">${v.nombre}</div>
-                            <div class="text-[10px] text-sky-300 font-semibold mb-0.5">⏱️ ${v.momento}</div>
-                            <div class="text-[10px] text-zinc-400 leading-snug">${v.desc}</div>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="font-black text-white text-[12px]">${v.nombre}</span>
+                                <span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${aplicada ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-zinc-400'}">${v.badge}</span>
+                            </div>
+                            <div class="text-[11px] text-zinc-300 font-medium">${v.subtitulo}</div>
+                            <div class="text-[10px] text-sky-300 font-mono mt-0.5">⏱️ ${v.momento}</div>
                         </div>
-                        <input type="checkbox" id="${v.id}" onchange="localStorage.setItem('${v.id}', this.checked)" ${aplicada ? 'checked' : ''} class="accent-sky-400 w-4 h-4 mt-1 cursor-pointer">
+                        <label class="flex flex-col items-center cursor-pointer shrink-0">
+                            <input type="checkbox" id="${v.id}" onchange="toggleVacuna('${v.id}')" ${aplicada ? 'checked' : ''} class="w-5 h-5 accent-emerald-500 cursor-pointer">
+                            <span class="text-[9px] mt-1 font-bold ${aplicada ? 'text-emerald-400' : 'text-zinc-500'}">${aplicada ? 'Listo' : 'Pendiente'}</span>
+                        </label>
                     </div>
                 `;
             });
             htmlVacunas += '</div>';
 
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-syringe text-sky-400"></i>';
-            document.getElementById('modal-title').innerText = "Carnet de Vacunación";
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-badge text-sky-400"></i>';
+            document.getElementById('modal-title').innerText = "Carnet de Vacunas Maternal";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-2">Esquema oficial de inmunización durante la gestación:</p>
+                <p class="text-xs text-zinc-300 mb-3">Esquema oficial de vacunas de la paciente gestante:</p>
                 ${htmlVacunas}
             `;
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold flex items-center justify-center gap-2" onclick="compartirCarnetVacunas('ws')">
-                    <i class="fa-brands fa-whatsapp text-base"></i> Compartir por WhatsApp
+                    <i class="fa-brands fa-whatsapp text-base"></i> Enviar Carnet a la Dra. Lisbeth
                 </button>
                 <button class="modal-btn-secondary flex items-center justify-center gap-2 border-white/20 text-white" onclick="compartirCarnetVacunas('email')">
                     <i class="fa-solid fa-envelope"></i> Compartir por Email
@@ -1415,22 +1464,41 @@
             abrirModalCustom();
         }
 
+        function toggleVacuna(id) {
+            const checkbox = document.getElementById(id);
+            if (checkbox) {
+                localStorage.setItem(id, checkbox.checked);
+                abrirCarnetVacunacion();
+            }
+        }
+
         function compartirCarnetVacunas(canal) {
             const nombre = localStorage.getItem('paciente_nombre') || 'Paciente';
-            let resumen = `📋 *CARNET DE VACUNACIÓN MATERNAL*\nPaciente: ${nombre}\n\n`;
-            
-            VACUNAS_GESTACIONALES.forEach(v => {
-                const aplicada = localStorage.getItem(v.id) === 'true';
-                resumen += `${aplicada ? '✅' : '⏳'} ${v.nombre} (${v.momento}): ${aplicada ? 'APLICADA' : 'PENDIENTE'}\n`;
-            });
+            const fur = localStorage.getItem('fur_embarazo');
+            let semTexto = "En gestación";
+            if (fur) {
+                const diffDias = calcularDiasGestacion(fur);
+                const sem = Math.floor(diffDias / 7);
+                semTexto = `Semana ${sem}`;
+            }
 
-            resumen += `\nControl ginecológico y obstétrico: ${nombreNegocioGlobal}`;
+            let reporte = `📋 *CARNET DE VACUNAS DE LA EMBARAZADA*\n`;
+            reporte += `👩 Paciente: ${nombre} (${semTexto})\n`;
+            reporte += `🏥 Control Clínico: Dra. Lisbeth Carolina Rangel\n`;
+            reporte += `─────────────────────\n`;
+            
+            ESQUEMA_VACUNAL_OFICIAL.forEach(v => {
+                const cumplida = localStorage.getItem(v.id) === 'true';
+                reporte += `${cumplida ? '✅' : '⏳'} *${v.nombre}*: ${cumplida ? 'ESQUEMA CUMPLIDO' : 'PENDIENTE'}\n`;
+            });
+            reporte += `─────────────────────\n`;
+            reporte += `Reporte generado desde Pasaporte Phygital Maternal · Studio 42`;
 
             if (canal === 'ws') {
-                window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${encodeURIComponent(resumen)}`, '_blank');
+                window.open(`https://wa.me/${whatsappMedicoGlobal}?text=${encodeURIComponent(reporte)}`, '_blank');
             } else {
-                const subject = encodeURIComponent(`Carnet de Vacunación Maternal - ${nombre}`);
-                const body = encodeURIComponent(resumen);
+                const subject = encodeURIComponent(`Carnet de Vacunas Maternal - ${nombre}`);
+                const body = encodeURIComponent(reporte);
                 window.location.href = `mailto:?subject=${subject}&body=${body}`;
             }
         }
@@ -1522,6 +1590,9 @@
             `;
         }
 
+        // ==========================================
+        // FUNCIONES TEST COLCHÓN / LOGÍSTICA
+        // ==========================================
         function abrirTestDesgaste() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-microscope text-amber-400"></i>';
             document.getElementById('modal-title').innerText = "Diagnóstico de Fatiga";
