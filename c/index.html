@@ -521,6 +521,20 @@
                                         </div>
                                     `;
                                 }
+                                else if (btnTipo === 'asistencia_ruta' || btnNombre.includes('farmacia') || btnNombre.includes('salud en ruta') || btnNombre.includes('urgencias cercanas')) {
+                                    block.innerHTML += `
+                                        <div class="app-btn" onclick="abrirModalAsistenciaRuta()">
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16, 185, 129, 0.18); color: #10B981;'}">
+                                                <i class="${btn.icono || 'fa-solid fa-map-location-dot'}"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre || 'Urgencias & Salud en Ruta'}</div>
+                                                <div class="app-desc">${btn.descripcion || 'Centros de salud y farmacias por GPS'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                        </div>
+                                    `;
+                                }
                                 else if (btnTipo === 'teleconsulta_triaje') {
                                     block.innerHTML += `
                                         <div class="app-btn border border-sky-500/30 bg-sky-950/20 ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalTeleconsulta()">
@@ -707,6 +721,49 @@
             modalOverlay.style.opacity = '0';
             modalContent.style.transform = 'translateY(20px)';
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        }
+
+        // ==========================================
+        // ASISTENCIA EN RUTA GPS (HOSPITALES Y FARMACIAS)
+        // ==========================================
+        function abrirModalAsistenciaRuta() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-map-location-dot text-emerald-400"></i>';
+            document.getElementById('modal-title').innerText = "Asistencia en Ruta GPS";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-4">Localiza puntos de atención médica inmediata a tu alrededor con 1 toque:</p>
+                <div class="space-y-3 text-left">
+                    <button onclick="buscarPuntosRuta('hospital')" class="w-full p-3.5 rounded-2xl bg-rose-950/30 border border-rose-500/40 flex items-center gap-3.5 cursor-pointer hover:bg-rose-900/40 transition">
+                        <div class="w-11 h-11 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-hospital"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-xs text-white">Centros de Salud & Clínicas</div>
+                            <div class="text-[10px] text-rose-300">Hospitales, ambulatorios y urgencias cercanas</div>
+                        </div>
+                    </button>
+
+                    <button onclick="buscarPuntosRuta('farmacia')" class="w-full p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex items-center gap-3.5 cursor-pointer hover:bg-emerald-900/40 transition">
+                        <div class="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-prescription-bottle-medical"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-xs text-white">Farmacias Cercanas</div>
+                            <div class="text-[10px] text-emerald-300">Turnos de guardia y medicamentos abiertos</div>
+                        </div>
+                    </button>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            abrirModalCustom();
+        }
+
+        function buscarPuntosRuta(tipo) {
+            let busqueda = tipo === 'hospital' 
+                ? 'hospital o clinica de urgencias cercana' 
+                : 'farmacia abierta cercana';
+            
+            window.open(`https://www.google.com/maps/search/${encodeURIComponent(busqueda)}/`, '_blank');
+            cerrarModalBtn();
         }
 
         function abrirModalCalendario() {
