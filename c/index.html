@@ -143,10 +143,47 @@
             }
         }
 
+        /* MODAL CON BOTÓN DE CIERRE SUPERIOR */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 28px; padding: 22px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; max-height: 90vh; overflow-y: auto; }
-        .modal-icon { font-size: 2.2rem; margin-bottom: 10px; }
-        .modal-title { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
+        .modal-box { 
+            background: #0f172a; 
+            border: 1px solid rgba(255, 255, 255, 0.18); 
+            border-radius: 28px; 
+            padding: 24px 20px 20px 20px; 
+            max-width: 380px; 
+            width: 100%; 
+            text-align: center; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9); 
+            transform: translateY(20px); 
+            transition: transform 0.3s ease; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            z-index: 60;
+        }
+        .modal-close-btn:hover { background: rgba(255, 255, 255, 0.18); color: #ffffff; }
+        .modal-close-btn:active { transform: scale(0.9); }
+
+        .modal-icon { font-size: 2.2rem; margin-bottom: 8px; }
+        .modal-title { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; padding: 0 25px; }
         .modal-text { font-size: 0.82rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 16px; }
         
         .modal-actions { display: flex; flex-direction: column; gap: 9px; }
@@ -180,8 +217,10 @@
         <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
+    <!-- MODAL GENERAL CON BOTÓN X -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
+            <button class="modal-close-btn" onclick="cerrarModalBtn()" title="Cerrar y volver"><i class="fa-solid fa-xmark"></i></button>
             <div id="modal-icon" class="modal-icon"></div>
             <div id="modal-title" class="modal-title"></div>
             <div id="modal-text" class="modal-text"></div>
@@ -602,7 +641,7 @@
                                     `;
                                 } else if (btnTipo === 'carnet_vacunas') {
                                     block.innerHTML += `
-                                        <div class="app-btn" onclick="abrirCarnetVacunacion()">
+                                        <div class="app-btn cursor-pointer" onclick="abrirCarnetVacunacion()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56,189,248,0.18); color: #38BDF8;'}">
                                                 <i class="${btn.icono || 'fa-solid fa-id-badge'}"></i>
                                             </div>
@@ -615,7 +654,7 @@
                                     `;
                                 } else if (btnTipo === 'calculadora_imc') {
                                     block.innerHTML += `
-                                        <div class="app-btn" onclick="abrirCalculadoraIMC()">
+                                        <div class="app-btn cursor-pointer" onclick="abrirCalculadoraIMC()">
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(234,179,8,0.18); color: #EAB308;'}">
                                                 <i class="${btn.icono || 'fa-solid fa-weight-scale'}"></i>
                                             </div>
@@ -1441,42 +1480,40 @@
         }
 
         // ========================================================
-        // CARNET DE VACUNAS DE LA EMBARAZADA (ESQUEMA OFICIAL)
+        // CARNET DE VACUNAS DE LA EMBARAZADA (ESQUEMA TÁCTIL INTUITIVO)
         // ========================================================
         const ESQUEMA_VACUNAL_OFICIAL = [
             {
                 id: "vac_toxoide",
                 nombre: "Toxoide Tetánico / Diftérico",
                 subtitulo: "Prevención de Tétanos Neonatal y Difteria",
-                momento: "A partir de la semana 20 (2 dosis o refuerzo)",
+                momento: "Semana 20 en adelante (2 dosis o refuerzo)",
                 badge: "Obligatoria"
             },
             {
                 id: "vac_hepb",
                 nombre: "Anti Hepatitis B",
                 subtitulo: "Protección materna e inmunización vertical",
-                momento: "Esquema según antecedente (1ª, 2ª o 3ª dosis)",
+                momento: "3 dosis según esquema previo",
                 badge: "Fundamental"
             },
             {
                 id: "vac_influenza",
                 nombre: "Influenza Estacional",
-                subtitulo: "Prevención de complicaciones respiratorias agudas",
-                momento: "Cualquier trimestre de gestación (Dosis única)",
+                subtitulo: "Prevención de infecciones respiratorias agudas",
+                momento: "Cualquier trimestre (Dosis única)",
                 badge: "Recomendada"
             },
             {
                 id: "vac_covid",
-                nombre: "COVID-19",
-                subtitulo: "Refuerzo o esquema de protección biológica",
+                nombre: "COVID-19 Refuerzo",
+                subtitulo: "Protección biológica gestacional",
                 momento: "Cualquier edad gestacional",
                 badge: "Protocolo"
             }
         ];
 
         function abrirCarnetVacunacion() {
-            const nombre = localStorage.getItem('paciente_nombre') || 'Mamá';
-            
             let totalCumplidas = 0;
             ESQUEMA_VACUNAL_OFICIAL.forEach(v => {
                 if (localStorage.getItem(v.id) === 'true') totalCumplidas++;
@@ -1484,63 +1521,67 @@
             const porcentaje = Math.round((totalCumplidas / ESQUEMA_VACUNAL_OFICIAL.length) * 100);
 
             let htmlVacunas = `
-                <div class="mb-3 p-3 bg-slate-900/90 rounded-2xl border border-sky-500/30 text-left">
+                <div class="mb-3.5 p-3 bg-slate-900/90 rounded-2xl border border-sky-500/30 text-left">
                     <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-[10px] uppercase font-bold text-sky-400 tracking-wider">Estado de Inmunización</span>
-                        <span class="text-xs font-mono font-black ${porcentaje === 100 ? 'text-emerald-400' : 'text-sky-300'}">${porcentaje}% Cumplido</span>
+                        <span class="text-[10px] uppercase font-bold text-sky-400 tracking-wider">Cumplimiento Gestacional</span>
+                        <span class="text-xs font-mono font-black ${porcentaje === 100 ? 'text-emerald-400' : 'text-sky-300'}">${porcentaje}% Completado</span>
                     </div>
-                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-sky-500 to-emerald-400 transition-all duration-300" style="width: ${porcentaje}%"></div>
+                    <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden p-0.5">
+                        <div class="h-full rounded-full bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 transition-all duration-300" style="width: ${porcentaje}%"></div>
                     </div>
                 </div>
-                <div class="space-y-2.5 text-left text-xs max-h-[50vh] overflow-y-auto pr-1">
+                <div class="space-y-2 text-left text-xs max-h-[50vh] overflow-y-auto pr-1">
             `;
 
             ESQUEMA_VACUNAL_OFICIAL.forEach((v) => {
                 const aplicada = localStorage.getItem(v.id) === 'true';
                 htmlVacunas += `
-                    <div class="p-3 rounded-2xl bg-slate-900 border ${aplicada ? 'border-emerald-500/40 bg-emerald-950/10' : 'border-white/10'} flex items-center justify-between gap-3 transition">
+                    <div onclick="toggleVacuna('${v.id}')" class="p-3 rounded-2xl border transition-all cursor-pointer select-none flex items-center justify-between gap-3 ${aplicada ? 'bg-emerald-950/25 border-emerald-500/50 shadow-lg shadow-emerald-950/30' : 'bg-slate-900/90 border-white/10 hover:border-white/20'}">
                         <div class="flex-grow">
                             <div class="flex items-center gap-2 mb-0.5">
-                                <span class="font-black text-white text-[12px]">${v.nombre}</span>
-                                <span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${aplicada ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-zinc-400'}">${v.badge}</span>
+                                <span class="font-extrabold text-white text-[12px]">${v.nombre}</span>
+                                <span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${aplicada ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800 text-zinc-400 border border-white/5'}">${v.badge}</span>
                             </div>
-                            <div class="text-[11px] text-zinc-300 font-medium">${v.subtitulo}</div>
-                            <div class="text-[10px] text-sky-300 font-mono mt-0.5">⏱️ ${v.momento}</div>
+                            <div class="text-[11px] text-zinc-300 leading-snug">${v.subtitulo}</div>
+                            <div class="text-[10px] text-sky-300 font-mono mt-1 flex items-center gap-1">
+                                <i class="fa-regular fa-clock text-[9px]"></i> ${v.momento}
+                            </div>
                         </div>
-                        <label class="flex flex-col items-center cursor-pointer shrink-0">
-                            <input type="checkbox" id="${v.id}" onchange="toggleVacuna('${v.id}')" ${aplicada ? 'checked' : ''} class="w-5 h-5 accent-emerald-500 cursor-pointer">
-                            <span class="text-[9px] mt-1 font-bold ${aplicada ? 'text-emerald-400' : 'text-zinc-500'}">${aplicada ? 'Listo' : 'Pendiente'}</span>
-                        </label>
+                        <div class="shrink-0 flex flex-col items-center justify-center pl-2">
+                            <div class="w-6 h-6 rounded-lg flex items-center justify-center border transition-all ${aplicada ? 'bg-emerald-500 border-emerald-400 text-slate-950 shadow-md shadow-emerald-500/40' : 'bg-slate-800/80 border-white/20 text-transparent'}">
+                                <i class="fa-solid fa-check text-xs"></i>
+                            </div>
+                            <span class="text-[9px] mt-1 font-bold ${aplicada ? 'text-emerald-400' : 'text-zinc-500'}">${aplicada ? 'Puesta' : 'Pendiente'}</span>
+                        </div>
                     </div>
                 `;
             });
             htmlVacunas += '</div>';
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-badge text-sky-400"></i>';
-            document.getElementById('modal-title').innerText = "Carnet de Vacunas Maternal";
+            document.getElementById('modal-title').innerText = "Carnet de Vacunación";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Esquema oficial de vacunas de la paciente gestante:</p>
+                <p class="text-[11px] text-zinc-400 mb-3 leading-snug">Toca cualquier vacuna para marcarla como aplicada:</p>
                 ${htmlVacunas}
             `;
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold flex items-center justify-center gap-2" onclick="compartirCarnetVacunas('ws')">
+                <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/40" onclick="compartirCarnetVacunas('ws')">
                     <i class="fa-brands fa-whatsapp text-base"></i> Enviar Carnet a la Dra. Lisbeth
                 </button>
                 <button class="modal-btn-secondary flex items-center justify-center gap-2 border-white/20 text-white" onclick="compartirCarnetVacunas('email')">
-                    <i class="fa-solid fa-envelope"></i> Compartir por Email
+                    <i class="fa-solid fa-envelope"></i> Compartir por Correo
                 </button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
 
         function toggleVacuna(id) {
-            const checkbox = document.getElementById(id);
-            if (checkbox) {
-                localStorage.setItem(id, checkbox.checked);
-                abrirCarnetVacunacion();
+            if ("vibrate" in navigator) {
+                try { navigator.vibrate(30); } catch(e) {}
             }
+            const actual = localStorage.getItem(id) === 'true';
+            localStorage.setItem(id, !actual);
+            abrirCarnetVacunacion();
         }
 
         function compartirCarnetVacunas(canal) {
@@ -1560,7 +1601,7 @@
             
             ESQUEMA_VACUNAL_OFICIAL.forEach(v => {
                 const cumplida = localStorage.getItem(v.id) === 'true';
-                reporte += `${cumplida ? '✅' : '⏳'} *${v.nombre}*: ${cumplida ? 'ESQUEMA CUMPLIDO' : 'PENDIENTE'}\n`;
+                reporte += `${cumplida ? '✅' : '⏳'} *${v.nombre}*: ${cumplida ? 'APLICADA' : 'PENDIENTE'}\n`;
             });
             reporte += `─────────────────────\n`;
             reporte += `Reporte generado desde Pasaporte Phygital Maternal · Studio 42`;
@@ -1598,7 +1639,6 @@
             `;
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-amber-500 hover:bg-amber-600 text-slate-950 font-black" onclick="calcularIMCPreconcepcional()">Calcular Rango Óptimo</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
@@ -1623,19 +1663,19 @@
 
             if (imc < 18.5) {
                 clasificacion = "Bajo Peso";
-                ganancia = "12.5 a 18 kg (Aproximadamente 0.5 kg/semana en 2º y 3º trimestre)";
+                ganancia = "12.5 a 18 kg (~0.5 kg/semana en 2º y 3º trimestre)";
                 colorClase = "text-sky-400";
             } else if (imc <= 24.9) {
                 clasificacion = "Peso Normal / Saludable";
-                ganancia = "11.5 a 16 kg (Aproximadamente 0.4 kg/semana en 2º y 3º trimestre)";
+                ganancia = "11.5 a 16 kg (~0.4 kg/semana en 2º y 3º trimestre)";
                 colorClase = "text-emerald-400";
             } else if (imc <= 29.9) {
                 clasificacion = "Sobrepeso Previo";
-                ganancia = "7 a 11.5 kg (Aproximadamente 0.28 kg/semana en 2º y 3º trimestre)";
+                ganancia = "7 a 11.5 kg (~0.28 kg/semana en 2º y 3º trimestre)";
                 colorClase = "text-amber-400";
             } else {
                 clasificacion = "Obesidad Previa";
-                ganancia = "5 a 9 kg (Aproximadamente 0.2 kg/semana en 2º y 3º trimestre)";
+                ganancia = "5 a 9 kg (~0.2 kg/semana en 2º y 3º trimestre)";
                 colorClase = "text-rose-400";
             }
 
@@ -1652,12 +1692,11 @@
                     </div>
                 </div>
                 <p class="text-[11px] text-zinc-400 text-left leading-relaxed">
-                    💡 Cada embarazo es único. Consulta con la Dra. Lisbeth para adecuar el plan dietético según tus analíticas y crecimiento fetal.
+                    💡 Cada gestación es única. Consulta con la Dra. Lisbeth para adecuar el plan nutricional exacto según tus analíticas.
                 </p>
             `;
             modalActions.innerHTML = `
                 <button class="modal-btn-secondary" onclick="abrirCalculadoraIMC()">Modificar Valores</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
             `;
         }
 
@@ -1706,7 +1745,6 @@
 
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-amber-500 hover:bg-amber-600 text-slate-950 font-black" onclick="calcularResultadoDesgaste()">Calcular Índice de Desgaste</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
@@ -1766,7 +1804,6 @@
                 <a href="https://wa.me/${whatsappComercialGlobal}?text=${msg}" target="_blank" class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-base"></i> Consultar Recomendación con Asesor
                 </a>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Volver</button>
             `;
         }
 
@@ -1806,7 +1843,6 @@
 
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="finalizarTestErgonomico()">Ver Recomendación en Tienda</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
@@ -1855,7 +1891,6 @@
 
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold" onclick="finalizarTasadorRetirada()">Consultar Condiciones en Tienda</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
             `;
             abrirModalCustom();
         }
