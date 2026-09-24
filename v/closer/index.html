@@ -11,111 +11,57 @@
             --color-principal: #0F172A;
             --color-acento: #00E5FF;
             --color-fondo: #030712; 
-            --color-tarjeta: rgba(15, 23, 42, 0.92); 
-            --color-boton: rgba(30, 41, 59, 0.75); 
+            --color-tarjeta: rgba(15, 23, 42, 0.88); 
+            --color-boton: rgba(30, 41, 59, 0.7); 
             --color-texto: #f8fafc;
             --color-gris: #94a3b8;
             --titanium-light: #f1f5f9;
             --titanium-glow: rgba(226, 232, 240, 0.4);
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
             background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
             color: var(--color-texto); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            padding: 15px; 
-            user-select: none; 
-            overflow-x: hidden;
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
         }
         
         #splash-screen { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100vh; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
             background: radial-gradient(circle at center, #111827 0%, #030712 100%);
-            z-index: 10000; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            transition: opacity 0.4s ease; 
-            padding: 20px;
+            z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.4s ease; padding: 20px;
         }
         .btn-desbloqueo { 
-            background: linear-gradient(135deg, var(--color-acento), #ffffff); 
-            color: #020617; 
-            border: none; 
-            padding: 16px 36px; 
-            border-radius: 50px; 
-            font-size: 0.9rem; 
-            font-weight: 900; 
-            letter-spacing: 1.2px; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            box-shadow: 0 0 30px var(--titanium-glow);
+            background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
+            padding: 16px 36px; border-radius: 50px; font-size: 0.9rem; font-weight: 900; letter-spacing: 1.2px; 
+            text-transform: uppercase; cursor: pointer; box-shadow: 0 0 30px var(--titanium-glow);
             transition: transform 0.2s ease;
         }
         .btn-desbloqueo:active { transform: scale(0.95); }
 
         .hub-container { 
-            background: var(--color-tarjeta); 
-            width: 100%; 
-            max-width: 410px; 
-            border-radius: 32px; 
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95); 
-            padding: 26px 18px; 
-            text-align: center; 
-            border: 1px solid rgba(255, 255, 255, 0.12); 
-            backdrop-filter: blur(20px); 
-            position: relative; 
-            margin: auto;
+            background: var(--color-tarjeta); width: 100%; max-width: 410px; 
+            border-radius: 32px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95); 
+            padding: 26px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(20px); position: relative; margin: auto;
         }
 
         .status-badge { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px;
-            background: rgba(241, 245, 249, 0.06); 
-            border: 1px solid rgba(226, 232, 240, 0.2);
-            padding: 6px 14px; 
-            border-radius: 50px; 
-            font-size: 0.65rem; 
-            font-weight: 800;
-            letter-spacing: 1px; 
-            color: var(--titanium-light); 
-            margin-bottom: 16px; 
-            text-transform: uppercase;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
+            padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 16px; text-transform: uppercase;
         }
         .ping-light { 
-            position: relative; 
-            width: 7px; 
-            height: 7px; 
-            background-color: var(--titanium-light);
-            border-radius: 50%; 
-            box-shadow: 0 0 8px var(--titanium-light);
+            position: relative; width: 7px; height: 7px; background-color: var(--titanium-light);
+            border-radius: 50%; box-shadow: 0 0 8px var(--titanium-light);
         }
         .ping-light::after { 
-            content: ''; 
-            position: absolute; 
-            top: -3px; 
-            left: -3px; 
-            width: 13px; 
-            height: 13px; 
-            border-radius: 50%; 
-            background-color: var(--titanium-glow);
+            content: ''; position: absolute; top: -3px; left: -3px; width: 13px; height: 13px;
+            border-radius: 50%; background-color: var(--titanium-glow);
             animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
         }
         @keyframes radarTitanium { 
@@ -124,22 +70,15 @@
         }
         
         .logo-container { 
-            width: 86px; 
-            height: 86px; 
-            margin: 0 auto 12px auto; 
-            border-radius: 24px; 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            overflow: hidden; 
-            background-color: #ffffff; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
+            width: 86px; height: 86px; margin: 0 auto 12px auto; 
+            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.15); 
+            overflow: hidden; background-color: #ffffff; display: flex; justify-content: center; align-items: center;
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
         }
         .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         
-        h1 { font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; line-height: 1.25; }
-        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; }
+        h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; color: #fff; line-height: 1.25; }
+        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.8px; }
 
         .paciente-header-card {
             background: rgba(255, 255, 255, 0.04);
@@ -153,92 +92,29 @@
             text-align: left;
         }
         
-        .section-title { 
-            text-align: left; 
-            font-size: 0.7rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1.3px; 
-            color: var(--color-gris); 
-            margin: 20px 0 10px 4px; 
-            font-weight: 800; 
-        }
+        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 800; }
         
-        .apps-menu { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-            width: 100%;
-        }
-
+        .apps-menu { display: flex; flex-direction: column; gap: 11px; }
         .app-btn { 
-            display: flex; 
-            align-items: center; 
-            width: 100%;
-            padding: 12px 14px; 
-            border-radius: 20px; 
-            background: var(--color-boton); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            transition: transform 0.15s ease, border-color 0.15s ease; 
-            cursor: pointer; 
-            text-align: left; 
-            text-decoration: none; 
+            display: flex; align-items: center; padding: 13px 16px; border-radius: 20px; 
+            background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.07); 
+            transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; 
             backdrop-filter: blur(10px);
         }
-        .app-btn:active { transform: scale(0.98); border-color: var(--color-acento); }
+        .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
         .app-btn.destacado { 
             border: 1px solid var(--color-acento); 
             background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(15, 23, 42, 0.85));
-            box-shadow: 0 0 18px rgba(0, 229, 255, 0.12); 
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); 
         }
-
-        .app-icon { 
-            width: 42px; 
-            height: 42px; 
-            min-width: 42px;
-            border-radius: 13px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-right: 12px; 
-            font-size: 1.15rem; 
-            flex-shrink: 0; 
-        }
-        .app-info { 
-            flex: 1; 
-            min-width: 0; 
-            text-align: left;
-        }
-        .app-name { 
-            font-size: 0.86rem; 
-            font-weight: 800; 
-            color: var(--color-texto); 
-            margin-bottom: 2px; 
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .app-desc { 
-            font-size: 0.70rem; 
-            color: var(--color-gris); 
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .app-arrow {
-            color: #64748b;
-            font-size: 0.75rem;
-            margin-left: 6px;
-            flex-shrink: 0;
-        }
+        .app-icon { width: 44px; height: 44px; min-width: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
+        .app-info { flex-grow: 1; min-width: 0; }
+        .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.72rem; color: var(--color-gris); }
         
-        /* ESTRELLAS RESEÑAS & ANIMACIÓN */
+        /* ESTRELLAS RESEÑAS */
         .stars-container { font-size: 2rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
-        .star-rating i { 
-            cursor: pointer; 
-            transition: transform 0.2s ease, filter 0.2s ease; 
-            display: inline-block;
-        }
+        .star-rating i { cursor: pointer; transition: transform 0.2s ease; display: inline-block; }
         .star-rating i:active { transform: scale(1.3); }
         .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
         .star-inactive { color: #334155; }
@@ -250,14 +126,8 @@
         .stars-container i:nth-child(5) { animation: starPulse 2.2s infinite ease-in-out 0.5s; }
 
         @keyframes starPulse {
-            0%, 100% {
-                transform: scale(1);
-                filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
-            }
-            50% {
-                transform: scale(1.15);
-                filter: drop-shadow(0 0 8px var(--color-acento));
-            }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 8px var(--color-acento)); }
         }
 
         /* MODALES */
@@ -277,22 +147,10 @@
 
         /* CONTROL FLOTANTE MUTE */
         .btn-audio-toggle {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--color-gris);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            z-index: 50;
+            position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--color-gris); display: none; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.85rem; transition: all 0.2s; z-index: 50;
         }
         .btn-audio-toggle:active { transform: scale(0.9); }
         .btn-audio-toggle.active { color: var(--color-acento); border-color: var(--color-acento); }
@@ -305,14 +163,14 @@
     <!-- SPLASH SCREEN -->
     <div id="splash-screen">
         <div class="logo-container" id="splash-logo-box" style="width: 100px; height: 100px; margin-bottom: 20px;">
-            <img id="splash-logo" alt="Logo">
+            <img id="splash-logo" alt="Logo" onerror="this.src='logo.png'">
         </div>
         <h2 id="splash-title" style="color: #fff; font-size: 1.4rem; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;">STUDIO 42</h2>
         <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.85rem; margin-bottom: 30px; text-transform: uppercase;">Ecosistema Phygital</p>
         <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
-    <!-- MODAL GENERAL / INTERACTIVO -->
+    <!-- MODAL GENERAL -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
             <div id="modal-icon" class="modal-icon"></div>
@@ -326,7 +184,7 @@
 
     <!-- HUB PRINCIPAL -->
     <div class="hub-container">
-        <!-- BOTÓN CONTROL SILENCIO -->
+        <!-- BOTÓN MUTE -->
         <button id="btn-audio-control" class="btn-audio-toggle" onclick="alternarAudioManual()" title="Silenciar / Activar Música">
             <i id="btn-audio-icon" class="fa-solid fa-volume-high"></i>
         </button>
@@ -336,11 +194,13 @@
             <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
         </div>
 
-        <div class="logo-container" id="hub-logo-box"><img id="hub-logo" alt="Logo"></div>
+        <div class="logo-container" id="hub-logo-box">
+            <img id="hub-logo" alt="Logo" onerror="this.src='logo.png'">
+        </div>
         <h1 id="client-name">STUDIO 42</h1>
         <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-        <!-- TARJETA PACIENTE CABECERA (MODO MATERNAL) -->
+        <!-- TARJETA PACIENTE CABECERA (SOLO MODO MATERNAL) -->
         <div id="card-paciente-header" class="paciente-header-card hidden">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -362,7 +222,7 @@
             <div class="grid grid-cols-2 gap-2 mb-3" id="friccion-grid"></div>
         </div>
 
-        <!-- RENDER DINÁMICO DE SECCIONES Y HERRAMIENTAS -->
+        <!-- CONTENEDOR DE BOTONES DINÁMICOS -->
         <div id="dynamic-menu"></div>
 
         <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
@@ -389,9 +249,7 @@
 
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
-                if (reproductor && !reproductor.paused) {
-                    reproductor.pause();
-                }
+                if (reproductor && !reproductor.paused) reproductor.pause();
             } else {
                 if (reproductor && reproductor.src && reproductor.paused && splash.style.display === 'none') {
                     reproductor.play().catch(() => {});
@@ -409,11 +267,8 @@
 
         function alternarAudioManual() {
             if (!reproductor || !reproductor.src) return;
-            
             if (reproductor.paused) {
-                reproductor.play().then(() => {
-                    actualizarIconoAudio(true);
-                }).catch((e) => console.error("Error audio:", e));
+                reproductor.play().then(() => actualizarIconoAudio(true)).catch((e) => console.error(e));
             } else {
                 reproductor.pause();
                 actualizarIconoAudio(false);
@@ -424,7 +279,6 @@
             const btn = document.getElementById('btn-audio-control');
             const icon = document.getElementById('btn-audio-icon');
             if (!btn || !icon) return;
-
             if (estaReproduciendo) {
                 btn.classList.add('active');
                 icon.className = "fa-solid fa-volume-high";
@@ -493,12 +347,12 @@
                 document.getElementById('splash-logo').src = logoPath;
                 document.getElementById('hub-logo').src = logoPath;
 
+                // GESTIÓN DEL SPLASH / AUDIO
                 if (data.audioFondo && data.audioFondo.trim() !== "") {
                     reproductor.src = data.audioFondo;
                     document.getElementById('btn-audio-control').style.display = 'flex';
                     splash.style.display = 'flex';
                     splash.style.opacity = '1';
-                    splash.style.pointerEvents = 'all';
                 } else {
                     document.getElementById('btn-audio-control').style.display = 'none';
                     splash.style.display = 'none';
@@ -506,38 +360,14 @@
                     splash.style.pointerEvents = 'none';
                 }
 
-                // MODO DEMO
-                const seccionFricciones = document.getElementById('fricciones-section');
-                if (data.modoDemo === true) {
-                    seccionFricciones.style.display = 'block';
-                    datosFriccionesGlobales = {
-                        'contactos': { icono: '<i class="fa-solid fa-user-check text-cyan-400"></i>', titulo: 'Retención Inmediata', texto: 'El 70% de clientes no guarda números manualmente.<br><br><b>Solución:</b> Descarga directa de vCard al móvil en 1 toque.' },
-                        'resenas': { icono: '<i class="fa-solid fa-shield-halved text-rose-500"></i>', titulo: 'Escudo de Reputación', texto: 'Las quejas públicas en Google alejan clientes.<br><br><b>Solución:</b> Intercepta valoraciones bajas (1-3★) directo a WhatsApp privado.' },
-                        'herramientas': { icono: '<i class="fa-solid fa-toolbox text-amber-400"></i>', titulo: 'Herramientas de Valor', texto: 'Herramientas interactivas y asesoramiento táctil que resuelven dudas en mostrador en 10 segundos.' },
-                        'facturacion': { icono: '<i class="fa-solid fa-bolt text-purple-400"></i>', titulo: 'Facturación Directa', texto: 'Llamados a la acción para agendar y canjear promociones de forma directa.' }
-                    };
-
-                    document.getElementById('friccion-grid').innerHTML = `
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('contactos')"><i class="fa-solid fa-user-xmark text-cyan-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Fuga Contactos</div></div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('resenas')"><i class="fa-solid fa-star-half-stroke text-rose-500 text-xl mb-1"></i><div class="text-[11px] font-bold">Reputación</div></div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('herramientas')"><i class="fa-solid fa-toolbox text-amber-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('facturacion')"><i class="fa-solid fa-bolt text-purple-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Facturación</div></div>
-                    `;
-                } else {
-                    seccionFricciones.style.display = 'none';
-                }
-
-                // Render Dinámico
+                // RENDERIZADO DINÁMICO
                 const menuContainer = document.getElementById('dynamic-menu');
                 menuContainer.innerHTML = '';
 
                 if (data.secciones && Array.isArray(data.secciones)) {
                     data.secciones.forEach(sec => {
                         if (sec.titulo) {
-                            const titleEl = document.createElement('div');
-                            titleEl.className = 'section-title';
-                            titleEl.innerText = sec.titulo;
-                            menuContainer.appendChild(titleEl);
+                            menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
                         }
                         
                         const block = document.createElement('div');
@@ -548,7 +378,7 @@
 
                         if (sec.escudoResenas) {
                             block.innerHTML += `
-                                <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
+                                <div class="app-btn flex flex-col items-center p-5 border border-slate-700/80 bg-slate-900/90 rounded-3xl shadow-xl">
                                     <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
                                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -599,7 +429,7 @@
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || ''}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'parking' || btnNombre.includes('aparqué') || btnNombre.includes('aparque')) {
@@ -612,7 +442,7 @@
                                                 <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
                                                 <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'test_desgaste' || btnNombre.includes('fatiga') || btnNombre.includes('desgaste')) {
@@ -625,7 +455,7 @@
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || ''}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'test_ergonomico' || btnNombre.includes('ergonómico') || btnNombre.includes('ergonomico')) {
@@ -638,7 +468,7 @@
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || ''}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'tasador_retirada' || btnNombre.includes('tasador') || btnNombre.includes('retirada') || btnNombre.includes('logística')) {
@@ -651,7 +481,7 @@
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || ''}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'teleconsulta_triaje') {
@@ -664,7 +494,7 @@
                                                 <div class="app-name text-sky-300">${btn.nombre || 'Solicitar Teleconsulta'}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Orientación médica o alerta SOS'}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow text-sky-400"></i>
+                                            <i class="fa-solid fa-chevron-right text-sky-400 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'calculadora_embarazo') {
@@ -677,7 +507,7 @@
                                                 <div class="app-name">${btn.nombre || 'Calculadora Gestacional'}</div>
                                                 <div class="app-desc" id="calculadora-resumen">${btn.descripcion || 'Calcula tus semanas y fecha de parto'}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'triaje_urgencias') {
@@ -690,7 +520,7 @@
                                                 <div class="app-name text-rose-300">${btn.nombre || 'Semáforo de Alarmas'}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Revisa síntomas y alerta a la Dra.'}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow text-rose-400"></i>
+                                            <i class="fa-solid fa-chevron-right text-rose-400 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'contador_contracciones') {
@@ -703,7 +533,7 @@
                                                 <div class="app-name">${btn.nombre || 'Contador de Contracciones'}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Cronómetro de parto en tiempo real'}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else if (btnTipo === 'checklist_parto') {
@@ -716,7 +546,7 @@
                                                 <div class="app-name">${btn.nombre || 'Maleta para el Parto'}</div>
                                                 <div class="app-desc">${btn.descripcion || 'Checklist interactivo de preparación'}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </div>
                                     `;
                                 } else {
@@ -729,7 +559,7 @@
                                                 <div class="app-name">${btn.nombre}</div>
                                                 <div class="app-desc">${btn.descripcion || ''}</div>
                                             </div>
-                                            <i class="fa-solid fa-chevron-right app-arrow"></i>
+                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                         </a>
                                     `;
                                 }
@@ -789,16 +619,6 @@
         const modalContent = document.getElementById('modal-content');
         const modalActions = document.getElementById('modal-actions');
 
-        function mostrarExplicacion(tipo) {
-            if (datosFriccionesGlobales[tipo]) {
-                document.getElementById('modal-icon').innerHTML = datosFriccionesGlobales[tipo].icono;
-                document.getElementById('modal-title').innerText = datosFriccionesGlobales[tipo].titulo;
-                document.getElementById('modal-text').innerHTML = datosFriccionesGlobales[tipo].texto;
-                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
-                abrirModalCustom();
-            }
-        }
-
         function abrirModalCustom() {
             modalOverlay.style.display = 'flex';
             setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
@@ -823,10 +643,10 @@
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calendar-plus text-lime-400"></i>';
             document.getElementById('modal-title').innerText = "Guardar Tu Cita";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-4">Guarda tu turno en el calendario con alertas automáticas:</p>
+                <p class="text-xs text-zinc-300 mb-4">Guarda tu turno en el calendario de tu teléfono:</p>
                 <div class="space-y-3 text-left text-xs">
                     <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">1. Motivo del Turno:</label>
+                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">Motivo del Turno:</label>
                         <select id="cal-motivo" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white font-semibold">
                             <option value="Revisión General / Turno">Revisión General / Consulta</option>
                             <option value="Tratamiento Odontológico / Médico">Tratamiento / Intervención</option>
@@ -836,22 +656,19 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-[11px] text-zinc-400 mb-1 font-bold">2. Fecha:</label>
+                            <label class="block text-[11px] text-zinc-400 mb-1 font-bold">Fecha:</label>
                             <input type="date" id="cal-fecha" value="${fechaDefecto}" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white font-bold text-center">
                         </div>
                         <div>
-                            <label class="block text-[11px] text-zinc-400 mb-1 font-bold">3. Hora:</label>
+                            <label class="block text-[11px] text-zinc-400 mb-1 font-bold">Hora:</label>
                             <input type="time" id="cal-hora" value="10:00" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white font-bold text-center">
                         </div>
-                    </div>
-                    <div class="p-2.5 rounded-xl bg-slate-800/80 border border-white/10 text-[11px] text-zinc-300 leading-snug">
-                        🔔 Alertas programadas 24h y 2h antes de tu turno.
                     </div>
                 </div>
             `;
 
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-lime-600 hover:bg-lime-500 font-black text-slate-950 flex items-center justify-center gap-2 shadow-lg shadow-lime-900/40" onclick="generarEventoCalendario('ics')">
+                <button class="modal-btn-primary bg-lime-600 hover:bg-lime-500 font-black text-slate-950 flex items-center justify-center gap-2" onclick="generarEventoCalendario('ics')">
                     <i class="fa-brands fa-apple text-base"></i> Guardar en iPhone / Móvil (.ics)
                 </button>
                 <button class="modal-btn-secondary flex items-center justify-center gap-2 text-white border-white/20 hover:border-amber-400" onclick="generarEventoCalendario('google')">
@@ -868,76 +685,29 @@
             const hora = document.getElementById('cal-hora').value;
 
             if (!fecha || !hora) {
-                alert("Por favor selecciona una fecha y hora válidas.");
+                alert("Selecciona fecha y hora válidas.");
                 return;
             }
 
-            const duracionMinutos = 45;
-            const titulo = `Cita: ${motivo} - ${nombreNegocioGlobal}`;
-            const ubicacion = `${nombreNegocioGlobal}`;
-            const descripcion = `Cita programada en ${nombreNegocioGlobal}. Por favor acude 5 minutos antes.`;
-
             const dataInicio = new Date(`${fecha}T${hora}:00`);
-            const dataFin = new Date(dataInicio.getTime() + (duracionMinutos * 60 * 1000));
+            const dataFin = new Date(dataInicio.getTime() + (45 * 60 * 1000));
 
-            const formatToICSValue = (date) => {
-                const pad = (n) => (n < 10 ? '0' + n : n);
-                return date.getUTCFullYear() +
-                       pad(date.getUTCMonth() + 1) +
-                       pad(date.getUTCDate()) + 'T' +
-                       pad(date.getUTCHours()) +
-                       pad(date.getUTCMinutes()) +
-                       pad(date.getUTCSeconds()) + 'Z';
-            };
+            const pad = (n) => (n < 10 ? '0' + n : n);
+            const formatToICS = (d) => d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
 
             if (formato === 'google') {
-                const urlGoogle = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titulo)}&dates=${formatToICSValue(dataInicio)}/${formatToICSValue(dataFin)}&details=${encodeURIComponent(descripcion)}&location=${encodeURIComponent(ubicacion)}&sf=true&output=xml`;
-                window.open(urlGoogle, '_blank');
+                const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Cita: ' + motivo)}&dates=${formatToICS(dataInicio)}/${formatToICS(dataFin)}&location=${encodeURIComponent(nombreNegocioGlobal)}`;
+                window.open(url, '_blank');
                 cerrarModalBtn();
             } else {
-                const icsContent = [
-                    'BEGIN:VCALENDAR',
-                    'VERSION:2.0',
-                    'PRODID:-//Studio 42//Ecosistema Phygital//ES',
-                    'CALSCALE:GREGORIAN',
-                    'METHOD:PUBLISH',
-                    'BEGIN:VEVENT',
-                    `SUMMARY:${titulo}`,
-                    `DESCRIPTION:${descripcion.replace(/\n/g, '\\n')}`,
-                    `LOCATION:${ubicacion}`,
-                    `DTSTART:${formatToICSValue(dataInicio)}`,
-                    `DTEND:${formatToICSValue(dataFin)}`,
-                    'STATUS:CONFIRMED',
-                    'SEQUENCE:0',
-                    'BEGIN:VALARM',
-                    'TRIGGER:-P1D',
-                    'ACTION:DISPLAY',
-                    'DESCRIPTION:Recordatorio de Cita',
-                    'END:VALARM',
-                    'BEGIN:VALARM',
-                    'TRIGGER:-PT2H',
-                    'ACTION:DISPLAY',
-                    'DESCRIPTION:Tu cita es en 2 horas',
-                    'END:VALARM',
-                    'END:VEVENT',
-                    'END:VCALENDAR'
-                ].join('\r\n');
-
-                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-                if (isIOS) {
-                    const reader = new FileReader();
-                    reader.onloadend = function () { window.open(reader.result, '_blank'); };
-                    reader.readAsDataURL(blob);
-                } else {
-                    const link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.setAttribute('download', `cita-${nombreNegocioGlobal.toLowerCase().replace(/[^a-z0-9]/g, '_')}.ics`);
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
+                const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT', `SUMMARY:Cita: ${motivo}`, `LOCATION:${nombreNegocioGlobal}`, `DTSTART:${formatToICS(dataInicio)}`, `DTEND:${formatToICS(dataFin)}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+                const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.setAttribute('download', 'cita.ics');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
                 cerrarModalBtn();
             }
         }
@@ -1004,7 +774,7 @@
                 if (nota <= 3) {
                     document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
                     document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
-                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección para resolver tu caso:`;
+                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero:`;
                     modalActions.innerHTML = `
                         <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
                         <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
@@ -1012,7 +782,7 @@
                 } else {
                     document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
                     document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
-                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial en Google Maps:`;
+                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia!<br><br>Ayúdanos confirmando tu valoración oficial:`;
                     modalActions.innerHTML = `
                         <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
                         <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
@@ -1023,11 +793,11 @@
             }, 300);
         }
 
+        // FUNCIONES MÉDICAS
         function abrirModalAltaMaternalCompleta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-card-clip text-pink-400"></i>';
             document.getElementById('modal-title').innerText = "Activación Pasaporte Maternal";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Registra tus datos vitales para personalizar tu seguimiento obstétrico:</p>
                 <div class="space-y-2 text-left text-xs">
                     <div>
                         <label class="block text-[11px] text-zinc-400 mb-1">Nombre y Apellido de la Mamá:</label>
@@ -1049,21 +819,20 @@
                         </div>
                         <div>
                             <label class="block text-[11px] text-zinc-400 mb-1">Alergias:</label>
-                            <input type="text" id="reg-alergias" placeholder="Ninguna reportada" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                            <input type="text" id="reg-alergias" placeholder="Ninguna" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
                         </div>
                     </div>
                     <div>
                         <label class="block text-[11px] text-zinc-400 mb-1">Contacto de Emergencia:</label>
                         <input type="text" id="reg-contacto-nombre" placeholder="Nombre acompañante" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white mb-1.5">
-                        <input type="tel" id="reg-contacto-tel" placeholder="Teléfono de contacto" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                        <input type="tel" id="reg-contacto-tel" placeholder="Teléfono" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
                     </div>
-                    <div class="pt-2 border-t border-white/10">
+                    <div>
                         <label class="block text-[11px] text-pink-300 font-bold mb-1">Fecha Última Regla (FUR):</label>
-                        <input type="date" id="reg-fur" class="w-full p-2.5 rounded-xl bg-slate-900 border border-pink-500/50 text-white text-center font-bold">
+                        <input type="date" id="reg-fur" class="w-full p-2 rounded-xl bg-slate-900 border border-pink-500/50 text-white text-center font-bold">
                     </div>
                 </div>
             `;
-
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-pink-500 hover:bg-pink-600 font-bold" onclick="guardarAltaMaternalCompleta()">Guardar Mi Pasaporte</button>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Hacerlo después</button>
@@ -1079,11 +848,7 @@
             const contactoTel = document.getElementById('reg-contacto-tel').value.trim();
             const fur = document.getElementById('reg-fur').value;
 
-            if (!nombre) return alert("Por favor indica tu nombre.");
-            if (!fur) return alert("Por favor indica la fecha de tu última regla.");
-
-            const diffDias = calcularDiasGestacion(fur);
-            if (diffDias < 0 || diffDias > 294) return alert("Fecha fuera del rango gestacional válido.");
+            if (!nombre || !fur) return alert("Completa los datos requeridos.");
 
             localStorage.setItem('paciente_nombre', nombre);
             localStorage.setItem('paciente_sangre', sangre);
@@ -1094,7 +859,7 @@
 
             actualizarTarjetaCabeceraPaciente();
             actualizarResumenEmbarazo();
-            mostrarModalHitoClinico(fur);
+            cerrarModalBtn();
         }
 
         function actualizarTarjetaCabeceraPaciente() {
@@ -1142,7 +907,7 @@
                 <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 text-left text-xs space-y-2 mb-3">
                     <div class="flex justify-between"><span class="text-zinc-400">Paciente:</span><span class="text-white font-bold">${nombre}</span></div>
                     <div class="flex justify-between"><span class="text-zinc-400">Estado:</span><span class="text-pink-300 font-bold">${semInfo}</span></div>
-                    <div class="flex justify-between"><span class="text-zinc-400">Grupo Sanguíneo:</span><span class="text-rose-400 font-bold">${sangre}</span></div>
+                    <div class="flex justify-between"><span class="text-zinc-400">Grupo:</span><span class="text-rose-400 font-bold">${sangre}</span></div>
                     <div class="flex justify-between"><span class="text-zinc-400">Alergias:</span><span class="text-amber-300 font-semibold">${alergias}</span></div>
                 </div>
 
@@ -1156,11 +921,7 @@
                     <i class="fa-solid fa-user-doctor"></i> Contactar con Doctora
                 </a>
             `;
-
-            modalActions.innerHTML = `
-                <button class="modal-btn-secondary" onclick="abrirModalAltaMaternalCompleta()">Editar Ficha</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
-            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
             abrirModalCustom();
         }
 
@@ -1168,9 +929,8 @@
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-user-doctor text-sky-400"></i>';
             document.getElementById('modal-title').innerText = "Teleconsulta Médica";
             document.getElementById('modal-text').innerHTML = `
-                <p class="mb-4 text-xs text-zinc-300">Selecciona el motivo de tu solicitud:</p>
                 <div class="space-y-2.5 text-left">
-                    <button onclick="ejecutarPasarelaPagoTeleconsulta()" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-emerald-500/30 flex items-center gap-3 cursor-pointer hover:bg-slate-800 transition">
+                    <button onclick="ejecutarPasarelaPagoTeleconsulta()" class="w-full p-3 rounded-2xl bg-slate-900 border border-emerald-500/30 flex items-center gap-3 cursor-pointer">
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg shrink-0">
                             <i class="fa-solid fa-file-invoice-dollar"></i>
                         </div>
@@ -1179,8 +939,7 @@
                             <div class="text-[10px] text-zinc-400">Validación de comprobante y cita</div>
                         </div>
                     </button>
-
-                    <button onclick="ejecutarTeleconsultaUrgencia()" class="w-full p-3 rounded-2xl bg-rose-950/30 border border-rose-500/40 flex items-center gap-3 cursor-pointer hover:bg-rose-950/50 transition">
+                    <button onclick="ejecutarTeleconsultaUrgencia()" class="w-full p-3 rounded-2xl bg-rose-950/30 border border-rose-500/40 flex items-center gap-3 cursor-pointer">
                         <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-500 flex items-center justify-center text-lg shrink-0">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
@@ -1199,7 +958,6 @@
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-file-invoice-dollar text-emerald-400"></i>';
             document.getElementById('modal-title').innerText = "Validación de Consulta";
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Datos bancarios para formalizar la sesión:</p>
                 <div class="p-3 bg-slate-900 rounded-2xl border border-emerald-500/30 text-left text-xs space-y-2 mb-3">
                     <div class="text-[11px] text-emerald-300 font-bold border-b border-white/10 pb-1">${datosPagoGlobal.tarifa}</div>
                     ${datosPagoGlobal.pagoMovil ? `<div><span class="text-zinc-400 text-[10px] block">Pago Móvil:</span><div class="text-[11px] text-zinc-200 font-mono">${datosPagoGlobal.pagoMovil}</div></div>` : ''}
@@ -1248,30 +1006,10 @@
         function procesarCalculoEmbarazo() {
             const inputFur = document.getElementById('input-fur');
             if (!inputFur || !inputFur.value) return alert("Introduce la fecha.");
-            const diffDias = calcularDiasGestacion(inputFur.value);
-            if (diffDias < 0 || diffDias > 294) return alert("Fecha fuera de rango válido.");
-
             localStorage.setItem('fur_embarazo', inputFur.value);
             actualizarResumenEmbarazo();
             actualizarTarjetaCabeceraPaciente();
-            mostrarModalHitoClinico(inputFur.value);
-        }
-
-        function mostrarModalHitoClinico(fechaStr) {
-            const diffDias = calcularDiasGestacion(fechaStr);
-            const semanas = Math.floor(diffDias / 7);
-            const dias = diffDias % 7;
-            const fruto = obtenerFrutoGestacional(semanas);
-
-            document.getElementById('modal-icon').innerHTML = `<span class="text-4xl">${fruto.icono}</span>`;
-            document.getElementById('modal-title').innerText = `Semana ${semanas} + ${dias} Días`;
-            document.getElementById('modal-text').innerHTML = `
-                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 text-center text-xs space-y-1">
-                    <div>Tamaño del bebé: <b class="text-pink-300">${fruto.nombre}</b> (~${fruto.tam})</div>
-                </div>
-            `;
-            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
-            abrirModalCustom();
+            cerrarModalBtn();
         }
 
         function actualizarResumenEmbarazo() {
@@ -1364,217 +1102,6 @@
             document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
             abrirModalCustom();
-        }
-
-        function abrirTestDesgaste() {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-microscope text-amber-400"></i>';
-            document.getElementById('modal-title').innerText = "Diagnóstico de Fatiga";
-            document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Evaluación biomecánica del estado de tu equipo de descanso:</p>
-                <div class="space-y-2.5 text-left text-xs">
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">1. Antigüedad del colchón actual:</label>
-                        <select id="desgaste-edad" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="1">Menos de 5 años</option>
-                            <option value="2">Entre 5 y 8 años (Zona de fatiga de materiales)</option>
-                            <option value="3">Más de 8-10 años (Límite ASOCAMA superado)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">2. Soporte y deformación física:</label>
-                        <select id="desgaste-forma" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="1">Superficie uniforme y firme</option>
-                            <option value="2">Ligera huella corporal / Pérdida de acogida</option>
-                            <option value="3">Hundimiento visible en la zona lumbar (Efecto hamaca)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">3. Síntomas musculares al despertar:</label>
-                        <select id="desgaste-sintomas" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="1">Me levanto descansado y sin molestias</option>
-                            <option value="2">Rigidez lumbar o en cuello los primeros minutos</option>
-                            <option value="3">Dolor de espalda frecuente y cambios continuos de postura</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">4. Comparativa de confort (Prueba del hotel):</label>
-                        <select id="desgaste-hotel" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="1">Duermo igual o mejor en mi casa</option>
-                            <option value="3">Noto que descanso mucho mejor cuando duermo fuera de casa</option>
-                        </select>
-                    </div>
-                </div>
-            `;
-
-            modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-amber-500 hover:bg-amber-600 text-slate-950 font-black" onclick="calcularResultadoDesgaste()">Calcular Índice de Desgaste</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
-            `;
-            abrirModalCustom();
-        }
-
-        function calcularResultadoDesgaste() {
-            const p1 = parseInt(document.getElementById('desgaste-edad').value);
-            const p2 = parseInt(document.getElementById('desgaste-forma').value);
-            const p3 = parseInt(document.getElementById('desgaste-sintomas').value);
-            const p4 = parseInt(document.getElementById('desgaste-hotel').value);
-
-            const total = p1 + p2 + p3 + p4;
-            let estado = "";
-            let porcentaje = 0;
-            let consejo = "";
-            let colorClase = "";
-
-            if (total <= 5) {
-                porcentaje = 25;
-                estado = "Estado Óptimo / Desgaste Leve";
-                consejo = "Tu colchón aún conserva resiliencia ergonómica. Recuerda rotarlo periódicamente para prolongar su vida útil.";
-                colorClase = "text-emerald-400";
-            } else if (total <= 8) {
-                porcentaje = 65;
-                estado = "Fatiga de Materiales Media";
-                consejo = "Las capas de amortiguación han perdido adaptación. Comienzan las sobrecargas en zona lumbar y cervical.";
-                colorClase = "text-amber-400";
-            } else {
-                porcentaje = 95;
-                estado = "Colchón Crítico / Soporte Vencido";
-                consejo = "Pérdida severa de alineación vertebral según estándares ASOCAMA. Tu cuerpo está absorbiendo la presión que el colchón ya no amortigua.";
-                colorClase = "text-rose-400";
-            }
-
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-chart-pie text-amber-400"></i>';
-            document.getElementById('modal-title').innerText = "Informe Biomecánico";
-            document.getElementById('modal-text').innerHTML = `
-                <div class="p-3 bg-slate-900 rounded-2xl border border-white/10 mb-3 text-center">
-                    <div class="text-[10px] text-zinc-400 uppercase tracking-wider mb-1 font-bold">Índice de Fatiga Biomecánica</div>
-                    <div class="text-3xl font-black ${colorClase} my-1 font-mono">${porcentaje}%</div>
-                    <div class="text-xs font-bold text-white mb-1">${estado}</div>
-                    <p class="text-[11px] text-zinc-300 leading-snug">${consejo}</p>
-                </div>
-                <div class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] leading-snug text-left">
-                    💡 <b>Solución en Exposición:</b> Los especialistas de ${nombreNegocioGlobal} pueden recomendarte el grado de firmeza exacto para corregir esta sobrecarga.
-                </div>
-            `;
-
-            const msg = encodeURIComponent(
-                `Hola ${nombreNegocioGlobal}, he completado el Diagnóstico de Fatiga en el soporte de la tienda:\n\n` +
-                `• Índice de Desgaste: ${porcentaje}%\n` +
-                `• Diagnóstico: ${estado}\n` +
-                `• Síntomas: ${consejo}\n\n` +
-                `¿Podríais recomendarme qué modelos de la exposición están diseñados para aliviar este tipo de fatiga?`
-            );
-
-            modalActions.innerHTML = `
-                <a href="https://wa.me/${whatsappComercialGlobal}?text=${msg}" target="_blank" class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-base"></i> Consultar Recomendación con Asesor
-                </a>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Volver</button>
-            `;
-        }
-
-        function abrirTestErgonomico() {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bed-pulse text-cyan-400"></i>';
-            document.getElementById('modal-title').innerText = "Configurador Ergonómico";
-            document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Encuentra tu firmeza ideal en 3 selecciones rápidas:</p>
-                <div class="space-y-2.5 text-left text-xs">
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">1. ¿Cómo duermes habitualmente?</label>
-                        <select id="test-postura" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="De lado (adaptación en hombros y caderas)">De lado</option>
-                            <option value="Boca arriba (soporte lumbar recto)">Boca arriba</option>
-                            <option value="Boca abajo / Mixto (firmeza media-alta)">Boca abajo / Variado</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">2. Sensación de Firmeza buscada:</label>
-                        <select id="test-firmeza" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="Firmeza Media con efecto nube (Viscoelástica)">Firmeza Media (Efecto nube / Acogida)</option>
-                            <option value="Firmeza Alta con soporte ergonómico (Muelles Ensacados)">Firmeza Alta (Máxima estabilidad y frescor)</option>
-                            <option value="Terapéutico (Alivio dolor de espalda y lumbar)">Terapéutico (Alivio lumbar)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">3. Medida de tu cama:</label>
-                        <select id="test-medida" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="150 x 190/200 cm (Matrimonio estándar)">150 x 190/200 cm (Queen)</option>
-                            <option value="135 x 190 cm (Matrimonio compacto)">135 x 190 cm</option>
-                            <option value="180 x 200 cm (King Size)">180 x 200 cm (King Size)</option>
-                            <option value="90 o 105 cm (Individual / Juvenil)">90 / 105 cm (Individual)</option>
-                        </select>
-                    </div>
-                </div>
-            `;
-
-            modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="finalizarTestErgonomico()">Ver Recomendación en Tienda</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
-            `;
-            abrirModalCustom();
-        }
-
-        function finalizarTestErgonomico() {
-            const postura = document.getElementById('test-postura').value;
-            const firmeza = document.getElementById('test-firmeza').value;
-            const medida = document.getElementById('test-medida').value;
-
-            const mensaje = encodeURIComponent(
-                `Hola ${nombreNegocioGlobal}, acabo de realizar el Test Ergonómico en el soporte de la tienda:\n\n` +
-                `• Postura: ${postura}\n` +
-                `• Firmeza: ${firmeza}\n` +
-                `• Medida: ${medida}\n\n` +
-                `¿Qué modelo de la exposición me recomendáis probar con esta configuración?`
-            );
-
-            window.open(`https://wa.me/${whatsappComercialGlobal}?text=${mensaje}`, '_blank');
-            cerrarModalBtn();
-        }
-
-        function abrirTasadorRetirada() {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-truck-ramp-box text-emerald-400"></i>';
-            document.getElementById('modal-title').innerText = "Servicio de Entrega & Retirada";
-            document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Consulta condiciones para la gestión de tu descanso:</p>
-                <div class="space-y-2.5 text-left text-xs">
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">Tipo de vivienda / Acceso:</label>
-                        <select id="tasador-acceso" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="Piso con ascensor">Piso con ascensor</option>
-                            <option value="Piso por escalera (sin ascensor)">Piso sin ascensor (por escalera)</option>
-                            <option value="Vivienda unifamiliar / Planta baja">Vivienda unifamiliar / Chalet</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-zinc-400 mb-1 font-bold">Servicio solicitado:</label>
-                        <select id="tasador-elemento" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white">
-                            <option value="Entrega de nuevo colchón">Solo entrega de nuevo colchón</option>
-                            <option value="Entrega + Retirada de colchón antiguo">Entrega + Retirada de colchón antiguo</option>
-                            <option value="Entrega + Montaje de canapé / base">Entrega + Montaje de equipo completo</option>
-                        </select>
-                    </div>
-                </div>
-            `;
-
-            modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold" onclick="finalizarTasadorRetirada()">Consultar Condiciones en Tienda</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
-            `;
-            abrirModalCustom();
-        }
-
-        function finalizarTasadorRetirada() {
-            const acceso = document.getElementById('tasador-acceso').value;
-            const elemento = document.getElementById('tasador-elemento').value;
-
-            const mensaje = encodeURIComponent(
-                `Hola ${nombreNegocioGlobal}, he consultado las condiciones de logística en el soporte de la tienda:\n\n` +
-                `• Tipo de vivienda: ${acceso}\n` +
-                `• Servicio: ${elemento}\n\n` +
-                `¿Podríais confirmarme las condiciones y plazos de entrega para mi zona?`
-            );
-
-            window.open(`https://wa.me/${whatsappComercialGlobal}?text=${mensaje}`, '_blank');
-            cerrarModalBtn();
         }
 
         document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
