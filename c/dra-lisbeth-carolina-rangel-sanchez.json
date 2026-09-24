@@ -51,7 +51,7 @@
           "icono": "fa-solid fa-shield-heart",
           "estiloIcono": "background: rgba(225, 29, 72, 0.22); color: #E11D48;",
           "alertas": [
-            "TMF (Tono / Movimientos Fetales) insatisfactorio",
+            "TMF (Test / Movimientos Fetales) insatisfactorio",
             "Dolor intenso o constante en bajo vientre",
             "Pérdida de líquido amniótico o sangrado vaginal",
             "Cefalea intensa persistente o alteraciones visuales",
