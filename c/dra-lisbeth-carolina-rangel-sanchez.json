@@ -47,7 +47,7 @@
         {
           "tipo": "triaje_urgencias",
           "nombre": "Semáforo de Signos de Alarma",
-          "descripcion": "Identifica síntomas críticos (TMF insatisfactorio, dolor bajo vientre, sangrado)",
+          "descripcion": "Identifica síntomas críticos (TMF insatisfactorio, dolor bajo vientre)",
           "icono": "fa-solid fa-shield-heart",
           "estiloIcono": "background: rgba(225, 29, 72, 0.22); color: #E11D48;",
           "alertas": [
@@ -57,6 +57,20 @@
             "Cefalea intensa persistente o alteraciones visuales",
             "Disminución drástica de los movimientos fetales"
           ]
+        },
+        {
+          "tipo": "carnet_vacunas",
+          "nombre": "Carnet de Vacunación Maternal",
+          "descripcion": "Esquema gestacional completo con envío por WhatsApp o Email",
+          "icono": "fa-solid fa-syringe",
+          "estiloIcono": "background: rgba(56, 189, 248, 0.18); color: #38BDF8;"
+        },
+        {
+          "tipo": "calculadora_imc",
+          "nombre": "Control de Peso & Ganancia Gestacional",
+          "descripcion": "Calcula tu IMC previo y los kilos recomendados para el embarazo",
+          "icono": "fa-solid fa-weight-scale",
+          "estiloIcono": "background: rgba(234, 179, 8, 0.18); color: #EAB308;"
         },
         {
           "tipo": "contador_contracciones",
