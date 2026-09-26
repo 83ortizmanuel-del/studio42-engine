@@ -111,17 +111,22 @@
             100% { transform: scale(2.8); opacity: 0; }
         }
         
+        /* MARCO DE FOTO OPTIMIZADO (LLENADO TOTAL SIN BORDES BLANCOS) */
         .logo-container { 
-            width: 86px; height: 86px; margin: 0 auto 12px auto; 
-            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.15); 
-            overflow: hidden; background-color: #ffffff; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.08); position: relative; cursor: pointer;
+            width: 94px; height: 94px; margin: 0 auto 12px auto; 
+            border-radius: 26px; border: 2px solid var(--color-acento); 
+            overflow: hidden; background-color: #0b111e; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 25px var(--halo-glow); position: relative; cursor: pointer;
         }
-        .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+        .logo-container img { 
+            width: 100%; height: 100%; object-fit: cover !important; padding: 0 !important; 
+            display: block;
+        }
         .edit-badge-logo {
-            position: absolute; bottom: 3px; right: 3px; background: rgba(0,0,0,0.7);
-            border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 20px; height: 20px;
-            display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff;
+            position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.75);
+            border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; width: 22px; height: 22px;
+            display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff;
+            box-shadow: 0 0 8px rgba(0,0,0,0.8);
         }
         
         h1 { font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
@@ -286,7 +291,6 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-            <!-- TARJETA CABECERA OBSTÉTRICA -->
             <div id="card-paciente-header" class="paciente-header-card hidden">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -309,12 +313,12 @@
 
             <div id="dynamic-menu"></div>
 
-            <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+            <div class="footer-brand" id="lbl-footer-brand">Desarrollado por <span>Studio 42</span></div>
         </div>
     </div>
 
     <script>
-        // DICCIONARIO TRILINGÜE
+        // DICCIONARIO TRILINGÜE EXPANDIDO
         const DICCIONARIO = {
             es: {
                 flag: "🇪🇸",
@@ -327,7 +331,18 @@
                 asistenciaRuta: "Puntos de Asistencia en Ruta",
                 cerrar: "Cerrar",
                 entendido: "Entendido",
-                personalizar: "Personalizar Interfaz"
+                personalizar: "Personalizar Interfaz",
+                llamarOwner: "Llamar al Dueño",
+                llamarOwnerDesc: "Llamada prioritaria en 1 toque al móvil registrado",
+                avisarWs: "Avisar por WhatsApp",
+                avisarWsDesc: "Envía mensaje directo: ¡Tengo a tu mascota!",
+                vetsGps: "Hospitales Veterinarios 24h & GPS",
+                vetsGpsDesc: "Localiza por satélite clínicas abiertas y envía ubicación",
+                carnetVac: "Carnet de Vacunación",
+                carnetVacDesc: "Control oficial de inmunización y refuerzos",
+                guardarVcard: "Guardar Contacto en Agenda",
+                guardarVcardDesc: "Descarga directa a los contactos del smartphone",
+                footer: "Desarrollado por <span>Studio 42</span>"
             },
             en: {
                 flag: "🇬🇧",
@@ -340,7 +355,18 @@
                 asistenciaRuta: "Assistance Points on Route",
                 cerrar: "Close",
                 entendido: "Got it",
-                personalizar: "Customize Interface"
+                personalizar: "Customize Interface",
+                llamarOwner: "Call Owner",
+                llamarOwnerDesc: "Priority 1-tap call to the registered phone",
+                avisarWs: "Notify via WhatsApp",
+                avisarWsDesc: "Send instant message: I have found your pet!",
+                vetsGps: "24/7 Vet Hospitals & GPS",
+                vetsGpsDesc: "Locate open emergency clinics and send coordinates",
+                carnetVac: "Vaccination Passport",
+                carnetVacDesc: "Official immunization and booster tracking",
+                guardarVcard: "Save to Contacts",
+                guardarVcardDesc: "Direct download to smartphone address book",
+                footer: "Powered by <span>Studio 42</span>"
             },
             fr: {
                 flag: "🇫🇷",
@@ -353,11 +379,23 @@
                 asistenciaRuta: "Points d'Assistance en Route",
                 cerrar: "Fermer",
                 entendido: "Compris",
-                personalizar: "Personnaliser l'Interface"
+                personalizar: "Personnaliser l'Interface",
+                llamarOwner: "Appeler le Propriétaire",
+                llamarOwnerDesc: "Appel prioritaire en 1 clic au numéro enregistré",
+                avisarWs: "Avertir par WhatsApp",
+                avisarWsDesc: "Envoyez un message direct : J'ai trouvé votre animal !",
+                vetsGps: "Urgences Vétérinaires 24h & GPS",
+                vetsGpsDesc: "Trouvez les cliniques ouvertes et envoyez la position",
+                carnetVac: "Passeport de Vaccination",
+                carnetVacDesc: "Contrôle officiel des vaccins et rappels",
+                guardarVcard: "Enregistrer le Contact",
+                guardarVcardDesc: "Téléchargement direct dans les contacts du mobile",
+                footer: "Développé par <span>Studio 42</span>"
             }
         };
 
         let idiomaActual = localStorage.getItem('user_lang') || 'es';
+        let datosClienteOriginal = null;
         let datosFriccionesGlobales = {};
         let googleReviewUrlGlobal = "https://maps.google.com";
         let whatsappGerenciaGlobal = "https://wa.me/34672294962";
@@ -389,6 +427,11 @@
 
             localStorage.setItem('user_lang', idiomaActual);
             actualizarTextosIdioma();
+            
+            // Re-renderiza la interfaz al instante con el nuevo idioma
+            if (datosClienteOriginal) {
+                renderizarMenuDinamico(datosClienteOriginal);
+            }
         }
 
         function actualizarTextosIdioma() {
@@ -398,6 +441,9 @@
             
             const badge = document.getElementById('badge-text');
             if (badge) badge.innerText = dataLang.badge;
+
+            const footer = document.getElementById('lbl-footer-brand');
+            if (footer) footer.innerHTML = dataLang.footer;
         }
 
         function abrirCambiadorFoto() {
@@ -577,13 +623,8 @@
             document.getElementById('client-name').innerText = nombre.toUpperCase();
             if (raza) document.getElementById('client-subtitle').innerText = raza;
 
-            const btnTel = document.querySelector('a[href^="tel:"]');
-            if (btnTel) btnTel.href = `tel:${tel}`;
-
-            const btnWa = document.querySelector('a[href*="wa.me"]');
-            if (btnWa) {
-                const msg = encodeURIComponent(`¡Hola! Acabo de escanear la chapa de ${nombre} y lo tengo conmigo.`);
-                btnWa.href = `https://wa.me/${tel}?text=${msg}`;
+            if (datosClienteOriginal) {
+                renderizarMenuDinamico(datosClienteOriginal);
             }
 
             cerrarModalBtn();
@@ -663,6 +704,7 @@
                 if (!response.ok) throw new Error(`No se encontró ${clienteCod}.json`);
 
                 const data = await response.json();
+                datosClienteOriginal = data;
                 nombreNegocioGlobal = data.nombre || "Profesional";
 
                 esNodoMaternal = false;
@@ -683,7 +725,6 @@
 
                 const customPetNombre = localStorage.getItem(`pet_nombre_${clienteCod}`);
                 const customPetRaza = localStorage.getItem(`pet_raza_${clienteCod}`);
-                const customPetTel = localStorage.getItem(`pet_tel_${clienteCod}`);
 
                 const nombreFinal = customPetNombre ? customPetNombre.toUpperCase() : (data.nombre || "Profesional");
                 const subtituloFinal = customPetRaza || (data.subtitulo || 'Ecosistema Phygital');
@@ -732,262 +773,7 @@
                     seccionFricciones.style.display = 'none';
                 }
 
-                const menuContainer = document.getElementById('dynamic-menu');
-                menuContainer.innerHTML = '';
-
-                if (data.secciones && Array.isArray(data.secciones)) {
-                    data.secciones.forEach(sec => {
-                        if (sec.titulo) menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
-                        const block = document.createElement('div');
-                        block.className = 'apps-menu';
-
-                        if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
-                        if (sec.whatsappGerencia) whatsappGerenciaGlobal = sec.whatsappGerencia;
-
-                        if (sec.escudoResenas) {
-                            block.innerHTML += `
-                                <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
-                                    <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
-                                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                                            <path fill="none" d="M0 0h48v48H0z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="app-name text-center text-white text-base font-extrabold mb-0.5" id="lbl-review-title">¿Qué tal ha sido tu experiencia?</div>
-                                    <div class="text-xs text-slate-300 text-center font-medium mb-2" id="lbl-review-sub">Tu valoración nos ayuda a seguir mejorando cada día</div>
-                                    
-                                    <div class="stars-container star-rating my-1" id="escudo-estrellas">
-                                        <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
-                                        <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
-                                        <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
-                                        <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
-                                        <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
-                                    </div>
-                                    <p class="text-[11px] text-zinc-400 text-center mt-1" id="lbl-review-hint">Toca las estrellas para calificar el servicio</p>
-                                    <p id="mensaje-filtro" class="text-xs text-cyan-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
-                                </div>
-                            `;
-                        } else if (sec.botones && Array.isArray(sec.botones)) {
-                            sec.botones.forEach(btn => {
-                                const btnNombre = (btn.nombre || "").toLowerCase();
-                                const btnTipo = (btn.tipo || "").toLowerCase();
-
-                                if (btnTipo === 'carnet_vacunacion' || btnNombre.includes('veterinario') || btnNombre.includes('mascota')) {
-                                    esSectorMascotaGlobal = true;
-                                }
-
-                                let finalUrl = btn.url || '#';
-                                if (customPetTel) {
-                                    if (finalUrl.startsWith('tel:')) finalUrl = `tel:${customPetTel}`;
-                                    if (finalUrl.includes('wa.me/')) {
-                                        const msg = encodeURIComponent(`¡Hola! Acabo de escanear la chapa de ${nombreFinal} y lo tengo conmigo.`);
-                                        finalUrl = `https://wa.me/${customPetTel}?text=${msg}`;
-                                    }
-                                }
-
-                                if (btnTipo === 'calculadora_embarazo' || btnTipo === 'contador_contracciones') {
-                                    esNodoMaternal = true;
-                                }
-
-                                if (btnTipo === 'carnet_vacunacion' || btnTipo === 'carnet_vacunas') {
-                                    if (btn.vacunas && Array.isArray(btn.vacunas)) {
-                                        vacunasCustomGlobal = btn.vacunas;
-                                    }
-                                }
-
-                                if (btnTipo === 'triaje_urgencias' && btn.alertas) {
-                                    alertasSemaforoGlobal = btn.alertas;
-                                }
-                                if (btnTipo === 'checklist_parto' && btn.checklist) {
-                                    checklistPartoGlobal = btn.checklist;
-                                }
-
-                                if (btnTipo === 'recordatorio_cita' || btnNombre.includes('calendario') || btnNombre.includes('guardar cita')) {
-                                    block.innerHTML += `
-                                        <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalCalendario()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(141, 182, 0, 0.18); color: #8DB600;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-calendar-plus'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre}</div>
-                                                <div class="app-desc">${btn.descripcion || ''}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                }
-                                else if (btnTipo === 'parking' || btnNombre.includes('aparqué') || btnNombre.includes('aparque')) {
-                                    block.innerHTML += `
-                                        <div onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
-                                            <div class="app-icon" id="parking-icon-container" style="${btn.estiloIcono || 'background: rgba(142,142,147,0.1); color: #8e8e93;'}">
-                                                <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la ubicación de tu coche'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                }
-                                else if (btnTipo === 'test_desgaste' || btnNombre.includes('fatiga') || btnNombre.includes('desgaste')) {
-                                    block.innerHTML += `
-                                        <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirTestDesgaste()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 180, 0, 0.15); color: #FFB400;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-microscope'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre}</div>
-                                                <div class="app-desc">${btn.descripcion || ''}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                }
-                                else if (btnTipo === 'test_ergonomico' || btnNombre.includes('ergonómico') || btnNombre.includes('ergonomico')) {
-                                    block.innerHTML += `
-                                        <div class="app-btn" onclick="abrirTestErgonomico()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 168, 232, 0.15); color: #00A8E8;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre}</div>
-                                                <div class="app-desc">${btn.descripcion || ''}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                } 
-                                else if (btnTipo === 'tasador_retirada' || btnNombre.includes('tasador') || btnNombre.includes('retirada') || btnNombre.includes('logística')) {
-                                    block.innerHTML += `
-                                        <div class="app-btn" onclick="abrirTasadorRetirada()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(48, 209, 88, 0.15); color: #30d158;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre}</div>
-                                                <div class="app-desc">${btn.descripcion || ''}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                }
-                                else if (btnTipo === 'asistencia_ruta' || btnNombre.includes('salud en ruta') || btnNombre.includes('urgencias & salud') || btnNombre.includes('farmacia') || btnNombre.includes('veterinarios')) {
-                                    block.innerHTML += `
-                                        <div class="app-btn cursor-pointer ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalAsistenciaRuta()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16, 185, 129, 0.18); color: #10B981;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-map-location-dot'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre || 'Puntos Clave en Ruta'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Localización por GPS satelital'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                }
-                                else if (btnTipo === 'teleconsulta_triaje') {
-                                    block.innerHTML += `
-                                        <div class="app-btn border border-sky-500/30 bg-sky-950/20 ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalTeleconsulta()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(14,165,233,0.18); color: #0EA5E9;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-user-doctor'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name text-sky-300">${btn.nombre || 'Solicitar Consulta'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Atención prioritaria o teleconsulta'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-sky-400 text-xs"></i>
-                                        </div>
-                                    `;
-                                } else if (btnTipo === 'calculadora_embarazo') {
-                                    block.innerHTML += `
-                                        <div class="app-btn destacado" onclick="abrirCalculadoraEmbarazo()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(244,114,182,0.15); color: #F472B6;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-baby'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre || 'Calculadora Gestacional'}</div>
-                                                <div class="app-desc" id="calculadora-resumen">${btn.descripcion || 'Calcula tus semanas y fecha de parto'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                } else if (btnTipo === 'triaje_urgencias') {
-                                    block.innerHTML += `
-                                        <div class="app-btn border border-rose-500/30 bg-rose-950/20" onclick="abrirTriajeUrgencias()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(225,29,72,0.2); color: #E11D48;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-shield-heart'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name text-rose-300">${btn.nombre || 'Semáforo de Alarmas'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Triaje preventivo e incidencias'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-rose-400 text-xs"></i>
-                                        </div>
-                                    `;
-                                } else if (btnTipo === 'checklist_parto') {
-                                    block.innerHTML += `
-                                        <div class="app-btn" onclick="abrirChecklistParto()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16,185,129,0.15); color: #10B981;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-clipboard-check'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre || 'Checklist / Requisitos'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Verificación interactiva'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                } else if (btnTipo === 'carnet_vacunacion' || btnTipo === 'carnet_vacunas') {
-                                    block.innerHTML += `
-                                        <div class="app-btn cursor-pointer" onclick="abrirCarnetVacunacion()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56,189,248,0.18); color: #38BDF8;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-id-badge'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre || 'Carnet de Vacunación'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Control de inmunización y pautas'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                } else if (btnTipo === 'calculadora_imc') {
-                                    block.innerHTML += `
-                                        <div class="app-btn cursor-pointer" onclick="abrirCalculadoraIMC()">
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(234,179,8,0.18); color: #EAB308;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-weight-scale'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre || 'Control de Peso e IMC'}</div>
-                                                <div class="app-desc">${btn.descripcion || 'Cálculo de masa e índices'}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </div>
-                                    `;
-                                }
-                                else {
-                                    block.innerHTML += `
-                                        <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') ? 'target="_blank"' : ''}>
-                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
-                                                <i class="${btn.icono || 'fa-solid fa-link'}"></i>
-                                            </div>
-                                            <div class="app-info">
-                                                <div class="app-name">${btn.nombre}</div>
-                                                <div class="app-desc">${btn.descripcion || ''}</div>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                        </a>
-                                    `;
-                                }
-                            });
-                        }
-                        menuContainer.appendChild(block);
-                    });
-                }
-                
+                renderizarMenuDinamico(data);
                 actualizarInterfazParking();
                 
                 if (esNodoMaternal) {
@@ -1002,9 +788,291 @@
             }
         }
 
-        // ==========================================
-        // PERSONALIZACIÓN COMPLETA (COLOR, BRILLO, FONDO)
-        // ==========================================
+        // ========================================================
+        // RENDERIZADO DINÁMICO TRADUCIBLE Y AUTOSERVICIO
+        // ========================================================
+        function renderizarMenuDinamico(data) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
+            const customPetTel = localStorage.getItem(`pet_tel_${clienteCod}`);
+            const nombreFinal = (localStorage.getItem(`pet_nombre_${clienteCod}`) || data.nombre || "Mascota").toUpperCase();
+
+            const menuContainer = document.getElementById('dynamic-menu');
+            menuContainer.innerHTML = '';
+
+            const dic = DICCIONARIO[idiomaActual];
+
+            if (data.secciones && Array.isArray(data.secciones)) {
+                data.secciones.forEach(sec => {
+                    if (sec.titulo) menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
+                    const block = document.createElement('div');
+                    block.className = 'apps-menu';
+
+                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
+                    if (sec.whatsappGerencia) whatsappGerenciaGlobal = sec.whatsappGerencia;
+
+                    if (sec.escudoResenas) {
+                        block.innerHTML += `
+                            <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
+                                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                        <path fill="none" d="M0 0h48v48H0z"/>
+                                    </svg>
+                                </div>
+                                <div class="app-name text-center text-white text-base font-extrabold mb-0.5">${dic.resenaTitle}</div>
+                                <div class="text-xs text-slate-300 text-center font-medium mb-2">${dic.resenaSub}</div>
+                                
+                                <div class="stars-container star-rating my-1" id="escudo-estrellas">
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
+                                </div>
+                                <p class="text-[11px] text-zinc-400 text-center mt-1">${dic.resenaHint}</p>
+                                <p id="mensaje-filtro" class="text-xs text-cyan-300 text-center w-full mt-2 font-bold hidden animate-pulse">${dic.conectarGoogle}</p>
+                            </div>
+                        `;
+                    } else if (sec.botones && Array.isArray(sec.botones)) {
+                        sec.botones.forEach(btn => {
+                            const btnNombre = (btn.nombre || "").toLowerCase();
+                            const btnTipo = (btn.tipo || "").toLowerCase();
+
+                            let nombreBoton = btn.nombre;
+                            let descBoton = btn.descripcion || '';
+
+                            // TRADUCCIONES DINÁMICAS SI APLICA
+                            if (btnNombre.includes('llamar') || btnNombre.includes('call') || btnNombre.includes('appeler')) {
+                                nombreBoton = dic.llamarOwner;
+                                descBoton = dic.llamarOwnerDesc;
+                            } else if (btnNombre.includes('whatsapp') || btnNombre.includes('avisar')) {
+                                nombreBoton = dic.avisarWs;
+                                descBoton = dic.avisarWsDesc;
+                            } else if (btnTipo === 'asistencia_ruta' && esSectorMascotaGlobal) {
+                                nombreBoton = dic.vetsGps;
+                                descBoton = dic.vetsGpsDesc;
+                            } else if (btnTipo === 'carnet_vacunacion' || btnTipo === 'carnet_vacunas') {
+                                nombreBoton = dic.carnetVac;
+                                descBoton = dic.carnetVacDesc;
+                            } else if (btnNombre.includes('vcard') || btnNombre.includes('contacto')) {
+                                nombreBoton = dic.guardarVcard;
+                                descBoton = dic.guardarVcardDesc;
+                            }
+
+                            if (btnTipo === 'carnet_vacunacion' || btnNombre.includes('veterinario') || btnNombre.includes('mascota')) {
+                                esSectorMascotaGlobal = true;
+                            }
+
+                            let finalUrl = btn.url || '#';
+                            if (customPetTel) {
+                                if (finalUrl.startsWith('tel:')) finalUrl = `tel:${customPetTel}`;
+                                if (finalUrl.includes('wa.me/')) {
+                                    const msg = encodeURIComponent(`¡Hola! Acabo de escanear la chapa de ${nombreFinal} y lo tengo conmigo.`);
+                                    finalUrl = `https://wa.me/${customPetTel}?text=${msg}`;
+                                }
+                            }
+
+                            if (btnTipo === 'calculadora_embarazo' || btnTipo === 'contador_contracciones') {
+                                esNodoMaternal = true;
+                            }
+
+                            if (btnTipo === 'carnet_vacunacion' || btnTipo === 'carnet_vacunas') {
+                                if (btn.vacunas && Array.isArray(btn.vacunas)) {
+                                    vacunasCustomGlobal = btn.vacunas;
+                                }
+                            }
+
+                            if (btnTipo === 'triaje_urgencias' && btn.alertas) alertasSemaforoGlobal = btn.alertas;
+                            if (btnTipo === 'checklist_parto' && btn.checklist) checklistPartoGlobal = btn.checklist;
+
+                            if (btnTipo === 'recordatorio_cita' || btnNombre.includes('calendario') || btnNombre.includes('guardar cita')) {
+                                block.innerHTML += `
+                                    <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalCalendario()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(141, 182, 0, 0.18); color: #8DB600;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-calendar-plus'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            else if (btnTipo === 'parking' || btnNombre.includes('aparqué') || btnNombre.includes('aparque')) {
+                                block.innerHTML += `
+                                    <div onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
+                                        <div class="app-icon" id="parking-icon-container" style="${btn.estiloIcono || 'background: rgba(142,142,147,0.1); color: #8e8e93;'}">
+                                            <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name" id="parking-name">${nombreBoton || '¿Dónde aparqué?'}</div>
+                                            <div class="app-desc" id="parking-desc">${descBoton || 'Guarda la ubicación de tu coche'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            else if (btnTipo === 'test_desgaste' || btnNombre.includes('fatiga') || btnNombre.includes('desgaste')) {
+                                block.innerHTML += `
+                                    <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirTestDesgaste()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 180, 0, 0.15); color: #FFB400;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-microscope'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            else if (btnTipo === 'test_ergonomico' || btnNombre.includes('ergonómico') || btnNombre.includes('ergonomico')) {
+                                block.innerHTML += `
+                                    <div class="app-btn" onclick="abrirTestErgonomico()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 168, 232, 0.15); color: #00A8E8;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            } 
+                            else if (btnTipo === 'tasador_retirada' || btnNombre.includes('tasador') || btnNombre.includes('retirada') || btnNombre.includes('logística')) {
+                                block.innerHTML += `
+                                    <div class="app-btn" onclick="abrirTasadorRetirada()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(48, 209, 88, 0.15); color: #30d158;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            else if (btnTipo === 'asistencia_ruta' || btnNombre.includes('salud en ruta') || btnNombre.includes('urgencias & salud') || btnNombre.includes('farmacia') || btnNombre.includes('veterinarios')) {
+                                block.innerHTML += `
+                                    <div class="app-btn cursor-pointer ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalAsistenciaRuta()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16, 185, 129, 0.18); color: #10B981;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-map-location-dot'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            else if (btnTipo === 'teleconsulta_triaje') {
+                                block.innerHTML += `
+                                    <div class="app-btn border border-sky-500/30 bg-sky-950/20 ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalTeleconsulta()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(14,165,233,0.18); color: #0EA5E9;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-user-doctor'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name text-sky-300">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-sky-400 text-xs"></i>
+                                    </div>
+                                `;
+                            } else if (btnTipo === 'calculadora_embarazo') {
+                                block.innerHTML += `
+                                    <div class="app-btn destacado" onclick="abrirCalculadoraEmbarazo()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(244,114,182,0.15); color: #F472B6;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-baby'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc" id="calculadora-resumen">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            } else if (btnTipo === 'triaje_urgencias') {
+                                block.innerHTML += `
+                                    <div class="app-btn border border-rose-500/30 bg-rose-950/20" onclick="abrirTriajeUrgencias()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(225,29,72,0.2); color: #E11D48;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-shield-heart'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name text-rose-300">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-rose-400 text-xs"></i>
+                                    </div>
+                                `;
+                            } else if (btnTipo === 'checklist_parto') {
+                                block.innerHTML += `
+                                    <div class="app-btn" onclick="abrirChecklistParto()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(16,185,129,0.15); color: #10B981;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-clipboard-check'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            } else if (btnTipo === 'carnet_vacunacion' || btnTipo === 'carnet_vacunas') {
+                                block.innerHTML += `
+                                    <div class="app-btn cursor-pointer" onclick="abrirCarnetVacunacion()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56,189,248,0.18); color: #38BDF8;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-id-badge'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            } else if (btnTipo === 'calculadora_imc') {
+                                block.innerHTML += `
+                                    <div class="app-btn cursor-pointer" onclick="abrirCalculadoraIMC()">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(234,179,8,0.18); color: #EAB308;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-weight-scale'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            else {
+                                block.innerHTML += `
+                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') ? 'target="_blank"' : ''}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-link'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${nombreBoton}</div>
+                                            <div class="app-desc">${descBoton}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                        });
+                    }
+                    menuContainer.appendChild(block);
+                });
+            }
+        }
+
         function abrirModalPersonalizacion() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
@@ -1012,7 +1080,7 @@
             const esNeonIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-palette text-cyan-400"></i>';
-            document.getElementById('modal-title').innerText = "Personalizar Interfaz";
+            document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].personalizar;
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-xs text-zinc-300 mb-3">Elige tu color neón preferido para los botones, halos y acentos:</p>
                 
@@ -1051,7 +1119,7 @@
             `;
 
             modalActions.innerHTML = `
-                <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="cerrarModalBtn()">Guardar Preferencia</button>
+                <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
             `;
             abrirModalCustom();
         }
@@ -1118,7 +1186,7 @@
                 document.getElementById('modal-icon').innerHTML = datosFriccionesGlobales[tipo].icono;
                 document.getElementById('modal-title').innerText = datosFriccionesGlobales[tipo].titulo;
                 document.getElementById('modal-text').innerHTML = datosFriccionesGlobales[tipo].texto;
-                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].entendido}</button>`;
                 abrirModalCustom();
             }
         }
@@ -1476,7 +1544,7 @@
             htmlVacunas += '</div>';
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-id-badge text-sky-400"></i>';
-            document.getElementById('modal-title').innerText = "Carnet de Vacunación";
+            document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].carnetVac;
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-[11px] text-zinc-400 mb-3 leading-snug">Toca cualquier casilla para alternar su estado:</p>
                 ${htmlVacunas}
