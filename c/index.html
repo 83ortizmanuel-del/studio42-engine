@@ -252,10 +252,9 @@
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             
-            <!-- BARRA DE CONTROLES: EDITAR DATOS MASCOTA, TEMA, IDIOMA Y MÚSICA -->
+            <!-- BARRA DE CONTROLES: GESTIÓN MASCOTA, TEMA, IDIOMA Y MÚSICA -->
             <div class="top-controls-bar">
                 <div class="flex items-center gap-2">
-                    <!-- BOTÓN GESTIÓN DE DATOS MASCOTA -->
                     <button id="btn-edit-pet" class="btn-top-control" onclick="verificarAccesoPropietario()" title="Editar Ficha de la Mascota">
                         <i class="fa-solid fa-paw text-cyan-400"></i>
                     </button>
@@ -277,7 +276,7 @@
                 <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
             </div>
 
-            <!-- CONTENEDOR DE FOTO DE LA MASCOTA -->
+            <!-- CONTENEDOR DE FOTO / LOGO -->
             <div class="logo-container" id="hub-logo-box" onclick="abrirCambiadorFoto()" title="Toca para cambiar la foto">
                 <img id="hub-logo" alt="Logo">
                 <div class="edit-badge-logo"><i class="fa-solid fa-camera"></i></div>
@@ -287,6 +286,7 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
+            <!-- TARJETA CABECERA OBSTÉTRICA -->
             <div id="card-paciente-header" class="paciente-header-card hidden">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -314,6 +314,7 @@
     </div>
 
     <script>
+        // DICCIONARIO TRILINGÜE
         const DICCIONARIO = {
             es: {
                 flag: "🇪🇸",
@@ -365,6 +366,7 @@
         let whatsappMedicoGlobal = "";
         let timerTeleconsultaGlobal = null;
         let esNodoMaternal = false;
+        let esSectorMascotaGlobal = false;
         let audioIniciadoPorUsuario = false;
 
         let alertasSemaforoGlobal = [];
@@ -420,7 +422,7 @@
         }
 
         // ========================================================
-        // GESTIÓN Y EDICIÓN DE DATOS DE LA MASCOTA POR EL DUEÑO
+        // GESTIÓN Y RECUPERACIÓN CON DOBLE CANDADO
         // ========================================================
         function verificarAccesoPropietario() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -434,7 +436,12 @@
                 document.getElementById('modal-title').innerText = "Acceso Propietario";
                 document.getElementById('modal-text').innerHTML = `
                     <p class="text-xs text-zinc-300 mb-3">Introduce tu PIN de 4 dígitos para editar la ficha:</p>
-                    <input type="password" id="input-pin-auth" maxlength="4" placeholder="••••" class="w-32 mx-auto p-2.5 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center text-lg font-bold tracking-widest mb-2">
+                    <input type="password" id="input-pin-auth" maxlength="4" placeholder="••••" class="w-32 mx-auto p-2.5 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center text-lg font-bold tracking-widest mb-3">
+                    <div>
+                        <button onclick="solicitarRecuperacionPIN('${clienteCod}')" class="text-[11px] text-cyan-400 underline bg-transparent border-none cursor-pointer">
+                            ¿Olvidaste tu clave?
+                        </button>
+                    </div>
                 `;
                 modalActions.innerHTML = `
                     <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="validarPINPropietario('${pinGuardado}')">Acceder a Edición</button>
@@ -450,6 +457,51 @@
                 abrirFormularioDatosMascota();
             } else {
                 alert("PIN incorrecto. Inténtalo de nuevo.");
+            }
+        }
+
+        function solicitarRecuperacionPIN(clienteCod) {
+            const telGuardado = localStorage.getItem(`pet_tel_${clienteCod}`);
+            const chipGuardado = localStorage.getItem(`pet_chip_${clienteCod}`);
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-amber-400"></i>';
+            document.getElementById('modal-title').innerText = "Doble Validación SOS";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-zinc-300 mb-3">Por seguridad, confirma ambos datos para restablecer el acceso:</p>
+                <div class="space-y-2 text-left text-xs mb-3">
+                    <div>
+                        <label class="block text-[10px] text-zinc-400 font-bold mb-1">1. Teléfono móvil registrado:</label>
+                        <input type="tel" id="input-recuperar-tel" placeholder="Ej: 672294962" class="w-full p-2 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-zinc-400 font-bold mb-1">2. Últimos 4 dígitos del Microchip:</label>
+                        <input type="text" id="input-recuperar-chip" maxlength="4" placeholder="Ej: 2911" class="w-full p-2 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center font-bold">
+                    </div>
+                </div>
+                <p class="text-[10px] text-zinc-400 leading-tight">Al validar ambos campos, tu PIN se restablecerá temporalmente a <b>1234</b>.</p>
+            `;
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-amber-500 hover:bg-amber-600 text-slate-950 font-black" onclick="validarDobleCandado('${clienteCod}', '${telGuardado}', '${chipGuardado}')">Validar y Restablecer</button>
+                <button class="modal-btn-secondary" onclick="verificarAccesoPropietario()">Volver</button>
+            `;
+        }
+
+        function validarDobleCandado(clienteCod, telReal, chipReal) {
+            const telInput = document.getElementById('input-recuperar-tel').value.trim().replace(/[^0-9]/g, '');
+            const chipInput = document.getElementById('input-recuperar-chip').value.trim();
+
+            const telBase = (telReal || "").replace(/[^0-9]/g, '');
+            const chipBase = (chipReal || "").trim();
+
+            const telValido = telInput && telBase && telBase.endsWith(telInput.slice(-9));
+            const chipValido = chipInput && chipBase && chipBase.endsWith(chipInput);
+
+            if (telValido && chipValido) {
+                localStorage.setItem(`pet_pin_${clienteCod}`, "1234");
+                alert("✅ Verificación exitosa. Tu PIN ha sido restablecido a: 1234. Entrando al editor...");
+                abrirFormularioDatosMascota();
+            } else {
+                alert("❌ Los datos no coinciden con los registros de la chapa. Verifica la cartilla del animal.");
             }
         }
 
@@ -482,16 +534,16 @@
                         <input type="tel" id="edit-pet-tel" value="${telActual}" placeholder="Ej: 34672294962" class="w-full p-2 rounded-xl bg-slate-900 border border-emerald-500/40 text-white font-mono font-bold">
                     </div>
                     <div>
-                        <label class="block text-[10px] text-zinc-400 font-bold mb-1">Nº Microchip Oficial:</label>
-                        <input type="text" id="edit-pet-chip" value="${chipActual}" placeholder="Ej: 981098108472911" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white font-mono">
+                        <label class="block text-[10px] text-cyan-300 font-bold mb-1">Nº Microchip Oficial (Mínimo 4 dígitos):</label>
+                        <input type="text" id="edit-pet-chip" value="${chipActual}" placeholder="Ej: 981098108472911" class="w-full p-2 rounded-xl bg-slate-900 border border-cyan-500/30 text-white font-mono">
                     </div>
                     <div>
                         <label class="block text-[10px] text-zinc-400 font-bold mb-1">Alergias o Cuidados Críticos:</label>
                         <textarea id="edit-pet-notas" rows="2" placeholder="Ej: Alérgico al pollo. Es muy cariñoso." class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">${notasActual}</textarea>
                     </div>
                     <div class="pt-2 border-t border-white/10">
-                        <label class="block text-[10px] text-cyan-300 font-bold mb-1">PIN de Seguridad (4 dígitos):</label>
-                        <input type="password" id="edit-pet-pin" maxlength="4" value="${pinActual}" class="w-full p-2 rounded-xl bg-slate-900 border border-cyan-500/40 text-white font-mono text-center font-bold">
+                        <label class="block text-[10px] text-amber-300 font-bold mb-1">PIN de Seguridad (4 dígitos):</label>
+                        <input type="password" id="edit-pet-pin" maxlength="4" value="${pinActual}" class="w-full p-2 rounded-xl bg-slate-900 border border-amber-500/40 text-white font-mono text-center font-bold">
                     </div>
                 </div>
             `;
@@ -511,8 +563,8 @@
             const notas = document.getElementById('edit-pet-notas').value.trim();
             const pin = document.getElementById('edit-pet-pin').value.trim();
 
-            if (!nombre || !tel) {
-                return alert("Nombre y Teléfono de contacto son obligatorios.");
+            if (!nombre || !tel || !chip) {
+                return alert("Nombre, Teléfono y Microchip son obligatorios para garantizar la seguridad.");
             }
 
             localStorage.setItem(`pet_nombre_${clienteCod}`, nombre);
@@ -522,11 +574,9 @@
             localStorage.setItem(`pet_notas_${clienteCod}`, notas);
             if (pin) localStorage.setItem(`pet_pin_${clienteCod}`, pin);
 
-            // ACTUALIZACIÓN INMEDIATA EN PANTALLA
             document.getElementById('client-name').innerText = nombre.toUpperCase();
             if (raza) document.getElementById('client-subtitle').innerText = raza;
 
-            // VINCULACIÓN DE BOTONES DE RESCATE
             const btnTel = document.querySelector('a[href^="tel:"]');
             if (btnTel) btnTel.href = `tel:${tel}`;
 
@@ -537,7 +587,7 @@
             }
 
             cerrarModalBtn();
-            alert("✅ ¡Ficha de la mascota actualizada con éxito!");
+            alert("✅ ¡Ficha protegida y actualizada correctamente!");
         }
 
         document.addEventListener("visibilitychange", () => {
@@ -616,9 +666,9 @@
                 nombreNegocioGlobal = data.nombre || "Profesional";
 
                 esNodoMaternal = false;
+                esSectorMascotaGlobal = clienteCod.includes('pet');
                 document.getElementById('card-paciente-header').classList.add('hidden');
 
-                // APLICAR PERSONALIZACIÓN (COLOR, BRILLO, FONDO Y FOTO)
                 const userCustomColor = localStorage.getItem(`custom_acento_${clienteCod}`);
                 const colorAcentoFinal = userCustomColor || data.colorAcento || "#00E5FF";
                 const colorPrincipalFinal = data.colorPrincipal || "#0F172A";
@@ -631,7 +681,6 @@
 
                 if (data.datosPago) datosPagoGlobal = { ...datosPagoGlobal, ...data.datosPago };
 
-                // SOBRESCRIBIR CON DATOS PERSONALIZADOS DE MASCOTA SI EXISTEN
                 const customPetNombre = localStorage.getItem(`pet_nombre_${clienteCod}`);
                 const customPetRaza = localStorage.getItem(`pet_raza_${clienteCod}`);
                 const customPetTel = localStorage.getItem(`pet_tel_${clienteCod}`);
@@ -725,6 +774,10 @@
                             sec.botones.forEach(btn => {
                                 const btnNombre = (btn.nombre || "").toLowerCase();
                                 const btnTipo = (btn.tipo || "").toLowerCase();
+
+                                if (btnTipo === 'carnet_vacunacion' || btnNombre.includes('veterinario') || btnNombre.includes('mascota')) {
+                                    esSectorMascotaGlobal = true;
+                                }
 
                                 let finalUrl = btn.url || '#';
                                 if (customPetTel) {
@@ -949,6 +1002,9 @@
             }
         }
 
+        // ==========================================
+        // PERSONALIZACIÓN COMPLETA (COLOR, BRILLO, FONDO)
+        // ==========================================
         function abrirModalPersonalizacion() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
@@ -1083,30 +1139,47 @@
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
 
-        // ASISTENCIA EN RUTA GPS
+        // ==========================================
+        // ASISTENCIA EN RUTA GPS POLIMÓRFICA (HUMANO / MASCOTA)
+        // ==========================================
         function abrirModalAsistenciaRuta() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || '').toLowerCase().trim();
+            const esMascota = clienteCod.includes('pet') || esSectorMascotaGlobal;
+
+            const tituloModal = esMascota ? "Urgencias & Salud Veterinaria" : (DICCIONARIO[idiomaActual].asistenciaRuta || "Puntos de Asistencia en Ruta");
+            const subtexto = esMascota ? "Localiza atención veterinaria de emergencia con 1 toque por GPS satelital:" : "Localiza centros de salud y farmacias a tu alrededor:";
+
+            const opcion1Titulo = esMascota ? "Hospitales Veterinarios 24 Horas" : "Centros de Salud & Urgencias";
+            const opcion1Desc = esMascota ? "Clínicas con quirófano y urgencias caninas/felinas" : "Hospitales, ambulatorios y urgencias";
+            const icono1 = esMascota ? "fa-solid fa-notes-medical" : "fa-solid fa-hospital";
+
+            const opcion2Titulo = esMascota ? "Farmacias Veterinarias & Suministros" : "Farmacias Cercanas";
+            const opcion2Desc = esMascota ? "Medicamentos para mascotas y alimentación clínica" : "Turnos de guardia y suministros abiertos";
+            const icono2 = esMascota ? "fa-solid fa-pills" : "fa-solid fa-prescription-bottle-medical";
+
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-map-location-dot text-emerald-400"></i>';
-            document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].asistenciaRuta;
+            document.getElementById('modal-title').innerText = tituloModal;
             document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-4">Localiza puntos de interés y urgencias a tu alrededor en 1 toque:</p>
+                <p class="text-xs text-zinc-300 mb-4">${subtexto}</p>
                 <div class="space-y-3 text-left">
-                    <button onclick="buscarPuntosRuta('hospital')" class="w-full p-3.5 rounded-2xl bg-rose-950/30 border border-rose-500/40 flex items-center gap-3.5 cursor-pointer hover:bg-rose-900/40 transition">
+                    <button onclick="buscarPuntosRuta('${esMascota ? 'vet_urgencias' : 'hospital'}')" class="w-full p-3.5 rounded-2xl bg-rose-950/30 border border-rose-500/40 flex items-center gap-3.5 cursor-pointer hover:bg-rose-900/40 transition">
                         <div class="w-11 h-11 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-hospital"></i>
+                            <i class="${icono1}"></i>
                         </div>
                         <div>
-                            <div class="font-bold text-xs text-white">Centros de Salud & Urgencias</div>
-                            <div class="text-[10px] text-rose-300">Hospitales, clínicas o veterinarias 24h</div>
+                            <div class="font-bold text-xs text-white">${opcion1Titulo}</div>
+                            <div class="text-[10px] text-rose-300">${opcion1Desc}</div>
                         </div>
                     </button>
 
-                    <button onclick="buscarPuntosRuta('farmacia')" class="w-full p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex items-center gap-3.5 cursor-pointer hover:bg-emerald-900/40 transition">
+                    <button onclick="buscarPuntosRuta('${esMascota ? 'vet_farmacia' : 'farmacia'}')" class="w-full p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex items-center gap-3.5 cursor-pointer hover:bg-emerald-900/40 transition">
                         <div class="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-prescription-bottle-medical"></i>
+                            <i class="${icono2}"></i>
                         </div>
                         <div>
-                            <div class="font-bold text-xs text-white">Farmacias Cercanas</div>
-                            <div class="text-[10px] text-emerald-300">Turnos de guardia y suministros abiertos</div>
+                            <div class="font-bold text-xs text-white">${opcion2Titulo}</div>
+                            <div class="text-[10px] text-emerald-300">${opcion2Desc}</div>
                         </div>
                     </button>
                 </div>
@@ -1116,7 +1189,11 @@
         }
 
         function buscarPuntosRuta(tipo) {
-            const termino = tipo === 'hospital' ? 'hospital+clinica+urgencias' : 'farmacia+abierta';
+            let termino = "";
+            if (tipo === 'vet_urgencias') termino = "hospital+veterinario+urgencias+24h";
+            else if (tipo === 'vet_farmacia') termino = "farmacia+veterinaria";
+            else if (tipo === 'hospital') termino = "hospital+clinica+urgencias";
+            else termino = "farmacia+abierta";
             
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
@@ -1127,13 +1204,13 @@
                         cerrarModalBtn();
                     },
                     () => {
-                        window.open(`https://www.google.com/maps/search/${termino}+cercana/`, '_blank');
+                        window.open(`https://www.google.com/maps/search/${termino}+cercano/`, '_blank');
                         cerrarModalBtn();
                     },
                     { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
                 );
             } else {
-                window.open(`https://www.google.com/maps/search/${termino}+cercana/`, '_blank');
+                window.open(`https://www.google.com/maps/search/${termino}+cercano/`, '_blank');
                 cerrarModalBtn();
             }
         }
