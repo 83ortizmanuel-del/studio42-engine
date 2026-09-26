@@ -1,0 +1,143 @@
+{
+  "nombre": "TOBY · GOLDEN RETRIEVER",
+  "modoDemo": false,
+  "subtitulo": "Pasaporte Phygital Canino · Rescate Inteligente Activo",
+  "textoBadge": "CHIP INTELIGENTE ACTIVO · PROTOCOLO RESCATE SOS",
+  "logo": "https://images.unsplash.com/photo-1552053831-71594a27632d?w=500",
+  "audioFondo": "",
+  "colorPrincipal": "#080E1A",
+  "colorAcento": "#00E5FF",
+  "datosPago": {
+    "tarifa": "Recompensa / Servicio SOS Mascota",
+    "pagoMovil": "Contacto Directo Propietario",
+    "zelle": "contacto@studio42.es"
+  },
+  "secciones": [
+    {
+      "titulo": "🚨 ¡Mascota Perdida! Contacto de Rescate",
+      "botones": [
+        {
+          "nombre": "Llamar a Papá/Mamá de Toby",
+          "descripcion": "Llamada prioritaria en 1 toque al móvil del dueño",
+          "icono": "fa-solid fa-phone-volume",
+          "estiloIcono": "background: rgba(34, 197, 94, 0.22); color: #22C55E;",
+          "url": "tel:34672294962",
+          "destacado": true
+        },
+        {
+          "nombre": "Avisar por WhatsApp al Dueño",
+          "descripcion": "Envía mensaje predeterminado: ¡Tengo a tu perro!",
+          "icono": "fa-brands fa-whatsapp",
+          "estiloIcono": "background: rgba(37, 211, 102, 0.18); color: #25D366;",
+          "url": "https://wa.me/34672294962?text=%C2%A1Hola!%20Acabo%20de%20escanear%20la%20chapa%20de%20Toby%20y%20lo%20tengo%20conmigo.%20%C2%BFC%C3%B3mo%20coordinamos%20para%20entregarlo?",
+          "destacado": false
+        },
+        {
+          "tipo": "asistencia_ruta",
+          "nombre": "Hospitales Veterinarios 24h & GPS",
+          "descripcion": "Localiza por satélite clínicas abiertas y envía ubicación",
+          "icono": "fa-solid fa-location-crosshairs",
+          "estiloIcono": "background: rgba(0, 229, 255, 0.2); color: #00E5FF;",
+          "destacado": true
+        }
+      ]
+    },
+    {
+      "titulo": "Ficha Médica & Cuidados Especiales",
+      "botones": [
+        {
+          "tipo": "carnet_vacunacion",
+          "nombre": "Carnet de Vacunación Canina",
+          "descripcion": "Toca cada vacuna para verificar pautas oficiales y refuerzos",
+          "icono": "fa-solid fa-shield-dog",
+          "estiloIcono": "background: rgba(56, 189, 248, 0.2); color: #38BDF8;",
+          "vacunas": [
+            {
+              "id": "vac_rabia_toby",
+              "nombre": "Rabia Canina (Oficial 2026)",
+              "subtitulo": "Inmunización obligatoria antirrábica",
+              "momento": "Dosis Anual Vigente",
+              "badge": "Obligatoria"
+            },
+            {
+              "id": "vac_polivalente_toby",
+              "nombre": "Polivalente / Séxtuple (DHPPiL)",
+              "subtitulo": "Parvovirus, Moquillo, Hepatitis y Leptospira",
+              "momento": "Refuerzo Anual Vigente",
+              "badge": "Vital"
+            },
+            {
+              "id": "vac_tos_toby",
+              "nombre": "Tos de las Perreras (Bordetella)",
+              "subtitulo": "Requisito para residencias y parques caninos",
+              "momento": "Dosis Anual",
+              "badge": "Recomendada"
+            },
+            {
+              "id": "vac_desp_interna_toby",
+              "nombre": "Desparasitación Interna",
+              "subtitulo": "Comprimido de amplio espectro contra parásitos",
+              "momento": "Pauta Trimestral",
+              "badge": "Al Día"
+            },
+            {
+              "id": "vac_leishmania_toby",
+              "nombre": "Collar / Pipeta Leishmaniosis",
+              "subtitulo": "Protección externa activa contra flebótomos",
+              "momento": "Protección Continua",
+              "badge": "Activa"
+            }
+          ]
+        },
+        {
+          "tipo": "checklist_parto",
+          "nombre": "Protocolo de Dieta, Alergias y Carácter",
+          "descripcion": "Alergias severas, medicación y comportamiento con otros perros",
+          "icono": "fa-solid fa-clipboard-list",
+          "estiloIcono": "background: rgba(245, 158, 11, 0.2); color: #F59E0B;",
+          "checklist": {
+            "Alertas Clínicas Críticas": [
+              "Alérgico estricto al pollo y cereales (solo pienso hipoalergénico)",
+              "Toma condroprotector articular con el desayuno",
+              "Microchip oficial homologado: 981098108472911"
+            ],
+            "Comportamiento & Trato": [
+              "Extremadamente sociable con personas y niños",
+              "Miedo intenso a petardos y tormentas fuertes",
+              "Pasea tranquilo sin tirar de la correa"
+            ],
+            "Centro Veterinario de Cabecera": [
+              "Clínica / Hospital Veterinario 24h",
+              "Seguro de Responsabilidad Civil vigente"
+            ]
+          }
+        },
+        {
+          "tipo": "triaje_urgencias",
+          "nombre": "Semáforo SOS / Intoxicaciones & Primeros Auxilios",
+          "descripcion": "Guía inmediata si ingiere alimentos o sustancias venenosas",
+          "icono": "fa-solid fa-triangle-exclamation",
+          "estiloIcono": "background: rgba(239, 68, 68, 0.22); color: #EF4444;",
+          "alertas": [
+            "Ingesta accidental de chocolate negro, uvas, cebolla o ajo",
+            "Golpe de calor (jadeo acelerado, debilidad y encías oscuras)",
+            "Contacto con orugas procesionarias en pinares o parques",
+            "Cojera repentina o atropello con traumatismo"
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Identidad & Contacto Directo",
+      "botones": [
+        {
+          "nombre": "Guardar Contacto del Dueño (vCard)",
+          "descripcion": "Descarga directa de los datos a la agenda de tu teléfono",
+          "icono": "fa-solid fa-address-card",
+          "estiloIcono": "background: rgba(197, 160, 89, 0.2); color: #C5A059;",
+          "url": "./contacto.vcf"
+        }
+      ]
+    }
+  ]
+}
