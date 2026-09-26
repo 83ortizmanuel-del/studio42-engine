@@ -18,6 +18,7 @@
             --titanium-light: #f1f5f9;
             --titanium-glow: rgba(226, 232, 240, 0.4);
             --halo-glow: rgba(0, 229, 255, 0.5);
+            --halo-intensity: 30px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -55,7 +56,7 @@
             padding: 2px;
             overflow: hidden;
             margin: auto;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 30px var(--halo-glow);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
             transition: box-shadow 0.3s ease;
         }
 
@@ -115,9 +116,14 @@
             width: 86px; height: 86px; margin: 0 auto 12px auto; 
             border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.15); 
             overflow: hidden; background-color: #ffffff; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.08); position: relative; cursor: pointer;
         }
         .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+        .edit-badge-logo {
+            position: absolute; bottom: 3px; right: 3px; background: rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff;
+        }
         
         h1 { font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
         .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.8px; }
@@ -189,18 +195,29 @@
         .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
         .footer-brand span { color: var(--titanium-light); font-weight: 800; }
 
+        /* BOTONES FLOTANTES SUPERIORES */
+        .top-controls-bar {
+            position: absolute; top: 16px; left: 16px; right: 16px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 50;
+        }
         .btn-top-control {
-            position: absolute; top: 18px; width: 34px; height: 34px; border-radius: 50%;
+            width: 34px; height: 34px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
             color: var(--color-gris); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 0.8rem; transition: all 0.2s; z-index: 50;
+            cursor: pointer; font-size: 0.8rem; transition: all 0.2s;
         }
         .btn-top-control:active { transform: scale(0.9); }
-        .btn-theme-toggle { left: 18px; }
-        .btn-audio-toggle { right: 18px; display: none; }
+        .btn-audio-toggle { display: none; }
         .btn-audio-toggle.active { color: var(--color-acento); border-color: var(--color-acento); }
 
-        /* PRESETS DE COLOR */
+        .lang-badge {
+            font-size: 10px; font-weight: 900; letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--color-gris); border-radius: 50px; padding: 6px 10px; cursor: pointer;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .lang-badge:active { transform: scale(0.95); }
+
         .color-swatch {
             width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
             border: 2px solid rgba(255, 255, 255, 0.2); transition: transform 0.2s ease, border-color 0.2s ease;
@@ -234,25 +251,37 @@
     </div>
 
     <!-- WRAPPER CON HALO CONIC LUMINOSO -->
-    <div class="halo-wrapper">
+    <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             
-            <!-- BOTÓN PERSONALIZAR TEMA (CLIENTE) -->
-            <button id="btn-theme-control" class="btn-top-control btn-theme-toggle" onclick="abrirModalPersonalizacion()" title="Personalizar Color de la Interfaz">
-                <i class="fa-solid fa-palette"></i>
-            </button>
+            <!-- BARRA DE CONTROLES: TEMA, IDIOMA Y MÚSICA -->
+            <div class="top-controls-bar">
+                <div class="flex items-center gap-2">
+                    <button id="btn-theme-control" class="btn-top-control" onclick="abrirModalPersonalizacion()" title="Personalizar Interfaz">
+                        <i class="fa-solid fa-palette"></i>
+                    </button>
+                    <div id="btn-lang-selector" class="lang-badge" onclick="rotarIdioma()" title="Cambiar Idioma">
+                        <span id="lang-flag">🇪🇸</span> <span id="lang-code">ES</span>
+                    </div>
+                </div>
 
-            <!-- BOTÓN AUDIO -->
-            <button id="btn-audio-control" class="btn-top-control btn-audio-toggle" onclick="alternarAudioManual()" title="Silenciar / Activar Música">
-                <i id="btn-audio-icon" class="fa-solid fa-volume-high"></i>
-            </button>
+                <button id="btn-audio-control" class="btn-top-control btn-audio-toggle" onclick="alternarAudioManual()" title="Silenciar / Activar Música">
+                    <i id="btn-audio-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
 
-            <div class="status-badge">
+            <div class="status-badge" style="margin-top: 28px;">
                 <span class="ping-light"></span>
                 <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
             </div>
 
-            <div class="logo-container" id="hub-logo-box"><img id="hub-logo" alt="Logo"></div>
+            <!-- CONTENEDOR DE LOGO (CON BOTÓN DE CAMBIO DE FOTO) -->
+            <div class="logo-container" id="hub-logo-box" onclick="abrirCambiadorFoto()" title="Toca para cambiar la foto">
+                <img id="hub-logo" alt="Logo">
+                <div class="edit-badge-logo"><i class="fa-solid fa-camera"></i></div>
+            </div>
+            <input type="file" id="input-foto-upload" accept="image/*" class="hidden" onchange="procesarFotoSubida(event)">
+
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
@@ -284,6 +313,50 @@
     </div>
 
     <script>
+        // DICCIONARIO TRILINGÜE
+        const DICCIONARIO = {
+            es: {
+                flag: "🇪🇸",
+                badge: "NODO PHYGITAL CONECTADO · RED ACTIVA",
+                resenaTitle: "¿Qué tal ha sido tu experiencia?",
+                resenaSub: "Tu valoración nos ayuda a seguir mejorando cada día",
+                resenaHint: "Toca las estrellas para calificar el servicio",
+                conectarGoogle: "Conectando con Google Maps...",
+                guardarCita: "Guardar Tu Cita",
+                asistenciaRuta: "Puntos de Asistencia en Ruta",
+                cerrar: "Cerrar",
+                entendido: "Entendido",
+                personalizar: "Personalizar Interfaz"
+            },
+            en: {
+                flag: "🇬🇧",
+                badge: "SMART PHYGITAL NODE · ACTIVE NETWORK",
+                resenaTitle: "How was your experience?",
+                resenaSub: "Your review helps us keep improving every day",
+                resenaHint: "Tap the stars to rate the service",
+                conectarGoogle: "Connecting to Google Maps...",
+                guardarCita: "Save Your Appointment",
+                asistenciaRuta: "Assistance Points on Route",
+                cerrar: "Close",
+                entendido: "Got it",
+                personalizar: "Customize Interface"
+            },
+            fr: {
+                flag: "🇫🇷",
+                badge: "NŒUD PHYGITAL CONNECTÉ · RÉSEAU ACTIF",
+                resenaTitle: "Comment s'est passée votre expérience ?",
+                resenaSub: "Votre avis nous aide à nous améliorer chaque jour",
+                resenaHint: "Appuyez sur les étoiles pour noter le service",
+                conectarGoogle: "Connexion à Google Maps...",
+                guardarCita: "Enregistrer Votre Rendez-vous",
+                asistenciaRuta: "Points d'Assistance en Route",
+                cerrar: "Fermer",
+                entendido: "Compris",
+                personalizar: "Personnaliser l'Interface"
+            }
+        };
+
+        let idiomaActual = localStorage.getItem('user_lang') || 'es';
         let datosFriccionesGlobales = {};
         let googleReviewUrlGlobal = "https://maps.google.com";
         let whatsappGerenciaGlobal = "https://wa.me/34672294962";
@@ -306,6 +379,45 @@
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
+
+        function rotarIdioma() {
+            if (idiomaActual === 'es') idiomaActual = 'en';
+            else if (idiomaActual === 'en') idiomaActual = 'fr';
+            else idiomaActual = 'es';
+
+            localStorage.setItem('user_lang', idiomaActual);
+            actualizarTextosIdioma();
+        }
+
+        function actualizarTextosIdioma() {
+            const dataLang = DICCIONARIO[idiomaActual];
+            document.getElementById('lang-flag').innerText = dataLang.flag;
+            document.getElementById('lang-code').innerText = idiomaActual.toUpperCase();
+            
+            const badge = document.getElementById('badge-text');
+            if (badge) badge.innerText = dataLang.badge;
+        }
+
+        function abrirCambiadorFoto() {
+            document.getElementById('input-foto-upload').click();
+        }
+
+        function procesarFotoSubida(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Img = e.target.result;
+                const urlParams = new URLSearchParams(window.location.search);
+                const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
+
+                document.getElementById('hub-logo').src = base64Img;
+                document.getElementById('splash-logo').src = base64Img;
+                localStorage.setItem(`custom_photo_${clienteCod}`, base64Img);
+            };
+            reader.readAsDataURL(file);
+        }
 
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
@@ -372,6 +484,8 @@
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
 
+            actualizarTextosIdioma();
+
             try {
                 let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
                 if (!response.ok) response = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
@@ -383,14 +497,16 @@
                 esNodoMaternal = false;
                 document.getElementById('card-paciente-header').classList.add('hidden');
 
-                // APLICAR COLORES POR DEFECTO O PERSISTIDOS POR EL USUARIO
+                // APLICAR PERSONALIZACIÓN (COLOR, BRILLO, FONDO Y FOTO)
                 const userCustomColor = localStorage.getItem(`custom_acento_${clienteCod}`);
                 const colorAcentoFinal = userCustomColor || data.colorAcento || "#00E5FF";
                 const colorPrincipalFinal = data.colorPrincipal || "#0F172A";
 
+                const glowIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
                 document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
                 document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
-                document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
+                document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + (glowIntenso ? 'AA' : '55'));
+                document.documentElement.style.setProperty('--halo-intensity', glowIntenso ? '45px' : '25px');
 
                 if (data.datosPago) datosPagoGlobal = { ...datosPagoGlobal, ...data.datosPago };
 
@@ -404,7 +520,9 @@
 
                 if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
 
-                const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "logo.png";
+                // FOTO PERSISTIDA O POR DEFECTO
+                const fotoCustom = localStorage.getItem(`custom_photo_${clienteCod}`);
+                const logoPath = fotoCustom || (data.logo && data.logo.trim() !== "" ? data.logo : "logo.png");
                 document.getElementById('splash-logo').src = logoPath;
                 document.getElementById('hub-logo').src = logoPath;
 
@@ -463,8 +581,8 @@
                                             <path fill="none" d="M0 0h48v48H0z"/>
                                         </svg>
                                     </div>
-                                    <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal ha sido tu experiencia?</div>
-                                    <div class="text-xs text-slate-300 text-center font-medium mb-2">Tu valoración nos ayuda a seguir mejorando cada día</div>
+                                    <div class="app-name text-center text-white text-base font-extrabold mb-0.5" id="lbl-review-title">¿Qué tal ha sido tu experiencia?</div>
+                                    <div class="text-xs text-slate-300 text-center font-medium mb-2" id="lbl-review-sub">Tu valoración nos ayuda a seguir mejorando cada día</div>
                                     
                                     <div class="stars-container star-rating my-1" id="escudo-estrellas">
                                         <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
@@ -473,7 +591,7 @@
                                         <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
                                         <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
                                     </div>
-                                    <p class="text-[11px] text-zinc-400 text-center mt-1">Toca las estrellas para calificar el servicio</p>
+                                    <p class="text-[11px] text-zinc-400 text-center mt-1" id="lbl-review-hint">Toca las estrellas para calificar el servicio</p>
                                     <p id="mensaje-filtro" class="text-xs text-cyan-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
                                 </div>
                             `;
@@ -705,12 +823,13 @@
         }
 
         // ==========================================
-        // PERSONALIZACIÓN DINÁMICA POR EL CLIENTE
+        // PERSONALIZACIÓN COMPLETA (COLOR, BRILLO, FONDO)
         // ==========================================
         function abrirModalPersonalizacion() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
             const colorActual = getComputedStyle(document.documentElement).getPropertyValue('--color-acento').trim();
+            const esNeonIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-palette text-cyan-400"></i>';
             document.getElementById('modal-title').innerText = "Personalizar Interfaz";
@@ -727,11 +846,19 @@
                 </div>
 
                 <div class="p-3 bg-slate-900/90 rounded-2xl border border-white/10 text-left text-xs mb-3 space-y-2">
-                    <label class="block text-[11px] text-zinc-400 font-bold">O selecciona tu tono exacto:</label>
+                    <label class="block text-[11px] text-zinc-400 font-bold">Selector de color libre:</label>
                     <div class="flex items-center gap-3">
                         <input type="color" id="custom-picker" value="${colorActual}" oninput="aplicarColorPersonalizado(this.value, '${clienteCod}')" class="w-10 h-10 rounded-xl bg-transparent border border-white/20 cursor-pointer">
                         <span id="custom-hex-label" class="font-mono text-zinc-200 text-xs font-bold">${colorActual}</span>
                     </div>
+                </div>
+
+                <div class="p-3 bg-slate-900/90 rounded-2xl border border-white/10 text-left text-xs mb-3 flex items-center justify-between">
+                    <div>
+                        <div class="font-bold text-white text-[11px]">Halo de Luz Neón Intenso</div>
+                        <div class="text-[9px] text-zinc-400">Amplifica el brillo y el resplandor 360°</div>
+                    </div>
+                    <input type="checkbox" id="chk-neon" ${esNeonIntenso ? 'checked' : ''} onchange="toggleNeonIntenso(this.checked, '${clienteCod}')" class="accent-cyan-400 w-5 h-5 cursor-pointer">
                 </div>
 
                 <div class="p-3 bg-slate-900/90 rounded-2xl border border-white/10 text-left text-xs space-y-2">
@@ -751,10 +878,18 @@
 
         function aplicarColorPersonalizado(colorHex, clienteCod) {
             document.documentElement.style.setProperty('--color-acento', colorHex);
-            document.documentElement.style.setProperty('--halo-glow', colorHex + '66');
+            const esNeonIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
+            document.documentElement.style.setProperty('--halo-glow', colorHex + (esNeonIntenso ? 'AA' : '55'));
             localStorage.setItem(`custom_acento_${clienteCod}`, colorHex);
             const label = document.getElementById('custom-hex-label');
             if (label) label.innerText = colorHex.toUpperCase();
+        }
+
+        function toggleNeonIntenso(activo, clienteCod) {
+            localStorage.setItem(`custom_neon_intenso_${clienteCod}`, activo);
+            const colorActual = getComputedStyle(document.documentElement).getPropertyValue('--color-acento').trim();
+            document.documentElement.style.setProperty('--halo-glow', colorActual + (activo ? 'AA' : '55'));
+            document.documentElement.style.setProperty('--halo-intensity', activo ? '45px' : '25px');
         }
 
         function cambiarAtmosferaFondo(fondo, principal) {
@@ -827,7 +962,7 @@
         // ASISTENCIA EN RUTA GPS
         function abrirModalAsistenciaRuta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-map-location-dot text-emerald-400"></i>';
-            document.getElementById('modal-title').innerText = "Puntos de Asistencia en Ruta";
+            document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].asistenciaRuta;
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-xs text-zinc-300 mb-4">Localiza puntos de interés y urgencias a tu alrededor en 1 toque:</p>
                 <div class="space-y-3 text-left">
@@ -852,7 +987,7 @@
                     </button>
                 </div>
             `;
-            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>`;
             abrirModalCustom();
         }
 
@@ -885,7 +1020,7 @@
             const fechaDefecto = manana.toISOString().split('T')[0];
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calendar-plus text-lime-400"></i>';
-            document.getElementById('modal-title').innerText = "Guardar Tu Cita";
+            document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].guardarCita;
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-xs text-zinc-300 mb-4">Guarda tu turno en el calendario de tu smartphone con alertas automáticas:</p>
                 <div class="space-y-3 text-left text-xs">
@@ -920,7 +1055,7 @@
                 <button class="modal-btn-secondary flex items-center justify-center gap-2 text-white border-white/20 hover:border-amber-400" onclick="generarEventoCalendario('google')">
                     <i class="fa-brands fa-google text-amber-400"></i> Guardar en Google Calendar
                 </button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cancelar</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
             `;
             abrirModalCustom();
         }
@@ -1075,7 +1210,7 @@
                     document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial en Google Maps:`;
                     modalActions.innerHTML = `
                         <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
-                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
                     `;
                 }
                 abrirModalCustom();
@@ -1149,7 +1284,7 @@
                 <button class="modal-btn-primary bg-emerald-600 hover:bg-emerald-500 font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/40" onclick="compartirCarnetVacunas('ws')">
                     <i class="fa-brands fa-whatsapp text-base"></i> Compartir Carnet por WhatsApp
                 </button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
             `;
             abrirModalCustom();
         }
@@ -1207,7 +1342,7 @@
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-clipboard-check text-emerald-400"></i>';
             document.getElementById('modal-title').innerText = "Checklist de Verificación";
             document.getElementById('modal-text').innerHTML = html;
-            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>`;
             abrirModalCustom();
         }
 
@@ -1234,7 +1369,7 @@
             `;
             modalActions.innerHTML = `
                 <button class="modal-btn-primary bg-rose-600 hover:bg-rose-700 font-bold" onclick="enviarAlarmaDirecta()">Notificar Inmediatamente</button>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
             `;
             abrirModalCustom();
         }
