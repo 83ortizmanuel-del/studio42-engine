@@ -47,7 +47,6 @@
         }
         .btn-desbloqueo:active { transform: scale(0.95); }
 
-        /* CONTENEDOR CON HALO DE LUZ DESPLAZÁNDOSE */
         .halo-wrapper {
             position: relative;
             width: 100%;
@@ -195,7 +194,6 @@
         .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
         .footer-brand span { color: var(--titanium-light); font-weight: 800; }
 
-        /* BOTONES FLOTANTES SUPERIORES */
         .top-controls-bar {
             position: absolute; top: 16px; left: 16px; right: 16px;
             display: flex; justify-content: space-between; align-items: center; z-index: 50;
@@ -254,9 +252,13 @@
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             
-            <!-- BARRA DE CONTROLES: TEMA, IDIOMA Y MÚSICA -->
+            <!-- BARRA DE CONTROLES: EDITAR DATOS MASCOTA, TEMA, IDIOMA Y MÚSICA -->
             <div class="top-controls-bar">
                 <div class="flex items-center gap-2">
+                    <!-- BOTÓN GESTIÓN DE DATOS MASCOTA -->
+                    <button id="btn-edit-pet" class="btn-top-control" onclick="verificarAccesoPropietario()" title="Editar Ficha de la Mascota">
+                        <i class="fa-solid fa-paw text-cyan-400"></i>
+                    </button>
                     <button id="btn-theme-control" class="btn-top-control" onclick="abrirModalPersonalizacion()" title="Personalizar Interfaz">
                         <i class="fa-solid fa-palette"></i>
                     </button>
@@ -275,7 +277,7 @@
                 <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
             </div>
 
-            <!-- CONTENEDOR DE LOGO (CON BOTÓN DE CAMBIO DE FOTO) -->
+            <!-- CONTENEDOR DE FOTO DE LA MASCOTA -->
             <div class="logo-container" id="hub-logo-box" onclick="abrirCambiadorFoto()" title="Toca para cambiar la foto">
                 <img id="hub-logo" alt="Logo">
                 <div class="edit-badge-logo"><i class="fa-solid fa-camera"></i></div>
@@ -285,7 +287,6 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-            <!-- TARJETA CABECERA (OBSTÉTRICA / VITAL) -->
             <div id="card-paciente-header" class="paciente-header-card hidden">
                 <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">
@@ -313,7 +314,6 @@
     </div>
 
     <script>
-        // DICCIONARIO TRILINGÜE
         const DICCIONARIO = {
             es: {
                 flag: "🇪🇸",
@@ -419,6 +419,127 @@
             reader.readAsDataURL(file);
         }
 
+        // ========================================================
+        // GESTIÓN Y EDICIÓN DE DATOS DE LA MASCOTA POR EL DUEÑO
+        // ========================================================
+        function verificarAccesoPropietario() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
+            const pinGuardado = localStorage.getItem(`pet_pin_${clienteCod}`);
+
+            if (!pinGuardado) {
+                abrirFormularioDatosMascota();
+            } else {
+                document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-lock text-cyan-400"></i>';
+                document.getElementById('modal-title').innerText = "Acceso Propietario";
+                document.getElementById('modal-text').innerHTML = `
+                    <p class="text-xs text-zinc-300 mb-3">Introduce tu PIN de 4 dígitos para editar la ficha:</p>
+                    <input type="password" id="input-pin-auth" maxlength="4" placeholder="••••" class="w-32 mx-auto p-2.5 rounded-xl bg-slate-900 border border-white/20 text-white font-mono text-center text-lg font-bold tracking-widest mb-2">
+                `;
+                modalActions.innerHTML = `
+                    <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="validarPINPropietario('${pinGuardado}')">Acceder a Edición</button>
+                    <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
+                `;
+                abrirModalCustom();
+            }
+        }
+
+        function validarPINPropietario(pinReal) {
+            const pinIngresado = document.getElementById('input-pin-auth').value.trim();
+            if (pinIngresado === pinReal) {
+                abrirFormularioDatosMascota();
+            } else {
+                alert("PIN incorrecto. Inténtalo de nuevo.");
+            }
+        }
+
+        function abrirFormularioDatosMascota() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
+
+            const nombreActual = localStorage.getItem(`pet_nombre_${clienteCod}`) || "";
+            const razaActual = localStorage.getItem(`pet_raza_${clienteCod}`) || "";
+            const telActual = localStorage.getItem(`pet_tel_${clienteCod}`) || "";
+            const chipActual = localStorage.getItem(`pet_chip_${clienteCod}`) || "";
+            const notasActual = localStorage.getItem(`pet_notas_${clienteCod}`) || "";
+            const pinActual = localStorage.getItem(`pet_pin_${clienteCod}`) || "1234";
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-paw text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Ficha de la Mascota";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-[11px] text-zinc-400 mb-3">Modifica los datos que se muestran al escanear la chapa:</p>
+                <div class="space-y-2 text-left text-xs max-h-[58vh] overflow-y-auto pr-1">
+                    <div>
+                        <label class="block text-[10px] text-zinc-400 font-bold mb-1">Nombre de la Mascota:</label>
+                        <input type="text" id="edit-pet-nombre" value="${nombreActual}" placeholder="Ej: TOBY" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-zinc-400 font-bold mb-1">Raza y Detalles:</label>
+                        <input type="text" id="edit-pet-raza" value="${razaActual}" placeholder="Ej: Golden Retriever · 3 años" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-emerald-400 font-bold mb-1">Teléfono Móvil (Rescate SOS):</label>
+                        <input type="tel" id="edit-pet-tel" value="${telActual}" placeholder="Ej: 34672294962" class="w-full p-2 rounded-xl bg-slate-900 border border-emerald-500/40 text-white font-mono font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-zinc-400 font-bold mb-1">Nº Microchip Oficial:</label>
+                        <input type="text" id="edit-pet-chip" value="${chipActual}" placeholder="Ej: 981098108472911" class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-zinc-400 font-bold mb-1">Alergias o Cuidados Críticos:</label>
+                        <textarea id="edit-pet-notas" rows="2" placeholder="Ej: Alérgico al pollo. Es muy cariñoso." class="w-full p-2 rounded-xl bg-slate-900 border border-white/10 text-white">${notasActual}</textarea>
+                    </div>
+                    <div class="pt-2 border-t border-white/10">
+                        <label class="block text-[10px] text-cyan-300 font-bold mb-1">PIN de Seguridad (4 dígitos):</label>
+                        <input type="password" id="edit-pet-pin" maxlength="4" value="${pinActual}" class="w-full p-2 rounded-xl bg-slate-900 border border-cyan-500/40 text-white font-mono text-center font-bold">
+                    </div>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="guardarDatosMascota('${clienteCod}')">Guardar Ficha Oficial</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function guardarDatosMascota(clienteCod) {
+            const nombre = document.getElementById('edit-pet-nombre').value.trim();
+            const raza = document.getElementById('edit-pet-raza').value.trim();
+            const tel = document.getElementById('edit-pet-tel').value.trim().replace(/[^0-9]/g, '');
+            const chip = document.getElementById('edit-pet-chip').value.trim();
+            const notas = document.getElementById('edit-pet-notas').value.trim();
+            const pin = document.getElementById('edit-pet-pin').value.trim();
+
+            if (!nombre || !tel) {
+                return alert("Nombre y Teléfono de contacto son obligatorios.");
+            }
+
+            localStorage.setItem(`pet_nombre_${clienteCod}`, nombre);
+            localStorage.setItem(`pet_raza_${clienteCod}`, raza);
+            localStorage.setItem(`pet_tel_${clienteCod}`, tel);
+            localStorage.setItem(`pet_chip_${clienteCod}`, chip);
+            localStorage.setItem(`pet_notas_${clienteCod}`, notas);
+            if (pin) localStorage.setItem(`pet_pin_${clienteCod}`, pin);
+
+            // ACTUALIZACIÓN INMEDIATA EN PANTALLA
+            document.getElementById('client-name').innerText = nombre.toUpperCase();
+            if (raza) document.getElementById('client-subtitle').innerText = raza;
+
+            // VINCULACIÓN DE BOTONES DE RESCATE
+            const btnTel = document.querySelector('a[href^="tel:"]');
+            if (btnTel) btnTel.href = `tel:${tel}`;
+
+            const btnWa = document.querySelector('a[href*="wa.me"]');
+            if (btnWa) {
+                const msg = encodeURIComponent(`¡Hola! Acabo de escanear la chapa de ${nombre} y lo tengo conmigo.`);
+                btnWa.href = `https://wa.me/${tel}?text=${msg}`;
+            }
+
+            cerrarModalBtn();
+            alert("✅ ¡Ficha de la mascota actualizada con éxito!");
+        }
+
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
                 if (reproductor && !reproductor.paused) reproductor.pause();
@@ -510,17 +631,22 @@
 
                 if (data.datosPago) datosPagoGlobal = { ...datosPagoGlobal, ...data.datosPago };
 
-                document.getElementById('page-title').innerText = `${nombreNegocioGlobal} | Identidad Digital`;
-                document.getElementById('splash-title').innerText = nombreNegocioGlobal;
-                document.getElementById('client-name').innerText = nombreNegocioGlobal;
-                
-                const subtituloText = data.subtitulo || 'Ecosistema Phygital';
-                document.getElementById('splash-subtitle').innerText = subtituloText;
-                document.getElementById('client-subtitle').innerText = subtituloText;
+                // SOBRESCRIBIR CON DATOS PERSONALIZADOS DE MASCOTA SI EXISTEN
+                const customPetNombre = localStorage.getItem(`pet_nombre_${clienteCod}`);
+                const customPetRaza = localStorage.getItem(`pet_raza_${clienteCod}`);
+                const customPetTel = localStorage.getItem(`pet_tel_${clienteCod}`);
+
+                const nombreFinal = customPetNombre ? customPetNombre.toUpperCase() : (data.nombre || "Profesional");
+                const subtituloFinal = customPetRaza || (data.subtitulo || 'Ecosistema Phygital');
+
+                document.getElementById('page-title').innerText = `${nombreFinal} | Identidad Digital`;
+                document.getElementById('splash-title').innerText = nombreFinal;
+                document.getElementById('client-name').innerText = nombreFinal;
+                document.getElementById('splash-subtitle').innerText = subtituloFinal;
+                document.getElementById('client-subtitle').innerText = subtituloFinal;
 
                 if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
 
-                // FOTO PERSISTIDA O POR DEFECTO
                 const fotoCustom = localStorage.getItem(`custom_photo_${clienteCod}`);
                 const logoPath = fotoCustom || (data.logo && data.logo.trim() !== "" ? data.logo : "logo.png");
                 document.getElementById('splash-logo').src = logoPath;
@@ -600,11 +726,12 @@
                                 const btnNombre = (btn.nombre || "").toLowerCase();
                                 const btnTipo = (btn.tipo || "").toLowerCase();
 
-                                if (btn.url && btn.url.includes('wa.me/')) {
-                                    const match = btn.url.match(/wa\.me\/([0-9]+)/);
-                                    if (match && match[1]) {
-                                        whatsappComercialGlobal = match[1];
-                                        if (!whatsappMedicoGlobal) whatsappMedicoGlobal = match[1];
+                                let finalUrl = btn.url || '#';
+                                if (customPetTel) {
+                                    if (finalUrl.startsWith('tel:')) finalUrl = `tel:${customPetTel}`;
+                                    if (finalUrl.includes('wa.me/')) {
+                                        const msg = encodeURIComponent(`¡Hola! Acabo de escanear la chapa de ${nombreFinal} y lo tengo conmigo.`);
+                                        finalUrl = `https://wa.me/${customPetTel}?text=${msg}`;
                                     }
                                 }
 
@@ -790,7 +917,7 @@
                                 }
                                 else {
                                     block.innerHTML += `
-                                        <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
+                                        <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') ? 'target="_blank"' : ''}>
                                             <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
                                                 <i class="${btn.icono || 'fa-solid fa-link'}"></i>
                                             </div>
@@ -822,9 +949,6 @@
             }
         }
 
-        // ==========================================
-        // PERSONALIZACIÓN COMPLETA (COLOR, BRILLO, FONDO)
-        // ==========================================
         function abrirModalPersonalizacion() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
