@@ -126,18 +126,6 @@
           ]
         }
       ]
-    },
-    {
-      "titulo": "Identidad & Contacto Directo",
-      "botones": [
-        {
-          "nombre": "Guardar Contacto del Dueño (vCard)",
-          "descripcion": "Descarga directa de los datos a la agenda de tu teléfono",
-          "icono": "fa-solid fa-address-card",
-          "estiloIcono": "background: rgba(197, 160, 89, 0.2); color: #C5A059;",
-          "url": "./contacto.vcf"
-        }
-      ]
     }
   ]
 }
