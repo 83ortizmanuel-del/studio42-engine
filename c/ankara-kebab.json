@@ -1,0 +1,42 @@
+{
+  "nombre": "ANKARA KEBAB",
+  "modoDemo": true,
+  "subtitulo": "Especialistas en Hostelería y Restauración",
+  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "logo": "logo.png",
+  "colorPrincipal": "#0A0F1D",
+  "colorAcento": "#fa8405",
+  "audioFondo": "",
+  "secciones": [
+    {
+      "titulo": "Servicios & Soluciones Directas",
+      "botones": [
+        {
+          "nombre": "Atención Prioritaria por WhatsApp",
+          "descripcion": "Resuelve tus dudas directamente con nuestro equipo",
+          "icono": "fa-brands fa-whatsapp",
+          "url": "[https://wa.me/34672294962?text=Hola%20](https://wa.me/34672294962?text=Hola%20)ANKARA%20KEBAB",
+          "destacado": true
+        },
+        {
+          "nombre": "¿Dónde aparqué?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posición GPS de tu coche para volver",
+          "icono": "fa-solid fa-location-crosshairs"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Añade nuestro teléfono directo al móvil",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "[https://maps.google.com](https://maps.google.com)",
+      "whatsappGerencia": "[https://wa.me/34672294962?text=Hola%20Gerencia](https://wa.me/34672294962?text=Hola%20Gerencia)"
+    }
+  ]
+}
