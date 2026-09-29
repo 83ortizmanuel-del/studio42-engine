@@ -1,12 +1,12 @@
 {
   "nombre": "NUTRITION PLANET",
-  "modoDemo": true,
+  "modoDemo": false,
   "subtitulo": "Nutrición Deportiva Avanzada · Asesoría & Rendimiento",
   "textoBadge": "PUNTO DE ASESORÍA FIT · MOSTRADOR ACTIVO",
-  "logo": "logo.png",
-  "audioFondo": "ambiente2.mp3",
-  "colorPrincipal": "#080E18",
-  "colorAcento": "#00E5FF",
+  "logo": "./nutrition-planet.png",
+  "audioFondo": "",
+  "colorPrincipal": "#0b0c10",
+  "colorAcento": "#e60000",
   "esMascota": false,
   "secciones": [
     {
@@ -17,7 +17,7 @@
           "nombre": "Calculadora de Proteína Diaria",
           "descripcion": "Calcula tus gramos exactos según peso y objetivo",
           "icono": "fa-solid fa-calculator",
-          "estiloIcono": "background: rgba(0, 229, 255, 0.2); color: #00E5FF;",
+          "estiloIcono": "background: rgba(230, 0, 0, 0.2); color: #e60000;",
           "destacado": true
         },
         {
@@ -25,13 +25,13 @@
           "nombre": "Protocolo & Dosificación de Creatina",
           "descripcion": "Gramos exactos por peso y momento óptimo de toma",
           "icono": "fa-solid fa-bottle-droplet",
-          "estiloIcono": "background: rgba(168, 85, 247, 0.2); color: #A855F7;",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;",
           "destacado": false
         }
       ]
     },
     {
-      "titulo": "Atención & Fidelización",
+      "titulo": "Atención & Pedidos Directos",
       "botones": [
         {
           "nombre": "Consultar Stock & Sabores en 1 Toque",
@@ -42,11 +42,18 @@
           "destacado": false
         },
         {
+          "nombre": "¿Dónde aparqué?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posición GPS de tu coche para volver",
+          "icono": "fa-solid fa-location-crosshairs",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #9ca3af;"
+        },
+        {
           "nombre": "Guardar Contacto en Agenda",
           "descripcion": "Descarga nuestro teléfono y ubicación directa al móvil",
           "icono": "fa-solid fa-address-card",
           "url": "./contacto.vcf",
-          "estiloIcono": "background: rgba(56, 189, 248, 0.2); color: #38BDF8;"
+          "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;"
         }
       ]
     },
