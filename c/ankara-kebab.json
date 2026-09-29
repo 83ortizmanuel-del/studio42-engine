@@ -1,9 +1,11 @@
 {
   "nombre": "ANKARA KEBAB",
   "modoDemo": false,
-  "subtitulo": "Auténtico Sabor Tradicional · Dürüm, Pita & Especialidades",
-  "textoBadge": "PUNTO DE PEDIDO & MOSTRADOR CONECTADO",
+  "subtitulo": "Auténtico Sabor Tradicional",
+  "textoBadge": "PUNTO DE PEDIDO CONECTADO",
   "logo": "ankara-logo.png",
+  "fondoLogo": "#0b0c10",
+  "whatsapp": "https://wa.me/34672294962",
   "audioFondo": "",
   "colorPrincipal": "#0B0D14",
   "colorAcento": "#FA8405",
@@ -13,8 +15,8 @@
       "botones": [
         {
           "tipo": "configurador_kebab",
-          "nombre": "Armar Mi Menú Kebab (Paso a Paso)",
-          "descripcion": "Elige carne, pan, vegetales y salsas antes de pedir",
+          "nombre": "Armar Mi Menú Kebab",
+          "descripcion": "Elige carne, pan, vegetales y salsas al momento",
           "icono": "fa-solid fa-utensils",
           "estiloIcono": "background: rgba(250, 132, 5, 0.2); color: #FA8405;",
           "destacado": true
@@ -22,7 +24,7 @@
         {
           "tipo": "guia_alergenos_kebab",
           "nombre": "Guía de Alérgenos & Salsas",
-          "descripcion": "Consulta gluten, lácteos y nivel de picante al instante",
+          "descripcion": "Consulta gluten, lácteos y nivel de picante",
           "icono": "fa-solid fa-wheat-awn-circle-exclamation",
           "estiloIcono": "background: rgba(239, 68, 68, 0.18); color: #EF4444;"
         }
@@ -34,30 +36,29 @@
         {
           "tipo": "recuperar_llaves",
           "nombre": "🔑 ¿Encontraste estas llaves?",
-          "descripcion": "Avisa a Ankara Kebab para coordinar la entrega al dueño",
-          "icono": "fa-solid fa-key",
-          "url": "https://wa.me/34672294962?text=Hola%20Ankara%20Kebab,%20he%20encontrado%20un%20llavero%20con%20llaves%20de%20un%20cliente%20vuestro%20y%20quiero%20coordinar%20su%20devolución."
+          "descripcion": "Avisa al local para coordinar la devolución segura",
+          "icono": "fa-solid fa-key"
         },
         {
-          "nombre": "Pedir por WhatsApp (Para Llevar / Domicilio)",
-          "descripcion": "Encarga tu comida sin comisiones ni esperas de cola",
+          "nombre": "Pedir por WhatsApp",
+          "descripcion": "Encarga para recoger o entrega a domicilio",
           "icono": "fa-brands fa-whatsapp",
           "url": "https://wa.me/34672294962?text=Hola%20Ankara%20Kebab,%20quisiera%20hacer%20un%20pedido%20para%20recoger/llevar.",
           "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;"
         },
         {
-          "nombre": "¿Dónde aparqué?",
           "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la posición GPS de tu coche para volver",
           "icono": "fa-solid fa-location-crosshairs",
           "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #94A3B8;"
         },
         {
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Descarga nuestro teléfono directo al móvil en 1 toque",
+          "descripcion": "Descarga nuestro teléfono directo al móvil",
           "icono": "fa-solid fa-address-card",
-          "url": "./contacto.vcf",
-          "estiloIcono": "background: rgba(250, 132, 5, 0.15); color: #FA8405;"
+          "estiloIcono": "background: rgba(250, 132, 5, 0.15); color: #FA8405;",
+          "url": "./contacto.vcf"
         }
       ]
     },
