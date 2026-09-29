@@ -83,7 +83,6 @@
         }
         @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
-        /* LOGO POLIMÓRFICO CON CONTROL DE FONDO */
         .logo-container { 
             width: 96px; height: 96px; margin: 0 auto 12px auto; 
             border-radius: 26px; border: 2px solid var(--color-acento); 
@@ -118,7 +117,6 @@
         }
         .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
         
-        /* PROTECCIÓN ANTI-DESBORDE PARA MÓVILES */
         .app-info { flex-grow: 1; min-width: 0; overflow: hidden; }
         .app-name { font-size: 0.9rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; word-break: break-word; }
         .app-desc { font-size: 0.72rem; color: var(--color-gris); word-break: break-word; }
@@ -139,7 +137,6 @@
         .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
         .star-inactive { color: #334155; }
 
-        /* MODALES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
         .modal-box { 
             background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); 
@@ -190,7 +187,7 @@
 
     <button id="btn-audio-control" onclick="alternarAudio()"><i id="btn-audio-icon" class="fa-solid fa-volume-high"></i></button>
 
-    <!-- MODAL GENERAL NATIVO -->
+    <!-- MODALES NATIVOS -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
             <button class="modal-close-btn" onclick="cerrarModalBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -203,7 +200,6 @@
         </div>
     </div>
 
-    <!-- MODAL 1: TEST ERGONÓMICO (IBERLAX) -->
     <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
         <div class="modal-box" style="max-width: 380px;">
             <button class="modal-close-btn" onclick="cerrarAsesorBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -251,7 +247,6 @@
         </div>
     </div>
 
-    <!-- MODAL 2: LOGÍSTICA & RETIRADA (IBERLAX) -->
     <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
         <div class="modal-box" style="max-width: 380px;">
             <button class="modal-close-btn" onclick="cerrarEnvioBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -298,7 +293,6 @@
         </div>
     </div>
 
-    <!-- HUB PRINCIPAL -->
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             <div class="status-badge">
@@ -329,6 +323,7 @@
         let whatsappGerenciaGlobal = "";
         let whatsappTiendaGlobal = "";
         let nombreNegocioGlobal = "Profesional";
+        let clienteSlugGlobal = "contacto";
 
         let estadoAsesor = { postura: 'De Lado', peso: '70-90kg', medida: '150x190' };
         let estadoEnvio = { zona: 'Logroño Centro / Casco', acceso: 'Con Ascensor / Planta Baja', retirada: 'Sí, retirar colchón antiguo' };
@@ -359,7 +354,7 @@
         window.addEventListener('beforeunload', detenerAudioInmediato);
         window.addEventListener('blur', detenerAudioInmediato);
 
-        // SILENCIAR SOLO EN ENLACES EXTERNOS REALES
+        // CORTE DE AUDIO SOLO EN SALIDAS EXTERNAS REALES
         document.addEventListener('click', (e) => {
             const enlace = e.target.closest('a');
             if (enlace && enlace.href) {
@@ -370,9 +365,33 @@
             }
         });
 
+        // GENERADOR DINÁMICO DE VCARD POR CLIENTE (SIN ARCHIVOS COMPARTIDOS)
+        function descargarVCardDinamica() {
+            const telLimpio = whatsappTiendaGlobal.replace(/\D/g, '');
+            const vcardContent = 
+`BEGIN:VCARD
+VERSION:3.0
+FN:${nombreNegocioGlobal}
+ORG:${nombreNegocioGlobal}
+TEL;TYPE=WORK,VOICE:+${telLimpio || '34672294962'}
+NOTE:Contacto verificado a través de tarjeta inteligente Studio 42
+END:VCARD`;
+
+            const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${clienteSlugGlobal}.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
+            clienteSlugGlobal = clienteCod;
 
             let data = null;
 
@@ -400,7 +419,7 @@
 
             nombreNegocioGlobal = data.nombre || "Profesional";
 
-            // 1. EXTRACCIÓN PRIORITARIA Y DIRECTA DEL WHATSAPP REAL DEL COMERCIO
+            // 1. CAPTURA DEL TELÉFONO DEL CLIENTE
             if (data.whatsapp && data.whatsapp.trim() !== "") {
                 whatsappTiendaGlobal = data.whatsapp.split('?')[0];
                 whatsappGerenciaGlobal = data.whatsapp;
@@ -488,7 +507,7 @@
                 splash.style.pointerEvents = 'none';
             }
 
-            // 4. MODO DEMO COMERCIAL
+            // 4. MODO DEMO
             const seccionFricciones = document.getElementById('fricciones-section');
             if (data.modoDemo === true) {
                 seccionFricciones.style.display = 'block';
@@ -547,7 +566,7 @@
                             const bTipo = (btn.tipo || '').toLowerCase();
                             const nLower = (btn.nombre || '').toLowerCase();
 
-                            // 1. RESCATE DE LLAVES SOS (VINCULADO OBLIGATORIAMENTE AL WHATSAPP DEL COMERCIO)
+                            // 1. RESCATE DE LLAVES SOS
                             if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('devolución de llaves') || nLower.includes('encontraste estas llaves')) {
                                 const waMsg = encodeURIComponent(
                                     `¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves que llevan vuestro llavero inteligente.\n\n` +
@@ -572,7 +591,7 @@
                                     </a>
                                 `;
                             }
-                            // 2. CONFIGURADOR DE KEBAB (MODAL NATIVO)
+                            // 2. CONFIGURADOR DE KEBAB
                             else if (bTipo === 'configurador_kebab') {
                                 block.innerHTML += `
                                     <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -587,7 +606,7 @@
                                     </div>
                                 `;
                             }
-                            // 3. ALÉRGENOS & SALSAS (MODAL NATIVO)
+                            // 3. GUÍA DE ALÉRGENOS
                             else if (bTipo === 'guia_alergenos_kebab') {
                                 block.innerHTML += `
                                     <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -632,7 +651,7 @@
                                     </div>
                                 `;
                             }
-                            // 6. TEST ERGONÓMICO IBERLAX
+                            // 6. ASESOR ERGONÓMICO IBERLAX
                             else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
                                 block.innerHTML += `
                                     <div class="app-btn destacado" onclick="abrirAsesor(event)" role="button">
@@ -667,13 +686,32 @@
                                         </div>
                                         <div class="app-info">
                                             <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                            <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la posición GPS de tu coche'}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Guarda la posición GPS de tu coche'}</div>
                                         </div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
                             }
-                            // 9. BOTONES UNIVERSALES (WHATSAPP, ENLACES EXTERNOS)
+                            // 9. VCARD INTELIGENTE (DESCARGA SINCRONIZADA CON EL CLIENTE)
+                            else if (bTipo === 'vcard' || nLower.includes('contacto en agenda') || (btn.url && btn.url.endsWith('.vcf'))) {
+                                const tieneArchivoPropio = btn.url && !btn.url.includes('contacto.vcf');
+                                const onClickAccion = tieneArchivoPropio ? '' : 'onclick="descargarVCardDinamica()"';
+                                const hrefValor = tieneArchivoPropio ? btn.url : 'javascript:void(0)';
+
+                                block.innerHTML += `
+                                    <a class="app-btn" href="${hrefValor}" ${onClickAccion}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-address-card'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Descarga directa de contacto'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // 10. BOTONES GENERALES
                             else {
                                 const finalUrl = btn.url || '#';
                                 block.innerHTML += `
