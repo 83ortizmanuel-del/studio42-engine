@@ -1,0 +1,88 @@
+{
+  "nombre": "NUTRITION PLANET",
+  "modoDemo": true,
+  "subtitulo": "Nutrición Deportiva Avanzada · Asesoría & Rendimiento",
+  "textoBadge": "PUNTO DE ASESORÍA FIT · MOSTRADOR ACTIVO",
+  "logo": "logo.png",
+  "audioFondo": "ambiente2.mp3",
+  "colorPrincipal": "#080E18",
+  "colorAcento": "#00E5FF",
+  "esMascota": false,
+  "secciones": [
+    {
+      "titulo": "Herramientas de Rendimiento & Fidelización",
+      "botones": [
+        {
+          "nombre": "Calculadora de Proteína & Objetivos",
+          "descripcion": "Calcula tus gramos exactos diarios según tu peso y entreno",
+          "icono": "fa-solid fa-calculator",
+          "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet,%20quisiera%20calcular%20mis%20requerimientos%20de%20prote%C3%ADna%20y%20suplementos%20seg%C3%BAn%20mi%20peso.",
+          "estiloIcono": "background: rgba(0, 229, 255, 0.2); color: #00E5FF;",
+          "destacado": true
+        },
+        {
+          "nombre": "Guía Rápida: Cómo Tomar tu Creatina",
+          "descripcion": "Dosis diaria, momentos clave y mitos frecuentes",
+          "icono": "fa-solid fa-bottle-droplet",
+          "url": "https://wa.me/34692202636?text=Hola,%20me%20gustar%C3%ADa%20recibir%20la%20gu%C3%ADa%20de%20uso%20y%20tomas%20de%20la%20creatina.",
+          "estiloIcono": "background: rgba(168, 85, 247, 0.2); color: #A855F7;",
+          "destacado": false
+        },
+        {
+          "nombre": "Club VIP: Reposición con Descuento",
+          "descripcion": "Asegura precio exclusivo en tu próximo bote mensual",
+          "icono": "fa-solid fa-medal",
+          "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet,%20quiero%20activar%20mi%20ficha%20del%20Club%20VIP%20para%20mis%20reposiciones.",
+          "estiloIcono": "background: rgba(245, 158, 11, 0.2); color: #F59E0B;",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "Mostrador & Pedidos Rápidos",
+      "botones": [
+        {
+          "nombre": "Consultar Stock & Sabores en 1 Toque",
+          "descripcion": "Verifica si tu sabor favorito está listo para entrega",
+          "icono": "fa-brands fa-whatsapp",
+          "url": "https://wa.me/34692202636?text=Hola,%20quisiera%20consultar%20sabores%20y%20stock%20disponible%20en%20tienda.",
+          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;",
+          "destacado": false
+        },
+        {
+          "nombre": "Encargos & Recogida Exprés",
+          "descripcion": "Aparta tus suplementos y recógelos sin esperar cola",
+          "icono": "fa-solid fa-boxes-packing",
+          "url": "https://wa.me/34692202636?text=Hola,%20deseo%20hacer%20un%20encargo%20para%20recogerlo%20hoy.",
+          "estiloIcono": "background: rgba(14, 165, 233, 0.2); color: #0EA5E9;",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "Herramientas del Cliente",
+      "botones": [
+        {
+          "nombre": "¿Dónde aparqué?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posición GPS de tu coche durante tu compra",
+          "icono": "fa-solid fa-location-crosshairs",
+          "estiloIcono": "background: rgba(142, 142, 147, 0.18); color: #94A3B8;"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Descarga nuestro teléfono directo al móvil en 1 toque",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf",
+          "estiloIcono": "background: rgba(56, 189, 248, 0.2); color: #38BDF8;"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com/?cid=nutritionplanet",
+      "whatsappGerencia": "https://wa.me/34692202636?text=Hola%20Gerencia%20de%20Nutrition%20Planet,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20compra"
+    }
+  ]
+}
