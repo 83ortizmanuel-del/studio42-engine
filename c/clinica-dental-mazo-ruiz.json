@@ -4,6 +4,7 @@
   "subtitulo": "Odontología Avanzada & Salud Bucal",
   "textoBadge": "NODO CLÍNICO ACTIVO · VARA DE REY 51",
   "logo": "logo-ruizmazo.png",
+  "fondoLogo": "#ffffff",
   "colorPrincipal": "#0A0E14",
   "colorAcento": "#8DB600",
   "secciones": [
@@ -20,15 +21,15 @@
           "destacado": true
         },
         {
-          "nombre": "Simulador: Tratamiento en Cómodas Cuotas",
-          "descripcion": "Calcula tu presupuesto estimado para implantes u ortodoncia invisible",
+          "nombre": "Simulador: Tratamiento en Cuotas",
+          "descripcion": "Calcula tu presupuesto estimado para implantes u ortodoncia",
           "icono": "fa-solid fa-calculator",
           "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;",
           "url": "https://wa.me/34691613796?text=Hola,%20quisiera%20consultar%20las%20opciones%20de%20financiación%20a%20medida%20para%20un%20tratamiento."
         },
         {
           "nombre": "Cita Previa / Revisión General",
-          "descripcion": "Agenda tu diagnóstico digital y limpieza bucodental preventiva",
+          "descripcion": "Agenda tu diagnóstico digital y limpieza preventiva",
           "icono": "fa-solid fa-calendar-check",
           "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
           "url": "https://wa.me/34691613796?text=Hola%20Ruiz%20Mazo,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
@@ -36,34 +37,32 @@
       ]
     },
     {
-      "titulo": "Espacio del Paciente & Utilidades",
+      "titulo": "Espacio del Paciente & Servicios del Llavero",
       "botones": [
         {
-          "tipo": "recordatorio_cita",
-          "nombre": "📅 Guardar Cita en Mi Calendario",
-          "descripcion": "Añade tu próximo turno con recordatorio nativo en tu smartphone",
-          "icono": "fa-solid fa-calendar-plus",
-          "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;",
-          "destacado": true
+          "tipo": "recuperar_llaves",
+          "nombre": "🔑 ¿Encontraste estas llaves?",
+          "descripcion": "Avisa a la clínica para coordinar la devolución segura al paciente",
+          "icono": "fa-solid fa-key"
         },
         {
           "nombre": "Guía Pre y Post Operatoria",
-          "descripcion": "Pautas de medicación y dieta tras cirugías, extracciones o implantes",
+          "descripcion": "Pautas de medicación y dieta tras cirugías o implantes",
           "icono": "fa-solid fa-notes-medical",
           "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;",
           "url": "https://ruizmazo.es/tratamientos-dentales/"
         },
         {
           "nombre": "Bono Amigo: Comparte 30 € de Descuento",
-          "descripcion": "Recomienda la clínica a un familiar o amigo para su primer tratamiento",
+          "descripcion": "Recomienda la clínica a un familiar para su primer tratamiento",
           "icono": "fa-solid fa-gift",
           "estiloIcono": "background: rgba(168, 85, 247, 0.18); color: #A855F7;",
-          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20contacto%20de%20confianza%20para%20tu%20salud%20dental%20en%20Logroño.%20Tienen%20revisión%20completa%20y%20tecnología%20digital:%20https://ruizmazo.es"
+          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20contacto%20de%20confianza%20para%20tu%20salud%20dental%20en%20Logroño:%20https://ruizmazo.es"
         },
         {
           "tipo": "parking",
           "nombre": "¿Dónde aparqué?",
-          "descripcion": "Guarda la ubicación GPS de tu coche en el centro de Logroño",
+          "descripcion": "Guarda la ubicación GPS de tu coche en Vara de Rey",
           "icono": "fa-solid fa-location-crosshairs",
           "estiloIcono": "background: rgba(142, 142, 147, 0.15); color: #94A3B8;"
         },
