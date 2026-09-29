@@ -102,14 +102,15 @@
             100% { transform: scale(2.8); opacity: 0; }
         }
         
+        /* CONTENEDOR DEL LOGO CON FONDO NEGRO Y CONTRASTE */
         .logo-container { 
             width: 96px; height: 96px; margin: 0 auto 14px auto; 
-            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.2); 
-            overflow: hidden; background-color: #ffffff; 
+            border-radius: 24px; border: 2px solid var(--color-acento); 
+            overflow: hidden; background-color: #0b0c10; 
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px var(--titanium-glow);
         }
-        .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+        .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
         
         h1 { font-size: 1.45rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; }
         .propietario { color: var(--color-acento); font-size: 0.8rem; margin-bottom: 18px; font-weight: 600; letter-spacing: 0.8px; }
@@ -188,7 +189,7 @@
         <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
-    <!-- MODAL GENERAL (FRICCIONES, CALCULADORAS Y ESCUDO) -->
+    <!-- MODAL GENERAL (FRICCIONES, CALCULADORAS, CONFIGURADORES Y ESCUDO) -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
             <div id="modal-icon" class="modal-icon"></div>
@@ -385,7 +386,7 @@
 
             nombreNegocioGlobal = data.nombre || "Profesional";
 
-            // 1. BRANDING DINÁMICO POR CLIENTE (TOTALMENTE RESPETADO)
+            // 1. BRANDING DINÁMICO POR CLIENTE
             if (data.colorPrincipal) {
                 document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
             }
@@ -414,15 +415,20 @@
             splashImg.onerror = function() { if (!this.src.includes('./')) this.src = './' + logoPath; };
             hubImg.onerror = function() { if (!this.src.includes('./')) this.src = './' + logoPath; };
 
+            // CONTROL DEL AUDIO Y SPLASH
             const pistaAudio = data.audioFondo && data.audioFondo.trim() !== "" ? data.audioFondo : "";
             if (pistaAudio) {
                 reproductor.src = pistaAudio;
                 reproductor.load();
+                splash.style.display = 'flex';
+                splash.style.opacity = '1';
             } else {
                 splash.style.display = 'none';
+                splash.style.opacity = '0';
+                splash.style.pointerEvents = 'none';
             }
 
-            // 2. MODO DEMO / PRESENTACIÓN COMERCIAL (SI MODO DEMO ES FALSE, SE OCULTA COMPLETAMENTE)
+            // 2. MODO DEMO / PRESENTACIÓN COMERCIAL
             const seccionFricciones = document.getElementById('fricciones-section');
             if (data.modoDemo === true) {
                 seccionFricciones.style.display = 'block';
@@ -522,7 +528,7 @@
                                     </a>
                                 `;
                             } 
-                            // 3. NUEVO MÓDULO DEPORTIVO: CALCULADORA DE PROTEÍNA EN MODAL
+                            // 3. MÓDULO DEPORTIVO: CALCULADORA DE PROTEÍNA EN MODAL
                             else if (bTipo === 'calc_proteina') {
                                 block.innerHTML += `
                                     <div onclick="abrirCalculadoraProteina()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -537,7 +543,7 @@
                                     </div>
                                 `;
                             }
-                            // 4. NUEVO MÓDULO DEPORTIVO: PROTOCOLO DE CREATINA EN MODAL
+                            // 4. MÓDULO DEPORTIVO: PROTOCOLO DE CREATINA EN MODAL
                             else if (bTipo === 'guia_creatina') {
                                 block.innerHTML += `
                                     <div onclick="abrirGuiaCreatina()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -552,7 +558,37 @@
                                     </div>
                                 `;
                             }
-                            // 5. GESTOR DE PARKING GPS REAL
+                            // 5. MÓDULO RESTAURACIÓN: CONFIGURADOR DE KEBAB EN MODAL
+                            else if (bTipo === 'configurador_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirConfiguradorKebab()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-utensils'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Arma tu menú antes de pedir'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                    </div>
+                                `;
+                            }
+                            // 6. MÓDULO RESTAURACIÓN: ALÉRGENOS & SALSAS KEBAB EN MODAL
+                            else if (bTipo === 'guia_alergenos_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirAlergenosKebab()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Consulta alérgenos y salsas'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                    </div>
+                                `;
+                            }
+                            // 7. GESTOR DE PARKING GPS REAL
                             else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
                                 block.innerHTML += `
                                     <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
@@ -567,7 +603,7 @@
                                     </a>
                                 `;
                             } 
-                            // 6. VCARD Y BOTONES CONVENCIONALES (WHATSAPP, ENLACES)
+                            // 8. BOTONES ESTÁNDAR (VCARD, WHATSAPP, ENLACES)
                             else {
                                 if(btn.url && btn.url.includes('wa.me') && !whatsappTiendaGlobal) {
                                     whatsappTiendaGlobal = btn.url.split('?')[0];
@@ -660,7 +696,7 @@
         }
 
         // ==========================================
-        // APPS NUEVAS: FITNESS & NUTRICIÓN
+        // APPS FITNESS: NUTRICIÓN & PROTEÍNA
         // ==========================================
         function abrirCalculadoraProteina() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator" style="color:var(--color-acento);"></i>';
@@ -729,6 +765,85 @@
             `;
             modalActions.innerHTML = `
                 <a href="${whatsappGerenciaGlobal}?text=Hola%20Nutrition%20Planet,%20estoy%20viendo%20la%20gu%C3%ADa%20y%20quiero%20consultar%20marcas%20de%20creatina%20en%20mostrador." class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Consultar Disponibilidad en Mostrador</a>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
+            `;
+            abrirModalCustom();
+        }
+
+        // ==========================================
+        // APPS RESTAURACIÓN: KEBAB
+        // ==========================================
+        function abrirConfiguradorKebab() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = "Arma tu Menú";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Configura tu plato y mándalo a cocina en 1 clic:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-3">
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">1. Formato:</label>
+                        <select id="kebab-formato" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Dürüm Rollo Gigante">Dürüm Rollo (Pan fino enrollado)</option>
+                            <option value="Kebab en Pan de Pita">Pita Clásica (Pan turco tostado)</option>
+                            <option value="Plato Kebab Completo con Patatas">Plato Kebab (Con patatas y ensalada)</option>
+                            <option value="Kebab Box para llevar">Kebab Box (Carne + patatas en caja)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">2. Carne:</label>
+                        <select id="kebab-carne" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Carne Mixta (Pollo y Ternera)">Mixto (Pollo y Ternera)</option>
+                            <option value="Solo Ternera Especiada">Solo Ternera 100%</option>
+                            <option value="Solo Pollo Crujiente">Solo Pollo Marinado</option>
+                            <option value="Falafel Vegetariano">Falafel (100% Vegetariano)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">3. Salsas favoritas:</label>
+                        <select id="kebab-salsa" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Salsa Blanca de Yogur">Salsa Blanca (Suave / Yogur)</option>
+                            <option value="Salsa Blanca + Toque Picante">Salsa Blanca + Toque Picante</option>
+                            <option value="Muy Picante (Salsa Roja Brava)">Salsa Roja Muy Picante</option>
+                            <option value="Sin Salsas">Sin salsa</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `
+                <button onclick="enviarPedidoKebabWA()" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Pedir este Menú por WhatsApp</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function enviarPedidoKebabWA() {
+            const f = document.getElementById('kebab-formato').value;
+            const c = document.getElementById('kebab-carne').value;
+            const s = document.getElementById('kebab-salsa').value;
+            const txt = encodeURIComponent(`Hola Ankara Kebab, acabo de armar mi pedido:\n- Formato: ${f}\n- Carne: ${c}\n- Salsa: ${s}\n¿Cuánto tarda en estar listo?`);
+            window.open(`${whatsappTiendaGlobal}?text=${txt}`, '_blank');
+        }
+
+        function abrirAlergenosKebab() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-wheat-awn-circle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Alérgenos & Salsas";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2.5">
+                    <div class="bg-black/50 p-3 rounded-xl border border-white/5">
+                        <div class="font-extrabold text-amber-400 text-sm mb-1">🌾 Gluten</div>
+                        <p>Presente en panes (Pita y Dürüm) y en el rebozado de Falafel. Para opción sin gluten: solicita <b>Plato Kebab solo con carne y ensalada</b>.</p>
+                    </div>
+                    <div class="bg-black/50 p-3 rounded-xl border border-white/5">
+                        <div class="font-extrabold text-cyan-400 text-sm mb-1">🥛 Lácteos</div>
+                        <p>Presentes en la <b>Salsa Blanca tradicional</b> (base de yogur natural) y en el Queso Feta.</p>
+                    </div>
+                    <div class="bg-black/50 p-3 rounded-xl border border-white/5">
+                        <div class="font-extrabold text-rose-400 text-sm mb-1">🌶️ Picante & Especias</div>
+                        <p>La Salsa Roja contiene chile molido y pimentón picante. Es 100% libre de lácteos.</p>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `
+                <a href="${whatsappTiendaGlobal}?text=Hola%20Ankara%20Kebab,%20tengo%20una%20consulta%20espec%C3%ADfica%20sobre%20al%C3%A9rgenos%20en%20vuestro%20men%C3%BA." class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Preguntar en Barra por WhatsApp</a>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
             `;
             abrirModalCustom();
