@@ -5,7 +5,7 @@
   "textoBadge": "PUNTO DE PEDIDO CONECTADO",
   "logo": "ankara-logo.png",
   "fondoLogo": "#0b0c10",
-  "whatsapp": "https://wa.me/34672294962",
+  "whatsapp": "https://wa.me/34602552973",
   "audioFondo": "",
   "colorPrincipal": "#0B0D14",
   "colorAcento": "#FA8405",
@@ -43,7 +43,7 @@
           "nombre": "Pedir por WhatsApp",
           "descripcion": "Encarga para recoger o entrega a domicilio",
           "icono": "fa-brands fa-whatsapp",
-          "url": "https://wa.me/34672294962?text=Hola%20Ankara%20Kebab,%20quisiera%20hacer%20un%20pedido%20para%20recoger/llevar.",
+          "url": "https://wa.me/34602552973?text=Hola%20Ankara%20Kebab,%20quisiera%20hacer%20un%20pedido%20para%20recoger/llevar.",
           "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;"
         },
         {
@@ -65,8 +65,8 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/34672294962?text=Hola%20Gerencia%20de%20Ankara%20Kebab,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20pedido"
+      "urlGoogleResenas": "ChIJUQUjoe1VRQ0RoEKpuucdgF0",
+      "whatsappGerencia": "https://wa.me/34602552973?text=Hola%20Gerencia%20de%20Ankara%20Kebab,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20pedido"
     }
   ]
 }
