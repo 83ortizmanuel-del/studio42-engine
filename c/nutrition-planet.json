@@ -1,9 +1,11 @@
 {
   "nombre": "NUTRITION PLANET",
   "modoDemo": false,
+  "whatsapp": "https://wa.me/34692202636",
   "subtitulo": "Nutrición Deportiva Avanzada · Asesoría & Rendimiento",
   "textoBadge": "PUNTO FIT · MOSTRADOR ACTIVO",
   "logo": "./nutrition-planet.png",
+  "fondoLogo": "#0b0c10",
   "audioFondo": "ambiente2.mp3",
   "colorPrincipal": "#0b0c10",
   "colorAcento": "#e60000",
@@ -36,9 +38,8 @@
         {
           "tipo": "recuperar_llaves",
           "nombre": "🔑 ¿Encontraste estas llaves?",
-          "descripcion": "Avisa a Nutrition Planet para coordinar la devolución al dueño",
-          "icono": "fa-solid fa-key",
-          "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet,%20he%20encontrado%20un%20llavero%20con%20llaves%20de%20un%20cliente%20vuestro%20y%20quiero%20coordinar%20su%20devolución."
+          "descripcion": "Pulsa aquí para avisar a Nutrition Planet y devolverlas de forma segura",
+          "icono": "fa-solid fa-key"
         },
         {
           "nombre": "Consultar Stock & Sabores en 1 Toque",
@@ -66,7 +67,7 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38",
+      "urlGoogleResenas": "https://maps.google.com/?cid=nutritionplanet",
       "whatsappGerencia": "https://wa.me/34692202636?text=Hola%20Gerencia%20de%20Nutrition%20Planet,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20compra"
     }
   ]
