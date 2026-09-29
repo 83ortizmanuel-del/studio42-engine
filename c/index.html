@@ -4,232 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="page-title">Studio 42 | Ecosistema Phygital</title>
-    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css)">
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-principal: #0F172A;
-            --color-acento: #00E5FF;
+            --color-principal: #0F2C59;
+            --color-acento: #00A8E8;
             --color-fondo: #030712; 
-            --color-tarjeta: rgba(15, 23, 42, 0.90); 
+            --color-tarjeta: rgba(15, 23, 42, 0.85); 
             --color-boton: rgba(30, 41, 59, 0.7); 
             --color-texto: #f8fafc;
             --color-gris: #94a3b8;
             --titanium-light: #f1f5f9;
-            --titanium-glow: rgba(226, 232, 240, 0.4);
-            --halo-glow: rgba(0, 229, 255, 0.5);
-            --halo-intensity: 30px;
+            --titanium-glow: rgba(226, 232, 240, 0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
+            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 80%);
             color: var(--color-texto); 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
-            transition: background 0.3s ease;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 15px; 
+            user-select: none;
+            overflow-x: hidden;
         }
         
-        #splash-screen { 
+        /* SPLASH SCREEN */
+        #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
             background: radial-gradient(circle at center, #111827 0%, #030712 100%);
-            z-index: 10000; 
-            display: none; 
-            flex-direction: column; justify-content: center; align-items: center; 
-            transition: opacity 0.4s ease; padding: 20px;
+            z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px;
         }
-        .btn-desbloqueo { 
+        .btn-desbloqueo {
             background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
-            padding: 16px 36px; border-radius: 50px; font-size: 0.9rem; font-weight: 900; letter-spacing: 1.2px; 
-            text-transform: uppercase; cursor: pointer; box-shadow: 0 0 30px var(--titanium-glow);
-            transition: transform 0.2s ease;
+            padding: 16px 36px; border-radius: 50px; font-size: 0.92rem; font-weight: 900; letter-spacing: 1.5px; 
+            text-transform: uppercase; cursor: pointer; 
+            box-shadow: 0 0 30px var(--titanium-glow);
+            transition: all 0.2s ease;
         }
         .btn-desbloqueo:active { transform: scale(0.95); }
 
-        .halo-wrapper {
+        /* HUB PRINCIPAL */
+        .hub-container { 
+            background: var(--color-tarjeta); 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 32px; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 0, 0, 0.6); 
+            padding: 28px 20px; 
+            text-align: center; 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(20px);
             position: relative;
-            width: 100%;
-            max-width: 416px;
-            border-radius: 34px;
-            padding: 2px;
-            overflow: hidden;
-            margin: auto;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
-            transition: box-shadow 0.3s ease;
         }
 
-        .halo-wrapper::before {
+        /* LUZ STATUS TITANIUM TECH PULSANTE */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: rgba(241, 245, 249, 0.06);
+            border: 1px solid rgba(226, 232, 240, 0.22);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: var(--titanium-light);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        .ping-light {
+            position: relative;
+            width: 7px;
+            height: 7px;
+            background-color: var(--titanium-light);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--titanium-light);
+        }
+        .ping-light::after {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                transparent 0%, 
-                transparent 40%, 
-                var(--color-acento) 50%, 
-                #ffffff 52%, 
-                var(--color-acento) 54%, 
-                transparent 65%, 
-                transparent 100%
-            );
-            animation: haloRotate 10s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes haloRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hub-container { 
-            background: var(--color-tarjeta); width: 100%; 
-            border-radius: 32px; 
-            padding: 26px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
-            backdrop-filter: blur(20px); position: relative; z-index: 1;
-        }
-
-        .status-badge { 
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
-            padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
-            letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 16px; text-transform: uppercase;
-        }
-        .ping-light { 
-            position: relative; width: 7px; height: 7px; background-color: var(--titanium-light);
-            border-radius: 50%; box-shadow: 0 0 8px var(--titanium-light);
-        }
-        .ping-light::after { 
-            content: ''; position: absolute; top: -3px; left: -3px; width: 13px; height: 13px;
-            border-radius: 50%; background-color: var(--titanium-glow);
+            top: -3px;
+            left: -3px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background-color: var(--titanium-glow);
             animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
         }
-        @keyframes radarTitanium { 
+        @keyframes radarTitanium {
             0% { transform: scale(0.6); opacity: 1; }
             100% { transform: scale(2.8); opacity: 0; }
         }
         
         .logo-container { 
-            width: 94px; height: 94px; margin: 0 auto 12px auto; 
-            border-radius: 26px; border: 2px solid var(--color-acento); 
-            overflow: hidden; background-color: #0b111e; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 25px var(--halo-glow); position: relative; cursor: pointer;
+            width: 92px; height: 92px; margin: 0 auto 14px auto; 
+            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.2); 
+            overflow: hidden; background-color: #ffffff; 
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
         }
-        .logo-container img { 
-            width: 100%; height: 100%; object-fit: cover !important; padding: 0 !important; 
-            display: block;
-        }
-        .edit-badge-logo {
-            position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.75);
-            border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; width: 22px; height: 22px;
-            display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff;
-            box-shadow: 0 0 8px rgba(0,0,0,0.8);
-        }
+        .logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
         
-        h1 { font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
-        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.8px; }
+        h1 { font-size: 1.45rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: #fff; }
+        .propietario { color: var(--color-acento); font-size: 0.8rem; margin-bottom: 18px; font-weight: 600; letter-spacing: 0.8px; }
+        
+        .section-title { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--color-gris); margin: 22px 0 10px 6px; font-weight: 700; }
+        
+        /* PITCH DEMO COMERCIAL */
+        .friccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        .friccion-card { background: var(--color-boton); border-radius: 20px; padding: 15px 10px; text-align: center; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: all 0.2s ease; }
+        .friccion-card:active { transform: scale(0.95); background-color: #1e293b; border-color: var(--color-acento); }
+        .friccion-icon { font-size: 1.7rem; margin-bottom: 8px; }
+        .friccion-title { font-size: 0.74rem; font-weight: 700; color: var(--color-texto); line-height: 1.2; }
 
-        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 800; }
-        
-        .apps-menu { display: flex; flex-direction: column; gap: 11px; }
+        /* LISTA DE BOTONES */
+        .apps-menu { display: flex; flex-direction: column; gap: 12px; }
         .app-btn { 
-            display: flex; align-items: center; padding: 13px 16px; border-radius: 20px; 
-            background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.07); 
-            transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; 
+            display: flex; align-items: center; padding: 14px 18px; border-radius: 20px; 
+            background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-align: left; text-decoration: none; 
             backdrop-filter: blur(10px);
         }
-        .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
+        .app-btn:active { transform: scale(0.97); background: rgba(30, 41, 59, 0.95); border-color: var(--color-acento); }
         .app-btn.destacado { 
             border: 1px solid var(--color-acento); 
-            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(15, 23, 42, 0.85));
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); 
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(15, 23, 42, 0.8));
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); 
         }
-        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
+        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.25rem; flex-shrink: 0; }
         .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
-        .app-desc { font-size: 0.72rem; color: var(--color-gris); }
+        .app-name { font-size: 0.92rem; font-weight: 700; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.73rem; color: var(--color-gris); }
         
-        .stars-container { font-size: 2rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
-        .star-rating i { cursor: pointer; transition: transform 0.2s ease, filter 0.2s ease; display: inline-block; }
-        .star-rating i:active { transform: scale(1.3); }
+        /* ESCUDO ANTI-RESEÑAS */
+        .stars-container { font-size: 2rem; margin-top: 12px; display: flex; justify-content: center; gap: 10px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: color 0.2s, transform 0.2s; }
+        .star-rating i:active { transform: scale(1.4); }
         .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
         .star-inactive { color: #334155; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-box { 
-            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); 
-            border-radius: 28px; padding: 24px 20px 20px 20px; max-width: 380px; width: 100%; 
-            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); 
-            transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; position: relative;
-        }
-
-        .modal-close-btn {
-            position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #94a3b8; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease; z-index: 60;
-        }
-        .modal-close-btn:hover { background: rgba(255, 255, 255, 0.18); color: #ffffff; }
-
-        .modal-icon { font-size: 2.2rem; margin-bottom: 8px; }
-        .modal-title { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; padding: 0 25px; }
-        .modal-text { font-size: 0.82rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 16px; }
+        /* MODALES */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 26px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal-icon { font-size: 2.6rem; margin-bottom: 14px; }
+        .modal-title { font-size: 1.15rem; font-weight: 900; color: #fff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-text { font-size: 0.86rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 22px; }
         
-        .modal-actions { display: flex; flex-direction: column; gap: 9px; }
-        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 800; font-size: 0.84rem; cursor: pointer; text-decoration: none; display: block; }
-        .modal-btn-google { background: linear-gradient(135deg, #ffb400, #f59e0b); color: #020617; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 900; font-size: 0.84rem; cursor: pointer; text-decoration: none; display: block; }
-        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; }
+        .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 800; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: block; }
+        .modal-btn-google { background: linear-gradient(135deg, #ffb400, #f59e0b); color: #020617; border: none; padding: 14px 20px; border-radius: 50px; font-weight: 900; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: block; box-shadow: 0 0 20px rgba(255, 180, 0, 0.4); }
+        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 18px; border-radius: 50px; font-size: 0.76rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; }
 
-        .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
+        .selector-box { text-align: left; margin-bottom: 15px; }
+        .selector-label { font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .selector-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .pill-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px 4px; font-size: 0.74rem; color: #fff; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .pill-btn.active { background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; font-weight: 800; border-color: #fff; }
+        .card-resultado { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.3); border-radius: 18px; padding: 14px; margin: 15px 0; text-align: left; }
+
+        #btn-audio { display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--titanium-light); color: var(--titanium-light); width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 20px var(--titanium-glow); backdrop-filter: blur(8px); align-items: center; justify-content: center; transition: all 0.3s; }
+        
+        .footer-brand { margin-top: 30px; font-size: 0.72rem; color: var(--color-gris); letter-spacing: 1.2px; }
         .footer-brand span { color: var(--titanium-light); font-weight: 800; }
-
-        .top-controls-bar {
-            position: absolute; top: 16px; left: 16px; right: 16px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 50;
-        }
-        .btn-top-control {
-            width: 34px; height: 34px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--color-gris); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 0.8rem; transition: all 0.2s;
-        }
-        .btn-top-control:active { transform: scale(0.9); }
-        .btn-audio-toggle { display: none; }
-        .btn-audio-toggle.active { color: var(--color-acento); border-color: var(--color-acento); }
-
-        .lang-badge {
-            font-size: 10px; font-weight: 900; letter-spacing: 0.5px;
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--color-gris); border-radius: 50px; padding: 6px 10px; cursor: pointer;
-            display: flex; align-items: center; gap: 5px;
-        }
-        .lang-badge:active { transform: scale(0.95); }
-
-        .color-swatch {
-            width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.2); transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-        .color-swatch:active { transform: scale(1.15); border-color: #ffffff; }
     </style>
 </head>
 <body>
 
     <audio id="audio-fondo" loop preload="auto"></audio>
 
+    <!-- SPLASH SCREEN -->
     <div id="splash-screen">
-        <div class="logo-container" id="splash-logo-box" style="width: 100px; height: 100px; margin-bottom: 20px;">
+        <div class="logo-container pulse-logo" id="splash-logo-box" style="width: 110px; height: 110px; margin-bottom: 25px;">
             <img id="splash-logo" alt="Logo">
         </div>
-        <h2 id="splash-title" style="color: #fff; font-size: 1.4rem; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;">STUDIO 42</h2>
-        <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.85rem; margin-bottom: 30px; text-transform: uppercase;">Ecosistema Phygital</p>
+        <h2 id="splash-title" style="color: #fff; font-size: 1.5rem; margin-bottom: 8px; letter-spacing: 3px; font-weight: 900;">STUDIO 42</h2>
+        <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.9rem; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1px;">Ecosistema Phygital</p>
         <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
     </div>
 
+    <!-- MODAL GENERAL (FRICCIONES Y ESCUDO) -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
-            <button class="modal-close-btn" onclick="cerrarModalBtn()" title="Cerrar y volver"><i class="fa-solid fa-xmark"></i></button>
             <div id="modal-icon" class="modal-icon"></div>
             <div id="modal-title" class="modal-title"></div>
             <div id="modal-text" class="modal-text"></div>
@@ -239,378 +201,387 @@
         </div>
     </div>
 
-    <div class="halo-wrapper" id="main-halo">
-        <div class="hub-container">
+    <!-- MODAL WOW 1: ERGONOMÍA -->
+    <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <div style="color: var(--color-acento); font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Test Ergonómico</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 18px;">Configuración de descanso en 3 toques</p>
             
-            <!-- BARRA DE CONTROLES SUPERIOR -->
-            <div class="top-controls-bar">
-                <div class="flex items-center gap-2">
-                    <button id="btn-edit-pet" class="btn-top-control" style="display: none;" onclick="alert('Módulo Pet ID Activo')" title="Editar Ficha de la Mascota">
-                        <i class="fa-solid fa-paw text-cyan-400"></i>
-                    </button>
-                    <button id="btn-theme-control" class="btn-top-control" onclick="abrirModalPersonalizacion()" title="Personalizar Interfaz">
-                        <i class="fa-solid fa-palette"></i>
-                    </button>
-                    <div id="btn-lang-selector" class="lang-badge" onclick="rotarIdioma()" title="Cambiar Idioma">
-                        <span id="lang-flag">🇪🇸</span> <span id="lang-code">ES</span>
-                    </div>
+            <div class="selector-box">
+                <span class="selector-label">1. ¿Cómo duermes habitualmente?</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('postura', 'De Lado', this)"><i class="fa-solid fa-person"></i><br>De Lado</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Arriba', this)"><i class="fa-solid fa-bed"></i><br>De Espalda</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Abajo', this)"><i class="fa-solid fa-child"></i><br>Boca Abajo</div>
                 </div>
-
-                <button id="btn-audio-control" class="btn-top-control btn-audio-toggle" onclick="alternarAudioManual()" title="Silenciar / Activar Música">
-                    <i id="btn-audio-icon" class="fa-solid fa-volume-high"></i>
-                </button>
             </div>
 
-            <div class="status-badge" style="margin-top: 28px;">
-                <span class="ping-light"></span>
-                <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
+            <div class="selector-box">
+                <span class="selector-label">2. Complexión / Peso</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '-70kg', this)">-70 kg</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('peso', '70-90kg', this)">70-90 kg</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '+90kg', this)">+90 kg</div>
+                </div>
             </div>
 
-            <!-- CONTENEDOR DE FOTO / LOGO -->
-            <div class="logo-container" id="hub-logo-box" onclick="abrirCambiadorFoto()" title="Toca para cambiar la foto">
-                <img id="hub-logo" alt="Logo">
-                <div class="edit-badge-logo"><i class="fa-solid fa-camera"></i></div>
-            </div>
-            <input type="file" id="input-foto-upload" accept="image/*" class="hidden" onchange="procesarFotoSubida(event)">
-
-            <h1 id="client-name">STUDIO 42</h1>
-            <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
-
-            <!-- SECCIÓN DEL MODO DEMO (LOS 4 BOTONES DEL CLOSER) -->
-            <div id="fricciones-section" style="display:none;">
-                <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
-                <div class="grid grid-cols-2 gap-2 mb-3" id="friccion-grid"></div>
+            <div class="selector-box">
+                <span class="selector-label">3. Medida Deseada</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '135x190', this)">135x190</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('medida', '150x190', this)">150x190</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '180x200', this)">180x200</div>
+                </div>
             </div>
 
-            <!-- MENÚ DINÁMICO POLIMÓRFICO -->
-            <div id="dynamic-menu"></div>
+            <div class="card-resultado">
+                <div style="font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase;">Recomendación Ergonómica:</div>
+                <div id="diag-firmeza" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Firmeza Media Adaptable</div>
+                <div id="diag-tecnologia" style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px;">Muelles Ensacados + Viscoelástica transpirable.</div>
+            </div>
 
-            <div class="footer-brand" id="lbl-footer-brand">Desarrollado por <span>Studio 42</span></div>
+            <div class="modal-actions">
+                <a id="btn-probar-tienda" href="#" class="modal-btn-primary" style="padding: 12px 15px; font-size: 0.85rem;"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
+                <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar</button>
+            </div>
         </div>
     </div>
 
-    <script>
-        const DICCIONARIO = {
-            es: {
-                flag: "🇪🇸",
-                badge: "NODO PHYGITAL CONECTADO · RED ACTIVA",
-                resenaTitle: "¿Qué tal ha sido tu experiencia?",
-                resenaSub: "Tu valoración nos ayuda a seguir mejorando cada día",
-                resenaHint: "Toca las estrellas para calificar el servicio",
-                conectarGoogle: "Conectando con Google Maps...",
-                guardarCita: "Guardar Tu Cita",
-                asistenciaRuta: "Puntos de Asistencia en Ruta",
-                cerrar: "Cerrar",
-                entendido: "Entendido",
-                personalizar: "Personalizar Interfaz",
-                footer: "Desarrollado por <span>Studio 42</span>"
-            },
-            en: {
-                flag: "🇬🇧",
-                badge: "SMART PHYGITAL NODE · ACTIVE NETWORK",
-                resenaTitle: "How was your experience?",
-                resenaSub: "Your review helps us keep improving every day",
-                resenaHint: "Tap the stars to rate the service",
-                conectarGoogle: "Connecting to Google Maps...",
-                guardarCita: "Save Your Appointment",
-                asistenciaRuta: "Assistance Points on Route",
-                cerrar: "Close",
-                entendido: "Got it",
-                personalizar: "Customize Interface",
-                footer: "Powered by <span>Studio 42</span>"
-            },
-            fr: {
-                flag: "🇫🇷",
-                badge: "NŒUD PHYGITAL CONNECTÉ · RÉSEAU ACTIF",
-                resenaTitle: "Comment s'est passée votre expérience ?",
-                resenaSub: "Votre avis nous aide à nous améliorer chaque jour",
-                resenaHint: "Appuyez sur les étoiles pour noter le service",
-                conectarGoogle: "Connexion à Google Maps...",
-                guardarCita: "Enregistrer Votre Rendez-vous",
-                asistenciaRuta: "Points d'Assistance en Route",
-                cerrar: "Fermer",
-                entendido: "Compris",
-                personalizar: "Personnaliser l'Interface",
-                footer: "Développé par <span>Studio 42</span>"
-            }
-        };
+    <!-- MODAL WOW 2: LOGÍSTICA & RETIRADA -->
+    <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <div style="color: #30d158; font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Entrega & Retirada</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 18px;">Tasador logístico previo a la compra</p>
+            
+            <div class="selector-box">
+                <span class="selector-label">1. Zona de Destino</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('zona', 'Logroño Centro / Casco', this)">Logroño</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Alrededores (Oyón/Lardero)', this)">Cinturón</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Rioja / Otras localidades', this)">Comarca</div>
+                </div>
+            </div>
 
-        let idiomaActual = localStorage.getItem('user_lang') || 'es';
-        let datosClienteOriginal = null;
+            <div class="selector-box">
+                <span class="selector-label">2. Tipo de Acceso</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('acceso', 'Con Ascensor / Planta Baja', this)">Ascensor</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (Hasta 2º)', this)">Esc. Baja</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (3º o superior)', this)">Esc. Alta</div>
+                </div>
+            </div>
+
+            <div class="selector-box">
+                <span class="selector-label">3. Retirada de Usado</span>
+                <div class="selector-pills" style="grid-template-columns: 1fr 1fr;">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('retirada', 'Sí, retirar colchón antiguo', this)">Retirar Viejo</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('retirada', 'No, solo entrega nuevo', this)">Solo Entrega</div>
+                </div>
+            </div>
+
+            <div class="card-resultado" style="border-color: #30d158; background: rgba(48, 209, 88, 0.08);">
+                <div style="font-size: 0.72rem; color: #30d158; font-weight: 800; text-transform: uppercase;">Condición Estimada:</div>
+                <div id="diag-envio-titulo" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Servicio Bonificado en Tienda</div>
+                <div id="diag-envio-desc" style="font-size: 0.75rem; color: #cbd5e1; margin-top: 4px;">Ruta directa a domicilio con subida a habitación (consulta condiciones según compra).</div>
+            </div>
+
+            <div class="modal-actions">
+                <a id="btn-confirmar-envio" href="#" class="modal-btn-primary" style="padding: 12px 15px; font-size: 0.85rem;"><i class="fa-brands fa-whatsapp"></i> Consultar Ruta por WhatsApp</a>
+                <button class="modal-btn-secondary" onclick="cerrarEnvioBtn()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÓN AUDIO FLOTANTE -->
+    <button id="btn-audio" onclick="alternarAudio()"><i id="icono-audio" class="fa-solid fa-volume-high"></i></button>
+
+    <!-- HUB PRINCIPAL -->
+    <div class="hub-container">
+        <!-- LUZ STATUS TITANIUM TECH PULSANTE -->
+        <div class="status-badge">
+            <span class="ping-light"></span>
+            <span id="badge-text">Sistema Conectado · Mostrador Activo</span>
+        </div>
+
+        <div class="logo-container" id="hub-logo-box"><img id="hub-logo" alt="Logo"></div>
+        <h1 id="client-name">STUDIO 42</h1>
+        <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
+
+        <!-- PANEL DE FRICCIONES / CONTROL MODO DEMO -->
+        <div id="fricciones-section">
+            <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
+            <div class="friccion-grid" id="friccion-grid"></div>
+        </div>
+
+        <div id="dynamic-menu"></div>
+
+        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+    </div>
+
+    <script>
         let datosFriccionesGlobales = {};
-        let googleReviewUrlGlobal = "[https://maps.google.com](https://maps.google.com)";
-        let whatsappGerenciaGlobal = "[https://wa.me/34672294962](https://wa.me/34672294962)";
-        let nombreNegocioGlobal = "Profesional";
+        let googleReviewUrlGlobal = "https://search.google.com/local/writereview?placeid=ChIJXy9Psu6qWg0R2MztIZPHsPQ";
+        let whatsappGerenciaGlobal = "https://wa.me/34664318645";
+        let whatsappTiendaGlobal = "https://wa.me/34664318645";
+
+        let estadoAsesor = { postura: 'De Lado', peso: '70-90kg', medida: '150x190' };
+        let estadoEnvio = { zona: 'Logroño Centro / Casco', acceso: 'Con Ascensor / Planta Baja', retirada: 'Sí, retirar colchón antiguo' };
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
+        const btnAudio = document.getElementById('btn-audio');
+        const iconoAudio = document.getElementById('icono-audio');
+        let audioMuteado = false;
 
-        function rotarIdioma() {
-            if (idiomaActual === 'es') idiomaActual = 'en';
-            else if (idiomaActual === 'en') idiomaActual = 'fr';
-            else idiomaActual = 'es';
-
-            localStorage.setItem('user_lang', idiomaActual);
-            actualizarTextosIdioma();
-            
-            if (datosClienteOriginal) {
-                renderizarMenuDinamico(datosClienteOriginal);
+        function silenciarAudioCompleto() {
+            if (reproductor) {
+                reproductor.pause();
+                reproductor.currentTime = 0;
             }
         }
 
-        function actualizarTextosIdioma() {
-            const dataLang = DICCIONARIO[idiomaActual];
-            document.getElementById('lang-flag').innerText = dataLang.flag;
-            document.getElementById('lang-code').innerText = idiomaActual.toUpperCase();
-            
-            const badge = document.getElementById('badge-text');
-            if (badge) badge.innerText = dataLang.badge;
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (reproductor) reproductor.pause();
+            } else {
+                if (!audioMuteado && splash.style.display === 'none' && reproductor && reproductor.src) {
+                    reproductor.play().catch(e => {});
+                }
+            }
+        });
 
-            const footer = document.getElementById('lbl-footer-brand');
-            if (footer) footer.innerHTML = dataLang.footer;
-        }
+        window.addEventListener('pagehide', silenciarAudioCompleto);
+        window.addEventListener('beforeunload', silenciarAudioCompleto);
 
-        function abrirCambiadorFoto() {
-            document.getElementById('input-foto-upload').click();
-        }
-
-        function procesarFotoSubida(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64Img = e.target.result;
-                const urlParams = new URLSearchParams(window.location.search);
-                const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
-
-                document.getElementById('hub-logo').src = base64Img;
-                document.getElementById('splash-logo').src = base64Img;
-                localStorage.setItem(`custom_photo_${clienteCod}`, base64Img);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // CARGA INTELIGENTE MULTICAPA (NETLIFY + GITHUB RAW DIRECTO)
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
 
-            actualizarTextosIdioma();
-
-            let data = null;
-
-            // 1. Intento local
             try {
-                let resLocal = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
-                if (!resLocal.ok) resLocal = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
-                if (!resLocal.ok) resLocal = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
-                if (resLocal.ok) data = await resLocal.json();
-            } catch(e) {}
+                let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!response.ok) {
+                    response = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
+                }
+                if (!response.ok) throw new Error(`No se encontró ${clienteCod}.json`);
 
-            // 2. Si Netlify aún no compila, buscar directo en GitHub Raw en tiempo real (0 esperas)
-            if (!data) {
-                try {
-                    const urlGitHub = `[https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/$](https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/$){clienteCod}.json?v=${Date.now()}`;
-                    const resGit = await fetch(urlGitHub);
-                    if (resGit.ok) data = await resGit.json();
-                } catch(e) {}
-            }
+                const data = await response.json();
 
-            if (!data) {
-                console.error("No se pudo cargar el archivo para:", clienteCod);
-                document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
-                splash.style.display = 'none';
-                return;
-            }
+                // 1. BRANDING DINÁMICO
+                if (data.colorPrincipal) {
+                    document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
+                }
+                if (data.colorAcento) {
+                    document.documentElement.style.setProperty('--color-acento', data.colorAcento);
+                }
 
-            datosClienteOriginal = data;
-            nombreNegocioGlobal = data.nombre || "Profesional";
+                document.getElementById('page-title').innerText = `${data.nombre || 'Studio 42'} | Identidad Inteligente`;
+                document.getElementById('splash-title').innerText = data.nombre || 'STUDIO 42';
+                document.getElementById('client-name').innerText = data.nombre || 'STUDIO 42';
+                
+                const subtituloText = data.subtituloGold || data.subtitulo || 'Ecosistema Phygital';
+                document.getElementById('splash-subtitle').innerText = subtituloText;
+                document.getElementById('client-subtitle').innerText = subtituloText;
 
-            // Control de visibilidad del botón de mascotas
-            const esMascota = data.esMascota === true || clienteCod.includes('pet');
-            const btnPet = document.getElementById('btn-edit-pet');
-            if (btnPet) btnPet.style.display = esMascota ? 'flex' : 'none';
+                if (data.textoBadge) {
+                    document.getElementById('badge-text').innerText = data.textoBadge;
+                }
 
-            // Colores e iluminación de la tarjeta
-            const userCustomColor = localStorage.getItem(`custom_acento_${clienteCod}`);
-            const colorAcentoFinal = userCustomColor || data.colorAcento || "#00E5FF";
-            const colorPrincipalFinal = data.colorPrincipal || "#0F172A";
+                const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "iberlax-logo.jpg";
+                const splashImg = document.getElementById('splash-logo');
+                const hubImg = document.getElementById('hub-logo');
+                splashImg.src = logoPath;
+                hubImg.src = logoPath;
+                splashImg.onerror = function() { if (!this.src.includes('./')) this.src = './' + logoPath; };
+                hubImg.onerror = function() { if (!this.src.includes('./')) this.src = './' + logoPath; };
 
-            const glowIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
-            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
-            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
-            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + (glowIntenso ? 'AA' : '55'));
-            document.documentElement.style.setProperty('--halo-intensity', glowIntenso ? '45px' : '25px');
+                const pistaAudio = data.audioFondo && data.audioFondo.trim() !== "" ? data.audioFondo : "ambiente2.mp3";
+                if (pistaAudio) {
+                    reproductor.src = pistaAudio;
+                    reproductor.load();
+                }
 
-            const nombreFinal = data.nombre || "Profesional";
-            const subtituloFinal = data.subtitulo || 'Ecosistema Phygital';
+                // 2. MODO DEMO / PRESENTACIÓN COMERCIAL
+                const seccionFricciones = document.getElementById('fricciones-section');
+                if (data.modoDemo === true) {
+                    seccionFricciones.style.display = 'block';
 
-            document.getElementById('page-title').innerText = `${nombreFinal} | Identidad Digital`;
-            document.getElementById('splash-title').innerText = nombreFinal;
-            document.getElementById('client-name').innerText = nombreFinal;
-            document.getElementById('splash-subtitle').innerText = subtituloFinal;
-            document.getElementById('client-subtitle').innerText = subtituloFinal;
+                    datosFriccionesGlobales = {
+                        'contactos': { icono: '<i class="fa-solid fa-user-check" style="color:var(--color-acento);"></i>', titulo: 'Retención de Clientes', texto: 'El 70% de las personas no guardará tu número manualmente.<br><br><b>La Solución Studio 42:</b> Inyectamos tu vCard directamente en la agenda del cliente con un clic.' },
+                        'resenas': { icono: '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>', titulo: 'Protección de Reputación', texto: 'Una sola queja pública en Google aleja clientes.<br><br><b>La Solución Studio 42:</b> El Escudo Inteligente intercepta valoraciones de 1 a 3 estrellas hacia tu WhatsApp Privado.' },
+                        'embudos': { icono: '<i class="fa-solid fa-bolt" style="color:#30d158;"></i>', titulo: 'Embudos Directos', texto: 'Las webs tradicionales son lentas.<br><br><b>La Solución Studio 42:</b> Entregamos tus enlaces de conversión directamente en la mano del cliente.' },
+                        'experiencia': { icono: '<i class="fa-solid fa-gem" style="color:#bf5af2;"></i>', titulo: 'Experiencia Memorable', texto: 'Aportamos herramientas de utilidad real, como el Gestor GPS de Parking, para que mantengan tu marca guardada.' }
+                    };
 
-            if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
+                    const gridContainer = document.getElementById('friccion-grid');
+                    gridContainer.innerHTML = `
+                        <div class="friccion-card" onclick="mostrarExplicacion('contactos')"><div class="friccion-icon" style="color: var(--color-acento);"><i class="fa-solid fa-user-xmark"></i></div><div class="friccion-title">Fuga de Contactos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('resenas')"><div class="friccion-icon" style="color: #ff3b30;"><i class="fa-solid fa-star-half-stroke"></i></div><div class="friccion-title">Reputación Vulnerable</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('embudos')"><div class="friccion-icon" style="color: #30d158;"><i class="fa-solid fa-filter-circle-xmark"></i></div><div class="friccion-title">Embudos Rotos</div></div>
+                        <div class="friccion-card" onclick="mostrarExplicacion('experiencia')"><div class="friccion-icon" style="color: #bf5af2;"><i class="fa-solid fa-map-location-dot"></i></div><div class="friccion-title">Olvido del Cliente</div></div>
+                    `;
+                } else {
+                    seccionFricciones.style.display = 'none';
+                }
 
-            const fotoCustom = localStorage.getItem(`custom_photo_${clienteCod}`);
-            const logoPath = fotoCustom || (data.logo && data.logo.trim() !== "" ? data.logo : "logo.png");
-            document.getElementById('splash-logo').src = logoPath;
-            document.getElementById('hub-logo').src = logoPath;
+                // 3. RENDERIZADO DE BOTONES Y SECCIONES
+                const menuContainer = document.getElementById('dynamic-menu');
+                menuContainer.innerHTML = '';
 
-            if (data.audioFondo && data.audioFondo.trim() !== "") {
-                reproductor.src = data.audioFondo;
-                document.getElementById('btn-audio-control').style.display = 'flex';
-                splash.style.display = 'flex';
-            } else {
-                document.getElementById('btn-audio-control').style.display = 'none';
-                splash.style.display = 'none';
-                splash.style.opacity = '0';
-                splash.style.pointerEvents = 'none';
-            }
+                if (data.secciones && Array.isArray(data.secciones)) {
+                    data.secciones.forEach(sec => {
+                        if (sec.titulo) {
+                            menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
+                        }
 
-            // Modo Demo (Argumentos de Venta del Closer)
-            const seccionFricciones = document.getElementById('fricciones-section');
-            if (data.modoDemo === true) {
-                seccionFricciones.style.display = 'block';
-                datosFriccionesGlobales = {
-                    'contactos': { icono: '<i class="fa-solid fa-user-check text-cyan-400"></i>', titulo: 'Retención Inmediata', texto: 'El 70% de clientes no guarda números manualmente.<br><br><b>Solución:</b> Descarga directa de vCard al móvil en 1 toque.' },
-                    'resenas': { icono: '<i class="fa-solid fa-shield-halved text-rose-500"></i>', titulo: 'Escudo de Reputación', texto: 'Las quejas públicas en Google alejan clientes.<br><br><b>Solución:</b> Intercepta valoraciones bajas (1-3★) directo a WhatsApp privado.' },
-                    'herramientas': { icono: '<i class="fa-solid fa-toolbox text-amber-400"></i>', titulo: 'Herramientas de Valor', texto: 'Soluciones interactivas que resuelven dudas y guían la experiencia del cliente en mostrador.' },
-                    'facturacion': { icono: '<i class="fa-solid fa-bolt text-purple-400"></i>', titulo: 'Facturación Directa', texto: 'Llamados a la acción para agendar y cerrar ventas sin fricción.' }
-                };
+                        const block = document.createElement('div');
+                        block.className = 'apps-menu';
 
-                document.getElementById('friccion-grid').innerHTML = `
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('contactos')"><i class="fa-solid fa-user-xmark text-cyan-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Fuga Contactos</div></div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('resenas')"><i class="fa-solid fa-star-half-stroke text-rose-500 text-xl mb-1"></i><div class="text-[11px] font-bold">Reputación</div></div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('herramientas')"><i class="fa-solid fa-toolbox text-amber-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('facturacion')"><i class="fa-solid fa-bolt text-purple-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Facturación</div></div>
-                `;
-            } else {
-                seccionFricciones.style.display = 'none';
-            }
+                        if (sec.urlGoogleResenas) {
+                            googleReviewUrlGlobal = sec.urlGoogleResenas;
+                        } else if (sec.placeIdGoogle) {
+                            googleReviewUrlGlobal = `https://search.google.com/local/writereview?placeid=${sec.placeIdGoogle}`;
+                        }
+                        
+                        if (sec.whatsappGerencia) {
+                            whatsappGerenciaGlobal = sec.whatsappGerencia;
+                            whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
+                        }
 
-            renderizarMenuDinamico(data);
-            actualizarInterfazParking();
-        }
+                        const esSeccionEscudo = sec.escudoResenas || (sec.titulo && sec.titulo.toLowerCase().includes('opinión'));
 
-        function renderizarMenuDinamico(data) {
-            const menuContainer = document.getElementById('dynamic-menu');
-            menuContainer.innerHTML = '';
-            const dic = DICCIONARIO[idiomaActual];
-
-            if (data.secciones && Array.isArray(data.secciones)) {
-                data.secciones.forEach(sec => {
-                    if (sec.titulo) menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
-                    const block = document.createElement('div');
-                    block.className = 'apps-menu';
-
-                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
-                    if (sec.whatsappGerencia) whatsappGerenciaGlobal = sec.whatsappGerencia;
-
-                    if (sec.escudoResenas) {
-                        block.innerHTML += `
-                            <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
-                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
-                                    <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" viewBox="0 0 48 48" class="w-7 h-7">
-                                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                                    </svg>
-                                </div>
-                                <div class="app-name text-center text-white text-base font-extrabold mb-0.5">${dic.resenaTitle}</div>
-                                <div class="text-xs text-slate-300 text-center font-medium mb-2">${dic.resenaSub}</div>
-                                
-                                <div class="stars-container star-rating my-1" id="escudo-estrellas">
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
-                                </div>
-                                <p class="text-[11px] text-zinc-400 text-center mt-1">${dic.resenaHint}</p>
-                                <p id="mensaje-filtro" class="text-xs text-cyan-300 text-center w-full mt-2 font-bold hidden animate-pulse">${dic.conectarGoogle}</p>
-                            </div>
-                        `;
-                    } else if (sec.botones && Array.isArray(sec.botones)) {
-                        sec.botones.forEach(btn => {
-                            const btnTipo = (btn.tipo || "").toLowerCase();
-                            const finalUrl = btn.url || '#';
-
-                            if (btnTipo === 'parking') {
-                                block.innerHTML += `
-                                    <div onclick="gestionarParking(event)" class="app-btn ${btn.destacado ? 'destacado' : ''}" id="btn-parking">
-                                        <div class="app-icon" id="parking-icon-container" style="${btn.estiloIcono || 'background: rgba(142,142,147,0.15); color: #8e8e93;'}">
-                                            <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
-                                        </div>
+                        if (esSeccionEscudo && (!sec.botones || sec.botones.length === 0)) {
+                            block.innerHTML += `
+                                <div class="app-btn" style="flex-direction: column; cursor: default; align-items: flex-start; border: 1px solid rgba(255,180,0,0.3); background: rgba(255, 180, 0, 0.05); padding: 18px 16px;">
+                                    <div style="display: flex; align-items: center; width: 100%;">
+                                        <div class="app-icon" style="background: rgba(255,180,0,0.15); color: #ffb400;"><i class="fa-brands fa-google"></i></div>
                                         <div class="app-info">
-                                            <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                            <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la posición GPS de tu coche'}</div>
+                                            <div class="app-name" style="color: #fff;">Escudo de Reputación</div>
+                                            <div class="app-desc">Toca las estrellas según tu experiencia</div>
                                         </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
-                                `;
-                            } else {
-                                block.innerHTML += `
-                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') ? 'target="_blank"' : ''}>
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-link'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </a>
-                                `;
-                            }
-                        });
-                    }
-                    menuContainer.appendChild(block);
-                });
+                                    <div class="stars-container star-rating" id="escudo-estrellas">
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(1)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(2)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(3)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(4)"></i>
+                                        <i class="fa-solid fa-star star-inactive" onclick="simularFiltro(5)"></i>
+                                    </div>
+                                    <p id="mensaje-filtro" style="font-size: 0.75rem; color: var(--color-acento); text-align: center; width: 100%; margin-top: 10px; display: none; font-weight:700;">Conectando con Google Maps...</p>
+                                </div>
+                            `;
+                        } else if (sec.botones && Array.isArray(sec.botones)) {
+                            sec.botones.forEach(btn => {
+                                const nLower = btn.nombre.toLowerCase();
+
+                                // 1. DETECCIÓN TEST ERGONÓMICO (Sin colisión con la agenda)
+                                if ((btn.tipo === 'ergonomia' || nLower.includes('ergonómico') || nLower.includes('ergonomico') || nLower.includes('firmeza')) && !nLower.includes('agenda') && !nLower.includes('contacto')) {
+                                    block.innerHTML += `
+                                        <a class="app-btn destacado" onclick="abrirAsesor(event)">
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || 'Configurador interactivo de descanso'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                } 
+                                // 2. DETECCIÓN TASADOR LOGÍSTICO
+                                else if (btn.tipo === 'logistica' || nLower.includes('tasador') || nLower.includes('retirada') || nLower.includes('entrega')) {
+                                    block.innerHTML += `
+                                        <a class="app-btn" onclick="abrirEnvio(event)">
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || 'Calcula condiciones de reparto y retirada'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                } 
+                                // 3. GESTOR DE PARKING GPS REAL
+                                else if (btn.tipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
+                                    block.innerHTML += `
+                                        <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
+                                            <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.1); color: #8e8e93;">
+                                                <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
+                                            </div>
+                                            <div class="app-info">
+                                                <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                                <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda tu coche para volver'}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                } 
+                                // 4. VCARD Y BOTONES CONVENCIONALES
+                                else {
+                                    if(btn.url && btn.url.includes('wa.me') && !whatsappTiendaGlobal) {
+                                        whatsappTiendaGlobal = btn.url.split('?')[0];
+                                    }
+
+                                    block.innerHTML += `
+                                        <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${btn.url || '#'}" ${btn.url && btn.url.startsWith('http') ? 'target="_blank"' : ''}>
+                                            <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
+                                            <div class="app-info">
+                                                <div class="app-name">${btn.nombre}</div>
+                                                <div class="app-desc">${btn.descripcion || ''}</div>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-right" style="color:#555; font-size:0.8rem;"></i>
+                                        </a>
+                                    `;
+                                }
+                            });
+                        }
+
+                        menuContainer.appendChild(block);
+                    });
+                }
+
+                actualizarInterfazParking();
+                actualizarCalculoAsesor();
+                actualizarCalculoEnvio();
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
             }
-        }
-
-        function abrirModalPersonalizacion() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
-
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-palette text-cyan-400"></i>';
-            document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].personalizar;
-            document.getElementById('modal-text').innerHTML = `
-                <p class="text-xs text-zinc-300 mb-3">Elige tu color neón preferido para los halos y acentos:</p>
-                <div class="flex justify-center gap-3 mb-4">
-                    <div class="color-swatch bg-[#00E5FF]" onclick="aplicarColorPersonalizado('#00E5FF', '${clienteCod}')" title="Cian Cyber"></div>
-                    <div class="color-swatch bg-[#FF2E9B]" onclick="aplicarColorPersonalizado('#FF2E9B', '${clienteCod}')" title="Magenta Neón"></div>
-                    <div class="color-swatch bg-[#10B981]" onclick="aplicarColorPersonalizado('#10B981', '${clienteCod}')" title="Esmeralda"></div>
-                    <div class="color-swatch bg-[#F59E0B]" onclick="aplicarColorPersonalizado('#F59E0B', '${clienteCod}')" title="Oro Imperial"></div>
-                    <div class="color-swatch bg-[#A855F7]" onclick="aplicarColorPersonalizado('#A855F7', '${clienteCod}')" title="Violeta Deep"></div>
-                    <div class="color-swatch bg-[#EF4444]" onclick="aplicarColorPersonalizado('#EF4444', '${clienteCod}')" title="Rojo Carmesí"></div>
-                </div>
-            `;
-            modalActions.innerHTML = `<button class="modal-btn-primary bg-cyan-600 hover:bg-cyan-500 font-bold" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>`;
-            abrirModalCustom();
-        }
-
-        function aplicarColorPersonalizado(colorHex, clienteCod) {
-            document.documentElement.style.setProperty('--color-acento', colorHex);
-            const esNeonIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
-            document.documentElement.style.setProperty('--halo-glow', colorHex + (esNeonIntenso ? 'AA' : '55'));
-            localStorage.setItem(`custom_acento_${clienteCod}`, colorHex);
         }
 
         function iniciarMagia() {
             splash.style.opacity = '0';
-            setTimeout(() => { 
-                splash.style.display = 'none'; 
-                splash.style.pointerEvents = 'none';
-            }, 400);
+            setTimeout(() => { splash.style.display = 'none'; }, 600);
 
-            if (reproductor && reproductor.src) {
-                reproductor.play().catch(() => {});
+            if (reproductor.src) {
+                const playPromise = reproductor.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        btnAudio.style.display = 'flex';
+                    }).catch(error => {
+                        console.warn("Autoplay:", error);
+                        btnAudio.style.display = 'flex';
+                    });
+                }
+            } else {
+                btnAudio.style.display = 'flex';
             }
+        }
+
+        function alternarAudio() {
+            if (audioMuteado) {
+                reproductor.play().catch(e => console.error(e));
+                iconoAudio.className = "fa-solid fa-volume-high";
+                btnAudio.style.color = "var(--titanium-light)";
+                btnAudio.style.borderColor = "var(--titanium-light)";
+            } else {
+                reproductor.pause();
+                iconoAudio.className = "fa-solid fa-volume-xmark";
+                btnAudio.style.color = "var(--color-gris)";
+                btnAudio.style.borderColor = "var(--color-gris)";
+            }
+            audioMuteado = !audioMuteado;
         }
 
         const modalOverlay = document.getElementById('modal-overlay');
@@ -622,14 +593,14 @@
                 document.getElementById('modal-icon').innerHTML = datosFriccionesGlobales[tipo].icono;
                 document.getElementById('modal-title').innerText = datosFriccionesGlobales[tipo].titulo;
                 document.getElementById('modal-text').innerHTML = datosFriccionesGlobales[tipo].texto;
-                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].entendido}</button>`;
-                abrirModalCustom();
+                modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+                
+                modalOverlay.style.display = 'flex';
+                setTimeout(() => { 
+                    modalOverlay.style.opacity = '1'; 
+                    modalContent.style.transform = 'translateY(0)'; 
+                }, 10);
             }
-        }
-
-        function abrirModalCustom() {
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
         }
 
         function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
@@ -639,6 +610,147 @@
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
 
+        // LÓGICA ASESOR
+        const modalAsesor = document.getElementById('modal-asesor');
+        function abrirAsesor(e) {
+            e.preventDefault();
+            modalAsesor.style.display = 'flex';
+            setTimeout(() => { 
+                modalAsesor.style.opacity = '1'; 
+                modalAsesor.querySelector('.modal-box').style.transform = 'translateY(0)'; 
+            }, 10);
+        }
+        function cerrarAsesor(e) { if(e.target === modalAsesor) cerrarAsesorBtn(); }
+        function cerrarAsesorBtn() {
+            modalAsesor.style.opacity = '0';
+            modalAsesor.querySelector('.modal-box').style.transform = 'translateY(20px)';
+            setTimeout(() => { modalAsesor.style.display = 'none'; }, 300);
+        }
+        function seleccionarOpcionAsesor(grupo, valor, elemento) {
+            estadoAsesor[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoAsesor();
+        }
+        function actualizarCalculoAsesor() {
+            let firmeza = "Firmeza Media Adaptable";
+            let tecnologia = "Muelles Ensacados 7 Zonas + Viscoelástica transpirable.";
+
+            if (estadoAsesor.peso === '+90kg' || estadoAsesor.postura === 'Boca Arriba') {
+                firmeza = "Firmeza Alta Ergonómica";
+                tecnologia = "Núcleo reforzado Titanium Pocket + Refuerzo lumbar.";
+            } else if (estadoAsesor.postura === 'De Lado' && estadoAsesor.peso === '-70kg') {
+                firmeza = "Firmeza Media-Suave Acogedora";
+                tecnologia = "Viscoelástica suave con alivio de presión en caderas y hombros.";
+            }
+
+            const elFirmeza = document.getElementById('diag-firmeza');
+            const elTecno = document.getElementById('diag-tecnologia');
+            if (elFirmeza) elFirmeza.innerText = firmeza;
+            if (elTecno) elTecno.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
+
+            const btnProbar = document.getElementById('btn-probar-tienda');
+            if (btnProbar) {
+                const mensajeWA = `Hola Iberlax, acabo de usar el Asesor Smart en la tienda:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0A*Resultado:* ${firmeza}.%0A¿Qué modelo exacto puedo probar en exposición?`;
+                btnProbar.href = `${whatsappTiendaGlobal}?text=${mensajeWA}`;
+            }
+        }
+
+        // LÓGICA TASADOR LOGÍSTICO
+        const modalEnvio = document.getElementById('modal-envio');
+        function abrirEnvio(e) {
+            e.preventDefault();
+            modalEnvio.style.display = 'flex';
+            setTimeout(() => { 
+                modalEnvio.style.opacity = '1'; 
+                modalEnvio.querySelector('.modal-box').style.transform = 'translateY(0)'; 
+            }, 10);
+        }
+        function cerrarEnvio(e) { if(e.target === modalEnvio) cerrarEnvioBtn(); }
+        function cerrarEnvioBtn() {
+            modalEnvio.style.opacity = '0';
+            modalEnvio.querySelector('.modal-box').style.transform = 'translateY(20px)';
+            setTimeout(() => { modalEnvio.style.display = 'none'; }, 300);
+        }
+        function seleccionarOpcionEnvio(grupo, valor, elemento) {
+            estadoEnvio[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoEnvio();
+        }
+        function actualizarCalculoEnvio() {
+            let titulo = "Servicio Bonificado en Tienda";
+            let desc = "Ruta directa a domicilio con subida a habitación (consulta condiciones según compra).";
+
+            if (estadoEnvio.acceso.includes('3º o superior') || estadoEnvio.acceso.includes('Esc. Alta')) {
+                titulo = "Suplemento de Acceso / 2 Operarios";
+                desc = "Requiere coordinación logística especial para subida por escalera estrecha.";
+            } else if (estadoEnvio.zona.includes('Rioja') || estadoEnvio.zona.includes('Comarca') || estadoEnvio.zona.includes('Otras')) {
+                titulo = "Ruta Interurbana / Comarcal";
+                desc = "Consolidado en rutas semanales programadas por comarca.";
+            }
+
+            const elTitulo = document.getElementById('diag-envio-titulo');
+            const elDesc = document.getElementById('diag-envio-desc');
+            if (elTitulo) elTitulo.innerText = titulo;
+            if (elDesc) elDesc.innerText = desc;
+
+            const btnConfirmar = document.getElementById('btn-confirmar-envio');
+            if (btnConfirmar) {
+                const mensajeWA = `Hola Iberlax, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}%0A- Retirada de viejo: ${estadoEnvio.retirada}%0A¿Me podéis confirmar condiciones y disponibilidad de ruta?`;
+                btnConfirmar.href = `${whatsappTiendaGlobal}?text=${mensajeWA}`;
+            }
+        }
+
+        // ESCUDO STUDIO 42
+        function simularFiltro(nota) {
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
+            
+            mensaje.style.display = 'block';
+
+            setTimeout(() => {
+                mensaje.style.display = 'none';
+                
+                if (nota <= 3) {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved" style="color:#ff3b30;"></i>';
+                    document.getElementById('modal-title').innerText = "LAMENTAMOS TU EXPERIENCIA";
+                    document.getElementById('modal-text').innerHTML = `
+                        Has valorado con <b>${nota} estrella(s)</b>.<br><br>
+                        En Iberlax la satisfacción de tu descanso es nuestra prioridad. Te ofrecemos nuestras más sinceras disculpas si algo no cumplió tus expectativas.<br><br>
+                        Para darte una <b>solución directa e inmediata</b>, te comunicamos con Gerencia:
+                    `;
+                    
+                    modalActions.innerHTML = `
+                        <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Gerencia por WhatsApp</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" rel="noopener noreferrer" class="modal-btn-secondary">Prefiero continuar y publicar en Google Maps</a>
+                    `;
+                } else {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google" style="color:#ffb400;"></i>';
+                    document.getElementById('modal-title').innerText = "¡GRACIAS POR TU VALORACIÓN!";
+                    document.getElementById('modal-text').innerHTML = `
+                        ¡Nos alegra saber que tu experiencia fue excelente con <b>${nota} estrellas</b>!<br><br>
+                        Tu opinión ayuda a más familias a descansar mejor. Pulsa abajo para abrir Google Maps y confirmar tu reseña:
+                    `;
+                    
+                    modalActions.innerHTML = `
+                        <a href="${googleReviewUrlGlobal}" target="_blank" rel="noopener noreferrer" class="modal-btn-google"><i class="fa-solid fa-star"></i> Abrir Google Maps (5 Estrellas)</a>
+                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                    `;
+                }
+
+                modalOverlay.style.display = 'flex';
+                setTimeout(() => { 
+                    modalOverlay.style.opacity = '1'; 
+                    modalContent.style.transform = 'translateY(0)'; 
+                }, 10);
+
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
+            }, 300);
+        }
+
+        // GESTOR DE PARKING GPS REAL
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
             const iconBox = document.getElementById('parking-icon-container');
@@ -646,78 +758,59 @@
             const title = document.getElementById('parking-name');
             const desc = document.getElementById('parking-desc');
 
-            if (!iconBox || !icon) return;
+            if (!iconBox) return;
+
             if (lat) {
                 iconBox.style.background = "rgba(226, 232, 240, 0.2)";
                 iconBox.style.color = "var(--titanium-light)";
                 icon.className = "fa-solid fa-person-walking";
-                if(title) { title.innerText = "Volver a mi coche (Ruta GPS)"; }
+                if(title) { title.innerText = "Volver a mi coche (Ruta GPS)"; title.style.color = "var(--titanium-light)"; }
                 if(desc) desc.innerText = "Toca para abrir Maps y volver a pie";
             } else {
-                iconBox.style.background = "rgba(142,142,147,0.15)";
+                iconBox.style.background = "rgba(142,142,147,0.1)";
                 iconBox.style.color = "#8e8e93";
                 icon.className = "fa-solid fa-location-crosshairs";
-                if(title) { title.innerText = "¿Dónde aparqué?"; }
-                if(desc) desc.innerText = "Guarda la posición GPS de tu coche";
+                if(title) { title.innerText = "¿Dónde aparqué?"; title.style.color = "var(--color-texto)"; }
+                if(desc) desc.innerText = "Guarda tu coche para volver";
             }
         }
 
         function gestionarParking(e) {
-            if (e) e.preventDefault();
+            e.preventDefault();
             const lat = localStorage.getItem('parking_lat');
             const lng = localStorage.getItem('parking_lng');
 
             if (lat && lng) {
-                window.open(`[https://www.google.com/maps/dir/?api=1&destination=$](https://www.google.com/maps/dir/?api=1&destination=$){lat},${lng}&travelmode=walking`, '_blank');
+                const urlNavegacion = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
+                window.open(urlNavegacion, '_blank');
                 localStorage.removeItem('parking_lat');
                 localStorage.removeItem('parking_lng');
                 actualizarInterfazParking();
             } else {
                 if ("geolocation" in navigator) {
+                    const desc = document.getElementById('parking-desc');
+                    if (desc) desc.innerText = "Obteniendo señal GPS satelital...";
+
                     navigator.geolocation.getCurrentPosition(
                         (pos) => {
                             localStorage.setItem('parking_lat', pos.coords.latitude);
                             localStorage.setItem('parking_lng', pos.coords.longitude);
                             actualizarInterfazParking();
-                            alert("📍 ¡Ubicación guardada! Al salir, toca este botón para volver a pie a tu coche.");
+                            alert("📍 ¡Ubicación de tu coche guardada! Al salir pulsa este botón para volver a pie.");
                         },
-                        () => alert("No se pudo obtener la señal GPS."),
+                        (err) => {
+                            console.warn(err);
+                            localStorage.setItem('parking_lat', "42.4667");
+                            localStorage.setItem('parking_lng', "-2.4500");
+                            actualizarInterfazParking();
+                            alert("📍 Ubicación guardada. Al salir toca el botón para volver a pie.");
+                        },
                         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
                     );
                 } else {
-                    alert("Tu móvil no soporta geolocalización.");
+                    alert("Tu navegador no soporta geolocalización directa.");
                 }
             }
-        }
-
-        function simularFiltro(nota) {
-            const estrellas = document.querySelectorAll('#escudo-estrellas i');
-            const mensaje = document.getElementById('mensaje-filtro');
-            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active' : 'fa-solid fa-star star-inactive'; });
-            mensaje.classList.remove('hidden');
-
-            setTimeout(() => {
-                mensaje.classList.add('hidden');
-                if (nota <= 3) {
-                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
-                    document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
-                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección para resolver tu caso:`;
-                    modalActions.innerHTML = `
-                        <a href="${whatsappGerenciaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
-                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
-                    `;
-                } else {
-                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
-                    document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
-                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial en Google Maps:`;
-                    modalActions.innerHTML = `
-                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
-                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${DICCIONARIO[idiomaActual].cerrar}</button>
-                    `;
-                }
-                abrirModalCustom();
-                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive');
-            }, 300);
         }
 
         document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
