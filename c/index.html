@@ -82,18 +82,21 @@
         }
         @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
-        /* CONTENEDOR DE LOGO POLIMÓRFICO DINÁMICO */
+        /* CONTENEDOR DE LOGO INTELIGENTE Y POLIMÓRFICO */
         .logo-container { 
             width: 96px; height: 96px; margin: 0 auto 12px auto; 
             border-radius: 26px; border: 2px solid var(--color-acento); 
             overflow: hidden; 
-            background-color: var(--fondo-logo);
+            background-color: var(--fondo-logo, #0b0c10);
             display: flex; justify-content: center; align-items: center;
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px var(--halo-glow); 
             position: relative; cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-        .logo-container img { width: 100%; height: 100%; object-fit: contain !important; padding: 6px !important; display: block; }
+        .logo-container img { 
+            width: 100%; height: 100%; object-fit: contain !important; 
+            display: block; transition: filter 0.3s ease; 
+        }
         
         h1 { font-size: 1.35rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
         .propietario { color: var(--color-acento); font-size: 0.8rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; }
@@ -244,7 +247,7 @@
             </div>
 
             <div class="modal-actions">
-                <a id="btn-probar-tienda" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
+                <a id="btn-probar-tienda" href="#" class="modal-btn-primary" style="padding: 12px 15px; font-size: 0.85rem;"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
                 <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar</button>
             </div>
         </div>
@@ -314,7 +317,7 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-            <!-- SECCIÓN DEL MODO DEMO COMERCIAL (SE OCULTA AUTOMÁTICAMENTE CON modoDemo: false) -->
+            <!-- SECCIÓN DEL MODO DEMO COMERCIAL (SE OCULTA CON modoDemo: false) -->
             <div id="fricciones-section" style="display:none;">
                 <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
                 <div class="grid grid-cols-2 gap-2 mb-3" id="friccion-grid"></div>
@@ -348,7 +351,7 @@
 
             let data = null;
 
-            // 1. CARGA MULTICAPA: LOCAL NETLIFY -> FALLBACK GITHUB RAW EN TIEMPO REAL
+            // 1. CARGA MULTICAPA: LOCAL NETLIFY -> FALLBACK GITHUB RAW TIEMPO REAL
             try {
                 let res = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
                 if (!res.ok) res = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
@@ -373,10 +376,12 @@
 
             nombreNegocioGlobal = data.nombre || "Profesional";
 
-            // 2. BRANDING DINÁMICO & CONTROL DEL FONDO DEL LOGO
+            // 2. BRANDING DINÁMICO & TRATAMIENTO AUTOMÁTICO DEL LOGO
             const colorAcentoFinal = data.colorAcento || "#00E5FF";
             const colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
             const fondoLogoFinal = data.fondoLogo || "#0b0c10";
+            const filtroLogoFinal = data.filtroLogo || "none";
+            const paddingLogoFinal = data.paddingLogo || "6px";
 
             document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
             document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
@@ -386,8 +391,26 @@
 
             const hubBox = document.getElementById('hub-logo-box');
             const splashBox = document.getElementById('splash-logo-box');
-            if (hubBox) hubBox.style.backgroundColor = fondoLogoFinal;
-            if (splashBox) splashBox.style.backgroundColor = fondoLogoFinal;
+            const hubImg = document.getElementById('hub-logo');
+            const splashImg = document.getElementById('splash-logo');
+
+            if (hubBox) {
+                hubBox.style.backgroundColor = fondoLogoFinal;
+                if (data.bordeLogo) hubBox.style.borderColor = data.bordeLogo;
+            }
+            if (splashBox) {
+                splashBox.style.backgroundColor = fondoLogoFinal;
+                if (data.bordeLogo) splashBox.style.borderColor = data.bordeLogo;
+            }
+
+            if (hubImg) {
+                hubImg.style.filter = filtroLogoFinal;
+                hubImg.style.padding = paddingLogoFinal;
+            }
+            if (splashImg) {
+                splashImg.style.filter = filtroLogoFinal;
+                splashImg.style.padding = paddingLogoFinal;
+            }
 
             const nombreFinal = data.nombre || "STUDIO 42";
             const subtituloFinal = data.subtitulo || 'Ecosistema Phygital';
@@ -401,8 +424,8 @@
             if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
 
             const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "logo.png";
-            document.getElementById('splash-logo').src = logoPath;
-            document.getElementById('hub-logo').src = logoPath;
+            splashImg.src = logoPath;
+            hubImg.src = logoPath;
 
             // 3. AUDIO Y SPLASH SCREEN
             if (data.audioFondo && data.audioFondo.trim() !== "") {
