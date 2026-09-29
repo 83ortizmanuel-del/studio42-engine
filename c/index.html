@@ -139,6 +139,7 @@
         .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
         .star-inactive { color: #334155; }
 
+        /* MODALES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
         .modal-box { 
             background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); 
@@ -189,6 +190,7 @@
 
     <button id="btn-audio-control" onclick="alternarAudio()"><i id="btn-audio-icon" class="fa-solid fa-volume-high"></i></button>
 
+    <!-- MODAL GENERAL NATIVO -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
             <button class="modal-close-btn" onclick="cerrarModalBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -201,6 +203,7 @@
         </div>
     </div>
 
+    <!-- MODAL 1: TEST ERGONÓMICO (IBERLAX) -->
     <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
         <div class="modal-box" style="max-width: 380px;">
             <button class="modal-close-btn" onclick="cerrarAsesorBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -248,6 +251,7 @@
         </div>
     </div>
 
+    <!-- MODAL 2: LOGÍSTICA & RETIRADA (IBERLAX) -->
     <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
         <div class="modal-box" style="max-width: 380px;">
             <button class="modal-close-btn" onclick="cerrarEnvioBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -294,6 +298,7 @@
         </div>
     </div>
 
+    <!-- HUB PRINCIPAL -->
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             <div class="status-badge">
@@ -354,6 +359,7 @@
         window.addEventListener('beforeunload', detenerAudioInmediato);
         window.addEventListener('blur', detenerAudioInmediato);
 
+        // SILENCIAR SOLO EN ENLACES EXTERNOS REALES
         document.addEventListener('click', (e) => {
             const enlace = e.target.closest('a');
             if (enlace && enlace.href) {
@@ -394,8 +400,8 @@
 
             nombreNegocioGlobal = data.nombre || "Profesional";
 
-            // 1. EXTRACCIÓN PRIORITARIA DEL WHATSAPP REAL DEL CLIENTE
-            if (data.whatsapp) {
+            // 1. EXTRACCIÓN PRIORITARIA Y DIRECTA DEL WHATSAPP REAL DEL COMERCIO
+            if (data.whatsapp && data.whatsapp.trim() !== "") {
                 whatsappTiendaGlobal = data.whatsapp.split('?')[0];
                 whatsappGerenciaGlobal = data.whatsapp;
             }
@@ -510,6 +516,7 @@
 
                     if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
 
+                    // ESCUDO DE RESEÑAS
                     if (sec.escudoResenas) {
                         block.innerHTML += `
                             <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
@@ -540,13 +547,14 @@
                             const bTipo = (btn.tipo || '').toLowerCase();
                             const nLower = (btn.nombre || '').toLowerCase();
 
+                            // 1. RESCATE DE LLAVES SOS (VINCULADO OBLIGATORIAMENTE AL WHATSAPP DEL COMERCIO)
                             if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('devolución de llaves') || nLower.includes('encontraste estas llaves')) {
                                 const waMsg = encodeURIComponent(
                                     `¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves que llevan vuestro llavero inteligente.\n\n` +
                                     `🔑 CÓDIGO DE IDENTIFICACIÓN: [ ${codigoLlaveroNFC} ]\n\n` +
                                     `Por favor, contactad con el propietario para coordinar la devolución en vuestro local.`
                                 );
-                                const urlRescate = `${whatsappTiendaGlobal || 'https://wa.me/34692202636'}?text=${waMsg}`;
+                                const urlRescate = `${whatsappTiendaGlobal}?text=${waMsg}`;
 
                                 block.innerHTML += `
                                     <a class="app-btn btn-rescate-llaves" href="${urlRescate}" target="_blank">
@@ -564,9 +572,10 @@
                                     </a>
                                 `;
                             }
+                            // 2. CONFIGURADOR DE KEBAB (MODAL NATIVO)
                             else if (bTipo === 'configurador_kebab') {
                                 block.innerHTML += `
-                                    <div onclick="abrirConfiguradorKebab()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                    <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
                                         <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}">
                                             <i class="${btn.icono || 'fa-solid fa-utensils'}"></i>
                                         </div>
@@ -578,9 +587,10 @@
                                     </div>
                                 `;
                             }
+                            // 3. ALÉRGENOS & SALSAS (MODAL NATIVO)
                             else if (bTipo === 'guia_alergenos_kebab') {
                                 block.innerHTML += `
-                                    <div onclick="abrirAlergenosKebab()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                    <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
                                         <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}">
                                             <i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i>
                                         </div>
@@ -592,9 +602,10 @@
                                     </div>
                                 `;
                             }
+                            // 4. CALCULADORA DE PROTEÍNA
                             else if (bTipo === 'calc_proteina') {
                                 block.innerHTML += `
-                                    <div onclick="abrirCalculadoraProteina()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                    <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
                                         <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(230, 0, 0, 0.2); color: #e60000;'}">
                                             <i class="${btn.icono || 'fa-solid fa-calculator'}"></i>
                                         </div>
@@ -606,9 +617,10 @@
                                     </div>
                                 `;
                             }
+                            // 5. PROTOCOLO DE CREATINA
                             else if (bTipo === 'guia_creatina') {
                                 block.innerHTML += `
-                                    <div onclick="abrirGuiaCreatina()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                    <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
                                         <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 255, 255, 0.12); color: #fff;'}">
                                             <i class="${btn.icono || 'fa-solid fa-bottle-droplet'}"></i>
                                         </div>
@@ -620,33 +632,36 @@
                                     </div>
                                 `;
                             }
+                            // 6. TEST ERGONÓMICO IBERLAX
                             else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
                                 block.innerHTML += `
-                                    <a class="app-btn destacado" onclick="abrirAsesor(event)">
+                                    <div class="app-btn destacado" onclick="abrirAsesor(event)" role="button">
                                         <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
                                         <div class="app-info">
                                             <div class="app-name">${btn.nombre}</div>
                                             <div class="app-desc">${btn.descripcion || 'Configurador de descanso'}</div>
                                         </div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </a>
+                                    </div>
                                 `;
                             }
+                            // 7. TASADOR LOGÍSTICO IBERLAX
                             else if (bTipo === 'logistica' || bTipo === 'tasador_retirada' || nLower.includes('tasador') || nLower.includes('retirada')) {
                                 block.innerHTML += `
-                                    <a class="app-btn" onclick="abrirEnvio(event)">
+                                    <div class="app-btn" onclick="abrirEnvio(event)" role="button">
                                         <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
                                         <div class="app-info">
                                             <div class="app-name">${btn.nombre}</div>
                                             <div class="app-desc">${btn.descripcion || 'Calcula reparto y transporte'}</div>
                                         </div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </a>
+                                    </div>
                                 `;
                             }
+                            // 8. PARKING GPS SATELITAL
                             else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
                                 block.innerHTML += `
-                                    <div onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
+                                    <div onclick="gestionarParking(event)" role="button" class="app-btn" id="btn-parking">
                                         <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.15); color: #8e8e93;">
                                             <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
                                         </div>
@@ -658,6 +673,7 @@
                                     </div>
                                 `;
                             }
+                            // 9. BOTONES UNIVERSALES (WHATSAPP, ENLACES EXTERNOS)
                             else {
                                 const finalUrl = btn.url || '#';
                                 block.innerHTML += `
@@ -684,6 +700,11 @@
             actualizarCalculoEnvio();
         }
 
+        // CONTROL DE MODALES GENERALES
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalActions = document.getElementById('modal-actions');
+
         function abrirModalCustom() {
             modalOverlay.style.display = 'flex';
             setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
@@ -695,6 +716,7 @@
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
 
+        // CONFIGURADOR DE KEBAB
         function abrirConfiguradorKebab() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Arma tu Menú";
@@ -746,6 +768,7 @@
             window.open(`${whatsappTiendaGlobal}?text=${txt}`, '_blank');
         }
 
+        // GUÍA DE ALÉRGENOS
         function abrirAlergenosKebab() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-wheat-awn-circle-exclamation text-rose-500"></i>';
             document.getElementById('modal-title').innerText = "Alérgenos & Salsas";
@@ -772,6 +795,7 @@
             abrirModalCustom();
         }
 
+        // CALCULADORA DE PROTEÍNA
         function abrirCalculadoraProteina() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Calculadora de Proteína";
@@ -818,6 +842,7 @@
             resBox.classList.remove('hidden');
         }
 
+        // GUÍA DE CREATINA
         function abrirGuiaCreatina() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bottle-droplet" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Protocolo de Creatina";
@@ -838,15 +863,16 @@
                 </div>
             `;
             modalActions.innerHTML = `
-                <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}?text=Hola%20${encodeURIComponent(nombreNegocioGlobal)},%20estoy%20viendo%20la%20guía%20y%20quiero%20consultar%20marcas%20de%20creatina%20en%20mostrador." class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Consultar Disponibilidad en Mostrador</a>
+                <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Consultar Disponibilidad en Mostrador</a>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
             `;
             abrirModalCustom();
         }
 
+        // ASESOR ERGONÓMICO (IBERLAX)
         const modalAsesor = document.getElementById('modal-asesor');
         function abrirAsesor(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
             modalAsesor.style.display = 'flex';
             setTimeout(() => { modalAsesor.style.opacity = '1'; modalAsesor.querySelector('.modal-box').style.transform = 'translateY(0)'; }, 10);
         }
@@ -886,9 +912,10 @@
             }
         }
 
+        // LOGÍSTICA & RETIRADA (IBERLAX)
         const modalEnvio = document.getElementById('modal-envio');
         function abrirEnvio(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
             modalEnvio.style.display = 'flex';
             setTimeout(() => { modalEnvio.style.opacity = '1'; modalEnvio.querySelector('.modal-box').style.transform = 'translateY(0)'; }, 10);
         }
@@ -928,6 +955,7 @@
             }
         }
 
+        // ESCUDO DE RESEÑAS
         function simularFiltro(nota) {
             const estrellas = document.querySelectorAll('#escudo-estrellas i');
             const mensaje = document.getElementById('mensaje-filtro');
@@ -958,6 +986,7 @@
             }, 300);
         }
 
+        // PARKING GPS SATELITAL
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
             const iconBox = document.getElementById('parking-icon-container');
