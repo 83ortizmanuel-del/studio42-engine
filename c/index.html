@@ -247,7 +247,7 @@
             </div>
 
             <div class="modal-actions">
-                <a id="btn-probar-tienda" href="#" class="modal-btn-primary" style="padding: 12px 15px; font-size: 0.85rem;"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
+                <a id="btn-probar-tienda" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
                 <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar</button>
             </div>
         </div>
@@ -317,7 +317,7 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-            <!-- SECCIÓN DEL MODO DEMO COMERCIAL (SE OCULTA CON modoDemo: false) -->
+            <!-- SECCIÓN DEL MODO DEMO COMERCIAL (SE OCULTA AUTOMÁTICAMENTE CON modoDemo: false) -->
             <div id="fricciones-section" style="display:none;">
                 <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
                 <div class="grid grid-cols-2 gap-2 mb-3" id="friccion-grid"></div>
@@ -345,13 +345,49 @@
         const iconoAudio = document.getElementById('btn-audio-icon');
         let audioMuteado = false;
 
+        // ============================================================
+        // CONTROL ESTRICTO DE AUDIO (SILENCIO INMEDIATO AL ABANDONAR)
+        // ============================================================
+        function detenerAudioInmediato() {
+            if (reproductor) {
+                reproductor.pause();
+            }
+        }
+
+        // 1. Al cambiar de app, minimizar o bloquear pantalla
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                detenerAudioInmediato();
+            } else {
+                if (!audioMuteado && splash && splash.style.display === 'none' && reproductor && reproductor.src) {
+                    reproductor.play().catch(() => {});
+                }
+            }
+        });
+
+        // 2. Al salir, cambiar de página o desenfocar ventana
+        window.addEventListener('pagehide', detenerAudioInmediato);
+        window.addEventListener('beforeunload', detenerAudioInmediato);
+        window.addEventListener('blur', detenerAudioInmediato);
+
+        // 3. Interceptar cualquier clic saliente para pausar antes del cambio de app
+        document.addEventListener('click', (e) => {
+            const enlace = e.target.closest('a');
+            if (enlace && enlace.href) {
+                const url = enlace.href.toLowerCase();
+                if (url.includes('wa.me') || url.includes('maps') || url.includes('tel:') || url.includes('.vcf') || enlace.target === '_blank') {
+                    detenerAudioInmediato();
+                }
+            }
+        });
+
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
             const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
 
             let data = null;
 
-            // 1. CARGA MULTICAPA: LOCAL NETLIFY -> FALLBACK GITHUB RAW TIEMPO REAL
+            // CARGA MULTICAPA: LOCAL NETLIFY -> FALLBACK GITHUB RAW TIEMPO REAL
             try {
                 let res = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
                 if (!res.ok) res = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
@@ -376,7 +412,7 @@
 
             nombreNegocioGlobal = data.nombre || "Profesional";
 
-            // 2. BRANDING DINÁMICO & TRATAMIENTO AUTOMÁTICO DEL LOGO
+            // BRANDING DINÁMICO & TRATAMIENTO DEL LOGO
             const colorAcentoFinal = data.colorAcento || "#00E5FF";
             const colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
             const fondoLogoFinal = data.fondoLogo || "#0b0c10";
@@ -427,7 +463,7 @@
             splashImg.src = logoPath;
             hubImg.src = logoPath;
 
-            // 3. AUDIO Y SPLASH SCREEN
+            // AUDIO Y SPLASH
             if (data.audioFondo && data.audioFondo.trim() !== "") {
                 reproductor.src = data.audioFondo;
                 reproductor.load();
@@ -441,7 +477,7 @@
                 splash.style.pointerEvents = 'none';
             }
 
-            // 4. MODO DEMO / ARGUMENTOS DE VENTA (SE OCULTA TOTALMENTE CON modoDemo: false)
+            // MODO DEMO COMERCIAL
             const seccionFricciones = document.getElementById('fricciones-section');
             if (data.modoDemo === true) {
                 seccionFricciones.style.display = 'block';
@@ -455,11 +491,10 @@
                 seccionFricciones.style.display = 'none';
             }
 
-            // 5. RENDERIZADO DE MENÚ DINÁMICO POLIMÓRFICO
+            // RENDER DE BOTONERA POLIMÓRFICA
             const menuContainer = document.getElementById('dynamic-menu');
             menuContainer.innerHTML = '';
 
-            // LECTURA DEL CÓDIGO CORRELATIVO DEL LLAVERO (k=NP-001, k=AK-025, etc.)
             const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
 
             if (data.secciones && Array.isArray(data.secciones)) {
@@ -474,7 +509,7 @@
                         whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
                     }
 
-                    // A) ESCUDO DE RESEÑAS
+                    // ESCUDO DE RESEÑAS
                     if (sec.escudoResenas) {
                         block.innerHTML += `
                             <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
@@ -500,13 +535,13 @@
                             </div>
                         `;
                     } 
-                    // B) BOTONES Y COMPONENTES POLIMÓRFICOS
+                    // BOTONES POLIMÓRFICOS
                     else if (sec.botones && Array.isArray(sec.botones)) {
                         sec.botones.forEach(btn => {
                             const bTipo = (btn.tipo || '').toLowerCase();
                             const nLower = (btn.nombre || '').toLowerCase();
 
-                            // 1. SEGURO UNIVERSAL DE LLAVES PERDIDAS (KEY RESCUE SOS)
+                            // 1. RESCATE DE LLAVES SOS
                             if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('devolución de llaves') || nLower.includes('encontraste estas llaves')) {
                                 const waMsg = encodeURIComponent(
                                     `¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves que llevan vuestro llavero inteligente.\n\n` +
@@ -531,7 +566,7 @@
                                     </a>
                                 `;
                             }
-                            // 2. MÓDULO RESTAURACIÓN: CONFIGURADOR DE KEBAB
+                            // 2. CONFIGURADOR DE KEBAB
                             else if (bTipo === 'configurador_kebab') {
                                 block.innerHTML += `
                                     <div onclick="abrirConfiguradorKebab()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -546,7 +581,7 @@
                                     </div>
                                 `;
                             }
-                            // 3. MÓDULO RESTAURACIÓN: ALÉRGENOS & SALSAS
+                            // 3. ALÉRGENOS & SALSAS KEBAB
                             else if (bTipo === 'guia_alergenos_kebab') {
                                 block.innerHTML += `
                                     <div onclick="abrirAlergenosKebab()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -561,7 +596,7 @@
                                     </div>
                                 `;
                             }
-                            // 4. MÓDULO FITNESS: CALCULADORA DE PROTEÍNA
+                            // 4. CALCULADORA DE PROTEÍNA
                             else if (bTipo === 'calc_proteina') {
                                 block.innerHTML += `
                                     <div onclick="abrirCalculadoraProteina()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -576,7 +611,7 @@
                                     </div>
                                 `;
                             }
-                            // 5. MÓDULO FITNESS: PROTOCOLO DE CREATINA
+                            // 5. PROTOCOLO DE CREATINA
                             else if (bTipo === 'guia_creatina') {
                                 block.innerHTML += `
                                     <div onclick="abrirGuiaCreatina()" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -591,7 +626,7 @@
                                     </div>
                                 `;
                             }
-                            // 6. RETROCOMPATIBILIDAD IBERLAX: ASESOR ERGONÓMICO
+                            // 6. ASESOR ERGONÓMICO IBERLAX
                             else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
                                 block.innerHTML += `
                                     <a class="app-btn destacado" onclick="abrirAsesor(event)">
@@ -604,7 +639,7 @@
                                     </a>
                                 `;
                             }
-                            // 7. RETROCOMPATIBILIDAD IBERLAX: TASADOR LOGÍSTICO
+                            // 7. TASADOR LOGÍSTICO IBERLAX
                             else if (bTipo === 'logistica' || bTipo === 'tasador_retirada' || nLower.includes('tasador') || nLower.includes('retirada')) {
                                 block.innerHTML += `
                                     <a class="app-btn" onclick="abrirEnvio(event)">
@@ -632,7 +667,7 @@
                                     </div>
                                 `;
                             }
-                            // 9. BOTONES UNIVERSALES (WHATSAPP, VCARD, LINKS)
+                            // 9. BOTONES UNIVERSALES
                             else {
                                 const finalUrl = btn.url || '#';
                                 if (finalUrl.includes('wa.me') && !whatsappTiendaGlobal) {
@@ -679,9 +714,7 @@
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
 
-        // ==========================================
         // APPS RESTAURACIÓN (ANKARA KEBAB)
-        // ==========================================
         function abrirConfiguradorKebab() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Arma tu Menú";
@@ -725,6 +758,7 @@
         }
 
         function enviarPedidoKebabWA() {
+            detenerAudioInmediato();
             const f = document.getElementById('kebab-formato').value;
             const c = document.getElementById('kebab-carne').value;
             const s = document.getElementById('kebab-salsa').value;
@@ -758,9 +792,7 @@
             abrirModalCustom();
         }
 
-        // ==========================================
         // APPS FITNESS (NUTRITION PLANET)
-        // ==========================================
         function abrirCalculadoraProteina() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Calculadora de Proteína";
@@ -833,9 +865,7 @@
             abrirModalCustom();
         }
 
-        // ==========================================
         // APPS RETROCOMPATIBLES (IBERLAX)
-        // ==========================================
         const modalAsesor = document.getElementById('modal-asesor');
         function abrirAsesor(e) {
             e.preventDefault();
@@ -920,9 +950,7 @@
             }
         }
 
-        // ==========================================
-        // ESCUDO DE RESEÑAS CON ESTRELLAS
-        // ==========================================
+        // ESCUDO DE RESEÑAS
         function simularFiltro(nota) {
             const estrellas = document.querySelectorAll('#escudo-estrellas i');
             const mensaje = document.getElementById('mensaje-filtro');
@@ -953,9 +981,7 @@
             }, 300);
         }
 
-        // ==========================================
-        // GESTOR DE PARKING GPS SATELITAL
-        // ==========================================
+        // PARKING GPS SATELITAL
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
             const iconBox = document.getElementById('parking-icon-container');
@@ -985,6 +1011,7 @@
             const lng = localStorage.getItem('parking_lng');
 
             if (lat && lng) {
+                detenerAudioInmediato();
                 window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
                 localStorage.removeItem('parking_lat');
                 localStorage.removeItem('parking_lng');
