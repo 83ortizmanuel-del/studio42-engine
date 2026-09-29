@@ -31,15 +31,21 @@
       ]
     },
     {
-      "titulo": "Atención & Pedidos Directos",
+      "titulo": "Servicios & Utilidades del Llavero",
       "botones": [
+        {
+          "tipo": "recuperar_llaves",
+          "nombre": "🔑 ¿Encontraste estas llaves?",
+          "descripcion": "Avisa a Nutrition Planet para coordinar la devolución al dueño",
+          "icono": "fa-solid fa-key",
+          "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet,%20he%20encontrado%20un%20llavero%20con%20llaves%20de%20un%20cliente%20vuestro%20y%20quiero%20coordinar%20su%20devolución."
+        },
         {
           "nombre": "Consultar Stock & Sabores en 1 Toque",
           "descripcion": "Verifica disponibilidad en mostrador por WhatsApp",
           "icono": "fa-brands fa-whatsapp",
           "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet,%20estoy%20en%20tienda%20y%20quisiera%20consultar%20sabores%20y%20stock.",
-          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;",
-          "destacado": false
+          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;"
         },
         {
           "nombre": "¿Dónde aparqué?",
