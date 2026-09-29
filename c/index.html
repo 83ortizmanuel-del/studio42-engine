@@ -60,7 +60,7 @@
 
         .hub-container { 
             background: var(--color-tarjeta); width: 100%; border-radius: 32px; 
-            padding: 26px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
+            padding: 24px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
             backdrop-filter: blur(20px); position: relative; z-index: 1;
         }
 
@@ -68,7 +68,7 @@
             display: inline-flex; align-items: center; gap: 8px;
             background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
             padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
-            letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 16px; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 14px; text-transform: uppercase;
             max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .ping-light { 
@@ -82,9 +82,10 @@
         }
         @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
+        /* LOGO PROPORCIONADO Y COMPACTO */
         .logo-container { 
-            width: 100px; height: 100px; margin: 0 auto 12px auto; 
-            border-radius: 28px; border: 2px solid var(--color-acento); 
+            width: 88px; height: 88px; margin: 0 auto 12px auto; 
+            border-radius: 24px; border: 2px solid var(--color-acento); 
             overflow: hidden; 
             background-color: var(--fondo-logo, #0b0c10);
             display: flex; justify-content: center; align-items: center;
@@ -93,13 +94,14 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         .logo-container img { 
-            width: 100%; height: 100%; object-fit: cover !important; 
+            width: 100%; height: 100%; 
+            object-fit: contain; 
             display: block; transition: filter 0.3s ease; 
         }
         
-        h1 { font-size: 1.35rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
-        .propietario { color: var(--color-acento); font-size: 0.8rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
-        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 20px 0 10px 6px; font-weight: 800; }
+        h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
+        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
+        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 18px 0 10px 6px; font-weight: 800; }
         
         .apps-menu { display: flex; flex-direction: column; gap: 11px; width: 100%; }
         .app-btn { 
@@ -117,7 +119,7 @@
         .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
         
         .app-info { flex-grow: 1; min-width: 0; overflow: hidden; }
-        .app-name { font-size: 0.9rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; word-break: break-word; }
+        .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; word-break: break-word; }
         .app-desc { font-size: 0.72rem; color: var(--color-gris); word-break: break-word; }
 
         .btn-rescate-llaves {
@@ -176,7 +178,7 @@
     <audio id="audio-fondo" loop preload="auto"></audio>
 
     <div id="splash-screen">
-        <div class="logo-container" id="splash-logo-box" style="width: 104px; height: 104px; margin-bottom: 20px;">
+        <div class="logo-container" id="splash-logo-box">
             <img id="splash-logo" alt="Logo">
         </div>
         <h2 id="splash-title" style="color: #fff; font-size: 1.4rem; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;">STUDIO 42</h2>
@@ -361,7 +363,7 @@
             }
         });
 
-        // DESCARGA DINÁMICA DE VCARD POR CLIENTE
+        // DESCARGA DINÁMICA DE VCARD
         function descargarVCardDinamica() {
             const telLimpio = whatsappTiendaGlobal.replace(/\D/g, '');
             const vcardContent = 
@@ -384,7 +386,7 @@ END:VCARD`;
             URL.revokeObjectURL(url);
         }
 
-        // CONTROL DE MODALES GENERALES
+        // CONTROL DE MODALES
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
         const modalActions = document.getElementById('modal-actions');
@@ -525,7 +527,7 @@ END:VCARD`;
             abrirModalCustom();
         }
 
-        // B. RESTAURACIÓN / ANKARA KEBAB
+        // B. RESTAURACIÓN / KEBAB
         function abrirConfiguradorKebab() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Arma tu Menú";
@@ -839,7 +841,7 @@ END:VCARD`;
         }
 
         // ==========================================
-        // ENGINE PRINCIPAL DE CARGA MULTICAPA
+        // ENGINE PRINCIPAL CARGA MULTICAPA
         // ==========================================
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -872,7 +874,7 @@ END:VCARD`;
 
             nombreNegocioGlobal = data.nombre || "Profesional";
 
-            // EXTRACCIÓN PRIORITARIA DEL WHATSAPP
+            // 1. CAPTURA DEL WHATSAPP
             if (data.whatsapp && data.whatsapp.trim() !== "") {
                 whatsappTiendaGlobal = data.whatsapp.split('?')[0];
                 whatsappGerenciaGlobal = data.whatsapp;
@@ -895,12 +897,11 @@ END:VCARD`;
                 });
             }
 
-            // BRANDING DINÁMICO
+            // 2. BRANDING DINÁMICO & TRATAMIENTO DEL LOGO/FOTO
             const colorAcentoFinal = data.colorAcento || "#00E5FF";
             const colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
             const fondoLogoFinal = data.fondoLogo || "#0b0c10";
             const filtroLogoFinal = data.filtroLogo || "none";
-            const paddingLogoFinal = data.paddingLogo || "6px";
 
             document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
             document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
@@ -922,13 +923,20 @@ END:VCARD`;
                 if (data.bordeLogo) splashBox.style.borderColor = data.bordeLogo;
             }
 
+            // AJUSTE PROPORCIONAL INTELIGENTE: FOTO MASCOTA (COVER) vs LOGO COMERCIAL (CONTAIN)
+            const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
+            const objectFitFinal = esMascota ? "cover" : "contain";
+            const paddingLogoFinal = data.paddingLogo || (esMascota ? "0px" : "8px");
+
             if (hubImg) {
-                hubImg.style.filter = filtroLogoFinal;
+                hubImg.style.objectFit = objectFitFinal;
                 hubImg.style.padding = paddingLogoFinal;
+                hubImg.style.filter = filtroLogoFinal;
             }
             if (splashImg) {
-                splashImg.style.filter = filtroLogoFinal;
+                splashImg.style.objectFit = objectFitFinal;
                 splashImg.style.padding = paddingLogoFinal;
+                splashImg.style.filter = filtroLogoFinal;
             }
 
             const nombreFinal = data.nombre || "STUDIO 42";
@@ -946,7 +954,7 @@ END:VCARD`;
             splashImg.src = logoPath;
             hubImg.src = logoPath;
 
-            // AUDIO Y SPLASH
+            // 3. AUDIO Y SPLASH
             if (data.audioFondo && data.audioFondo.trim() !== "") {
                 reproductor.src = data.audioFondo;
                 reproductor.load();
@@ -960,7 +968,7 @@ END:VCARD`;
                 splash.style.pointerEvents = 'none';
             }
 
-            // MODO DEMO
+            // 4. MODO DEMO
             const seccionFricciones = document.getElementById('fricciones-section');
             if (data.modoDemo === true) {
                 seccionFricciones.style.display = 'block';
@@ -974,7 +982,7 @@ END:VCARD`;
                 seccionFricciones.style.display = 'none';
             }
 
-            // RENDER DINÁMICO POLIMÓRFICO
+            // 5. RENDER POLIMÓRFICO
             const menuContainer = document.getElementById('dynamic-menu');
             menuContainer.innerHTML = '';
 
@@ -988,7 +996,6 @@ END:VCARD`;
 
                     if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
 
-                    // ESCUDO DE RESEÑAS
                     if (sec.escudoResenas) {
                         block.innerHTML += `
                             <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
@@ -1020,7 +1027,7 @@ END:VCARD`;
                             const nLower = (btn.nombre || '').toLowerCase();
                             const btnId = `btn_${sIdx}_${bIdx}`;
 
-                            // 1. RESCATE DE LLAVES SOS
+                            // RESCATE DE LLAVES SOS
                             if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('devolución de llaves') || nLower.includes('encontraste estas llaves')) {
                                 const waMsg = encodeURIComponent(
                                     `¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves que llevan vuestro llavero inteligente.\n\n` +
@@ -1045,7 +1052,7 @@ END:VCARD`;
                                     </a>
                                 `;
                             }
-                            // 2. PET RESCUE: HOSPITALES 24H & GPS
+                            // PET: GPS & HOSPITALES 24H
                             else if (bTipo === 'asistencia_ruta') {
                                 block.innerHTML += `
                                     <div onclick="abrirAsistenciaRuta()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -1060,7 +1067,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 3. PET RESCUE: CARNET VACUNACIÓN
+                            // PET: CARNET VACUNACIÓN
                             else if (bTipo === 'carnet_vacunacion') {
                                 window[btnId + '_data'] = btn.vacunas || [];
                                 block.innerHTML += `
@@ -1076,7 +1083,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 4. PET RESCUE: DIETA & ALERGIAS
+                            // PET: DIETA & ALERGIAS
                             else if (bTipo === 'checklist_parto' || bTipo === 'checklist') {
                                 window[btnId + '_data'] = btn.checklist || {};
                                 block.innerHTML += `
@@ -1092,7 +1099,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 5. PET RESCUE: TRIAJE SOS URGENCIAS
+                            // PET: TRIAJE URGENCIAS
                             else if (bTipo === 'triaje_urgencias') {
                                 window[btnId + '_data'] = btn.alertas || [];
                                 block.innerHTML += `
@@ -1108,7 +1115,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 6. RESTAURACIÓN: CONFIGURADOR KEBAB
+                            // KEBAB: CONFIGURADOR
                             else if (bTipo === 'configurador_kebab') {
                                 block.innerHTML += `
                                     <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -1123,7 +1130,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 7. RESTAURACIÓN: GUÍA ALÉRGENOS
+                            // KEBAB: ALÉRGENOS
                             else if (bTipo === 'guia_alergenos_kebab') {
                                 block.innerHTML += `
                                     <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -1138,7 +1145,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 8. FITNESS: CALCULADORA PROTEÍNA
+                            // FITNESS: PROTEÍNA
                             else if (bTipo === 'calc_proteina') {
                                 block.innerHTML += `
                                     <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -1153,7 +1160,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 9. FITNESS: GUÍA CREATINA
+                            // FITNESS: CREATINA
                             else if (bTipo === 'guia_creatina') {
                                 block.innerHTML += `
                                     <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -1168,7 +1175,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 10. DESCANSO: TEST ERGONÓMICO IBERLAX
+                            // DESCANSO: TEST ERGONÓMICO
                             else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
                                 block.innerHTML += `
                                     <div class="app-btn destacado" onclick="abrirAsesor(event)" role="button">
@@ -1181,7 +1188,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 11. DESCANSO: TASADOR LOGÍSTICO IBERLAX
+                            // DESCANSO: LOGÍSTICA & RETIRADA
                             else if (bTipo === 'logistica' || bTipo === 'tasador_retirada' || nLower.includes('tasador') || nLower.includes('retirada')) {
                                 block.innerHTML += `
                                     <div class="app-btn" onclick="abrirEnvio(event)" role="button">
@@ -1194,7 +1201,7 @@ END:VCARD`;
                                     </div>
                                 `;
                             }
-                            // 12. PARKING GPS SATELITAL
+                            // PARKING GPS
                             else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
                                 block.innerHTML += `
                                     <div onclick="gestionarParking(event)" role="button" class="app-btn" id="btn-parking">
@@ -1202,14 +1209,14 @@ END:VCARD`;
                                             <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
                                         </div>
                                         <div class="app-info">
-                                            <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                            <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la posición GPS de tu coche'}</div>
+                                            <div class="app-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Guarda la posición GPS de tu coche'}</div>
                                         </div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
                             }
-                            // 13. VCARD INTELIGENTE
+                            // VCARD INTELIGENTE
                             else if (bTipo === 'vcard' || nLower.includes('contacto en agenda') || (btn.url && btn.url.endsWith('.vcf'))) {
                                 const tieneArchivoPropio = btn.url && !btn.url.includes('contacto.vcf');
                                 const onClickAccion = tieneArchivoPropio ? '' : 'onclick="descargarVCardDinamica()"';
@@ -1228,7 +1235,7 @@ END:VCARD`;
                                     </a>
                                 `;
                             }
-                            // 14. BOTONES UNIVERSALES (TELÉFONO, WEB, WHATSAPP)
+                            // BOTONES GENERALES
                             else {
                                 const finalUrl = btn.url || '#';
                                 block.innerHTML += `
@@ -1257,7 +1264,7 @@ END:VCARD`;
 
         function iniciarMagia() {
             splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; splash.style.pointerEvents = 'none'; }, 400);
+            setTimeout(() => { splash.style.display = 'none'; }, 400);
             if (reproductor && reproductor.src) reproductor.play().catch(() => {});
         }
 
