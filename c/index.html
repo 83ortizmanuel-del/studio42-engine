@@ -32,7 +32,6 @@
             transition: background 0.3s ease;
         }
         
-        /* SPLASH SCREEN */
         #splash-screen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
             background: radial-gradient(circle at center, #111827 0%, #030712 100%);
@@ -84,8 +83,8 @@
         @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
         .logo-container { 
-            width: 96px; height: 96px; margin: 0 auto 12px auto; 
-            border-radius: 26px; border: 2px solid var(--color-acento); 
+            width: 100px; height: 100px; margin: 0 auto 12px auto; 
+            border-radius: 28px; border: 2px solid var(--color-acento); 
             overflow: hidden; 
             background-color: var(--fondo-logo, #0b0c10);
             display: flex; justify-content: center; align-items: center;
@@ -94,7 +93,7 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         .logo-container img { 
-            width: 100%; height: 100%; object-fit: contain !important; 
+            width: 100%; height: 100%; object-fit: cover !important; 
             display: block; transition: filter 0.3s ease; 
         }
         
@@ -177,7 +176,7 @@
     <audio id="audio-fondo" loop preload="auto"></audio>
 
     <div id="splash-screen">
-        <div class="logo-container" id="splash-logo-box" style="width: 100px; height: 100px; margin-bottom: 20px;">
+        <div class="logo-container" id="splash-logo-box" style="width: 104px; height: 104px; margin-bottom: 20px;">
             <img id="splash-logo" alt="Logo">
         </div>
         <h2 id="splash-title" style="color: #fff; font-size: 1.4rem; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;">STUDIO 42</h2>
@@ -187,7 +186,7 @@
 
     <button id="btn-audio-control" onclick="alternarAudio()"><i id="btn-audio-icon" class="fa-solid fa-volume-high"></i></button>
 
-    <!-- MODALES NATIVOS -->
+    <!-- MODAL GENERAL POLIMÓRFICO -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
         <div class="modal-box" id="modal-content">
             <button class="modal-close-btn" onclick="cerrarModalBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -200,6 +199,7 @@
         </div>
     </div>
 
+    <!-- MODAL 1: TEST ERGONÓMICO (IBERLAX) -->
     <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
         <div class="modal-box" style="max-width: 380px;">
             <button class="modal-close-btn" onclick="cerrarAsesorBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -247,6 +247,7 @@
         </div>
     </div>
 
+    <!-- MODAL 2: LOGÍSTICA & RETIRADA (IBERLAX) -->
     <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
         <div class="modal-box" style="max-width: 380px;">
             <button class="modal-close-btn" onclick="cerrarEnvioBtn()"><i class="fa-solid fa-xmark"></i></button>
@@ -293,11 +294,12 @@
         </div>
     </div>
 
+    <!-- HUB PRINCIPAL -->
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             <div class="status-badge">
                 <span class="ping-light"></span>
-                <span id="badge-text">NODO PHYGITAL CONECTADO · RED ACTIVA</span>
+                <span id="badge-text">NODO CONECTADO · RED ACTIVA</span>
             </div>
 
             <div class="logo-container" id="hub-logo-box">
@@ -335,18 +337,13 @@
         let audioMuteado = false;
 
         function detenerAudioInmediato() {
-            if (reproductor) {
-                reproductor.pause();
-            }
+            if (reproductor) reproductor.pause();
         }
 
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                detenerAudioInmediato();
-            } else {
-                if (!audioMuteado && splash && splash.style.display === 'none' && reproductor && reproductor.src) {
-                    reproductor.play().catch(() => {});
-                }
+            if (document.hidden) detenerAudioInmediato();
+            else if (!audioMuteado && splash && splash.style.display === 'none' && reproductor && reproductor.src) {
+                reproductor.play().catch(() => {});
             }
         });
 
@@ -354,7 +351,6 @@
         window.addEventListener('beforeunload', detenerAudioInmediato);
         window.addEventListener('blur', detenerAudioInmediato);
 
-        // CORTE DE AUDIO SOLO EN SALIDAS EXTERNAS REALES
         document.addEventListener('click', (e) => {
             const enlace = e.target.closest('a');
             if (enlace && enlace.href) {
@@ -365,7 +361,7 @@
             }
         });
 
-        // GENERADOR DINÁMICO DE VCARD POR CLIENTE (SIN ARCHIVOS COMPARTIDOS)
+        // DESCARGA DINÁMICA DE VCARD POR CLIENTE
         function descargarVCardDinamica() {
             const telLimpio = whatsappTiendaGlobal.replace(/\D/g, '');
             const vcardContent = 
@@ -388,356 +384,6 @@ END:VCARD`;
             URL.revokeObjectURL(url);
         }
 
-        async function cargarEnginePhygital() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
-            clienteSlugGlobal = clienteCod;
-
-            let data = null;
-
-            try {
-                let res = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
-                if (!res.ok) res = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
-                if (!res.ok) res = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
-                if (res.ok) data = await res.json();
-            } catch(e) {}
-
-            if (!data) {
-                try {
-                    const urlGitHub = `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/${clienteCod}.json?v=${Date.now()}`;
-                    const resGit = await fetch(urlGitHub);
-                    if (resGit.ok) data = await resGit.json();
-                } catch(e) {}
-            }
-
-            if (!data) {
-                console.warn("No se pudo cargar el archivo para:", clienteCod);
-                document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
-                splash.style.display = 'none';
-                return;
-            }
-
-            nombreNegocioGlobal = data.nombre || "Profesional";
-
-            // 1. CAPTURA DEL TELÉFONO DEL CLIENTE
-            if (data.whatsapp && data.whatsapp.trim() !== "") {
-                whatsappTiendaGlobal = data.whatsapp.split('?')[0];
-                whatsappGerenciaGlobal = data.whatsapp;
-            }
-
-            if (data.secciones && Array.isArray(data.secciones)) {
-                data.secciones.forEach(sec => {
-                    if (sec.whatsappGerencia && !whatsappTiendaGlobal) {
-                        whatsappGerenciaGlobal = sec.whatsappGerencia;
-                        whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
-                    }
-                    if (sec.botones && Array.isArray(sec.botones)) {
-                        sec.botones.forEach(b => {
-                            if (b.url && b.url.includes('wa.me') && !whatsappTiendaGlobal) {
-                                whatsappTiendaGlobal = b.url.split('?')[0];
-                                if (!whatsappGerenciaGlobal) whatsappGerenciaGlobal = b.url;
-                            }
-                        });
-                    }
-                });
-            }
-
-            // 2. BRANDING DINÁMICO & TRATAMIENTO DEL LOGO
-            const colorAcentoFinal = data.colorAcento || "#00E5FF";
-            const colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
-            const fondoLogoFinal = data.fondoLogo || "#0b0c10";
-            const filtroLogoFinal = data.filtroLogo || "none";
-            const paddingLogoFinal = data.paddingLogo || "6px";
-
-            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
-            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
-            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
-            document.documentElement.style.setProperty('--titanium-glow', colorAcentoFinal + '44');
-            document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
-
-            const hubBox = document.getElementById('hub-logo-box');
-            const splashBox = document.getElementById('splash-logo-box');
-            const hubImg = document.getElementById('hub-logo');
-            const splashImg = document.getElementById('splash-logo');
-
-            if (hubBox) {
-                hubBox.style.backgroundColor = fondoLogoFinal;
-                if (data.bordeLogo) hubBox.style.borderColor = data.bordeLogo;
-            }
-            if (splashBox) {
-                splashBox.style.backgroundColor = fondoLogoFinal;
-                if (data.bordeLogo) splashBox.style.borderColor = data.bordeLogo;
-            }
-
-            if (hubImg) {
-                hubImg.style.filter = filtroLogoFinal;
-                hubImg.style.padding = paddingLogoFinal;
-            }
-            if (splashImg) {
-                splashImg.style.filter = filtroLogoFinal;
-                splashImg.style.padding = paddingLogoFinal;
-            }
-
-            const nombreFinal = data.nombre || "STUDIO 42";
-            const subtituloFinal = data.subtitulo || 'Ecosistema Phygital';
-
-            document.getElementById('page-title').innerText = `${nombreFinal} | Identidad Digital`;
-            document.getElementById('splash-title').innerText = nombreFinal;
-            document.getElementById('client-name').innerText = nombreFinal;
-            document.getElementById('splash-subtitle').innerText = subtituloFinal;
-            document.getElementById('client-subtitle').innerText = subtituloFinal;
-
-            if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
-
-            const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "logo.png";
-            splashImg.src = logoPath;
-            hubImg.src = logoPath;
-
-            // 3. AUDIO Y SPLASH
-            if (data.audioFondo && data.audioFondo.trim() !== "") {
-                reproductor.src = data.audioFondo;
-                reproductor.load();
-                btnAudio.style.display = 'flex';
-                splash.style.display = 'flex';
-                splash.style.opacity = '1';
-            } else {
-                btnAudio.style.display = 'none';
-                splash.style.display = 'none';
-                splash.style.opacity = '0';
-                splash.style.pointerEvents = 'none';
-            }
-
-            // 4. MODO DEMO
-            const seccionFricciones = document.getElementById('fricciones-section');
-            if (data.modoDemo === true) {
-                seccionFricciones.style.display = 'block';
-                document.getElementById('friccion-grid').innerHTML = `
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('contactos')"><i class="fa-solid fa-user-xmark text-cyan-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Fuga Contactos</div></div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('resenas')"><i class="fa-solid fa-star-half-stroke text-rose-500 text-xl mb-1"></i><div class="text-[11px] font-bold">Reputación</div></div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('herramientas')"><i class="fa-solid fa-toolbox text-amber-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
-                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('facturacion')"><i class="fa-solid fa-bolt text-purple-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Facturación</div></div>
-                `;
-            } else {
-                seccionFricciones.style.display = 'none';
-            }
-
-            // 5. RENDERIZADO DINÁMICO POLIMÓRFICO
-            const menuContainer = document.getElementById('dynamic-menu');
-            menuContainer.innerHTML = '';
-
-            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
-
-            if (data.secciones && Array.isArray(data.secciones)) {
-                data.secciones.forEach(sec => {
-                    if (sec.titulo) menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
-                    const block = document.createElement('div');
-                    block.className = 'apps-menu';
-
-                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
-
-                    // ESCUDO DE RESEÑAS
-                    if (sec.escudoResenas) {
-                        block.innerHTML += `
-                            <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
-                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
-                                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-                                    </svg>
-                                </div>
-                                <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal ha sido tu experiencia?</div>
-                                <div class="text-xs text-slate-300 text-center font-medium mb-2">Tu valoración nos ayuda a mejorar</div>
-                                <div class="stars-container star-rating my-1" id="escudo-estrellas">
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
-                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
-                                </div>
-                                <p class="text-[11px] text-zinc-400 text-center mt-1">Toca las estrellas para calificar el servicio</p>
-                                <p id="mensaje-filtro" class="text-xs text-amber-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
-                            </div>
-                        `;
-                    } 
-                    else if (sec.botones && Array.isArray(sec.botones)) {
-                        sec.botones.forEach(btn => {
-                            const bTipo = (btn.tipo || '').toLowerCase();
-                            const nLower = (btn.nombre || '').toLowerCase();
-
-                            // 1. RESCATE DE LLAVES SOS
-                            if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('devolución de llaves') || nLower.includes('encontraste estas llaves')) {
-                                const waMsg = encodeURIComponent(
-                                    `¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves que llevan vuestro llavero inteligente.\n\n` +
-                                    `🔑 CÓDIGO DE IDENTIFICACIÓN: [ ${codigoLlaveroNFC} ]\n\n` +
-                                    `Por favor, contactad con el propietario para coordinar la devolución en vuestro local.`
-                                );
-                                const urlRescate = `${whatsappTiendaGlobal}?text=${waMsg}`;
-
-                                block.innerHTML += `
-                                    <a class="app-btn btn-rescate-llaves" href="${urlRescate}" target="_blank">
-                                        <div class="app-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">
-                                            <i class="fa-solid fa-key animate-bounce"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name flex items-center">
-                                                ${btn.nombre || '¿Encontraste estas llaves?'}
-                                                <span class="badge-rescate-sos">SOS</span>
-                                            </div>
-                                            <div class="app-desc">${btn.descripcion || 'Pulsa para avisar a la tienda y devolverlas de forma segura'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-amber-400 text-xs"></i>
-                                    </a>
-                                `;
-                            }
-                            // 2. CONFIGURADOR DE KEBAB
-                            else if (bTipo === 'configurador_kebab') {
-                                block.innerHTML += `
-                                    <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-utensils'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Arma tu menú antes de pedir'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
-                            }
-                            // 3. GUÍA DE ALÉRGENOS
-                            else if (bTipo === 'guia_alergenos_kebab') {
-                                block.innerHTML += `
-                                    <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Consulta alérgenos y salsas'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
-                            }
-                            // 4. CALCULADORA DE PROTEÍNA
-                            else if (bTipo === 'calc_proteina') {
-                                block.innerHTML += `
-                                    <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(230, 0, 0, 0.2); color: #e60000;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-calculator'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Calcula tus gramos diarios exactos'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
-                            }
-                            // 5. PROTOCOLO DE CREATINA
-                            else if (bTipo === 'guia_creatina') {
-                                block.innerHTML += `
-                                    <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 255, 255, 0.12); color: #fff;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-bottle-droplet'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Dosis óptima y momentos de toma'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
-                            }
-                            // 6. ASESOR ERGONÓMICO IBERLAX
-                            else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
-                                block.innerHTML += `
-                                    <div class="app-btn destacado" onclick="abrirAsesor(event)" role="button">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Configurador de descanso'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
-                            }
-                            // 7. TASADOR LOGÍSTICO IBERLAX
-                            else if (bTipo === 'logistica' || bTipo === 'tasador_retirada' || nLower.includes('tasador') || nLower.includes('retirada')) {
-                                block.innerHTML += `
-                                    <div class="app-btn" onclick="abrirEnvio(event)" role="button">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Calcula reparto y transporte'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
-                            }
-                            // 8. PARKING GPS SATELITAL
-                            else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
-                                block.innerHTML += `
-                                    <div onclick="gestionarParking(event)" role="button" class="app-btn" id="btn-parking">
-                                        <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.15); color: #8e8e93;">
-                                            <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Guarda la posición GPS de tu coche'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
-                            }
-                            // 9. VCARD INTELIGENTE (DESCARGA SINCRONIZADA CON EL CLIENTE)
-                            else if (bTipo === 'vcard' || nLower.includes('contacto en agenda') || (btn.url && btn.url.endsWith('.vcf'))) {
-                                const tieneArchivoPropio = btn.url && !btn.url.includes('contacto.vcf');
-                                const onClickAccion = tieneArchivoPropio ? '' : 'onclick="descargarVCardDinamica()"';
-                                const hrefValor = tieneArchivoPropio ? btn.url : 'javascript:void(0)';
-
-                                block.innerHTML += `
-                                    <a class="app-btn" href="${hrefValor}" ${onClickAccion}>
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-address-card'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || 'Descarga directa de contacto'}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </a>
-                                `;
-                            }
-                            // 10. BOTONES GENERALES
-                            else {
-                                const finalUrl = btn.url || '#';
-                                block.innerHTML += `
-                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') ? 'target="_blank"' : ''}>
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-link'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </a>
-                                `;
-                            }
-                        });
-                    }
-                    menuContainer.appendChild(block);
-                });
-            }
-
-            actualizarInterfazParking();
-            actualizarCalculoAsesor();
-            actualizarCalculoEnvio();
-        }
-
         // CONTROL DE MODALES GENERALES
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
@@ -754,7 +400,132 @@ END:VCARD`;
             setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
 
-        // CONFIGURADOR DE KEBAB
+        // ==========================================
+        // MÓDULOS VERTICALES INTERACTIVOS
+        // ==========================================
+
+        // A. MASCOTAS / PET RESCUE
+        function abrirAsistenciaRuta() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-location-crosshairs" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = "Hospitales 24h & GPS";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Localiza centros veterinarios de urgencia abiertos en tu zona o envía la posición exacta al dueño:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-2">
+                    <button onclick="buscarVeterinariosCercanos()" class="w-full bg-slate-800 border border-slate-600 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2 hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-hospital text-cyan-400"></i> Buscar Urgencias 24h en Google Maps
+                    </button>
+                    <button onclick="compartirUbicacionMascota()" class="w-full bg-emerald-600/20 border border-emerald-500 rounded-xl p-3 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 hover:bg-emerald-600/30 transition">
+                        <i class="fa-brands fa-whatsapp text-emerald-400"></i> Enviar Mi Posición GPS al Dueño
+                    </button>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            abrirModalCustom();
+        }
+
+        function buscarVeterinariosCercanos() {
+            detenerAudioInmediato();
+            window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank');
+        }
+
+        function compartirUbicacionMascota() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        detenerAudioInmediato();
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        const msg = encodeURIComponent(`¡Hola! Tengo a ${nombreNegocioGlobal} conmigo. Esta es mi ubicación GPS exacta para coordinar la entrega: https://maps.google.com/?q=${lat},${lng}`);
+                        window.open(`${whatsappTiendaGlobal}?text=${msg}`, '_blank');
+                    },
+                    () => {
+                        window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(`¡Hola! Tengo a ${nombreNegocioGlobal} conmigo. Por favor contáctame para coordinar la entrega.`)}`, '_blank');
+                    }
+                );
+            } else {
+                window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(`¡Hola! Tengo a ${nombreNegocioGlobal} conmigo.`)}`, '_blank');
+            }
+        }
+
+        function abrirCarnetVacunacion(vacunas) {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-dog" style="color: #38BDF8;"></i>';
+            document.getElementById('modal-title').innerText = "Cartilla Sanitaria";
+            let htmlVacunas = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
+            if (vacunas && Array.isArray(vacunas)) {
+                vacunas.forEach(v => {
+                    htmlVacunas += `
+                        <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-white">${v.nombre}</span>
+                                <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5 rounded-full font-bold uppercase">${v.badge || 'Vigente'}</span>
+                            </div>
+                            <div class="text-[11px] text-slate-300">${v.subtitulo || ''}</div>
+                            <div class="text-[10px] text-slate-400 mt-1"><i class="fa-solid fa-clock text-cyan-400 mr-1"></i>${v.momento || 'Pauta Anual'}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                htmlVacunas += `<p class="text-xs text-slate-400">Cartilla sanitaria al día bajo supervisión veterinaria.</p>`;
+            }
+            htmlVacunas += `</div>`;
+            document.getElementById('modal-text').innerHTML = htmlVacunas;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirChecklistClinico(checklist) {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-clipboard-list" style="color: #F59E0B;"></i>';
+            document.getElementById('modal-title').innerText = "Dieta & Alergias";
+            let htmlCheck = `<div class="space-y-3 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
+            if (checklist && typeof checklist === 'object') {
+                for (const [categoria, items] of Object.entries(checklist)) {
+                    htmlCheck += `
+                        <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                            <div class="text-xs font-bold text-amber-400 uppercase tracking-wide mb-1.5">${categoria}</div>
+                            <ul class="space-y-1">
+                    `;
+                    items.forEach(it => {
+                        htmlCheck += `<li class="text-[11px] text-slate-200 flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-amber-400 text-[10px] mt-0.5"></i> <span>${it}</span></li>`;
+                    });
+                    htmlCheck += `</ul></div>`;
+                }
+            }
+            htmlCheck += `</div>`;
+            document.getElementById('modal-text').innerHTML = htmlCheck;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirTriajeUrgencias(alertas) {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444;"></i>';
+            document.getElementById('modal-title').innerText = "Semáforo SOS / Auxilios";
+            let htmlAlertas = `
+                <p class="text-xs text-slate-300 text-left mb-2">Pautas críticas ante sospecha de envenenamiento o emergencia:</p>
+                <div class="space-y-2 text-left my-2 max-h-56 overflow-y-auto pr-1">
+            `;
+            if (alertas && Array.isArray(alertas)) {
+                alertas.forEach(al => {
+                    htmlAlertas += `
+                        <div class="bg-rose-950/40 border border-rose-800/80 p-2 rounded-xl text-xs text-rose-200 flex items-start gap-2">
+                            <i class="fa-solid fa-skull-crossbones text-rose-400 mt-0.5"></i>
+                            <span>${al}</span>
+                        </div>
+                    `;
+                });
+            }
+            htmlAlertas += `
+                </div>
+                <p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización veterinaria expresa.</p>
+            `;
+            document.getElementById('modal-text').innerHTML = htmlAlertas;
+            modalActions.innerHTML = `
+                <button onclick="buscarVeterinariosCercanos()" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="fa-solid fa-phone-volume"></i> Urgencias Veterinarias 24h</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        // B. RESTAURACIÓN / ANKARA KEBAB
         function abrirConfiguradorKebab() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Arma tu Menú";
@@ -806,7 +577,6 @@ END:VCARD`;
             window.open(`${whatsappTiendaGlobal}?text=${txt}`, '_blank');
         }
 
-        // GUÍA DE ALÉRGENOS
         function abrirAlergenosKebab() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-wheat-awn-circle-exclamation text-rose-500"></i>';
             document.getElementById('modal-title').innerText = "Alérgenos & Salsas";
@@ -833,7 +603,7 @@ END:VCARD`;
             abrirModalCustom();
         }
 
-        // CALCULADORA DE PROTEÍNA
+        // C. FITNESS / NUTRITION PLANET
         function abrirCalculadoraProteina() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Calculadora de Proteína";
@@ -873,14 +643,12 @@ END:VCARD`;
             }
             const gramosTotales = Math.round(peso * factor);
             const scoopsAprox = Math.round((gramosTotales * 0.3) / 25);
-
             const resBox = document.getElementById('resultado-proteina-box');
             document.getElementById('resultado-gramos').innerText = `${gramosTotales} g / día`;
             document.getElementById('resultado-consejo').innerHTML = `De los cuales aprox. <b>${scoopsAprox} batido(s) (1 scoop de ~25g)</b> te permitirán alcanzar tus macros diarios sin sobrecargar comidas sólidas.`;
             resBox.classList.remove('hidden');
         }
 
-        // GUÍA DE CREATINA
         function abrirGuiaCreatina() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bottle-droplet" style="color:var(--color-acento);"></i>';
             document.getElementById('modal-title').innerText = "Protocolo de Creatina";
@@ -907,7 +675,7 @@ END:VCARD`;
             abrirModalCustom();
         }
 
-        // ASESOR ERGONÓMICO (IBERLAX)
+        // D. DESCANSO / IBERLAX
         const modalAsesor = document.getElementById('modal-asesor');
         function abrirAsesor(e) {
             if (e) e.preventDefault();
@@ -929,7 +697,6 @@ END:VCARD`;
         function actualizarCalculoAsesor() {
             let firmeza = "Firmeza Media Adaptable";
             let tecnologia = "Muelles Ensacados 7 Zonas + Viscoelástica transpirable.";
-
             if (estadoAsesor.peso === '+90kg' || estadoAsesor.postura === 'Boca Arriba') {
                 firmeza = "Firmeza Alta Ergonómica";
                 tecnologia = "Núcleo reforzado Titanium Pocket + Refuerzo lumbar.";
@@ -937,12 +704,10 @@ END:VCARD`;
                 firmeza = "Firmeza Media-Suave Acogedora";
                 tecnologia = "Viscoelástica suave con alivio de presión en caderas y hombros.";
             }
-
             const elFirmeza = document.getElementById('diag-firmeza');
             const elTecno = document.getElementById('diag-tecnologia');
             if (elFirmeza) elFirmeza.innerText = firmeza;
             if (elTecno) elTecno.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
-
             const btnProbar = document.getElementById('btn-probar-tienda');
             if (btnProbar) {
                 const mensajeWA = `Hola ${nombreNegocioGlobal}, he completado el test ergonómico:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0A*Resultado:* ${firmeza}.%0A¿Qué modelo puedo probar en exposición?`;
@@ -950,7 +715,6 @@ END:VCARD`;
             }
         }
 
-        // LOGÍSTICA & RETIRADA (IBERLAX)
         const modalEnvio = document.getElementById('modal-envio');
         function abrirEnvio(e) {
             if (e) e.preventDefault();
@@ -972,7 +736,6 @@ END:VCARD`;
         function actualizarCalculoEnvio() {
             let titulo = "Servicio Bonificado en Tienda";
             let desc = "Ruta directa a domicilio con subida a habitación.";
-
             if (estadoEnvio.acceso.includes('3º o superior') || estadoEnvio.acceso.includes('Esc. Alta')) {
                 titulo = "Suplemento de Acceso / 2 Operarios";
                 desc = "Requiere coordinación logística especial para subida por escalera estrecha.";
@@ -980,12 +743,10 @@ END:VCARD`;
                 titulo = "Ruta Interurbana / Comarcal";
                 desc = "Consolidado en rutas semanales programadas por comarca.";
             }
-
             const elTitulo = document.getElementById('diag-envio-titulo');
             const elDesc = document.getElementById('diag-envio-desc');
             if (elTitulo) elTitulo.innerText = titulo;
             if (elDesc) elDesc.innerText = desc;
-
             const btnConfirmar = document.getElementById('btn-confirmar-envio');
             if (btnConfirmar) {
                 const mensajeWA = `Hola ${nombreNegocioGlobal}, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}%0A- Retirada de viejo: ${estadoEnvio.retirada}%0A¿Me podéis confirmar condiciones y disponibilidad de ruta?`;
@@ -993,7 +754,7 @@ END:VCARD`;
             }
         }
 
-        // ESCUDO DE RESEÑAS
+        // E. ESCUDO DE RESEÑAS
         function simularFiltro(nota) {
             const estrellas = document.querySelectorAll('#escudo-estrellas i');
             const mensaje = document.getElementById('mensaje-filtro');
@@ -1024,7 +785,7 @@ END:VCARD`;
             }, 300);
         }
 
-        // PARKING GPS SATELITAL
+        // F. PARKING GPS SATELITAL
         function actualizarInterfazParking() {
             const lat = localStorage.getItem('parking_lat');
             const iconBox = document.getElementById('parking-icon-container');
@@ -1075,6 +836,423 @@ END:VCARD`;
                     alert("Tu móvil no soporta geolocalización directa.");
                 }
             }
+        }
+
+        // ==========================================
+        // ENGINE PRINCIPAL DE CARGA MULTICAPA
+        // ==========================================
+        async function cargarEnginePhygital() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
+            clienteSlugGlobal = clienteCod;
+
+            let data = null;
+
+            try {
+                let res = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!res.ok) res = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
+                if (!res.ok) res = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
+                if (res.ok) data = await res.json();
+            } catch(e) {}
+
+            if (!data) {
+                try {
+                    const urlGitHub = `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/${clienteCod}.json?v=${Date.now()}`;
+                    const resGit = await fetch(urlGitHub);
+                    if (resGit.ok) data = await resGit.json();
+                } catch(e) {}
+            }
+
+            if (!data) {
+                console.warn("No se pudo cargar el archivo para:", clienteCod);
+                document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
+                splash.style.display = 'none';
+                return;
+            }
+
+            nombreNegocioGlobal = data.nombre || "Profesional";
+
+            // EXTRACCIÓN PRIORITARIA DEL WHATSAPP
+            if (data.whatsapp && data.whatsapp.trim() !== "") {
+                whatsappTiendaGlobal = data.whatsapp.split('?')[0];
+                whatsappGerenciaGlobal = data.whatsapp;
+            }
+
+            if (data.secciones && Array.isArray(data.secciones)) {
+                data.secciones.forEach(sec => {
+                    if (sec.whatsappGerencia && !whatsappTiendaGlobal) {
+                        whatsappGerenciaGlobal = sec.whatsappGerencia;
+                        whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
+                    }
+                    if (sec.botones && Array.isArray(sec.botones)) {
+                        sec.botones.forEach(b => {
+                            if (b.url && b.url.includes('wa.me') && !whatsappTiendaGlobal) {
+                                whatsappTiendaGlobal = b.url.split('?')[0];
+                                if (!whatsappGerenciaGlobal) whatsappGerenciaGlobal = b.url;
+                            }
+                        });
+                    }
+                });
+            }
+
+            // BRANDING DINÁMICO
+            const colorAcentoFinal = data.colorAcento || "#00E5FF";
+            const colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
+            const fondoLogoFinal = data.fondoLogo || "#0b0c10";
+            const filtroLogoFinal = data.filtroLogo || "none";
+            const paddingLogoFinal = data.paddingLogo || "6px";
+
+            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
+            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
+            document.documentElement.style.setProperty('--titanium-glow', colorAcentoFinal + '44');
+            document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
+
+            const hubBox = document.getElementById('hub-logo-box');
+            const splashBox = document.getElementById('splash-logo-box');
+            const hubImg = document.getElementById('hub-logo');
+            const splashImg = document.getElementById('splash-logo');
+
+            if (hubBox) {
+                hubBox.style.backgroundColor = fondoLogoFinal;
+                if (data.bordeLogo) hubBox.style.borderColor = data.bordeLogo;
+            }
+            if (splashBox) {
+                splashBox.style.backgroundColor = fondoLogoFinal;
+                if (data.bordeLogo) splashBox.style.borderColor = data.bordeLogo;
+            }
+
+            if (hubImg) {
+                hubImg.style.filter = filtroLogoFinal;
+                hubImg.style.padding = paddingLogoFinal;
+            }
+            if (splashImg) {
+                splashImg.style.filter = filtroLogoFinal;
+                splashImg.style.padding = paddingLogoFinal;
+            }
+
+            const nombreFinal = data.nombre || "STUDIO 42";
+            const subtituloFinal = data.subtitulo || 'Ecosistema Phygital';
+
+            document.getElementById('page-title').innerText = `${nombreFinal} | Identidad Digital`;
+            document.getElementById('splash-title').innerText = nombreFinal;
+            document.getElementById('client-name').innerText = nombreFinal;
+            document.getElementById('splash-subtitle').innerText = subtituloFinal;
+            document.getElementById('client-subtitle').innerText = subtituloFinal;
+
+            if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
+
+            const logoPath = data.logo && data.logo.trim() !== "" ? data.logo : "logo.png";
+            splashImg.src = logoPath;
+            hubImg.src = logoPath;
+
+            // AUDIO Y SPLASH
+            if (data.audioFondo && data.audioFondo.trim() !== "") {
+                reproductor.src = data.audioFondo;
+                reproductor.load();
+                btnAudio.style.display = 'flex';
+                splash.style.display = 'flex';
+                splash.style.opacity = '1';
+            } else {
+                btnAudio.style.display = 'none';
+                splash.style.display = 'none';
+                splash.style.opacity = '0';
+                splash.style.pointerEvents = 'none';
+            }
+
+            // MODO DEMO
+            const seccionFricciones = document.getElementById('fricciones-section');
+            if (data.modoDemo === true) {
+                seccionFricciones.style.display = 'block';
+                document.getElementById('friccion-grid').innerHTML = `
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('contactos')"><i class="fa-solid fa-user-xmark text-cyan-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Fuga Contactos</div></div>
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('resenas')"><i class="fa-solid fa-star-half-stroke text-rose-500 text-xl mb-1"></i><div class="text-[11px] font-bold">Reputación</div></div>
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('herramientas')"><i class="fa-solid fa-toolbox text-amber-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('facturacion')"><i class="fa-solid fa-bolt text-purple-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Facturación</div></div>
+                `;
+            } else {
+                seccionFricciones.style.display = 'none';
+            }
+
+            // RENDER DINÁMICO POLIMÓRFICO
+            const menuContainer = document.getElementById('dynamic-menu');
+            menuContainer.innerHTML = '';
+
+            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+
+            if (data.secciones && Array.isArray(data.secciones)) {
+                data.secciones.forEach((sec, sIdx) => {
+                    if (sec.titulo) menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
+                    const block = document.createElement('div');
+                    block.className = 'apps-menu';
+
+                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
+
+                    // ESCUDO DE RESEÑAS
+                    if (sec.escudoResenas) {
+                        block.innerHTML += `
+                            <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
+                                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                    </svg>
+                                </div>
+                                <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal ha sido tu experiencia?</div>
+                                <div class="text-xs text-slate-300 text-center font-medium mb-2">Tu valoración nos ayuda a mejorar</div>
+                                <div class="stars-container star-rating my-1" id="escudo-estrellas">
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
+                                </div>
+                                <p class="text-[11px] text-zinc-400 text-center mt-1">Toca las estrellas para calificar el servicio</p>
+                                <p id="mensaje-filtro" class="text-xs text-amber-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
+                            </div>
+                        `;
+                    } 
+                    else if (sec.botones && Array.isArray(sec.botones)) {
+                        sec.botones.forEach((btn, bIdx) => {
+                            const bTipo = (btn.tipo || '').toLowerCase();
+                            const nLower = (btn.nombre || '').toLowerCase();
+                            const btnId = `btn_${sIdx}_${bIdx}`;
+
+                            // 1. RESCATE DE LLAVES SOS
+                            if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('devolución de llaves') || nLower.includes('encontraste estas llaves')) {
+                                const waMsg = encodeURIComponent(
+                                    `¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves que llevan vuestro llavero inteligente.\n\n` +
+                                    `🔑 CÓDIGO DE IDENTIFICACIÓN: [ ${codigoLlaveroNFC} ]\n\n` +
+                                    `Por favor, contactad con el propietario para coordinar la devolución en vuestro local.`
+                                );
+                                const urlRescate = `${whatsappTiendaGlobal}?text=${waMsg}`;
+
+                                block.innerHTML += `
+                                    <a class="app-btn btn-rescate-llaves" href="${urlRescate}" target="_blank">
+                                        <div class="app-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">
+                                            <i class="fa-solid fa-key animate-bounce"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name flex items-center">
+                                                ${btn.nombre || '¿Encontraste estas llaves?'}
+                                                <span class="badge-rescate-sos">SOS</span>
+                                            </div>
+                                            <div class="app-desc">${btn.descripcion || 'Pulsa para avisar a la tienda y devolverlas de forma segura'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-amber-400 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // 2. PET RESCUE: HOSPITALES 24H & GPS
+                            else if (bTipo === 'asistencia_ruta') {
+                                block.innerHTML += `
+                                    <div onclick="abrirAsistenciaRuta()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: #00E5FF;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-location-crosshairs'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || ''}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 3. PET RESCUE: CARNET VACUNACIÓN
+                            else if (bTipo === 'carnet_vacunacion') {
+                                window[btnId + '_data'] = btn.vacunas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirCarnetVacunacion(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56, 189, 248, 0.2); color: #38BDF8;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-shield-dog'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || ''}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 4. PET RESCUE: DIETA & ALERGIAS
+                            else if (bTipo === 'checklist_parto' || bTipo === 'checklist') {
+                                window[btnId + '_data'] = btn.checklist || {};
+                                block.innerHTML += `
+                                    <div onclick="abrirChecklistClinico(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #F59E0B;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-clipboard-list'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || ''}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 5. PET RESCUE: TRIAJE SOS URGENCIAS
+                            else if (bTipo === 'triaje_urgencias') {
+                                window[btnId + '_data'] = btn.alertas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirTriajeUrgencias(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.22); color: #EF4444;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-triangle-exclamation'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || ''}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 6. RESTAURACIÓN: CONFIGURADOR KEBAB
+                            else if (bTipo === 'configurador_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-utensils'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Arma tu menú antes de pedir'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 7. RESTAURACIÓN: GUÍA ALÉRGENOS
+                            else if (bTipo === 'guia_alergenos_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Consulta alérgenos y salsas'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 8. FITNESS: CALCULADORA PROTEÍNA
+                            else if (bTipo === 'calc_proteina') {
+                                block.innerHTML += `
+                                    <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(230, 0, 0, 0.2); color: #e60000;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-calculator'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Calcula tus gramos diarios exactos'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 9. FITNESS: GUÍA CREATINA
+                            else if (bTipo === 'guia_creatina') {
+                                block.innerHTML += `
+                                    <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 255, 255, 0.12); color: #fff;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-bottle-droplet'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Dosis óptima y momentos de toma'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 10. DESCANSO: TEST ERGONÓMICO IBERLAX
+                            else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
+                                block.innerHTML += `
+                                    <div class="app-btn destacado" onclick="abrirAsesor(event)" role="button">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Configurador de descanso'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 11. DESCANSO: TASADOR LOGÍSTICO IBERLAX
+                            else if (bTipo === 'logistica' || bTipo === 'tasador_retirada' || nLower.includes('tasador') || nLower.includes('retirada')) {
+                                block.innerHTML += `
+                                    <div class="app-btn" onclick="abrirEnvio(event)" role="button">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Calcula reparto y transporte'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 12. PARKING GPS SATELITAL
+                            else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
+                                block.innerHTML += `
+                                    <div onclick="gestionarParking(event)" role="button" class="app-btn" id="btn-parking">
+                                        <div class="app-icon" id="parking-icon-container" style="background: rgba(142,142,147,0.15); color: #8e8e93;">
+                                            <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name" id="parking-name">${btn.nombre || '¿Dónde aparqué?'}</div>
+                                            <div class="app-desc" id="parking-desc">${btn.descripcion || 'Guarda la posición GPS de tu coche'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // 13. VCARD INTELIGENTE
+                            else if (bTipo === 'vcard' || nLower.includes('contacto en agenda') || (btn.url && btn.url.endsWith('.vcf'))) {
+                                const tieneArchivoPropio = btn.url && !btn.url.includes('contacto.vcf');
+                                const onClickAccion = tieneArchivoPropio ? '' : 'onclick="descargarVCardDinamica()"';
+                                const hrefValor = tieneArchivoPropio ? btn.url : 'javascript:void(0)';
+
+                                block.innerHTML += `
+                                    <a class="app-btn" href="${hrefValor}" ${onClickAccion}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-address-card'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || 'Descarga directa de contacto'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // 14. BOTONES UNIVERSALES (TELÉFONO, WEB, WHATSAPP)
+                            else {
+                                const finalUrl = btn.url || '#';
+                                block.innerHTML += `
+                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') || finalUrl.startsWith('tel:') ? 'target="_blank"' : ''}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
+                                            <i class="${btn.icono || 'fa-solid fa-link'}"></i>
+                                        </div>
+                                        <div class="app-info">
+                                            <div class="app-name">${btn.nombre}</div>
+                                            <div class="app-desc">${btn.descripcion || ''}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                        });
+                    }
+                    menuContainer.appendChild(block);
+                });
+            }
+
+            actualizarInterfazParking();
+            actualizarCalculoAsesor();
+            actualizarCalculoEnvio();
         }
 
         function iniciarMagia() {
