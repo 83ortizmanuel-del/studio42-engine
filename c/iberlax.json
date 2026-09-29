@@ -4,7 +4,9 @@
   "subtitulo": "Especialistas en Descanso & Ergonomía",
   "subtituloOverlay": "Bienvenido al Ecosistema Iberlax Phygital",
   "logo": "iberlax-logo.jpg",
+  "fondoLogo": "#ffffff",
   "colorPrincipal": "#0F2C59",
+  "colorAcento": "#00A8E8",
   "audioFondo": "ambiente2.mp3",
   "secciones": [
     {
@@ -37,7 +39,7 @@
           "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir",
           "icono": "fa-solid fa-location-crosshairs",
-          "url": "#"
+          "estiloIcono": "background-color: rgba(142, 142, 147, 0.15); color: #94A3B8;"
         }
       ]
     },
@@ -45,25 +47,24 @@
       "titulo": "Servicios VIP & Prescripción",
       "botones": [
         {
-          "nombre": "🔑 Devolución de Llaves Perdidas",
-          "descripcion": "¿Has encontrado estas llaves? Pulsa aquí para avisar a Iberlax y coordinar la entrega",
-          "icono": "fa-solid fa-key",
-          "url": "https://wa.me/34945601573?text=Hola%20Iberlax,%20he%20encontrado%20un%20llavero%20con%20llaves%20de%20un%20cliente%20vuestro%20y%20quiero%20coordinar%20su%20devolución",
-          "estiloIcono": "background-color: rgba(14, 165, 233, 0.15); color: #0EA5E9;"
+          "tipo": "recuperar_llaves",
+          "nombre": "🔑 ¿Encontraste estas llaves?",
+          "descripcion": "Avisa a Iberlax para coordinar la devolución segura al propietario",
+          "icono": "fa-solid fa-key"
         },
         {
           "nombre": "Club Embajador: Regala 50 € a un Amigo",
           "descripcion": "Comparte un bono exclusivo de 50 € para el nuevo descanso de un familiar o amigo",
           "icono": "fa-solid fa-gift",
-          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20bono%20exclusivo%20de%2050%20€%20de%20descuento%20para%20tu%20nuevo%20colchón%20en%20Iberlax.%20Pruébalo%20aquí:%20https://wa.me/34945601573",
-          "estiloIcono": "background-color: rgba(168, 85, 247, 0.15); color: #A855F7;"
+          "estiloIcono": "background-color: rgba(168, 85, 247, 0.15); color: #A855F7;",
+          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20bono%20exclusivo%20de%2050%20€%20de%20descuento%20para%20tu%20nuevo%20colchón%20en%20Iberlax.%20Pruébalo%20aquí:%20https://wa.me/34643186453"
         },
         {
           "nombre": "Guardar Contacto en Agenda",
           "descripcion": "Añade el WhatsApp y teléfono directo a tus contactos",
           "icono": "fa-solid fa-address-card",
-          "url": "./contacto.vcf",
-          "estiloIcono": "background-color: rgba(0, 229, 255, 0.15); color: #00E5FF;"
+          "estiloIcono": "background-color: rgba(0, 229, 255, 0.15); color: #00A8E8;",
+          "url": "./contacto.vcf"
         }
       ]
     },
