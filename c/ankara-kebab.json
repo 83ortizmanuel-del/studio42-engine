@@ -1,42 +1,66 @@
 {
   "nombre": "ANKARA KEBAB",
-  "modoDemo": true,
-  "subtitulo": "Especialistas en Hostelería y Restauración",
-  "textoBadge": "NODO PHYGITAL CONECTADO · RED ACTIVA",
+  "modoDemo": false,
+  "subtitulo": "Auténtico Sabor Tradicional · Dürüm, Pita & Especialidades",
+  "textoBadge": "PUNTO DE PEDIDO & MOSTRADOR CONECTADO",
   "logo": "logo.png",
-  "colorPrincipal": "#0A0F1D",
-  "colorAcento": "#fa8405",
   "audioFondo": "",
+  "colorPrincipal": "#0B0D14",
+  "colorAcento": "#FA8405",
   "secciones": [
     {
-      "titulo": "Servicios & Soluciones Directas",
+      "titulo": "Herramientas de Mesa & Mostrador",
       "botones": [
         {
-          "nombre": "Atención Prioritaria por WhatsApp",
-          "descripcion": "Resuelve tus dudas directamente con nuestro equipo",
-          "icono": "fa-brands fa-whatsapp",
-          "url": "[https://wa.me/34672294962?text=Hola%20](https://wa.me/34672294962?text=Hola%20)ANKARA%20KEBAB",
+          "tipo": "configurador_kebab",
+          "nombre": "Armar Mi Menú Kebab (Paso a Paso)",
+          "descripcion": "Elige carne, pan, vegetales y salsas antes de pedir",
+          "icono": "fa-solid fa-utensils",
+          "estiloIcono": "background: rgba(250, 132, 5, 0.2); color: #FA8405;",
           "destacado": true
+        },
+        {
+          "tipo": "guia_alergenos_kebab",
+          "nombre": "Guía de Alérgenos & Salsas",
+          "descripcion": "Consulta gluten, lácteos y nivel de picante al instante",
+          "icono": "fa-solid fa-wheat-awn-circle-exclamation",
+          "estiloIcono": "background: rgba(239, 68, 68, 0.18); color: #EF4444;",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "Pedidos & Recogida Rápida",
+      "botones": [
+        {
+          "nombre": "Pedir por WhatsApp (Para Llevar / Domicilio)",
+          "descripcion": "Encarga tu comida sin comisiones ni esperas de cola",
+          "icono": "fa-brands fa-whatsapp",
+          "url": "https://wa.me/34672294962?text=Hola%20Ankara%20Kebab,%20quisiera%20hacer%20un%20pedido%20para%20recoger/llevar.",
+          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;",
+          "destacado": false
         },
         {
           "nombre": "¿Dónde aparqué?",
           "tipo": "parking",
           "descripcion": "Guarda la posición GPS de tu coche para volver",
-          "icono": "fa-solid fa-location-crosshairs"
+          "icono": "fa-solid fa-location-crosshairs",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #94A3B8;"
         },
         {
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Añade nuestro teléfono directo al móvil",
+          "descripcion": "Descarga nuestro teléfono directo al móvil en 1 toque",
           "icono": "fa-solid fa-address-card",
-          "url": "./contacto.vcf"
+          "url": "./contacto.vcf",
+          "estiloIcono": "background: rgba(250, 132, 5, 0.15); color: #FA8405;"
         }
       ]
     },
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "[https://maps.google.com](https://maps.google.com)",
-      "whatsappGerencia": "[https://wa.me/34672294962?text=Hola%20Gerencia](https://wa.me/34672294962?text=Hola%20Gerencia)"
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34672294962?text=Hola%20Gerencia%20de%20Ankara%20Kebab,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20pedido"
     }
   ]
 }
