@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="page-title">Studio 42 | Ecosistema Phygital</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css)">
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
     <style>
         :root {
             --color-principal: #0F172A;
@@ -245,8 +245,7 @@
             <!-- BARRA DE CONTROLES SUPERIOR -->
             <div class="top-controls-bar">
                 <div class="flex items-center gap-2">
-                    <!-- BOTÓN EXCLUSIVO PARA MASCOTAS (OCULTO POR DEFECTO) -->
-                    <button id="btn-edit-pet" class="btn-top-control" style="display: none;" onclick="verificarAccesoPropietario()" title="Editar Ficha de la Mascota">
+                    <button id="btn-edit-pet" class="btn-top-control" style="display: none;" onclick="alert('Módulo Pet ID Activo')" title="Editar Ficha de la Mascota">
                         <i class="fa-solid fa-paw text-cyan-400"></i>
                     </button>
                     <button id="btn-theme-control" class="btn-top-control" onclick="abrirModalPersonalizacion()" title="Personalizar Interfaz">
@@ -277,7 +276,7 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-            <!-- SECCIÓN DEL MODO DEMO (ARGUMENTOS DE VENTA) -->
+            <!-- SECCIÓN DEL MODO DEMO (LOS 4 BOTONES DEL CLOSER) -->
             <div id="fricciones-section" style="display:none;">
                 <div class="section-title">El Motor Phygital (Studio 42 Engine)</div>
                 <div class="grid grid-cols-2 gap-2 mb-3" id="friccion-grid"></div>
@@ -339,10 +338,9 @@
         let idiomaActual = localStorage.getItem('user_lang') || 'es';
         let datosClienteOriginal = null;
         let datosFriccionesGlobales = {};
-        let googleReviewUrlGlobal = "https://maps.google.com";
-        let whatsappGerenciaGlobal = "https://wa.me/34672294962";
+        let googleReviewUrlGlobal = "[https://maps.google.com](https://maps.google.com)";
+        let whatsappGerenciaGlobal = "[https://wa.me/34672294962](https://wa.me/34672294962)";
         let nombreNegocioGlobal = "Profesional";
-        let audioIniciadoPorUsuario = false;
 
         const reproductor = document.getElementById('audio-fondo');
         const splash = document.getElementById('splash-screen');
@@ -393,94 +391,110 @@
             reader.readAsDataURL(file);
         }
 
+        // CARGA INTELIGENTE MULTICAPA (NETLIFY + GITHUB RAW DIRECTO)
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
 
             actualizarTextosIdioma();
 
+            let data = null;
+
+            // 1. Intento local
             try {
-                let response = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
-                if (!response.ok) response = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
-                if (!response.ok) throw new Error(`No se encontró ${clienteCod}.json`);
+                let resLocal = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!resLocal.ok) resLocal = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
+                if (!resLocal.ok) resLocal = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
+                if (resLocal.ok) data = await resLocal.json();
+            } catch(e) {}
 
-                const data = await response.json();
-                datosClienteOriginal = data;
-                nombreNegocioGlobal = data.nombre || "Profesional";
+            // 2. Si Netlify aún no compila, buscar directo en GitHub Raw en tiempo real (0 esperas)
+            if (!data) {
+                try {
+                    const urlGitHub = `[https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/$](https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/$){clienteCod}.json?v=${Date.now()}`;
+                    const resGit = await fetch(urlGitHub);
+                    if (resGit.ok) data = await resGit.json();
+                } catch(e) {}
+            }
 
-                // ACTIVAR BOTÓN DE MASCOTAS ÚNICAMENTE SI EL CLIENTE ES DE ESE SECTOR
-                const esMascota = clienteCod.includes('pet') || data.esMascota === true || (data.subtitulo && data.subtitulo.toLowerCase().includes('mascota'));
-                const btnPet = document.getElementById('btn-edit-pet');
-                if (btnPet) btnPet.style.display = esMascota ? 'flex' : 'none';
-
-                const userCustomColor = localStorage.getItem(`custom_acento_${clienteCod}`);
-                const colorAcentoFinal = userCustomColor || data.colorAcento || "#00E5FF";
-                const colorPrincipalFinal = data.colorPrincipal || "#0F172A";
-
-                const glowIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
-                document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
-                document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
-                document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + (glowIntenso ? 'AA' : '55'));
-                document.documentElement.style.setProperty('--halo-intensity', glowIntenso ? '45px' : '25px');
-
-                const nombreFinal = data.nombre || "Profesional";
-                const subtituloFinal = data.subtitulo || 'Ecosistema Phygital';
-
-                document.getElementById('page-title').innerText = `${nombreFinal} | Identidad Digital`;
-                document.getElementById('splash-title').innerText = nombreFinal;
-                document.getElementById('client-name').innerText = nombreFinal;
-                document.getElementById('splash-subtitle').innerText = subtituloFinal;
-                document.getElementById('client-subtitle').innerText = subtituloFinal;
-
-                if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
-
-                const fotoCustom = localStorage.getItem(`custom_photo_${clienteCod}`);
-                const logoPath = fotoCustom || (data.logo && data.logo.trim() !== "" ? data.logo : "logo.png");
-                document.getElementById('splash-logo').src = logoPath;
-                document.getElementById('hub-logo').src = logoPath;
-
-                if (data.audioFondo && data.audioFondo.trim() !== "") {
-                    reproductor.src = data.audioFondo;
-                    document.getElementById('btn-audio-control').style.display = 'flex';
-                    splash.style.display = 'flex';
-                } else {
-                    document.getElementById('btn-audio-control').style.display = 'none';
-                    splash.style.display = 'none';
-                    splash.style.opacity = '0';
-                    splash.style.pointerEvents = 'none';
-                }
-
-                const seccionFricciones = document.getElementById('fricciones-section');
-                if (data.modoDemo === true) {
-                    seccionFricciones.style.display = 'block';
-                    datosFriccionesGlobales = {
-                        'contactos': { icono: '<i class="fa-solid fa-user-check text-cyan-400"></i>', titulo: 'Retención Inmediata', texto: 'El 70% de clientes no guarda números manualmente.<br><br><b>Solución:</b> Descarga directa de vCard al móvil en 1 toque.' },
-                        'resenas': { icono: '<i class="fa-solid fa-shield-halved text-rose-500"></i>', titulo: 'Escudo de Reputación', texto: 'Las quejas públicas en Google alejan clientes.<br><br><b>Solución:</b> Intercepta valoraciones bajas (1-3★) directo a WhatsApp privado.' },
-                        'herramientas': { icono: '<i class="fa-solid fa-toolbox text-amber-400"></i>', titulo: 'Herramientas de Valor', texto: 'Soluciones interactivas que resuelven dudas y guían la experiencia del cliente en mostrador.' },
-                        'facturacion': { icono: '<i class="fa-solid fa-bolt text-purple-400"></i>', titulo: 'Facturación Directa', texto: 'Llamados a la acción para agendar y cerrar ventas sin fricción.' }
-                    };
-
-                    document.getElementById('friccion-grid').innerHTML = `
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('contactos')"><i class="fa-solid fa-user-xmark text-cyan-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Fuga Contactos</div></div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('resenas')"><i class="fa-solid fa-star-half-stroke text-rose-500 text-xl mb-1"></i><div class="text-[11px] font-bold">Reputación</div></div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('herramientas')"><i class="fa-solid fa-toolbox text-amber-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
-                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('facturacion')"><i class="fa-solid fa-bolt text-purple-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Facturación</div></div>
-                    `;
-                } else {
-                    seccionFricciones.style.display = 'none';
-                }
-
-                renderizarMenuDinamico(data);
-                actualizarInterfazParking();
-
-            } catch (err) {
-                console.error(err);
+            if (!data) {
+                console.error("No se pudo cargar el archivo para:", clienteCod);
                 document.getElementById('client-subtitle').innerText = "Identidad Digital Activa";
                 splash.style.display = 'none';
+                return;
             }
+
+            datosClienteOriginal = data;
+            nombreNegocioGlobal = data.nombre || "Profesional";
+
+            // Control de visibilidad del botón de mascotas
+            const esMascota = data.esMascota === true || clienteCod.includes('pet');
+            const btnPet = document.getElementById('btn-edit-pet');
+            if (btnPet) btnPet.style.display = esMascota ? 'flex' : 'none';
+
+            // Colores e iluminación de la tarjeta
+            const userCustomColor = localStorage.getItem(`custom_acento_${clienteCod}`);
+            const colorAcentoFinal = userCustomColor || data.colorAcento || "#00E5FF";
+            const colorPrincipalFinal = data.colorPrincipal || "#0F172A";
+
+            const glowIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
+            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
+            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + (glowIntenso ? 'AA' : '55'));
+            document.documentElement.style.setProperty('--halo-intensity', glowIntenso ? '45px' : '25px');
+
+            const nombreFinal = data.nombre || "Profesional";
+            const subtituloFinal = data.subtitulo || 'Ecosistema Phygital';
+
+            document.getElementById('page-title').innerText = `${nombreFinal} | Identidad Digital`;
+            document.getElementById('splash-title').innerText = nombreFinal;
+            document.getElementById('client-name').innerText = nombreFinal;
+            document.getElementById('splash-subtitle').innerText = subtituloFinal;
+            document.getElementById('client-subtitle').innerText = subtituloFinal;
+
+            if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
+
+            const fotoCustom = localStorage.getItem(`custom_photo_${clienteCod}`);
+            const logoPath = fotoCustom || (data.logo && data.logo.trim() !== "" ? data.logo : "logo.png");
+            document.getElementById('splash-logo').src = logoPath;
+            document.getElementById('hub-logo').src = logoPath;
+
+            if (data.audioFondo && data.audioFondo.trim() !== "") {
+                reproductor.src = data.audioFondo;
+                document.getElementById('btn-audio-control').style.display = 'flex';
+                splash.style.display = 'flex';
+            } else {
+                document.getElementById('btn-audio-control').style.display = 'none';
+                splash.style.display = 'none';
+                splash.style.opacity = '0';
+                splash.style.pointerEvents = 'none';
+            }
+
+            // Modo Demo (Argumentos de Venta del Closer)
+            const seccionFricciones = document.getElementById('fricciones-section');
+            if (data.modoDemo === true) {
+                seccionFricciones.style.display = 'block';
+                datosFriccionesGlobales = {
+                    'contactos': { icono: '<i class="fa-solid fa-user-check text-cyan-400"></i>', titulo: 'Retención Inmediata', texto: 'El 70% de clientes no guarda números manualmente.<br><br><b>Solución:</b> Descarga directa de vCard al móvil en 1 toque.' },
+                    'resenas': { icono: '<i class="fa-solid fa-shield-halved text-rose-500"></i>', titulo: 'Escudo de Reputación', texto: 'Las quejas públicas en Google alejan clientes.<br><br><b>Solución:</b> Intercepta valoraciones bajas (1-3★) directo a WhatsApp privado.' },
+                    'herramientas': { icono: '<i class="fa-solid fa-toolbox text-amber-400"></i>', titulo: 'Herramientas de Valor', texto: 'Soluciones interactivas que resuelven dudas y guían la experiencia del cliente en mostrador.' },
+                    'facturacion': { icono: '<i class="fa-solid fa-bolt text-purple-400"></i>', titulo: 'Facturación Directa', texto: 'Llamados a la acción para agendar y cerrar ventas sin fricción.' }
+                };
+
+                document.getElementById('friccion-grid').innerHTML = `
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('contactos')"><i class="fa-solid fa-user-xmark text-cyan-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Fuga Contactos</div></div>
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('resenas')"><i class="fa-solid fa-star-half-stroke text-rose-500 text-xl mb-1"></i><div class="text-[11px] font-bold">Reputación</div></div>
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('herramientas')"><i class="fa-solid fa-toolbox text-amber-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Herramientas</div></div>
+                    <div class="bg-slate-800/80 p-3 rounded-2xl border border-white/5 cursor-pointer text-center" onclick="mostrarExplicacion('facturacion')"><i class="fa-solid fa-bolt text-purple-400 text-xl mb-1"></i><div class="text-[11px] font-bold">Facturación</div></div>
+                `;
+            } else {
+                seccionFricciones.style.display = 'none';
+            }
+
+            renderizarMenuDinamico(data);
+            actualizarInterfazParking();
         }
 
-        // MOTOR LIMPIO: RESPETA DIRECTAMENTE LOS TEXTOS Y BOTONES GENERADOS POR GEMINI
         function renderizarMenuDinamico(data) {
             const menuContainer = document.getElementById('dynamic-menu');
             menuContainer.innerHTML = '';
@@ -499,7 +513,7 @@
                         block.innerHTML += `
                             <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
                                 <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
+                                    <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" viewBox="0 0 48 48" class="w-7 h-7">
                                         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                                         <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
                                         <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
@@ -538,21 +552,7 @@
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
-                            } else if (btnTipo === 'recordatorio_cita') {
-                                block.innerHTML += `
-                                    <div class="app-btn ${btn.destacado ? 'destacado' : ''}" onclick="abrirModalCalendario()">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(141, 182, 0, 0.18); color: #8DB600;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-calendar-plus'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
-                                    </div>
-                                `;
                             } else {
-                                // BOTÓN UNIVERSAL RENDERIZADO CON LA ESTRATEGIA EXACTA DE GEMINI
                                 block.innerHTML += `
                                     <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') ? 'target="_blank"' : ''}>
                                         <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
@@ -573,12 +573,9 @@
             }
         }
 
-        // FUNCIONES GENERALES DEL SISTEMA
         function abrirModalPersonalizacion() {
             const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'iberlax').toLowerCase().trim();
-            const colorActual = getComputedStyle(document.documentElement).getPropertyValue('--color-acento').trim();
-            const esNeonIntenso = localStorage.getItem(`custom_neon_intenso_${clienteCod}`) === 'true';
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
 
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-palette text-cyan-400"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].personalizar;
@@ -671,7 +668,7 @@
             const lng = localStorage.getItem('parking_lng');
 
             if (lat && lng) {
-                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
+                window.open(`[https://www.google.com/maps/dir/?api=1&destination=$](https://www.google.com/maps/dir/?api=1&destination=$){lat},${lng}&travelmode=walking`, '_blank');
                 localStorage.removeItem('parking_lat');
                 localStorage.removeItem('parking_lng');
                 actualizarInterfazParking();
