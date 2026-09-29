@@ -24,21 +24,26 @@
           "nombre": "Guía de Alérgenos & Salsas",
           "descripcion": "Consulta gluten, lácteos y nivel de picante al instante",
           "icono": "fa-solid fa-wheat-awn-circle-exclamation",
-          "estiloIcono": "background: rgba(239, 68, 68, 0.18); color: #EF4444;",
-          "destacado": false
+          "estiloIcono": "background: rgba(239, 68, 68, 0.18); color: #EF4444;"
         }
       ]
     },
     {
-      "titulo": "Pedidos & Recogida Rápida",
+      "titulo": "Pedidos & Servicios del Llavero",
       "botones": [
+        {
+          "tipo": "recuperar_llaves",
+          "nombre": "🔑 ¿Encontraste estas llaves?",
+          "descripcion": "Avisa a Ankara Kebab para coordinar la entrega al dueño",
+          "icono": "fa-solid fa-key",
+          "url": "https://wa.me/34672294962?text=Hola%20Ankara%20Kebab,%20he%20encontrado%20un%20llavero%20con%20llaves%20de%20un%20cliente%20vuestro%20y%20quiero%20coordinar%20su%20devolución."
+        },
         {
           "nombre": "Pedir por WhatsApp (Para Llevar / Domicilio)",
           "descripcion": "Encarga tu comida sin comisiones ni esperas de cola",
           "icono": "fa-brands fa-whatsapp",
           "url": "https://wa.me/34672294962?text=Hola%20Ankara%20Kebab,%20quisiera%20hacer%20un%20pedido%20para%20recoger/llevar.",
-          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;",
-          "destacado": false
+          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;"
         },
         {
           "nombre": "¿Dónde aparqué?",
