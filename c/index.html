@@ -30,7 +30,6 @@
             scroll-behavior: smooth;
         }
 
-        /* SCROLL FLUIDO SIN BLOQUEOS NI MARCOS */
         body { 
             background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
             color: var(--color-texto); 
@@ -79,7 +78,6 @@
             backdrop-filter: blur(20px); position: relative; z-index: 1;
         }
 
-        /* HEADER UNIVERSAL: IDIOMAS + CONFIGURADOR */
         .top-bar-controls {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 12px; padding: 0 4px;
@@ -630,7 +628,41 @@
         const iconoAudio = document.getElementById('btn-audio-icon');
         let audioMuteado = false;
 
-        function detenerAudioInmediato() { if (reproductor) reproductor.pause(); }
+        function detenerAudioInmediato() {
+            if (reproductor) {
+                reproductor.pause();
+                reproductor.currentTime = 0;
+            }
+        }
+
+        // =======================================================
+        // DETECCIÓN ROBUSTA DE ABANDONO DE PÁGINA (AUTO-PAUSA)
+        // =======================================================
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                if (reproductor && !reproductor.paused) {
+                    reproductor.pause();
+                }
+            } else {
+                if (reproductor && reproductor.src && !audioMuteado && splash.style.display === 'none') {
+                    reproductor.play().catch(() => {});
+                }
+            }
+        });
+
+        window.addEventListener("pagehide", detenerAudioInmediato);
+        window.addEventListener("beforeunload", detenerAudioInmediato);
+
+        // Interceptar cualquier enlace saliente (WhatsApp, Teléfono, Maps, etc.)
+        document.addEventListener("click", (e) => {
+            const anchor = e.target.closest("a");
+            if (anchor && anchor.href) {
+                const destino = anchor.href.toLowerCase();
+                if (destino.startsWith("tel:") || destino.startsWith("mailto:") || destino.includes("wa.me") || destino.includes("whatsapp.com") || anchor.target === "_blank") {
+                    detenerAudioInmediato();
+                }
+            }
+        });
 
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
@@ -793,7 +825,7 @@
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-xs text-slate-300 mb-3 text-left">Localiza centros veterinarios de urgencia abiertos o envía tu ubicación GPS al dueño:</p>
                 <div class="flex flex-col gap-2.5 text-left mb-2">
-                    <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
+                    <button onclick="detenerAudioInmediato(); window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
                         <i class="fa-solid fa-hospital text-cyan-400"></i> Buscar Urgencias 24h en Google Maps
                     </button>
                     <button onclick="compartirUbicacionMascota()" class="w-full bg-emerald-600/20 border border-emerald-500 rounded-xl p-3 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2">
@@ -806,6 +838,7 @@
         }
 
         function compartirUbicacionMascota() {
+            detenerAudioInmediato();
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
             const petNom = nombreNegocioGlobal.split('·')[0].trim();
             const msgDefault = t.msgWaPet.replace('{nombre}', petNom);
@@ -921,7 +954,7 @@
             html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización expresa.</p>`;
             document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `
-                <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
+                <button onclick="detenerAudioInmediato(); window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
                     <i class="fa-solid fa-hospital mr-1"></i> Urgencias Veterinarias 24h
                 </button>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>
@@ -1112,15 +1145,15 @@
                     document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
                     document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección:`;
                     modalActions.innerHTML = `
-                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
-                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
+                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" onclick="detenerAudioInmediato()" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${googleReviewUrlGlobal}" onclick="detenerAudioInmediato()" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
                     `;
                 } else {
                     document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
                     document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
                     document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial:`;
                     modalActions.innerHTML = `
-                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
+                        <a href="${googleReviewUrlGlobal}" onclick="detenerAudioInmediato()" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
                         <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>
                     `;
                 }
@@ -1148,6 +1181,7 @@
             const lat = localStorage.getItem('parking_lat');
             const lng = localStorage.getItem('parking_lng');
             if (lat && lng) {
+                detenerAudioInmediato();
                 window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
                 localStorage.removeItem('parking_lat');
                 localStorage.removeItem('parking_lng');
