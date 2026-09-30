@@ -221,7 +221,7 @@
             <div id="modal-title" class="text-base font-black text-white mb-2 uppercase tracking-wide"></div>
             <div id="modal-text" class="text-xs text-slate-300 leading-relaxed mb-4"></div>
             <div id="modal-actions" class="modal-actions">
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()" id="btn-modal-entendido">Entendido</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
             </div>
         </div>
     </div>
@@ -442,7 +442,7 @@
         let whatsappGerenciaGlobal = "";
         let whatsappTiendaGlobal = "";
         let nombreNegocioGlobal = "Profesional";
-        let clienteSlugGlobal = "demo";
+        let clienteSlugGlobal = "toby";
 
         let pinBuffer = "";
         const PIN_DEFAULT = "1234";
@@ -716,8 +716,11 @@
             localStorage.setItem(`dark_${clienteSlugGlobal}`, colorDark);
         }
         function cargarDatosEnCampos() {
-            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
-            const data = override ? JSON.parse(override) : datosPerfilGlobal;
+            let data = datosPerfilGlobal;
+            try {
+                const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+                if (override) data = JSON.parse(override);
+            } catch(e) {}
             if (!data) return;
 
             document.getElementById('cfg-wa').value = (data.whatsapp || "34672294962").replace(/\D/g, '');
@@ -735,8 +738,11 @@
         }
         function guardarAjustesCompletos() {
             vibrarMovil(60);
-            let override = localStorage.getItem(`override_${clienteSlugGlobal}`);
-            let data = override ? JSON.parse(override) : JSON.parse(JSON.stringify(datosPerfilGlobal));
+            let data = JSON.parse(JSON.stringify(datosPerfilGlobal));
+            try {
+                const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+                if (override) data = JSON.parse(override);
+            } catch(e) {}
 
             data.whatsapp = `https://wa.me/${document.getElementById('cfg-wa').value.trim()}`;
             data.microchip = document.getElementById('cfg-chip').value.trim();
@@ -792,7 +798,7 @@
 
         function compartirUbicacionMascota() {
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
-            const petNom = nombreNegocioGlobal.split('·')[0].trim();
+            const petNom = (nombreNegocioGlobal || 'Toby').split('·')[0].trim();
             const msgDefault = t.msgWaPet.replace('{nombre}', petNom);
 
             if ("geolocation" in navigator) {
@@ -816,11 +822,13 @@
             document.getElementById('modal-title').innerText = t.cartillaPet;
             
             let todas = [...(vacunas || [])];
-            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
-            if (override) {
-                const dataO = JSON.parse(override);
-                if (dataO.vacunasExtras) todas = [...todas, ...dataO.vacunasExtras];
-            }
+            try {
+                const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+                if (override) {
+                    const dataO = JSON.parse(override);
+                    if (dataO.vacunasExtras) todas = [...todas, ...dataO.vacunasExtras];
+                }
+            } catch(e) {}
 
             let html = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
             todas.forEach(v => {
@@ -846,8 +854,11 @@
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-notes-medical text-amber-400"></i>';
             document.getElementById('modal-title').innerText = t.dietaPet;
             
-            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
-            const d = override ? JSON.parse(override) : datosPerfilGlobal;
+            let d = datosPerfilGlobal;
+            try {
+                const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+                if (override) d = JSON.parse(override);
+            } catch(e) {}
 
             const chip = d.microchip || "981098108472911";
             const raza = d.raza || "Golden Retriever";
@@ -1156,6 +1167,7 @@
         // ==========================================
         function renderMenu(data) {
             const menuContainer = document.getElementById('dynamic-menu');
+            if (!menuContainer) return;
             menuContainer.innerHTML = '';
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
 
@@ -1167,14 +1179,16 @@
 
             let telLlamada = "34672294962";
             if (esMascota) {
-                const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
-                if (override) {
-                    const d = JSON.parse(override);
-                    if (d.whatsapp) {
-                        whatsappTiendaGlobal = d.whatsapp;
-                        telLlamada = d.whatsapp.replace(/\D/g, '');
+                try {
+                    const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+                    if (override) {
+                        const d = JSON.parse(override);
+                        if (d.whatsapp) {
+                            whatsappTiendaGlobal = d.whatsapp;
+                            telLlamada = d.whatsapp.replace(/\D/g, '');
+                        }
                     }
-                }
+                } catch(e) {}
             }
 
             if (data.secciones && Array.isArray(data.secciones)) {
@@ -1358,7 +1372,7 @@
                                     </a>
                                 `;
                             }
-                            // ENLACES DIRECTOS (TEL, WA, WEB)
+                            // ENLACES DIRECTOS
                             else {
                                 let finalUrl = btn.url || '#';
                                 let btnNom = btn.nombre;
@@ -1394,17 +1408,29 @@
 
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
+            // Si no hay parámetro, busca 'toby' directamente
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'toby').toLowerCase().trim();
             clienteSlugGlobal = clienteCod;
 
             let data = null;
 
-            try {
-                let res = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
-                if (!res.ok) res = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
-                if (!res.ok) res = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
-                if (res.ok) data = await res.json();
-            } catch(e) {}
+            // Intentos de lectura robustos
+            const rutas = [
+                `./${clienteCod}.json?v=${Date.now()}`,
+                `../c/${clienteCod}.json?v=${Date.now()}`,
+                `./json/${clienteCod}.json?v=${Date.now()}`,
+                `./c/${clienteCod}.json?v=${Date.now()}`
+            ];
+
+            for (const r of rutas) {
+                try {
+                    let res = await fetch(r);
+                    if (res.ok) {
+                        data = await res.json();
+                        break;
+                    }
+                } catch(e) {}
+            }
 
             if (!data) {
                 try {
@@ -1414,7 +1440,10 @@
                 } catch(e) {}
             }
 
-            if (!data) return;
+            if (!data) {
+                console.warn("No se pudo localizar el archivo JSON para:", clienteCod);
+                return;
+            }
 
             datosPerfilGlobal = data;
             nombreNegocioGlobal = data.nombre || "Profesional";
@@ -1449,8 +1478,14 @@
             const topBar = document.getElementById('universal-top-bar');
             if (topBar) topBar.style.display = (data.mostrarIdiomas === false) ? 'none' : 'flex';
 
-            const colorAcentoFinal = esMascota ? (localStorage.getItem(`color_${clienteSlugGlobal}`) || data.colorAcento || "#00E5FF") : (data.colorAcento || "#00E5FF");
-            const colorPrincipalFinal = esMascota ? (localStorage.getItem(`dark_${clienteSlugGlobal}`) || data.colorPrincipal || "#080E1A") : (data.colorPrincipal || "#0B0C10");
+            let colorAcentoFinal = data.colorAcento || "#00E5FF";
+            let colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
+            if (esMascota) {
+                try {
+                    colorAcentoFinal = localStorage.getItem(`color_${clienteSlugGlobal}`) || colorAcentoFinal;
+                    colorPrincipalFinal = localStorage.getItem(`dark_${clienteSlugGlobal}`) || colorPrincipalFinal;
+                } catch(e) {}
+            }
             const fondoLogoFinal = data.fondoLogo || "#0b0c10";
 
             document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
