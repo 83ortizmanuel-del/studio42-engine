@@ -17,27 +17,31 @@
             --color-gris: #94a3b8;
             --titanium-light: #f1f5f9;
             --titanium-glow: rgba(226, 232, 240, 0.4);
-            --halo-glow: rgba(0, 229, 255, 0.5);
-            --halo-intensity: 30px;
-            --halo-edge: #00E5FF;
+            --halo-glow: rgba(0, 229, 255, 0.4);
+            --halo-intensity: 22px;
             --fondo-logo: #0b0c10;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
-            color: var(--color-texto); 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
-            transition: background 0.3s ease; position: relative;
+        /* FLUJO DE SCROLL NATIVO SUAVE (SIN BRINCOS) */
+        html {
+            background-color: var(--color-fondo);
+            scroll-behavior: smooth;
         }
 
-        body::before {
-            content: ''; position: fixed; inset: 0; pointer-events: none;
-            border: 2px solid var(--halo-edge);
-            box-shadow: inset 0 0 25px var(--halo-glow), 0 0 20px var(--halo-glow);
-            z-index: 9999; border-radius: 20px; transition: all 0.4s ease;
+        body { 
+            background: radial-gradient(circle at 50% 0%, var(--color-principal) 0%, var(--color-fondo) 100%);
+            color: var(--color-texto); 
+            min-height: 100vh;
+            padding: 20px 14px 40px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         #splash-screen { 
@@ -53,25 +57,27 @@
             transition: transform 0.2s ease;
         }
 
+        /* HALO ELEGANTE EN LA TARJETA (SIN MARCOS EN PANTALLA) */
         .halo-wrapper {
-            position: relative; width: 100%; max-width: 412px; border-radius: 34px; padding: 2px;
-            overflow: hidden; margin: auto; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
+            position: relative; width: 100%; max-width: 412px; border-radius: 34px; padding: 1.5px;
+            margin: auto 0;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 var(--halo-intensity) var(--halo-glow);
             transition: box-shadow 0.3s ease;
         }
         .halo-wrapper::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent 0%, transparent 40%, var(--color-acento) 50%, #ffffff 52%, var(--color-acento) 54%, transparent 65%, transparent 100%);
-            animation: haloRotate 8s linear infinite; z-index: 0;
+            background: conic-gradient(transparent 0%, transparent 42%, var(--color-acento) 50%, #ffffff 52%, var(--color-acento) 54%, transparent 62%, transparent 100%);
+            animation: haloRotate 9s linear infinite; z-index: 0;
         }
         @keyframes haloRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .hub-container { 
             background: var(--color-tarjeta); width: 100%; border-radius: 32px; 
-            padding: 22px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
+            padding: 22px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.10); 
             backdrop-filter: blur(20px); position: relative; z-index: 1;
         }
 
-        /* HEADER UNIVERSAL: IDIOMAS + CONFIGURADOR */
         .top-bar-controls {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 12px; padding: 0 4px;
@@ -128,7 +134,7 @@
         .app-btn { 
             display: flex; align-items: center; padding: 13px 16px; border-radius: 20px; 
             background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
-            transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; 
+            transition: all 0.2s ease; cursor: pointer; text-decoration: none; 
             backdrop-filter: blur(10px); width: 100%; box-sizing: border-box;
         }
         .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
@@ -318,10 +324,10 @@
         <div class="modal-box" style="max-width: 380px;">
             <button class="modal-close-btn" onclick="cerrarAsesorBtn()"><i class="fa-solid fa-xmark"></i></button>
             <div style="color: var(--color-acento); font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
-            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;" id="lbl-erg-title">Test Ergonómico</h3>
-            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;" id="lbl-erg-sub">Configuración de descanso en 3 toques</p>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Test Ergonómico</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;">Configuración de descanso en 3 toques</p>
             <div class="selector-box">
-                <span class="selector-label" id="lbl-erg-p1">1. Postura de Descanso:</span>
+                <span class="selector-label">1. Postura de Descanso:</span>
                 <div class="selector-pills">
                     <div class="pill-btn active" onclick="seleccionarOpcionAsesor('postura', 'De Lado', this)"><i class="fa-solid fa-person"></i><br>De Lado</div>
                     <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Arriba', this)"><i class="fa-solid fa-bed"></i><br>De Espalda</div>
@@ -329,7 +335,7 @@
                 </div>
             </div>
             <div class="selector-box">
-                <span class="selector-label" id="lbl-erg-p2">2. Complexión / Peso:</span>
+                <span class="selector-label">2. Complexión / Peso:</span>
                 <div class="selector-pills">
                     <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '-70kg', this)">-70 kg</div>
                     <div class="pill-btn active" onclick="seleccionarOpcionAsesor('peso', '70-90kg', this)">70-90 kg</div>
@@ -337,7 +343,7 @@
                 </div>
             </div>
             <div class="selector-box">
-                <span class="selector-label" id="lbl-erg-p3">3. Medida Deseada:</span>
+                <span class="selector-label">3. Medida Deseada:</span>
                 <div class="selector-pills">
                     <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '135x190', this)">135x190</div>
                     <div class="pill-btn active" onclick="seleccionarOpcionAsesor('medida', '150x190', this)">150x190</div>
@@ -402,7 +408,6 @@
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             
-            <!-- HEADER MULTI-IDIOMA UNIVERSAL -->
             <div class="top-bar-controls" id="universal-top-bar">
                 <div class="lang-picker">
                     <button class="lang-btn active" onclick="cambiarIdioma('es', this)">ES</button>
@@ -448,7 +453,6 @@
         let estadoAsesor = { postura: 'De Lado', peso: '70-90kg', medida: '150x190' };
         let estadoEnvio = { zona: 'Logroño Centro / Casco', acceso: 'Con Ascensor / Planta Baja', retirada: 'Sí, retirar colchón antiguo' };
 
-        // DICCIONARIO UNIVERSAL (TODOS LOS VERTICALES)
         const DICCIONARIO = {
             es: {
                 badgeDefault: "NODO CONECTADO · RED ACTIVA",
@@ -616,14 +620,6 @@
             }
         };
 
-        const reproductor = document.getElementById('audio-fondo');
-        const splash = document.getElementById('splash-screen');
-        const btnAudio = document.getElementById('btn-audio-control');
-        const iconoAudio = document.getElementById('btn-audio-icon');
-        let audioMuteado = false;
-
-        function detenerAudioInmediato() { if (reproductor) reproductor.pause(); }
-
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
         const modalActions = document.getElementById('modal-actions');
@@ -637,7 +633,7 @@
         function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
         function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
 
-        // PIN & SEGURIDAD (MASCOTAS)
+        // PIN & SEGURIDAD MASCOTAS
         function iniciarAuthPropietario() {
             vibrarMovil(50);
             pinBuffer = "";
@@ -1058,7 +1054,7 @@
             if (elF) elF.innerText = firmeza;
             if (elT) elT.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
             const btnP = document.getElementById('btn-probar-tienda');
-            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0AResultado: ${firmeza}. ¿Qué modelo puedo probar?`)}`;
+            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}\%0A- Peso:${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}\%0AResultado:${firmeza}. ¿Qué modelo puedo probar?`)}`;
         }
 
         const modalEnvio = document.getElementById('modal-envio');
@@ -1450,11 +1446,9 @@
 
             const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
 
-            // MOSTRAR U OCULTAR ENGRANAJE DE AJUSTES (SOLO DUEÑO EN MASCOTAS)
             const btnGear = document.getElementById('btn-owner-gear');
             if (btnGear) btnGear.style.display = esMascota ? 'flex' : 'none';
 
-            // CONTROL DEL SELECTOR DE IDIOMAS (ACTIVO POR DEFECTO PARA TODOS)
             const topBar = document.getElementById('universal-top-bar');
             if (topBar) topBar.style.display = (data.mostrarIdiomas === false) ? 'none' : 'flex';
 
@@ -1465,7 +1459,7 @@
             document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
             document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
             document.documentElement.style.setProperty('--halo-edge', colorAcentoFinal);
-            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
+            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '55');
             document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
 
             const hubImg = document.getElementById('hub-logo');
