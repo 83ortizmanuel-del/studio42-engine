@@ -3,30 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Studio 42 | Pasaporte Canino Inteligente</title>
+    <title id="page-title">Studio 42 | Ecosistema Phygital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-principal: #080E1A;
+            --color-principal: #0b0c10;
             --color-acento: #00E5FF;
             --color-fondo: #030712; 
-            --color-tarjeta: rgba(15, 23, 42, 0.85); 
+            --color-tarjeta: rgba(15, 23, 42, 0.90); 
             --color-boton: rgba(30, 41, 59, 0.7); 
             --color-texto: #f8fafc;
             --color-gris: #94a3b8;
-            --halo-glow: rgba(0, 229, 255, 0.45);
+            --titanium-light: #f1f5f9;
+            --titanium-glow: rgba(226, 232, 240, 0.4);
+            --halo-glow: rgba(0, 229, 255, 0.5);
+            --halo-intensity: 30px;
             --halo-edge: #00E5FF;
+            --fondo-logo: #0b0c10;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 90%);
+            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
             color: var(--color-texto); 
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; padding: 12px; user-select: none; overflow-x: hidden;
-            position: relative;
+            min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
+            transition: background 0.3s ease; position: relative;
         }
 
         /* HALO NEON PERIMETRAL DE LA PANTALLA (EDGE GLOW) */
@@ -37,10 +41,23 @@
             z-index: 9999; border-radius: 20px; transition: all 0.4s ease;
         }
 
+        #splash-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            background: radial-gradient(circle at center, #111827 0%, #030712 100%);
+            z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.5s ease; padding: 20px;
+        }
+        .btn-desbloqueo { 
+            background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
+            padding: 16px 36px; border-radius: 50px; font-size: 0.9rem; font-weight: 900; letter-spacing: 1.2px; 
+            text-transform: uppercase; cursor: pointer; box-shadow: 0 0 30px var(--titanium-glow);
+            transition: transform 0.2s ease;
+        }
+
         .halo-wrapper {
-            position: relative; width: 100%; max-width: 410px; border-radius: 36px; padding: 2px;
-            overflow: hidden; margin: auto; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px var(--halo-glow);
-            transition: box-shadow 0.4s ease;
+            position: relative; width: 100%; max-width: 412px; border-radius: 34px; padding: 2px;
+            overflow: hidden; margin: auto; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
+            transition: box-shadow 0.3s ease;
         }
         .halo-wrapper::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -50,72 +67,69 @@
         @keyframes haloRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .hub-container { 
-            background: var(--color-tarjeta); width: 100%; border-radius: 34px; 
-            padding: 22px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
-            backdrop-filter: blur(25px); position: relative; z-index: 1;
+            background: var(--color-tarjeta); width: 100%; border-radius: 32px; 
+            padding: 24px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(20px); position: relative; z-index: 1;
         }
 
-        /* CONTROLES SUPERIORES GLASSMORPHISM */
+        /* HEADER MASCOTAS (SOLO SE MUESTRA SI ES PERFIL PET) */
         .top-bar-controls {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 14px; padding: 0 4px;
+            display: none; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; padding: 0 4px;
         }
         .lang-picker {
-            display: flex; gap: 4px; background: rgba(255,255,255,0.05);
-            padding: 3px 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(8px);
+            display: flex; gap: 4px; background: rgba(255,255,255,0.06);
+            padding: 3px 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
         }
         .lang-btn {
             background: none; border: none; font-size: 0.7rem; font-weight: 800;
-            color: #94a3b8; cursor: pointer; padding: 2px 7px; border-radius: 12px; transition: all 0.2s;
+            color: #94a3b8; cursor: pointer; padding: 2px 6px; border-radius: 8px;
         }
         .lang-btn.active { color: #020617; background: var(--color-acento); font-weight: 900; }
-        
         .owner-btn {
             background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-            color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(8px);
+            color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer;
+            transition: all 0.2s;
         }
-        .owner-btn:active { transform: scale(0.9) rotate(45deg); color: var(--color-acento); border-color: var(--color-acento); }
 
         .status-badge { 
             display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 5px 14px; border-radius: 50px; font-size: 0.62rem; font-weight: 900;
-            letter-spacing: 1.2px; color: #fff; margin-bottom: 12px; text-transform: uppercase;
+            background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
+            padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 14px; text-transform: uppercase;
         }
         .ping-light { 
             position: relative; width: 7px; height: 7px; background-color: var(--color-acento);
-            border-radius: 50%; box-shadow: 0 0 10px var(--color-acento); flex-shrink: 0;
+            border-radius: 50%; box-shadow: 0 0 8px var(--color-acento); flex-shrink: 0;
         }
         .ping-light::after { 
             content: ''; position: absolute; top: -3px; left: -3px; width: 13px; height: 13px;
-            border-radius: 50%; background-color: var(--color-acento); opacity: 0.7;
-            animation: radarTitanium 1.8s infinite cubic-bezier(0, 0, 0.2, 1);
+            border-radius: 50%; background-color: var(--titanium-glow);
+            animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
         }
-        @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.8); opacity: 0; } }
+        @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
         .logo-container { 
-            width: 90px; height: 90px; margin: 0 auto 12px auto; 
-            border-radius: 26px; border: 2px solid var(--color-acento); 
-            overflow: hidden; background-color: #0b0c10;
+            width: 88px; height: 88px; margin: 0 auto 12px auto; 
+            border-radius: 24px; border: 2px solid var(--color-acento); 
+            overflow: hidden; background-color: var(--fondo-logo, #0b0c10);
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--halo-glow); 
-            position: relative; transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px var(--halo-glow); 
+            position: relative; cursor: pointer; transition: all 0.3s ease;
         }
-        .logo-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-container img { width: 100%; height: 100%; object-fit: contain; display: block; }
         
-        h1 { font-size: 1.35rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
-        .propietario { color: var(--color-acento); font-size: 0.75rem; margin-bottom: 14px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
-        .section-title { text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 16px 0 9px 6px; font-weight: 800; }
+        h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
+        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
+        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 18px 0 10px 6px; font-weight: 800; }
         
-        .apps-menu { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .apps-menu { display: flex; flex-direction: column; gap: 11px; width: 100%; }
         .app-btn { 
-            display: flex; align-items: center; padding: 13px 15px; border-radius: 20px; 
+            display: flex; align-items: center; padding: 13px 16px; border-radius: 20px; 
             background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-decoration: none; 
-            backdrop-filter: blur(12px); width: 100%; box-sizing: border-box;
+            transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; 
+            backdrop-filter: blur(10px); width: 100%; box-sizing: border-box;
         }
         .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
         .app-btn.destacado { 
@@ -123,50 +137,85 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(15, 23, 42, 0.85));
             box-shadow: 0 0 20px var(--halo-glow); 
         }
-        .app-icon { width: 42px; height: 42px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
+        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
         
-        .app-info { flex-grow: 1; min-width: 0; overflow: hidden; text-align: left; }
+        .app-info { flex-grow: 1; min-width: 0; overflow: hidden; }
         .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
         .app-desc { font-size: 0.72rem; color: var(--color-gris); }
 
+        .btn-rescate-llaves {
+            border: 1px solid #f59e0b !important;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(15, 23, 42, 0.9)) !important;
+            box-shadow: 0 0 18px rgba(245, 158, 11, 0.25) !important;
+        }
+        .badge-rescate-sos {
+            font-size: 9px; font-weight: 900; background: #f59e0b; color: #020617;
+            padding: 2px 7px; border-radius: 20px; margin-left: 6px; text-transform: uppercase; flex-shrink: 0;
+        }
+
+        .stars-container { font-size: 2rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: transform 0.2s ease; display: inline-block; }
+        .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
+        .star-inactive { color: #334155; }
+
         /* MODALES */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(16px); z-index: 10001; justify-content: center; align-items: center; padding: 18px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
         .modal-box { 
-            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.16); 
-            border-radius: 28px; padding: 22px 18px; max-width: 380px; width: 100%; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.95); transform: translateY(20px); 
+            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); 
+            border-radius: 28px; padding: 24px 20px; max-width: 380px; width: 100%; 
+            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); 
             transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; position: relative;
         }
         .modal-close-btn {
-            position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
+            position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
             color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
-        .modal-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
-        .modal-btn-primary { background: linear-gradient(135deg, var(--color-acento), #0284c7); color: #020617; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; cursor: pointer; text-align: center; }
-        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center; }
+        .modal-actions { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; }
+        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        .modal-btn-google { background: linear-gradient(135deg, #ffb400, #f59e0b); color: #020617; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; text-align: center; }
 
-        /* PALETAS DE COLOR */
-        .color-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
-        .color-dot.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 14px rgba(255,255,255,0.5); }
+        /* TEST ERGONÓMICO & TASADOR IBERLAX */
+        .selector-box { text-align: left; margin-bottom: 12px; }
+        .selector-label { font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .selector-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .pill-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 4px; font-size: 0.72rem; color: #fff; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .pill-btn.active { background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; font-weight: 800; border-color: #fff; }
+        .card-resultado { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.25); border-radius: 16px; padding: 12px; margin: 14px 0; text-align: left; }
 
         /* TECLADO PIN DIGITAL */
         .pin-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--color-acento); background: transparent; transition: all 0.2s; }
         .pin-dot.filled { background: var(--color-acento); box-shadow: 0 0 10px var(--color-acento); }
-        .key-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 14px; font-size: 1.15rem; font-weight: 800; color: #fff; cursor: pointer; transition: all 0.15s; }
+        .key-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 14px; font-size: 1.15rem; font-weight: 800; color: #fff; cursor: pointer; }
         .key-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.92); }
 
-        .footer-brand { margin-top: 24px; font-size: 0.68rem; color: var(--color-gris); letter-spacing: 1.2px; }
-        .footer-brand span { color: var(--color-acento); font-weight: 800; }
+        .color-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .color-dot.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 14px rgba(255,255,255,0.5); }
+
+        .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
+        .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+        #btn-audio-control { display: none; position: fixed; bottom: 22px; right: 22px; z-index: 999; background: rgba(15, 23, 42, 0.88); border: 1px solid var(--color-acento); color: var(--color-acento); width: 46px; height: 46px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
     <audio id="audio-fondo" loop preload="auto"></audio>
 
-    <!-- 1. MODAL LECTURA INFORMATIVA (PÚBLICO) -->
+    <div id="splash-screen">
+        <div class="logo-container" id="splash-logo-box">
+            <img id="splash-logo" alt="Logo">
+        </div>
+        <h2 id="splash-title" style="color: #fff; font-size: 1.4rem; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;">STUDIO 42</h2>
+        <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.85rem; margin-bottom: 30px; text-transform: uppercase;">Ecosistema Phygital</p>
+        <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
+    </div>
+
+    <button id="btn-audio-control" onclick="alternarAudio()"><i id="btn-audio-icon" class="fa-solid fa-volume-high"></i></button>
+
+    <!-- MODAL GENERAL POLIMÓRFICO -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
-        <div class="modal-box text-center" id="modal-content">
+        <div class="modal-box" id="modal-content">
             <button class="modal-close-btn" onclick="cerrarModalBtn()"><i class="fa-solid fa-xmark"></i></button>
             <div id="modal-icon" class="text-3xl mb-2"></div>
             <div id="modal-title" class="text-base font-black text-white mb-2 uppercase tracking-wide"></div>
@@ -177,12 +226,12 @@
         </div>
     </div>
 
-    <!-- 2. MODAL TECLADO PIN DIGITAL (ACCESO SEGURO) -->
+    <!-- MODAL TECLADO PIN DIGITAL -->
     <div id="modal-pin-auth" class="modal-overlay">
         <div class="modal-box text-center" style="max-width: 320px;">
             <button class="modal-close-btn" onclick="cerrarPinAuth()"><i class="fa-solid fa-xmark"></i></button>
             <i class="fa-solid fa-shield-halved text-2xl mb-2" style="color:var(--color-acento);"></i>
-            <h3 class="text-white text-sm font-black uppercase tracking-wider mb-1" id="pin-modal-title">Zona Propietario</h3>
+            <h3 class="text-white text-sm font-black uppercase tracking-wider mb-1">Zona Propietario</h3>
             <p class="text-[11px] text-slate-400 mb-4" id="pin-modal-desc">Introduce tu PIN de 4 dígitos</p>
             
             <div class="flex justify-center gap-3 mb-5">
@@ -210,7 +259,7 @@
         </div>
     </div>
 
-    <!-- 3. MODAL RECUPERACIÓN INTELIGENTE DE PIN -->
+    <!-- MODAL RECUPERACIÓN INTELIGENTE DE PIN -->
     <div id="modal-recuperar" class="modal-overlay">
         <div class="modal-box text-left" style="max-width: 340px;">
             <button class="modal-close-btn" onclick="cerrarRecuperar()"><i class="fa-solid fa-xmark"></i></button>
@@ -218,38 +267,89 @@
                 <i class="fa-solid fa-key text-amber-400 text-lg"></i>
                 <h3 class="text-white text-sm font-black uppercase">Recuperar Acceso</h3>
             </div>
-            <p class="text-[11px] text-slate-400 mb-3">Introduce tu <b>Palabra Secreta</b> configurada o solicita el código a Studio 42:</p>
-            
-            <input type="text" id="input-palabra-secreta" placeholder="Ej: Toby / Pamplona / Clinica" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs mb-3 outline-none focus:border-amber-400">
-            
+            <p class="text-[11px] text-slate-400 mb-3">Introduce tu <b>Palabra Secreta</b> configurada:</p>
+            <input type="text" id="input-palabra-secreta" placeholder="Ej: Toby / Pamplona" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs mb-3 outline-none">
             <div class="modal-actions">
                 <button onclick="validarPalabraSecreta()" class="modal-btn-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706); color:#fff;">Restablecer a PIN 1234</button>
-                <a href="https://wa.me/34672294962?text=Hola%20Studio%2042,%20he%20olvidado%20el%20PIN%20de%20mi%20chapa%20inteligente." target="_blank" class="modal-btn-secondary text-center">Ayuda Directa Soporte</a>
             </div>
         </div>
     </div>
 
-    <!-- 4. MODAL CONFIGURADOR PROPIETARIO COMPLETO -->
+    <!-- MODAL CONFIGURADOR PROPIETARIO (MASCOTAS) -->
     <div id="modal-configurador" class="modal-overlay">
-        <div class="modal-box text-left" style="max-width: 390px;">
+        <div class="modal-box text-left" style="max-width: 400px;">
             <button class="modal-close-btn" onclick="cerrarConfigurador()"><i class="fa-solid fa-xmark"></i></button>
             
             <div class="flex items-center gap-2 mb-3">
-                <i class="fa-solid fa-sliders text-lg" style="color:var(--color-acento);"></i>
-                <h3 class="text-white text-sm font-black uppercase tracking-wider">Centro de Control</h3>
+                <i class="fa-solid fa-notes-medical text-lg" style="color:var(--color-acento);"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Gestión Médica & SOS</h3>
             </div>
 
-            <!-- TABS -->
             <div class="flex gap-2 border-b border-slate-800 pb-2 mb-3 text-[11px] font-bold">
-                <button onclick="cambiarTabCfg('emergencia')" id="tab-btn-emergencia" class="text-cyan-400 border-b-2 border-cyan-400 pb-1">🚨 Emergencia</button>
-                <button onclick="cambiarTabCfg('salud')" id="tab-btn-salud" class="text-slate-400 pb-1">💉 Salud</button>
-                <button onclick="cambiarTabCfg('estilo')" id="tab-btn-estilo" class="text-slate-400 pb-1">🎨 Halo & Estilo</button>
+                <button onclick="cambiarTabCfg('salud')" id="tab-btn-salud" class="text-cyan-400 border-b-2 border-cyan-400 pb-1">💉 Ficha Médica</button>
+                <button onclick="cambiarTabCfg('emergencia')" id="tab-btn-emergencia" class="text-slate-400 pb-1">🚨 Rescate</button>
+                <button onclick="cambiarTabCfg('estilo')" id="tab-btn-estilo" class="text-slate-400 pb-1">🎨 Estilo</button>
             </div>
 
-            <!-- CONTENIDO TABS -->
-            <div id="tab-emergencia" class="space-y-3 text-xs">
+            <div id="tab-salud" class="space-y-3 text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">Raza:</label>
+                        <input type="text" id="cfg-raza" placeholder="Golden Retriever" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">Peso (kg):</label>
+                        <input type="text" id="cfg-peso" placeholder="32 kg" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">Esterilizado:</label>
+                        <select id="cfg-esterilizado" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
+                            <option value="Sí">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">Seguro RC Vigente:</label>
+                        <select id="cfg-seguro" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
+                            <option value="Sí, Seguro Oficial">Sí, Activo</option>
+                            <option value="En trámite / No">No / Sin póliza</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div>
-                    <label class="font-bold text-slate-300 block mb-1">Móvil WhatsApp de Rescate:</label>
+                    <label class="font-bold text-rose-400 block mb-1">⚠️ Alergias Críticas & Alimentos Prohibidos:</label>
+                    <textarea id="cfg-alergias" rows="2" class="w-full bg-slate-900 border border-rose-900/60 rounded-xl p-2 text-white outline-none" placeholder="Ej: Alérgico estricto al pollo y cereales."></textarea>
+                </div>
+
+                <div>
+                    <label class="font-bold text-amber-400 block mb-1">💊 Medicación Diaria:</label>
+                    <input type="text" id="cfg-medicacion" placeholder="Ej: Condroprotector con desayuno" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
+                </div>
+
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">🏥 Hospital Veterinario:</label>
+                    <input type="text" id="cfg-vet" placeholder="Hospital Veterinario San Fermín 24h" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
+                </div>
+
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">🐕 Carácter:</label>
+                    <input type="text" id="cfg-caracter" placeholder="Sociable. Miedo a petardos." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
+                </div>
+
+                <div class="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800">
+                    <span class="font-bold text-cyan-400 block mb-1.5">💉 Añadir Vacuna Oficial:</span>
+                    <input type="text" id="cfg-vac-nom" placeholder="Vacuna (ej: Rabia 2026)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white mb-2 text-xs">
+                    <input type="text" id="cfg-vac-est" placeholder="Pauta (ej: Vigente)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white text-xs">
+                </div>
+            </div>
+
+            <div id="tab-emergencia" class="space-y-3 text-xs hidden">
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">WhatsApp de Rescate (con código país):</label>
                     <input type="text" id="cfg-wa" placeholder="Ej: 34672294962" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
                 </div>
                 <div>
@@ -257,36 +357,24 @@
                     <input type="text" id="cfg-chip" placeholder="Ej: 981098108472911" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
                 </div>
                 <div>
-                    <label class="font-bold text-slate-300 block mb-1">Recompensa / Anuncio SOS:</label>
-                    <input type="text" id="cfg-recompensa" placeholder="Ej: Recompensa por entrega segura" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
-                </div>
-            </div>
-
-            <div id="tab-salud" class="space-y-3 text-xs hidden">
-                <div>
-                    <label class="font-bold text-slate-300 block mb-1">Alergias Críticas & Dieta:</label>
-                    <textarea id="cfg-dieta" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none" placeholder="Ej: Alérgico al pollo. Toma condroprotector con el desayuno."></textarea>
-                </div>
-                <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
-                    <span class="font-bold text-amber-400 block mb-1.5">Añadir Nueva Vacuna / Refuerzo:</span>
-                    <input type="text" id="cfg-vac-nom" placeholder="Vacuna (ej: Leishmaniosis / Rabia)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white mb-2 text-xs">
-                    <input type="text" id="cfg-vac-est" placeholder="Pauta (ej: Refuerzo Anual 2026)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white text-xs">
+                    <label class="font-bold text-slate-300 block mb-1">Recompensa / Mensaje de Rescate:</label>
+                    <input type="text" id="cfg-recompensa" placeholder="Recompensa económica por entrega en mano" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
                 </div>
             </div>
 
             <div id="tab-estilo" class="space-y-3 text-xs hidden">
                 <div>
-                    <label class="font-bold text-slate-300 block mb-2">Color del Halo Neón Perimetral & Botones:</label>
+                    <label class="font-bold text-slate-300 block mb-2">Color del Halo Neón & Botones:</label>
                     <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-2xl border border-slate-800">
-                        <div class="color-dot active" style="background:#00E5FF;" onclick="aplicarTemaColor('#00E5FF', '#080E1A', this)" title="Cian Cyber"></div>
-                        <div class="color-dot" style="background:#22C55E;" onclick="aplicarTemaColor('#22C55E', '#06170d', this)" title="Verde Esmeralda"></div>
-                        <div class="color-dot" style="background:#F59E0B;" onclick="aplicarTemaColor('#F59E0B', '#1c1304', this)" title="Oro Imperial"></div>
-                        <div class="color-dot" style="background:#EC4899;" onclick="aplicarTemaColor('#EC4899', '#190610', this)" title="Fucsia Neón"></div>
-                        <div class="color-dot" style="background:#A855F7;" onclick="aplicarTemaColor('#A855F7', '#12051d', this)" title="Violeta Deep"></div>
+                        <div class="color-dot active" style="background:#00E5FF;" onclick="aplicarTemaColor('#00E5FF', '#080E1A', this)"></div>
+                        <div class="color-dot" style="background:#22C55E;" onclick="aplicarTemaColor('#22C55E', '#06170d', this)"></div>
+                        <div class="color-dot" style="background:#F59E0B;" onclick="aplicarTemaColor('#F59E0B', '#1c1304', this)"></div>
+                        <div class="color-dot" style="background:#EC4899;" onclick="aplicarTemaColor('#EC4899', '#190610', this)"></div>
+                        <div class="color-dot" style="background:#A855F7;" onclick="aplicarTemaColor('#A855F7', '#12051d', this)"></div>
                     </div>
                 </div>
                 <div class="pt-2 border-t border-slate-800">
-                    <label class="font-bold text-slate-300 block mb-1">Palabra Secreta (Para recuperar PIN si lo olvidas):</label>
+                    <label class="font-bold text-slate-300 block mb-1">Palabra Secreta para Recuperar PIN:</label>
                     <input type="text" id="cfg-palabra" placeholder="Ej: Toby / Pamplona" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
                 </div>
                 <div>
@@ -299,7 +387,102 @@
                 <button onclick="guardarAjustesCompletos()" class="modal-btn-primary">
                     <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar Ficha Phygital
                 </button>
-                <button class="modal-btn-secondary" onclick="cerrarConfigurador()">Cerrar sin guardar</button>
+                <button class="modal-btn-secondary" onclick="cerrarConfigurador()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TEST ERGONÓMICO (IBERLAX) -->
+    <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <button class="modal-close-btn" onclick="cerrarAsesorBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="color: var(--color-acento); font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Test Ergonómico</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;">Configuración de descanso en 3 toques</p>
+            
+            <div class="selector-box">
+                <span class="selector-label">1. Postura de Descanso:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('postura', 'De Lado', this)"><i class="fa-solid fa-person"></i><br>De Lado</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Arriba', this)"><i class="fa-solid fa-bed"></i><br>De Espalda</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Abajo', this)"><i class="fa-solid fa-child"></i><br>Boca Abajo</div>
+                </div>
+            </div>
+
+            <div class="selector-box">
+                <span class="selector-label">2. Complexión / Peso:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '-70kg', this)">-70 kg</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('peso', '70-90kg', this)">70-90 kg</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '+90kg', this)">+90 kg</div>
+                </div>
+            </div>
+
+            <div class="selector-box">
+                <span class="selector-label">3. Medida Deseada:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '135x190', this)">135x190</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('medida', '150x190', this)">150x190</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '180x200', this)">180x200</div>
+                </div>
+            </div>
+
+            <div class="card-resultado">
+                <div style="font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase;">Recomendación Ergonómica:</div>
+                <div id="diag-firmeza" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Firmeza Media Adaptable</div>
+                <div id="diag-tecnologia" style="font-size: 0.74rem; color: #cbd5e1; margin-top: 4px;">Muelles Ensacados + Viscoelástica transpirable.</div>
+            </div>
+
+            <div class="modal-actions">
+                <a id="btn-probar-tienda" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
+                <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TASADOR LOGÍSTICA (IBERLAX) -->
+    <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <button class="modal-close-btn" onclick="cerrarEnvioBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="color: #30d158; font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Entrega & Retirada</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;">Tasador logístico a domicilio</p>
+            
+            <div class="selector-box">
+                <span class="selector-label">1. Zona de Entrega:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('zona', 'Logroño Centro / Casco', this)">Logroño</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Alrededores (Oyón/Lardero)', this)">Cinturón</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Rioja / Otras localidades', this)">Comarca</div>
+                </div>
+            </div>
+
+            <div class="selector-box">
+                <span class="selector-label">2. Acceso al Edificio:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('acceso', 'Con Ascensor / Planta Baja', this)">Ascensor</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (Hasta 2º)', this)">Esc. Baja</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (3º o superior)', this)">Esc. Alta</div>
+                </div>
+            </div>
+
+            <div class="selector-box">
+                <span class="selector-label">3. Retirada de Usado:</span>
+                <div class="selector-pills" style="grid-template-columns: 1fr 1fr;">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('retirada', 'Sí, retirar colchón antiguo', this)">Retirar Viejo</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('retirada', 'No, solo entrega nuevo', this)">Solo Entrega</div>
+                </div>
+            </div>
+
+            <div class="card-resultado" style="border-color: #30d158; background: rgba(48, 209, 88, 0.08);">
+                <div style="font-size: 0.72rem; color: #30d158; font-weight: 800; text-transform: uppercase;">Condición Estimada:</div>
+                <div id="diag-envio-titulo" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Servicio Bonificado en Tienda</div>
+                <div id="diag-envio-desc" style="font-size: 0.74rem; color: #cbd5e1; margin-top: 4px;">Ruta directa a domicilio con subida a habitación.</div>
+            </div>
+
+            <div class="modal-actions">
+                <a id="btn-confirmar-envio" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Consultar Ruta por WhatsApp</a>
+                <button class="modal-btn-secondary" onclick="cerrarEnvioBtn()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -308,8 +491,8 @@
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             
-            <!-- HEADER DE ALTO IMPACTO -->
-            <div class="top-bar-controls">
+            <!-- HEADER MASCOTAS -->
+            <div class="top-bar-controls" id="pet-top-bar">
                 <div class="lang-picker">
                     <button class="lang-btn active" onclick="cambiarIdioma('es', this)">ES</button>
                     <button class="lang-btn" onclick="cambiarIdioma('en', this)">EN</button>
@@ -323,75 +506,87 @@
 
             <div class="status-badge">
                 <span class="ping-light"></span>
-                <span id="badge-text">PASAPORTE DIGITAL ACTIVO</span>
+                <span id="badge-text">NODO CONECTADO · RED ACTIVA</span>
             </div>
 
             <div class="logo-container" id="hub-logo-box">
-                <img id="hub-logo" alt="Foto Mascota">
+                <img id="hub-logo" alt="Logo">
             </div>
 
-            <h1 id="client-name">TOBY</h1>
-            <div class="propietario" id="client-subtitle">PASAPORTE PHYGITAL ACTIVO</div>
+            <h1 id="client-name">STUDIO 42</h1>
+            <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
             <div id="dynamic-menu"></div>
 
-            <div class="footer-brand" id="lbl-footer-brand">Tecnología Certificada por <span>Studio 42</span></div>
+            <div class="footer-brand" id="lbl-footer-brand">Desarrollado por <span>Studio 42</span></div>
         </div>
     </div>
 
     <script>
         let datosPerfilGlobal = null;
         let idiomaActual = 'es';
+        let googleReviewUrlGlobal = "https://maps.google.com";
+        let whatsappGerenciaGlobal = "";
         let whatsappTiendaGlobal = "";
-        let nombreNegocioGlobal = "TOBY";
-        let clienteSlugGlobal = "toby";
+        let nombreNegocioGlobal = "Profesional";
+        let clienteSlugGlobal = "demo";
 
         let pinBuffer = "";
         const PIN_DEFAULT = "1234";
-        const MASTER_RESET = "S42-RESCUE-RESET";
+
+        let estadoAsesor = { postura: 'De Lado', peso: '70-90kg', medida: '150x190' };
+        let estadoEnvio = { zona: 'Logroño Centro / Casco', acceso: 'Con Ascensor / Planta Baja', retirada: 'Sí, retirar colchón antiguo' };
 
         const DICCIONARIO = {
             es: {
                 badge: "CHIP INTELIGENTE ACTIVO · PROTOCOLO RESCATE SOS",
-                llamar: "Llamar a Papá/Mamá de Toby",
+                llamar: "Llamar a Papá/Mamá",
                 wa: "Avisar por WhatsApp al Dueño",
                 gps: "Hospitales Veterinarios 24h & GPS",
                 cartilla: "Carnet de Vacunación Canina",
                 dieta: "Protocolo de Dieta, Alergias y Carácter",
                 triaje: "Semáforo SOS / Intoxicaciones & Auxilios",
-                msgWa: "¡Hola! Acabo de escanear la chapa de Toby y lo tengo conmigo. ¿Cómo coordinamos para entregarlo?"
+                msgWa: "¡Hola! Acabo de escanear la chapa inteligente y tengo a tu mascota conmigo. ¿Cómo coordinamos para entregarla?"
             },
             en: {
                 badge: "ACTIVE SMART CHIP · SOS RESCUE PROTOCOL",
-                llamar: "Call Toby's Family",
+                llamar: "Call Pet Owner",
                 wa: "Notify Owner via WhatsApp",
                 gps: "24/7 Vet Hospitals & GPS Satellite",
                 cartilla: "Official Vaccination Passport",
                 dieta: "Dietary Needs, Allergies & Character",
                 triaje: "SOS Poisoning Protocol & First Aid",
-                msgWa: "Hello! I just scanned Toby's smart tag and he is with me. How can we coordinate to return him?"
+                msgWa: "Hello! I just scanned your pet's smart tag and have them with me. How can we meet to return them?"
             },
             fr: {
                 badge: "PUCE INTELLIGENTE ACTIVE · PROTOCOLE SOS",
-                llamar: "Appeler la famille de Toby",
+                llamar: "Appeler le propriétaire",
                 wa: "Aviser par WhatsApp",
                 gps: "Urgences Vétérinaires 24h & GPS",
                 cartilla: "Passeport Sanitaire & Vaccins",
                 dieta: "Régime, Allergies & Comportement",
                 triaje: "Guide SOS Intoxications & Premiers Soins",
-                msgWa: "Bonjour! Je viens de scanner la médaille de Toby et il est avec moi. Comment faire pour vous le rendre?"
+                msgWa: "Bonjour! Je viens de scanner la médaille de votre animal et il est avec moi. Comment faire pour vous le rendre?"
             },
             de: {
                 badge: "SMART-CHIP AKTIV · SOS RETTUNGSPROTOKOLL",
-                llamar: "Tobys Familie anrufen",
+                llamar: "Besitzer anrufen",
                 wa: "Besitzer per WhatsApp kontaktieren",
                 gps: "24h Tierkliniken & GPS-Standort",
                 cartilla: "Impfpass & Tierarztakte",
                 dieta: "Diät, Allergien & Wesen",
                 triaje: "SOS Vergiftung & Erste Hilfe",
-                msgWa: "Hallo! Ich habe gerade Tobys Marke gescannt und er ist bei mir. Wie können wir die Übergabe vereinbaren?"
+                msgWa: "Hallo! Ich habe die Marke Ihres Haustieres gescannt und es ist bei mir. Wie können wir die Übergabe vereinbaren?"
             }
         };
+
+        const reproductor = document.getElementById('audio-fondo');
+        const splash = document.getElementById('splash-screen');
+        const btnAudio = document.getElementById('btn-audio-control');
+        const iconoAudio = document.getElementById('btn-audio-icon');
+        let audioMuteado = false;
+
+        function detenerAudioInmediato() { if (reproductor) reproductor.pause(); }
 
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
@@ -400,12 +595,14 @@
         const modalCfg = document.getElementById('modal-configurador');
         const modalRec = document.getElementById('modal-recuperar');
 
-        function vibrarMovil(ms = 35) {
-            if ("vibrate" in navigator) navigator.vibrate(ms);
-        }
+        function vibrarMovil(ms = 35) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+
+        function abrirModalCustom() { modalOverlay.style.display = 'flex'; setTimeout(() => { modalOverlay.style.opacity = '1'; }, 10); }
+        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
+        function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
 
         // ==========================================
-        // SISTEMA DE SEGURIDAD & TECLADO PIN DIGITAL
+        // PIN & SEGURIDAD MASCOTAS
         // ==========================================
         function iniciarAuthPropietario() {
             vibrarMovil(50);
@@ -414,29 +611,16 @@
             modalPin.style.display = 'flex';
             setTimeout(() => { modalPin.style.opacity = '1'; }, 10);
         }
-
-        function cerrarPinAuth() {
-            modalPin.style.opacity = '0';
-            setTimeout(() => { modalPin.style.display = 'none'; }, 250);
-        }
-
+        function cerrarPinAuth() { modalPin.style.opacity = '0'; setTimeout(() => { modalPin.style.display = 'none'; }, 250); }
         function teclearPin(num) {
             vibrarMovil(30);
             if (pinBuffer.length < 4) {
                 pinBuffer += num;
                 actualizarPuntosPin();
-                if (pinBuffer.length === 4) {
-                    setTimeout(verificarPin, 200);
-                }
+                if (pinBuffer.length === 4) setTimeout(verificarPin, 200);
             }
         }
-
-        function borrarPin() {
-            vibrarMovil(20);
-            pinBuffer = pinBuffer.slice(0, -1);
-            actualizarPuntosPin();
-        }
-
+        function borrarPin() { vibrarMovil(20); pinBuffer = pinBuffer.slice(0, -1); actualizarPuntosPin(); }
         function actualizarPuntosPin() {
             for (let i = 0; i < 4; i++) {
                 const dot = document.getElementById(`dot-${i}`);
@@ -444,7 +628,6 @@
                 else dot.classList.remove('filled');
             }
         }
-
         function verificarPin() {
             const pinGuardado = localStorage.getItem(`pin_${clienteSlugGlobal}`) || PIN_DEFAULT;
             if (pinBuffer === pinGuardado) {
@@ -453,7 +636,7 @@
                 abrirConfigurador();
             } else {
                 vibrarMovil(250);
-                document.getElementById('pin-modal-desc').innerText = "❌ PIN Incorrecto. Inténtalo de nuevo";
+                document.getElementById('pin-modal-desc').innerText = "❌ PIN Incorrecto";
                 document.getElementById('pin-modal-desc').style.color = "#f43f5e";
                 pinBuffer = "";
                 actualizarPuntosPin();
@@ -463,63 +646,44 @@
                 }, 1500);
             }
         }
-
-        function abrirRecuperacionPin() {
-            cerrarPinAuth();
-            modalRec.style.display = 'flex';
-            setTimeout(() => { modalRec.style.opacity = '1'; }, 10);
-        }
-
-        function cerrarRecuperar() {
-            modalRec.style.opacity = '0';
-            setTimeout(() => { modalRec.style.display = 'none'; }, 250);
-        }
-
+        function abrirRecuperacionPin() { cerrarPinAuth(); modalRec.style.display = 'flex'; setTimeout(() => { modalRec.style.opacity = '1'; }, 10); }
+        function cerrarRecuperar() { modalRec.style.opacity = '0'; setTimeout(() => { modalRec.style.display = 'none'; }, 250); }
         function validarPalabraSecreta() {
-            const palabra = document.getElementById('input-palabra-secreta').value.trim().toLowerCase();
-            const secretaGuardada = (localStorage.getItem(`palabra_${clienteSlugGlobal}`) || "toby").toLowerCase();
-
-            if (palabra === secretaGuardada || palabra === MASTER_RESET.toLowerCase()) {
+            const p = document.getElementById('input-palabra-secreta').value.trim().toLowerCase();
+            const s = (localStorage.getItem(`palabra_${clienteSlugGlobal}`) || "toby").toLowerCase();
+            if (p === s || p === "s42-rescue-reset") {
                 localStorage.setItem(`pin_${clienteSlugGlobal}`, PIN_DEFAULT);
-                alert(`✅ Identidad validada. Tu PIN se ha restablecido al valor oficial: ${PIN_DEFAULT}`);
+                alert(`✅ PIN restablecido a: ${PIN_DEFAULT}`);
                 cerrarRecuperar();
                 iniciarAuthPropietario();
-            } else {
-                alert("❌ Palabra incorrecta. Contacta con Studio 42 para restablecimiento oficial.");
-            }
+            } else { alert("❌ Palabra incorrecta."); }
         }
 
         // ==========================================
-        // CONFIGURADOR INTUITIVO
+        // CONFIGURADOR MASCOTAS
         // ==========================================
         function abrirConfigurador() {
             cargarDatosEnCampos();
+            cambiarTabCfg('salud');
             modalCfg.style.display = 'flex';
             setTimeout(() => { modalCfg.style.opacity = '1'; }, 10);
         }
-
-        function cerrarConfigurador() {
-            modalCfg.style.opacity = '0';
-            setTimeout(() => { modalCfg.style.display = 'none'; }, 250);
-        }
-
+        function cerrarConfigurador() { modalCfg.style.opacity = '0'; setTimeout(() => { modalCfg.style.display = 'none'; }, 250); }
         function cambiarTabCfg(tab) {
             vibrarMovil(20);
-            ['emergencia', 'salud', 'estilo'].forEach(t => {
+            ['salud', 'emergencia', 'estilo'].forEach(t => {
                 document.getElementById(`tab-${t}`).classList.add('hidden');
                 document.getElementById(`tab-btn-${t}`).className = "text-slate-400 pb-1";
             });
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
             document.getElementById(`tab-btn-${tab}`).className = "text-cyan-400 border-b-2 border-cyan-400 pb-1 font-bold";
         }
-
         function aplicarTemaColor(colorHex, colorDark, dotElement) {
             vibrarMovil(40);
             document.documentElement.style.setProperty('--color-acento', colorHex);
             document.documentElement.style.setProperty('--color-principal', colorDark);
             document.documentElement.style.setProperty('--halo-edge', colorHex);
             document.documentElement.style.setProperty('--halo-glow', colorHex + '66');
-
             if (dotElement) {
                 document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
                 dotElement.classList.add('active');
@@ -527,7 +691,6 @@
             localStorage.setItem(`color_${clienteSlugGlobal}`, colorHex);
             localStorage.setItem(`dark_${clienteSlugGlobal}`, colorDark);
         }
-
         function cargarDatosEnCampos() {
             const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
             const data = override ? JSON.parse(override) : datosPerfilGlobal;
@@ -536,70 +699,57 @@
             document.getElementById('cfg-wa').value = (data.whatsapp || "34672294962").replace(/\D/g, '');
             document.getElementById('cfg-chip').value = data.microchip || "981098108472911";
             document.getElementById('cfg-recompensa').value = data.recompensa || "Recompensa / Servicio SOS Mascota";
-            document.getElementById('cfg-dieta').value = data.dietaNotas || "Alérgico estricto al pollo y cereales (solo pienso hipoalergénico).";
+
+            document.getElementById('cfg-raza').value = data.raza || "Golden Retriever";
+            document.getElementById('cfg-peso').value = data.peso || "32 kg";
+            document.getElementById('cfg-esterilizado').value = data.esterilizado || "Sí";
+            document.getElementById('cfg-seguro').value = data.seguro || "Sí, Seguro Oficial";
+            document.getElementById('cfg-alergias').value = data.alergias || "Alérgico estricto al pollo y cereales (solo pienso hipoalergénico).";
+            document.getElementById('cfg-medicacion').value = data.medicacion || "Toma condroprotector articular con el desayuno";
+            document.getElementById('cfg-vet').value = data.veterinario || "Hospital Veterinario San Fermín 24h";
+            document.getElementById('cfg-caracter').value = data.caracter || "Sociable con niños. Miedo a tormentas y petardos.";
             document.getElementById('cfg-palabra').value = localStorage.getItem(`palabra_${clienteSlugGlobal}`) || "toby";
         }
-
         function guardarAjustesCompletos() {
             vibrarMovil(60);
-            const wa = document.getElementById('cfg-wa').value.trim();
-            const chip = document.getElementById('cfg-chip').value.trim();
-            const rec = document.getElementById('cfg-recompensa').value.trim();
-            const dieta = document.getElementById('cfg-dieta').value.trim();
-            const vacNom = document.getElementById('cfg-vac-nom').value.trim();
-            const vacEst = document.getElementById('cfg-vac-est').value.trim();
-            const nuevaPalabra = document.getElementById('cfg-palabra').value.trim();
-            const nuevoPin = document.getElementById('cfg-nuevo-pin').value.trim();
-
             let override = localStorage.getItem(`override_${clienteSlugGlobal}`);
             let data = override ? JSON.parse(override) : JSON.parse(JSON.stringify(datosPerfilGlobal));
 
-            data.whatsapp = `https://wa.me/${wa}`;
-            data.microchip = chip;
-            data.recompensa = rec;
-            data.dietaNotas = dieta;
+            data.whatsapp = `https://wa.me/${document.getElementById('cfg-wa').value.trim()}`;
+            data.microchip = document.getElementById('cfg-chip').value.trim();
+            data.recompensa = document.getElementById('cfg-recompensa').value.trim();
+            data.raza = document.getElementById('cfg-raza').value.trim();
+            data.peso = document.getElementById('cfg-peso').value.trim();
+            data.esterilizado = document.getElementById('cfg-esterilizado').value;
+            data.seguro = document.getElementById('cfg-seguro').value;
+            data.alergias = document.getElementById('cfg-alergias').value.trim();
+            data.medicacion = document.getElementById('cfg-medicacion').value.trim();
+            data.veterinario = document.getElementById('cfg-vet').value.trim();
+            data.caracter = document.getElementById('cfg-caracter').value.trim();
 
+            const vacNom = document.getElementById('cfg-vac-nom').value.trim();
+            const vacEst = document.getElementById('cfg-vac-est').value.trim();
             if (vacNom) {
                 if (!data.vacunasExtras) data.vacunasExtras = [];
                 data.vacunasExtras.push({ nombre: vacNom, subtitulo: vacEst || "Dosis Registrada", momento: "Vigente", badge: "Al Día" });
             }
 
-            if (nuevaPalabra) localStorage.setItem(`palabra_${clienteSlugGlobal}`, nuevaPalabra);
-            if (nuevoPin.length === 4) localStorage.setItem(`pin_${clienteSlugGlobal}`, nuevoPin);
+            const p = document.getElementById('cfg-palabra').value.trim();
+            const np = document.getElementById('cfg-nuevo-pin').value.trim();
+            if (p) localStorage.setItem(`palabra_${clienteSlugGlobal}`, p);
+            if (np.length === 4) localStorage.setItem(`pin_${clienteSlugGlobal}`, np);
 
             localStorage.setItem(`override_${clienteSlugGlobal}`, JSON.stringify(data));
             cerrarConfigurador();
-            alert("✨ ¡Pasaporte inteligente sincronizado con éxito!");
+            alert("✨ ¡Ficha clínica guardada y sincronizada!");
             cargarEnginePhygital();
         }
 
         // ==========================================
-        // SELECTOR MULTI-IDIOMA
+        // MÓDULOS VERTICALES
         // ==========================================
-        function cambiarIdioma(lang, btn) {
-            vibrarMovil(30);
-            idiomaActual = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-
-            const t = DICCIONARIO[lang] || DICCIONARIO.es;
-            document.getElementById('badge-text').innerText = t.badge;
-            renderMenu(datosPerfilGlobal);
-        }
-
-        // ==========================================
-        // MODALES LECTURA POLIMÓRFICA
-        // ==========================================
-        function abrirModalCustom() {
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => { modalOverlay.style.opacity = '1'; }, 10);
-        }
-        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
-        function cerrarModalBtn() {
-            modalOverlay.style.opacity = '0';
-            setTimeout(() => { modalOverlay.style.display = 'none'; }, 250);
-        }
-
+        
+        // 1. MASCOTAS
         function abrirAsistenciaRuta() {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-location-crosshairs text-cyan-400"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].gps;
@@ -617,14 +767,13 @@
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
             abrirModalCustom();
         }
-
         function compartirUbicacionMascota() {
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
                         const lat = pos.coords.latitude;
                         const lng = pos.coords.longitude;
-                        const msg = encodeURIComponent(`¡Hola! Tengo a ${nombreNegocioGlobal} conmigo. Esta es mi ubicación GPS exacta para coordinar la entrega: https://maps.google.com/?q=${lat},${lng}`);
+                        const msg = encodeURIComponent(`¡Hola! Tengo a ${nombreNegocioGlobal} conmigo. Esta es mi ubicación GPS exacta: https://maps.google.com/?q=${lat},${lng}`);
                         window.open(`${whatsappTiendaGlobal}?text=${msg}`, '_blank');
                     },
                     () => { window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(DICCIONARIO[idiomaActual].msgWa)}`, '_blank'); }
@@ -633,18 +782,15 @@
                 window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(DICCIONARIO[idiomaActual].msgWa)}`, '_blank');
             }
         }
-
         function abrirCarnetVacunacion(vacunas) {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-dog text-cyan-400"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].cartilla;
-            
             let todas = [...(vacunas || [])];
             const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
             if (override) {
                 const dataO = JSON.parse(override);
                 if (dataO.vacunasExtras) todas = [...todas, ...dataO.vacunasExtras];
             }
-
             let html = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
             todas.forEach(v => {
                 html += `
@@ -663,44 +809,50 @@
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
             abrirModalCustom();
         }
-
-        function abrirChecklistClinico(checklist) {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-clipboard-list text-amber-400"></i>';
+        function abrirChecklistClinico() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-notes-medical text-amber-400"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].dieta;
-            
             const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
-            let notasExtra = "";
-            let chipExtra = "981098108472911";
-            if (override) {
-                const d = JSON.parse(override);
-                if (d.dietaNotas) notasExtra = d.dietaNotas;
-                if (d.microchip) chipExtra = d.microchip;
-            }
+            const d = override ? JSON.parse(override) : datosPerfilGlobal;
 
-            let html = `<div class="space-y-3 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
-            if (checklist && typeof checklist === 'object') {
-                for (const [categoria, items] of Object.entries(checklist)) {
-                    html += `
-                        <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
-                            <div class="text-xs font-bold text-amber-400 uppercase tracking-wide mb-1.5">${categoria}</div>
-                            <ul class="space-y-1">
-                    `;
-                    items.forEach(it => {
-                        const texto = it.includes('Microchip') ? `Microchip oficial homologado: ${chipExtra}` : it;
-                        html += `<li class="text-[11px] text-slate-200 flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-amber-400 text-[10px] mt-0.5"></i> <span>${texto}</span></li>`;
-                    });
-                    if (categoria.includes('Clínicas') && notasExtra) {
-                        html += `<li class="text-[11px] text-cyan-200 flex items-start gap-1.5 font-semibold"><i class="fa-solid fa-notes-medical text-cyan-400 text-[10px] mt-0.5"></i> <span>Actualizado: ${notasExtra}</span></li>`;
-                    }
-                    html += `</ul></div>`;
-                }
-            }
-            html += `</div>`;
+            const chip = d.microchip || "981098108472911";
+            const raza = d.raza || "Golden Retriever";
+            const peso = d.peso || "32 kg";
+            const esterilizado = d.esterilizado || "Sí";
+            const seguro = d.seguro || "Sí, Vigente";
+            const alergias = d.alergias || "Alérgico estricto al pollo y cereales (solo pienso hipoalergénico).";
+            const medicacion = d.medicacion || "Condroprotector articular con el desayuno.";
+            const vet = d.veterinario || "Hospital Veterinario San Fermín 24h";
+            const caracter = d.caracter || "Sociable con niños. Miedo a tormentas y petardos.";
+
+            let html = `
+                <div class="space-y-2.5 text-left my-2 max-h-64 overflow-y-auto pr-1 text-xs">
+                    <div class="bg-rose-950/40 border border-rose-800/80 p-2.5 rounded-xl">
+                        <div class="text-rose-400 font-bold uppercase tracking-wider text-[11px] mb-1">🚨 Alertas Críticas & Alergias</div>
+                        <p class="text-slate-200">${alergias}</p>
+                        <p class="text-amber-300 font-semibold mt-1">💊 Medicación: ${medicacion}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl space-y-1">
+                        <div class="text-cyan-400 font-bold uppercase tracking-wider text-[11px] mb-1.5">📋 Ficha Técnica Oficial</div>
+                        <div class="flex justify-between"><span class="text-slate-400">Microchip:</span> <span class="text-white font-mono font-bold">${chip}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Raza / Peso:</span> <span class="text-white">${raza} (${peso})</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Esterilizado:</span> <span class="text-white">${esterilizado}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Seguro R.C.:</span> <span class="text-emerald-400 font-semibold">${seguro}</span></div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-amber-400 font-bold uppercase tracking-wider text-[11px] mb-1">🐕 Carácter & Trato</div>
+                        <p class="text-slate-200">${caracter}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-slate-400 text-[10px] uppercase font-bold">Clínica de Cabecera:</div>
+                        <div class="text-white font-bold">${vet}</div>
+                    </div>
+                </div>
+            `;
             document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
             abrirModalCustom();
         }
-
         function abrirTriajeUrgencias(alertas) {
             document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].triaje;
@@ -715,7 +867,7 @@
                     `;
                 });
             }
-            html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización veterinaria expresa.</p>`;
+            html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización expresa.</p>`;
             document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `
                 <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
@@ -726,21 +878,260 @@
             abrirModalCustom();
         }
 
+        // 2. KEBAB
+        function abrirConfiguradorKebab() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = "Arma tu Menú";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Configura tu plato y envíalo a cocina:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-3">
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">1. Formato:</label>
+                        <select id="kebab-formato" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Dürüm Rollo Gigante">Dürüm Rollo</option>
+                            <option value="Kebab en Pan de Pita">Pita Clásica</option>
+                            <option value="Plato Kebab Completo">Plato Kebab</option>
+                            <option value="Kebab Box">Kebab Box</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">2. Carne:</label>
+                        <select id="kebab-carne" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Carne Mixta">Mixto (Pollo y Ternera)</option>
+                            <option value="Solo Ternera">Solo Ternera</option>
+                            <option value="Solo Pollo">Solo Pollo</option>
+                            <option value="Falafel">Falafel (Vegetariano)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">3. Salsas:</label>
+                        <select id="kebab-salsa" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Salsa Blanca">Salsa Blanca</option>
+                            <option value="Blanca + Picante">Blanca + Toque Picante</option>
+                            <option value="Muy Picante">Salsa Roja Picante</option>
+                            <option value="Sin Salsas">Sin salsa</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `
+                <button onclick="enviarPedidoKebabWA()" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
+        }
+        function enviarPedidoKebabWA() {
+            detenerAudioInmediato();
+            const f = document.getElementById('kebab-formato').value;
+            const c = document.getElementById('kebab-carne').value;
+            const s = document.getElementById('kebab-salsa').value;
+            window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, he armado mi pedido:\n- Formato:${f}\n- Carne: ${c}\n- Salsa:${s}\n¿Cuánto tarda en estar listo?`)}`, '_blank');
+        }
+        function abrirAlergenosKebab() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-wheat-awn-circle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Alérgenos & Salsas";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">🌾 Gluten:</b> Presente en Pita, Dürüm y Falafel. Opción sin gluten: Plato Kebab solo carne y ensalada.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-cyan-400">🥛 Lácteos:</b> Presentes en la Salsa Blanca tradicional (yogur).</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-rose-400">🌶️ Picante:</b> Salsa roja a base de chile natural. Libre de lácteos.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        // 3. FITNESS
+        function abrirCalculadoraProteina() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = "Calculadora de Proteína";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="flex flex-col gap-2 text-left mb-3">
+                    <label class="text-[11px] text-slate-400 font-bold">Tu peso (kg):</label>
+                    <input type="number" id="input-peso-fit" placeholder="Ej: 75" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                    <label class="text-[11px] text-slate-400 font-bold">Objetivo:</label>
+                    <select id="select-objetivo-fit" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                        <option value="1.8">Ganancia Muscular (1.8g/kg)</option>
+                        <option value="2.2">Definición (2.2g/kg)</option>
+                        <option value="1.5">Mantenimiento (1.5g/kg)</option>
+                    </select>
+                    <button onclick="calcularResultadoProteina()" class="w-full bg-cyan-500 text-slate-950 font-black py-2 rounded-xl text-xs uppercase mt-2">Calcular</button>
+                    <div id="resultado-proteina-box" class="hidden bg-black/60 border border-white/10 p-3 rounded-xl mt-2 text-center">
+                        <span class="text-xs text-slate-300">Ingesta recomendada:</span>
+                        <div id="resultado-gramos" class="text-2xl font-black text-white my-1"></div>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            abrirModalCustom();
+        }
+        function calcularResultadoProteina() {
+            const peso = parseFloat(document.getElementById('input-peso-fit').value);
+            const factor = parseFloat(document.getElementById('select-objetivo-fit').value);
+            if (!peso) return alert("Introduce tu peso");
+            document.getElementById('resultado-gramos').innerText = `${Math.round(peso * factor)} g / día`;
+            document.getElementById('resultado-proteina-box').classList.remove('hidden');
+        }
+        function abrirGuiaCreatina() {
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bottle-droplet" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = "Protocolo de Creatina";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-white">⚡ Dosis:</b> 3g a 5g diarios sostenidos.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">⏰ Cuándo:</b> Post-entreno con agua o batido. Tomar también en días de descanso.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        // 4. IBERLAX
+        const modalAsesor = document.getElementById('modal-asesor');
+        function abrirAsesor(e) { if(e) e.preventDefault(); modalAsesor.style.display = 'flex'; setTimeout(() => { modalAsesor.style.opacity = '1'; }, 10); }
+        function cerrarAsesor(e) { if(e.target === modalAsesor) cerrarAsesorBtn(); }
+        function cerrarAsesorBtn() { modalAsesor.style.opacity = '0'; setTimeout(() => { modalAsesor.style.display = 'none'; }, 250); }
+        function seleccionarOpcionAsesor(grupo, valor, elemento) {
+            estadoAsesor[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoAsesor();
+        }
+        function actualizarCalculoAsesor() {
+            let firmeza = "Firmeza Media Adaptable";
+            let tecnologia = "Muelles Ensacados 7 Zonas + Viscoelástica transpirable.";
+            if (estadoAsesor.peso === '+90kg' || estadoAsesor.postura === 'Boca Arriba') {
+                firmeza = "Firmeza Alta Ergonómica";
+                tecnologia = "Núcleo reforzado Titanium Pocket + Refuerzo lumbar.";
+            } else if (estadoAsesor.postura === 'De Lado' && estadoAsesor.peso === '-70kg') {
+                firmeza = "Firmeza Media-Suave Acogedora";
+                tecnologia = "Viscoelástica suave con alivio de presión.";
+            }
+            const elF = document.getElementById('diag-firmeza');
+            const elT = document.getElementById('diag-tecnologia');
+            if (elF) elF.innerText = firmeza;
+            if (elT) elT.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
+            const btnP = document.getElementById('btn-probar-tienda');
+            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}\%0A- Peso:${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}\%0AResultado:${firmeza}. ¿Qué modelo puedo probar?`)}`;
+        }
+
+        const modalEnvio = document.getElementById('modal-envio');
+        function abrirEnvio(e) { if(e) e.preventDefault(); modalEnvio.style.display = 'flex'; setTimeout(() => { modalEnvio.style.opacity = '1'; }, 10); }
+        function cerrarEnvio(e) { if(e.target === modalEnvio) cerrarEnvioBtn(); }
+        function cerrarEnvioBtn() { modalEnvio.style.opacity = '0'; setTimeout(() => { modalEnvio.style.display = 'none'; }, 250); }
+        function seleccionarOpcionEnvio(grupo, valor, elemento) {
+            estadoEnvio[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoEnvio();
+        }
+        function actualizarCalculoEnvio() {
+            let titulo = "Servicio Bonificado en Tienda";
+            let desc = "Ruta directa a domicilio con subida a habitación.";
+            if (estadoEnvio.acceso.includes('3º o superior') || estadoEnvio.acceso.includes('Esc. Alta')) {
+                titulo = "Suplemento de Acceso / 2 Operarios";
+                desc = "Requiere subida por escalera estrecha.";
+            } else if (estadoEnvio.zona.includes('Rioja') || estadoEnvio.zona.includes('Comarca')) {
+                titulo = "Ruta Interurbana";
+                desc = "Consolidado en rutas semanales programadas.";
+            }
+            const elT = document.getElementById('diag-envio-titulo');
+            const elD = document.getElementById('diag-envio-desc');
+            if (elT) elT.innerText = titulo;
+            if (elD) elD.innerText = desc;
+            const btnC = document.getElementById('btn-confirmar-envio');
+            if (btnC) btnC.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}\%0A- Retirada:${estadoEnvio.retirada}%0A¿Me confirmáis disponibilidad?`)}`;
+        }
+
+        // 5. RESEÑAS & PARKING
+        function simularFiltro(nota) {
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active text-3xl' : 'fa-solid fa-star star-inactive text-3xl'; });
+            mensaje.classList.remove('hidden');
+
+            setTimeout(() => {
+                mensaje.classList.add('hidden');
+                if (nota <= 3) {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
+                    document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
+                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección:`;
+                    modalActions.innerHTML = `
+                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
+                    `;
+                } else {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
+                    document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
+                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial:`;
+                    modalActions.innerHTML = `
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
+                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                    `;
+                }
+                abrirModalCustom();
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive text-3xl');
+            }, 300);
+        }
+
+        function descargarVCardDinamica() {
+            const telLimpio = whatsappTiendaGlobal.replace(/\D/g, '');
+            const vcardContent = `BEGIN:VCARD\nVERSION:3.0\nFN:${nombreNegocioGlobal}\nORG:${nombreNegocioGlobal}\nTEL;TYPE=WORK,VOICE:+${telLimpio || '34672294962'}\nNOTE:Contacto inteligente Studio 42\nEND:VCARD`;
+            const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${clienteSlugGlobal}.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function gestionarParking(e) {
+            if (e) e.preventDefault();
+            const lat = localStorage.getItem('parking_lat');
+            const lng = localStorage.getItem('parking_lng');
+            if (lat && lng) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
+                localStorage.removeItem('parking_lat');
+                localStorage.removeItem('parking_lng');
+                alert("📍 Posición de parking eliminada.");
+            } else {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            localStorage.setItem('parking_lat', pos.coords.latitude);
+                            localStorage.setItem('parking_lng', pos.coords.longitude);
+                            alert("📍 ¡Posición guardada! Vuelve a pulsar este botón al salir para regresar a pie a tu coche.");
+                        },
+                        () => alert("No se pudo obtener señal GPS.")
+                    );
+                }
+            }
+        }
+
         // ==========================================
-        // RENDER DINÁMICO POLIMÓRFICO
+        // MOTOR POLIMÓRFICO DE CARGA Y RENDER
         // ==========================================
         function renderMenu(data) {
             const menuContainer = document.getElementById('dynamic-menu');
             menuContainer.innerHTML = '';
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
 
-            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+
+            const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
+
             let telLlamada = "34672294962";
-            if (override) {
-                const d = JSON.parse(override);
-                if (d.whatsapp) {
-                    whatsappTiendaGlobal = d.whatsapp;
-                    telLlamada = d.whatsapp.replace(/\D/g, '');
+            if (esMascota) {
+                const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+                if (override) {
+                    const d = JSON.parse(override);
+                    if (d.whatsapp) {
+                        whatsappTiendaGlobal = d.whatsapp;
+                        telLlamada = d.whatsapp.replace(/\D/g, '');
+                    }
                 }
             }
 
@@ -750,87 +1141,194 @@
                     const block = document.createElement('div');
                     block.className = 'apps-menu';
 
-                    if (sec.botones && Array.isArray(sec.botones)) {
+                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
+
+                    if (sec.escudoResenas) {
+                        block.innerHTML += `
+                            <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
+                                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                    </svg>
+                                </div>
+                                <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal ha sido tu experiencia?</div>
+                                <div class="text-xs text-slate-300 text-center font-medium mb-2">Tu valoración nos ayuda a mejorar</div>
+                                <div class="stars-container star-rating my-1" id="escudo-estrellas">
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
+                                </div>
+                                <p class="text-[11px] text-zinc-400 text-center mt-1">Toca las estrellas para calificar el servicio</p>
+                                <p id="mensaje-filtro" class="text-xs text-amber-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
+                            </div>
+                        `;
+                    } else if (sec.botones && Array.isArray(sec.botones)) {
                         sec.botones.forEach((btn, bIdx) => {
                             const bTipo = (btn.tipo || '').toLowerCase();
+                            const nLower = (btn.nombre || '').toLowerCase();
                             const btnId = `btn_${sIdx}_${bIdx}`;
 
-                            if (bTipo === 'asistencia_ruta') {
+                            // RESCATE DE LLAVES
+                            if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('encontraste estas llaves')) {
+                                const waMsg = encodeURIComponent(`¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves con vuestro llavero inteligente.\n🔑 CÓDIGO: [ ${codigoLlaveroNFC} ]`);
+                                block.innerHTML += `
+                                    <a class="app-btn btn-rescate-llaves" href="${whatsappTiendaGlobal}?text=${waMsg}" target="_blank">
+                                        <div class="app-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;"><i class="fa-solid fa-key animate-bounce"></i></div>
+                                        <div class="app-info">
+                                            <div class="app-name flex items-center">${btn.nombre || '¿Encontraste estas llaves?'}<span class="badge-rescate-sos">SOS</span></div>
+                                            <div class="app-desc">${btn.descripcion || 'Pulsa para devolverlas'}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-amber-400 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // MASCOTAS: ASISTENCIA 24H
+                            else if (bTipo === 'asistencia_ruta') {
                                 block.innerHTML += `
                                     <div onclick="abrirAsistenciaRuta()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: var(--color-acento);'}">
-                                            <i class="${btn.icono || 'fa-solid fa-location-crosshairs'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${t.gps}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: var(--color-acento);'}"><i class="${btn.icono || 'fa-solid fa-location-crosshairs'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${esMascota ? t.gps : btn.nombre}</div><div class="app-desc">${btn.descripcion || ''}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
-                            } else if (bTipo === 'carnet_vacunacion') {
+                            }
+                            // MASCOTAS: CARNET VACUNAS
+                            else if (bTipo === 'carnet_vacunacion') {
                                 window[btnId + '_data'] = btn.vacunas || [];
                                 block.innerHTML += `
                                     <div onclick="abrirCarnetVacunacion(window['${btnId}_data'])" role="button" class="app-btn">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56, 189, 248, 0.2); color: #38BDF8;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-shield-dog'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${t.cartilla}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56, 189, 248, 0.2); color: #38BDF8;'}"><i class="${btn.icono || 'fa-solid fa-shield-dog'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${esMascota ? t.cartilla : btn.nombre}</div><div class="app-desc">${btn.descripcion || ''}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
-                            } else if (bTipo === 'checklist_parto' || bTipo === 'checklist') {
-                                window[btnId + '_data'] = btn.checklist || {};
+                            }
+                            // MASCOTAS: CHECKLIST / DIETA
+                            else if (bTipo === 'checklist_parto' || bTipo === 'checklist') {
                                 block.innerHTML += `
-                                    <div onclick="abrirChecklistClinico(window['${btnId}_data'])" role="button" class="app-btn">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #F59E0B;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-clipboard-list'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${t.dieta}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
+                                    <div onclick="abrirChecklistClinico()" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #F59E0B;'}"><i class="${btn.icono || 'fa-solid fa-clipboard-list'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${esMascota ? t.dieta : btn.nombre}</div><div class="app-desc">${btn.descripcion || ''}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
-                            } else if (bTipo === 'triaje_urgencias') {
+                            }
+                            // MASCOTAS: TRIAJE SOS
+                            else if (bTipo === 'triaje_urgencias') {
                                 window[btnId + '_data'] = btn.alertas || [];
                                 block.innerHTML += `
                                     <div onclick="abrirTriajeUrgencias(window['${btnId}_data'])" role="button" class="app-btn">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.22); color: #EF4444;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-triangle-exclamation'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${t.triaje}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.22); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-triangle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${esMascota ? t.triaje : btn.nombre}</div><div class="app-desc">${btn.descripcion || ''}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
-                            } else {
+                            }
+                            // KEBAB: CONFIGURADOR
+                            else if (bTipo === 'configurador_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}"><i class="${btn.icono || 'fa-solid fa-utensils'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || 'Arma tu menú antes de pedir'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // KEBAB: ALÉRGENOS
+                            else if (bTipo === 'guia_alergenos_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || 'Consulta alérgenos'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // FITNESS: PROTEÍNA
+                            else if (bTipo === 'calc_proteina') {
+                                block.innerHTML += `
+                                    <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(230, 0, 0, 0.2); color: #e60000;'}"><i class="${btn.icono || 'fa-solid fa-calculator'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || 'Gramos diarios exactos'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // FITNESS: CREATINA
+                            else if (bTipo === 'guia_creatina') {
+                                block.innerHTML += `
+                                    <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 255, 255, 0.12); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-bottle-droplet'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || 'Protocolo de uso'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // IBERLAX: ERGONOMÍA
+                            else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
+                                block.innerHTML += `
+                                    <div class="app-btn destacado" onclick="abrirAsesor(event)" role="button">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || 'Configurador de descanso'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // IBERLAX: LOGÍSTICA
+                            else if (bTipo === 'logistica' || bTipo === 'tasador_retirada' || nLower.includes('tasador') || nLower.includes('retirada')) {
+                                block.innerHTML += `
+                                    <div class="app-btn" onclick="abrirEnvio(event)" role="button">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || 'Reparto y transporte'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // PARKING GPS
+                            else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
+                                block.innerHTML += `
+                                    <div onclick="gestionarParking(event)" role="button" class="app-btn">
+                                        <div class="app-icon" style="background: rgba(142,142,147,0.15); color: #8e8e93;"><i class="fa-solid fa-location-crosshairs"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre || '¿Dónde aparqué?'}</div><div class="app-desc">${btn.descripcion || 'Guarda el GPS de tu coche'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // VCARD
+                            else if (bTipo === 'vcard' || nLower.includes('contacto en agenda') || (btn.url && btn.url.endsWith('.vcf'))) {
+                                const tieneArchivo = btn.url && !btn.url.includes('contacto.vcf');
+                                block.innerHTML += `
+                                    <a class="app-btn" href="${tieneArchivo ? btn.url : 'javascript:void(0)'}" ${tieneArchivo ? '' : 'onclick="descargarVCardDinamica()"'}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-address-card'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || 'Descarga de contacto'}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // ENLACES DIRECTOS (TEL, WA, WEB)
+                            else {
                                 let finalUrl = btn.url || '#';
                                 let btnNom = btn.nombre;
 
-                                if (finalUrl.includes('tel:')) {
-                                    finalUrl = `tel:${telLlamada}`;
-                                    btnNom = t.llamar;
-                                } else if (finalUrl.includes('wa.me')) {
-                                    finalUrl = `${whatsappTiendaGlobal}?text=${encodeURIComponent(t.msgWa)}`;
-                                    btnNom = t.wa;
+                                if (esMascota) {
+                                    if (finalUrl.includes('tel:')) {
+                                        finalUrl = `tel:${telLlamada}`;
+                                        btnNom = t.llamar;
+                                    } else if (finalUrl.includes('wa.me')) {
+                                        finalUrl = `${whatsappTiendaGlobal}?text=${encodeURIComponent(t.msgWa)}`;
+                                        btnNom = t.wa;
+                                    }
                                 }
 
                                 block.innerHTML += `
-                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') ? 'target="_blank"' : ''}>
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-link'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btnNom}</div>
-                                            <div class="app-desc">${btn.descripcion || ''}</div>
-                                        </div>
+                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') || finalUrl.startsWith('tel:') ? 'target="_blank"' : ''}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btnNom}</div><div class="app-desc">${btn.descripcion || ''}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </a>
                                 `;
@@ -842,12 +1340,9 @@
             }
         }
 
-        // ==========================================
-        // MOTOR DE CARGA INICIAL
-        // ==========================================
         async function cargarEnginePhygital() {
             const urlParams = new URLSearchParams(window.location.search);
-            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'toby').toLowerCase().trim();
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
             clienteSlugGlobal = clienteCod;
 
             let data = null;
@@ -861,44 +1356,117 @@
 
             if (!data) {
                 try {
-                    const urlGitHub = `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/${clienteCod}.json?v=${Date.now()}`;
-                    const resGit = await fetch(urlGitHub);
-                    if (resGit.ok) data = await resGit.json();
+                    const urlGit = `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/${clienteCod}.json?v=${Date.now()}`;
+                    const resG = await fetch(urlGit);
+                    if (resG.ok) data = await resG.json();
                 } catch(e) {}
             }
 
             if (!data) return;
 
             datosPerfilGlobal = data;
-            nombreNegocioGlobal = data.nombre || "Mascota";
+            nombreNegocioGlobal = data.nombre || "Profesional";
 
             if (data.whatsapp && data.whatsapp.trim() !== "") {
                 whatsappTiendaGlobal = data.whatsapp.split('?')[0];
-            } else if (data.secciones) {
+                whatsappGerenciaGlobal = data.whatsapp;
+            }
+
+            if (data.secciones && Array.isArray(data.secciones)) {
                 data.secciones.forEach(sec => {
-                    if (sec.botones) {
+                    if (sec.whatsappGerencia && !whatsappTiendaGlobal) {
+                        whatsappGerenciaGlobal = sec.whatsappGerencia;
+                        whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
+                    }
+                    if (sec.botones && Array.isArray(sec.botones)) {
                         sec.botones.forEach(b => {
                             if (b.url && b.url.includes('wa.me') && !whatsappTiendaGlobal) {
                                 whatsappTiendaGlobal = b.url.split('?')[0];
+                                if (!whatsappGerenciaGlobal) whatsappGerenciaGlobal = b.url;
                             }
                         });
                     }
                 });
             }
 
-            // APLICAR TEMAS PERSISTENTES GUARDADOS POR EL USUARIO
-            const temaColorGuardado = localStorage.getItem(`color_${clienteSlugGlobal}`) || data.colorAcento || "#00E5FF";
-            const temaDarkGuardado = localStorage.getItem(`dark_${clienteSlugGlobal}`) || data.colorPrincipal || "#080E1A";
-            aplicarTemaColor(temaColorGuardado, temaDarkGuardado);
+            const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
 
-            document.getElementById('page-title').innerText = `${data.nombre} | Pasaporte Phygital`;
+            // MOSTRAR O OCULTAR LA BARRA SUPERIOR DE MASCOTAS
+            const petTopBar = document.getElementById('pet-top-bar');
+            if (petTopBar) petTopBar.style.display = esMascota ? 'flex' : 'none';
+
+            // BRANDING Y TEMAS
+            const colorAcentoFinal = esMascota ? (localStorage.getItem(`color_${clienteSlugGlobal}`) || data.colorAcento || "#00E5FF") : (data.colorAcento || "#00E5FF");
+            const colorPrincipalFinal = esMascota ? (localStorage.getItem(`dark_${clienteSlugGlobal}`) || data.colorPrincipal || "#080E1A") : (data.colorPrincipal || "#0B0C10");
+            const fondoLogoFinal = data.fondoLogo || "#0b0c10";
+
+            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
+            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-edge', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
+            document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
+
+            const hubImg = document.getElementById('hub-logo');
+            const splashImg = document.getElementById('splash-logo');
+            if (hubImg) {
+                hubImg.style.objectFit = esMascota ? "cover" : "contain";
+                hubImg.style.padding = data.paddingLogo || (esMascota ? "0px" : "8px");
+            }
+            if (splashImg) {
+                splashImg.style.objectFit = esMascota ? "cover" : "contain";
+                splashImg.style.padding = data.paddingLogo || (esMascota ? "0px" : "8px");
+            }
+
+            document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
+            document.getElementById('splash-title').innerText = data.nombre;
             document.getElementById('client-name').innerText = data.nombre;
-            document.getElementById('client-subtitle').innerText = data.subtitulo || "Pasaporte Phygital Canino";
+            document.getElementById('splash-subtitle').innerText = data.subtitulo || "Ecosistema Phygital";
+            document.getElementById('client-subtitle').innerText = data.subtitulo || "Ecosistema Phygital";
+
+            if (data.textoBadge) document.getElementById('badge-text').innerText = data.textoBadge;
 
             const logoImg = data.logo || "logo.png";
-            document.getElementById('hub-logo').src = logoImg;
+            if (hubImg) hubImg.src = logoImg;
+            if (splashImg) splashImg.src = logoImg;
+
+            if (data.audioFondo && data.audioFondo.trim() !== "") {
+                reproductor.src = data.audioFondo;
+                reproductor.load();
+                btnAudio.style.display = 'flex';
+                splash.style.display = 'flex';
+                splash.style.opacity = '1';
+            } else {
+                btnAudio.style.display = 'none';
+                splash.style.display = 'none';
+            }
 
             renderMenu(data);
+        }
+
+        function cambiarIdioma(lang, btn) {
+            vibrarMovil(30);
+            idiomaActual = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            document.getElementById('badge-text').innerText = (DICCIONARIO[lang] || DICCIONARIO.es).badge;
+            renderMenu(datosPerfilGlobal);
+        }
+
+        function iniciarMagia() {
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.display = 'none'; }, 400);
+            if (reproductor && reproductor.src) reproductor.play().catch(() => {});
+        }
+
+        function alternarAudio() {
+            if (audioMuteado) {
+                reproductor.play().catch(() => {});
+                iconoAudio.className = "fa-solid fa-volume-high";
+            } else {
+                reproductor.pause();
+                iconoAudio.className = "fa-solid fa-volume-xmark";
+            }
+            audioMuteado = !audioMuteado;
         }
 
         document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
