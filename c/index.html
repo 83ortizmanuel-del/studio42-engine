@@ -25,19 +25,26 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
+        html {
+            background-color: var(--color-fondo);
+            scroll-behavior: smooth;
+        }
+
+        /* SCROLL FLUIDO SIN BLOQUEOS NI MARCOS */
         body { 
             background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
             color: var(--color-texto); 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
-            transition: background 0.3s ease; position: relative;
-        }
-
-        body::before {
-            content: ''; position: fixed; inset: 0; pointer-events: none;
-            border: 2px solid var(--halo-edge);
-            box-shadow: inset 0 0 25px var(--halo-glow), 0 0 20px var(--halo-glow);
-            z-index: 9999; border-radius: 20px; transition: all 0.4s ease;
+            min-height: 100vh;
+            padding: 15px 15px 35px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            transition: background 0.3s ease;
+            position: relative;
         }
 
         #splash-screen { 
@@ -55,7 +62,8 @@
 
         .halo-wrapper {
             position: relative; width: 100%; max-width: 412px; border-radius: 34px; padding: 2px;
-            overflow: hidden; margin: auto; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
+            margin: auto 0;
+            overflow: hidden; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
             transition: box-shadow 0.3s ease;
         }
         .halo-wrapper::before {
@@ -564,7 +572,7 @@
                 btnParking: "Où suis-je garé ?",
                 btnParkingDesc: "Mémorisez la position GPS de votre véhicule",
                 btnVcard: "Enregistrer le Contact",
-                btnVcardDesc: "Téléchargez la fiche contact directement",
+                btnVcardDesc: "Téléchargez la fiche contact directamente",
                 btnReviewsTitle: "Comment s'est passée votre visite ?",
                 btnReviewsSub: "Votre avis compte beaucoup pour nous",
                 btnReviewsTap: "Touchez les étoiles pour noter le service",
@@ -1058,7 +1066,7 @@
             if (elF) elF.innerText = firmeza;
             if (elT) elT.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
             const btnP = document.getElementById('btn-probar-tienda');
-            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0AResultado: ${firmeza}. ¿Qué modelo puedo probar?`)}`;
+            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}\%0A- Peso:${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}\%0AResultado:${firmeza}. ¿Qué modelo puedo probar?`)}`;
         }
 
         const modalEnvio = document.getElementById('modal-envio');
@@ -1450,11 +1458,9 @@
 
             const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
 
-            // MOSTRAR U OCULTAR ENGRANAJE DE AJUSTES (SOLO DUEÑO EN MASCOTAS)
             const btnGear = document.getElementById('btn-owner-gear');
             if (btnGear) btnGear.style.display = esMascota ? 'flex' : 'none';
 
-            // CONTROL DEL SELECTOR DE IDIOMAS (ACTIVO POR DEFECTO PARA TODOS)
             const topBar = document.getElementById('universal-top-bar');
             if (topBar) topBar.style.display = (data.mostrarIdiomas === false) ? 'none' : 'flex';
 
