@@ -3,230 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Studio 42 | Ecosistema Phygital</title>
+    <title id="page-title">Studio 42 | Pasaporte Canino Inteligente</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --color-principal: #0b0c10;
+            --color-principal: #080E1A;
             --color-acento: #00E5FF;
             --color-fondo: #030712; 
-            --color-tarjeta: rgba(15, 23, 42, 0.90); 
+            --color-tarjeta: rgba(15, 23, 42, 0.85); 
             --color-boton: rgba(30, 41, 59, 0.7); 
             --color-texto: #f8fafc;
             --color-gris: #94a3b8;
-            --titanium-light: #f1f5f9;
-            --titanium-glow: rgba(226, 232, 240, 0.4);
-            --halo-glow: rgba(0, 229, 255, 0.5);
-            --halo-intensity: 30px;
-            --fondo-logo: #0b0c10;
+            --halo-glow: rgba(0, 229, 255, 0.45);
+            --halo-edge: #00E5FF;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
+            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 90%);
             color: var(--color-texto); 
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; padding: 15px; user-select: none; overflow-x: hidden;
-            transition: background 0.3s ease;
+            min-height: 100vh; padding: 12px; user-select: none; overflow-x: hidden;
+            position: relative;
         }
-        
-        #splash-screen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: radial-gradient(circle at center, #111827 0%, #030712 100%);
-            z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; 
-            transition: opacity 0.5s ease; padding: 20px;
+
+        /* HALO NEON PERIMETRAL DE LA PANTALLA (EDGE GLOW) */
+        body::before {
+            content: ''; position: fixed; inset: 0; pointer-events: none;
+            border: 2px solid var(--halo-edge);
+            box-shadow: inset 0 0 25px var(--halo-glow), 0 0 20px var(--halo-glow);
+            z-index: 9999; border-radius: 20px; transition: all 0.4s ease;
         }
-        .btn-desbloqueo { 
-            background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
-            padding: 16px 36px; border-radius: 50px; font-size: 0.9rem; font-weight: 900; letter-spacing: 1.2px; 
-            text-transform: uppercase; cursor: pointer; box-shadow: 0 0 30px var(--titanium-glow);
-            transition: transform 0.2s ease;
-        }
-        .btn-desbloqueo:active { transform: scale(0.95); }
 
         .halo-wrapper {
-            position: relative; width: 100%; max-width: 416px; border-radius: 34px; padding: 2px;
-            overflow: hidden; margin: auto; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
-            transition: box-shadow 0.3s ease;
+            position: relative; width: 100%; max-width: 410px; border-radius: 36px; padding: 2px;
+            overflow: hidden; margin: auto; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px var(--halo-glow);
+            transition: box-shadow 0.4s ease;
         }
         .halo-wrapper::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: conic-gradient(transparent 0%, transparent 40%, var(--color-acento) 50%, #ffffff 52%, var(--color-acento) 54%, transparent 65%, transparent 100%);
-            animation: haloRotate 10s linear infinite; z-index: 0;
+            animation: haloRotate 8s linear infinite; z-index: 0;
         }
         @keyframes haloRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .hub-container { 
-            background: var(--color-tarjeta); width: 100%; border-radius: 32px; 
-            padding: 24px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
-            backdrop-filter: blur(20px); position: relative; z-index: 1;
+            background: var(--color-tarjeta); width: 100%; border-radius: 34px; 
+            padding: 22px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(25px); position: relative; z-index: 1;
         }
 
-        /* HEADER SUPERIOR: IDIOMAS Y CONFIGURADOR */
+        /* CONTROLES SUPERIORES GLASSMORPHISM */
         .top-bar-controls {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; padding: 0 4px;
+            margin-bottom: 14px; padding: 0 4px;
         }
         .lang-picker {
-            display: flex; gap: 6px; background: rgba(255,255,255,0.06);
-            padding: 4px 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+            display: flex; gap: 4px; background: rgba(255,255,255,0.05);
+            padding: 3px 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
         }
         .lang-btn {
-            background: none; border: none; font-size: 0.72rem; font-weight: 800;
-            color: #94a3b8; cursor: pointer; padding: 2px 5px; border-radius: 6px;
+            background: none; border: none; font-size: 0.7rem; font-weight: 800;
+            color: #94a3b8; cursor: pointer; padding: 2px 7px; border-radius: 12px; transition: all 0.2s;
         }
-        .lang-btn.active { color: #fff; background: rgba(255,255,255,0.18); }
+        .lang-btn.active { color: #020617; background: var(--color-acento); font-weight: 900; }
+        
         .owner-btn {
             background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-            color: #94a3b8; width: 28px; height: 28px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer;
-            transition: all 0.2s;
+            color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(8px);
         }
-        .owner-btn:hover { color: var(--color-acento); border-color: var(--color-acento); }
+        .owner-btn:active { transform: scale(0.9) rotate(45deg); color: var(--color-acento); border-color: var(--color-acento); }
 
         .status-badge { 
             display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
-            padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
-            letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 14px; text-transform: uppercase;
-            max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 5px 14px; border-radius: 50px; font-size: 0.62rem; font-weight: 900;
+            letter-spacing: 1.2px; color: #fff; margin-bottom: 12px; text-transform: uppercase;
         }
         .ping-light { 
             position: relative; width: 7px; height: 7px; background-color: var(--color-acento);
-            border-radius: 50%; box-shadow: 0 0 8px var(--color-acento); flex-shrink: 0;
+            border-radius: 50%; box-shadow: 0 0 10px var(--color-acento); flex-shrink: 0;
         }
         .ping-light::after { 
             content: ''; position: absolute; top: -3px; left: -3px; width: 13px; height: 13px;
-            border-radius: 50%; background-color: var(--titanium-glow);
-            animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
+            border-radius: 50%; background-color: var(--color-acento); opacity: 0.7;
+            animation: radarTitanium 1.8s infinite cubic-bezier(0, 0, 0.2, 1);
         }
-        @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
+        @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.8); opacity: 0; } }
         
         .logo-container { 
-            width: 88px; height: 88px; margin: 0 auto 12px auto; 
-            border-radius: 24px; border: 2px solid var(--color-acento); 
-            overflow: hidden; 
-            background-color: var(--fondo-logo, #0b0c10);
+            width: 90px; height: 90px; margin: 0 auto 12px auto; 
+            border-radius: 26px; border: 2px solid var(--color-acento); 
+            overflow: hidden; background-color: #0b0c10;
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px var(--halo-glow); 
-            position: relative; cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--halo-glow); 
+            position: relative; transition: all 0.3s ease;
         }
-        .logo-container img { 
-            width: 100%; height: 100%; object-fit: contain; display: block; transition: filter 0.3s ease; 
-        }
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
-        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
-        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 18px 0 10px 6px; font-weight: 800; }
+        h1 { font-size: 1.35rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
+        .propietario { color: var(--color-acento); font-size: 0.75rem; margin-bottom: 14px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+        .section-title { text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 16px 0 9px 6px; font-weight: 800; }
         
-        .apps-menu { display: flex; flex-direction: column; gap: 11px; width: 100%; }
+        .apps-menu { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .app-btn { 
-            display: flex; align-items: center; padding: 13px 16px; border-radius: 20px; 
+            display: flex; align-items: center; padding: 13px 15px; border-radius: 20px; 
             background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
-            transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; 
-            backdrop-filter: blur(10px); width: 100%; box-sizing: border-box;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-decoration: none; 
+            backdrop-filter: blur(12px); width: 100%; box-sizing: border-box;
         }
         .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
         .app-btn.destacado { 
             border: 1px solid var(--color-acento); 
             background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(15, 23, 42, 0.85));
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); 
+            box-shadow: 0 0 20px var(--halo-glow); 
         }
-        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
+        .app-icon { width: 42px; height: 42px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
         
-        .app-info { flex-grow: 1; min-width: 0; overflow: hidden; }
-        .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; word-break: break-word; }
-        .app-desc { font-size: 0.72rem; color: var(--color-gris); word-break: break-word; }
+        .app-info { flex-grow: 1; min-width: 0; overflow: hidden; text-align: left; }
+        .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.72rem; color: var(--color-gris); }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        /* MODALES */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(16px); z-index: 10001; justify-content: center; align-items: center; padding: 18px; opacity: 0; transition: opacity 0.3s ease; }
         .modal-box { 
-            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); 
-            border-radius: 28px; padding: 24px 20px 20px 20px; max-width: 380px; width: 100%; 
-            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); 
+            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.16); 
+            border-radius: 28px; padding: 22px 18px; max-width: 380px; width: 100%; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.95); transform: translateY(20px); 
             transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; position: relative;
         }
         .modal-close-btn {
-            position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
+            position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #94a3b8; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease; z-index: 60;
+            color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
-        .modal-icon { font-size: 2.4rem; margin-bottom: 8px; }
-        .modal-title { font-size: 1.15rem; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; padding: 0 20px; word-break: break-word; }
-        .modal-text { font-size: 0.84rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 16px; word-break: break-word; }
-        
-        .modal-actions { display: flex; flex-direction: column; gap: 9px; }
-        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: block; text-align: center; }
-        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; }
+        .modal-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+        .modal-btn-primary { background: linear-gradient(135deg, var(--color-acento), #0284c7); color: #020617; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; cursor: pointer; text-align: center; }
+        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center; }
 
-        .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
-        .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+        /* PALETAS DE COLOR */
+        .color-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .color-dot.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 14px rgba(255,255,255,0.5); }
+
+        /* TECLADO PIN DIGITAL */
+        .pin-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--color-acento); background: transparent; transition: all 0.2s; }
+        .pin-dot.filled { background: var(--color-acento); box-shadow: 0 0 10px var(--color-acento); }
+        .key-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 14px; font-size: 1.15rem; font-weight: 800; color: #fff; cursor: pointer; transition: all 0.15s; }
+        .key-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.92); }
+
+        .footer-brand { margin-top: 24px; font-size: 0.68rem; color: var(--color-gris); letter-spacing: 1.2px; }
+        .footer-brand span { color: var(--color-acento); font-weight: 800; }
     </style>
 </head>
 <body>
 
     <audio id="audio-fondo" loop preload="auto"></audio>
 
-    <div id="splash-screen">
-        <div class="logo-container" id="splash-logo-box">
-            <img id="splash-logo" alt="Logo">
-        </div>
-        <h2 id="splash-title" style="color: #fff; font-size: 1.4rem; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;">STUDIO 42</h2>
-        <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.85rem; margin-bottom: 30px; text-transform: uppercase;">Ecosistema Phygital</p>
-        <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
-    </div>
-
-    <!-- MODAL GENERAL LECTURA/POLIMÓRFICO -->
+    <!-- 1. MODAL LECTURA INFORMATIVA (PÚBLICO) -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
-        <div class="modal-box" id="modal-content">
+        <div class="modal-box text-center" id="modal-content">
             <button class="modal-close-btn" onclick="cerrarModalBtn()"><i class="fa-solid fa-xmark"></i></button>
-            <div id="modal-icon" class="modal-icon"></div>
-            <div id="modal-title" class="modal-title"></div>
-            <div id="modal-text" class="modal-text"></div>
+            <div id="modal-icon" class="text-3xl mb-2"></div>
+            <div id="modal-title" class="text-base font-black text-white mb-2 uppercase tracking-wide"></div>
+            <div id="modal-text" class="text-xs text-slate-300 leading-relaxed mb-4"></div>
             <div id="modal-actions" class="modal-actions">
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL CONFIGURADOR PROPIETARIO (PROTEGIDO POR PIN) -->
-    <div id="modal-configurador" class="modal-overlay" onclick="cerrarConfigurador(event)">
-        <div class="modal-box text-left" style="max-width: 400px;">
-            <button class="modal-close-btn" onclick="cerrarConfiguradorBtn()"><i class="fa-solid fa-xmark"></i></button>
-            <div class="flex items-center gap-2 mb-2">
-                <i class="fa-solid fa-user-gear text-cyan-400 text-lg"></i>
-                <h3 class="text-white text-sm font-black uppercase tracking-wider">Gestión Propietario</h3>
+    <!-- 2. MODAL TECLADO PIN DIGITAL (ACCESO SEGURO) -->
+    <div id="modal-pin-auth" class="modal-overlay">
+        <div class="modal-box text-center" style="max-width: 320px;">
+            <button class="modal-close-btn" onclick="cerrarPinAuth()"><i class="fa-solid fa-xmark"></i></button>
+            <i class="fa-solid fa-shield-halved text-2xl mb-2" style="color:var(--color-acento);"></i>
+            <h3 class="text-white text-sm font-black uppercase tracking-wider mb-1" id="pin-modal-title">Zona Propietario</h3>
+            <p class="text-[11px] text-slate-400 mb-4" id="pin-modal-desc">Introduce tu PIN de 4 dígitos</p>
+            
+            <div class="flex justify-center gap-3 mb-5">
+                <div class="pin-dot" id="dot-0"></div>
+                <div class="pin-dot" id="dot-1"></div>
+                <div class="pin-dot" id="dot-2"></div>
+                <div class="pin-dot" id="dot-3"></div>
             </div>
-            <p class="text-[11px] text-slate-400 mb-3">Actualiza los datos clínicos y de contacto de la chapa inteligente:</p>
 
-            <div class="space-y-3 max-h-96 overflow-y-auto pr-1 text-xs">
+            <div class="grid grid-cols-3 gap-2.5 mb-3">
+                <button class="key-btn" onclick="teclearPin('1')">1</button>
+                <button class="key-btn" onclick="teclearPin('2')">2</button>
+                <button class="key-btn" onclick="teclearPin('3')">3</button>
+                <button class="key-btn" onclick="teclearPin('4')">4</button>
+                <button class="key-btn" onclick="teclearPin('5')">5</button>
+                <button class="key-btn" onclick="teclearPin('6')">6</button>
+                <button class="key-btn" onclick="teclearPin('7')">7</button>
+                <button class="key-btn" onclick="teclearPin('8')">8</button>
+                <button class="key-btn" onclick="teclearPin('9')">9</button>
+                <button class="key-btn text-xs text-amber-400 font-bold" onclick="abrirRecuperacionPin()">SOS</button>
+                <button class="key-btn" onclick="teclearPin('0')">0</button>
+                <button class="key-btn text-rose-400" onclick="borrarPin()"><i class="fa-solid fa-delete-left"></i></button>
+            </div>
+            <button onclick="abrirRecuperacionPin()" class="text-[11px] text-slate-400 hover:text-white underline mt-1">¿Olvidaste tu PIN?</button>
+        </div>
+    </div>
+
+    <!-- 3. MODAL RECUPERACIÓN INTELIGENTE DE PIN -->
+    <div id="modal-recuperar" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 340px;">
+            <button class="modal-close-btn" onclick="cerrarRecuperar()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-key text-amber-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase">Recuperar Acceso</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Introduce tu <b>Palabra Secreta</b> configurada o solicita el código a Studio 42:</p>
+            
+            <input type="text" id="input-palabra-secreta" placeholder="Ej: Toby / Pamplona / Clinica" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs mb-3 outline-none focus:border-amber-400">
+            
+            <div class="modal-actions">
+                <button onclick="validarPalabraSecreta()" class="modal-btn-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706); color:#fff;">Restablecer a PIN 1234</button>
+                <a href="https://wa.me/34672294962?text=Hola%20Studio%2042,%20he%20olvidado%20el%20PIN%20de%20mi%20chapa%20inteligente." target="_blank" class="modal-btn-secondary text-center">Ayuda Directa Soporte</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. MODAL CONFIGURADOR PROPIETARIO COMPLETO -->
+    <div id="modal-configurador" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 390px;">
+            <button class="modal-close-btn" onclick="cerrarConfigurador()"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="flex items-center gap-2 mb-3">
+                <i class="fa-solid fa-sliders text-lg" style="color:var(--color-acento);"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Centro de Control</h3>
+            </div>
+
+            <!-- TABS -->
+            <div class="flex gap-2 border-b border-slate-800 pb-2 mb-3 text-[11px] font-bold">
+                <button onclick="cambiarTabCfg('emergencia')" id="tab-btn-emergencia" class="text-cyan-400 border-b-2 border-cyan-400 pb-1">🚨 Emergencia</button>
+                <button onclick="cambiarTabCfg('salud')" id="tab-btn-salud" class="text-slate-400 pb-1">💉 Salud</button>
+                <button onclick="cambiarTabCfg('estilo')" id="tab-btn-estilo" class="text-slate-400 pb-1">🎨 Halo & Estilo</button>
+            </div>
+
+            <!-- CONTENIDO TABS -->
+            <div id="tab-emergencia" class="space-y-3 text-xs">
                 <div>
-                    <label class="font-bold text-slate-300 block mb-1">WhatsApp de Rescate (con código país):</label>
-                    <input type="text" id="cfg-wa" placeholder="Ej: 34672294962" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white">
+                    <label class="font-bold text-slate-300 block mb-1">Móvil WhatsApp de Rescate:</label>
+                    <input type="text" id="cfg-wa" placeholder="Ej: 34672294962" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
                 </div>
                 <div>
                     <label class="font-bold text-slate-300 block mb-1">Nº Microchip Oficial Homologado:</label>
-                    <input type="text" id="cfg-chip" placeholder="Ej: 981098108472911" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white">
+                    <input type="text" id="cfg-chip" placeholder="Ej: 981098108472911" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
                 </div>
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">Recompensa / Anuncio SOS:</label>
+                    <input type="text" id="cfg-recompensa" placeholder="Ej: Recompensa por entrega segura" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
+                </div>
+            </div>
+
+            <div id="tab-salud" class="space-y-3 text-xs hidden">
                 <div>
                     <label class="font-bold text-slate-300 block mb-1">Alergias Críticas & Dieta:</label>
-                    <textarea id="cfg-dieta" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white" placeholder="Ej: Alérgico al pollo. Toma condroprotector con desayuno."></textarea>
+                    <textarea id="cfg-dieta" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none" placeholder="Ej: Alérgico al pollo. Toma condroprotector con el desayuno."></textarea>
+                </div>
+                <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
+                    <span class="font-bold text-amber-400 block mb-1.5">Añadir Nueva Vacuna / Refuerzo:</span>
+                    <input type="text" id="cfg-vac-nom" placeholder="Vacuna (ej: Leishmaniosis / Rabia)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white mb-2 text-xs">
+                    <input type="text" id="cfg-vac-est" placeholder="Pauta (ej: Refuerzo Anual 2026)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white text-xs">
+                </div>
+            </div>
+
+            <div id="tab-estilo" class="space-y-3 text-xs hidden">
+                <div>
+                    <label class="font-bold text-slate-300 block mb-2">Color del Halo Neón Perimetral & Botones:</label>
+                    <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-2xl border border-slate-800">
+                        <div class="color-dot active" style="background:#00E5FF;" onclick="aplicarTemaColor('#00E5FF', '#080E1A', this)" title="Cian Cyber"></div>
+                        <div class="color-dot" style="background:#22C55E;" onclick="aplicarTemaColor('#22C55E', '#06170d', this)" title="Verde Esmeralda"></div>
+                        <div class="color-dot" style="background:#F59E0B;" onclick="aplicarTemaColor('#F59E0B', '#1c1304', this)" title="Oro Imperial"></div>
+                        <div class="color-dot" style="background:#EC4899;" onclick="aplicarTemaColor('#EC4899', '#190610', this)" title="Fucsia Neón"></div>
+                        <div class="color-dot" style="background:#A855F7;" onclick="aplicarTemaColor('#A855F7', '#12051d', this)" title="Violeta Deep"></div>
+                    </div>
+                </div>
+                <div class="pt-2 border-t border-slate-800">
+                    <label class="font-bold text-slate-300 block mb-1">Palabra Secreta (Para recuperar PIN si lo olvidas):</label>
+                    <input type="text" id="cfg-palabra" placeholder="Ej: Toby / Pamplona" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
                 </div>
                 <div>
-                    <label class="font-bold text-slate-300 block mb-1">Añadir / Modificar Vacuna:</label>
-                    <input type="text" id="cfg-vac-nom" placeholder="Nombre vacuna (ej: Rabia)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white mb-1.5">
-                    <input type="text" id="cfg-vac-est" placeholder="Estado (ej: Vigente 2026)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white">
+                    <label class="font-bold text-slate-300 block mb-1">Cambiar PIN (4 dígitos):</label>
+                    <input type="password" maxlength="4" id="cfg-nuevo-pin" placeholder="Dejar en blanco para no cambiar" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none">
                 </div>
             </div>
 
             <div class="modal-actions mt-4">
-                <button onclick="guardarAjustesPropietario()" class="modal-btn-primary" style="background: linear-gradient(135deg, #00E5FF, #0284c7); color: #020617; font-weight: 900;">
-                    <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar y Sincronizar Ficha
+                <button onclick="guardarAjustesCompletos()" class="modal-btn-primary">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar Ficha Phygital
                 </button>
-                <button class="modal-btn-secondary" onclick="cerrarConfiguradorBtn()">Cancelar</button>
+                <button class="modal-btn-secondary" onclick="cerrarConfigurador()">Cerrar sin guardar</button>
             </div>
         </div>
     </div>
@@ -235,7 +308,7 @@
     <div class="halo-wrapper" id="main-halo">
         <div class="hub-container">
             
-            <!-- BARRA SUPERIOR: MULTI-IDIOMA + CONFIGURADOR -->
+            <!-- HEADER DE ALTO IMPACTO -->
             <div class="top-bar-controls">
                 <div class="lang-picker">
                     <button class="lang-btn active" onclick="cambiarIdioma('es', this)">ES</button>
@@ -243,7 +316,7 @@
                     <button class="lang-btn" onclick="cambiarIdioma('fr', this)">FR</button>
                     <button class="lang-btn" onclick="cambiarIdioma('de', this)">DE</button>
                 </div>
-                <button class="owner-btn" onclick="pedirAccesoPropietario()" title="Zona Dueño / Editar">
+                <button class="owner-btn" onclick="iniciarAuthPropietario()" title="Ajustes Dueño">
                     <i class="fa-solid fa-gear"></i>
                 </button>
             </div>
@@ -258,11 +331,11 @@
             </div>
 
             <h1 id="client-name">TOBY</h1>
-            <div class="propietario" id="client-subtitle">RESCATE INTELIGENTE ACTIVO</div>
+            <div class="propietario" id="client-subtitle">PASAPORTE PHYGITAL ACTIVO</div>
 
             <div id="dynamic-menu"></div>
 
-            <div class="footer-brand" id="lbl-footer-brand">Desarrollado por <span>Studio 42 Pet Rescue</span></div>
+            <div class="footer-brand" id="lbl-footer-brand">Tecnología Certificada por <span>Studio 42</span></div>
         </div>
     </div>
 
@@ -273,10 +346,14 @@
         let nombreNegocioGlobal = "TOBY";
         let clienteSlugGlobal = "toby";
 
+        let pinBuffer = "";
+        const PIN_DEFAULT = "1234";
+        const MASTER_RESET = "S42-RESCUE-RESET";
+
         const DICCIONARIO = {
             es: {
                 badge: "CHIP INTELIGENTE ACTIVO · PROTOCOLO RESCATE SOS",
-                llamar: "Llamar a Papá/Mamá",
+                llamar: "Llamar a Papá/Mamá de Toby",
                 wa: "Avisar por WhatsApp al Dueño",
                 gps: "Hospitales Veterinarios 24h & GPS",
                 cartilla: "Carnet de Vacunación Canina",
@@ -286,107 +363,213 @@
             },
             en: {
                 badge: "ACTIVE SMART CHIP · SOS RESCUE PROTOCOL",
-                llamar: "Call Toby's Owner",
+                llamar: "Call Toby's Family",
                 wa: "Notify Owner via WhatsApp",
-                gps: "24/7 Vet Hospitals & GPS Location",
-                cartilla: "Vaccination & Medical Records",
-                dieta: "Dietary Needs, Allergies & Temperament",
-                triaje: "SOS Poisoning Guide & First Aid",
-                msgWa: "Hello! I just scanned Toby's smart tag and he is with me. How can we meet to return him?"
+                gps: "24/7 Vet Hospitals & GPS Satellite",
+                cartilla: "Official Vaccination Passport",
+                dieta: "Dietary Needs, Allergies & Character",
+                triaje: "SOS Poisoning Protocol & First Aid",
+                msgWa: "Hello! I just scanned Toby's smart tag and he is with me. How can we coordinate to return him?"
             },
             fr: {
                 badge: "PUCE INTELLIGENTE ACTIVE · PROTOCOLE SOS",
-                llamar: "Appeler le propriétaire",
-                wa: "Prévenir par WhatsApp",
+                llamar: "Appeler la famille de Toby",
+                wa: "Aviser par WhatsApp",
                 gps: "Urgences Vétérinaires 24h & GPS",
-                cartilla: "Carnet de Vaccination",
-                dieta: "Régime, Allergies & Caractère",
+                cartilla: "Passeport Sanitaire & Vaccins",
+                dieta: "Régime, Allergies & Comportement",
                 triaje: "Guide SOS Intoxications & Premiers Soins",
                 msgWa: "Bonjour! Je viens de scanner la médaille de Toby et il est avec moi. Comment faire pour vous le rendre?"
             },
             de: {
                 badge: "SMART-CHIP AKTIV · SOS RETTUNGSPROTOKOLL",
-                llamar: "Besitzer anrufen",
-                wa: "Besitzer per WhatsApp benachrichtigen",
+                llamar: "Tobys Familie anrufen",
+                wa: "Besitzer per WhatsApp kontaktieren",
                 gps: "24h Tierkliniken & GPS-Standort",
                 cartilla: "Impfpass & Tierarztakte",
-                dieta: "Diät, Allergien & Verhalten",
+                dieta: "Diät, Allergien & Wesen",
                 triaje: "SOS Vergiftung & Erste Hilfe",
                 msgWa: "Hallo! Ich habe gerade Tobys Marke gescannt und er ist bei mir. Wie können wir die Übergabe vereinbaren?"
             }
         };
 
-        const reproductor = document.getElementById('audio-fondo');
-        const splash = document.getElementById('splash-screen');
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
         const modalActions = document.getElementById('modal-actions');
+        const modalPin = document.getElementById('modal-pin-auth');
         const modalCfg = document.getElementById('modal-configurador');
+        const modalRec = document.getElementById('modal-recuperar');
 
-        function abrirModalCustom() {
-            modalOverlay.style.display = 'flex';
-            setTimeout(() => { modalOverlay.style.opacity = '1'; modalContent.style.transform = 'translateY(0)'; }, 10);
-        }
-        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
-        function cerrarModalBtn() {
-            modalOverlay.style.opacity = '0';
-            modalContent.style.transform = 'translateY(20px)';
-            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
+        function vibrarMovil(ms = 35) {
+            if ("vibrate" in navigator) navigator.vibrate(ms);
         }
 
         // ==========================================
-        // GESTIÓN PROPIETARIO / CONFIGURADOR
+        // SISTEMA DE SEGURIDAD & TECLADO PIN DIGITAL
         // ==========================================
-        function pedirAccesoPropietario() {
-            const pin = prompt("Introduce el PIN de Propietario (PIN por defecto: 1234):");
-            if (pin === "1234" || pin === (localStorage.getItem(`pin_${clienteSlugGlobal}`) || "1234")) {
-                cargarDatosEnConfigurador();
-                modalCfg.style.display = 'flex';
-                setTimeout(() => { modalCfg.style.opacity = '1'; modalCfg.querySelector('.modal-box').style.transform = 'translateY(0)'; }, 10);
-            } else if (pin !== null) {
-                alert("PIN incorrecto. Acceso denegado a edición.");
+        function iniciarAuthPropietario() {
+            vibrarMovil(50);
+            pinBuffer = "";
+            actualizarPuntosPin();
+            modalPin.style.display = 'flex';
+            setTimeout(() => { modalPin.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarPinAuth() {
+            modalPin.style.opacity = '0';
+            setTimeout(() => { modalPin.style.display = 'none'; }, 250);
+        }
+
+        function teclearPin(num) {
+            vibrarMovil(30);
+            if (pinBuffer.length < 4) {
+                pinBuffer += num;
+                actualizarPuntosPin();
+                if (pinBuffer.length === 4) {
+                    setTimeout(verificarPin, 200);
+                }
             }
         }
 
-        function cerrarConfigurador(e) { if(e.target === modalCfg) cerrarConfiguradorBtn(); }
-        function cerrarConfiguradorBtn() {
-            modalCfg.style.opacity = '0';
-            modalCfg.querySelector('.modal-box').style.transform = 'translateY(20px)';
-            setTimeout(() => { modalCfg.style.display = 'none'; }, 300);
+        function borrarPin() {
+            vibrarMovil(20);
+            pinBuffer = pinBuffer.slice(0, -1);
+            actualizarPuntosPin();
         }
 
-        function cargarDatosEnConfigurador() {
-            const guardado = localStorage.getItem(`override_${clienteSlugGlobal}`);
-            const data = guardado ? JSON.parse(guardado) : datosPerfilGlobal;
+        function actualizarPuntosPin() {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i < pinBuffer.length) dot.classList.add('filled');
+                else dot.classList.remove('filled');
+            }
+        }
+
+        function verificarPin() {
+            const pinGuardado = localStorage.getItem(`pin_${clienteSlugGlobal}`) || PIN_DEFAULT;
+            if (pinBuffer === pinGuardado) {
+                vibrarMovil([50, 50, 50]);
+                cerrarPinAuth();
+                abrirConfigurador();
+            } else {
+                vibrarMovil(250);
+                document.getElementById('pin-modal-desc').innerText = "❌ PIN Incorrecto. Inténtalo de nuevo";
+                document.getElementById('pin-modal-desc').style.color = "#f43f5e";
+                pinBuffer = "";
+                actualizarPuntosPin();
+                setTimeout(() => {
+                    document.getElementById('pin-modal-desc').innerText = "Introduce tu PIN de 4 dígitos";
+                    document.getElementById('pin-modal-desc').style.color = "#94a3b8";
+                }, 1500);
+            }
+        }
+
+        function abrirRecuperacionPin() {
+            cerrarPinAuth();
+            modalRec.style.display = 'flex';
+            setTimeout(() => { modalRec.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarRecuperar() {
+            modalRec.style.opacity = '0';
+            setTimeout(() => { modalRec.style.display = 'none'; }, 250);
+        }
+
+        function validarPalabraSecreta() {
+            const palabra = document.getElementById('input-palabra-secreta').value.trim().toLowerCase();
+            const secretaGuardada = (localStorage.getItem(`palabra_${clienteSlugGlobal}`) || "toby").toLowerCase();
+
+            if (palabra === secretaGuardada || palabra === MASTER_RESET.toLowerCase()) {
+                localStorage.setItem(`pin_${clienteSlugGlobal}`, PIN_DEFAULT);
+                alert(`✅ Identidad validada. Tu PIN se ha restablecido al valor oficial: ${PIN_DEFAULT}`);
+                cerrarRecuperar();
+                iniciarAuthPropietario();
+            } else {
+                alert("❌ Palabra incorrecta. Contacta con Studio 42 para restablecimiento oficial.");
+            }
+        }
+
+        // ==========================================
+        // CONFIGURADOR INTUITIVO
+        // ==========================================
+        function abrirConfigurador() {
+            cargarDatosEnCampos();
+            modalCfg.style.display = 'flex';
+            setTimeout(() => { modalCfg.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarConfigurador() {
+            modalCfg.style.opacity = '0';
+            setTimeout(() => { modalCfg.style.display = 'none'; }, 250);
+        }
+
+        function cambiarTabCfg(tab) {
+            vibrarMovil(20);
+            ['emergencia', 'salud', 'estilo'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "text-slate-400 pb-1";
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = "text-cyan-400 border-b-2 border-cyan-400 pb-1 font-bold";
+        }
+
+        function aplicarTemaColor(colorHex, colorDark, dotElement) {
+            vibrarMovil(40);
+            document.documentElement.style.setProperty('--color-acento', colorHex);
+            document.documentElement.style.setProperty('--color-principal', colorDark);
+            document.documentElement.style.setProperty('--halo-edge', colorHex);
+            document.documentElement.style.setProperty('--halo-glow', colorHex + '66');
+
+            if (dotElement) {
+                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+                dotElement.classList.add('active');
+            }
+            localStorage.setItem(`color_${clienteSlugGlobal}`, colorHex);
+            localStorage.setItem(`dark_${clienteSlugGlobal}`, colorDark);
+        }
+
+        function cargarDatosEnCampos() {
+            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+            const data = override ? JSON.parse(override) : datosPerfilGlobal;
             if (!data) return;
 
             document.getElementById('cfg-wa').value = (data.whatsapp || "34672294962").replace(/\D/g, '');
             document.getElementById('cfg-chip').value = data.microchip || "981098108472911";
-            document.getElementById('cfg-dieta').value = data.dietaNotas || "Alérgico estricto al pollo. Toma condroprotector articular con el desayuno.";
+            document.getElementById('cfg-recompensa').value = data.recompensa || "Recompensa / Servicio SOS Mascota";
+            document.getElementById('cfg-dieta').value = data.dietaNotas || "Alérgico estricto al pollo y cereales (solo pienso hipoalergénico).";
+            document.getElementById('cfg-palabra').value = localStorage.getItem(`palabra_${clienteSlugGlobal}`) || "toby";
         }
 
-        function guardarAjustesPropietario() {
-            const nuevoWa = document.getElementById('cfg-wa').value.trim();
-            const nuevoChip = document.getElementById('cfg-chip').value.trim();
-            const nuevaDieta = document.getElementById('cfg-dieta').value.trim();
+        function guardarAjustesCompletos() {
+            vibrarMovil(60);
+            const wa = document.getElementById('cfg-wa').value.trim();
+            const chip = document.getElementById('cfg-chip').value.trim();
+            const rec = document.getElementById('cfg-recompensa').value.trim();
+            const dieta = document.getElementById('cfg-dieta').value.trim();
             const vacNom = document.getElementById('cfg-vac-nom').value.trim();
             const vacEst = document.getElementById('cfg-vac-est').value.trim();
+            const nuevaPalabra = document.getElementById('cfg-palabra').value.trim();
+            const nuevoPin = document.getElementById('cfg-nuevo-pin').value.trim();
 
             let override = localStorage.getItem(`override_${clienteSlugGlobal}`);
             let data = override ? JSON.parse(override) : JSON.parse(JSON.stringify(datosPerfilGlobal));
 
-            data.whatsapp = `https://wa.me/${nuevoWa}`;
-            data.microchip = nuevoChip;
-            data.dietaNotas = nuevaDieta;
+            data.whatsapp = `https://wa.me/${wa}`;
+            data.microchip = chip;
+            data.recompensa = rec;
+            data.dietaNotas = dieta;
 
             if (vacNom) {
                 if (!data.vacunasExtras) data.vacunasExtras = [];
-                data.vacunasExtras.push({ nombre: vacNom, subtitulo: vacEst || "Actualizada por propietario", momento: "Revisión 2026", badge: "Al Día" });
+                data.vacunasExtras.push({ nombre: vacNom, subtitulo: vacEst || "Dosis Registrada", momento: "Vigente", badge: "Al Día" });
             }
 
+            if (nuevaPalabra) localStorage.setItem(`palabra_${clienteSlugGlobal}`, nuevaPalabra);
+            if (nuevoPin.length === 4) localStorage.setItem(`pin_${clienteSlugGlobal}`, nuevoPin);
+
             localStorage.setItem(`override_${clienteSlugGlobal}`, JSON.stringify(data));
-            alert("✅ ¡Ficha actualizada y guardada con éxito!");
-            cerrarConfiguradorBtn();
+            cerrarConfigurador();
+            alert("✨ ¡Pasaporte inteligente sincronizado con éxito!");
             cargarEnginePhygital();
         }
 
@@ -394,27 +577,36 @@
         // SELECTOR MULTI-IDIOMA
         // ==========================================
         function cambiarIdioma(lang, btn) {
+            vibrarMovil(30);
             idiomaActual = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
 
             const t = DICCIONARIO[lang] || DICCIONARIO.es;
             document.getElementById('badge-text').innerText = t.badge;
-            
-            // Re-renderizar enlaces con el mensaje en el idioma seleccionado
             renderMenu(datosPerfilGlobal);
         }
 
         // ==========================================
-        // MODALES LECTURA INFORMATIVA
+        // MODALES LECTURA POLIMÓRFICA
         // ==========================================
+        function abrirModalCustom() {
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => { modalOverlay.style.opacity = '1'; }, 10);
+        }
+        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
+        function cerrarModalBtn() {
+            modalOverlay.style.opacity = '0';
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 250);
+        }
+
         function abrirAsistenciaRuta() {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-location-crosshairs" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-location-crosshairs text-cyan-400"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].gps;
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-xs text-slate-300 mb-3 text-left">Localiza centros veterinarios de urgencia abiertos en la zona o envía la posición exacta al dueño:</p>
                 <div class="flex flex-col gap-2.5 text-left mb-2">
-                    <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-600 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
+                    <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
                         <i class="fa-solid fa-hospital text-cyan-400"></i> Buscar Urgencias 24h en Google Maps
                     </button>
                     <button onclick="compartirUbicacionMascota()" class="w-full bg-emerald-600/20 border border-emerald-500 rounded-xl p-3 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2">
@@ -435,9 +627,7 @@
                         const msg = encodeURIComponent(`¡Hola! Tengo a ${nombreNegocioGlobal} conmigo. Esta es mi ubicación GPS exacta para coordinar la entrega: https://maps.google.com/?q=${lat},${lng}`);
                         window.open(`${whatsappTiendaGlobal}?text=${msg}`, '_blank');
                     },
-                    () => {
-                        window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(DICCIONARIO[idiomaActual].msgWa)}`, '_blank');
-                    }
+                    () => { window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(DICCIONARIO[idiomaActual].msgWa)}`, '_blank'); }
                 );
             } else {
                 window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(DICCIONARIO[idiomaActual].msgWa)}`, '_blank');
@@ -445,7 +635,7 @@
         }
 
         function abrirCarnetVacunacion(vacunas) {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-dog" style="color: #38BDF8;"></i>';
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-dog text-cyan-400"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].cartilla;
             
             let todas = [...(vacunas || [])];
@@ -455,9 +645,9 @@
                 if (dataO.vacunasExtras) todas = [...todas, ...dataO.vacunasExtras];
             }
 
-            let htmlVacunas = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
+            let html = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
             todas.forEach(v => {
-                htmlVacunas += `
+                html += `
                     <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
                         <div class="flex justify-between items-center mb-1">
                             <span class="text-xs font-bold text-white">${v.nombre}</span>
@@ -468,14 +658,14 @@
                     </div>
                 `;
             });
-            htmlVacunas += `</div>`;
-            document.getElementById('modal-text').innerHTML = htmlVacunas;
+            html += `</div>`;
+            document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
             abrirModalCustom();
         }
 
         function abrirChecklistClinico(checklist) {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-clipboard-list" style="color: #F59E0B;"></i>';
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-clipboard-list text-amber-400"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].dieta;
             
             const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
@@ -487,40 +677,37 @@
                 if (d.microchip) chipExtra = d.microchip;
             }
 
-            let htmlCheck = `<div class="space-y-3 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
+            let html = `<div class="space-y-3 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
             if (checklist && typeof checklist === 'object') {
                 for (const [categoria, items] of Object.entries(checklist)) {
-                    htmlCheck += `
+                    html += `
                         <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
                             <div class="text-xs font-bold text-amber-400 uppercase tracking-wide mb-1.5">${categoria}</div>
                             <ul class="space-y-1">
                     `;
                     items.forEach(it => {
                         const texto = it.includes('Microchip') ? `Microchip oficial homologado: ${chipExtra}` : it;
-                        htmlCheck += `<li class="text-[11px] text-slate-200 flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-amber-400 text-[10px] mt-0.5"></i> <span>${texto}</span></li>`;
+                        html += `<li class="text-[11px] text-slate-200 flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-amber-400 text-[10px] mt-0.5"></i> <span>${texto}</span></li>`;
                     });
                     if (categoria.includes('Clínicas') && notasExtra) {
-                        htmlCheck += `<li class="text-[11px] text-cyan-200 flex items-start gap-1.5 font-semibold"><i class="fa-solid fa-notes-medical text-cyan-400 text-[10px] mt-0.5"></i> <span>Nota dueño: ${notasExtra}</span></li>`;
+                        html += `<li class="text-[11px] text-cyan-200 flex items-start gap-1.5 font-semibold"><i class="fa-solid fa-notes-medical text-cyan-400 text-[10px] mt-0.5"></i> <span>Actualizado: ${notasExtra}</span></li>`;
                     }
-                    htmlCheck += `</ul></div>`;
+                    html += `</ul></div>`;
                 }
             }
-            htmlCheck += `</div>`;
-            document.getElementById('modal-text').innerHTML = htmlCheck;
+            html += `</div>`;
+            document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
             abrirModalCustom();
         }
 
         function abrirTriajeUrgencias(alertas) {
-            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #EF4444;"></i>';
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
             document.getElementById('modal-title').innerText = DICCIONARIO[idiomaActual].triaje;
-            let htmlAlertas = `
-                <p class="text-xs text-slate-300 text-left mb-2">Pautas críticas ante sospecha de intoxicación o emergencia:</p>
-                <div class="space-y-2 text-left my-2 max-h-56 overflow-y-auto pr-1">
-            `;
+            let html = `<p class="text-xs text-slate-300 text-left mb-2">Pautas críticas ante sospecha de intoxicación:</p><div class="space-y-2 text-left my-2 max-h-56 overflow-y-auto pr-1">`;
             if (alertas && Array.isArray(alertas)) {
                 alertas.forEach(al => {
-                    htmlAlertas += `
+                    html += `
                         <div class="bg-rose-950/40 border border-rose-800/80 p-2 rounded-xl text-xs text-rose-200 flex items-start gap-2">
                             <i class="fa-solid fa-skull-crossbones text-rose-400 mt-0.5"></i>
                             <span>${al}</span>
@@ -528,10 +715,10 @@
                     `;
                 });
             }
-            htmlAlertas += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización veterinaria expresa.</p>`;
-            document.getElementById('modal-text').innerHTML = htmlAlertas;
+            html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización veterinaria expresa.</p>`;
+            document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `
-                <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
                     <i class="fa-solid fa-hospital mr-1"></i> Urgencias Veterinarias 24h
                 </button>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
@@ -547,7 +734,6 @@
             menuContainer.innerHTML = '';
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
 
-            // Revisar si el dueño cambió el teléfono
             const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
             let telLlamada = "34672294962";
             if (override) {
@@ -572,7 +758,7 @@
                             if (bTipo === 'asistencia_ruta') {
                                 block.innerHTML += `
                                     <div onclick="abrirAsistenciaRuta()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: #00E5FF;'}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: var(--color-acento);'}">
                                             <i class="${btn.icono || 'fa-solid fa-location-crosshairs'}"></i>
                                         </div>
                                         <div class="app-info">
@@ -681,16 +867,11 @@
                 } catch(e) {}
             }
 
-            if (!data) {
-                console.warn("No se pudo cargar:", clienteCod);
-                splash.style.display = 'none';
-                return;
-            }
+            if (!data) return;
 
             datosPerfilGlobal = data;
             nombreNegocioGlobal = data.nombre || "Mascota";
 
-            // WhatsApp inicial
             if (data.whatsapp && data.whatsapp.trim() !== "") {
                 whatsappTiendaGlobal = data.whatsapp.split('?')[0];
             } else if (data.secciones) {
@@ -705,28 +886,19 @@
                 });
             }
 
-            // Branding
-            const colorAcentoFinal = data.colorAcento || "#00E5FF";
-            const colorPrincipalFinal = data.colorPrincipal || "#080E1A";
-            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
-            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
-            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
+            // APLICAR TEMAS PERSISTENTES GUARDADOS POR EL USUARIO
+            const temaColorGuardado = localStorage.getItem(`color_${clienteSlugGlobal}`) || data.colorAcento || "#00E5FF";
+            const temaDarkGuardado = localStorage.getItem(`dark_${clienteSlugGlobal}`) || data.colorPrincipal || "#080E1A";
+            aplicarTemaColor(temaColorGuardado, temaDarkGuardado);
 
             document.getElementById('page-title').innerText = `${data.nombre} | Pasaporte Phygital`;
             document.getElementById('client-name').innerText = data.nombre;
-            document.getElementById('client-subtitle').innerText = data.subtitulo || "Pasaporte Canino";
+            document.getElementById('client-subtitle').innerText = data.subtitulo || "Pasaporte Phygital Canino";
 
             const logoImg = data.logo || "logo.png";
             document.getElementById('hub-logo').src = logoImg;
-            document.getElementById('hub-logo').style.objectFit = "cover";
-            document.getElementById('splash-logo').src = logoImg;
 
             renderMenu(data);
-        }
-
-        function iniciarMagia() {
-            splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; }, 400);
         }
 
         document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
