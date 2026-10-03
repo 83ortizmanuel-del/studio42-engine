@@ -653,7 +653,7 @@
         window.addEventListener("pagehide", detenerAudioInmediato);
         window.addEventListener("beforeunload", detenerAudioInmediato);
 
-        // Interceptar cualquier enlace saliente (WhatsApp, Teléfono, Maps, etc.)
+        // Interceptar cualquier enlace saliente
         document.addEventListener("click", (e) => {
             const anchor = e.target.closest("a");
             if (anchor && anchor.href) {
@@ -813,6 +813,58 @@
             cerrarConfigurador();
             alert("✨ ¡Ficha guardada y sincronizada!");
             cargarEnginePhygital();
+        }
+
+        // ==========================================
+        // MÓDULO BIZUM INTERACTIVO Y AUTO-COPIADO
+        // ==========================================
+        function abrirModalBizum() {
+            vibrarMovil(45);
+            let telBizum = "692202636";
+            let conceptoBizum = nombreNegocioGlobal;
+
+            if (datosPerfilGlobal && datosPerfilGlobal.datosPago) {
+                if (datosPerfilGlobal.datosPago.bizum) telBizum = String(datosPerfilGlobal.datosPago.bizum).trim();
+                if (datosPerfilGlobal.datosPago.concepto) conceptoBizum = datosPerfilGlobal.datosPago.concepto;
+            } else if (whatsappTiendaGlobal) {
+                telBizum = whatsappTiendaGlobal.replace(/\D/g, '');
+                if (telBizum.startsWith('34') && telBizum.length === 11) telBizum = telBizum.substring(2);
+            }
+
+            // Copiado automático seguro al portapapeles
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(telBizum.replace(/\D/g, '')).catch(() => {});
+            }
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-mobile-screen-button text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Pago Rápido con Bizum";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-center my-2">
+                    <span class="text-[11px] text-slate-400 uppercase font-bold block mb-1">Número Oficial:</span>
+                    <div class="text-2xl font-black text-white tracking-widest bg-slate-900 border border-cyan-500/40 py-3 px-4 rounded-2xl inline-block shadow-lg shadow-cyan-500/10">
+                        ${telBizum}
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mt-2 animate-pulse">
+                        <i class="fa-solid fa-circle-check mr-1"></i>¡Número copiado al portapapeles!
+                    </p>
+                    <p class="text-[11px] text-slate-300 mt-2 leading-relaxed">
+                        Abre tu app bancaria, pulsa <b>Pegar</b> en destinatario y pon en concepto: <b class="text-white">${conceptoBizum}</b>.
+                    </p>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <a href="${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, acabo de emitir un Bizum al ${telBizum} para abonar mi compra.`)}" 
+                   onclick="detenerAudioInmediato()" 
+                   target="_blank"
+                   class="modal-btn-primary" 
+                   style="background: linear-gradient(135deg, #00c3ff, #0077b6); color:#fff;">
+                   <i class="fa-brands fa-whatsapp mr-1"></i> Notificar Pago por WhatsApp
+                </a>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Listo, volver a la tienda</button>
+            `;
+
+            abrirModalCustom();
         }
 
         // ==========================================
@@ -1099,7 +1151,7 @@
             if (elF) elF.innerText = firmeza;
             if (elT) elT.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
             const btnP = document.getElementById('btn-probar-tienda');
-            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}\%0A- Peso:${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}\%0AResultado:${firmeza}. ¿Qué modelo puedo probar?`)}`;
+            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0AResultado: ${firmeza}. ¿Qué modelo puedo probar?`)}`;
         }
 
         const modalEnvio = document.getElementById('modal-envio');
@@ -1127,7 +1179,7 @@
             if (elT) elT.innerText = titulo;
             if (elD) elD.innerText = desc;
             const btnC = document.getElementById('btn-confirmar-envio');
-            if (btnC) btnC.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}\%0A- Retirada:${estadoEnvio.retirada}%0A¿Me confirmáis disponibilidad?`)}`;
+            if (btnC) btnC.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}%0A- Retirada: ${estadoEnvio.retirada}%0A¿Me confirmáis disponibilidad?`)}`;
         }
 
         // RESEÑAS & PARKING
@@ -1145,7 +1197,7 @@
                     document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
                     document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección:`;
                     modalActions.innerHTML = `
-                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" onclick="detenerAudioInmediato()" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" onclick="detenerAudioInmediato()" target="_blank" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
                         <a href="${googleReviewUrlGlobal}" onclick="detenerAudioInmediato()" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
                     `;
                 } else {
@@ -1284,6 +1336,16 @@
                                     </a>
                                 `;
                             }
+                            // BIZUM MODAL INTERACTIVO
+                            else if (bTipo === 'bizum' || nLower.includes('bizum')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirModalBizum()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 195, 255, 0.2); color: #00c3ff;'}"><i class="${btn.icono || 'fa-solid fa-mobile-screen-button'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
                             // MASCOTAS: ASISTENCIA 24H
                             else if (bTipo === 'asistencia_ruta') {
                                 block.innerHTML += `
@@ -1407,7 +1469,7 @@
                                     </a>
                                 `;
                             }
-                            // ENLACES DIRECTOS (TEL, WA, WEB)
+                            // ENLACES DIRECTOS (TEL, WA, CANVA, WEB)
                             else {
                                 let finalUrl = btn.url || '#';
                                 let btnNom = btn.nombre;
@@ -1475,6 +1537,9 @@
 
             if (data.secciones && Array.isArray(data.secciones)) {
                 data.secciones.forEach(sec => {
+                    if (sec.urlGoogleResenas) {
+                        googleReviewUrlGlobal = sec.urlGoogleResenas;
+                    }
                     if (sec.whatsappGerencia && !whatsappTiendaGlobal) {
                         whatsappGerenciaGlobal = sec.whatsappGerencia;
                         whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
