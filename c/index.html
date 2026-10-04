@@ -229,12 +229,42 @@
         </div>
     </div>
 
-    <!-- MODAL TECLADO PIN DIGITAL (MASCOTAS) -->
+    <!-- MODAL GESTIÓN NUTRICIÓN (CANVA DIETA Y RUTINA) -->
+    <div id="modal-nutri-admin" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 360px;">
+            <button class="modal-close-btn" onclick="cerrarNutriAdmin()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-user-doctor text-cyan-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Ficha del Paciente</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Pega los enlaces públicos de Canva (solo lectura):</p>
+            
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-emerald-400 block mb-1">🥗 Enlace Canva · Dieta / Menú:</label>
+                    <input type="url" id="admin-canva-dieta" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                </div>
+                <div>
+                    <label class="font-bold text-cyan-400 block mb-1">🏋️ Enlace Canva · Rutina de Ejercicios:</label>
+                    <input type="url" id="admin-canva-rutina" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                </div>
+            </div>
+
+            <div class="modal-actions mt-4">
+                <button onclick="guardarEnlacesNutri()" class="modal-btn-primary" style="background: linear-gradient(135deg, #00E5FF, #0077b6); color:#020617;">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar en Llavero
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarNutriAdmin()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TECLADO PIN DIGITAL -->
     <div id="modal-pin-auth" class="modal-overlay">
         <div class="modal-box text-center" style="max-width: 320px;">
             <button class="modal-close-btn" onclick="cerrarPinAuth()"><i class="fa-solid fa-xmark"></i></button>
             <i class="fa-solid fa-shield-halved text-2xl mb-2" style="color:var(--color-acento);"></i>
-            <h3 class="text-white text-sm font-black uppercase tracking-wider mb-1">Zona Propietario</h3>
+            <h3 class="text-white text-sm font-black uppercase tracking-wider mb-1">Zona Administración</h3>
             <p class="text-[11px] text-slate-400 mb-4" id="pin-modal-desc">Introduce tu PIN de 4 dígitos</p>
             <div class="flex justify-center gap-3 mb-5">
                 <div class="pin-dot" id="dot-0"></div><div class="pin-dot" id="dot-1"></div><div class="pin-dot" id="dot-2"></div><div class="pin-dot" id="dot-3"></div>
@@ -670,6 +700,7 @@
         const modalPin = document.getElementById('modal-pin-auth');
         const modalCfg = document.getElementById('modal-configurador');
         const modalRec = document.getElementById('modal-recuperar');
+        const modalNutriAdmin = document.getElementById('modal-nutri-admin');
 
         function vibrarMovil(ms = 35) { if ("vibrate" in navigator) navigator.vibrate(ms); }
 
@@ -677,7 +708,42 @@
         function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
         function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
 
-        // PIN & SEGURIDAD (MASCOTAS)
+        // ==========================================
+        // GESTIÓN CLÍNICA NUTRICIÓN (CANVA)
+        // ==========================================
+        function abrirNutriAdmin() {
+            vibrarMovil(40);
+            const dietaGuardada = localStorage.getItem(`canva_dieta_${clienteSlugGlobal}`) || "";
+            const rutinaGuardada = localStorage.getItem(`canva_rutina_${clienteSlugGlobal}`) || "";
+            
+            document.getElementById('admin-canva-dieta').value = dietaGuardada;
+            document.getElementById('admin-canva-rutina').value = rutinaGuardada;
+            
+            modalNutriAdmin.style.display = 'flex';
+            setTimeout(() => { modalNutriAdmin.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarNutriAdmin() {
+            modalNutriAdmin.style.opacity = '0';
+            setTimeout(() => { modalNutriAdmin.style.display = 'none'; }, 250);
+        }
+
+        function guardarEnlacesNutri() {
+            vibrarMovil(60);
+            const urlDieta = document.getElementById('admin-canva-dieta').value.trim();
+            const urlRutina = document.getElementById('admin-canva-rutina').value.trim();
+
+            if (urlDieta) localStorage.setItem(`canva_dieta_${clienteSlugGlobal}`, urlDieta);
+            if (urlRutina) localStorage.setItem(`canva_rutina_${clienteSlugGlobal}`, urlRutina);
+
+            cerrarNutriAdmin();
+            alert("✅ ¡Pautas de Canva vinculadas al llavero con éxito!");
+            cargarEnginePhygital();
+        }
+
+        // ==========================================
+        // PIN & SEGURIDAD (MASCOTAS / NUTRICIÓN)
+        // ==========================================
         function iniciarAuthPropietario() {
             vibrarMovil(50);
             pinBuffer = "";
@@ -707,7 +773,13 @@
             if (pinBuffer === pinGuardado) {
                 vibrarMovil([50, 50, 50]);
                 cerrarPinAuth();
-                abrirConfigurador();
+                const esNutri = (datosPerfilGlobal && datosPerfilGlobal.nombre && datosPerfilGlobal.nombre.toLowerCase().includes('nutrition')) || 
+                                (datosPerfilGlobal && datosPerfilGlobal.subtitulo && datosPerfilGlobal.subtitulo.toLowerCase().includes('consulta'));
+                if (esNutri) {
+                    abrirNutriAdmin();
+                } else {
+                    abrirConfigurador();
+                }
             } else {
                 vibrarMovil(250);
                 document.getElementById('pin-modal-desc').innerText = "❌ PIN Incorrecto";
@@ -831,7 +903,6 @@
                 if (telBizum.startsWith('34') && telBizum.length === 11) telBizum = telBizum.substring(2);
             }
 
-            // Copiado automático seguro al portapapeles
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(telBizum.replace(/\D/g, '')).catch(() => {});
             }
@@ -1475,6 +1546,15 @@
                                 let btnNom = btn.nombre;
                                 let btnDesc = btn.descripcion || '';
 
+                                // VINCULACIÓN DINÁMICA DE CANVA (DIETA Y RUTINA)
+                                if (nLower.includes('dieta') || nLower.includes('comidas') || nLower.includes('menú')) {
+                                    const savedDieta = localStorage.getItem(`canva_dieta_${clienteSlugGlobal}`);
+                                    if (savedDieta) finalUrl = savedDieta;
+                                } else if (nLower.includes('rutina') || nLower.includes('entrenamiento')) {
+                                    const savedRutina = localStorage.getItem(`canva_rutina_${clienteSlugGlobal}`);
+                                    if (savedRutina) finalUrl = savedRutina;
+                                }
+
                                 if (esMascota) {
                                     if (finalUrl.includes('tel:')) {
                                         finalUrl = `tel:${telLlamada}`;
@@ -1556,9 +1636,10 @@
             }
 
             const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
+            const esNutri = (data.nombre && data.nombre.toLowerCase().includes('nutrition')) || (data.subtitulo && data.subtitulo.toLowerCase().includes('consulta'));
 
             const btnGear = document.getElementById('btn-owner-gear');
-            if (btnGear) btnGear.style.display = esMascota ? 'flex' : 'none';
+            if (btnGear) btnGear.style.display = (esMascota || esNutri) ? 'flex' : 'none';
 
             const topBar = document.getElementById('universal-top-bar');
             if (topBar) topBar.style.display = (data.mostrarIdiomas === false) ? 'none' : 'flex';
