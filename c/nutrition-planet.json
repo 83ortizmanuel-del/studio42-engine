@@ -5,8 +5,10 @@
   "subtitulo": "Nutrición Deportiva · Asesoría, Bioimpedancia & Rendimiento",
   "textoBadge": "PUNTO FIT · CONSULTA & MOSTRADOR ACTIVO",
   "logo": "./nutrition-planet.png",
-  "paddingLogo": "2px",
-  "fondoLogo": "#0b0c10",
+  "logoAnchoMax": "270px",
+  "logoAlto": "86px",
+  "paddingLogo": "4px 10px",
+  "fondoLogo": "rgba(11, 12, 16, 0.95)",
   "audioFondo": "ambiente2.mp3",
   "colorPrincipal": "#0b0c10",
   "colorAcento": "#e60000",
@@ -108,7 +110,7 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38",
+      "urlGoogleResenas": "https://maps.google.com/?q=Nutrition+Planet+Logro%C3%B1o",
       "whatsappGerencia": "https://wa.me/34692202636?text=Hola%20Gerencia%20de%20Nutrition%20Planet,%20quisiera%20comentar%20un%20aspecto%20sobre%20mi%20atencion%20en%20tienda."
     }
   ]
