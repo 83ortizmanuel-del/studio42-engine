@@ -117,8 +117,8 @@
         @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
         .logo-container { 
-            width: 88px; height: 88px; margin: 0 auto 12px auto; 
-            border-radius: 24px; border: 2px solid var(--color-acento); 
+            width: 96px; height: 96px; margin: 0 auto 12px auto; 
+            border-radius: 26px; border: 2px solid var(--color-acento); 
             overflow: hidden; background-color: var(--fondo-logo, #0b0c10);
             display: flex; justify-content: center; align-items: center;
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px var(--halo-glow); 
@@ -1654,15 +1654,16 @@
             document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
             document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
 
+            const paddingPorDefecto = esMascota ? "0px" : "4px";
             const hubImg = document.getElementById('hub-logo');
             const splashImg = document.getElementById('splash-logo');
             if (hubImg) {
                 hubImg.style.objectFit = esMascota ? "cover" : "contain";
-                hubImg.style.padding = data.paddingLogo || (esMascota ? "0px" : "8px");
+                hubImg.style.padding = data.paddingLogo || paddingPorDefecto;
             }
             if (splashImg) {
                 splashImg.style.objectFit = esMascota ? "cover" : "contain";
-                splashImg.style.padding = data.paddingLogo || (esMascota ? "0px" : "8px");
+                splashImg.style.padding = data.paddingLogo || paddingPorDefecto;
             }
 
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
@@ -1680,6 +1681,7 @@
 
             if (data.audioFondo && data.audioFondo.trim() !== "") {
                 reproductor.src = data.audioFondo;
+                reproductor.volume = 0.22;
                 reproductor.load();
                 btnAudio.style.display = 'flex';
                 splash.style.display = 'flex';
