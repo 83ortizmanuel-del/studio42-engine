@@ -229,6 +229,46 @@
         </div>
     </div>
 
+    <!-- MODAL RESERVA DE CITA CON JUSTIFICANTE DE PAGO -->
+    <div id="modal-reserva-pago" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 360px;">
+            <button class="modal-close-btn" onclick="cerrarModalReserva()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-calendar-check text-cyan-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Reserva de Consulta</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Para confirmar y agendar tu hueco en consulta, realiza el Bizum e introduce la referencia:</p>
+            
+            <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl mb-3 flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Bizum de la Consulta:</span>
+                    <span id="reserva-bizum-num" class="text-sm font-black text-white font-mono tracking-wider">692 20 26 36</span>
+                </div>
+                <button onclick="copiarBizumReserva()" class="bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[10px] font-bold px-2.5 py-1.5 rounded-lg active:scale-95 transition">
+                    <i class="fa-solid fa-copy mr-1"></i>Copiar
+                </button>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">Tu Nombre Completo:</label>
+                    <input type="text" id="reserva-nombre-input" placeholder="Ej: María Gómez" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="font-bold text-amber-400 block mb-1">Referencia Bizum / Teléfono Emisor:</label>
+                    <input type="text" id="reserva-ref-input" oninput="validarFormularioReserva()" placeholder="Ej: Ref. 482910 o Tu móvil emisor" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-amber-400">
+                </div>
+            </div>
+
+            <div class="modal-actions mt-4">
+                <button id="btn-enviar-reserva-wa" onclick="enviarReservaConfirmadaWA()" disabled class="modal-btn-primary opacity-50 cursor-not-allowed transition" style="background: linear-gradient(135deg, #25D366, #128c7e); color:#fff;">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Confirmar y Agendar por WhatsApp
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarModalReserva()">Volver</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL GESTIÓN NUTRICIÓN (CANVA DIETA Y RUTINA) -->
     <div id="modal-nutri-admin" class="modal-overlay">
         <div class="modal-box text-left" style="max-width: 360px;">
@@ -701,6 +741,7 @@
         const modalCfg = document.getElementById('modal-configurador');
         const modalRec = document.getElementById('modal-recuperar');
         const modalNutriAdmin = document.getElementById('modal-nutri-admin');
+        const modalReservaPago = document.getElementById('modal-reserva-pago');
 
         function vibrarMovil(ms = 35) { if ("vibrate" in navigator) navigator.vibrate(ms); }
 
@@ -709,12 +750,77 @@
         function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
 
         // ==========================================
+        // RESERVA DE CITA CON JUSTIFICANTE DE PAGO
+        // ==========================================
+        function abrirModalReserva() {
+            vibrarMovil(40);
+            const telBizum = (datosPerfilGlobal && datosPerfilGlobal.datosPago && datosPerfilGlobal.datosPago.bizum) 
+                             ? datosPerfilGlobal.datosPago.bizum : "692202636";
+            document.getElementById('reserva-bizum-num').innerText = telBizum;
+            document.getElementById('reserva-nombre-input').value = "";
+            document.getElementById('reserva-ref-input').value = "";
+            validarFormularioReserva();
+
+            modalReservaPago.style.display = 'flex';
+            setTimeout(() => { modalReservaPago.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarModalReserva() {
+            modalReservaPago.style.opacity = '0';
+            setTimeout(() => { modalReservaPago.style.display = 'none'; }, 250);
+        }
+
+        function copiarBizumReserva() {
+            vibrarMovil(30);
+            const num = document.getElementById('reserva-bizum-num').innerText.replace(/\D/g, '');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(num);
+                alert("📋 Número de Bizum copiado al portapapeles.");
+            }
+        }
+
+        function validarFormularioReserva() {
+            const ref = document.getElementById('reserva-ref-input').value.trim();
+            const btn = document.getElementById('btn-enviar-reserva-wa');
+            if (ref.length >= 3) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function enviarReservaConfirmadaWA() {
+            detenerAudioInmediato();
+            vibrarMovil(50);
+            const nom = document.getElementById('reserva-nombre-input').value.trim() || "Paciente";
+            const ref = document.getElementById('reserva-ref-input').value.trim();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+
+            const textoMsg = `¡Hola ${nombreNegocioGlobal}! He emitido el pago para mi consulta/revisión:\n` +
+                             `👤 Paciente: ${nom}\n` +
+                             `💳 Ref. / Justificante: ${ref}\n` +
+                             `🔑 Llavero: [ ${codigoLlaveroNFC} ]\n\n` +
+                             `¿Qué huecos tenéis disponibles para agendar la cita?`;
+
+            cerrarModalReserva();
+            window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(textoMsg)}`, '_blank');
+        }
+
+        // ==========================================
         // GESTIÓN CLÍNICA NUTRICIÓN (CANVA)
         // ==========================================
         function abrirNutriAdmin() {
             vibrarMovil(40);
-            const dietaGuardada = localStorage.getItem(`canva_dieta_${clienteSlugGlobal}`) || "";
-            const rutinaGuardada = localStorage.getItem(`canva_rutina_${clienteSlugGlobal}`) || "";
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
+            const dietaGuardada = localStorage.getItem(`canva_dieta_${claveUnica}`) || "";
+            const rutinaGuardada = localStorage.getItem(`canva_rutina_${claveUnica}`) || "";
             
             document.getElementById('admin-canva-dieta').value = dietaGuardada;
             document.getElementById('admin-canva-rutina').value = rutinaGuardada;
@@ -730,14 +836,18 @@
 
         function guardarEnlacesNutri() {
             vibrarMovil(60);
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
             const urlDieta = document.getElementById('admin-canva-dieta').value.trim();
             const urlRutina = document.getElementById('admin-canva-rutina').value.trim();
 
-            if (urlDieta) localStorage.setItem(`canva_dieta_${clienteSlugGlobal}`, urlDieta);
-            if (urlRutina) localStorage.setItem(`canva_rutina_${clienteSlugGlobal}`, urlRutina);
+            if (urlDieta) localStorage.setItem(`canva_dieta_${claveUnica}`, urlDieta);
+            if (urlRutina) localStorage.setItem(`canva_rutina_${claveUnica}`, urlRutina);
 
             cerrarNutriAdmin();
-            alert("✅ ¡Pautas de Canva vinculadas al llavero con éxito!");
+            alert(`✅ ¡Pautas de Canva vinculadas al Llavero #${idLlavero} con éxito!`);
             cargarEnginePhygital();
         }
 
@@ -1333,6 +1443,7 @@
 
             const urlParams = new URLSearchParams(window.location.search);
             const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+            const claveLlavero = `${clienteSlugGlobal}_${codigoLlaveroNFC}`;
 
             const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
             const petNom = (data.nombre || 'TOBY').split('·')[0].trim();
@@ -1405,6 +1516,16 @@
                                         </div>
                                         <i class="fa-solid fa-chevron-right text-amber-400 text-xs"></i>
                                     </a>
+                                `;
+                            }
+                            // RESERVA DE CITA CON PAGO PREVIO
+                            else if (bTipo === 'reserva_cita' || nLower.includes('revisión & bioimpedancia') || nLower.includes('revision & bioimpedancia')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirModalReserva()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #f59e0b;'}"><i class="${btn.icono || 'fa-solid fa-weight-scale'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
                                 `;
                             }
                             // BIZUM MODAL INTERACTIVO
@@ -1546,12 +1667,12 @@
                                 let btnNom = btn.nombre;
                                 let btnDesc = btn.descripcion || '';
 
-                                // VINCULACIÓN DINÁMICA DE CANVA (DIETA Y RUTINA)
+                                // VINCULACIÓN DINÁMICA DE CANVA POR LLAVERO
                                 if (nLower.includes('dieta') || nLower.includes('comidas') || nLower.includes('menú')) {
-                                    const savedDieta = localStorage.getItem(`canva_dieta_${clienteSlugGlobal}`);
+                                    const savedDieta = localStorage.getItem(`canva_dieta_${claveLlavero}`);
                                     if (savedDieta) finalUrl = savedDieta;
                                 } else if (nLower.includes('rutina') || nLower.includes('entrenamiento')) {
-                                    const savedRutina = localStorage.getItem(`canva_rutina_${clienteSlugGlobal}`);
+                                    const savedRutina = localStorage.getItem(`canva_rutina_${claveLlavero}`);
                                     if (savedRutina) finalUrl = savedRutina;
                                 }
 
