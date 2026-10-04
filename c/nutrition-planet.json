@@ -5,6 +5,7 @@
   "subtitulo": "Nutrición Deportiva · Asesoría, Bioimpedancia & Rendimiento",
   "textoBadge": "PUNTO FIT · CONSULTA & MOSTRADOR ACTIVO",
   "logo": "./nutrition-planet.png",
+  "paddingLogo": "2px",
   "fondoLogo": "#0b0c10",
   "audioFondo": "ambiente2.mp3",
   "colorPrincipal": "#0b0c10",
@@ -35,10 +36,10 @@
           "destacado": false
         },
         {
+          "tipo": "reserva_cita",
           "nombre": "Pedir Cita para Revisión & Bioimpedancia",
-          "descripcion": "Reserva tu pesaje, control de grasa y ajuste de pauta",
+          "descripcion": "Reserva tu pesaje y control con justificante previo",
           "icono": "fa-solid fa-weight-scale",
-          "url": "https://wa.me/34692202636?text=Hola,%20quisiera%20pedir%20cita%20para%20mi%20revisi%C3%B3n%20nutricional%20y%20pesaje%20de%20bioimpedancia.",
           "estiloIcono": "background: rgba(245, 158, 11, 0.2); color: #f59e0b;",
           "destacado": false
         }
@@ -85,7 +86,7 @@
           "nombre": "Consultar Stock & Sabores en 1 Toque",
           "descripcion": "Verifica disponibilidad en mostrador por WhatsApp",
           "icono": "fa-brands fa-whatsapp",
-          "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet,%20estoy%20en%20tienda%20y%20quisiera%20consultar%20sabores%20y%20stock.",
+          "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet!%20Estoy%20en%20la%20tienda%20y%20quisiera%20consultar%20disponibilidad%20de%20stock%20y%20sabores.",
           "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;"
         },
         {
@@ -107,8 +108,8 @@
     {
       "titulo": "Tu Opinión Nos Importa",
       "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJZzFB33-rWg0R43uw2jP3pp8",
-      "whatsappGerencia": "https://wa.me/34692202636?text=Hola%20Gerencia%20de%20Nutrition%20Planet,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20compra"
+      "urlGoogleResenas": "https://maps.google.com/?q=Nutrition+Planet+Logro%C3%B1o",
+      "whatsappGerencia": "https://wa.me/34692202636?text=Hola%20Gerencia%20de%20Nutrition%20Planet,%20quisiera%20comentar%20un%20aspecto%20sobre%20mi%20atencion%20en%20tienda."
     }
   ]
 }
