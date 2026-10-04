@@ -116,6 +116,7 @@
         }
         @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
+        /* CONTENEDOR DEFAULT (MASCOTAS / PERFILES CON MARCO) */
         .logo-container { 
             width: 96px; height: 96px; margin: 0 auto 12px auto; 
             border-radius: 26px; border: 2px solid var(--color-acento); 
@@ -125,6 +126,26 @@
             position: relative; cursor: pointer; transition: all 0.3s ease;
         }
         .logo-container img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+        /* MODO BANNER PANORÁMICO (AUTOMÁTICO PARA TODOS LOS COMERCIOS) */
+        .logo-banner-full {
+            width: 100% !important;
+            max-width: 330px !important;
+            height: 90px !important;
+            margin: 0 auto 14px auto !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+        }
+        .logo-banner-full img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            transform: none !important;
+            filter: drop-shadow(0 4px 14px var(--halo-glow));
+        }
         
         h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
         .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
@@ -1775,16 +1796,26 @@
             document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
             document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
 
-            const paddingPorDefecto = esMascota ? "0px" : "4px";
+            // CONTROL DE LOGO: Banner panorámico si es comercio, recuadro si es mascota
+            const hubBox = document.getElementById('hub-logo-box');
+            const splashBox = document.getElementById('splash-logo-box');
+            if (!esMascota) {
+                if (hubBox) hubBox.classList.add('logo-banner-full');
+                if (splashBox) splashBox.classList.add('logo-banner-full');
+            } else {
+                if (hubBox) hubBox.classList.remove('logo-banner-full');
+                if (splashBox) splashBox.classList.remove('logo-banner-full');
+            }
+
             const hubImg = document.getElementById('hub-logo');
             const splashImg = document.getElementById('splash-logo');
             if (hubImg) {
                 hubImg.style.objectFit = esMascota ? "cover" : "contain";
-                hubImg.style.padding = data.paddingLogo || paddingPorDefecto;
+                hubImg.style.padding = esMascota ? (data.paddingLogo || "0px") : "0px";
             }
             if (splashImg) {
                 splashImg.style.objectFit = esMascota ? "cover" : "contain";
-                splashImg.style.padding = data.paddingLogo || paddingPorDefecto;
+                splashImg.style.padding = esMascota ? (data.paddingLogo || "0px") : "0px";
             }
 
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
@@ -1800,6 +1831,7 @@
             if (hubImg) hubImg.src = logoImg;
             if (splashImg) splashImg.src = logoImg;
 
+            // MÚSICA SUTIL DE FONDO (22% de volumen)
             if (data.audioFondo && data.audioFondo.trim() !== "") {
                 reproductor.src = data.audioFondo;
                 reproductor.volume = 0.22;
