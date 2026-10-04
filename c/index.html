@@ -116,36 +116,33 @@
         }
         @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
         
-        /* CONTENEDOR DEFAULT (MASCOTAS / PERFILES CON MARCO) */
         .logo-container { 
-            width: 96px; height: 96px; margin: 0 auto 12px auto; 
-            border-radius: 26px; border: 2px solid var(--color-acento); 
-            overflow: hidden; background-color: var(--fondo-logo, #0b0c10);
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px var(--halo-glow); 
-            position: relative; cursor: pointer; transition: all 0.3s ease;
+            width: 100%; 
+            max-width: 270px; 
+            height: 84px; 
+            margin: 0 auto 16px auto; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            overflow: hidden; 
+            background: radial-gradient(circle at center, rgba(230, 0, 0, 0.15) 0%, rgba(11, 12, 16, 0.95) 85%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--halo-glow); 
+            position: relative; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            padding: 4px 10px;
         }
-        .logo-container img { width: 100%; height: 100%; object-fit: contain; display: block; }
-
-        /* MODO BANNER PANORÁMICO (AUTOMÁTICO PARA TODOS LOS COMERCIOS) */
-        .logo-banner-full {
-            width: 100% !important;
-            max-width: 330px !important;
-            height: 90px !important;
-            margin: 0 auto 14px auto !important;
-            border: none !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            padding: 0 !important;
+        .logo-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            display: block; 
+            filter: drop-shadow(0 0 10px rgba(230, 0, 0, 0.5));
+            transition: transform 0.25s ease;
         }
-        .logo-banner-full img {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: contain !important;
-            transform: none !important;
-            filter: drop-shadow(0 4px 14px var(--halo-glow));
-        }
+        .logo-container:active img { transform: scale(0.97); }
         
         h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
         .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
@@ -1274,7 +1271,7 @@
                 <div class="text-left text-xs text-slate-300 space-y-2">
                     <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">🌾 Gluten:</b> Presente en Pita, Dürüm y Falafel. Opción sin gluten: Plato Kebab solo carne y ensalada.</div>
                     <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-cyan-400">🥛 Lácteos:</b> Presentes en la Salsa Blanca tradicional (yogur).</div>
-                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-rose-400">🌶️ Picante:</b> Salsa roja a base de chile natural. Libre de lácteos.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-rose-400">🌶️️ Picante:</b> Salsa roja a base de chile natural. Libre de lácteos.</div>
                 </div>
             `;
             modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalEntendido}</button>`;
@@ -1796,26 +1793,61 @@
             document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
             document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
 
-            // CONTROL DE LOGO: Banner panorámico si es comercio, recuadro si es mascota
-            const hubBox = document.getElementById('hub-logo-box');
-            const splashBox = document.getElementById('splash-logo-box');
-            if (!esMascota) {
-                if (hubBox) hubBox.classList.add('logo-banner-full');
-                if (splashBox) splashBox.classList.add('logo-banner-full');
-            } else {
-                if (hubBox) hubBox.classList.remove('logo-banner-full');
-                if (splashBox) splashBox.classList.remove('logo-banner-full');
-            }
-
             const hubImg = document.getElementById('hub-logo');
             const splashImg = document.getElementById('splash-logo');
-            if (hubImg) {
-                hubImg.style.objectFit = esMascota ? "cover" : "contain";
-                hubImg.style.padding = esMascota ? (data.paddingLogo || "0px") : "0px";
-            }
-            if (splashImg) {
-                splashImg.style.objectFit = esMascota ? "cover" : "contain";
-                splashImg.style.padding = esMascota ? (data.paddingLogo || "0px") : "0px";
+            const hubLogoBox = document.getElementById('hub-logo-box');
+            const splashLogoBox = document.getElementById('splash-logo-box');
+
+            if (esMascota) {
+                if (hubLogoBox) {
+                    hubLogoBox.style.width = "88px";
+                    hubLogoBox.style.height = "88px";
+                    hubLogoBox.style.borderRadius = "24px";
+                    hubLogoBox.style.maxWidth = "88px";
+                }
+                if (splashLogoBox) {
+                    splashLogoBox.style.width = "88px";
+                    splashLogoBox.style.height = "88px";
+                    splashLogoBox.style.borderRadius = "24px";
+                    splashLogoBox.style.maxWidth = "88px";
+                }
+                if (hubImg) {
+                    hubImg.style.objectFit = "cover";
+                    hubImg.style.padding = "0px";
+                    hubImg.style.filter = "none";
+                }
+                if (splashImg) {
+                    splashImg.style.objectFit = "cover";
+                    splashImg.style.padding = "0px";
+                    splashImg.style.filter = "none";
+                }
+            } else {
+                const maxW = data.logoAnchoMax || "270px";
+                const h = data.logoAlto || "84px";
+                const pad = data.paddingLogo || "4px 10px";
+
+                if (hubLogoBox) {
+                    hubLogoBox.style.width = "100%";
+                    hubLogoBox.style.maxWidth = maxW;
+                    hubLogoBox.style.height = h;
+                    hubLogoBox.style.borderRadius = "20px";
+                }
+                if (splashLogoBox) {
+                    splashLogoBox.style.width = "100%";
+                    splashLogoBox.style.maxWidth = maxW;
+                    splashLogoBox.style.height = h;
+                    splashLogoBox.style.borderRadius = "20px";
+                }
+                if (hubImg) {
+                    hubImg.style.objectFit = "contain";
+                    hubImg.style.padding = pad;
+                    hubImg.style.filter = `drop-shadow(0 0 10px ${colorAcentoFinal}80)`;
+                }
+                if (splashImg) {
+                    splashImg.style.objectFit = "contain";
+                    splashImg.style.padding = pad;
+                    splashImg.style.filter = `drop-shadow(0 0 10px ${colorAcentoFinal}80)`;
+                }
             }
 
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
@@ -1831,7 +1863,6 @@
             if (hubImg) hubImg.src = logoImg;
             if (splashImg) splashImg.src = logoImg;
 
-            // MÚSICA SUTIL DE FONDO (22% de volumen)
             if (data.audioFondo && data.audioFondo.trim() !== "") {
                 reproductor.src = data.audioFondo;
                 reproductor.volume = 0.22;
