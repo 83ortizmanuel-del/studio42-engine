@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Studio 42 | Ecosistema Phygital</title>
+    <title id="page-title">Studio 42 | Terminal Phygital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -44,19 +44,6 @@
             -webkit-overflow-scrolling: touch;
             transition: background 0.3s ease;
             position: relative;
-        }
-
-        #splash-screen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: radial-gradient(circle at center, #111827 0%, #030712 100%);
-            z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; 
-            transition: opacity 0.5s ease; padding: 20px;
-        }
-        .btn-desbloqueo { 
-            background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; border: none; 
-            padding: 16px 36px; border-radius: 50px; font-size: 0.9rem; font-weight: 900; letter-spacing: 1.2px; 
-            text-transform: uppercase; cursor: pointer; box-shadow: 0 0 30px var(--titanium-glow);
-            transition: transform 0.2s ease;
         }
 
         .halo-wrapper {
@@ -216,23 +203,9 @@
 
         .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
         .footer-brand span { color: var(--titanium-light); font-weight: 800; }
-        #btn-audio-control { display: none; position: fixed; bottom: 22px; right: 22px; z-index: 999; background: rgba(15, 23, 42, 0.88); border: 1px solid var(--color-acento); color: var(--color-acento); width: 46px; height: 46px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-
-    <audio id="audio-fondo" loop preload="auto"></audio>
-
-    <div id="splash-screen">
-        <div class="logo-container" id="splash-logo-box">
-            <img id="splash-logo" alt="Logo">
-        </div>
-        <h2 id="splash-title" style="color: #fff; font-size: 1.4rem; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;">STUDIO 42</h2>
-        <p id="splash-subtitle" style="color: var(--color-gris); font-size: 0.85rem; margin-bottom: 30px; text-transform: uppercase;">Ecosistema Phygital</p>
-        <button onclick="iniciarMagia()" class="btn-desbloqueo">Desbloquear Experiencia</button>
-    </div>
-
-    <button id="btn-audio-control" onclick="alternarAudio()"><i id="btn-audio-icon" class="fa-solid fa-volume-high"></i></button>
 
     <!-- MODAL GENERAL POLIMÓRFICO -->
     <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
@@ -269,20 +242,20 @@
 
             <div class="space-y-2.5 text-xs">
                 <div>
-                    <label class="font-bold text-slate-300 block mb-1" id="lbl-reserva-tu-nombre">Tu Nombre Completo:</label>
+                    <label class="font-bold text-slate-300 block mb-1">Tu Nombre Completo:</label>
                     <input type="text" id="reserva-nombre-input" placeholder="Ej: María Gómez" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
                 </div>
                 <div>
-                    <label class="font-bold text-amber-400 block mb-1" id="lbl-reserva-tu-ref">Referencia Bizum / Teléfono Emisor:</label>
+                    <label class="font-bold text-amber-400 block mb-1">Referencia Bizum / Teléfono Emisor:</label>
                     <input type="text" id="reserva-ref-input" oninput="validarFormularioReserva()" placeholder="Ej: Ref. 482910 o Tu móvil emisor" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-amber-400">
                 </div>
             </div>
 
             <div class="modal-actions mt-4">
                 <button id="btn-enviar-reserva-wa" onclick="enviarReservaConfirmadaWA()" disabled class="modal-btn-primary opacity-50 cursor-not-allowed transition" style="background: linear-gradient(135deg, #25D366, #128c7e); color:#fff;">
-                    <i class="fa-brands fa-whatsapp mr-1"></i> <span id="lbl-reserva-btn-wa">Confirmar y Agendar por WhatsApp</span>
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Confirmar y Agendar por WhatsApp
                 </button>
-                <button class="modal-btn-secondary" onclick="cerrarModalReserva()" id="lbl-reserva-btn-volver">Volver</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalReserva()">Volver</button>
             </div>
         </div>
     </div>
@@ -511,7 +484,7 @@
 
             <div class="status-badge">
                 <span class="ping-light"></span>
-                <span id="badge-text">NODO CONECTADO · RED ACTIVA</span>
+                <span id="badge-text">PUNTO DE CONEXIÓN ACTIVO</span>
             </div>
 
             <div class="logo-container" id="hub-logo-box">
@@ -521,7 +494,13 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-            <div id="dynamic-menu"></div>
+            <!-- CONTENEDOR DINÁMICO CON ESTADO INICIAL VISIBLE -->
+            <div id="dynamic-menu">
+                <div style="text-align: center; padding: 40px 0; color: #94a3b8; font-size: 13px;">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-cyan-400 mb-2"></i>
+                    <p>Cargando menú interactivo...</p>
+                </div>
+            </div>
 
             <div class="footer-brand" id="lbl-footer-brand">Desarrollado por <span>Studio 42</span></div>
         </div>
@@ -542,10 +521,10 @@
         let estadoAsesor = { postura: 'De Lado', peso: '70-90kg', medida: '150x190' };
         let estadoEnvio = { zona: 'Logroño Centro / Casco', acceso: 'Con Ascensor / Planta Baja', retirada: 'Sí, retirar colchón antiguo' };
 
-        // DICCIONARIO UNIVERSAL (TODOS LOS VERTICALES + NUTRICIÓN)
+        // DICCIONARIO UNIVERSAL (MULTI-VERTICAL)
         const DICCIONARIO = {
             es: {
-                badgeDefault: "NODO CONECTADO · RED ACTIVA",
+                badgeDefault: "PUNTO DE CONEXIÓN ACTIVO",
                 badgeMascota: "CHIP INTELIGENTE ACTIVO · PROTOCOLO RESCATE SOS",
                 secPet1: "🚨 ¡Mascota Perdida! Contacto de Rescate",
                 secPet2: "Ficha Médica & Cuidados Especiales",
@@ -564,7 +543,7 @@
                 fitCrea: "Protocolo & Dosificación de Creatina",
                 fitCreaDesc: "Gramos exactos por peso y momento óptimo de toma",
                 fitLlaves: "🔑 ¿Encontraste estas llaves?",
-                fitLlavesDesc: "Avisar a Nutrition Planet y devolverlas de forma segura",
+                fitLlavesDesc: "Avisar al responsable y devolverlas de forma segura",
                 fitBizum: "Pagar por Bizum en Mostrador",
                 fitBizumDesc: "Toca para copiar y pegar en tu banco",
                 fitStock: "Consultar Stock & Sabores en 1 Toque",
@@ -572,7 +551,7 @@
                 llamarPet: "Llamar a Papá/Mamá de {nombre}",
                 llamarPetDesc: "Llamada prioritaria en 1 toque al móvil del dueño",
                 waPet: "Avisar por WhatsApp al Dueño",
-                waPetDesc: "Envía mensaje predeterminado: ¡Tengo a tu perro!",
+                waPetDesc: "Envía mensaje predeterminado: ¡Tengo a tu mascota!",
                 gpsPet: "Hospitales Veterinarios 24h & GPS",
                 gpsPetDesc: "Localiza por satélite clínicas abiertas y envía ubicación",
                 cartillaPet: "Carnet de Vacunación Canina",
@@ -598,8 +577,8 @@
                 btnReviewsTap: "Toca las estrellas para calificar el servicio",
                 modalCerrar: "Cerrar",
                 modalEntendido: "Entendido",
-                msgWaPet: "¡Hola! Acabo de escanear la chapa de {nombre} y lo tengo conmigo. ¿Cómo coordinamos para entregarlo?",
-                msgGpsPet: "¡Hola! Tengo a {nombre} conmigo. Esta es mi ubicación GPS exacta para coordinar la entrega:"
+                msgWaPet: "¡Hola! Acabo de escanear la placa de {nombre} y está conmigo. ¿Cómo coordinamos para entregarlo?",
+                msgGpsPet: "¡Hola! Tengo a {nombre} conmigo. Esta es mi ubicación GPS exacta:"
             },
             en: {
                 badgeDefault: "CONNECTED NODE · ACTIVE SYSTEM",
@@ -621,11 +600,11 @@
                 fitCrea: "Creatine Protocol & Dosage",
                 fitCreaDesc: "Target dosage by bodyweight and best intake times",
                 fitLlaves: "🔑 Did you find these keys?",
-                fitLlavesDesc: "Tap here to notify Nutrition Planet and return safely",
+                fitLlavesDesc: "Tap here to notify the owner and return safely",
                 fitBizum: "Pay via Bizum at the Counter",
                 fitBizumDesc: "Tap to copy phone number into your banking app",
-                fitStock: "Check Stock & Flavors (1-Tap)",
-                fitStockDesc: "Confirm current in-store availability via WhatsApp",
+                fitStock: "Check Stock & Availability (1-Tap)",
+                fitStockDesc: "Confirm current in-store options via WhatsApp",
                 llamarPet: "Call {nombre}'s Family",
                 llamarPetDesc: "Direct 1-tap priority call to owner",
                 waPet: "Notify Owner via WhatsApp",
@@ -655,8 +634,8 @@
                 btnReviewsTap: "Tap the stars to rate our service",
                 modalCerrar: "Close",
                 modalEntendido: "Understood",
-                msgWaPet: "Hello! I just scanned {nombre}'s smart tag and he is with me. How can we meet to return him?",
-                msgGpsPet: "Hello! I have {nombre} with me. Here is my exact GPS location to coordinate pickup:"
+                msgWaPet: "Hello! I just scanned {nombre}'s smart tag and he is with me. How can we meet?",
+                msgGpsPet: "Hello! I have {nombre} with me. Here is my exact GPS location:"
             },
             fr: {
                 badgeDefault: "NŒUD CONNECTÉ · RÉSEAU ACTIF",
@@ -678,15 +657,15 @@
                 fitCrea: "Protocole & Dosage de Créatine",
                 fitCreaDesc: "Dosage optimal et moments de prise recommandés",
                 fitLlaves: "🔑 Avez-vous trouvé ces clés ?",
-                fitLlavesDesc: "Touchez pour prévenir Nutrition Planet et les restituer",
+                fitLlavesDesc: "Touchez pour prévenir le propriétaire en sécurité",
                 fitBizum: "Payer par Bizum au Comptoir",
                 fitBizumDesc: "Copiez le numéro pour votre application bancaire",
-                fitStock: "Consulter le Stock & Saveurs (1 Clic)",
-                fitStockDesc: "Vérifiez la disponibilité en boutique via WhatsApp",
+                fitStock: "Consulter la Disponibilité (1 Clic)",
+                fitStockDesc: "Vérifiez le stock disponible via WhatsApp",
                 llamarPet: "Appeler le maître de {nombre}",
                 llamarPetDesc: "Appel prioritaire direct en 1 clic",
                 waPet: "Prévenir le Maître par WhatsApp",
-                waPetDesc: "Message instantané : J'ai trouvé votre chien !",
+                waPetDesc: "Message instantané : J'ai trouvé votre animal !",
                 gpsPet: "Urgences Vétérinaires 24h & GPS",
                 gpsPetDesc: "Localise les cliniques ouvertes et transmet la position",
                 cartillaPet: "Passeport Vaccinal Canin",
@@ -712,7 +691,7 @@
                 btnReviewsTap: "Touchez les étoiles pour noter le service",
                 modalCerrar: "Fermer",
                 modalEntendido: "Compris",
-                msgWaPet: "Bonjour ! Je viens de scanner la médaille de {nombre} et il est avec moi. Comment faire pour vous le rendre ?",
+                msgWaPet: "Bonjour ! Je viens de scanner la médaille de {nombre}. Comment pouvons-nous nous retrouver ?",
                 msgGpsPet: "Bonjour ! J'ai {nombre} avec moi. Voici ma position GPS exacte :"
             },
             de: {
@@ -725,25 +704,25 @@
                 secNutri3: "Schlüsselanhänger Services & Tools",
                 secNutri4: "Ihre Meinung ist uns wichtig",
                 fitMenu: "Mein Ernährungsplan & Fit-Menü",
-                fitMenuDesc: "Zugang zu Ihrem individuellen Ernährungsplan (Canva)",
+                fitMenuDesc: "Zugang zu Ihrem individuellen Plan (Canva)",
                 fitRutina: "Mein Trainingsplan",
                 fitRutinaDesc: "Übungen, Sätze und Gewichte (Canva)",
                 fitReserva: "Termin · Bioimpedanz & Beratung",
-                fitReservaDesc: "Termin buchen mit vorheriger Zahlungsbestätigung",
+                fitReservaDesc: "Termin buchen mit Zahlungsbestätigung",
                 fitProt: "Täglicher Protein-Rechner",
                 fitProtDesc: "Exakter Proteinbedarf nach Körpergewicht & Ziel",
                 fitCrea: "Kreatin Dosierungsplan",
                 fitCreaDesc: "Optimale Einnahmemenge und Zeitpunkte",
                 fitLlaves: "🔑 Schlüssel gefunden?",
-                fitLlavesDesc: "Tippen Sie hier zur sicheren Rückgabe an Nutrition Planet",
+                fitLlavesDesc: "Tippen Sie hier zur sicheren Kontaktaufnahme",
                 fitBizum: "Vor Ort per Bizum bezahlen",
                 fitBizumDesc: "Tippen zum Kopieren für Ihre Bank-App",
-                fitStock: "Bestand & Sorten anfragen (1 Klick)",
-                fitStockDesc: "Verfügbarkeit direkt per WhatsApp prüfen",
+                fitStock: "Verfügbarkeit anfragen (1 Klick)",
+                fitStockDesc: "Aktuellen Bestand direkt per WhatsApp prüfen",
                 llamarPet: "{nombre}s Besitzer anrufen",
                 llamarPetDesc: "Direkter 1-Klick-Anruf beim Besitzer",
                 waPet: "Besitzer per WhatsApp kontaktieren",
-                waPetDesc: "Sofortnachricht: Ich habe deinen Hund gefunden!",
+                waPetDesc: "Sofortnachricht: Ich habe dein Tier gefunden!",
                 gpsPet: "24h Tierkliniken & GPS-Standort",
                 gpsPetDesc: "Findet Notfallkliniken und sendet GPS-Standort",
                 cartillaPet: "Offizieller Impfpass",
@@ -769,48 +748,10 @@
                 btnReviewsTap: "Tippen Sie auf die Sterne zur Bewertung",
                 modalCerrar: "Schließen",
                 modalEntendido: "Verstanden",
-                msgWaPet: "Hallo! Ich habe gerade {nombre}s Marke gescannt und er ist bei mir. Wie können wir die Übergabe vereinbaren?",
+                msgWaPet: "Hallo! Ich habe gerade {nombre}s Marke gescannt. Wie können wir uns treffen?",
                 msgGpsPet: "Hallo! Ich habe {nombre} bei mir. Hier ist mein genauer GPS-Standort:"
             }
         };
-
-        const reproductor = document.getElementById('audio-fondo');
-        const splash = document.getElementById('splash-screen');
-        const btnAudio = document.getElementById('btn-audio-control');
-        const iconoAudio = document.getElementById('btn-audio-icon');
-        let audioMuteado = false;
-
-        function detenerAudioInmediato() {
-            if (reproductor) {
-                reproductor.pause();
-                reproductor.currentTime = 0;
-            }
-        }
-
-        document.addEventListener("visibilitychange", () => {
-            if (document.hidden) {
-                if (reproductor && !reproductor.paused) {
-                    reproductor.pause();
-                }
-            } else {
-                if (reproductor && reproductor.src && !audioMuteado && splash.style.display === 'none') {
-                    reproductor.play().catch(() => {});
-                }
-            }
-        });
-
-        window.addEventListener("pagehide", detenerAudioInmediato);
-        window.addEventListener("beforeunload", detenerAudioInmediato);
-
-        document.addEventListener("click", (e) => {
-            const anchor = e.target.closest("a");
-            if (anchor && anchor.href) {
-                const destino = anchor.href.toLowerCase();
-                if (destino.startsWith("tel:") || destino.startsWith("mailto:") || destino.includes("wa.me") || destino.includes("whatsapp.com") || anchor.target === "_blank") {
-                    detenerAudioInmediato();
-                }
-            }
-        });
 
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
@@ -851,7 +792,7 @@
             const num = document.getElementById('reserva-bizum-num').innerText.replace(/\D/g, '');
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(num);
-                alert("📋 Número de Bizum copiado al portapapeles.");
+                alert("📋 Número copiado al portapapeles.");
             }
         }
 
@@ -868,25 +809,24 @@
         }
 
         function enviarReservaConfirmadaWA() {
-            detenerAudioInmediato();
             vibrarMovil(50);
-            const nom = document.getElementById('reserva-nombre-input').value.trim() || "Paciente";
+            const nom = document.getElementById('reserva-nombre-input').value.trim() || "Cliente";
             const ref = document.getElementById('reserva-ref-input').value.trim();
 
             const urlParams = new URLSearchParams(window.location.search);
             const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
 
             const textoMsg = `¡Hola ${nombreNegocioGlobal}! He emitido el pago para mi consulta/revisión:\n` +
-                             `👤 Paciente: ${nom}\n` +
+                             `👤 Nombre: ${nom}\n` +
                              `💳 Ref. / Justificante: ${ref}\n` +
-                             `🔑 Llavero: [ ${codigoLlaveroNFC} ]\n\n` +
-                             `¿Qué huecos tenéis disponibles para agendar la cita?`;
+                             `🔑 Terminal: [ ${codigoLlaveroNFC} ]\n\n` +
+                             `¿Qué huecos tenéis disponibles para agendar?`;
 
             cerrarModalReserva();
             window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(textoMsg)}`, '_blank');
         }
 
-        // CANVA PACIENTE
+        // CANVA PACIENTE / CLIENTE
         function abrirNutriAdmin() {
             vibrarMovil(40);
             const urlParams = new URLSearchParams(window.location.search);
@@ -921,7 +861,7 @@
             if (urlRutina) localStorage.setItem(`canva_rutina_${claveUnica}`, urlRutina);
 
             cerrarNutriAdmin();
-            alert(`✅ ¡Pautas de Canva vinculadas al Llavero #${idLlavero} con éxito!`);
+            alert(`✅ ¡Pautas vinculadas al dispositivo #${idLlavero} con éxito!`);
             cargarEnginePhygital();
         }
 
@@ -1023,7 +963,7 @@
 
             document.getElementById('cfg-wa').value = (data.whatsapp || "34672294962").replace(/\D/g, '');
             document.getElementById('cfg-chip').value = data.microchip || "981098108472911";
-            document.getElementById('cfg-recompensa').value = data.recompensa || "Recompensa / Servicio SOS Mascota";
+            document.getElementById('cfg-recompensa').value = data.recompensa || "Recompensa / Servicio SOS";
             document.getElementById('cfg-raza').value = data.raza || "Golden Retriever";
             document.getElementById('cfg-peso').value = data.peso || "32 kg";
             document.getElementById('cfg-esterilizado').value = data.esterilizado || "Sí";
@@ -1065,11 +1005,11 @@
 
             localStorage.setItem(`override_${clienteSlugGlobal}`, JSON.stringify(data));
             cerrarConfigurador();
-            alert("✨ ¡Ficha guardada y sincronizada!");
+            alert("✨ ¡Datos sincronizados!");
             cargarEnginePhygital();
         }
 
-        // BIZUM
+        // BIZUM INTERACTIVO
         function abrirModalBizum() {
             vibrarMovil(45);
             let telBizum = "692202636";
@@ -1106,13 +1046,12 @@
 
             modalActions.innerHTML = `
                 <a href="${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, acabo de emitir un Bizum al ${telBizum} para abonar mi compra.`)}" 
-                   onclick="detenerAudioInmediato()" 
                    target="_blank" 
                    class="modal-btn-primary" 
                    style="background: linear-gradient(135deg, #00c3ff, #0077b6); color:#fff;">
                    <i class="fa-brands fa-whatsapp mr-1"></i> Notificar Pago por WhatsApp
                 </a>
-                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Listo, volver a la tienda</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Listo, volver</button>
             `;
 
             abrirModalCustom();
@@ -1126,7 +1065,7 @@
             document.getElementById('modal-text').innerHTML = `
                 <p class="text-xs text-slate-300 mb-3 text-left">Localiza centros veterinarios de urgencia abiertos o envía tu ubicación GPS al dueño:</p>
                 <div class="flex flex-col gap-2.5 text-left mb-2">
-                    <button onclick="detenerAudioInmediato(); window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
+                    <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
                         <i class="fa-solid fa-hospital text-cyan-400"></i> Buscar Urgencias 24h en Google Maps
                     </button>
                     <button onclick="compartirUbicacionMascota()" class="w-full bg-emerald-600/20 border border-emerald-500 rounded-xl p-3 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2">
@@ -1139,7 +1078,6 @@
         }
 
         function compartirUbicacionMascota() {
-            detenerAudioInmediato();
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
             const petNom = nombreNegocioGlobal.split('·')[0].trim();
             const msgDefault = t.msgWaPet.replace('{nombre}', petNom);
@@ -1255,7 +1193,7 @@
             html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización expresa.</p>`;
             document.getElementById('modal-text').innerHTML = html;
             modalActions.innerHTML = `
-                <button onclick="detenerAudioInmediato(); window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
+                <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
                     <i class="fa-solid fa-hospital mr-1"></i> Urgencias Veterinarias 24h
                 </button>
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>
@@ -1307,7 +1245,6 @@
             abrirModalCustom();
         }
         function enviarPedidoKebabWA() {
-            detenerAudioInmediato();
             const f = document.getElementById('kebab-formato').value;
             const c = document.getElementById('kebab-carne').value;
             const s = document.getElementById('kebab-salsa').value;
@@ -1446,15 +1383,15 @@
                     document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
                     document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección:`;
                     modalActions.innerHTML = `
-                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" onclick="detenerAudioInmediato()" target="_blank" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
-                        <a href="${googleReviewUrlGlobal}" onclick="detenerAudioInmediato()" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
+                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" target="_blank" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
                     `;
                 } else {
                     document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
                     document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
                     document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial:`;
                     modalActions.innerHTML = `
-                        <a href="${googleReviewUrlGlobal}" onclick="detenerAudioInmediato()" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
                         <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>
                     `;
                 }
@@ -1482,7 +1419,6 @@
             const lat = localStorage.getItem('parking_lat');
             const lng = localStorage.getItem('parking_lng');
             if (lat && lng) {
-                detenerAudioInmediato();
                 window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
                 localStorage.removeItem('parking_lat');
                 localStorage.removeItem('parking_lng');
@@ -1502,7 +1438,7 @@
         }
 
         // ==========================================
-        // MOTOR POLIMÓRFICO DE CARGA Y RENDER
+        // MOTOR DE CARGA Y RENDER DINÁMICO
         // ==========================================
         function renderMenu(data) {
             const menuContainer = document.getElementById('dynamic-menu');
@@ -1735,13 +1671,12 @@
                                     </a>
                                 `;
                             }
-                            // ENLACES DIRECTOS Y PREDETERMINADOS (TRADUCCIÓN DINÁMICA)
+                            // ENLACES DIRECTOS Y PREDETERMINADOS (CON TRADUCCIÓN DINÁMICA)
                             else {
                                 let finalUrl = btn.url || '#';
                                 let btnNom = btn.nombre;
                                 let btnDesc = btn.descripcion || '';
 
-                                // Traducción inteligente de botones de Nutrition Planet
                                 if (nLower.includes('comidas') || nLower.includes('menú fit') || nLower.includes('dieta')) {
                                     btnNom = t.fitMenu;
                                     btnDesc = t.fitMenuDesc;
@@ -1857,9 +1792,7 @@
             document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
 
             const hubImg = document.getElementById('hub-logo');
-            const splashImg = document.getElementById('splash-logo');
             const hubLogoBox = document.getElementById('hub-logo-box');
-            const splashLogoBox = document.getElementById('splash-logo-box');
 
             if (esMascota) {
                 if (hubLogoBox) {
@@ -1868,21 +1801,10 @@
                     hubLogoBox.style.borderRadius = "24px";
                     hubLogoBox.style.maxWidth = "88px";
                 }
-                if (splashLogoBox) {
-                    splashLogoBox.style.width = "88px";
-                    splashLogoBox.style.height = "88px";
-                    splashLogoBox.style.borderRadius = "24px";
-                    splashLogoBox.style.maxWidth = "88px";
-                }
                 if (hubImg) {
                     hubImg.style.objectFit = "cover";
                     hubImg.style.padding = "0px";
                     hubImg.style.filter = "none";
-                }
-                if (splashImg) {
-                    splashImg.style.objectFit = "cover";
-                    splashImg.style.padding = "0px";
-                    splashImg.style.filter = "none";
                 }
             } else {
                 const maxW = data.logoAnchoMax || "270px";
@@ -1895,48 +1817,22 @@
                     hubLogoBox.style.height = h;
                     hubLogoBox.style.borderRadius = "20px";
                 }
-                if (splashLogoBox) {
-                    splashLogoBox.style.width = "100%";
-                    splashLogoBox.style.maxWidth = maxW;
-                    splashLogoBox.style.height = h;
-                    splashLogoBox.style.borderRadius = "20px";
-                }
                 if (hubImg) {
                     hubImg.style.objectFit = "contain";
                     hubImg.style.padding = pad;
                     hubImg.style.filter = `drop-shadow(0 0 10px ${colorAcentoFinal}80)`;
                 }
-                if (splashImg) {
-                    splashImg.style.objectFit = "contain";
-                    splashImg.style.padding = pad;
-                    splashImg.style.filter = `drop-shadow(0 0 10px ${colorAcentoFinal}80)`;
-                }
             }
 
             const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
             document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
-            document.getElementById('splash-title').innerText = data.nombre;
             document.getElementById('client-name').innerText = data.nombre;
-            document.getElementById('splash-subtitle').innerText = esMascota ? t.badgeMascota : (data.subtitulo || "Ecosistema Phygital");
             document.getElementById('client-subtitle').innerText = esMascota ? t.badgeMascota : (data.subtitulo || "Ecosistema Phygital");
 
             document.getElementById('badge-text').innerText = esMascota ? t.badgeMascota : (data.textoBadge || t.badgeDefault);
 
             const logoImg = data.logo || "logo.png";
             if (hubImg) hubImg.src = logoImg;
-            if (splashImg) splashImg.src = logoImg;
-
-            if (data.audioFondo && data.audioFondo.trim() !== "") {
-                reproductor.src = data.audioFondo;
-                reproductor.volume = 0.22;
-                reproductor.load();
-                btnAudio.style.display = 'flex';
-                splash.style.display = 'flex';
-                splash.style.opacity = '1';
-            } else {
-                btnAudio.style.display = 'none';
-                splash.style.display = 'none';
-            }
 
             renderMenu(data);
         }
@@ -1954,23 +1850,6 @@
             document.getElementById('client-subtitle').innerText = esMascota ? t.badgeMascota : (datosPerfilGlobal.subtitulo || "Ecosistema Phygital");
             
             renderMenu(datosPerfilGlobal);
-        }
-
-        function iniciarMagia() {
-            splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; }, 400);
-            if (reproductor && reproductor.src) reproductor.play().catch(() => {});
-        }
-
-        function alternarAudio() {
-            if (audioMuteado) {
-                reproductor.play().catch(() => {});
-                iconoAudio.className = "fa-solid fa-volume-high";
-            } else {
-                reproductor.pause();
-                iconoAudio.className = "fa-solid fa-volume-xmark";
-            }
-            audioMuteado = !audioMuteado;
         }
 
         document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
