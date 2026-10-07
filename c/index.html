@@ -66,9 +66,18 @@
         }
 
         .top-bar-controls {
-            display: flex; justify-content: flex-end; align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 12px; padding: 0 4px;
         }
+        .lang-picker {
+            display: flex; gap: 4px; background: rgba(255,255,255,0.06);
+            padding: 3px 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .lang-btn {
+            background: none; border: none; font-size: 0.7rem; font-weight: 800;
+            color: #94a3b8; cursor: pointer; padding: 2px 7px; border-radius: 8px; transition: all 0.2s;
+        }
+        .lang-btn.active { color: #020617; background: var(--color-acento); font-weight: 900; }
         
         .owner-btn {
             background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
@@ -102,4 +111,1748 @@
             border-radius: 20px; 
             border: 1px solid rgba(255, 255, 255, 0.12); 
             overflow: hidden; 
-            background: radial-gradient(circle at center, rgba(230, 0, 0, 0.15) 0%, rgba(11, 12, 16,
+            background: radial-gradient(circle at center, rgba(230, 0, 0, 0.15) 0%, rgba(11, 12, 16, 0.95) 85%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--halo-glow); 
+            position: relative; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            padding: 4px 10px;
+        }
+        .logo-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            display: block; 
+            filter: drop-shadow(0 0 10px rgba(230, 0, 0, 0.5));
+            transition: transform 0.25s ease;
+        }
+        .logo-container:active img { transform: scale(0.97); }
+        
+        h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
+        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
+        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 18px 0 10px 6px; font-weight: 800; }
+        
+        .apps-menu { display: flex; flex-direction: column; gap: 11px; width: 100%; }
+        .app-btn { 
+            display: flex; align-items: center; padding: 13px 16px; border-radius: 20px; 
+            background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; 
+            backdrop-filter: blur(10px); width: 100%; box-sizing: border-box;
+        }
+        .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
+        .app-btn.destacado { 
+            border: 1px solid var(--color-acento); 
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(15, 23, 42, 0.85));
+            box-shadow: 0 0 20px var(--halo-glow); 
+        }
+        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
+        
+        .app-info { flex-grow: 1; min-width: 0; overflow: hidden; }
+        .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.72rem; color: var(--color-gris); }
+
+        .btn-rescate-llaves {
+            border: 1px solid #f59e0b !important;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(15, 23, 42, 0.9)) !important;
+            box-shadow: 0 0 18px rgba(245, 158, 11, 0.25) !important;
+        }
+        .badge-rescate-sos {
+            font-size: 9px; font-weight: 900; background: #f59e0b; color: #020617;
+            padding: 2px 7px; border-radius: 20px; margin-left: 6px; text-transform: uppercase; flex-shrink: 0;
+        }
+
+        .stars-container { font-size: 2rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: transform 0.2s ease; display: inline-block; }
+        .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
+        .star-inactive { color: #334155; }
+
+        /* MODALES */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { 
+            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); 
+            border-radius: 28px; padding: 24px 20px; max-width: 380px; width: 100%; 
+            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); 
+            transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; position: relative;
+        }
+        .modal-close-btn {
+            position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .modal-actions { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; }
+        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        .modal-btn-google { background: linear-gradient(135deg, #ffb400, #f59e0b); color: #020617; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+
+        .selector-box { text-align: left; margin-bottom: 12px; }
+        .selector-label { font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .selector-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .pill-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 4px; font-size: 0.72rem; color: #fff; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .pill-btn.active { background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; font-weight: 800; border-color: #fff; }
+        .card-resultado { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.25); border-radius: 16px; padding: 12px; margin: 14px 0; text-align: left; }
+
+        .pin-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--color-acento); background: transparent; transition: all 0.2s; }
+        .pin-dot.filled { background: var(--color-acento); box-shadow: 0 0 10px var(--color-acento); }
+        .key-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 14px; font-size: 1.15rem; font-weight: 800; color: #fff; cursor: pointer; }
+        .key-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.92); }
+        .color-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .color-dot.active { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 14px rgba(255,255,255,0.5); }
+
+        .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
+        .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+    </style>
+</head>
+<body>
+
+    <!-- MODAL GENERAL POLIMÓRFICO -->
+    <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
+        <div class="modal-box" id="modal-content">
+            <button class="modal-close-btn" onclick="cerrarModalBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modal-icon" class="text-3xl mb-2"></div>
+            <div id="modal-title" class="text-base font-black text-white mb-2 uppercase tracking-wide"></div>
+            <div id="modal-text" class="text-xs text-slate-300 leading-relaxed mb-4"></div>
+            <div id="modal-actions" class="modal-actions">
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()" id="btn-modal-entendido">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL RESERVA DE CITA CON JUSTIFICANTE DE PAGO -->
+    <div id="modal-reserva-pago" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 360px;">
+            <button class="modal-close-btn" onclick="cerrarModalReserva()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-calendar-check text-cyan-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider" id="lbl-reserva-modal-title">Reserva de Consulta</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3" id="lbl-reserva-modal-desc">Para confirmar y agendar tu hueco en consulta, realiza el Bizum e introduce la referencia:</p>
+            
+            <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl mb-3 flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Bizum de la Consulta:</span>
+                    <span id="reserva-bizum-num" class="text-sm font-black text-white font-mono tracking-wider">692 20 26 36</span>
+                </div>
+                <button onclick="copiarBizumReserva()" class="bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[10px] font-bold px-2.5 py-1.5 rounded-lg active:scale-95 transition">
+                    <i class="fa-solid fa-copy mr-1"></i>Copiar
+                </button>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">Tu Nombre Completo:</label>
+                    <input type="text" id="reserva-nombre-input" placeholder="Ej: María Gómez" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="font-bold text-amber-400 block mb-1">Referencia Bizum / Teléfono Emisor:</label>
+                    <input type="text" id="reserva-ref-input" oninput="validarFormularioReserva()" placeholder="Ej: Ref. 482910 o Tu móvil emisor" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-amber-400">
+                </div>
+            </div>
+
+            <div class="modal-actions mt-4">
+                <button id="btn-enviar-reserva-wa" onclick="enviarReservaConfirmadaWA()" disabled class="modal-btn-primary opacity-50 cursor-not-allowed transition" style="background: linear-gradient(135deg, #25D366, #128c7e); color:#fff;">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Confirmar y Agendar por WhatsApp
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarModalReserva()">Volver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GESTIÓN NUTRICIÓN (CANVA DIETA Y RUTINA) -->
+    <div id="modal-nutri-admin" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 360px;">
+            <button class="modal-close-btn" onclick="cerrarNutriAdmin()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-user-doctor text-cyan-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Ficha del Paciente</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Pega los enlaces públicos de Canva (solo lectura):</p>
+            
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-emerald-400 block mb-1">🥗 Enlace Canva · Dieta / Menú:</label>
+                    <input type="url" id="admin-canva-dieta" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                </div>
+                <div>
+                    <label class="font-bold text-cyan-400 block mb-1">🏋️ Enlace Canva · Rutina de Ejercicios:</label>
+                    <input type="url" id="admin-canva-rutina" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                </div>
+            </div>
+
+            <div class="modal-actions mt-4">
+                <button onclick="guardarEnlacesNutri()" class="modal-btn-primary" style="background: linear-gradient(135deg, #00E5FF, #0077b6); color:#020617;">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar en Llavero
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarNutriAdmin()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TECLADO PIN DIGITAL -->
+    <div id="modal-pin-auth" class="modal-overlay">
+        <div class="modal-box text-center" style="max-width: 320px;">
+            <button class="modal-close-btn" onclick="cerrarPinAuth()"><i class="fa-solid fa-xmark"></i></button>
+            <i class="fa-solid fa-shield-halved text-2xl mb-2" style="color:var(--color-acento);"></i>
+            <h3 class="text-white text-sm font-black uppercase tracking-wider mb-1">Zona Administración</h3>
+            <p class="text-[11px] text-slate-400 mb-4" id="pin-modal-desc">Introduce tu PIN de 4 dígitos</p>
+            <div class="flex justify-center gap-3 mb-5">
+                <div class="pin-dot" id="dot-0"></div><div class="pin-dot" id="dot-1"></div><div class="pin-dot" id="dot-2"></div><div class="pin-dot" id="dot-3"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-2.5 mb-3">
+                <button class="key-btn" onclick="teclearPin('1')">1</button><button class="key-btn" onclick="teclearPin('2')">2</button><button class="key-btn" onclick="teclearPin('3')">3</button>
+                <button class="key-btn" onclick="teclearPin('4')">4</button><button class="key-btn" onclick="teclearPin('5')">5</button><button class="key-btn" onclick="teclearPin('6')">6</button>
+                <button class="key-btn" onclick="teclearPin('7')">7</button><button class="key-btn" onclick="teclearPin('8')">8</button><button class="key-btn" onclick="teclearPin('9')">9</button>
+                <button class="key-btn text-xs text-amber-400 font-bold" onclick="abrirRecuperacionPin()">SOS</button>
+                <button class="key-btn" onclick="teclearPin('0')">0</button>
+                <button class="key-btn text-rose-400" onclick="borrarPin()"><i class="fa-solid fa-delete-left"></i></button>
+            </div>
+            <button onclick="abrirRecuperacionPin()" class="text-[11px] text-slate-400 hover:text-white underline mt-1">¿Olvidaste tu PIN?</button>
+        </div>
+    </div>
+
+    <!-- MODAL RECUPERACIÓN PIN -->
+    <div id="modal-recuperar" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 340px;">
+            <button class="modal-close-btn" onclick="cerrarRecuperar()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-key text-amber-400 text-lg"></i><h3 class="text-white text-sm font-black uppercase">Recuperar Acceso</h3></div>
+            <p class="text-[11px] text-slate-400 mb-3">Introduce tu <b>Palabra Secreta</b> configurada:</p>
+            <input type="text" id="input-palabra-secreta" placeholder="Ej: Toby / Pamplona" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs mb-3 outline-none">
+            <div class="modal-actions">
+                <button onclick="validarPalabraSecreta()" class="modal-btn-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706); color:#fff;">Restablecer a PIN 1234</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIGURADOR MASCOTAS -->
+    <div id="modal-configurador" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 400px;">
+            <button class="modal-close-btn" onclick="cerrarConfigurador()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-notes-medical text-lg" style="color:var(--color-acento);"></i><h3 class="text-white text-sm font-black uppercase tracking-wider">Gestión Médica & SOS</h3></div>
+            <div class="flex gap-2 border-b border-slate-800 pb-2 mb-3 text-[11px] font-bold">
+                <button onclick="cambiarTabCfg('salud')" id="tab-btn-salud" class="text-cyan-400 border-b-2 border-cyan-400 pb-1">💉 Ficha Médica</button>
+                <button onclick="cambiarTabCfg('emergencia')" id="tab-btn-emergencia" class="text-slate-400 pb-1">🚨 Rescate</button>
+                <button onclick="cambiarTabCfg('estilo')" id="tab-btn-estilo" class="text-slate-400 pb-1">🎨 Estilo</button>
+            </div>
+            <div id="tab-salud" class="space-y-3 text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="font-bold text-slate-300 block mb-1">Raza:</label><input type="text" id="cfg-raza" placeholder="Golden Retriever" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"></div>
+                    <div><label class="font-bold text-slate-300 block mb-1">Peso (kg):</label><input type="text" id="cfg-peso" placeholder="32 kg" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="font-bold text-slate-300 block mb-1">Esterilizado:</label><select id="cfg-esterilizado" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"><option value="Sí">Sí</option><option value="No">No</option></select></div>
+                    <div><label class="font-bold text-slate-300 block mb-1">Seguro RC:</label><select id="cfg-seguro" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"><option value="Sí, Seguro Oficial">Sí, Activo</option><option value="En trámite / No">No / Sin póliza</option></select></div>
+                </div>
+                <div><label class="font-bold text-rose-400 block mb-1">⚠️ Alergias Críticas:</label><textarea id="cfg-alergias" rows="2" class="w-full bg-slate-900 border border-rose-900/60 rounded-xl p-2 text-white outline-none" placeholder="Ej: Alérgico al pollo."></textarea></div>
+                <div><label class="font-bold text-amber-400 block mb-1">💊 Medicación Diaria:</label><input type="text" id="cfg-medicacion" placeholder="Ej: Condroprotector con desayuno" class="w-full bg-slate-900 border border-amber-900/60 rounded-xl p-2 text-white outline-none"></div>
+                <div><label class="font-bold text-slate-300 block mb-1">🏥 Hospital Veterinario:</label><input type="text" id="cfg-vet" placeholder="Hospital Veterinario San Fermín 24h" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"></div>
+                <div><label class="font-bold text-slate-300 block mb-1">🐕 Carácter:</label><input type="text" id="cfg-caracter" placeholder="Sociable. Miedo a petardos." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"></div>
+                <div class="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800">
+                    <span class="font-bold text-cyan-400 block mb-1.5">💉 Añadir Vacuna:</span>
+                    <input type="text" id="cfg-vac-nom" placeholder="Vacuna (ej: Rabia 2026)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white mb-2 text-xs">
+                    <input type="text" id="cfg-vac-est" placeholder="Pauta (ej: Vigente)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white text-xs">
+                </div>
+            </div>
+            <div id="tab-emergencia" class="space-y-3 text-xs hidden">
+                <div><label class="font-bold text-slate-300 block mb-1">WhatsApp Rescate:</label><input type="text" id="cfg-wa" placeholder="Ej: 34672294962" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none"></div>
+                <div><label class="font-bold text-slate-300 block mb-1">Nº Microchip:</label><input type="text" id="cfg-chip" placeholder="Ej: 981098108472911" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none"></div>
+                <div><label class="font-bold text-slate-300 block mb-1">Recompensa / Mensaje SOS:</label><input type="text" id="cfg-recompensa" placeholder="Recompensa por entrega" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none"></div>
+            </div>
+            <div id="tab-estilo" class="space-y-3 text-xs hidden">
+                <div>
+                    <label class="font-bold text-slate-300 block mb-2">Color del Halo Neón & Botones:</label>
+                    <div class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-2xl border border-slate-800">
+                        <div class="color-dot active" style="background:#00E5FF;" onclick="aplicarTemaColor('#00E5FF', '#080E1A', this)"></div>
+                        <div class="color-dot" style="background:#22C55E;" onclick="aplicarTemaColor('#22C55E', '#06170d', this)"></div>
+                        <div class="color-dot" style="background:#F59E0B;" onclick="aplicarTemaColor('#F59E0B', '#1c1304', this)"></div>
+                        <div class="color-dot" style="background:#EC4899;" onclick="aplicarTemaColor('#EC4899', '#190610', this)"></div>
+                        <div class="color-dot" style="background:#A855F7;" onclick="aplicarTemaColor('#A855F7', '#12051d', this)"></div>
+                    </div>
+                </div>
+                <div class="pt-2 border-t border-slate-800"><label class="font-bold text-slate-300 block mb-1">Palabra Secreta para PIN:</label><input type="text" id="cfg-palabra" placeholder="Ej: Toby" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"></div>
+                <div><label class="font-bold text-slate-300 block mb-1">Cambiar PIN (4 dígitos):</label><input type="password" maxlength="4" id="cfg-nuevo-pin" placeholder="Dejar en blanco para no cambiar" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white outline-none"></div>
+            </div>
+            <div class="modal-actions mt-4">
+                <button onclick="guardarAjustesCompletos()" class="modal-btn-primary"><i class="fa-solid fa-floppy-disk mr-1"></i> Guardar Cambios</button>
+                <button class="modal-btn-secondary" onclick="cerrarConfigurador()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TEST ERGONÓMICO (IBERLAX) -->
+    <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <button class="modal-close-btn" onclick="cerrarAsesorBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="color: var(--color-acento); font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;" id="lbl-erg-title">Test Ergonómico</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;" id="lbl-erg-sub">Configuración de descanso en 3 toques</p>
+            <div class="selector-box">
+                <span class="selector-label" id="lbl-erg-p1">1. Postura de Descanso:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('postura', 'De Lado', this)"><i class="fa-solid fa-person"></i><br>De Lado</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Arriba', this)"><i class="fa-solid fa-bed"></i><br>De Espalda</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Abajo', this)"><i class="fa-solid fa-child"></i><br>Boca Abajo</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label" id="lbl-erg-p2">2. Complexión / Peso:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '-70kg', this)">-70 kg</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('peso', '70-90kg', this)">70-90 kg</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '+90kg', this)">+90 kg</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label" id="lbl-erg-p3">3. Medida Deseada:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '135x190', this)">135x190</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('medida', '150x190', this)">150x190</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '180x200', this)">180x200</div>
+                </div>
+            </div>
+            <div class="card-resultado">
+                <div style="font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase;">Recomendación Ergonómica:</div>
+                <div id="diag-firmeza" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Firmeza Media Adaptable</div>
+                <div id="diag-tecnologia" style="font-size: 0.74rem; color: #cbd5e1; margin-top: 4px;">Muelles Ensacados + Viscoelástica transpirable.</div>
+            </div>
+            <div class="modal-actions">
+                <a id="btn-probar-tienda" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
+                <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TASADOR LOGÍSTICA (IBERLAX) -->
+    <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <button class="modal-close-btn" onclick="cerrarEnvioBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="color: #30d158; font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Entrega & Retirada</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;">Tasador logístico a domicilio</p>
+            <div class="selector-box">
+                <span class="selector-label">1. Zona de Entrega:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('zona', 'Logroño Centro / Casco', this)">Logroño</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Alrededores (Oyón/Lardero)', this)">Cinturón</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Rioja / Otras localidades', this)">Comarca</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label">2. Acceso al Edificio:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('acceso', 'Con Ascensor / Planta Baja', this)">Ascensor</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (Hasta 2º)', this)">Esc. Baja</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (3º o superior)', this)">Esc. Alta</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label">3. Retirada de Usado:</span>
+                <div class="selector-pills" style="grid-template-columns: 1fr 1fr;">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('retirada', 'Sí, retirar colchón antiguo', this)">Retirar Viejo</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('retirada', 'No, solo entrega nuevo', this)">Solo Entrega</div>
+                </div>
+            </div>
+            <div class="card-resultado" style="border-color: #30d158; background: rgba(48, 209, 88, 0.08);">
+                <div style="font-size: 0.72rem; color: #30d158; font-weight: 800; text-transform: uppercase;">Condición Estimada:</div>
+                <div id="diag-envio-titulo" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Servicio Bonificado en Tienda</div>
+                <div id="diag-envio-desc" style="font-size: 0.74rem; color: #cbd5e1; margin-top: 4px;">Ruta directa a domicilio con subida a habitación.</div>
+            </div>
+            <div class="modal-actions">
+                <a id="btn-confirmar-envio" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Consultar Ruta por WhatsApp</a>
+                <button class="modal-btn-secondary" onclick="cerrarEnvioBtn()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HUB PRINCIPAL -->
+    <div class="halo-wrapper" id="main-halo">
+        <div class="hub-container">
+            
+            <!-- HEADER MULTI-IDIOMA UNIVERSAL -->
+            <div class="top-bar-controls" id="universal-top-bar">
+                <div class="lang-picker notranslate" translate="no">
+                    <button class="lang-btn active" onclick="cambiarIdioma('es', this)">ES</button>
+                    <button class="lang-btn" onclick="cambiarIdioma('en', this)">EN</button>
+                    <button class="lang-btn" onclick="cambiarIdioma('fr', this)">FR</button>
+                    <button class="lang-btn" onclick="cambiarIdioma('de', this)">DE</button>
+                </div>
+                <button class="owner-btn" id="btn-owner-gear" onclick="iniciarAuthPropietario()" title="Ajustes Dueño">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+
+            <div class="status-badge">
+                <span class="ping-light"></span>
+                <span id="badge-text">PUNTO DE CONEXIÓN ACTIVO</span>
+            </div>
+
+            <div class="logo-container" id="hub-logo-box">
+                <img id="hub-logo" alt="Logo">
+            </div>
+
+            <h1 id="client-name">STUDIO 42</h1>
+            <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
+
+            <!-- CONTENEDOR DINÁMICO CON ESTADO INICIAL VISIBLE -->
+            <div id="dynamic-menu">
+                <div style="text-align: center; padding: 40px 0; color: #94a3b8; font-size: 13px;">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-cyan-400 mb-2"></i>
+                    <p>Cargando menú interactivo...</p>
+                </div>
+            </div>
+
+            <div class="footer-brand" id="lbl-footer-brand">Desarrollado por <span>Studio 42</span></div>
+        </div>
+    </div>
+
+    <script>
+        let datosPerfilGlobal = null;
+        let idiomaActual = 'es';
+        let googleReviewUrlGlobal = "https://maps.google.com";
+        let whatsappGerenciaGlobal = "";
+        let whatsappTiendaGlobal = "";
+        let nombreNegocioGlobal = "Profesional";
+        let clienteSlugGlobal = "demo";
+
+        let pinBuffer = "";
+        const PIN_DEFAULT = "1234";
+
+        let estadoAsesor = { postura: 'De Lado', peso: '70-90kg', medida: '150x190' };
+        let estadoEnvio = { zona: 'Logroño Centro / Casco', acceso: 'Con Ascensor / Planta Baja', retirada: 'Sí, retirar colchón antiguo' };
+
+        // DICCIONARIO UNIVERSAL (MULTI-VERTICAL)
+        const DICCIONARIO = {
+            es: {
+                badgeDefault: "PUNTO DE CONEXIÓN ACTIVO",
+                badgeMascota: "CHIP INTELIGENTE ACTIVO · PROTOCOLO RESCATE SOS",
+                secPet1: "🚨 ¡Mascota Perdida! Contacto de Rescate",
+                secPet2: "Ficha Médica & Cuidados Especiales",
+                secNutri1: "Área del Paciente · Pautas & Consulta",
+                secNutri2: "Herramientas Interactivas (En Mostrador)",
+                secNutri3: "Servicios & Utilidades del Llavero",
+                secNutri4: "Tu Opinión Nos Importa",
+                fitMenu: "Mi Plan de Comidas & Menú Fit",
+                fitMenuDesc: "Acceso a tu plan alimenticio personalizado (Canva)",
+                fitRutina: "Mi Rutina de Entrenamiento",
+                fitRutinaDesc: "Ejercicios, series y cargas de tu plan activo (Canva)",
+                fitReserva: "Pedir Cita para Revisión & Bioimpedancia",
+                fitReservaDesc: "Reserva tu pesaje y control con justificante previo",
+                fitProt: "Calculadora de Proteína Diaria",
+                fitProtDesc: "Calcula tus gramos exactos según peso y objetivo",
+                fitCrea: "Protocolo & Dosificación de Creatina",
+                fitCreaDesc: "Gramos exactos por peso y momento óptimo de toma",
+                fitLlaves: "🔑 ¿Encontraste estas llaves?",
+                fitLlavesDesc: "Avisar al responsable y devolverlas de forma segura",
+                fitBizum: "Pagar por Bizum en Mostrador",
+                fitBizumDesc: "Toca para copiar y pegar en tu banco",
+                fitStock: "Consultar Stock & Sabores en 1 Toque",
+                fitStockDesc: "Verifica disponibilidad en mostrador por WhatsApp",
+                llamarPet: "Llamar a Papá/Mamá de {nombre}",
+                llamarPetDesc: "Llamada prioritaria en 1 toque al móvil del dueño",
+                waPet: "Avisar por WhatsApp al Dueño",
+                waPetDesc: "Envía mensaje predeterminado: ¡Tengo a tu mascota!",
+                gpsPet: "Hospitales Veterinarios 24h & GPS",
+                gpsPetDesc: "Localiza por satélite clínicas abiertas y envía ubicación",
+                cartillaPet: "Carnet de Vacunación Canina",
+                cartillaPetDesc: "Toca cada vacuna para verificar pautas oficiales y refuerzos",
+                dietaPet: "Protocolo de Dieta, Alergias y Carácter",
+                dietaPetDesc: "Alergias severas, medicación y comportamiento",
+                triajePet: "Semáforo SOS / Intoxicaciones & Auxilios",
+                triajePetDesc: "Guía inmediata si ingiere alimentos o sustancias venenosas",
+                kebabMenu: "Arma tu Menú",
+                kebabMenuDesc: "Configura tu plato y envíalo a cocina",
+                kebabAler: "Alérgenos & Salsas",
+                kebabAlerDesc: "Consulta alérgenos y salsas",
+                iberErg: "Test Ergonómico de Descanso",
+                iberErgDesc: "Configura firmeza ideal en 3 toques",
+                iberLog: "Entrega & Retirada a Domicilio",
+                iberLogDesc: "Calcula condiciones de envío y retirada de viejo",
+                btnParking: "¿Dónde aparqué?",
+                btnParkingDesc: "Guarda la posición GPS de tu coche",
+                btnVcard: "Guardar Contacto en Agenda",
+                btnVcardDesc: "Descarga directa de contacto al móvil",
+                btnReviewsTitle: "¿Qué tal ha sido tu experiencia?",
+                btnReviewsSub: "Tu valoración nos ayuda a mejorar",
+                btnReviewsTap: "Toca las estrellas para calificar el servicio",
+                modalCerrar: "Cerrar",
+                modalEntendido: "Entendido",
+                msgWaPet: "¡Hola! Acabo de escanear la placa de {nombre} y está conmigo. ¿Cómo coordinamos para entregarlo?",
+                msgGpsPet: "¡Hola! Tengo a {nombre} conmigo. Esta es mi ubicación GPS exacta:"
+            },
+            en: {
+                badgeDefault: "CONNECTED NODE · ACTIVE SYSTEM",
+                badgeMascota: "ACTIVE SMART CHIP · SOS RESCUE PROTOCOL",
+                secPet1: "🚨 Lost Pet! Immediate Rescue Contact",
+                secPet2: "Medical Records & Special Care",
+                secNutri1: "Patient Portal · Guidelines & Appointments",
+                secNutri2: "Interactive Tools (Counter Service)",
+                secNutri3: "Smart Keychain Services & Tools",
+                secNutri4: "Your Feedback Matters",
+                fitMenu: "My Meal Plan & Fit Nutrition",
+                fitMenuDesc: "Direct access to your custom meal plan (Canva)",
+                fitRutina: "My Workout Program",
+                fitRutinaDesc: "Exercises, sets and reps for your active goal (Canva)",
+                fitReserva: "Book Body Composition & Follow-up",
+                fitReservaDesc: "Schedule your check-in with pre-payment receipt",
+                fitProt: "Daily Protein Calculator",
+                fitProtDesc: "Exact daily grams based on weight & body goal",
+                fitCrea: "Creatine Protocol & Dosage",
+                fitCreaDesc: "Target dosage by bodyweight and best intake times",
+                fitLlaves: "🔑 Did you find these keys?",
+                fitLlavesDesc: "Tap here to notify the owner and return safely",
+                fitBizum: "Pay via Bizum at the Counter",
+                fitBizumDesc: "Tap to copy phone number into your banking app",
+                fitStock: "Check Stock & Availability (1-Tap)",
+                fitStockDesc: "Confirm current in-store options via WhatsApp",
+                llamarPet: "Call {nombre}'s Family",
+                llamarPetDesc: "Direct 1-tap priority call to owner",
+                waPet: "Notify Owner via WhatsApp",
+                waPetDesc: "Send pre-filled message: I found your pet!",
+                gpsPet: "24/7 Vet Hospitals & GPS Satellite",
+                gpsPetDesc: "Locate open emergency clinics & send live GPS",
+                cartillaPet: "Official Vaccination Passport",
+                cartillaPetDesc: "Tap each vaccine to verify dates and boosters",
+                dietaPet: "Dietary Needs, Allergies & Temperament",
+                dietaPetDesc: "Severe allergies, medications & behavior",
+                triajePet: "SOS Poisoning Protocol & First Aid",
+                triajePetDesc: "Emergency guide if pet ingested toxic substances",
+                kebabMenu: "Build Your Menu",
+                kebabMenuDesc: "Customize your meal and send directly to kitchen",
+                kebabAler: "Allergens & Sauces",
+                kebabAlerDesc: "Check gluten, dairy and spice details",
+                iberErg: "Ergonomic Mattress Finder",
+                iberErgDesc: "Find your ideal firmness in 3 taps",
+                iberLog: "Home Delivery & Old Removal",
+                iberLogDesc: "Check shipping routes and old mattress pickup",
+                btnParking: "Where did I park?",
+                btnParkingDesc: "Save your car's satellite GPS position",
+                btnVcard: "Save Contact Card",
+                btnVcardDesc: "Add verified business contact to your phone",
+                btnReviewsTitle: "How was your experience?",
+                btnReviewsSub: "Your review helps us grow",
+                btnReviewsTap: "Tap the stars to rate our service",
+                modalCerrar: "Close",
+                modalEntendido: "Understood",
+                msgWaPet: "Hello! I just scanned {nombre}'s smart tag and he is with me. How can we meet?",
+                msgGpsPet: "Hello! I have {nombre} with me. Here is my exact GPS location:"
+            },
+            fr: {
+                badgeDefault: "NŒUD CONNECTÉ · RÉSEAU ACTIF",
+                badgeMascota: "PUCE INTELLIGENTE ACTIVE · PROTOCOLE SOS",
+                secPet1: "🚨 Animal Perdu ! Contact Immédiat",
+                secPet2: "Fiche Médicale & Soins Spécifiques",
+                secNutri1: "Espace Patient · Conseils & Rendez-vous",
+                secNutri2: "Outils Interactifs (Au Comptoir)",
+                secNutri3: "Services & Utilités du Porte-Clés",
+                secNutri4: "Votre Avis Nous Intéresse",
+                fitMenu: "Mon Plan Alimentaire & Menu Fit",
+                fitMenuDesc: "Accès à votre régime personnalisé (Canva)",
+                fitRutina: "Mon Programme d'Entraînement",
+                fitRutinaDesc: "Exercices, séries et charges adaptées (Canva)",
+                fitReserva: "Prendre RDV · Bilan & Impédancemétrie",
+                fitReservaDesc: "Réservez votre suivi avec justificatif de paiement",
+                fitProt: "Calculateur de Protéines Quotidien",
+                fitProtDesc: "Grammes exacts selon votre poids et vos objectifs",
+                fitCrea: "Protocole & Dosage de Créatine",
+                fitCreaDesc: "Dosage optimal et moments de prise recommandés",
+                fitLlaves: "🔑 Avez-vous trouvé ces clés ?",
+                fitLlavesDesc: "Touchez pour prévenir le propriétaire en sécurité",
+                fitBizum: "Payer par Bizum au Comptoir",
+                fitBizumDesc: "Copiez le numéro pour votre application bancaire",
+                fitStock: "Consulter la Disponibilité (1 Clic)",
+                fitStockDesc: "Vérifiez le stock disponible via WhatsApp",
+                llamarPet: "Appeler le maître de {nombre}",
+                llamarPetDesc: "Appel prioritaire direct en 1 clic",
+                waPet: "Prévenir le Maître par WhatsApp",
+                waPetDesc: "Message instantané : J'ai trouvé votre animal !",
+                gpsPet: "Urgences Vétérinaires 24h & GPS",
+                gpsPetDesc: "Localise les cliniques ouvertes et transmet la position",
+                cartillaPet: "Passeport Vaccinal Canin",
+                cartillaPetDesc: "Vérifiez les vaccins officiels et rappels",
+                dietaPet: "Régime, Allergies & Comportement",
+                dietaPetDesc: "Allergies graves, traitement et caractère",
+                triajePet: "Guide SOS Intoxications & Soins",
+                triajePetDesc: "Protocole d'urgence en cas d'ingestion toxique",
+                kebabMenu: "Composez Votre Menu",
+                kebabMenuDesc: "Personnalisez votre plat pour la cuisine",
+                kebabAler: "Allergènes & Sauces",
+                kebabAlerDesc: "Consultez les ingrédients et sauces",
+                iberErg: "Test Ergonomique Literie",
+                iberErgDesc: "Trouvez votre fermeté idéale en 3 clics",
+                iberLog: "Livraison & Reprise Ancien",
+                iberLogDesc: "Conditions d'expédition à domicile",
+                btnParking: "Où suis-je garé ?",
+                btnParkingDesc: "Mémorisez la position GPS de votre véhicule",
+                btnVcard: "Enregistrer le Contact",
+                btnVcardDesc: "Téléchargez la fiche contact directamente",
+                btnReviewsTitle: "Comment s'est passée votre visite ?",
+                btnReviewsSub: "Votre avis compte beaucoup pour nous",
+                btnReviewsTap: "Touchez les étoiles pour noter le service",
+                modalCerrar: "Fermer",
+                modalEntendido: "Compris",
+                msgWaPet: "Bonjour ! Je viens de scanner la médaille de {nombre}. Comment pouvons-nous nous retrouver ?",
+                msgGpsPet: "Bonjour ! J'ai {nombre} avec moi. Voici ma position GPS exacte :"
+            },
+            de: {
+                badgeDefault: "KNOTEN VERBUNDEN · SYSTEM AKTIV",
+                badgeMascota: "SMART-CHIP AKTIV · SOS RETTUNGSPROTOKOLL",
+                secPet1: "🚨 Tier Gefunden! Notfall-Kontakt",
+                secPet2: "Gesundheitsakte & Besondere Pflege",
+                secNutri1: "Patientenbereich · Pläne & Termine",
+                secNutri2: "Interaktive Tools (Am Empfang)",
+                secNutri3: "Schlüsselanhänger Services & Tools",
+                secNutri4: "Ihre Meinung ist uns wichtig",
+                fitMenu: "Mein Ernährungsplan & Fit-Menü",
+                fitMenuDesc: "Zugang zu Ihrem individuellen Plan (Canva)",
+                fitRutina: "Mein Trainingsplan",
+                fitRutinaDesc: "Übungen, Sätze und Gewichte (Canva)",
+                fitReserva: "Termin · Bioimpedanz & Beratung",
+                fitReservaDesc: "Termin buchen mit Zahlungsbestätigung",
+                fitProt: "Täglicher Protein-Rechner",
+                fitProtDesc: "Exakter Proteinbedarf nach Körpergewicht & Ziel",
+                fitCrea: "Kreatin Dosierungsplan",
+                fitCreaDesc: "Optimale Einnahmemenge und Zeitpunkte",
+                fitLlaves: "🔑 Schlüssel gefunden?",
+                fitLlavesDesc: "Tippen Sie hier zur sicheren Kontaktaufnahme",
+                fitBizum: "Vor Ort per Bizum bezahlen",
+                fitBizumDesc: "Tippen zum Kopieren für Ihre Bank-App",
+                fitStock: "Verfügbarkeit anfragen (1 Klick)",
+                fitStockDesc: "Aktuellen Bestand direkt per WhatsApp prüfen",
+                llamarPet: "{nombre}s Besitzer anrufen",
+                llamarPetDesc: "Direkter 1-Klick-Anruf beim Besitzer",
+                waPet: "Besitzer per WhatsApp kontaktieren",
+                waPetDesc: "Sofortnachricht: Ich habe dein Tier gefunden!",
+                gpsPet: "24h Tierkliniken & GPS-Standort",
+                gpsPetDesc: "Findet Notfallkliniken und sendet GPS-Standort",
+                cartillaPet: "Offizieller Impfpass",
+                cartillaPetDesc: "Auffrischungen und Termine einsehen",
+                dietaPet: "Diät, Allergien & Wesen",
+                dietaPetDesc: "Schwere Allergien, Medikamente und Verhalten",
+                triajePet: "SOS Vergiftung & Erste Hilfe",
+                triajePetDesc: "Notfallmaßnahmen bei Giftaufnahme",
+                kebabMenu: "Menü Zusammenstellen",
+                kebabMenuDesc: "Stellen Sie Ihr Gericht direkt für die Küche zusammen",
+                kebabAler: "Allergene & Saucen",
+                kebabAlerDesc: "Detaillierte Allergenübersicht einsehen",
+                iberErg: "Ergonomie-Schlafberater",
+                iberErgDesc: "Ideale Matratzenfestigkeit in 3 Schritten",
+                iberLog: "Lieferung & Altmatratzen-Entsorgung",
+                iberLogDesc: "Lieferbedingungen und Abholservice prüfen",
+                btnParking: "Wo habe ich geparkt?",
+                btnParkingDesc: "GPS-Standort des Autos speichern",
+                btnVcard: "Kontakt im Telefonbuch speichern",
+                btnVcardDesc: "Offizielle Kontaktdaten herunterladen",
+                btnReviewsTitle: "Wie war Ihre Erfahrung?",
+                btnReviewsSub: "Ihre Bewertung hilft uns sehr",
+                btnReviewsTap: "Tippen Sie auf die Sterne zur Bewertung",
+                modalCerrar: "Schließen",
+                modalEntendido: "Verstanden",
+                msgWaPet: "Hallo! Ich habe gerade {nombre}s Marke gescannt. Wie können wir uns treffen?",
+                msgGpsPet: "Hallo! Ich habe {nombre} bei mir. Hier ist mein genauer GPS-Standort:"
+            }
+        };
+
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalActions = document.getElementById('modal-actions');
+        const modalPin = document.getElementById('modal-pin-auth');
+        const modalCfg = document.getElementById('modal-configurador');
+        const modalRec = document.getElementById('modal-recuperar');
+        const modalNutriAdmin = document.getElementById('modal-nutri-admin');
+        const modalReservaPago = document.getElementById('modal-reserva-pago');
+
+        function vibrarMovil(ms = 35) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+
+        function abrirModalCustom() { modalOverlay.style.display = 'flex'; setTimeout(() => { modalOverlay.style.opacity = '1'; }, 10); }
+        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
+        function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
+
+        // RESERVA DE CITA
+        function abrirModalReserva() {
+            vibrarMovil(40);
+            const telBizum = (datosPerfilGlobal && datosPerfilGlobal.datosPago && datosPerfilGlobal.datosPago.bizum) 
+                             ? datosPerfilGlobal.datosPago.bizum : "692202636";
+            document.getElementById('reserva-bizum-num').innerText = telBizum;
+            document.getElementById('reserva-nombre-input').value = "";
+            document.getElementById('reserva-ref-input').value = "";
+            validarFormularioReserva();
+
+            modalReservaPago.style.display = 'flex';
+            setTimeout(() => { modalReservaPago.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarModalReserva() {
+            modalReservaPago.style.opacity = '0';
+            setTimeout(() => { modalReservaPago.style.display = 'none'; }, 250);
+        }
+
+        function copiarBizumReserva() {
+            vibrarMovil(30);
+            const num = document.getElementById('reserva-bizum-num').innerText.replace(/\D/g, '');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(num);
+                alert("📋 Número copiado al portapapeles.");
+            }
+        }
+
+        function validarFormularioReserva() {
+            const ref = document.getElementById('reserva-ref-input').value.trim();
+            const btn = document.getElementById('btn-enviar-reserva-wa');
+            if (ref.length >= 3) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function enviarReservaConfirmadaWA() {
+            vibrarMovil(50);
+            const nom = document.getElementById('reserva-nombre-input').value.trim() || "Cliente";
+            const ref = document.getElementById('reserva-ref-input').value.trim();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+
+            const textoMsg = `¡Hola ${nombreNegocioGlobal}! He emitido el pago para mi consulta/revisión:\n` +
+                             `👤 Nombre: ${nom}\n` +
+                             `💳 Ref. / Justificante: ${ref}\n` +
+                             `🔑 Terminal: [ ${codigoLlaveroNFC} ]\n\n` +
+                             `¿Qué huecos tenéis disponibles para agendar?`;
+
+            cerrarModalReserva();
+            window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(textoMsg)}`, '_blank');
+        }
+
+        // CANVA PACIENTE / CLIENTE
+        function abrirNutriAdmin() {
+            vibrarMovil(40);
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
+            const dietaGuardada = localStorage.getItem(`canva_dieta_${claveUnica}`) || "";
+            const rutinaGuardada = localStorage.getItem(`canva_rutina_${claveUnica}`) || "";
+            
+            document.getElementById('admin-canva-dieta').value = dietaGuardada;
+            document.getElementById('admin-canva-rutina').value = rutinaGuardada;
+            
+            modalNutriAdmin.style.display = 'flex';
+            setTimeout(() => { modalNutriAdmin.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarNutriAdmin() {
+            modalNutriAdmin.style.opacity = '0';
+            setTimeout(() => { modalNutriAdmin.style.display = 'none'; }, 250);
+        }
+
+        function guardarEnlacesNutri() {
+            vibrarMovil(60);
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
+            const urlDieta = document.getElementById('admin-canva-dieta').value.trim();
+            const urlRutina = document.getElementById('admin-canva-rutina').value.trim();
+
+            if (urlDieta) localStorage.setItem(`canva_dieta_${claveUnica}`, urlDieta);
+            if (urlRutina) localStorage.setItem(`canva_rutina_${claveUnica}`, urlRutina);
+
+            cerrarNutriAdmin();
+            alert(`✅ ¡Pautas vinculadas al dispositivo #${idLlavero} con éxito!`);
+            cargarEnginePhygital();
+        }
+
+        // PIN & SEGURIDAD
+        function iniciarAuthPropietario() {
+            vibrarMovil(50);
+            pinBuffer = "";
+            actualizarPuntosPin();
+            modalPin.style.display = 'flex';
+            setTimeout(() => { modalPin.style.opacity = '1'; }, 10);
+        }
+        function cerrarPinAuth() { modalPin.style.opacity = '0'; setTimeout(() => { modalPin.style.display = 'none'; }, 250); }
+        function teclearPin(num) {
+            vibrarMovil(30);
+            if (pinBuffer.length < 4) {
+                pinBuffer += num;
+                actualizarPuntosPin();
+                if (pinBuffer.length === 4) setTimeout(verificarPin, 200);
+            }
+        }
+        function borrarPin() { vibrarMovil(20); pinBuffer = pinBuffer.slice(0, -1); actualizarPuntosPin(); }
+        function actualizarPuntosPin() {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i < pinBuffer.length) dot.classList.add('filled');
+                else dot.classList.remove('filled');
+            }
+        }
+        function verificarPin() {
+            const pinGuardado = localStorage.getItem(`pin_${clienteSlugGlobal}`) || PIN_DEFAULT;
+            if (pinBuffer === pinGuardado) {
+                vibrarMovil([50, 50, 50]);
+                cerrarPinAuth();
+                const esNutri = (datosPerfilGlobal && datosPerfilGlobal.nombre && datosPerfilGlobal.nombre.toLowerCase().includes('nutrition')) || 
+                                (datosPerfilGlobal && datosPerfilGlobal.subtitulo && datosPerfilGlobal.subtitulo.toLowerCase().includes('consulta'));
+                if (esNutri) {
+                    abrirNutriAdmin();
+                } else {
+                    abrirConfigurador();
+                }
+            } else {
+                vibrarMovil(250);
+                document.getElementById('pin-modal-desc').innerText = "❌ PIN Incorrecto";
+                document.getElementById('pin-modal-desc').style.color = "#f43f5e";
+                pinBuffer = "";
+                actualizarPuntosPin();
+                setTimeout(() => {
+                    document.getElementById('pin-modal-desc').innerText = "Introduce tu PIN de 4 dígitos";
+                    document.getElementById('pin-modal-desc').style.color = "#94a3b8";
+                }, 1500);
+            }
+        }
+        function abrirRecuperacionPin() { cerrarPinAuth(); modalRec.style.display = 'flex'; setTimeout(() => { modalRec.style.opacity = '1'; }, 10); }
+        function cerrarRecuperar() { modalRec.style.opacity = '0'; setTimeout(() => { modalRec.style.display = 'none'; }, 250); }
+        function validarPalabraSecreta() {
+            const p = document.getElementById('input-palabra-secreta').value.trim().toLowerCase();
+            const s = (localStorage.getItem(`palabra_${clienteSlugGlobal}`) || "toby").toLowerCase();
+            if (p === s || p === "s42-rescue-reset") {
+                localStorage.setItem(`pin_${clienteSlugGlobal}`, PIN_DEFAULT);
+                alert(`✅ PIN restablecido a: ${PIN_DEFAULT}`);
+                cerrarRecuperar();
+                iniciarAuthPropietario();
+            } else { alert("❌ Palabra incorrecta."); }
+        }
+
+        function abrirConfigurador() {
+            cargarDatosEnCampos();
+            cambiarTabCfg('salud');
+            modalCfg.style.display = 'flex';
+            setTimeout(() => { modalCfg.style.opacity = '1'; }, 10);
+        }
+        function cerrarConfigurador() { modalCfg.style.opacity = '0'; setTimeout(() => { modalCfg.style.display = 'none'; }, 250); }
+        function cambiarTabCfg(tab) {
+            vibrarMovil(20);
+            ['salud', 'emergencia', 'estilo'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "text-slate-400 pb-1";
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = "text-cyan-400 border-b-2 border-cyan-400 pb-1 font-bold";
+        }
+        function aplicarTemaColor(colorHex, colorDark, dotElement) {
+            vibrarMovil(40);
+            document.documentElement.style.setProperty('--color-acento', colorHex);
+            document.documentElement.style.setProperty('--color-principal', colorDark);
+            document.documentElement.style.setProperty('--halo-edge', colorHex);
+            document.documentElement.style.setProperty('--halo-glow', colorHex + '66');
+            if (dotElement) {
+                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+                dotElement.classList.add('active');
+            }
+            localStorage.setItem(`color_${clienteSlugGlobal}`, colorHex);
+            localStorage.setItem(`dark_${clienteSlugGlobal}`, colorDark);
+        }
+        function cargarDatosEnCampos() {
+            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+            const data = override ? JSON.parse(override) : datosPerfilGlobal;
+            if (!data) return;
+
+            document.getElementById('cfg-wa').value = (data.whatsapp || "34672294962").replace(/\D/g, '');
+            document.getElementById('cfg-chip').value = data.microchip || "981098108472911";
+            document.getElementById('cfg-recompensa').value = data.recompensa || "Recompensa / Servicio SOS";
+            document.getElementById('cfg-raza').value = data.raza || "Golden Retriever";
+            document.getElementById('cfg-peso').value = data.peso || "32 kg";
+            document.getElementById('cfg-esterilizado').value = data.esterilizado || "Sí";
+            document.getElementById('cfg-seguro').value = data.seguro || "Sí, Seguro Oficial";
+            document.getElementById('cfg-alergias').value = data.alergias || "Alérgico estricto al pollo y cereales.";
+            document.getElementById('cfg-medicacion').value = data.medicacion || "Condroprotector con desayuno";
+            document.getElementById('cfg-vet').value = data.veterinario || "Hospital Veterinario San Fermín 24h";
+            document.getElementById('cfg-caracter').value = data.caracter || "Sociable. Miedo a petardos.";
+            document.getElementById('cfg-palabra').value = localStorage.getItem(`palabra_${clienteSlugGlobal}`) || "toby";
+        }
+        function guardarAjustesCompletos() {
+            vibrarMovil(60);
+            let override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+            let data = override ? JSON.parse(override) : JSON.parse(JSON.stringify(datosPerfilGlobal));
+
+            data.whatsapp = `https://wa.me/${document.getElementById('cfg-wa').value.trim()}`;
+            data.microchip = document.getElementById('cfg-chip').value.trim();
+            data.recompensa = document.getElementById('cfg-recompensa').value.trim();
+            data.raza = document.getElementById('cfg-raza').value.trim();
+            data.peso = document.getElementById('cfg-peso').value.trim();
+            data.esterilizado = document.getElementById('cfg-esterilizado').value;
+            data.seguro = document.getElementById('cfg-seguro').value;
+            data.alergias = document.getElementById('cfg-alergias').value.trim();
+            data.medicacion = document.getElementById('cfg-medicacion').value.trim();
+            data.veterinario = document.getElementById('cfg-vet').value.trim();
+            data.caracter = document.getElementById('cfg-caracter').value.trim();
+
+            const vacNom = document.getElementById('cfg-vac-nom').value.trim();
+            const vacEst = document.getElementById('cfg-vac-est').value.trim();
+            if (vacNom) {
+                if (!data.vacunasExtras) data.vacunasExtras = [];
+                data.vacunasExtras.push({ nombre: vacNom, subtitulo: vacEst || "Dosis Registrada", momento: "Vigente", badge: "Al Día" });
+            }
+
+            const p = document.getElementById('cfg-palabra').value.trim();
+            const np = document.getElementById('cfg-nuevo-pin').value.trim();
+            if (p) localStorage.setItem(`palabra_${clienteSlugGlobal}`, p);
+            if (np.length === 4) localStorage.setItem(`pin_${clienteSlugGlobal}`, np);
+
+            localStorage.setItem(`override_${clienteSlugGlobal}`, JSON.stringify(data));
+            cerrarConfigurador();
+            alert("✨ ¡Datos sincronizados!");
+            cargarEnginePhygital();
+        }
+
+        // BIZUM INTERACTIVO
+        function abrirModalBizum() {
+            vibrarMovil(45);
+            let telBizum = "692202636";
+            let conceptoBizum = nombreNegocioGlobal;
+
+            if (datosPerfilGlobal && datosPerfilGlobal.datosPago) {
+                if (datosPerfilGlobal.datosPago.bizum) telBizum = String(datosPerfilGlobal.datosPago.bizum).trim();
+                if (datosPerfilGlobal.datosPago.concepto) conceptoBizum = datosPerfilGlobal.datosPago.concepto;
+            } else if (whatsappTiendaGlobal) {
+                telBizum = whatsappTiendaGlobal.replace(/\D/g, '');
+                if (telBizum.startsWith('34') && telBizum.length === 11) telBizum = telBizum.substring(2);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(telBizum.replace(/\D/g, '')).catch(() => {});
+            }
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-mobile-screen-button text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Pago Rápido con Bizum";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-center my-2">
+                    <span class="text-[11px] text-slate-400 uppercase font-bold block mb-1">Número Oficial:</span>
+                    <div class="text-2xl font-black text-white tracking-widest bg-slate-900 border border-cyan-500/40 py-3 px-4 rounded-2xl inline-block shadow-lg shadow-cyan-500/10">
+                        ${telBizum}
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mt-2 animate-pulse">
+                        <i class="fa-solid fa-circle-check mr-1"></i>¡Número copiado al portapapeles!
+                    </p>
+                    <p class="text-[11px] text-slate-300 mt-2 leading-relaxed">
+                        Abre tu app bancaria, pulsa <b>Pegar</b> en destinatario y pon en concepto: <b class="text-white">${conceptoBizum}</b>.
+                    </p>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <a href="${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, acabo de emitir un Bizum al ${telBizum} para abonar mi compra.`)}" 
+                   target="_blank" 
+                   class="modal-btn-primary" 
+                   style="background: linear-gradient(135deg, #00c3ff, #0077b6); color:#fff;">
+                   <i class="fa-brands fa-whatsapp mr-1"></i> Notificar Pago por WhatsApp
+                </a>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Listo, volver</button>
+            `;
+
+            abrirModalCustom();
+        }
+
+        // MASCOTAS / AUXILIARES
+        function abrirAsistenciaRuta() {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-location-crosshairs text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = t.gpsPet;
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Localiza centros veterinarios de urgencia abiertos o envía tu ubicación GPS al dueño:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-2">
+                    <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-hospital text-cyan-400"></i> Buscar Urgencias 24h en Google Maps
+                    </button>
+                    <button onclick="compartirUbicacionMascota()" class="w-full bg-emerald-600/20 border border-emerald-500 rounded-xl p-3 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-emerald-400"></i> Enviar Mi Posición GPS al Dueño
+                    </button>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>`;
+            abrirModalCustom();
+        }
+
+        function compartirUbicacionMascota() {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            const petNom = nombreNegocioGlobal.split('·')[0].trim();
+            const msgDefault = t.msgWaPet.replace('{nombre}', petNom);
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        const msgGPS = `${t.msgGpsPet.replace('{nombre}', petNom)} https://maps.google.com/?q=${lat},${lng}`;
+                        window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgGPS)}`, '_blank');
+                    },
+                    () => { window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgDefault)}`, '_blank'); }
+                );
+            } else {
+                window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgDefault)}`, '_blank');
+            }
+        }
+
+        function abrirCarnetVacunacion(vacunas) {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-dog text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = t.cartillaPet;
+            
+            let todas = [...(vacunas || [])];
+            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+            if (override) {
+                const dataO = JSON.parse(override);
+                if (dataO.vacunasExtras) todas = [...todas, ...dataO.vacunasExtras];
+            }
+
+            let html = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
+            todas.forEach(v => {
+                html += `
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-white">${v.nombre}</span>
+                            <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5 rounded-full font-bold uppercase">Vigente</span>
+                        </div>
+                        <div class="text-[11px] text-slate-300">${v.subtitulo || ''}</div>
+                        <div class="text-[10px] text-slate-400 mt-1"><i class="fa-solid fa-clock text-cyan-400 mr-1"></i>${v.momento || 'Al Día'}</div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalEntendido}</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirChecklistClinico() {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-notes-medical text-amber-400"></i>';
+            document.getElementById('modal-title').innerText = t.dietaPet;
+            
+            const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+            const d = override ? JSON.parse(override) : datosPerfilGlobal;
+
+            const chip = d.microchip || "981098108472911";
+            const raza = d.raza || "Golden Retriever";
+            const peso = d.peso || "32 kg";
+            const esterilizado = d.esterilizado || "Sí";
+            const seguro = d.seguro || "Sí, Vigente";
+            const alergias = d.alergias || "Alérgico estricto al pollo y cereales (solo pienso hipoalergénico).";
+            const medicacion = d.medicacion || "Condroprotector articular con el desayuno.";
+            const vet = d.veterinario || "Hospital Veterinario San Fermín 24h";
+            const caracter = d.caracter || "Sociable con niños. Miedo a tormentas y petardos.";
+
+            let html = `
+                <div class="space-y-2.5 text-left my-2 max-h-64 overflow-y-auto pr-1 text-xs">
+                    <div class="bg-rose-950/40 border border-rose-800/80 p-2.5 rounded-xl">
+                        <div class="text-rose-400 font-bold uppercase tracking-wider text-[11px] mb-1">🚨 Alertas Críticas & Alergias</div>
+                        <p class="text-slate-200">${alergias}</p>
+                        <p class="text-amber-300 font-semibold mt-1">💊 Medicación: ${medicacion}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl space-y-1">
+                        <div class="text-cyan-400 font-bold uppercase tracking-wider text-[11px] mb-1.5">📋 Ficha Técnica Oficial</div>
+                        <div class="flex justify-between"><span class="text-slate-400">Microchip:</span> <span class="text-white font-mono font-bold">${chip}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Raza / Peso:</span> <span class="text-white">${raza} (${peso})</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Esterilizado:</span> <span class="text-white">${esterilizado}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Seguro R.C.:</span> <span class="text-emerald-400 font-semibold">${seguro}</span></div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-amber-400 font-bold uppercase tracking-wider text-[11px] mb-1">🐕 Carácter & Trato</div>
+                        <p class="text-slate-200">${caracter}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-slate-400 text-[10px] uppercase font-bold">Clínica de Cabecera:</div>
+                        <div class="text-white font-bold">${vet}</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalEntendido}</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirTriajeUrgencias(alertas) {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = t.triajePet;
+            let html = `<p class="text-xs text-slate-300 text-left mb-2">Pautas críticas ante sospecha de intoxicación:</p><div class="space-y-2 text-left my-2 max-h-56 overflow-y-auto pr-1">`;
+            if (alertas && Array.isArray(alertas)) {
+                alertas.forEach(al => {
+                    html += `
+                        <div class="bg-rose-950/40 border border-rose-800/80 p-2 rounded-xl text-xs text-rose-200 flex items-start gap-2">
+                            <i class="fa-solid fa-skull-crossbones text-rose-400 mt-0.5"></i>
+                            <span>${al}</span>
+                        </div>
+                    `;
+                });
+            }
+            html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización expresa.</p>`;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `
+                <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
+                    <i class="fa-solid fa-hospital mr-1"></i> Urgencias Veterinarias 24h
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>
+            `;
+            abrirModalCustom();
+        }
+
+        // KEBAB
+        function abrirConfiguradorKebab() {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = t.kebabMenu;
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Configura tu plato y envíalo a cocina:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-3">
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">1. Formato:</label>
+                        <select id="kebab-formato" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Dürüm Rollo Gigante">Dürüm Rollo</option>
+                            <option value="Kebab en Pan de Pita">Pita Clásica</option>
+                            <option value="Plato Kebab Completo">Plato Kebab</option>
+                            <option value="Kebab Box">Kebab Box</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">2. Carne:</label>
+                        <select id="kebab-carne" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Carne Mixta">Mixto (Pollo y Ternera)</option>
+                            <option value="Solo Ternera">Solo Ternera</option>
+                            <option value="Solo Pollo">Solo Pollo</option>
+                            <option value="Falafel">Falafel (Vegetariano)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">3. Salsas:</label>
+                        <select id="kebab-salsa" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Salsa Blanca">Salsa Blanca</option>
+                            <option value="Blanca + Picante">Blanca + Toque Picante</option>
+                            <option value="Muy Picante">Salsa Roja Picante</option>
+                            <option value="Sin Salsas">Sin salsa</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `
+                <button onclick="enviarPedidoKebabWA()" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>
+            `;
+            abrirModalCustom();
+        }
+        function enviarPedidoKebabWA() {
+            const f = document.getElementById('kebab-formato').value;
+            const c = document.getElementById('kebab-carne').value;
+            const s = document.getElementById('kebab-salsa').value;
+            window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, he armado mi pedido:\n- Formato: ${f}\n- Carne: ${c}\n- Salsa: ${s}\n¿Cuánto tarda en estar listo?`)}`, '_blank');
+        }
+        function abrirAlergenosKebab() {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-wheat-awn-circle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = t.kebabAler;
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">🌾 Gluten:</b> Presente en Pita, Dürüm y Falafel. Opción sin gluten: Plato Kebab solo carne y ensalada.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-cyan-400">🥛 Lácteos:</b> Presentes en la Salsa Blanca tradicional (yogur).</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-rose-400">🌶 Picante:</b> Salsa roja a base de chile natural. Libre de lácteos.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalEntendido}</button>`;
+            abrirModalCustom();
+        }
+
+        // FITNESS
+        function abrirCalculadoraProteina() {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = t.fitProt;
+            document.getElementById('modal-text').innerHTML = `
+                <div class="flex flex-col gap-2 text-left mb-3">
+                    <label class="text-[11px] text-slate-400 font-bold">Tu peso (kg):</label>
+                    <input type="number" id="input-peso-fit" placeholder="Ej: 75" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                    <label class="text-[11px] text-slate-400 font-bold">Objetivo:</label>
+                    <select id="select-objetivo-fit" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                        <option value="1.8">Ganancia Muscular (1.8g/kg)</option>
+                        <option value="2.2">Definición (2.2g/kg)</option>
+                        <option value="1.5">Mantenimiento (1.5g/kg)</option>
+                    </select>
+                    <button onclick="calcularResultadoProteina()" class="w-full bg-cyan-500 text-slate-950 font-black py-2 rounded-xl text-xs uppercase mt-2">Calcular</button>
+                    <div id="resultado-proteina-box" class="hidden bg-black/60 border border-white/10 p-3 rounded-xl mt-2 text-center">
+                        <span class="text-xs text-slate-300">Ingesta recomendada:</span>
+                        <div id="resultado-gramos" class="text-2xl font-black text-white my-1"></div>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>`;
+            abrirModalCustom();
+        }
+        function calcularResultadoProteina() {
+            const peso = parseFloat(document.getElementById('input-peso-fit').value);
+            const factor = parseFloat(document.getElementById('select-objetivo-fit').value);
+            if (!peso) return alert("Introduce tu peso");
+            document.getElementById('resultado-gramos').innerText = `${Math.round(peso * factor)} g / día`;
+            document.getElementById('resultado-proteina-box').classList.remove('hidden');
+        }
+        function abrirGuiaCreatina() {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bottle-droplet" style="color:var(--color-acento);"></i>';
+            document.getElementById('modal-title').innerText = t.fitCrea;
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-white">⚡ Dosis:</b> 3g a 5g diarios sostenidos.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">⏰ Cuándo:</b> Post-entreno con agua o batido. Tomar también en días de descanso.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalEntendido}</button>`;
+            abrirModalCustom();
+        }
+
+        // IBERLAX
+        const modalAsesor = document.getElementById('modal-asesor');
+        function abrirAsesor(e) { if(e) e.preventDefault(); modalAsesor.style.display = 'flex'; setTimeout(() => { modalAsesor.style.opacity = '1'; }, 10); }
+        function cerrarAsesor(e) { if(e.target === modalAsesor) cerrarAsesorBtn(); }
+        function cerrarAsesorBtn() { modalAsesor.style.opacity = '0'; setTimeout(() => { modalAsesor.style.display = 'none'; }, 250); }
+        function seleccionarOpcionAsesor(grupo, valor, elemento) {
+            estadoAsesor[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoAsesor();
+        }
+        function actualizarCalculoAsesor() {
+            let firmeza = "Firmeza Media Adaptable";
+            let tecnologia = "Muelles Ensacados 7 Zonas + Viscoelástica transpirable.";
+            if (estadoAsesor.peso === '+90kg' || estadoAsesor.postura === 'Boca Arriba') {
+                firmeza = "Firmeza Alta Ergonómica";
+                tecnologia = "Núcleo reforzado Titanium Pocket + Refuerzo lumbar.";
+            } else if (estadoAsesor.postura === 'De Lado' && estadoAsesor.peso === '-70kg') {
+                firmeza = "Firmeza Media-Suave Acogedora";
+                tecnologia = "Viscoelástica suave con alivio de presión.";
+            }
+            const elF = document.getElementById('diag-firmeza');
+            const elT = document.getElementById('diag-tecnologia');
+            if (elF) elF.innerText = firmeza;
+            if (elT) elT.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
+            const btnP = document.getElementById('btn-probar-tienda');
+            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}%0A- Peso: ${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}%0AResultado: ${firmeza}. ¿Qué modelo puedo probar?`)}`;
+        }
+
+        const modalEnvio = document.getElementById('modal-envio');
+        function abrirEnvio(e) { if(e) e.preventDefault(); modalEnvio.style.display = 'flex'; setTimeout(() => { modalEnvio.style.opacity = '1'; }, 10); }
+        function cerrarEnvio(e) { if(e.target === modalEnvio) cerrarEnvioBtn(); }
+        function cerrarEnvioBtn() { modalEnvio.style.opacity = '0'; setTimeout(() => { modalEnvio.style.display = 'none'; }, 250); }
+        function seleccionarOpcionEnvio(grupo, valor, elemento) {
+            estadoEnvio[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoEnvio();
+        }
+        function actualizarCalculoEnvio() {
+            let titulo = "Servicio Bonificado en Tienda";
+            let desc = "Ruta directa a domicilio con subida a habitación.";
+            if (estadoEnvio.acceso.includes('3º o superior') || estadoEnvio.acceso.includes('Esc. Alta')) {
+                titulo = "Suplemento de Acceso / 2 Operarios";
+                desc = "Requiere subida por escalera estrecha.";
+            } else if (estadoEnvio.zona.includes('Rioja') || estadoEnvio.zona.includes('Comarca')) {
+                titulo = "Ruta Interurbana";
+                desc = "Consolidado en rutas semanales programadas.";
+            }
+            const elT = document.getElementById('diag-envio-titulo');
+            const elD = document.getElementById('diag-envio-desc');
+            if (elT) elT.innerText = titulo;
+            if (elD) elD.innerText = desc;
+            const btnC = document.getElementById('btn-confirmar-envio');
+            if (btnC) btnC.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}%0A- Retirada: ${estadoEnvio.retirada}%0A¿Me confirmáis disponibilidad?`)}`;
+        }
+
+        // RESEÑAS & PARKING
+        function simularFiltro(nota) {
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active text-3xl' : 'fa-solid fa-star star-inactive text-3xl'; });
+            mensaje.classList.remove('hidden');
+
+            setTimeout(() => {
+                mensaje.classList.add('hidden');
+                if (nota <= 3) {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
+                    document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
+                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección:`;
+                    modalActions.innerHTML = `
+                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" target="_blank" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
+                    `;
+                } else {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
+                    document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
+                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial:`;
+                    modalActions.innerHTML = `
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
+                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">${t.modalCerrar}</button>
+                    `;
+                }
+                abrirModalCustom();
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive text-3xl');
+            }, 300);
+        }
+
+        function descargarVCardDinamica() {
+            const telLimpio = whatsappTiendaGlobal.replace(/\D/g, '');
+            const vcardContent = `BEGIN:VCARD\nVERSION:3.0\nFN:${nombreNegocioGlobal}\nORG:${nombreNegocioGlobal}\nTEL;TYPE=WORK,VOICE:+${telLimpio || '34672294962'}\nNOTE:Contacto inteligente Studio 42\nEND:VCARD`;
+            const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${clienteSlugGlobal}.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function gestionarParking(e) {
+            if (e) e.preventDefault();
+            const lat = localStorage.getItem('parking_lat');
+            const lng = localStorage.getItem('parking_lng');
+            if (lat && lng) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
+                localStorage.removeItem('parking_lat');
+                localStorage.removeItem('parking_lng');
+                alert("📍 Posición de parking eliminada.");
+            } else {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            localStorage.setItem('parking_lat', pos.coords.latitude);
+                            localStorage.setItem('parking_lng', pos.coords.longitude);
+                            alert("📍 ¡Posición guardada! Vuelve a pulsar este botón al salir para regresar a pie a tu coche.");
+                        },
+                        () => alert("No se pudo obtener señal GPS.")
+                    );
+                }
+            }
+        }
+
+        // ==========================================
+        // MOTOR DE CARGA Y RENDER DINÁMICO
+        // ==========================================
+        function renderMenu(data) {
+            const menuContainer = document.getElementById('dynamic-menu');
+            menuContainer.innerHTML = '';
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+            const claveLlavero = `${clienteSlugGlobal}_${codigoLlaveroNFC}`;
+
+            const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
+            const esNutri = (data.nombre && data.nombre.toLowerCase().includes('nutrition')) || (data.subtitulo && data.subtitulo.toLowerCase().includes('nutrición'));
+            const petNom = (data.nombre || 'TOBY').split('·')[0].trim();
+
+            let telLlamada = "34672294962";
+            if (esMascota) {
+                const override = localStorage.getItem(`override_${clienteSlugGlobal}`);
+                if (override) {
+                    const d = JSON.parse(override);
+                    if (d.whatsapp) {
+                        whatsappTiendaGlobal = d.whatsapp;
+                        telLlamada = d.whatsapp.replace(/\D/g, '');
+                    }
+                }
+            }
+
+            if (data.secciones && Array.isArray(data.secciones)) {
+                data.secciones.forEach((sec, sIdx) => {
+                    let secTitulo = sec.titulo || '';
+                    if (esMascota) {
+                        if (sIdx === 0) secTitulo = t.secPet1;
+                        else if (sIdx === 1) secTitulo = t.secPet2;
+                    } else if (esNutri) {
+                        if (sIdx === 0) secTitulo = t.secNutri1;
+                        else if (sIdx === 1) secTitulo = t.secNutri2;
+                        else if (sIdx === 2) secTitulo = t.secNutri3;
+                        else if (sIdx === 3) secTitulo = t.secNutri4;
+                    }
+
+                    if (secTitulo) menuContainer.innerHTML += `<div class="section-title">${secTitulo}</div>`;
+                    const block = document.createElement('div');
+                    block.className = 'apps-menu';
+
+                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
+
+                    if (sec.escudoResenas) {
+                        block.innerHTML += `
+                            <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
+                                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                    </svg>
+                                </div>
+                                <div class="app-name text-center text-white text-base font-extrabold mb-0.5">${t.btnReviewsTitle}</div>
+                                <div class="text-xs text-slate-300 text-center font-medium mb-2">${t.btnReviewsSub}</div>
+                                <div class="stars-container star-rating my-1" id="escudo-estrellas">
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
+                                </div>
+                                <p class="text-[11px] text-zinc-400 text-center mt-1">${t.btnReviewsTap}</p>
+                                <p id="mensaje-filtro" class="text-xs text-amber-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
+                            </div>
+                        `;
+                    } else if (sec.botones && Array.isArray(sec.botones)) {
+                        sec.botones.forEach((btn, bIdx) => {
+                            const bTipo = (btn.tipo || '').toLowerCase();
+                            const nLower = (btn.nombre || '').toLowerCase();
+                            const btnId = `btn_${sIdx}_${bIdx}`;
+
+                            // RESCATE DE LLAVES
+                            if (bTipo === 'recuperar_llaves' || nLower.includes('llaves perdidas') || nLower.includes('encontraste estas llaves')) {
+                                const waMsg = encodeURIComponent(`¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves con vuestro llavero inteligente.\n🔑 CÓDIGO: [ ${codigoLlaveroNFC} ]`);
+                                block.innerHTML += `
+                                    <a class="app-btn btn-rescate-llaves" href="${whatsappTiendaGlobal}?text=${waMsg}" target="_blank">
+                                        <div class="app-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;"><i class="fa-solid fa-key animate-bounce"></i></div>
+                                        <div class="app-info">
+                                            <div class="app-name flex items-center">${t.fitLlaves || btn.nombre}<span class="badge-rescate-sos">SOS</span></div>
+                                            <div class="app-desc">${t.fitLlavesDesc || btn.descripcion}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-amber-400 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // RESERVA DE CITA
+                            else if (bTipo === 'reserva_cita' || nLower.includes('revisión & bioimpedancia') || nLower.includes('revision & bioimpedancia')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirModalReserva()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #f59e0b;'}"><i class="${btn.icono || 'fa-solid fa-weight-scale'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.fitReserva}</div><div class="app-desc">${t.fitReservaDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // BIZUM
+                            else if (bTipo === 'bizum' || nLower.includes('bizum')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirModalBizum()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 195, 255, 0.2); color: #00c3ff;'}"><i class="${btn.icono || 'fa-solid fa-mobile-screen-button'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.fitBizum}</div><div class="app-desc">${t.fitBizumDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: ASISTENCIA 24H
+                            else if (bTipo === 'asistencia_ruta') {
+                                block.innerHTML += `
+                                    <div onclick="abrirAsistenciaRuta()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: var(--color-acento);'}"><i class="${btn.icono || 'fa-solid fa-location-crosshairs'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.gpsPet}</div><div class="app-desc">${t.gpsPetDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: CARNET VACUNAS
+                            else if (bTipo === 'carnet_vacunacion') {
+                                window[btnId + '_data'] = btn.vacunas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirCarnetVacunacion(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56, 189, 248, 0.2); color: #38BDF8;'}"><i class="${btn.icono || 'fa-solid fa-shield-dog'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.cartillaPet}</div><div class="app-desc">${t.cartillaPetDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: CHECKLIST / DIETA
+                            else if (bTipo === 'checklist_parto' || bTipo === 'checklist') {
+                                block.innerHTML += `
+                                    <div onclick="abrirChecklistClinico()" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #F59E0B;'}"><i class="${btn.icono || 'fa-solid fa-clipboard-list'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.dietaPet}</div><div class="app-desc">${t.dietaPetDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: TRIAJE SOS
+                            else if (bTipo === 'triaje_urgencias') {
+                                window[btnId + '_data'] = btn.alertas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirTriajeUrgencias(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.22); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-triangle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.triajePet}</div><div class="app-desc">${t.triajePetDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // KEBAB: CONFIGURADOR
+                            else if (bTipo === 'configurador_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}"><i class="${btn.icono || 'fa-solid fa-utensils'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.kebabMenu}</div><div class="app-desc">${t.kebabMenuDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // KEBAB: ALÉRGENOS
+                            else if (bTipo === 'guia_alergenos_kebab') {
+                                block.innerHTML += `
+                                    <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.kebabAler}</div><div class="app-desc">${t.kebabAlerDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // FITNESS: PROTEÍNA
+                            else if (bTipo === 'calc_proteina') {
+                                block.innerHTML += `
+                                    <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(230, 0, 0, 0.2); color: #e60000;'}"><i class="${btn.icono || 'fa-solid fa-calculator'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.fitProt}</div><div class="app-desc">${t.fitProtDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // FITNESS: CREATINA
+                            else if (bTipo === 'guia_creatina') {
+                                block.innerHTML += `
+                                    <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 255, 255, 0.12); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-bottle-droplet'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.fitCrea}</div><div class="app-desc">${t.fitCreaDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // IBERLAX: ERGONOMÍA
+                            else if ((bTipo === 'ergonomia' || bTipo === 'test_ergonomico' || nLower.includes('ergonómico') || nLower.includes('firmeza')) && !nLower.includes('agenda')) {
+                                block.innerHTML += `
+                                    <div class="app-btn destacado" onclick="abrirAsesor(event)" role="button">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.2); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.iberErg}</div><div class="app-desc">${t.iberErgDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // IBERLAX: LOGÍSTICA
+                            else if (bTipo === 'logistica' || bTipo === 'tasador_retirada' || nLower.includes('tasador') || nLower.includes('retirada')) {
+                                block.innerHTML += `
+                                    <div class="app-btn" onclick="abrirEnvio(event)" role="button">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.iberLog}</div><div class="app-desc">${t.iberLogDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // PARKING GPS
+                            else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
+                                block.innerHTML += `
+                                    <div onclick="gestionarParking(event)" role="button" class="app-btn">
+                                        <div class="app-icon" style="background: rgba(142,142,147,0.15); color: #8e8e93;"><i class="fa-solid fa-location-crosshairs"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.btnParking}</div><div class="app-desc">${t.btnParkingDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // VCARD
+                            else if (bTipo === 'vcard' || nLower.includes('contacto en agenda') || (btn.url && btn.url.endsWith('.vcf'))) {
+                                const tieneArchivo = btn.url && !btn.url.includes('contacto.vcf');
+                                block.innerHTML += `
+                                    <a class="app-btn" href="${tieneArchivo ? btn.url : 'javascript:void(0)'}" ${tieneArchivo ? '' : 'onclick="descargarVCardDinamica()"'}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-address-card'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${t.btnVcard}</div><div class="app-desc">${t.btnVcardDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // ENLACES DIRECTOS Y PREDETERMINADOS (CON TRADUCCIÓN DINÁMICA)
+                            else {
+                                let finalUrl = btn.url || '#';
+                                let btnNom = btn.nombre;
+                                let btnDesc = btn.descripcion || '';
+
+                                if (nLower.includes('comidas') || nLower.includes('menú fit') || nLower.includes('dieta')) {
+                                    btnNom = t.fitMenu;
+                                    btnDesc = t.fitMenuDesc;
+                                    const savedDieta = localStorage.getItem(`canva_dieta_${claveLlavero}`);
+                                    if (savedDieta) finalUrl = savedDieta;
+                                } else if (nLower.includes('entrenamiento') || nLower.includes('rutina')) {
+                                    btnNom = t.fitRutina;
+                                    btnDesc = t.fitRutinaDesc;
+                                    const savedRutina = localStorage.getItem(`canva_rutina_${claveLlavero}`);
+                                    if (savedRutina) finalUrl = savedRutina;
+                                } else if (nLower.includes('stock') || nLower.includes('sabores')) {
+                                    btnNom = t.fitStock;
+                                    btnDesc = t.fitStockDesc;
+                                }
+
+                                if (esMascota) {
+                                    if (finalUrl.includes('tel:')) {
+                                        finalUrl = `tel:${telLlamada}`;
+                                        btnNom = t.llamarPet.replace('{nombre}', petNom);
+                                        btnDesc = t.llamarPetDesc;
+                                    } else if (finalUrl.includes('wa.me')) {
+                                        const waTexto = t.msgWaPet.replace('{nombre}', petNom);
+                                        finalUrl = `${whatsappTiendaGlobal}?text=${encodeURIComponent(waTexto)}`;
+                                        btnNom = t.waPet;
+                                        btnDesc = t.waPetDesc;
+                                    }
+                                }
+
+                                block.innerHTML += `
+                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') || finalUrl.startsWith('tel:') ? 'target="_blank"' : ''}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btnNom}</div><div class="app-desc">${btnDesc}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                        });
+                    }
+                    menuContainer.appendChild(block);
+                });
+            }
+        }
+
+        async function cargarEnginePhygital() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
+            clienteSlugGlobal = clienteCod;
+
+            let data = null;
+
+            try {
+                let res = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!res.ok) res = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
+                if (!res.ok) res = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
+                if (res.ok) data = await res.json();
+            } catch(e) {}
+
+            if (!data) {
+                try {
+                    const urlGit = `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/${clienteCod}.json?v=${Date.now()}`;
+                    const resG = await fetch(urlGit);
+                    if (resG.ok) data = await resG.json();
+                } catch(e) {}
+            }
+
+            if (!data) return;
+
+            datosPerfilGlobal = data;
+            nombreNegocioGlobal = data.nombre || "Profesional";
+
+            if (data.whatsapp && data.whatsapp.trim() !== "") {
+                whatsappTiendaGlobal = data.whatsapp.split('?')[0];
+                whatsappGerenciaGlobal = data.whatsapp;
+            }
+
+            if (data.secciones && Array.isArray(data.secciones)) {
+                data.secciones.forEach(sec => {
+                    if (sec.urlGoogleResenas) {
+                        googleReviewUrlGlobal = sec.urlGoogleResenas;
+                    }
+                    if (sec.whatsappGerencia && !whatsappTiendaGlobal) {
+                        whatsappGerenciaGlobal = sec.whatsappGerencia;
+                        whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
+                    }
+                    if (sec.botones && Array.isArray(sec.botones)) {
+                        sec.botones.forEach(b => {
+                            if (b.url && b.url.includes('wa.me') && !whatsappTiendaGlobal) {
+                                whatsappTiendaGlobal = b.url.split('?')[0];
+                                if (!whatsappGerenciaGlobal) whatsappGerenciaGlobal = b.url;
+                            }
+                        });
+                    }
+                });
+            }
+
+            const esMascota = (data.tipoPerfil === 'mascota') || (data.subtitulo && data.subtitulo.toLowerCase().includes('canino')) || (data.nombre && data.nombre.includes('·'));
+            const esNutri = (data.nombre && data.nombre.toLowerCase().includes('nutrition')) || (data.subtitulo && data.subtitulo.toLowerCase().includes('consulta'));
+
+            const btnGear = document.getElementById('btn-owner-gear');
+            if (btnGear) btnGear.style.display = (esMascota || esNutri) ? 'flex' : 'none';
+
+            const topBar = document.getElementById('universal-top-bar');
+            if (topBar) topBar.style.display = (data.mostrarIdiomas === false) ? 'none' : 'flex';
+
+            const colorAcentoFinal = esMascota ? (localStorage.getItem(`color_${clienteSlugGlobal}`) || data.colorAcento || "#00E5FF") : (data.colorAcento || "#00E5FF");
+            const colorPrincipalFinal = esMascota ? (localStorage.getItem(`dark_${clienteSlugGlobal}`) || data.colorPrincipal || "#080E1A") : (data.colorPrincipal || "#0B0C10");
+            const fondoLogoFinal = data.fondoLogo || "#0b0c10";
+
+            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
+            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-edge', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
+            document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
+
+            const hubImg = document.getElementById('hub-logo');
+            const hubLogoBox = document.getElementById('hub-logo-box');
+
+            if (esMascota) {
+                if (hubLogoBox) {
+                    hubLogoBox.style.width = "88px";
+                    hubLogoBox.style.height = "88px";
+                    hubLogoBox.style.borderRadius = "24px";
+                    hubLogoBox.style.maxWidth = "88px";
+                }
+                if (hubImg) {
+                    hubImg.style.objectFit = "cover";
+                    hubImg.style.padding = "0px";
+                    hubImg.style.filter = "none";
+                }
+            } else {
+                const maxW = data.logoAnchoMax || "270px";
+                const h = data.logoAlto || "84px";
+                const pad = data.paddingLogo || "4px 10px";
+
+                if (hubLogoBox) {
+                    hubLogoBox.style.width = "100%";
+                    hubLogoBox.style.maxWidth = maxW;
+                    hubLogoBox.style.height = h;
+                    hubLogoBox.style.borderRadius = "20px";
+                }
+                if (hubImg) {
+                    hubImg.style.objectFit = "contain";
+                    hubImg.style.padding = pad;
+                    hubImg.style.filter = `drop-shadow(0 0 10px ${colorAcentoFinal}80)`;
+                }
+            }
+
+            const t = DICCIONARIO[idiomaActual] || DICCIONARIO.es;
+            document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
+            document.getElementById('client-name').innerText = data.nombre;
+            document.getElementById('client-subtitle').innerText = esMascota ? t.badgeMascota : (data.subtitulo || "Ecosistema Phygital");
+
+            document.getElementById('badge-text').innerText = esMascota ? t.badgeMascota : (data.textoBadge || t.badgeDefault);
+
+            const logoImg = data.logo || "logo.png";
+            if (hubImg) hubImg.src = logoImg;
+
+            renderMenu(data);
+        }
+
+        function cambiarIdioma(lang, btn) {
+            vibrarMovil(30);
+            idiomaActual = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            const t = DICCIONARIO[lang] || DICCIONARIO.es;
+            const esMascota = (datosPerfilGlobal && (datosPerfilGlobal.tipoPerfil === 'mascota' || (datosPerfilGlobal.subtitulo && datosPerfilGlobal.subtitulo.toLowerCase().includes('canino'))));
+            
+            document.getElementById('badge-text').innerText = esMascota ? t.badgeMascota : (datosPerfilGlobal.textoBadge || t.badgeDefault);
+            document.getElementById('client-subtitle').innerText = esMascota ? t.badgeMascota : (datosPerfilGlobal.subtitulo || "Ecosistema Phygital");
+            
+            renderMenu(datosPerfilGlobal);
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
+    </script>
+</body>
+</html>
