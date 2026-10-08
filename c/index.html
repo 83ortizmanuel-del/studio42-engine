@@ -218,16 +218,16 @@
                 <i class="fa-solid fa-user-doctor text-cyan-400 text-lg"></i>
                 <h3 class="text-white text-sm font-black uppercase tracking-wider">Ficha del Paciente</h3>
             </div>
-            <p class="text-[11px] text-slate-400 mb-3">Pega los enlaces públicos de Canva (solo lectura) para vincular a este llavero:</p>
+            <p class="text-[11px] text-slate-400 mb-3">Pega los enlaces de Canva (solo lectura) u otros archivos para vincular a este llavero:</p>
             
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="font-bold text-emerald-400 block mb-1">🥗 Enlace Canva · Dieta / Menú:</label>
-                    <input type="url" id="admin-canva-dieta" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-emerald-400">
+                    <label class="font-bold text-emerald-400 block mb-1">🥗 Enlace · Dieta / Menú Fit:</label>
+                    <input type="url" id="admin-canva-dieta" placeholder="https://www.canva.com/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-emerald-400">
                 </div>
                 <div>
-                    <label class="font-bold text-cyan-400 block mb-1">🏋️ Enlace Canva · Rutina de Ejercicios:</label>
-                    <input type="url" id="admin-canva-rutina" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
+                    <label class="font-bold text-cyan-400 block mb-1">🏋️ Enlace · Rutina de Ejercicios:</label>
+                    <input type="url" id="admin-canva-rutina" placeholder="https://www.canva.com/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
                 </div>
             </div>
 
@@ -447,8 +447,56 @@
         function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
 
         // ==========================================
-        // GESTIÓN CLÍNICA NUTRICIÓN (CANVA)
+        // FITNESS & NUTRICIÓN (NUTRITION PLANET)
         // ==========================================
+        function abrirCalculadoraProteina() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator text-red-500"></i>';
+            document.getElementById('modal-title').innerText = "Calculadora de Proteína Diaria";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="flex flex-col gap-2 text-left mb-3">
+                    <label class="text-[11px] text-slate-400 font-bold">Tu peso (kg):</label>
+                    <input type="number" id="input-peso-fit" placeholder="Ej: 75" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                    <label class="text-[11px] text-slate-400 font-bold">Objetivo:</label>
+                    <select id="select-objetivo-fit" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                        <option value="1.8">Ganancia Muscular (1.8g/kg)</option>
+                        <option value="2.2">Definición (2.2g/kg)</option>
+                        <option value="1.5">Mantenimiento (1.5g/kg)</option>
+                    </select>
+                    <button onclick="calcularResultadoProteina()" class="w-full bg-red-600 text-white font-black py-2.5 rounded-xl uppercase text-xs mt-2">Calcular Ingesta</button>
+                    <div id="resultado-proteina-box" class="hidden bg-slate-900/90 border border-red-500/30 p-3 rounded-xl mt-2 text-center">
+                        <span class="text-xs text-slate-300">Ingesta recomendada:</span>
+                        <div id="resultado-gramos" class="text-2xl font-black text-white my-1"></div>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            abrirModalCustom();
+        }
+
+        function calcularResultadoProteina() {
+            vibrarMovil(30);
+            const peso = parseFloat(document.getElementById('input-peso-fit').value);
+            const factor = parseFloat(document.getElementById('select-objetivo-fit').value);
+            if (!peso) return alert("Por favor, introduce tu peso en kg.");
+            document.getElementById('resultado-gramos').innerText = `${Math.round(peso * factor)} g / día`;
+            document.getElementById('resultado-proteina-box').classList.remove('hidden');
+        }
+
+        function abrirGuiaCreatina() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bottle-droplet text-white"></i>';
+            document.getElementById('modal-title').innerText = "Protocolo de Creatina";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-white">⚡ Dosis:</b> 3g a 5g diarios sostenidos.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">⏰ Cuándo:</b> Post-entreno con agua o un batido de proteína. Tomar también en días de descanso.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
         function abrirNutriAdmin() {
             vibrarMovil(40);
             const urlParams = new URLSearchParams(window.location.search);
@@ -482,6 +530,230 @@
             cerrarNutriAdmin();
             alert(`✅ ¡Pautas vinculadas al llavero #${idLlavero} con éxito!`);
             cargarEnginePhygital();
+        }
+
+        // ==========================================
+        // KEBAB (ANKARA KEBAB)
+        // ==========================================
+        function abrirConfiguradorKebab() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils text-orange-500"></i>';
+            document.getElementById('modal-title').innerText = "Arma tu Menú";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Configura tu plato y envíalo a cocina:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-3">
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">1. Formato:</label>
+                        <select id="kebab-formato" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Dürüm Rollo Gigante">Dürüm Rollo Gigante</option>
+                            <option value="Kebab en Pan de Pita">Pita Clásica</option>
+                            <option value="Plato Kebab Completo">Plato Kebab</option>
+                            <option value="Kebab Box">Kebab Box</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">2. Carne:</label>
+                        <select id="kebab-carne" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Carne Mixta">Mixto (Pollo y Ternera)</option>
+                            <option value="Solo Ternera">Solo Ternera</option>
+                            <option value="Solo Pollo">Solo Pollo</option>
+                            <option value="Falafel">Falafel (Vegetariano)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">3. Salsas:</label>
+                        <select id="kebab-salsa" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Salsa Blanca">Salsa Blanca (Yogur)</option>
+                            <option value="Blanca + Picante">Blanca + Toque Picante</option>
+                            <option value="Muy Picante">Salsa Roja Picante</option>
+                            <option value="Sin Salsas">Sin salsa</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `
+                <button onclick="enviarPedidoKebabWA()" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cancelar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function enviarPedidoKebabWA() {
+            vibrarMovil(50);
+            const f = document.getElementById('kebab-formato').value;
+            const c = document.getElementById('kebab-carne').value;
+            const s = document.getElementById('kebab-salsa').value;
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const mesa = urlParams.get('mesa') || 'Barra';
+
+            window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(`¡Hola ${nombreNegocioGlobal}! He armado mi pedido desde la mesa/llavero [ ${mesa} ]:\n- Formato:${f}\n- Carne: ${c}\n- Salsa:${s}\n\n¿Cuánto tarda en estar listo?`)}`, '_blank');
+        }
+
+        function abrirAlergenosKebab() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-wheat-awn-circle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Alérgenos & Salsas";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">🌾 Gluten:</b> Presente en Pita, Dürüm y Falafel. Opción sin gluten: Plato Kebab solo carne y ensalada.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-cyan-400">🥛 Lácteos:</b> Presentes en la Salsa Blanca tradicional (yogur).</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-rose-400">🌶 Picante:</b> Salsa roja a base de chile natural. Libre de lácteos.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        // ==========================================
+        // MASCOTAS (RESCATE, VACUNAS, TRIAJE)
+        // ==========================================
+        function abrirAsistenciaRuta() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-location-crosshairs text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Hospitales 24h & GPS";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Localiza centros veterinarios de urgencia abiertos o envía tu ubicación GPS al dueño:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-2">
+                    <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-hospital text-cyan-400"></i> Buscar Urgencias 24h en Google Maps
+                    </button>
+                    <button onclick="compartirUbicacionMascota()" class="w-full bg-emerald-600/20 border border-emerald-500 rounded-xl p-3 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-emerald-400"></i> Enviar Mi Posición GPS al Dueño
+                    </button>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            abrirModalCustom();
+        }
+
+        function compartirUbicacionMascota() {
+            vibrarMovil(50);
+            const petNom = nombreNegocioGlobal.split('·')[0].trim();
+            const msgDefault = `¡Hola! Acabo de escanear la placa de ${petNom} y está conmigo. ¿Cómo coordinamos para entregarlo?`;
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        const msgGPS = `¡Hola! Tengo a ${petNom} conmigo. Esta es mi ubicación GPS exacta: https://maps.google.com/?q=${lat},${lng}`;
+                        window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgGPS)}`, '_blank');
+                    },
+                    () => { window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgDefault)}`, '_blank'); }
+                );
+            } else {
+                window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgDefault)}`, '_blank');
+            }
+        }
+
+        function abrirCarnetVacunacion(vacunas) {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-dog text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Carnet de Vacunación";
+            let todas = [...(vacunas || [])];
+            let html = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
+            
+            if(todas.length === 0) {
+                html += `<p class="text-xs text-slate-400 text-center py-4">No hay vacunas registradas en el sistema.</p>`;
+            } else {
+                todas.forEach(v => {
+                    html += `
+                        <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-white">${v.nombre}</span>
+                                <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5 rounded-full font-bold uppercase">Vigente</span>
+                            </div>
+                            <div class="text-[11px] text-slate-300">${v.subtitulo || ''}</div>
+                            <div class="text-[10px] text-slate-400 mt-1"><i class="fa-solid fa-clock text-cyan-400 mr-1"></i>${v.momento || 'Al Día'}</div>
+                        </div>
+                    `;
+                });
+            }
+            html += `</div>`;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirChecklistClinico() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-notes-medical text-amber-400"></i>';
+            document.getElementById('modal-title').innerText = "Ficha Médica & Cuidados";
+            
+            const d = datosPerfilGlobal || {};
+            const chip = d.microchip || "No registrado";
+            const raza = d.raza || "No especificada";
+            const peso = d.peso || "-- kg";
+            const esterilizado = d.esterilizado || "Sí";
+            const seguro = d.seguro || "Sí, Vigente";
+            const alergias = d.alergias || "Ninguna alergia crítica reportada.";
+            const medicacion = d.medicacion || "Ninguna medicación diaria activa.";
+            const vet = d.veterinario || "Contactar Dueño";
+            const caracter = d.caracter || "Sociable y amigable.";
+
+            let html = `
+                <div class="space-y-2.5 text-left my-2 max-h-64 overflow-y-auto pr-1 text-xs">
+                    <div class="bg-rose-950/40 border border-rose-800/80 p-2.5 rounded-xl">
+                        <div class="text-rose-400 font-bold uppercase tracking-wider text-[11px] mb-1">🚨 Alertas Críticas & Alergias</div>
+                        <p class="text-slate-200">${alergias}</p>
+                        <p class="text-amber-300 font-semibold mt-1">💊 Medicación: ${medicacion}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl space-y-1">
+                        <div class="text-cyan-400 font-bold uppercase tracking-wider text-[11px] mb-1.5">📋 Ficha Técnica Oficial</div>
+                        <div class="flex justify-between"><span class="text-slate-400">Microchip:</span> <span class="text-white font-mono font-bold">${chip}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Raza / Peso:</span> <span class="text-white">${raza} (${peso})</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Esterilizado:</span> <span class="text-white">${esterilizado}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Seguro R.C.:</span> <span class="text-emerald-400 font-semibold">${seguro}</span></div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-amber-400 font-bold uppercase tracking-wider text-[11px] mb-1">🐕 Carácter & Trato</div>
+                        <p class="text-slate-200">${caracter}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-slate-400 text-[10px] uppercase font-bold">Clínica de Cabecera:</div>
+                        <div class="text-white font-bold">${vet}</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirTriajeUrgencias(alertas) {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Triaje & Urgencias SOS";
+            let html = `<p class="text-xs text-slate-300 text-left mb-2">Pautas críticas ante sospecha de intoxicación o herida:</p><div class="space-y-2 text-left my-2 max-h-56 overflow-y-auto pr-1">`;
+            
+            if (alertas && Array.isArray(alertas) && alertas.length > 0) {
+                alertas.forEach(al => {
+                    html += `
+                        <div class="bg-rose-950/40 border border-rose-800/80 p-2 rounded-xl text-xs text-rose-200 flex items-start gap-2">
+                            <i class="fa-solid fa-skull-crossbones text-rose-400 mt-0.5"></i>
+                            <span>${al}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `
+                    <div class="bg-rose-950/40 border border-rose-800/80 p-2 rounded-xl text-xs text-rose-200 flex items-start gap-2">
+                        <i class="fa-solid fa-skull-crossbones text-rose-400 mt-0.5"></i>
+                        <span>Contactar inmediatamente con emergencias 24h. No suministrar medicamentos humanos.</span>
+                    </div>
+                `;
+            }
+
+            html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización médica expresa.</p>`;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `
+                <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
+                    <i class="fa-solid fa-hospital mr-1"></i> Buscar Urgencias 24h
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
         }
 
         // ==========================================
@@ -565,7 +837,7 @@
         }
 
         // ==========================================
-        // RESERVA DE CITA
+        // RESERVA DE CITA GENERAL
         // ==========================================
         function abrirModalReserva() {
             vibrarMovil(40);
@@ -655,12 +927,17 @@
             if (pinBuffer === PIN_DEFAULT) {
                 vibrarMovil([50, 50, 50]);
                 cerrarPinAuth();
-                const esNutri = (datosPerfilGlobal && datosPerfilGlobal.nombre && datosPerfilGlobal.nombre.toLowerCase().includes('nutrition')) || 
-                                (datosPerfilGlobal && datosPerfilGlobal.subtitulo && datosPerfilGlobal.subtitulo.toLowerCase().includes('nutrición'));
+                
+                // Si el negocio tiene un panel específico, se abre. Si no, lanza alerta general.
+                const nLower = (datosPerfilGlobal && datosPerfilGlobal.nombre) ? datosPerfilGlobal.nombre.toLowerCase() : "";
+                const sLower = (datosPerfilGlobal && datosPerfilGlobal.subtitulo) ? datosPerfilGlobal.subtitulo.toLowerCase() : "";
+
+                const esNutri = nLower.includes('nutrition') || sLower.includes('nutrición') || sLower.includes('consulta');
+
                 if (esNutri) {
                     abrirNutriAdmin();
                 } else {
-                    alert("Modo Administrador activado.");
+                    alert(`Modo Administrador activado para ${nombreNegocioGlobal}.`);
                 }
             } else {
                 vibrarMovil(250);
@@ -901,21 +1178,99 @@
                             </div>
                         `;
                     } else if (sec.botones && Array.isArray(sec.botones)) {
-                        sec.botones.forEach((btn) => {
+                        sec.botones.forEach((btn, bIdx) => {
                             const bTipo = (btn.tipo || '').toLowerCase();
                             const nLower = (btn.nombre || '').toLowerCase();
+                            const btnId = `btn_${sIdx}_${bIdx}`;
 
+                            // FITNESS: PROTEINA
+                            if (bTipo === 'calc_proteina' || nLower.includes('calculadora de proteína')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(230, 0, 0, 0.2); color: #e60000;'}"><i class="${btn.icono || 'fa-solid fa-calculator'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // FITNESS: CREATINA
+                            else if (bTipo === 'guia_creatina' || nLower.includes('creatina')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 255, 255, 0.12); color: #ffffff;'}"><i class="${btn.icono || 'fa-solid fa-bottle-droplet'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // KEBAB: CONFIGURADOR
+                            else if (bTipo === 'configurador_kebab' || nLower.includes('arma tu menú') || nLower.includes('menú kebab')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}"><i class="${btn.icono || 'fa-solid fa-utensils'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // KEBAB: ALÉRGENOS
+                            else if (bTipo === 'guia_alergenos_kebab' || nLower.includes('alérgenos') || nLower.includes('salsas')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: GPS / ASISTENCIA
+                            else if (bTipo === 'asistencia_ruta' || nLower.includes('hospitales 24h') || nLower.includes('gps')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirAsistenciaRuta()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: var(--color-acento);'}"><i class="${btn.icono || 'fa-solid fa-location-crosshairs'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: CARNET VACUNAS
+                            else if (bTipo === 'carnet_vacunacion' || nLower.includes('vacuna')) {
+                                window[btnId + '_data'] = btn.vacunas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirCarnetVacunacion(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56, 189, 248, 0.2); color: #38BDF8;'}"><i class="${btn.icono || 'fa-solid fa-shield-dog'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: CHECKLIST / DIETA
+                            else if (bTipo === 'checklist_parto' || bTipo === 'checklist' || nLower.includes('ficha médica')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirChecklistClinico()" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #F59E0B;'}"><i class="${btn.icono || 'fa-solid fa-clipboard-list'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: TRIAJE SOS
+                            else if (bTipo === 'triaje_urgencias' || nLower.includes('semáforo sos') || nLower.includes('intoxicaciones')) {
+                                window[btnId + '_data'] = btn.alertas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirTriajeUrgencias(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.22); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-triangle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
                             // TEST DE FATIGA DEL COLCHÓN (IBERLAX)
-                            if (bTipo === 'test_desgaste' || nLower.includes('fatiga') || nLower.includes('desgaste')) {
+                            else if (bTipo === 'test_desgaste' || nLower.includes('fatiga') || nLower.includes('desgaste')) {
                                 block.innerHTML += `
                                     <div onclick="abrirTestDesgaste()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(255, 180, 0, 0.15); color: #FFB400;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-microscope'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion}</div>
-                                        </div>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(255, 180, 0, 0.15); color: #FFB400;'}"><i class="${btn.icono || 'fa-solid fa-microscope'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
@@ -924,13 +1279,8 @@
                             else if (bTipo === 'test_ergonomico' || bTipo === 'ergonomia' || nLower.includes('ergonómico')) {
                                 block.innerHTML += `
                                     <div onclick="abrirAsesor(event)" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion}</div>
-                                        </div>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
@@ -939,13 +1289,8 @@
                             else if (bTipo === 'tasador_retirada' || bTipo === 'logistica' || nLower.includes('logística') || nLower.includes('entrega')) {
                                 block.innerHTML += `
                                     <div onclick="abrirEnvio(event)" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
-                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}">
-                                            <i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i>
-                                        </div>
-                                        <div class="app-info">
-                                            <div class="app-name">${btn.nombre}</div>
-                                            <div class="app-desc">${btn.descripcion}</div>
-                                        </div>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
                                         <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
                                     </div>
                                 `;
@@ -1085,13 +1430,13 @@
                 });
             }
 
-            // Habilitación de la rueda de administración (Nutrition Planet / Ficha médica)
-            const esNutri = (data.nombre && data.nombre.toLowerCase().includes('nutrition')) || 
-                            (data.subtitulo && data.subtitulo.toLowerCase().includes('nutrición')) ||
-                            (data.subtitulo && data.subtitulo.toLowerCase().includes('consulta'));
+            // Muestra el engranaje si es cliente médico/nutricional o mascota
+            const nLower = (data.nombre) ? data.nombre.toLowerCase() : "";
+            const sLower = (data.subtitulo) ? data.subtitulo.toLowerCase() : "";
+            const esMascotaONutri = nLower.includes('nutrition') || sLower.includes('nutrición') || sLower.includes('consulta') || (data.tipoPerfil === 'mascota') || sLower.includes('canino');
 
             const btnGear = document.getElementById('btn-owner-gear');
-            if (btnGear) btnGear.style.display = esNutri ? 'flex' : 'none';
+            if (btnGear) btnGear.style.display = esMascotaONutri ? 'flex' : 'none';
 
             // Estilos del tema
             const colorAcentoFinal = data.colorAcento || "#00E5FF";
