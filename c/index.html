@@ -72,10 +72,11 @@
         
         .owner-btn {
             background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-            color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: none;
-            align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer;
+            color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: none;
+            align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer;
             transition: all 0.2s;
         }
+        .owner-btn:active { transform: scale(0.92); border-color: var(--color-acento); color: #fff; }
 
         .status-badge { 
             display: inline-flex; align-items: center; gap: 8px;
@@ -205,6 +206,36 @@
             <div id="modal-text" class="text-xs text-slate-300 leading-relaxed mb-4"></div>
             <div id="modal-actions" class="modal-actions">
                 <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GESTIÓN NUTRICIÓN (CANVA DIETA Y RUTINA) -->
+    <div id="modal-nutri-admin" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 360px;">
+            <button class="modal-close-btn" onclick="cerrarNutriAdmin()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-user-doctor text-cyan-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Ficha del Paciente</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Pega los enlaces públicos de Canva (solo lectura) para vincular a este llavero:</p>
+            
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-emerald-400 block mb-1">🥗 Enlace Canva · Dieta / Menú:</label>
+                    <input type="url" id="admin-canva-dieta" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-emerald-400">
+                </div>
+                <div>
+                    <label class="font-bold text-cyan-400 block mb-1">🏋️ Enlace Canva · Rutina de Ejercicios:</label>
+                    <input type="url" id="admin-canva-rutina" placeholder="https://www.canva.com/design/.../view" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
+                </div>
+            </div>
+
+            <div class="modal-actions mt-4">
+                <button onclick="guardarEnlacesNutri()" class="modal-btn-primary" style="background: linear-gradient(135deg, #00E5FF, #0077b6); color:#020617;">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar en Llavero
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarNutriAdmin()">Cancelar</button>
             </div>
         </div>
     </div>
@@ -356,7 +387,7 @@
     </div>
 
     <!-- HUB PRINCIPAL -->
-    <div class="halo-wrapper" id="main-halo">
+    <div class="halo-wrapper">
         <div class="hub-container">
             
             <div class="top-bar-controls">
@@ -377,7 +408,7 @@
             <h1 id="client-name">STUDIO 42</h1>
             <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
 
-            <!-- CONTENEDOR DINÁMICO CON ESTADO INICIAL -->
+            <!-- CONTENEDOR DINÁMICO -->
             <div id="dynamic-menu">
                 <div style="text-align: center; padding: 40px 0; color: #94a3b8; font-size: 13px;">
                     <i class="fa-solid fa-circle-notch fa-spin text-2xl text-cyan-400 mb-2"></i>
@@ -409,10 +440,49 @@
         const modalActions = document.getElementById('modal-actions');
         const modalPin = document.getElementById('modal-pin-auth');
         const modalReservaPago = document.getElementById('modal-reserva-pago');
+        const modalNutriAdmin = document.getElementById('modal-nutri-admin');
 
         function abrirModalCustom() { modalOverlay.style.display = 'flex'; setTimeout(() => { modalOverlay.style.opacity = '1'; }, 10); }
         function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
         function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
+
+        // ==========================================
+        // GESTIÓN CLÍNICA NUTRICIÓN (CANVA)
+        // ==========================================
+        function abrirNutriAdmin() {
+            vibrarMovil(40);
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
+            document.getElementById('admin-canva-dieta').value = localStorage.getItem(`canva_dieta_${claveUnica}`) || "";
+            document.getElementById('admin-canva-rutina').value = localStorage.getItem(`canva_rutina_${claveUnica}`) || "";
+            
+            modalNutriAdmin.style.display = 'flex';
+            setTimeout(() => { modalNutriAdmin.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarNutriAdmin() {
+            modalNutriAdmin.style.opacity = '0';
+            setTimeout(() => { modalNutriAdmin.style.display = 'none'; }, 250);
+        }
+
+        function guardarEnlacesNutri() {
+            vibrarMovil(60);
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
+            const urlDieta = document.getElementById('admin-canva-dieta').value.trim();
+            const urlRutina = document.getElementById('admin-canva-rutina').value.trim();
+
+            if (urlDieta) localStorage.setItem(`canva_dieta_${claveUnica}`, urlDieta);
+            if (urlRutina) localStorage.setItem(`canva_rutina_${claveUnica}`, urlRutina);
+
+            cerrarNutriAdmin();
+            alert(`✅ ¡Pautas vinculadas al llavero #${idLlavero} con éxito!`);
+            cargarEnginePhygital();
+        }
 
         // ==========================================
         // DIAGNÓSTICO DE FATIGA DEL COLCHÓN (IBERLAX)
@@ -585,7 +655,13 @@
             if (pinBuffer === PIN_DEFAULT) {
                 vibrarMovil([50, 50, 50]);
                 cerrarPinAuth();
-                alert("Modo Administrador activado.");
+                const esNutri = (datosPerfilGlobal && datosPerfilGlobal.nombre && datosPerfilGlobal.nombre.toLowerCase().includes('nutrition')) || 
+                                (datosPerfilGlobal && datosPerfilGlobal.subtitulo && datosPerfilGlobal.subtitulo.toLowerCase().includes('nutrición'));
+                if (esNutri) {
+                    abrirNutriAdmin();
+                } else {
+                    alert("Modo Administrador activado.");
+                }
             } else {
                 vibrarMovil(250);
                 document.getElementById('pin-modal-desc').innerText = "❌ PIN Incorrecto";
@@ -720,11 +796,14 @@
             setTimeout(() => {
                 mensaje.classList.add('hidden');
                 if (nota <= 3) {
+                    const urlQueja = whatsappGerenciaGlobal 
+                                     || `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, quisiera comentar una disconformidad con mi visita.`)}`;
+
                     document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
                     document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
                     document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección:`;
                     modalActions.innerHTML = `
-                        <a href="${whatsappGerenciaGlobal || whatsappTiendaGlobal}" target="_blank" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${urlQueja}" target="_blank" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
                         <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
                     `;
                 } else {
@@ -787,6 +866,7 @@
 
             const urlParams = new URLSearchParams(window.location.search);
             const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+            const claveLlavero = `${clienteSlugGlobal}_${codigoLlaveroNFC}`;
 
             if (data.secciones && Array.isArray(data.secciones)) {
                 data.secciones.forEach((sec, sIdx) => {
@@ -855,7 +935,7 @@
                                     </div>
                                 `;
                             }
-                            // TASADOR LOGÍSTICO (IBERLAX)
+                            // TASADOR LOGÍSTICA (IBERLAX)
                             else if (bTipo === 'tasador_retirada' || bTipo === 'logistica' || nLower.includes('logística') || nLower.includes('entrega')) {
                                 block.innerHTML += `
                                     <div onclick="abrirEnvio(event)" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
@@ -925,9 +1005,18 @@
                                     </a>
                                 `;
                             }
-                            // BOTONES GENERALES (URLS DIRECTAS, WHATSAPP, ETC.)
+                            // ENLACES PERSONALIZADOS DE CANVA (DIETA Y RUTINA VINCULADOS AL LLAVERO)
                             else {
-                                const finalUrl = btn.url || '#';
+                                let finalUrl = btn.url || '#';
+                                
+                                if (nLower.includes('comidas') || nLower.includes('menú fit') || nLower.includes('dieta')) {
+                                    const savedDieta = localStorage.getItem(`canva_dieta_${claveLlavero}`);
+                                    if (savedDieta) finalUrl = savedDieta;
+                                } else if (nLower.includes('entrenamiento') || nLower.includes('rutina')) {
+                                    const savedRutina = localStorage.getItem(`canva_rutina_${claveLlavero}`);
+                                    if (savedRutina) finalUrl = savedRutina;
+                                }
+
                                 block.innerHTML += `
                                     <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') || finalUrl.startsWith('tel:') ? 'target="_blank"' : ''}>
                                         <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
@@ -978,22 +1067,33 @@
             if (data.secciones && Array.isArray(data.secciones)) {
                 data.secciones.forEach(sec => {
                     if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
-                    if (sec.whatsappGerencia && !whatsappTiendaGlobal) {
+                    
+                    if (sec.whatsappGerencia) {
                         whatsappGerenciaGlobal = sec.whatsappGerencia;
-                        whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
+                        if (!whatsappTiendaGlobal) {
+                            whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
+                        }
                     }
+
                     if (sec.botones && Array.isArray(sec.botones)) {
                         sec.botones.forEach(b => {
                             if (b.url && b.url.includes('wa.me') && !whatsappTiendaGlobal) {
                                 whatsappTiendaGlobal = b.url.split('?')[0];
-                                if (!whatsappGerenciaGlobal) whatsappGerenciaGlobal = b.url;
                             }
                         });
                     }
                 });
             }
 
-            // Aplicación de variables cromáticas
+            // Habilitación de la rueda de administración (Nutrition Planet / Ficha médica)
+            const esNutri = (data.nombre && data.nombre.toLowerCase().includes('nutrition')) || 
+                            (data.subtitulo && data.subtitulo.toLowerCase().includes('nutrición')) ||
+                            (data.subtitulo && data.subtitulo.toLowerCase().includes('consulta'));
+
+            const btnGear = document.getElementById('btn-owner-gear');
+            if (btnGear) btnGear.style.display = esNutri ? 'flex' : 'none';
+
+            // Estilos del tema
             const colorAcentoFinal = data.colorAcento || "#00E5FF";
             const colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
             const fondoLogoFinal = data.fondoLogo || "#0b0c10";
