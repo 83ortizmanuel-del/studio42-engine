@@ -1,0 +1,101 @@
+{
+  "nombre": "UÑAS LATINAS CAROLINA",
+  "modoDemo": false,
+  "whatsapp": "https://wa.me/34747412712",
+  "subtitulo": "El arte de resaltar tu mirada y tus manos",
+  "textoBadge": "PUESTO ACTIVO · AGENDA & MOSTRADOR VIP",
+  "logo": "./unas-latinas-carolina.png",
+  "logoAnchoMax": "260px",
+  "logoAlto": "84px",
+  "paddingLogo": "4px 10px",
+  "fondoLogo": "rgba(11, 12, 16, 0.95)",
+  "colorPrincipal": "#190610",
+  "colorAcento": "#EC4899",
+  "esMascota": false,
+  "datosPago": {
+    "bizum": "747412712",
+    "concepto": "Uñas Latinas Carolina"
+  },
+  "secciones": [
+    {
+      "titulo": "Servicios & Reserva de Cita",
+      "botones": [
+        {
+          "nombre": "Pedir Cita por WhatsApp",
+          "descripcion": "Reserva tu hora para pestañas, acrílicas o manicura",
+          "icono": "fa-brands fa-whatsapp",
+          "url": "https://wa.me/34747412712?text=¡Hola%20Carolina!%20Vengo%20desde%20tu%20pantalla%20interactiva%20y%20quisiera%20pedir%20cita.",
+          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;",
+          "destacado": true
+        },
+        {
+          "nombre": "Carta de Servicios & Cuidados",
+          "descripcion": "Volumen Ruso 3D/4D, Porcelana, Acrigel y Pedicura Prémium",
+          "icono": "fa-solid fa-hand-sparkles",
+          "url": "https://wa.me/34747412712?text=Hola%20Carolina,%20¿me%20podrías%20enviar%20la%20lista%20de%20precios%20y%20servicios?",
+          "estiloIcono": "background: rgba(168, 85, 247, 0.2); color: #a855f7;",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "Redes Sociales & Trabajos",
+      "botones": [
+        {
+          "nombre": "Galería de Diseños en Instagram",
+          "descripcion": "Inspírate con los últimos sets, pestañas y nail art",
+          "icono": "fa-brands fa-instagram",
+          "url": "https://www.instagram.com/unaslatinascarolina",
+          "estiloIcono": "background: rgba(236, 72, 153, 0.2); color: #EC4899;",
+          "destacado": false
+        },
+        {
+          "nombre": "Página Oficial de Facebook",
+          "descripcion": "Síguenos para novedades, promociones y opiniones",
+          "icono": "fa-brands fa-facebook",
+          "url": "https://www.facebook.com/unaslatinascarolina",
+          "estiloIcono": "background: rgba(24, 119, 242, 0.2); color: #1877F2;",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "Pagos & Utilidades en Puesto",
+      "botones": [
+        {
+          "tipo": "bizum",
+          "nombre": "Pagar por Bizum en Mostrador",
+          "descripcion": "Toca para copiar el número (747 41 27 12) y abonar tu cita",
+          "icono": "fa-solid fa-mobile-screen-button",
+          "estiloIcono": "background: rgba(0, 195, 255, 0.2); color: #00c3ff;"
+        },
+        {
+          "tipo": "recuperar_llaves",
+          "nombre": "🔑 ¿Encontraste estas llaves?",
+          "descripcion": "Pulsa aquí para avisar a Uñas Latinas Carolina y devolverlas",
+          "icono": "fa-solid fa-key"
+        },
+        {
+          "nombre": "¿Dónde aparqué?",
+          "tipo": "parking",
+          "descripcion": "Guarda la posición GPS de tu coche mientras disfrutas tu cita",
+          "icono": "fa-solid fa-location-crosshairs",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #9ca3af;"
+        },
+        {
+          "nombre": "Guardar Contacto en Agenda",
+          "descripcion": "Descarga nuestro teléfono y ubicación directa al móvil",
+          "icono": "fa-solid fa-address-card",
+          "url": "./contacto.vcf",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "escudoResenas": true,
+      "urlGoogleResenas": "https://maps.google.com",
+      "whatsappGerencia": "https://wa.me/34747412712?text=Hola%20Carolina,%20quisiera%20comentarte%20un%20aspecto%20sobre%20mi%20servicio."
+    }
+  ]
+}
