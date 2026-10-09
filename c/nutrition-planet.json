@@ -74,7 +74,7 @@
           "nombre": "Guardar Contacto de la Tienda",
           "descripcion": "Añádenos a tu agenda para consultarnos lo que necesites",
           "icono": "fa-solid fa-address-card",
-          "url": "./contacto.vcf",
+          "url": "spn-contacto.vcf",
           "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;"
         }
       ]
