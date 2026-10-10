@@ -1,7 +1,7 @@
 {
   "nombre": "ZOMBIE LIVE TATTOO",
   "subtitulo": "ESTUDIO DE TATUAJES · LOGROÑO",
-  "logo": "./zombie-logo.png",
+  "logo": "zombie-logo.png",
   "logoAnchoMax": "160px",
   "logoAlto": "160px",
   "paddingLogo": "0px",
