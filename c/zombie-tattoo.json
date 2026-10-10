@@ -9,7 +9,7 @@
   "colorPrincipal": "#050505",
   "colorAcento": "#b91c1c", 
   "textoBadge": "BLACK & GREY | BLACKWORK | DOTWORK",
-  "whatsapp": "https://wa.me/34XXXXXXXXX",
+  "whatsapp": "https://wa.me/34624176499",
   "secciones": [
     {
       "titulo": "CITAS Y ASESORAMIENTO",
@@ -18,7 +18,7 @@
           "nombre": "Cotizar mi Próximo Tattoo",
           "descripcion": "Cuéntanos tu idea, zona y estilo para darte presupuesto",
           "icono": "fa-solid fa-calendar-check",
-          "url": "https://wa.me/34XXXXXXXXX?text=Hola%20Zombie%20Live%20Tattoo!%20Quiero%20cotizar%20una%20idea%20que%20tengo...",
+          "url": "https://wa.me/34624176499?text=Hola%20Zombie%20Live%20Tattoo!%20Quiero%20cotizar%20una%20idea%20que%20tengo...",
           "estiloIcono": "background: rgba(185, 28, 28, 0.15); color: #b91c1c;",
           "destacado": true
         }
@@ -39,7 +39,7 @@
           "nombre": "Dudas Urgentes de Curación",
           "descripcion": "Línea directa si notas algo extraño durante la cicatrización",
           "icono": "fa-brands fa-whatsapp",
-          "url": "https://wa.me/34XXXXXXXXX?text=Hola,%20me%20tatué%20hace%20poco%20y%20tengo%20una%20duda%20con%20la%20curación:",
+          "url": "https://wa.me/34624176499?text=Hola,%20me%20tatué%20hace%20poco%20y%20tengo%20una%20duda%20con%20la%20curación:",
           "estiloIcono": "background: rgba(255, 255, 255, 0.05); color: #a1a1aa;",
           "destacado": false
         }
@@ -52,7 +52,7 @@
           "nombre": "Galería de Trabajos",
           "descripcion": "Black and grey, Anime, Geométrico y Blackwork",
           "icono": "fa-brands fa-instagram",
-          "url": "https://www.instagram.com/zombie_livetattoo",
+          "url": "https://www.instagram.com/zombie_livetattoo?cplk=MWplMG9zaTRxa3Fzbw==",
           "estiloIcono": "background: rgba(225, 48, 108, 0.15); color: #E1306C;",
           "destacado": false
         },
