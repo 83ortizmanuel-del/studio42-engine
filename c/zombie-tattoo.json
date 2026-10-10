@@ -1,0 +1,75 @@
+{
+  "nombre": "ZOMBIE LIVE TATTOO",
+  "subtitulo": "ESTUDIO DE TATUAJES · LOGROÑO",
+  "logo": "./zombie-logo.png",
+  "logoAnchoMax": "160px",
+  "logoAlto": "160px",
+  "paddingLogo": "0px",
+  "fondoLogo": "transparent",
+  "colorPrincipal": "#050505",
+  "colorAcento": "#b91c1c", 
+  "textoBadge": "BLACK & GREY | BLACKWORK | DOTWORK",
+  "whatsapp": "https://wa.me/34XXXXXXXXX",
+  "secciones": [
+    {
+      "titulo": "CITAS Y ASESORAMIENTO",
+      "botones": [
+        {
+          "nombre": "Cotizar mi Próximo Tattoo",
+          "descripcion": "Cuéntanos tu idea, zona y estilo para darte presupuesto",
+          "icono": "fa-solid fa-calendar-check",
+          "url": "https://wa.me/34XXXXXXXXX?text=Hola%20Zombie%20Live%20Tattoo!%20Quiero%20cotizar%20una%20idea%20que%20tengo...",
+          "estiloIcono": "background: rgba(185, 28, 28, 0.15); color: #b91c1c;",
+          "destacado": true
+        }
+      ]
+    },
+    {
+      "titulo": "CUIDADOS POST-TATUAJE",
+      "botones": [
+        {
+          "nombre": "Guía de Curación (PDF)",
+          "descripcion": "Instrucciones oficiales para que tu pieza cicatrice perfecta",
+          "icono": "fa-solid fa-hand-holding-droplet",
+          "url": "AQUI_TU_LINK_DE_DRIVE_AL_PDF",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #ffffff;",
+          "destacado": false
+        },
+        {
+          "nombre": "Dudas Urgentes de Curación",
+          "descripcion": "Línea directa si notas algo extraño durante la cicatrización",
+          "icono": "fa-brands fa-whatsapp",
+          "url": "https://wa.me/34XXXXXXXXX?text=Hola,%20me%20tatué%20hace%20poco%20y%20tengo%20una%20duda%20con%20la%20curación:",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.05); color: #a1a1aa;",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "PORTFOLIO",
+      "botones": [
+        {
+          "nombre": "Galería de Trabajos",
+          "descripcion": "Black and grey, Anime, Geométrico y Blackwork",
+          "icono": "fa-brands fa-instagram",
+          "url": "https://www.instagram.com/zombie_livetattoo",
+          "estiloIcono": "background: rgba(225, 48, 108, 0.15); color: #E1306C;",
+          "destacado": false
+        },
+        {
+          "nombre": "Guardar Contacto del Estudio",
+          "descripcion": "Añádenos a tu agenda para futuras citas",
+          "icono": "fa-solid fa-address-card",
+          "url": "./zombie-contacto.vcf",
+          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #ffffff;",
+          "destacado": false
+        }
+      ]
+    },
+    {
+      "titulo": "APOYA NUESTRO ARTE",
+      "urlGoogleResenas": "AQUI_LINK_DE_GOOGLE_MAPS",
+      "escudoResenas": true
+    }
+  ]
+}
