@@ -195,6 +195,25 @@
 
         .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
         .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+
+        /* ============================================================== */
+        /* MAGIA CSS: TEMA INDUSTRIAL (TITANIO CEPILLADO CON TORNILLOS)   */
+        /* ============================================================== */
+        .tema-industrial {
+            background: 
+                /* 4 Remaches/Tornillos metálicos en las esquinas */
+                radial-gradient(circle at 24px 24px, #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                radial-gradient(circle at calc(100% - 24px) 24px, #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                radial-gradient(circle at 24px calc(100% - 24px), #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                radial-gradient(circle at calc(100% - 24px) calc(100% - 24px), #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                /* Textura estriada (Brushed Titanium) */
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 3px),
+                /* Degradado Platinium/Titanio oscuro de fondo */
+                linear-gradient(135deg, #2A2D34 0%, #131519 100%) !important;
+            
+            border: 2px solid #475569 !important;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 25px 60px rgba(0,0,0,0.95) !important;
+        }
     </style>
 </head>
 <body>
@@ -1454,6 +1473,14 @@
             document.documentElement.style.setProperty('--halo-edge', colorAcentoFinal);
             document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
             document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
+
+            // ACTIVACIÓN DE TEMA INDUSTRIAL
+            const hubContainer = document.querySelector('.hub-container');
+            if (data.tema === 'industrial') {
+                hubContainer.classList.add('tema-industrial');
+            } else {
+                hubContainer.classList.remove('tema-industrial');
+            }
 
             // Identidad y textos
             document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
