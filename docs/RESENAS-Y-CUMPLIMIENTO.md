@@ -23,7 +23,7 @@ Sin enlace de Google válido (o si es solo la portada de Maps) el botón de Goog
 Todo lo que está en el repositorio (incluidos los `c/*.json` de cada cliente: nombre, WhatsApp, enlaces) **es público** mientras el repo sea público, y además cada JSON es público en `studio42.es/c/<slug>.json`. Esos datos ya son los que el negocio muestra en su ficha, pero conviene:
 1. Contárselo al cliente (cláusula en el contrato/ficha).
 2. No guardar nunca en un JSON datos de pacientes/clientes finales (nombres, fichas médicas reales). Para el SPN "área del paciente" usar enlaces privados por paciente o no usarlo hasta tener una solución con acceso.
-3. Valorar pasar el repositorio a **privado** (Netlify sigue desplegando; la única función que se perdería es el respaldo de lectura desde GitHub, que apenas se usa).
+3. Valorar pasar el repositorio a **privado** (ojo: GitHub Pages en repositorios privados exige plan de pago, así que comprueba antes de cambiarlo; la única función que se perdería es el respaldo de lectura desde GitHub, que apenas se usa).
 Las notas del Closer sobre las debilidades del negocio (las "fricciones") **no se publican**: solo se quedan en tu Google Sheet.
 
 ## Contenido sensible (salud, alimentación)

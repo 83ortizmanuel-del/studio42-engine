@@ -312,6 +312,19 @@
         .acciones-fin { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
         .btn-fin { display: block; text-align: center; text-decoration: none; font-family: inherit; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 13px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #fff; cursor: pointer; }
         .btn-fin.principal { background: var(--gradient-btn); color: var(--btn-text-color); border: none; box-shadow: 0 0 18px var(--color-glow); }
+        .maps-box { padding: 12px; border-radius: 16px; background: rgba(66,133,244,0.07); border: 1px solid rgba(66,133,244,0.35); display: flex; flex-direction: column; gap: 8px; }
+        .maps-box label { color: #8ab4f8; }
+        .maps-fila { display: flex; gap: 8px; }
+        .maps-fila .input-cyber { flex: 1; min-width: 0; }
+        .btn-buscar { flex-shrink: 0; border: none; border-radius: 12px; padding: 0 14px; background: #4285F4; color: #fff; font-family: inherit; font-weight: 800; font-size: 12px; cursor: pointer; }
+        .btn-buscar:disabled { opacity: .6; cursor: wait; }
+        .maps-res { display: flex; flex-direction: column; gap: 6px; }
+        .maps-item { text-align: left; font-family: inherit; color: #fff; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+        .maps-item b { display: block; font-size: 13px; }
+        .maps-item span { display: block; font-size: 11px; color: #9ca3af; margin-top: 2px; }
+        .maps-ok { padding: 10px 12px; border-radius: 12px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.4); color: #a7f3d0; font-size: 12px; line-height: 1.45; }
+        .maps-ok button { margin-left: 8px; background: none; border: none; color: #fcd34d; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: 11px; }
+        .maps-msg { font-size: 11px; color: #fcd34d; line-height: 1.4; }
         .url-final { word-break: break-all; font-size: 11px; color: var(--color-accent); margin-top: 8px; text-align: center; }
 </style>
 </head>
@@ -343,6 +356,19 @@
                     </div>
                 </div>
 
+                <div class="maps-box" id="maps-box">
+                    <label for="maps_consulta">① Busca el negocio en Google Maps</label>
+                    <div class="maps-fila">
+                        <input type="search" id="maps_consulta" maxlength="120" placeholder="Nombre y ciudad. Ej: Ankara Kebab Alcobendas" class="input-cyber">
+                        <button type="button" id="btn-buscar" class="btn-buscar">Buscar</button>
+                    </div>
+                    <div id="maps-res" class="maps-res"></div>
+                    <div id="maps-ok" class="maps-ok hidden-element"></div>
+                    <div id="maps-msg" class="maps-msg"></div>
+                    <p class="ayuda">Al elegirlo se rellenan nombre, sector, web y teléfono, y el botón de reseñas abrirá <b>directamente la ventana de valoración</b> de ese negocio. Si no aparece, rellena los datos a mano más abajo.</p>
+                </div>
+                <input type="hidden" id="place_id" value="">
+
                 <div class="form-group">
                     <label for="nombre_comercio">Nombre Comercial del Negocio <span class="req">*</span></label>
                     <input type="text" id="nombre_comercio" maxlength="60" placeholder="Ej: Centro Veterinario Norte" class="input-cyber" required>
@@ -353,11 +379,21 @@
                     <select id="sector_select" class="input-cyber" required>
                         <option value="" disabled selected>-- Selecciona el Sector --</option>
                         <option value="Hostelería y Restauración">🍽️ Hostelería, Cafetería o Restauración</option>
-                        <option value="Salud y Clínicas">🩺 Salud, Odontología, Fisio o Médica</option>
-                        <option value="Belleza y Estética">✂️ Belleza, Barbería, Peluquería o Spa</option>
-                        <option value="Automoción y Talleres">🚗 Automoción, Taller Mecánico o Concesionario</option>
+                        <option value="Hoteles y Alojamiento">🛏️ Hoteles, Hostales y Alojamiento</option>
+                        <option value="Salud y Clínicas">🩺 Salud, Fisio o Clínica médica</option>
+                        <option value="Dental y Odontología">🦷 Clínica dental u Odontología</option>
+                        <option value="Veterinaria y Mascotas">🐾 Veterinaria, Peluquería canina o Mascotas</option>
+                        <option value="Nutrición y Bienestar">🥗 Nutrición, Suplementos o Bienestar</option>
+                        <option value="Belleza y Estética">✂️ Belleza, Barbería, Peluquería, Uñas o Spa</option>
+                        <option value="Tatuajes y Piercing">🖋️ Tatuajes y Piercing</option>
+                        <option value="Fitness y Deporte">🏋️ Gimnasio, Fitness o Deporte</option>
+                        <option value="Automoción y Talleres">🚗 Automoción, Taller o Concesionario</option>
                         <option value="Comercio y Retail">🛍️ Comercio Minorista, Moda o Tienda Local</option>
-                        <option value="Servicios Profesionales">💼 Asesoría, Abogados, Inmobiliaria o Consultoría</option>
+                        <option value="Inmobiliaria">🏠 Inmobiliaria</option>
+                        <option value="Educación y Academias">🎓 Academia, Educación o Formación</option>
+                        <option value="Servicios Profesionales">💼 Asesoría, Abogados o Consultoría</option>
+                        <option value="Hogar y Reformas">🔧 Hogar, Reformas, Fontanería o Cerrajería</option>
+                        <option value="Ocio y Eventos">🎉 Ocio, Eventos o Entretenimiento</option>
                         <option value="Otros">✨ Otros (Sector Novedoso / Personalizado)</option>
                     </select>
                 </div>
@@ -381,7 +417,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="google">Enlace para Reseñas de Google</label>
+                    <label for="google">Enlace para Reseñas de Google (solo si NO usaste el buscador de Maps)</label>
                     <input type="url" inputmode="url" id="google" maxlength="300" placeholder="https://g.page/r/…/review" class="input-cyber">
                     <p class="ayuda"><b>Dónde sacarlo:</b> Perfil de empresa de Google → <b>Pedir reseñas</b> → Copiar enlace. No sirve la portada de Google Maps.</p>
                 </div>
@@ -466,6 +502,56 @@
                 "Falta de un enlace directo con vCard que se guarde en la agenda",
                 "Presencia en Google desactualizada frente a competidores"
             ],
+            "Hoteles y Alojamiento": [
+                "Los huéspedes llaman a recepción para dudas básicas (wifi, desayuno, check-out)",
+                "Pocas reseñas de huéspedes satisfechos al terminar la estancia",
+                "Consultas de disponibilidad que llegan fuera de horario"
+            ],
+            "Dental y Odontología": [
+                "Pacientes que no acuden a la revisión periódica",
+                "Llamadas constantes para pedir cita o preguntar por tratamientos",
+                "Pocas reseñas pese a la alta satisfacción de los pacientes"
+            ],
+            "Veterinaria y Mascotas": [
+                "Los dueños olvidan vacunas y desparasitaciones",
+                "Urgencias que llaman sin saber qué hacer ni cuándo acudir",
+                "Pocas reseñas de dueños satisfechos"
+            ],
+            "Nutrición y Bienestar": [
+                "Clientes que preguntan por productos y precios por mensaje privado",
+                "Abandono del seguimiento tras la primera consulta",
+                "Falta de reseñas de clientes con buenos resultados"
+            ],
+            "Tatuajes y Piercing": [
+                "Muchas consultas de presupuesto sin datos (zona, tamaño) que hacen perder tiempo",
+                "Clientes que no vuelven para retoques o nuevos diseños",
+                "Pocas reseñas frente al volumen de trabajos"
+            ],
+            "Fitness y Deporte": [
+                "Visitantes que preguntan cuotas y horarios y no se apuntan",
+                "Dificultad para convertir la clase de prueba en alta",
+                "Bajas silenciosas y pocas reseñas"
+            ],
+            "Inmobiliaria": [
+                "Contactos de propietarios y compradores que no se atienden al instante",
+                "Dificultad para captar tasaciones",
+                "Poca presencia de reseñas frente a la competencia"
+            ],
+            "Educación y Academias": [
+                "Familias que llaman solo para preguntar horarios y precios",
+                "Dificultad para captar matrículas fuera de temporada",
+                "Pocas reseñas de alumnos y familias"
+            ],
+            "Hogar y Reformas": [
+                "Presupuestos pedidos sin datos suficientes",
+                "Urgencias (cerrajería, fontanería) que no encuentran el teléfono a tiempo",
+                "Clientes satisfechos que nunca dejan reseña"
+            ],
+            "Ocio y Eventos": [
+                "Consultas de fecha y aforo que saturan WhatsApp",
+                "Grupos que no cierran la reserva por falta de respuesta rápida",
+                "Pocas reseñas tras eventos exitosos"
+            ],
             "Otros": [
                 "Fuga de contactos que no se convierten en clientes recurrentes",
                 "Falta de presencia digital interactiva en el mostrador",
@@ -534,6 +620,54 @@
             document.documentElement.style.setProperty('--color-glow', e.target.value + '88');
         });
 
+        /* ---------------------------- Google Maps ---------------------------- */
+        // La búsqueda la hace el servidor (Apps Script): la clave de Maps nunca está en esta página.
+        const mapsRes = $('maps-res'), mapsOk = $('maps-ok'), mapsMsg = $('maps-msg'), btnBuscar = $('btn-buscar');
+
+        async function buscarMaps() {
+            const q = $('maps_consulta').value.trim();
+            mapsRes.textContent = ''; mapsMsg.textContent = '';
+            if (q.length < 3) { mapsMsg.textContent = 'Escribe al menos 3 letras.'; return; }
+            btnBuscar.disabled = true; btnBuscar.textContent = '…';
+            try {
+                const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ accion: 'buscar', closer_id: $('closer_id').value, consulta: q }), redirect: 'follow' });
+                const r = await resp.json();
+                if (!r.ok) { mapsMsg.textContent = r.error || 'No se pudo buscar.'; return; }
+                if (!r.resultados.length) { mapsMsg.textContent = 'Sin resultados. Prueba con nombre + ciudad, o rellena los datos a mano.'; return; }
+                r.resultados.forEach((x) => {
+                    const b = document.createElement('button'); b.type = 'button'; b.className = 'maps-item';
+                    const n = document.createElement('b'); n.textContent = x.nombre;
+                    const d = document.createElement('span'); d.textContent = x.direccion;
+                    b.append(n, d);
+                    b.addEventListener('click', () => elegirLugar(x));
+                    mapsRes.appendChild(b);
+                });
+            } catch (e) {
+                mapsMsg.textContent = 'No hay conexión con el servidor. Rellena los datos a mano.';
+            } finally { btnBuscar.disabled = false; btnBuscar.textContent = 'Buscar'; }
+        }
+        btnBuscar.addEventListener('click', buscarMaps);
+        $('maps_consulta').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); buscarMaps(); } });
+
+        function elegirLugar(x) {
+            $('place_id').value = x.id;
+            $('nombre_comercio').value = x.nombre.slice(0, 60);
+            if (x.sector && Array.from(sectorSelect.options).some((o) => o.value === x.sector)) {
+                sectorSelect.value = x.sector; sectorSelect.dispatchEvent(new Event('change'));
+            }
+            if (x.whatsapp && !$('whatsapp').value.trim()) $('whatsapp').value = x.whatsapp;
+            if (x.web && !$('web').value.trim()) $('web').value = x.web;
+            $('google').value = '';
+            mapsRes.textContent = ''; mapsMsg.textContent = '';
+            mapsOk.textContent = '✓ ' + x.nombre + ' — ' + x.direccion + '. Reseña directa de Google activada. ';
+            const quitar = document.createElement('button'); quitar.type = 'button'; quitar.textContent = 'Quitar';
+            quitar.addEventListener('click', () => { $('place_id').value = ''; mapsOk.classList.add('hidden-element'); });
+            mapsOk.appendChild(quitar);
+            mapsOk.classList.remove('hidden-element');
+            if (!x.whatsapp) mapsMsg.textContent = 'Pide al dueño su WhatsApp y escríbelo abajo.';
+        }
+
         /* ------------------------------- utilidades ------------------------------- */
         // Misma regla que usa el servidor para crear la dirección (por si la respuesta no se puede leer).
         function slugify(nombre) {
@@ -577,12 +711,12 @@
             const copiar = document.createElement('button'); copiar.type = 'button'; copiar.className = 'btn-fin'; copiar.textContent = 'Copiar enlace';
             copiar.addEventListener('click', async () => { try { await navigator.clipboard.writeText(url); copiar.textContent = '¡Copiado!'; } catch (e) { copiar.textContent = 'Mantén pulsado el enlace'; } });
             const nuevo = document.createElement('button'); nuevo.type = 'button'; nuevo.className = 'btn-fin'; nuevo.textContent = 'Nuevo diagnóstico';
-            nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+            nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; $('place_id').value = ''; mapsOk.classList.add('hidden-element'); mapsRes.textContent = ''; mapsMsg.textContent = ''; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
             acc.append(abrir, copiar, nuevo);
             z.append(ok, u, acc);
         }
 
-        /* Espera a que Netlify sirva el JSON recién subido. Se reconoce por el código de petición,
+        /* Espera a que GitHub Pages sirva el JSON recién subido. Se reconoce por el código de petición,
            así nunca se confunde con una versión anterior del mismo negocio. */
         async function esperarPublicacion(slug, peticion) {
             const t0 = Date.now();
@@ -640,7 +774,7 @@
             marcar('p3', 'fallo');
             mostrarError(noLegible
                 ? 'No hemos podido confirmar la publicación. Revisa tu conexión y pulsa Reintentar (no se duplicará nada). Si sigue igual, mira la columna Estado de la hoja "Diagnósticos".'
-                : 'El servidor confirmó el envío, pero la página aún no aparece. Netlify puede tardar un poco más: abre el enlace en un minuto.', true);
+                : 'El servidor confirmó el envío, pero la página aún no aparece. GitHub Pages puede tardar un poco más: abre el enlace en un minuto.', true);
             if (respuesta && respuesta.ok) { const z = $('zona-final'); const a = document.createElement('div'); a.className = 'url-final'; a.textContent = `${BASE}/c/?cod=${slug}`; z.appendChild(a); }
         }
 
@@ -663,7 +797,7 @@
             enviar({
                 closer_id: val('closer_id'), nombre: val('nombre_comercio'), sector: sector, whatsapp: val('whatsapp'),
                 fricciones: chips, notas: val('fricciones_extra'),
-                google: val('google'), instagram: val('instagram'), facebook: val('facebook'), web: val('web'), bizum: val('bizum'),
+                place_id: val('place_id'), google: val('google'), instagram: val('instagram'), facebook: val('facebook'), web: val('web'), bizum: val('bizum'),
                 estilo: val('branding'), color: $('color-picker').value, logo: val('logo_extra'),
                 peticion: nuevaPeticion()
             }, false);

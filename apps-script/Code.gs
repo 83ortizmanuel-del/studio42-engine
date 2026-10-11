@@ -1,58 +1,148 @@
 /**
  * ============================================================================
- *  STUDIO 42 · AUTOMATIZACIÓN DEL DIAGNÓSTICO PHYGITAL  (v2.0)
+ *  STUDIO 42 · AUTOMATIZACIÓN DEL DIAGNÓSTICO PHYGITAL  (v3.0 · Claude + Google Maps)
  * ============================================================================
  *  Qué hace, en una frase:
- *    El Closer envía el formulario  →  este script pide a Gemini los botones a
- *    medida  →  monta el JSON del cliente  →  lo sube a GitHub  →  Netlify lo
+ *    El Closer busca el comercio en Google Maps y envía el formulario  →  este script
+ *    obtiene el Place ID y los datos reales del negocio  →  pide a Claude los botones
+ *    a medida  →  monta el JSON del cliente  →  lo sube a GitHub  →  GitHub Pages lo
  *    publica en studio42.es/c/?cod=<nombre-del-negocio>  en unos segundos.
  *
  *  Reparto de trabajo (importante):
- *    · Los DATOS del negocio (teléfono, redes, enlace de Google, colores, Bizum)
- *      salen SIEMPRE del formulario. Gemini nunca los inventa.
- *    · Gemini solo escribe la parte creativa: subtítulo, badge y 2–4 botones
- *      (asistentes, calculadoras, fichas) que resuelven las fricciones.
- *    · Todo lo que devuelve Gemini se FILTRA aquí antes de publicarse. Si Gemini
- *      falla o responde algo raro, se publica igualmente una interfaz básica
- *      correcta (el Closer nunca se queda sin resultado).
+ *    · Los DATOS del negocio (teléfono, redes, enlace de reseñas, colores, Bizum, horarios)
+ *      salen SIEMPRE del formulario o de Google Maps. Claude nunca los inventa.
+ *    · Claude solo escribe la parte creativa: subtítulo, badge y hasta 5 botones
+ *      (asistentes, calculadoras, fichas) que resuelven las fricciones y cubren
+ *      lo que necesita ese tipo de comercio.
+ *    · Todo lo que devuelve Claude se FILTRA aquí antes de publicarse. Si Claude
+ *      falla o responde algo raro, se publica igualmente una interfaz correcta con
+ *      el paquete base de ese sector (el Closer nunca se queda sin resultado).
+ *    · El botón de Google lleva DIRECTO a la ventana de reseña del negocio
+ *      (search.google.com/local/writereview?placeid=...). Junto a él siempre hay otro
+ *      botón igual de visible para hablar con la gerencia. No se filtra por estrellas
+ *      ni se ofrece nada a cambio (cumple las normas de Google).
  *
  *  Las claves NO se escriben en este archivo. Se guardan en:
  *    Configuración del proyecto (rueda dentada) → Propiedades de la secuencia de comandos
- *      GITHUB_TOKEN     (obligatoria)  token fine-grained, solo este repo, permiso Contents: Read and write
- *      GEMINI_API_KEY   (obligatoria)  clave de Google AI Studio
- *      CLOSERS          (recomendada)  códigos de Closer permitidos, separados por coma (ej: MO001,MEL001).
- *                                      Si la dejas vacía, se acepta cualquier código con formato válido.
- *      GITHUB_REPO      (opcional)     por defecto: 83ortizmanuel-del/studio42-engine
- *      GITHUB_RAMA      (opcional)     por defecto: main
- *      GEMINI_MODELO    (opcional)     por defecto: gemini-2.5-flash
- *      DOMINIO          (opcional)     por defecto: https://studio42.es
- *      MAX_POR_HORA     (opcional)     tope de diagnósticos por hora. Por defecto: 30
- *      PROMPT_EXTRA     (opcional)     texto que se añade al final de las instrucciones a Gemini
+ *      GITHUB_TOKEN       (obligatoria)  token fine-grained, solo este repo, permiso Contents: Read and write
+ *      ANTHROPIC_API_KEY  (obligatoria)  clave de la API de Claude (console.anthropic.com)
+ *      GOOGLE_MAPS_API_KEY (recomendada) clave de Google Maps Platform con "Places API (New)" activada.
+ *                                        Sin ella el buscador de Maps no funciona y se usa el modo manual.
+ *      CLOSERS            (recomendada)  códigos de Closer permitidos, separados por coma (ej: MO001,MEL001).
+ *                                        Si la dejas vacía, se acepta cualquier código con formato válido.
+ *      GITHUB_REPO        (opcional)     por defecto: 83ortizmanuel-del/studio42-engine
+ *      GITHUB_RAMA        (opcional)     por defecto: main
+ *      CLAUDE_MODELO      (opcional)     por defecto: claude-sonnet-5-5
+ *      DOMINIO            (opcional)     por defecto: https://studio42.es
+ *      MAX_POR_HORA       (opcional)     tope de diagnósticos por hora. Por defecto: 30
+ *      MAX_BUSQUEDAS_HORA (opcional)     tope de búsquedas en Maps por hora. Por defecto: 120
+ *      PROMPT_EXTRA       (opcional)     texto que se añade al final de las instrucciones a Claude
  *
  *  Pruebas desde el editor (sin publicar nada): ejecuta  PROBAR_CONFIGURACION
  * ============================================================================
  */
 
-var VERSION = '2.0';
+var VERSION = '3.0';
 
-// Iconos que sabe dibujar el motor (c/index.html). Gemini solo puede elegir de aquí.
+// Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
   'clipboard', 'search', 'bed', 'truck', 'link', 'cross', 'info', 'pin', 'clock', 'check', 'calendar', 'phone',
   'instagram', 'star', 'nav', 'gift', 'dumbbell', 'file', 'facebook', 'globe', 'flame', 'heart', 'scale'];
 
 var TIPOS_IA = ['asistente', 'calculadora', 'info', 'whatsapp'];
+var MAX_BOTONES_IA = 5;
 var NIVELES_OK = ['info', 'alerta', 'ok', 'aviso'];
 var RESERVADOS = ['index', 'schema', 'motor', 'motor-v1-respaldo', 'contacto', 'ambiente2', 'demo-base'];
 
-var SUBTITULO_POR_SECTOR = {
-  'Hostelería y Restauración': 'Pide, reserva y repite · desde tu mesa',
-  'Salud y Clínicas': 'Tu salud, más cerca y sin esperas',
-  'Belleza y Estética': 'Reserva tu momento · resultados que se notan',
-  'Automoción y Talleres': 'Tu vehículo al día, sin complicaciones',
-  'Comercio y Retail': 'Tu tienda de siempre, ahora en tu móvil',
-  'Servicios Profesionales': 'Atención directa y profesional',
-  'Otros': 'Tu negocio local, conectado'
+/**
+ * Sectores que ofrece el formulario. Para cada uno:
+ *   sub      subtítulo por defecto          icono/accion/paso/opciones  → botón base si Claude no responde
+ *   guia     pistas que se pasan a Claude sobre qué necesita ese tipo de comercio
+ * El nombre (clave) debe coincidir con el desplegable de v/closer/index.html.
+ */
+var SECTORES = {
+  'Hostelería y Restauración': { sub: 'Pide, reserva y repite · desde tu mesa', icono: 'utensils', accion: 'Reservar mesa', paso: 'Reserva',
+    opciones: ['Comer', 'Cenar', 'Desayuno o café', 'Grupo o celebración'],
+    guia: 'carta o menú, reservas, grupos y celebraciones, alérgenos (solo derivar al local), pedidos para llevar, horarios de cocina, fidelización' },
+  'Hoteles y Alojamiento': { sub: 'Tu estancia, sin complicaciones', icono: 'bed', accion: 'Consultar disponibilidad', paso: 'Estancia',
+    opciones: ['Una noche', 'Fin de semana', 'Una semana', 'Evento o grupo'],
+    guia: 'disponibilidad, check-in/check-out, servicios incluidos, llegada tardía, equipaje, recomendaciones de la zona, incidencias en la habitación' },
+  'Salud y Clínicas': { sub: 'Tu salud, más cerca y sin esperas', icono: 'cross', accion: 'Pedir cita', paso: 'Motivo',
+    opciones: ['Primera visita', 'Revisión', 'Seguimiento', 'Otra consulta'],
+    guia: 'pedir/cambiar cita, preparar la visita (qué traer), documentación, urgencias (llamar al 112 o al centro), seguros y pagos; NUNCA consejo clínico' },
+  'Dental y Odontología': { sub: 'Sonríe con tranquilidad', icono: 'cross', accion: 'Pedir cita dental', paso: 'Motivo',
+    opciones: ['Revisión', 'Limpieza', 'Dolor o urgencia', 'Estética dental', 'Ortodoncia'],
+    guia: 'primera visita, revisiones periódicas, urgencias dentales (avisar al centro), financiación y presupuestos (solo derivar), miedo al dentista; NUNCA consejo clínico' },
+  'Veterinaria y Mascotas': { sub: 'Cuidamos de los tuyos', icono: 'heart', accion: 'Pedir cita para tu mascota', paso: 'Motivo',
+    opciones: ['Vacunas', 'Revisión', 'Peluquería', 'Urgencia', 'Alimentación'],
+    guia: 'vacunación y desparasitación (recordatorios), urgencias (llamar al centro), identificación y chip, peluquería, tienda; NUNCA diagnóstico ni dosis' },
+  'Nutrición y Bienestar': { sub: 'Hábitos que se notan', icono: 'heart', accion: 'Pedir consulta', paso: 'Motivo',
+    opciones: ['Primera consulta', 'Seguimiento', 'Plan de alimentación', 'Información de productos'],
+    guia: 'primera consulta, seguimiento, productos y pedidos, dudas frecuentes de logística; NUNCA planes dietéticos, dosis ni promesas de resultados' },
+  'Belleza y Estética': { sub: 'Reserva tu momento · resultados que se notan', icono: 'calendar', accion: 'Reservar cita', paso: 'Servicio',
+    opciones: ['Corte', 'Color', 'Uñas', 'Facial o corporal', 'Barbería'],
+    guia: 'reserva y cambio de cita, cancelaciones con aviso, qué servicio elegir, cuidados posteriores generales, bonos y packs (solo derivar), fotos de trabajos en redes' },
+  'Tatuajes y Piercing': { sub: 'Tu diseño, bien pensado', icono: 'star', accion: 'Pedir presupuesto', paso: 'Trabajo',
+    opciones: ['Tatuaje nuevo', 'Cover-up', 'Piercing', 'Retoque'],
+    guia: 'presupuesto por zona y tamaño, cita de diseño, cuidados posteriores generales, mayoría de edad y documentación, retoques' },
+  'Fitness y Deporte': { sub: 'Empieza hoy, mejora cada día', icono: 'dumbbell', accion: 'Reservar clase de prueba', paso: 'Interés',
+    opciones: ['Clase de prueba', 'Entrenamiento personal', 'Cuotas y horarios', 'Clases en grupo'],
+    guia: 'clase de prueba, horarios de clases, cuotas (solo derivar), altas y bajas, entrenamiento personal, normas del centro' },
+  'Automoción y Talleres': { sub: 'Tu vehículo al día, sin complicaciones', icono: 'truck', accion: 'Pedir cita para tu vehículo', paso: 'Servicio',
+    opciones: ['Revisión', 'Cambio de aceite', 'Preparar la ITV', 'Avería', 'Neumáticos'],
+    guia: 'cita de taller, estado de la reparación, presupuesto, recordatorio de revisiones/ITV, coche de sustitución, recogida y entrega' },
+  'Comercio y Retail': { sub: 'Tu tienda de siempre, ahora en tu móvil', icono: 'gift', accion: 'Consultar un producto', paso: 'Consulta',
+    opciones: ['Disponibilidad', 'Pedido especial', 'Cambio o devolución', 'Reservar producto'],
+    guia: 'disponibilidad de producto, encargos, cambios y devoluciones, tarjeta de fidelidad, envíos, horarios de recogida' },
+  'Inmobiliaria': { sub: 'Tu próximo hogar, más cerca', icono: 'pin', accion: 'Pedir información', paso: 'Interés',
+    opciones: ['Comprar', 'Alquilar', 'Vender mi inmueble', 'Tasación'],
+    guia: 'comprar, alquilar, vender, tasación, visitas, documentación necesaria; no inventar precios ni inmuebles' },
+  'Educación y Academias': { sub: 'Aprender es más fácil aquí', icono: 'clipboard', accion: 'Pedir información', paso: 'Interés',
+    opciones: ['Matrícula', 'Clase de prueba', 'Horarios', 'Cursos y precios'],
+    guia: 'matrícula, clase de prueba, horarios y niveles, material, comunicación con familias; no inventar precios ni plazas' },
+  'Servicios Profesionales': { sub: 'Atención directa y profesional', icono: 'file', accion: 'Solicitar cita', paso: 'Motivo',
+    opciones: ['Primera consulta', 'Seguimiento', 'Presupuesto', 'Enviar documentación'],
+    guia: 'primera consulta, presupuesto, envío de documentación, plazos importantes, urgencias; no dar asesoramiento legal/fiscal concreto' },
+  'Hogar y Reformas': { sub: 'Soluciones para tu casa, sin sorpresas', icono: 'key', accion: 'Pedir presupuesto', paso: 'Trabajo',
+    opciones: ['Reparación urgente', 'Reforma', 'Instalación', 'Revisión'],
+    guia: 'avería urgente, presupuesto sin compromiso, visita técnica, zonas de servicio, garantías (solo derivar)' },
+  'Ocio y Eventos': { sub: 'Que no falte nada en tu plan', icono: 'star', accion: 'Consultar fecha', paso: 'Plan',
+    opciones: ['Cumpleaños', 'Evento de empresa', 'Grupo', 'Solo información'],
+    guia: 'consultar fecha, aforo, grupos, reservas, normas, pagos de señal (solo derivar)' },
+  'Otros': { sub: 'Tu negocio local, conectado', icono: 'chat', accion: 'Pedir información o cita', paso: 'Motivo',
+    opciones: ['Información', 'Cita', 'Presupuesto', 'Otra consulta'],
+    guia: 'las consultas más repetidas del negocio, cómo reservar o pedir cita, cómo llegar y horarios' }
 };
+
+function sector_(nombre) {
+  var n = String(nombre || '');
+  if (SECTORES[n]) return SECTORES[n];
+  return SECTORES['Otros'];
+}
+
+/** Traduce los tipos de Google Maps al sector del formulario ('' si no hay coincidencia clara). */
+function sectorDesdeTipos_(tipos) {
+  var t = (tipos || []).join(' ');
+  var reglas = [
+    [/\bdentist\b|dental/, 'Dental y Odontología'],
+    [/veterinary_care|pet_store|pet_/, 'Veterinaria y Mascotas'],
+    [/\blodging\b|hotel|hostel|bed_and_breakfast|guest_house/, 'Hoteles y Alojamiento'],
+    [/restaurant|\bcafe\b|\bbar\b|bakery|meal_takeaway|meal_delivery|coffee|food|pub\b|ice_cream/, 'Hostelería y Restauración'],
+    [/hair_care|beauty_salon|nail_salon|\bspa\b|barber|hair_salon|massage/, 'Belleza y Estética'],
+    [/tattoo|piercing/, 'Tatuajes y Piercing'],
+    [/\bgym\b|fitness|sports_club|yoga|swimming|stadium/, 'Fitness y Deporte'],
+    [/car_repair|car_dealer|car_wash|auto_parts|tire|gas_station|motorcycle/, 'Automoción y Talleres'],
+    [/doctor|hospital|physiotherapist|pharmacy|health|medical|clinic|drugstore/, 'Salud y Clínicas'],
+    [/real_estate/, 'Inmobiliaria'],
+    [/school|university|tutor|academy|library|language/, 'Educación y Academias'],
+    [/lawyer|accounting|insurance|consult|notary|finance|bank/, 'Servicios Profesionales'],
+    [/plumber|electrician|locksmith|roofing|general_contractor|painter|moving_company|laundry|home_goods|hardware/, 'Hogar y Reformas'],
+    [/night_club|event|amusement|bowling|movie|casino|park\b|tourist|wedding/, 'Ocio y Eventos'],
+    [/store|shop|market|clothing|shoe|jewelry|florist|supermarket|book|electronics|furniture|gift/, 'Comercio y Retail']
+  ];
+  for (var i = 0; i < reglas.length; i++) if (reglas[i][0].test(t)) return reglas[i][1];
+  return '';
+}
 
 /* =============================== PUNTOS DE ENTRADA =============================== */
 
@@ -67,7 +157,7 @@ function doPost(e) {
     tuvoLock = lock.tryLock(25000);
     if (!tuvoLock) return json_({ ok: false, error: 'Hay otro diagnóstico en curso. Espera 20 segundos y vuelve a enviarlo.' });
     var datos = leerPeticion_(e);
-    var r = procesar_(datos);
+    var r = datos.accion === 'buscar' ? buscar_(datos) : procesar_(datos);
     return json_(r);
   } catch (err) {
     console.error('doPost: ' + (err && err.stack || err));
@@ -102,25 +192,47 @@ function leerPeticion_(e) {
 
 /* ================================== FLUJO PRINCIPAL ================================== */
 
+function autorizarCloser_(c, raw) {
+  var closer = limpiar_(raw.closer_id || raw.closer, 20).toUpperCase();
+  if (!/^[A-Z0-9_-]{2,20}$/.test(closer)) return { error: 'Falta el código de Closer.' };
+  if (c.closers.length && c.closers.indexOf(closer) < 0) {
+    return { error: 'Código de Closer no autorizado (' + (closer || 'vacío') + ').' };
+  }
+  return { closer: closer };
+}
+
 function procesar_(raw) {
   var c = cfg_();
-  if (!c.githubToken || !c.geminiKey) {
-    return { ok: false, error: 'Falta configurar GITHUB_TOKEN o GEMINI_API_KEY en las propiedades del script.' };
+  if (!c.githubToken || !c.anthropicKey) {
+    return { ok: false, error: 'Falta configurar GITHUB_TOKEN o ANTHROPIC_API_KEY en las propiedades del script.' };
   }
 
-  var closer = limpiar_(raw.closer_id || raw.closer, 20).toUpperCase();
-  if (!/^[A-Z0-9_-]{2,20}$/.test(closer)) return { ok: false, error: 'Falta el código de Closer.' };
-  if (c.closers.length && c.closers.indexOf(closer) < 0) {
-    return { ok: false, error: 'Código de Closer no autorizado (' + (closer || 'vacío') + ').' };
-  }
-  if (!permitirPeticion_(c.maxPorHora)) {
+  var au = autorizarCloser_(c, raw);
+  if (au.error) return { ok: false, error: au.error };
+  var closer = au.closer;
+  if (!permitirPeticion_(c.maxPorHora, 'n_')) {
     return { ok: false, error: 'Se alcanzó el máximo de diagnósticos por hora. Inténtalo más tarde.' };
   }
 
-  var v = validarEntrada_(raw);
+  // 0) Datos reales del negocio en Google Maps (si el Closer lo eligió en el buscador)
+  var placeId = idLugar_(raw.place_id);
+  var lugar = null, avisoMaps = '';
+  if (placeId) {
+    if (c.mapsKey) {
+      var det = detallesLugar_(c, placeId);
+      if (det.error) { avisoMaps = det.error; if (det.invalido) placeId = ''; }
+      else lugar = det.lugar;
+    } else {
+      avisoMaps = 'Google Maps no está configurado (falta GOOGLE_MAPS_API_KEY): se usó el Place ID sin comprobar sus datos.';
+    }
+  }
+
+  var v = validarEntrada_(raw, placeId, lugar);
   if (v.error) return { ok: false, error: v.error };
   var d = v.datos;
   d.closer = closer;
+  d.lugar = lugar;
+  if (avisoMaps) d.avisos.push(avisoMaps);
 
   var ruta = c.carpeta + '/' + d.slug + '.json';
   var previo = githubLeer_(c, ruta);
@@ -129,12 +241,12 @@ function procesar_(raw) {
     return { ok: false, error: 'Ya existe un cliente real llamado "' + d.slug + '". Cambia el nombre (por ejemplo añade la ciudad).' };
   }
 
-  // 1) Gemini (opcional: si falla seguimos con la interfaz básica)
+  // 1) Claude (opcional: si falla seguimos con el paquete base del sector)
   var personal = null, avisoIA = '';
   try {
-    personal = pedirGemini_(c, d);
+    personal = pedirClaude_(c, d);
   } catch (err) {
-    avisoIA = 'Gemini no respondió bien: ' + String(err && err.message || err).slice(0, 160);
+    avisoIA = 'Claude no respondió bien: ' + String(err && err.message || err).slice(0, 160);
     console.warn(avisoIA);
   }
 
@@ -144,7 +256,7 @@ function procesar_(raw) {
   var usoIA = !!personal;
   if (fallos.length && personal) {
     console.warn('JSON con IA descartado: ' + fallos.join('; '));
-    avisoIA = 'La propuesta de Gemini no pasó la revisión (' + fallos[0] + '). Se publicó la interfaz básica.';
+    avisoIA = 'La propuesta de Claude no pasó la revisión (' + fallos[0] + '). Se publicó el paquete base del sector.';
     cliente = ensamblar_(d, null);
     fallos = validarCliente_(cliente);
     usoIA = false;
@@ -162,7 +274,93 @@ function procesar_(raw) {
   var url = c.dominio + '/c/?cod=' + d.slug;
   var avisos = (d.avisos || []).concat(avisoIA ? [avisoIA] : []);
   registrar_(d, usoIA ? 'PUBLICADO' : 'PUBLICADO_BASICO', usoIA, url, avisos.join(' | '), '');
-  return { ok: true, slug: d.slug, url: url, peticion: d.peticion, ia: usoIA, avisos: avisos };
+  return { ok: true, slug: d.slug, url: url, peticion: d.peticion, ia: usoIA, avisos: avisos, reseña_directa: !!d.googleDirecto };
+}
+
+/* ============================== GOOGLE MAPS (Places API New) ============================== */
+
+/** Un Place ID de Google: letras, números, guiones; normalmente empieza por ChIJ. */
+function idLugar_(s) {
+  var t = String(s || '').trim();
+  return /^[A-Za-z0-9_-]{20,200}$/.test(t) ? t : '';
+}
+
+function telefonoMovilEs_(tel) {
+  var d = String(tel || '').replace(/[^\d]/g, '');
+  if (d.indexOf('34') === 0 && d.length === 11) d = d.slice(2);
+  return d.length === 9 && /^[67]/.test(d) ? '34' + d : '';
+}
+
+/** Búsqueda para el desplegable del formulario. La clave de Maps nunca sale del servidor. */
+function buscar_(raw) {
+  var c = cfg_();
+  var au = autorizarCloser_(c, raw);
+  if (au.error) return { ok: false, error: au.error };
+  if (!c.mapsKey) return { ok: false, codigo: 'sin_maps', error: 'El buscador de Google Maps no está configurado todavía. Rellena los datos a mano.' };
+  var q = limpiar_(raw.consulta, 120);
+  if (q.length < 3) return { ok: false, error: 'Escribe al menos 3 letras del nombre del negocio.' };
+  if (!permitirPeticion_(c.maxBusquedas, 'b_')) return { ok: false, error: 'Demasiadas búsquedas esta hora. Rellena los datos a mano o inténtalo luego.' };
+
+  var r = UrlFetchApp.fetch('https://places.googleapis.com/v1/places:searchText', {
+    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    headers: {
+      'X-Goog-Api-Key': c.mapsKey,
+      'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.internationalPhoneNumber,places.websiteUri,places.types'
+    },
+    payload: JSON.stringify({ textQuery: q, languageCode: 'es', pageSize: 6 })
+  });
+  var code = r.getResponseCode();
+  if (code !== 200) {
+    console.warn('Places búsqueda HTTP ' + code + ' ' + r.getContentText().slice(0, 200));
+    return { ok: false, error: 'Google Maps no respondió (' + code + '). Rellena los datos a mano o revisa la clave y que "Places API (New)" esté activada.' };
+  }
+  var lista = (JSON.parse(r.getContentText()).places || []).map(function (p) {
+    var id = idLugar_(p.id);
+    if (!id) return null;
+    return {
+      id: id,
+      nombre: cadena_(p.displayName && p.displayName.text, 80),
+      direccion: cadena_(p.formattedAddress, 140),
+      telefono: cadena_(p.internationalPhoneNumber, 30),
+      web: urlHttps_(p.websiteUri),
+      sector: sectorDesdeTipos_(p.types),
+      whatsapp: telefonoMovilEs_(p.internationalPhoneNumber)
+    };
+  }).filter(Boolean);
+  return { ok: true, resultados: lista };
+}
+
+/** Ficha completa del negocio: teléfono, web, dirección, enlace a Maps, tipos y horario. */
+function detallesLugar_(c, id) {
+  var r = UrlFetchApp.fetch('https://places.googleapis.com/v1/places/' + encodeURIComponent(id) + '?languageCode=es', {
+    method: 'get', muteHttpExceptions: true,
+    headers: {
+      'X-Goog-Api-Key': c.mapsKey,
+      'X-Goog-FieldMask': 'id,displayName,formattedAddress,internationalPhoneNumber,websiteUri,types,googleMapsUri,regularOpeningHours.weekdayDescriptions'
+    }
+  });
+  var code = r.getResponseCode();
+  if (code === 404 || code === 400) return { invalido: true, error: 'No se encontró ese negocio en Google Maps (Place ID no válido). El botón de reseñas quedó oculto.' };
+  if (code !== 200) return { error: 'No se pudo consultar Google Maps (' + code + '); se usó el Place ID sin comprobar los datos del negocio.' };
+  var p = JSON.parse(r.getContentText());
+  var horas = ((p.regularOpeningHours && p.regularOpeningHours.weekdayDescriptions) || []).slice(0, 7).map(function (linea) {
+    var m = /^([^:]{1,20}):\s*(.{1,80})$/.exec(cadena_(linea, 110));
+    return m ? { etiqueta: m[1], valor: m[2] } : null;
+  }).filter(Boolean);
+  var maps = urlHttps_(p.googleMapsUri);
+  if (maps && !/^https:\/\/(www\.)?(maps\.google\.[a-z.]+|google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps)/i.test(maps)) maps = '';
+  var tel = String(p.internationalPhoneNumber || '').replace(/[^\d+]/g, '');
+  return { lugar: {
+    id: id,
+    nombre: cadena_(p.displayName && p.displayName.text, 80),
+    direccion: cadena_(p.formattedAddress, 140),
+    tel: /^\+\d{8,15}$/.test(tel) ? tel : '',
+    web: urlHttps_(p.websiteUri),
+    mapsUrl: maps,
+    sector: sectorDesdeTipos_(p.types),
+    tipos: (p.types || []).slice(0, 6).map(function (t) { return cadena_(t, 40); }),
+    horas: horas
+  } };
 }
 
 /* ================================ CONFIGURACIÓN ================================ */
@@ -172,22 +370,24 @@ function cfg_() {
   var g = function (k, def) { var v = p.getProperty(k); return v && String(v).trim() ? String(v).trim() : def; };
   return {
     githubToken: g('GITHUB_TOKEN', ''),
-    geminiKey: g('GEMINI_API_KEY', ''),
+    anthropicKey: g('ANTHROPIC_API_KEY', ''),
+    mapsKey: g('GOOGLE_MAPS_API_KEY', ''),
     repo: g('GITHUB_REPO', '83ortizmanuel-del/studio42-engine'),
     rama: g('GITHUB_RAMA', 'main'),
     carpeta: g('GITHUB_CARPETA', 'c'),
-    modelo: g('GEMINI_MODELO', 'gemini-2.5-flash'),
+    modelo: g('CLAUDE_MODELO', 'claude-sonnet-5-5'),
     dominio: g('DOMINIO', 'https://studio42.es').replace(/\/+$/, ''),
     closers: g('CLOSERS', '').split(',').map(function (s) { return s.trim().toUpperCase(); }).filter(Boolean),
     maxPorHora: Number(g('MAX_POR_HORA', '30')) || 30,
+    maxBusquedas: Number(g('MAX_BUSQUEDAS_HORA', '120')) || 120,
     promptExtra: g('PROMPT_EXTRA', '')
   };
 }
 
-function permitirPeticion_(max) {
+function permitirPeticion_(max, prefijo) {
   try {
     var cache = CacheService.getScriptCache();
-    var clave = 'n_' + Utilities.formatDate(new Date(), 'UTC', 'yyyyMMddHH');
+    var clave = (prefijo || 'n_') + Utilities.formatDate(new Date(), 'UTC', 'yyyyMMddHH');
     var n = Number(cache.get(clave) || '0');
     if (n >= max) return false;
     cache.put(clave, String(n + 1), 3700);
@@ -286,19 +486,32 @@ function acentoLegible_(hex) {
   return h;
 }
 
-function validarEntrada_(raw) {
+function validarEntrada_(raw, placeId, lugar) {
   var avisos = [];
-  var nombre = limpiar_(raw.nombre, 60);
+  var nombre = limpiar_(raw.nombre || (lugar && lugar.nombre), 60);
   if (nombre.length < 2) return { error: 'Falta el nombre del negocio.' };
   var slug = slugify_(nombre);
   if (slug.length < 2 || RESERVADOS.indexOf(slug) >= 0 || /^contacto-/.test(slug)) {
     return { error: 'Ese nombre no se puede usar como dirección. Cambia el nombre (por ejemplo añade la ciudad).' };
   }
   var wa = normalizarWhatsApp_(raw.whatsapp);
+  if (!wa && lugar && lugar.tel) {
+    var movil = telefonoMovilEs_(lugar.tel);
+    if (movil) { wa = movil; avisos.push('El WhatsApp se tomó del teléfono móvil de Google Maps. Confírmalo con el dueño.'); }
+  }
   if (!wa) return { error: 'El WhatsApp no es válido. Escríbelo con 9 cifras (España) o con prefijo internacional.' };
 
-  var sector = limpiar_(raw.sector, 80) || 'Otros';
-  var g = normalizarGoogle_(raw.google);
+  var sector = limpiar_(raw.sector, 80) || (lugar && lugar.sector) || 'Otros';
+  var g, googleDirecto = false;
+  if (placeId) {
+    // Enlace que abre DIRECTAMENTE la ventana de reseña del negocio (sin pasos intermedios)
+    g = { url: 'https://search.google.com/local/writereview?placeid=' + placeId, aviso: '' };
+    googleDirecto = true;
+    if (raw.google && String(raw.google).trim()) avisos.push('Se usó el negocio elegido en Google Maps para el enlace de reseñas; el enlace pegado a mano se ignoró.');
+  } else {
+    g = normalizarGoogle_(raw.google);
+    googleDirecto = /writereview|g\.page/.test(g.url);
+  }
   if (g.aviso) avisos.push(g.aviso);
 
   var instagram = normalizarRed_(raw.instagram, 'instagram.com');
@@ -307,6 +520,7 @@ function validarEntrada_(raw) {
   if (raw.facebook && !facebook) avisos.push('Facebook no válido: botón omitido.');
   var web = urlHttps_(raw.web);
   if (raw.web && !web) avisos.push('La web no es válida: botón omitido.');
+  if (!web && lugar && lugar.web) web = lugar.web;
 
   var logo = urlHttps_(raw.logo || raw.logo_extra);
   if (logo && /drive\.google\.com|dropbox\.com|docs\.google\.com/i.test(logo)) {
@@ -327,7 +541,7 @@ function validarEntrada_(raw) {
   return {
     datos: {
       nombre: nombre, slug: slug, sector: sector, whatsapp: wa,
-      google: g.url, instagram: instagram, facebook: facebook, web: web, logo: logo, bizum: bizum,
+      google: g.url, googleDirecto: googleDirecto, placeId: placeId || '', instagram: instagram, facebook: facebook, web: web, logo: logo, bizum: bizum,
       acento: acento, principal: mezclar_('#0b0c10', acento, 0.07),
       fricciones: fricciones, notas: limpiar_(raw.notas || raw.fricciones_extra, 600),
       estilo: limpiar_(raw.estilo || raw.branding, 120),
@@ -336,13 +550,13 @@ function validarEntrada_(raw) {
   };
 }
 
-/* ====================================== GEMINI ====================================== */
+/* ====================================== CLAUDE ====================================== */
 
 function construirPrompt_(d, c) {
   var iconos = ICONOS_OK.join(', ');
   var sistema = [
     'Eres el arquitecto de interfaces de Studio 42 (agencia "phygital": llaveros/stands NFC que abren una mini-app web en el móvil del cliente de un comercio local).',
-    'Tu trabajo: leer el diagnóstico de un comercio y proponer entre 2 y 4 BOTONES A MEDIDA que resuelvan las fricciones que se han contado.',
+    'Tu trabajo: leer el diagnóstico de un comercio y proponer entre 3 y 5 BOTONES A MEDIDA que resuelvan las fricciones que se han contado y cubran lo que suele necesitar un cliente de ese tipo de comercio.',
     'Responde SOLO con un objeto JSON válido (sin texto alrededor, sin ```).',
     '',
     'FORMATO DE SALIDA',
@@ -350,7 +564,7 @@ function construirPrompt_(d, c) {
     '  "subtitulo": "frase corta del negocio (máx. 70 caracteres)",',
     '  "textoBadge": "ETIQUETA EN MAYÚSCULAS (máx. 40)",',
     '  "tituloSeccion": "título de la sección de botones (máx. 50)",',
-    '  "botones": [ ...2 a 4 botones... ]',
+    '  "botones": [ ...3 a 5 botones... ]',
     '}',
     '',
     'TIPOS DE BOTÓN PERMITIDOS (solo estos cuatro)',
@@ -372,7 +586,8 @@ function construirPrompt_(d, c) {
     '',
     'REGLAS OBLIGATORIAS',
     '· NO inventes datos: ni teléfonos, direcciones, horarios, PRECIOS, descuentos, ingredientes/alérgenos, dosis, resultados médicos ni certificaciones. Si necesitas un dato que no te dieron, haz que el cliente ELIJA en el modal y mande su elección por WhatsApp para que el negocio responda.',
-    '· NO crees botones de reseñas, valoraciones, estrellas, llaves perdidas, Bizum, parking, guardar contacto, Instagram/Facebook/web: todo eso lo añade el sistema automáticamente.',
+    '· NO crees botones de reseñas, valoraciones, estrellas, llaves perdidas, Bizum, parking, guardar contacto, Instagram/Facebook/web, llamar, cómo llegar ni horarios: todo eso lo añade el sistema automáticamente con datos reales.',
+    '· Cubre varios aspectos distintos del negocio (por ejemplo: pedir cita/reserva, resolver dudas frecuentes, preparar la visita, consultar un producto/servicio, urgencias o incidencias). No repitas el mismo botón con otro nombre.',
     '· NUNCA prometas premios, descuentos o regalos a cambio de opiniones o reseñas.',
     '· Salud, clínicas, veterinaria, nutrición: ningún diagnóstico ni dosis ni consejo clínico. Solo orientación logística (pedir cita, preparar la visita, urgencias → llamar al 112 o al negocio).',
     '· Cada botón debe corresponder a UNA fricción real contada en el diagnóstico. El primero será el más importante.',
@@ -388,6 +603,8 @@ function construirPrompt_(d, c) {
     '<<<',
     'Negocio: ' + d.nombre,
     'Sector: ' + d.sector,
+    'Qué suele necesitar un cliente de este sector (orientativo): ' + sector_(d.sector).guia,
+    d.lugar ? 'Ficha de Google Maps → tipos: ' + (d.lugar.tipos.join(', ') || '(sin datos)') + ' · dirección: ' + (d.lugar.direccion || '(sin datos)') : 'Ficha de Google Maps: no disponible',
     'Fricciones detectadas por el Closer: ' + (d.fricciones.length ? d.fricciones.join(' | ') : 'optimización general'),
     'Notas del Closer: ' + (d.notas || '(ninguna)'),
     'Estilo / identidad visual: ' + (d.estilo || '(no indicado)'),
@@ -397,28 +614,31 @@ function construirPrompt_(d, c) {
   return { sistema: sistema.join('\n'), usuario: usuario };
 }
 
-function pedirGemini_(c, d) {
+function pedirClaude_(c, d) {
   var pr = construirPrompt_(d, c);
-  var url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(c.modelo) + ':generateContent';
   var ultimoError = '';
   for (var intento = 0; intento < 2; intento++) {
     var body = {
-      systemInstruction: { parts: [{ text: pr.sistema }] },
-      contents: [{ role: 'user', parts: [{ text: pr.usuario }] }],
-      generationConfig: { temperature: intento === 0 ? 0.5 : 0.2, responseMimeType: 'application/json', maxOutputTokens: 6144 }
+      model: c.modelo,
+      max_tokens: 6144,
+      system: pr.sistema,
+      messages: [{ role: 'user', content: pr.usuario }]
     };
-    var resp = UrlFetchApp.fetch(url, {
+    var resp = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
       method: 'post', contentType: 'application/json', muteHttpExceptions: true,
-      headers: { 'x-goog-api-key': c.geminiKey },
+      headers: { 'x-api-key': c.anthropicKey, 'anthropic-version': '2023-06-01' },
       payload: JSON.stringify(body)
     });
     var code = resp.getResponseCode();
     var texto = resp.getContentText();
-    if (code !== 200) { ultimoError = 'HTTP ' + code + ' ' + texto.slice(0, 160); if (code === 400 || code === 401 || code === 403 || code === 404) break; continue; }
+    if (code !== 200) {
+      ultimoError = 'HTTP ' + code + ' ' + texto.slice(0, 160);
+      if (code === 400 || code === 401 || code === 403 || code === 404) break;
+      continue;
+    }
     try {
       var j = JSON.parse(texto);
-      var parte = j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts;
-      var t = parte && parte.map(function (p) { return p.text || ''; }).join('');
+      var t = (j.content || []).filter(function (x) { return x && x.type === 'text'; }).map(function (x) { return x.text || ''; }).join('');
       if (!t) { ultimoError = 'respuesta vacía'; continue; }
       var limpio = depurarRespuestaIA_(t);
       if (limpio) return limpio;
@@ -428,12 +648,14 @@ function pedirGemini_(c, d) {
   throw new Error(ultimoError || 'sin respuesta');
 }
 
-/** Convierte el texto de Gemini en un objeto seguro, o null si no hay ningún botón aprovechable. */
+/** Convierte el texto de Claude en un objeto seguro, o null si no hay ningún botón aprovechable. */
 function depurarRespuestaIA_(texto) {
   var t = String(texto).trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  var i0 = t.indexOf('{'), i1 = t.lastIndexOf('}');   // por si Claude añade alguna frase alrededor
+  if (i0 > 0 || (i1 >= 0 && i1 < t.length - 1)) t = t.slice(i0, i1 + 1);
   var o = JSON.parse(t);
   if (!o || typeof o !== 'object') return null;
-  var botones = (Array.isArray(o.botones) ? o.botones : []).map(limpiarBoton_).filter(Boolean).slice(0, 4);
+  var botones = (Array.isArray(o.botones) ? o.botones : []).map(limpiarBoton_).filter(Boolean).slice(0, MAX_BOTONES_IA);
   if (!botones.length) return null;
   botones[0].destacado = true;
   return {
@@ -580,6 +802,21 @@ function waUrl_(num, texto) {
   return 'https://wa.me/' + num + (texto ? '?text=' + encodeURIComponent(texto) : '');
 }
 
+/** Paquete base de cada sector: se usa cuando Claude no responde. Pasa por el mismo filtro que las propuestas de la IA. */
+function botonesBaseSector_(nombreSector) {
+  var x = sector_(nombreSector);
+  var boton = limpiarBoton_({
+    tipo: 'asistente', nombre: x.accion, descripcion: 'Dinos qué necesitas y te respondemos por WhatsApp', icono: x.icono, titulo: x.accion,
+    intro: 'Elige tu opción y envíala al negocio por WhatsApp.',
+    pasos: [{ titulo: x.paso, opciones: x.opciones }, { titulo: 'Cuándo', opciones: ['Hoy', 'Mañana', 'Esta semana', 'Sin prisa'] }],
+    botonTexto: 'Enviar por WhatsApp',
+    mensaje: 'Hola {negocio}, quisiera hacer una consulta:\n- ' + x.paso + ': {' + x.paso + '}\n- Cuándo: {Cuándo}\n¿Podéis atenderme?'
+  });
+  if (boton) boton.destacado = true;
+  return boton ? [boton] : [{ tipo: 'whatsapp', nombre: 'Pedir información o cita', descripcion: 'Cuéntanos qué necesitas', icono: 'calendar', destacado: true,
+    mensaje: 'Hola {negocio}, quisiera pedir información o cita.' }];
+}
+
 function ensamblar_(d, personal) {
   var contacto = [];
   contacto.push({ tipo: 'whatsapp', nombre: 'Escríbenos por WhatsApp', descripcion: 'Respuesta directa del equipo', icono: 'chat', colorIcono: '#25D366',
@@ -587,6 +824,13 @@ function ensamblar_(d, personal) {
   if (d.instagram) contacto.push({ tipo: 'enlace', nombre: 'Síguenos en Instagram', descripcion: 'Novedades y trabajos recientes', icono: 'instagram', colorIcono: '#E1306C', url: d.instagram });
   if (d.facebook) contacto.push({ tipo: 'enlace', nombre: 'Página de Facebook', descripcion: 'Novedades y promociones', icono: 'facebook', colorIcono: '#1877F2', url: d.facebook });
   if (d.web) contacto.push({ tipo: 'enlace', nombre: 'Nuestra web', descripcion: 'Toda la información del negocio', icono: 'globe', url: d.web });
+  var l = d.lugar;
+  if (l && l.tel) contacto.push({ tipo: 'enlace', nombre: 'Llamar ahora', descripcion: 'Teléfono del negocio', icono: 'phone', colorIcono: '#34d399', url: 'tel:' + l.tel });
+  if (l && l.mapsUrl) contacto.push({ tipo: 'enlace', nombre: 'Cómo llegar', descripcion: l.direccion || 'Abrir en Google Maps', icono: 'nav', colorIcono: '#4285F4', url: l.mapsUrl });
+  if (l && l.horas && l.horas.length) contacto.push({ tipo: 'info', nombre: 'Horario', descripcion: 'Días y horas de apertura', icono: 'clock',
+    titulo: 'Horario de apertura', intro: 'Según la ficha de Google Maps. Puede variar en festivos.',
+    tarjetas: [{ nivel: 'info', titulo: 'Semana', items: l.horas }],
+    acciones: [{ texto: 'Preguntar por WhatsApp', whatsapp: true, estilo: 'whatsapp', mensaje: 'Hola {negocio}, quisiera confirmar el horario.' }] });
   contacto.push({ tipo: 'vcard', nombre: 'Guardar contacto en la agenda', descripcion: 'Descarga nuestro teléfono directo al móvil', icono: 'contact', colorIcono: '#ffffff' });
 
   var servicios = [{ tipo: 'llaves', nombre: '¿Encontraste estas llaves?', descripcion: 'Avisa al local para coordinar la devolución segura' }];
@@ -596,15 +840,12 @@ function ensamblar_(d, personal) {
   var opinion = { tipo: 'opinion', whatsappGerencia: waUrl_(d.whatsapp, 'Hola, quisiera enviar un comentario privado sobre mi visita a ' + d.nombre + '.') };
   if (d.google) opinion.urlGoogle = d.google;
 
-  var botonesPersonales = personal ? personal.botones : [{
-    tipo: 'whatsapp', nombre: 'Pedir información o cita', descripcion: 'Cuéntanos qué necesitas y te respondemos', icono: 'calendar', destacado: true,
-    mensaje: 'Hola {negocio}, quisiera pedir información o cita.'
-  }];
+  var botonesPersonales = personal ? personal.botones : botonesBaseSector_(d.sector);
 
   var cliente = {
     version: 2,
     nombre: d.nombre.toUpperCase().slice(0, 60),
-    subtitulo: (personal && personal.subtitulo) || SUBTITULO_POR_SECTOR[d.sector] || 'Tu negocio local, conectado',
+    subtitulo: (personal && personal.subtitulo) || sector_(d.sector).sub,
     textoBadge: (personal && personal.textoBadge) || 'SISTEMA CONECTADO · MOSTRADOR ACTIVO',
     colorPrincipal: d.principal,
     colorAcento: d.acento,
@@ -729,7 +970,8 @@ function PROBAR_CONFIGURACION() {
   var c = cfg_();
   var salida = [];
   salida.push((c.githubToken ? '✔' : '✘') + ' GITHUB_TOKEN ' + (c.githubToken ? 'guardado' : 'FALTA'));
-  salida.push((c.geminiKey ? '✔' : '✘') + ' GEMINI_API_KEY ' + (c.geminiKey ? 'guardada' : 'FALTA'));
+  salida.push((c.anthropicKey ? '✔' : '✘') + ' ANTHROPIC_API_KEY ' + (c.anthropicKey ? 'guardada' : 'FALTA'));
+  salida.push((c.mapsKey ? '✔' : '⚠') + ' GOOGLE_MAPS_API_KEY ' + (c.mapsKey ? 'guardada' : 'no guardada (el buscador de Maps no funcionará; modo manual)'));
   salida.push('Closers permitidos: ' + (c.closers.length ? c.closers.join(', ') : '(cualquiera con formato válido — conviene definir CLOSERS)'));
   if (c.githubToken) {
     var r = UrlFetchApp.fetch('https://api.github.com/repos/' + c.repo, { headers: ghHeaders_(c), muteHttpExceptions: true });
@@ -739,15 +981,28 @@ function PROBAR_CONFIGURACION() {
       salida.push('✔ GitHub responde: ' + info.full_name + ' (permiso de escritura: ' + (info.permissions && info.permissions.push ? 'sí' : 'NO — revisa el token') + ')');
     } else salida.push('✘ GitHub devolvió ' + code + ': ' + r.getContentText().slice(0, 120));
   }
-  if (c.geminiKey) {
+  if (c.anthropicKey) {
     try {
-      var r2 = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(c.modelo) + ':generateContent', {
-        method: 'post', contentType: 'application/json', muteHttpExceptions: true, headers: { 'x-goog-api-key': c.geminiKey },
-        payload: JSON.stringify({ contents: [{ parts: [{ text: 'Responde solo: OK' }] }] })
+      var r2 = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+        method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+        headers: { 'x-api-key': c.anthropicKey, 'anthropic-version': '2023-06-01' },
+        payload: JSON.stringify({ model: c.modelo, max_tokens: 20, messages: [{ role: 'user', content: 'Responde solo: OK' }] })
       });
-      salida.push(r2.getResponseCode() === 200 ? '✔ Gemini responde (modelo ' + c.modelo + ')'
-        : '✘ Gemini devolvió ' + r2.getResponseCode() + ' con el modelo ' + c.modelo + ': ' + r2.getContentText().slice(0, 140));
-    } catch (e) { salida.push('✘ Gemini: ' + e); }
+      salida.push(r2.getResponseCode() === 200 ? '✔ Claude responde (modelo ' + c.modelo + ')'
+        : '✘ Claude devolvió ' + r2.getResponseCode() + ' con el modelo ' + c.modelo + ': ' + r2.getContentText().slice(0, 140));
+    } catch (e) { salida.push('✘ Claude: ' + e); }
+  }
+  if (c.mapsKey) {
+    try {
+      var r3 = UrlFetchApp.fetch('https://places.googleapis.com/v1/places:searchText', {
+        method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+        headers: { 'X-Goog-Api-Key': c.mapsKey, 'X-Goog-FieldMask': 'places.id,places.displayName' },
+        payload: JSON.stringify({ textQuery: 'Museo del Prado Madrid', languageCode: 'es', pageSize: 1 })
+      });
+      var p3 = r3.getResponseCode() === 200 ? (JSON.parse(r3.getContentText()).places || [])[0] : null;
+      salida.push(p3 ? '✔ Google Maps responde (encontró: ' + (p3.displayName && p3.displayName.text) + ')'
+        : '✘ Google Maps devolvió ' + r3.getResponseCode() + ': ' + r3.getContentText().slice(0, 140));
+    } catch (e) { salida.push('✘ Google Maps: ' + e); }
   }
   console.log(salida.join('\n'));
   return salida.join('\n');

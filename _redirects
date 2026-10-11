@@ -1,5 +1,0 @@
-# Carpetas internas: que no se puedan abrir desde studio42.es (siguen visibles en GitHub).
-/docs/*         /404.html   404!
-/apps-script/*  /404.html   404!
-/tests/*        /404.html   404!
-/.github/*      /404.html   404!
