@@ -1,36 +1,32 @@
 {
+  "version": 2,
   "nombre": "DRA. LISBETH CAROLINA RANGEL SÁNCHEZ",
-  "modoDemo": false,
   "subtitulo": "Ginecología & Obstetricia · Cuidado Prenatal Humanizado",
   "textoBadge": "PASAPORTE PHYGITAL MATERNAL · ATENCIÓN DIRECTA",
-  "logo": "./logo-dra-lisbeth.png",
-  "audioFondo": "/c/ambiente2.mp3",
+  "logo": "logo-dra-lisbeth.png",
   "colorPrincipal": "#0F1A15",
   "colorAcento": "#D9888A",
-  "datosPago": {
-    "pagoMovil": "0414-0344533 · Banesco · V-12345678",
-    "zelle": "contacto@dralisbethrangel.com",
-    "tarifa": "Honorarios Teleconsulta: $20 (o al cambio oficial BCV)"
-  },
+  "whatsapp": "https://wa.me/584140344533",
   "secciones": [
     {
       "titulo": "Contacto Directo & Citas",
       "botones": [
         {
+          "tipo": "vcard",
           "nombre": "Guardar Contacto en Agenda",
           "descripcion": "Descarga mi ficha médica directa al móvil en 1 toque",
-          "icono": "fa-solid fa-address-card",
-          "estiloIcono": "background: rgba(217, 136, 138, 0.18); color: #D9888A;",
-          "url": "./dra-lisbeth-carolina-rangel-sanchez.vcf",
-          "destacado": true
+          "icono": "contact",
+          "colorIcono": "#D9888A",
+          "destacado": true,
+          "url": "./dra-lisbeth-carolina-rangel-sanchez.vcf"
         },
         {
+          "tipo": "whatsapp",
           "nombre": "Citas Presenciales & Secretaría",
           "descripcion": "Información de horarios, ubicación y agenda en clínica",
-          "icono": "fa-brands fa-whatsapp",
-          "estiloIcono": "background: rgba(94, 119, 103, 0.2); color: #7E9F89;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20le%20escribo%20para%20solicitar%20informaci%C3%B3n%20y%20agendar%20cita%20presencial",
-          "destacado": false
+          "icono": "chat",
+          "colorIcono": "#7E9F89",
+          "mensaje": "Hola Dra. Lisbeth, le escribo para solicitar información y agendar cita presencial"
         }
       ]
     },
@@ -38,79 +34,73 @@
       "titulo": "Herramientas de Cuidado Maternal",
       "botones": [
         {
-          "tipo": "calculadora_embarazo",
-          "nombre": "Calculadora Gestacional",
-          "descripcion": "Calcula tus semanas exactas y fecha probable de parto",
-          "icono": "fa-solid fa-baby",
-          "estiloIcono": "background: rgba(217, 136, 138, 0.2); color: #D9888A;"
-        },
-        {
-          "tipo": "triaje_urgencias",
+          "tipo": "info",
           "nombre": "Semáforo de Signos de Alarma",
-          "descripcion": "Identifica síntomas críticos (TMF insatisfactorio, dolor bajo vientre)",
-          "icono": "fa-solid fa-shield-heart",
-          "estiloIcono": "background: rgba(225, 29, 72, 0.22); color: #E11D48;",
-          "alertas": [
-            "TMF (Test / Movimientos Fetales) insatisfactorio",
-            "Dolor intenso o constante en bajo vientre",
-            "Pérdida de líquido amniótico o sangrado vaginal",
-            "Cefalea intensa persistente o alteraciones visuales",
-            "Disminución drástica de los movimientos fetales"
+          "descripcion": "Identifica síntomas críticos durante el embarazo",
+          "icono": "alert",
+          "colorIcono": "#E11D48",
+          "titulo": "Signos de alarma",
+          "intro": "Si presentas alguno de estos signos, contacta de inmediato con la doctora o acude a urgencias:",
+          "tarjetas": [
+            {
+              "nivel": "alerta",
+              "texto": "TMF (Test / Movimientos Fetales) insatisfactorio"
+            },
+            {
+              "nivel": "alerta",
+              "texto": "Dolor intenso o constante en bajo vientre"
+            },
+            {
+              "nivel": "alerta",
+              "texto": "Pérdida de líquido amniótico o sangrado vaginal"
+            },
+            {
+              "nivel": "alerta",
+              "texto": "Cefalea intensa persistente o alteraciones visuales"
+            },
+            {
+              "nivel": "alerta",
+              "texto": "Disminución drástica de los movimientos fetales"
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Avisar a la Dra. por WhatsApp",
+              "whatsapp": true,
+              "estilo": "peligro",
+              "mensaje": "Hola Dra. Lisbeth, tengo un signo de alarma y necesito orientación urgente:"
+            }
           ]
         },
         {
-          "tipo": "carnet_vacunas",
-          "nombre": "Carnet de Vacunación Maternal",
-          "descripcion": "Esquema oficial de vacunas de la embarazada (Toxoide, Hep B, Influenza, COVID)",
-          "icono": "fa-solid fa-id-badge",
-          "estiloIcono": "background: rgba(56, 189, 248, 0.18); color: #38BDF8;"
-        },
-        {
-          "tipo": "calculadora_imc",
-          "nombre": "Control de Peso & Ganancia Gestacional",
-          "descripcion": "Calcula tu IMC preconcepcional y la ganancia de peso recomendada",
-          "icono": "fa-solid fa-weight-scale",
-          "estiloIcono": "background: rgba(234, 179, 8, 0.18); color: #EAB308;"
-        },
-        {
-          "tipo": "contador_contracciones",
-          "nombre": "Contador de Contracciones",
-          "descripcion": "Cronómetro en tiempo real para trabajo de parto",
-          "icono": "fa-solid fa-stopwatch",
-          "estiloIcono": "background: rgba(168, 85, 247, 0.18); color: #A855F7;"
-        },
-        {
-          "tipo": "checklist_parto",
+          "tipo": "info",
           "nombre": "Maleta para el Parto",
-          "descripcion": "Checklist interactivo guardado en tu móvil para madre y bebé",
-          "icono": "fa-solid fa-clipboard-check",
-          "estiloIcono": "background: rgba(94, 119, 103, 0.22); color: #7E9F89;",
-          "checklist": {
-            "Documentos esenciales": [
-              "Documento de identidad (cédula o DNI) tuyo y de tu acompañante",
-              "Carné de control prenatal, resultados de exámenes y ecografías"
-            ],
-            "Para la madre (tú)": [
-              "2 o 3 camisones o pijamas con abertura frontal para facilitar la lactancia",
-              "Ropa interior cómoda y amplia (de algodón o desechables)",
-              "Sujetadores o tops de lactancia",
-              "Sandalias o chanclas para la ducha y pantuflas para la habitación",
-              "Artículos de aseo personal: cepillo de dientes, pasta dental, desodorante, champú, jabón y bálsamo labial",
-              "Toallas sanitarias o compresas obstétricas nocturnas",
-              "Discos absorbentes para lactancia",
-              "Ropa holgada y cómoda para el día de la salida del hospital"
-            ],
-            "Para el bebé": [
-              "3 o 4 mudas de ropa de algodón (bodys, pijamas y pantalones)",
-              "Gorritos de algodón para mantener su temperatura corporal",
-              "Calcetines y manoplas",
-              "Cobija o arrullo suave",
-              "Pañales desechables para recién nacido (talla RN) y toallitas húmedas sin alcohol"
-            ],
-            "Otros": [
-              "Teléfono móvil y cargador (de preferencia con un cable largo)"
-            ]
-          }
+          "descripcion": "Checklist de lo que necesitan la madre y el bebé",
+          "icono": "clipboard",
+          "colorIcono": "#7E9F89",
+          "titulo": "Maleta para el parto",
+          "tarjetas": [
+            {
+              "nivel": "info",
+              "titulo": "Documentos esenciales",
+              "texto": "• Documento de identidad (cédula o DNI) tuyo y de tu acompañante\n• Carné de control prenatal, resultados de exámenes y ecografías"
+            },
+            {
+              "nivel": "info",
+              "titulo": "Para la madre (tú)",
+              "texto": "• 2 o 3 camisones o pijamas con abertura frontal para facilitar la lactancia\n• Ropa interior cómoda y amplia (de algodón o desechables)\n• Sujetadores o tops de lactancia\n• Sandalias o chanclas para la ducha y pantuflas para la habitación\n• Artículos de aseo personal: cepillo de dientes, pasta dental, desodorante, champú, jabón y bálsamo labial\n• Toallas sanitarias o compresas obstétricas nocturnas\n• Discos absorbentes para lactancia\n• Ropa holgada y cómoda para el día de la salida del hospital"
+            },
+            {
+              "nivel": "info",
+              "titulo": "Para el bebé",
+              "texto": "• 3 o 4 mudas de ropa de algodón (bodys, pijamas y pantalones)\n• Gorritos de algodón para mantener su temperatura corporal\n• Calcetines y manoplas\n• Cobija o arrullo suave\n• Pañales desechables para recién nacido (talla RN) y toallitas húmedas sin alcohol"
+            },
+            {
+              "nivel": "info",
+              "titulo": "Otros",
+              "texto": "• Teléfono móvil y cargador (de preferencia con un cable largo)"
+            }
+          ]
         }
       ]
     },
@@ -118,36 +108,37 @@
       "titulo": "Consultas Médicas & Teleorientación",
       "botones": [
         {
-          "tipo": "teleconsulta_triaje",
+          "tipo": "whatsapp",
           "nombre": "Teleconsulta Médica Prioritaria",
           "descripcion": "Orientación médica a distancia o protocolo SOS de urgencia",
-          "icono": "fa-solid fa-user-doctor",
-          "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;",
-          "destacado": true
+          "icono": "cross",
+          "colorIcono": "#0EA5E9",
+          "destacado": true,
+          "mensaje": "Hola Dra. Lisbeth, solicito una teleconsulta prioritaria. Motivo:"
         },
         {
+          "tipo": "whatsapp",
           "nombre": "Control Prenatal Integral",
           "descripcion": "Evaluación médica continua, analíticas y seguimiento clínico",
-          "icono": "fa-solid fa-stethoscope",
-          "estiloIcono": "background: rgba(94, 119, 103, 0.2); color: #7E9F89;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20control%20prenatal%20integral",
-          "destacado": false
+          "icono": "heart",
+          "colorIcono": "#7E9F89",
+          "mensaje": "Hola Dra. Lisbeth, deseo agendar mi control prenatal integral"
         },
         {
+          "tipo": "whatsapp",
           "nombre": "Ecosonograma Obstétrico & Diagnóstico",
           "descripcion": "Evaluación estructural fetal detallada y bienestar intrauterino",
-          "icono": "fa-solid fa-eye",
-          "estiloIcono": "background: rgba(217, 136, 138, 0.18); color: #D9888A;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20Ecosonograma%20Obst%C3%A9trico",
-          "destacado": false
+          "icono": "search",
+          "colorIcono": "#D9888A",
+          "mensaje": "Hola Dra. Lisbeth, deseo agendar mi Ecosonograma Obstétrico"
         },
         {
+          "tipo": "whatsapp",
           "nombre": "Chequeo Ginecológico & Citología",
           "descripcion": "Despistaje preventivo y valoración clínica anual",
-          "icono": "fa-solid fa-microscope",
-          "estiloIcono": "background: rgba(201, 168, 106, 0.18); color: #C9A86A;",
-          "url": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20deseo%20agendar%20mi%20chequeo%20ginecol%C3%B3gico%20y%20citolog%C3%ADa",
-          "destacado": false
+          "icono": "search",
+          "colorIcono": "#C9A86A",
+          "mensaje": "Hola Dra. Lisbeth, deseo agendar mi chequeo ginecológico y citología"
         }
       ]
     },
@@ -157,18 +148,44 @@
         {
           "tipo": "asistencia_ruta",
           "nombre": "Urgencias & Salud en Ruta",
-          "descripcion": "Localiza hospitales, clínicas o farmacias por GPS en 1 clic",
-          "icono": "fa-solid fa-map-location-dot",
-          "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
-          "destacado": false
+          "descripcion": "Localiza hospitales y clínicas por GPS en 1 clic",
+          "icono": "locate",
+          "colorIcono": "#10B981",
+          "titulo": "Urgencias & salud en ruta",
+          "intro": "Localiza centros de urgencia cercanos o envía tu ubicación GPS a la doctora:",
+          "busquedaMaps": "hospital urgencias",
+          "textoMapas": "Buscar hospitales y urgencias cerca",
+          "textoGPS": "Enviar mi ubicación GPS a la Dra.",
+          "mensajeGPS": "Hola Dra. Lisbeth, necesito ayuda. Esta es mi ubicación GPS exacta: {ubicacion}"
         }
       ]
     },
     {
       "titulo": "Tu Opinión Nos Importa",
-      "escudoResenas": true,
-      "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth,%20tengo%20una%20sugerencia%20sobre%20la%20atenci%C3%B3n%20recibida"
+      "botones": [
+        {
+          "tipo": "opinion",
+          "whatsappGerencia": "https://wa.me/584140344533?text=Hola%20Dra.%20Lisbeth%2C%20tengo%20una%20sugerencia%20sobre%20la%20atenci%C3%B3n%20recibida"
+        }
+      ]
+    }
+  ],
+  "_pendientes": [
+    {
+      "que": "Botones con herramientas nuevas: Calculadora Gestacional, Carnet de Vacunación Maternal, Control de Peso/IMC, Contador de Contracciones",
+      "por_que": "No funcionaban de verdad (el motor antiguo no tenía la calculadora gestacional ni el contador; el carnet salía vacío). Requieren módulos nuevos (calculadora de fechas, cronómetro) y el contenido médico validado por la doctora. Se pueden construir en una segunda fase."
+    },
+    {
+      "que": "datosPago (pago móvil, Zelle, tarifa)",
+      "por_que": "El pago móvil tenía datos de relleno («V-12345678»). El motor no usa estos campos."
+    },
+    {
+      "que": "Enlace de reseñas de Google",
+      "por_que": "Era https://maps.google.com (portada de Maps). El botón de Google queda oculto hasta poner el enlace real de su ficha."
+    },
+    {
+      "que": "Botón «Urgencias & Salud en Ruta»",
+      "por_que": "Antes mostraba «hospitales veterinarios» (era el texto fijo de la mascota). Corregido a hospitales generales."
     }
   ]
 }

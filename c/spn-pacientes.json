@@ -1,49 +1,33 @@
 {
+  "version": 2,
   "nombre": "SPORT PLANET NUTRITION",
-  "modoDemo": false,
-  "whatsapp": "https://wa.me/34692202636",
   "subtitulo": "Nutrición Deportiva · Asesoría, Bioimpedancia & Rendimiento",
   "textoBadge": "PUNTO FIT · CONSULTA & MOSTRADOR ACTIVO",
-  "logo": "./nutrition-planet.png",
-  "logoAnchoMax": "270px",
+  "logo": "nutrition-planet.png",
+  "logoAnchoMax": "100%",
   "logoAlto": "86px",
   "paddingLogo": "4px 10px",
   "fondoLogo": "rgba(11, 12, 16, 0.95)",
-  "audioFondo": "ambiente2.mp3",
   "colorPrincipal": "#0b0c10",
   "colorAcento": "#e60000",
-  "esMascota": false,
+  "whatsapp": "https://wa.me/34692202636",
   "datosPago": {
     "bizum": "692202636",
     "concepto": "Nutrition Planet"
   },
   "secciones": [
     {
-      "titulo": "Área del Paciente · Pautas & Consulta",
+      "titulo": "Área del Paciente · Consulta",
       "botones": [
-        {
-          "nombre": "Mi Plan de Comidas & Menú Fit",
-          "descripcion": "Acceso a tu plan alimenticio personalizado (Canva)",
-          "icono": "fa-solid fa-utensils",
-          "url": "https://www.canva.com",
-          "estiloIcono": "background: rgba(48, 209, 88, 0.2); color: #30d158;",
-          "destacado": true
-        },
-        {
-          "nombre": "Mi Rutina de Entrenamiento",
-          "descripcion": "Ejercicios, series y cargas de tu plan activo (Canva)",
-          "icono": "fa-solid fa-dumbbell",
-          "url": "https://www.canva.com",
-          "estiloIcono": "background: rgba(0, 229, 255, 0.2); color: #00E5FF;",
-          "destacado": false
-        },
         {
           "tipo": "reserva_cita",
           "nombre": "Pedir Cita para Revisión & Bioimpedancia",
           "descripcion": "Reserva tu pesaje y control con justificante previo",
-          "icono": "fa-solid fa-weight-scale",
-          "estiloIcono": "background: rgba(245, 158, 11, 0.2); color: #f59e0b;",
-          "destacado": false
+          "icono": "scale",
+          "colorIcono": "#f59e0b",
+          "destacado": true,
+          "titulo": "Cita de revisión & bioimpedancia",
+          "aviso": "La cita se confirma cuando recibimos el justificante del Bizum."
         }
       ]
     },
@@ -51,20 +35,61 @@
       "titulo": "Herramientas Interactivas (En Mostrador)",
       "botones": [
         {
-          "tipo": "calc_proteina",
+          "tipo": "calculadora",
           "nombre": "Calculadora de Proteína Diaria",
-          "descripcion": "Calcula tus gramos exactos según peso y objetivo",
-          "icono": "fa-solid fa-calculator",
-          "estiloIcono": "background: rgba(230, 0, 0, 0.2); color: #e60000;",
-          "destacado": true
+          "descripcion": "Calcula tus gramos exactos de proteína según peso y objetivo",
+          "icono": "calculator",
+          "colorIcono": "#e60000",
+          "titulo": "Calculadora de Proteína Diaria",
+          "campo": {
+            "etiqueta": "Tu peso (kg)",
+            "unidad": "kg",
+            "min": 30,
+            "max": 250,
+            "placeholder": "Ej: 75"
+          },
+          "etiquetaOpciones": "Objetivo (base SPN 1.5 g/kg)",
+          "opciones": [
+            {
+              "texto": "Rendimiento / Mantenimiento (1.5 g/kg)",
+              "factor": 1.5
+            },
+            {
+              "texto": "Ganancia muscular (1.8 g/kg)",
+              "factor": 1.8
+            },
+            {
+              "texto": "Definición extrema (2.2 g/kg)",
+              "factor": 2.2
+            }
+          ],
+          "botonTexto": "Calcular ingesta",
+          "resultado": {
+            "texto": "Ingesta recomendada",
+            "unidad": "g / día",
+            "decimales": 0
+          },
+          "aviso": "Orientativo. No sustituye el consejo de un profesional sanitario."
         },
         {
-          "tipo": "guia_creatina",
-          "nombre": "Protocolo & Dosificación de Creatina",
-          "descripcion": "Gramos exactos por peso y momento óptimo de toma",
-          "icono": "fa-solid fa-bottle-droplet",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;",
-          "destacado": false
+          "tipo": "info",
+          "nombre": "Protocolo Exacto de Creatina",
+          "descripcion": "Dosis diaria y mejor momento de toma. Sin fase de carga innecesaria.",
+          "icono": "bottle",
+          "colorIcono": "#ffffff",
+          "titulo": "Protocolo de Creatina",
+          "tarjetas": [
+            {
+              "nivel": "info",
+              "titulo": "⚡ Dosis",
+              "texto": "3 g a 5 g diarios sostenidos."
+            },
+            {
+              "nivel": "aviso",
+              "titulo": "⏰ Cuándo",
+              "texto": "Post-entreno con agua o un batido de proteína. Tómala también en días de descanso."
+            }
+          ]
         }
       ]
     },
@@ -72,46 +97,56 @@
       "titulo": "Servicios & Utilidades del Llavero",
       "botones": [
         {
-          "tipo": "recuperar_llaves",
-          "nombre": "🔑 ¿Encontraste estas llaves?",
-          "descripcion": "Pulsa aquí para avisar a Nutrition Planet y devolverlas de forma segura",
-          "icono": "fa-solid fa-key"
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Pulsa aquí para avisar a Nutrition Planet y devolverlas de forma segura"
         },
         {
           "tipo": "bizum",
           "nombre": "Pagar por Bizum en Mostrador",
-          "descripcion": "Número: 692 20 26 36 (Toca para copiar y pegar en tu banco)",
-          "icono": "fa-solid fa-mobile-screen-button",
-          "estiloIcono": "background: rgba(0, 195, 255, 0.2); color: #00c3ff;"
+          "descripcion": "Toca para copiar el número (692 20 26 36) y pegarlo en tu banco",
+          "icono": "phone",
+          "colorIcono": "#00c3ff"
         },
         {
+          "tipo": "whatsapp",
           "nombre": "Consultar Stock & Sabores en 1 Toque",
           "descripcion": "Verifica disponibilidad en mostrador por WhatsApp",
-          "icono": "fa-brands fa-whatsapp",
-          "url": "https://wa.me/34692202636?text=Hola%20Nutrition%20Planet!%20Estoy%20en%20la%20tienda%20y%20quisiera%20consultar%20disponibilidad%20de%20stock%20y%20sabores.",
-          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;"
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "mensaje": "Hola Nutrition Planet! Estoy en la tienda y quisiera consultar disponibilidad de stock y sabores."
         },
         {
-          "nombre": "¿Dónde aparqué?",
           "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la posición GPS de tu coche para volver",
-          "icono": "fa-solid fa-location-crosshairs",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #9ca3af;"
+          "icono": "locate",
+          "colorIcono": "#9ca3af"
         },
         {
+          "tipo": "vcard",
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Descarga nuestro teléfono y ubicación directa al móvil",
-          "icono": "fa-solid fa-address-card",
-          "url": "./contacto.vcf",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;"
+          "descripcion": "Descarga nuestro teléfono directo al móvil",
+          "icono": "contact",
+          "colorIcono": "#ffffff"
         }
       ]
     },
     {
       "titulo": "Tu Opinión Nos Importa",
-      "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38",
-      "whatsappGerencia": "https://wa.me/34692202636?text=Hola%20Gerencia%20de%20Nutrition%20Planet,%20quisiera%20comentar%20un%20aspecto%20sobre%20mi%20atencion%20en%20tienda."
+      "botones": [
+        {
+          "tipo": "opinion",
+          "urlGoogle": "https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38",
+          "whatsappGerencia": "https://wa.me/34692202636?text=Hola%20Gerencia%20de%20Nutrition%20Planet%2C%20quisiera%20comentar%20un%20aspecto%20sobre%20mi%20atenci%C3%B3n%20en%20tienda."
+        }
+      ]
+    }
+  ],
+  "_pendientes": [
+    {
+      "que": "Botones «Mi Plan de Comidas & Menú Fit» y «Mi Rutina de Entrenamiento»",
+      "por_que": "Apuntaban a canva.com (la portada), no al plan del paciente. Hace falta un enlace de Canva por paciente (un JSON propio por paciente)."
     }
   ]
 }

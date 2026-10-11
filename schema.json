@@ -1,0 +1,532 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Studio 42 Engine v2 - configuración de un cliente",
+  "type": "object",
+  "required": [
+    "nombre",
+    "secciones"
+  ],
+  "properties": {
+    "version": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "nombre": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "subtitulo": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "textoBadge": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "logo": {
+      "type": "string",
+      "pattern": "^(https://[^\\s\"'<>]+|[\\w\\-./]+)$"
+    },
+    "fondoLogo": {
+      "type": "string",
+      "pattern": "^(#[0-9a-fA-F]{6}|transparent|rgba?\\(\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*,\\s*\\d{1,3}\\s*(,\\s*(0|1|0?\\.\\d+)\\s*)?\\))$"
+    },
+    "colorPrincipal": {
+      "$ref": "#/definitions/hex"
+    },
+    "colorAcento": {
+      "$ref": "#/definitions/hex"
+    },
+    "tema": {
+      "enum": [
+        "industrial"
+      ]
+    },
+    "logoAnchoMax": {
+      "type": "string",
+      "pattern": "^(\\d{2,3}px|100%)$"
+    },
+    "logoAlto": {
+      "type": "string",
+      "pattern": "^\\d{2,3}px$"
+    },
+    "whatsapp": {
+      "$ref": "#/definitions/whatsapp"
+    },
+    "telefono": {
+      "$ref": "#/definitions/telefono"
+    },
+    "datosPago": {
+      "type": "object",
+      "properties": {
+        "bizum": {
+          "$ref": "#/definitions/telefono"
+        },
+        "concepto": {
+          "type": "string",
+          "maxLength": 60
+        }
+      }
+    },
+    "secciones": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/seccion"
+      }
+    },
+    "paddingLogo": {
+      "type": "string",
+      "pattern": "^\\d{1,2}px( \\d{1,2}px)?$"
+    }
+  },
+  "definitions": {
+    "hex": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "whatsapp": {
+      "type": "string",
+      "pattern": "^(https://wa\\.me/\\+?[0-9]{9,15}([/?#].*)?|\\+?[0-9 ().-]{9,20})$"
+    },
+    "telefono": {
+      "type": "string",
+      "pattern": "^\\+?[0-9 ().-]{9,20}$"
+    },
+    "urlSegura": {
+      "type": "string",
+      "pattern": "^(https://|tel:|mailto:)\\S+$"
+    },
+    "seccion": {
+      "type": "object",
+      "required": [
+        "botones"
+      ],
+      "properties": {
+        "titulo": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "botones": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/boton"
+          }
+        }
+      }
+    },
+    "paso": {
+      "type": "object",
+      "required": [
+        "titulo",
+        "opciones"
+      ],
+      "properties": {
+        "titulo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "opciones": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object",
+                "required": [
+                  "texto"
+                ],
+                "properties": {
+                  "texto": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "defecto": {
+          "type": "string"
+        }
+      }
+    },
+    "tarjeta": {
+      "type": "object",
+      "properties": {
+        "nivel": {
+          "enum": [
+            "info",
+            "alerta",
+            "ok",
+            "aviso"
+          ]
+        },
+        "titulo": {
+          "type": "string"
+        },
+        "texto": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "etiqueta"
+            ],
+            "properties": {
+              "etiqueta": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "titulo"
+          ]
+        },
+        {
+          "required": [
+            "texto"
+          ]
+        },
+        {
+          "required": [
+            "items"
+          ]
+        }
+      ]
+    },
+    "accion": {
+      "type": "object",
+      "required": [
+        "texto"
+      ],
+      "properties": {
+        "texto": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "$ref": "#/definitions/urlSegura"
+        },
+        "maps": {
+          "type": "string"
+        },
+        "whatsapp": {
+          "type": "boolean"
+        },
+        "mensaje": {
+          "type": "string"
+        },
+        "estilo": {
+          "enum": [
+            "peligro",
+            "whatsapp",
+            "principal"
+          ]
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "url"
+          ]
+        },
+        {
+          "required": [
+            "maps"
+          ]
+        },
+        {
+          "required": [
+            "whatsapp"
+          ]
+        }
+      ]
+    },
+    "boton": {
+      "type": "object",
+      "required": [
+        "tipo"
+      ],
+      "properties": {
+        "tipo": {
+          "enum": [
+            "enlace",
+            "whatsapp",
+            "vcard",
+            "llaves",
+            "bizum",
+            "reserva_cita",
+            "parking",
+            "asistente",
+            "calculadora",
+            "info",
+            "asistencia_ruta",
+            "opinion"
+          ]
+        },
+        "nombre": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "descripcion": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "icono": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "colorIcono": {
+          "$ref": "#/definitions/hex"
+        },
+        "destacado": {
+          "type": "boolean"
+        },
+        "titulo": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "intro": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "aviso": {
+          "type": "string",
+          "maxLength": 400
+        },
+        "mensaje": {
+          "type": "string",
+          "maxLength": 600
+        },
+        "numeroWhatsapp": {
+          "$ref": "#/definitions/whatsapp"
+        },
+        "numeroBizum": {
+          "$ref": "#/definitions/telefono"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "opinion"
+              }
+            },
+            "required": [
+              "tipo"
+            ]
+          },
+          "else": {
+            "required": [
+              "nombre"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "enlace"
+              }
+            },
+            "required": [
+              "tipo"
+            ]
+          },
+          "then": {
+            "required": [
+              "url"
+            ],
+            "properties": {
+              "url": {
+                "$ref": "#/definitions/urlSegura"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "asistente"
+              }
+            },
+            "required": [
+              "tipo"
+            ]
+          },
+          "then": {
+            "required": [
+              "pasos"
+            ],
+            "properties": {
+              "pasos": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/definitions/paso"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "calculadora"
+              }
+            },
+            "required": [
+              "tipo"
+            ]
+          },
+          "then": {
+            "required": [
+              "campo",
+              "opciones",
+              "resultado"
+            ],
+            "properties": {
+              "campo": {
+                "type": "object",
+                "required": [
+                  "etiqueta"
+                ],
+                "properties": {
+                  "etiqueta": {
+                    "type": "string"
+                  }
+                }
+              },
+              "opciones": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "texto",
+                    "factor"
+                  ],
+                  "properties": {
+                    "texto": {
+                      "type": "string"
+                    },
+                    "factor": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  }
+                }
+              },
+              "resultado": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "info"
+              }
+            },
+            "required": [
+              "tipo"
+            ]
+          },
+          "then": {
+            "required": [
+              "tarjetas"
+            ],
+            "properties": {
+              "tarjetas": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/definitions/tarjeta"
+                }
+              },
+              "acciones": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/accion"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "asistencia_ruta"
+              }
+            },
+            "required": [
+              "tipo"
+            ]
+          },
+          "then": {
+            "required": [
+              "busquedaMaps"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "opinion"
+              }
+            },
+            "required": [
+              "tipo"
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "urlGoogle"
+                ]
+              },
+              {
+                "required": [
+                  "whatsappGerencia"
+                ]
+              }
+            ],
+            "properties": {
+              "urlGoogle": {
+                "$ref": "#/definitions/urlSegura"
+              },
+              "whatsappGerencia": {
+                "$ref": "#/definitions/whatsapp"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
