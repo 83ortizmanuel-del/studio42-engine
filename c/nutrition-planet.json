@@ -1,17 +1,16 @@
 {
+  "version": 2,
   "nombre": "SPORT PLANET NUTRITION",
-  "modoDemo": false,
-  "whatsapp": "https://wa.me/34692202636",
   "subtitulo": "Nutrición Deportiva · Suplementación & Asesoramiento",
   "textoBadge": "ZONA TIENDA · BENEFICIO VIP DESBLOQUEADO",
   "logo": "nutrition-planet.png",
-  "logoAnchoMax": "270px",
+  "logoAnchoMax": "100%",
   "logoAlto": "86px",
   "paddingLogo": "4px 10px",
   "fondoLogo": "rgba(11, 12, 16, 0.95)",
   "colorPrincipal": "#0b0c10",
   "colorAcento": "#e60000",
-  "esMascota": false,
+  "whatsapp": "https://wa.me/34692202636",
   "datosPago": {
     "bizum": "692202636",
     "concepto": "Sport Planet Nutrition"
@@ -21,20 +20,21 @@
       "titulo": "🎁 Tu Regalo por visitarnos hoy",
       "botones": [
         {
+          "tipo": "enlace",
           "nombre": "Guía: El Semáforo de la Suplementación",
           "descripcion": "Qué tomar, cuándo y cómo para potenciar tus resultados (PDF)",
-          "icono": "fa-solid fa-file-pdf",
-          "url": "https://drive.google.com/file/d/1GMwzLa7gx1FL8k_oXdCVhjLbccOrWGOo/view?usp=sharing",
-          "estiloIcono": "background: rgba(230, 0, 0, 0.2); color: #e60000;",
-          "destacado": true
+          "icono": "file",
+          "colorIcono": "#e60000",
+          "destacado": true,
+          "url": "https://drive.google.com/file/d/1GMwzLa7gx1FL8k_oXdCVhjLbccOrWGOo/view?usp=sharing"
         },
         {
+          "tipo": "enlace",
           "nombre": "15 Desayunos & Snacks Fit Económicos",
-          "descripcion": "Recetas fáciles de menos de 1,50€ para ganar masa o definir",
-          "icono": "fa-solid fa-fire-flame-curved",
-          "url": "https://drive.google.com/file/d/1YU43bDUeHFbtA_TyCvsGuAXSZy-9fDCz/view?usp=sharing",
-          "estiloIcono": "background: rgba(245, 158, 11, 0.2); color: #f59e0b;",
-          "destacado": false
+          "descripcion": "Recetas fáciles de menos de 1,50 € para ganar masa o definir",
+          "icono": "flame",
+          "colorIcono": "#f59e0b",
+          "url": "https://drive.google.com/file/d/1YU43bDUeHFbtA_TyCvsGuAXSZy-9fDCz/view?usp=sharing"
         }
       ]
     },
@@ -42,20 +42,61 @@
       "titulo": "⚡ Herramientas Gratuitas en tu móvil",
       "botones": [
         {
-          "tipo": "calc_proteina",
+          "tipo": "calculadora",
           "nombre": "Calculadora de Proteína Diaria",
           "descripcion": "Calcula tus gramos exactos de proteína según peso y objetivo",
-          "icono": "fa-solid fa-calculator",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.1); color: #ffffff;",
-          "destacado": false
+          "icono": "calculator",
+          "colorIcono": "#e60000",
+          "titulo": "Calculadora de Proteína Diaria",
+          "campo": {
+            "etiqueta": "Tu peso (kg)",
+            "unidad": "kg",
+            "min": 30,
+            "max": 250,
+            "placeholder": "Ej: 75"
+          },
+          "etiquetaOpciones": "Objetivo (base SPN 1.5 g/kg)",
+          "opciones": [
+            {
+              "texto": "Rendimiento / Mantenimiento (1.5 g/kg)",
+              "factor": 1.5
+            },
+            {
+              "texto": "Ganancia muscular (1.8 g/kg)",
+              "factor": 1.8
+            },
+            {
+              "texto": "Definición extrema (2.2 g/kg)",
+              "factor": 2.2
+            }
+          ],
+          "botonTexto": "Calcular ingesta",
+          "resultado": {
+            "texto": "Ingesta recomendada",
+            "unidad": "g / día",
+            "decimales": 0
+          },
+          "aviso": "Orientativo. No sustituye el consejo de un profesional sanitario."
         },
         {
-          "tipo": "guia_creatina",
+          "tipo": "info",
           "nombre": "Protocolo Exacto de Creatina",
-          "descripcion": "Dosis según tu peso corporal. Sin fase de carga innecesaria.",
-          "icono": "fa-solid fa-bottle-droplet",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.1); color: #ffffff;",
-          "destacado": false
+          "descripcion": "Dosis diaria y mejor momento de toma. Sin fase de carga innecesaria.",
+          "icono": "bottle",
+          "colorIcono": "#ffffff",
+          "titulo": "Protocolo de Creatina",
+          "tarjetas": [
+            {
+              "nivel": "info",
+              "titulo": "⚡ Dosis",
+              "texto": "3 g a 5 g diarios sostenidos."
+            },
+            {
+              "nivel": "aviso",
+              "titulo": "⏰ Cuándo",
+              "texto": "Post-entreno con agua o un batido de proteína. Tómala también en días de descanso."
+            }
+          ]
         }
       ]
     },
@@ -63,27 +104,43 @@
       "titulo": "Comunidad & Contacto Rápido",
       "botones": [
         {
+          "tipo": "whatsapp",
           "nombre": "Canal VIP · Ofertas Flash & Stock",
           "descripcion": "Entérate antes que nadie de reposiciones y descuentos exclusivos",
-          "icono": "fa-brands fa-whatsapp",
-          "url": "https://wa.me/34692202636?text=¡Hola%20SPN!%20Quiero%20unirme%20al%20grupo%20VIP%20de%20ofertas%20y%20novedades.",
-          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;",
-          "destacado": true
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "destacado": true,
+          "mensaje": "¡Hola SPN! Quiero unirme al grupo VIP de ofertas y novedades."
         },
         {
+          "tipo": "vcard",
           "nombre": "Guardar Contacto de la Tienda",
           "descripcion": "Añádenos a tu agenda para consultarnos lo que necesites",
-          "icono": "fa-solid fa-address-card",
-          "url": "spn-vcard.vcf",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;"
+          "icono": "contact",
+          "colorIcono": "#ffffff",
+          "url": "./spn-vcard.vcf"
         }
       ]
     },
     {
-      "titulo": "Tu Opinión Nos Importa · ¡Premio Seguro!",
-      "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38",
-      "whatsappGerencia": "https://wa.me/34692202636?text=Hola,%20quisiera%20comentar%20un%20aspecto%20sobre%20mi%20atención%20en%20tienda."
+      "titulo": "Tu Opinión Nos Importa",
+      "botones": [
+        {
+          "tipo": "opinion",
+          "urlGoogle": "https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38",
+          "whatsappGerencia": "https://wa.me/34692202636?text=Hola%2C%20quisiera%20comentar%20un%20aspecto%20sobre%20mi%20atenci%C3%B3n%20en%20tienda."
+        }
+      ]
+    }
+  ],
+  "_pendientes": [
+    {
+      "que": "Título antiguo de la sección de opinión: «Tu Opinión Nos Importa · ¡Premio Seguro!»",
+      "por_que": "Prometer premio por opinar va contra las normas de Google (reseñas incentivadas). Se ha quitado."
+    },
+    {
+      "que": "Tarjeta de contacto spn-vcard.vcf (se mantiene como estaba)",
+      "por_que": "Tiene otros teléfonos (+34626811728, +34671510675) distintos del WhatsApp de la tienda y un Gmail personal. Confirmar si es lo que se quiere publicar."
     }
   ]
 }

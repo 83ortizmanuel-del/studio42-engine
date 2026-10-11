@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">Studio 42 | Terminal Phygital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-principal: #0b0c10;
+            --color-acento: #00E5FF;
+            --color-fondo: #030712; 
+            --color-tarjeta: rgba(15, 23, 42, 0.90); 
+            --color-boton: rgba(30, 41, 59, 0.7); 
+            --color-texto: #f8fafc;
+            --color-gris: #94a3b8;
+            --titanium-light: #f1f5f9;
+            --titanium-glow: rgba(226, 232, 240, 0.4);
+            --halo-glow: rgba(0, 229, 255, 0.5);
+            --halo-intensity: 30px;
+            --halo-edge: #00E5FF;
+            --fondo-logo: #0b0c10;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        html {
+            background-color: var(--color-fondo);
+            scroll-behavior: smooth;
+        }
+
+        /* EFECTO ANTI-PANTALLAZO */
+        body { 
+            opacity: 0; 
+            transition: opacity 0.4s ease-in-out;
+            background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
+            color: var(--color-texto); 
+            min-height: 100vh;
+            padding: 15px 15px 35px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+
+        .halo-wrapper {
+            position: relative; width: 100%; max-width: 412px; border-radius: 34px; padding: 2px;
+            margin: auto 0;
+            overflow: hidden; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 var(--halo-intensity) var(--halo-glow);
+            transition: box-shadow 0.3s ease;
+        }
+        .halo-wrapper::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent 0%, transparent 40%, var(--color-acento) 50%, #ffffff 52%, var(--color-acento) 54%, transparent 65%, transparent 100%);
+            animation: haloRotate 8s linear infinite; z-index: 0;
+        }
+        @keyframes haloRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .hub-container { 
+            background: var(--color-tarjeta); width: 100%; border-radius: 32px; 
+            padding: 22px 18px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(20px); position: relative; z-index: 1;
+        }
+
+        .top-bar-controls {
+            display: flex; justify-content: flex-end; align-items: center;
+            margin-bottom: 12px; padding: 0 4px;
+        }
+        
+        .owner-btn {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+            color: #94a3b8; width: 32px; height: 32px; border-radius: 50%; display: none;
+            align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .owner-btn:active { transform: scale(0.92); border-color: var(--color-acento); color: #fff; }
+
+        .status-badge { 
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
+            padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 14px; text-transform: uppercase;
+        }
+        .ping-light { 
+            position: relative; width: 7px; height: 7px; background-color: var(--color-acento);
+            border-radius: 50%; box-shadow: 0 0 8px var(--color-acento); flex-shrink: 0;
+        }
+        .ping-light::after { 
+            content: ''; position: absolute; top: -3px; left: -3px; width: 13px; height: 13px;
+            border-radius: 50%; background-color: var(--titanium-glow);
+            animation: radarTitanium 2s infinite cubic-bezier(0, 0, 0.2, 1);
+        }
+        @keyframes radarTitanium { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
+        
+        .logo-container { 
+            width: 100%; 
+            max-width: 270px; 
+            height: 84px; 
+            margin: 0 auto 16px auto; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            overflow: hidden; 
+            background: radial-gradient(circle at center, rgba(230, 0, 0, 0.15) 0%, rgba(11, 12, 16, 0.95) 85%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--halo-glow); 
+            position: relative; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            padding: 4px 10px;
+        }
+        .logo-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            display: block; 
+            filter: drop-shadow(0 0 10px rgba(230, 0, 0, 0.5));
+            transition: transform 0.25s ease;
+        }
+        .logo-container:active img { transform: scale(0.97); }
+        
+        h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
+        .propietario { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; }
+        .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 18px 0 10px 6px; font-weight: 800; }
+        
+        .apps-menu { display: flex; flex-direction: column; gap: 11px; width: 100%; }
+        .app-btn { 
+            display: flex; align-items: center; padding: 13px 16px; border-radius: 20px; 
+            background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.2s ease; cursor: pointer; text-align: left; text-decoration: none; 
+            backdrop-filter: blur(10px); width: 100%; box-sizing: border-box;
+        }
+        .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
+        .app-btn.destacado { 
+            border: 1px solid var(--color-acento); 
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(15, 23, 42, 0.85));
+            box-shadow: 0 0 20px var(--halo-glow); 
+        }
+        .app-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center; margin-right: 14px; font-size: 1.2rem; flex-shrink: 0; }
+        
+        .app-info { flex-grow: 1; min-width: 0; overflow: hidden; }
+        .app-name { font-size: 0.88rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; }
+        .app-desc { font-size: 0.72rem; color: var(--color-gris); }
+
+        .btn-rescate-llaves {
+            border: 1px solid #f59e0b !important;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(15, 23, 42, 0.9)) !important;
+            box-shadow: 0 0 18px rgba(245, 158, 11, 0.25) !important;
+        }
+        .badge-rescate-sos {
+            font-size: 9px; font-weight: 900; background: #f59e0b; color: #020617;
+            padding: 2px 7px; border-radius: 20px; margin-left: 6px; text-transform: uppercase; flex-shrink: 0;
+        }
+
+        .stars-container { font-size: 2rem; margin-top: 10px; display: flex; justify-content: center; gap: 8px; width: 100%; }
+        .star-rating i { cursor: pointer; transition: transform 0.2s ease; display: inline-block; }
+        .star-active { color: #ffb400; text-shadow: 0 0 14px rgba(255, 180, 0, 0.7); }
+        .star-inactive { color: #334155; }
+
+        /* MODALES */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(14px); z-index: 10001; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-box { 
+            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.18); 
+            border-radius: 28px; padding: 24px 20px; max-width: 380px; width: 100%; 
+            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); transform: translateY(20px); 
+            transition: transform 0.3s ease; max-height: 88vh; overflow-y: auto; position: relative;
+        }
+        .modal-close-btn {
+            position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .modal-actions { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; }
+        .modal-btn-primary { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        .modal-btn-google { background: linear-gradient(135deg, #ffb400, #f59e0b); color: #020617; border: none; padding: 13px 18px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        .modal-btn-secondary { background: transparent; color: var(--color-gris); border: 1px solid rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+
+        .selector-box { text-align: left; margin-bottom: 12px; }
+        .selector-label { font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .selector-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .pill-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 4px; font-size: 0.72rem; color: #fff; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .pill-btn.active { background: linear-gradient(135deg, var(--color-acento), #ffffff); color: #020617; font-weight: 800; border-color: #fff; }
+        .card-resultado { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.25); border-radius: 16px; padding: 12px; margin: 14px 0; text-align: left; }
+
+        .pin-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--color-acento); background: transparent; transition: all 0.2s; }
+        .pin-dot.filled { background: var(--color-acento); box-shadow: 0 0 10px var(--color-acento); }
+        .key-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 14px; font-size: 1.15rem; font-weight: 800; color: #fff; cursor: pointer; }
+        .key-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.92); }
+
+        .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
+        .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+
+        /* ============================================================== */
+        /* MAGIA CSS: TEMA INDUSTRIAL (TITANIO CEPILLADO CON TORNILLOS)   */
+        /* ============================================================== */
+        .tema-industrial {
+            background: 
+                /* 4 Remaches/Tornillos metálicos en las esquinas */
+                radial-gradient(circle at 24px 24px, #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                radial-gradient(circle at calc(100% - 24px) 24px, #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                radial-gradient(circle at 24px calc(100% - 24px), #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                radial-gradient(circle at calc(100% - 24px) calc(100% - 24px), #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+                /* Textura estriada (Brushed Titanium) */
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 3px),
+                /* Degradado Platinium/Titanio oscuro de fondo */
+                linear-gradient(135deg, #2A2D34 0%, #131519 100%) !important;
+            
+            border: 2px solid #475569 !important;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 25px 60px rgba(0,0,0,0.95) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MODAL GENERAL POLIMÓRFICO -->
+    <div id="modal-overlay" class="modal-overlay" onclick="cerrarModal(event)">
+        <div class="modal-box" id="modal-content">
+            <button class="modal-close-btn" onclick="cerrarModalBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modal-icon" class="text-3xl mb-2"></div>
+            <div id="modal-title" class="text-base font-black text-white mb-2 uppercase tracking-wide"></div>
+            <div id="modal-text" class="text-xs text-slate-300 leading-relaxed mb-4"></div>
+            <div id="modal-actions" class="modal-actions">
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GESTIÓN NUTRICIÓN (CANVA DIETA Y RUTINA) -->
+    <div id="modal-nutri-admin" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 360px;">
+            <button class="modal-close-btn" onclick="cerrarNutriAdmin()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-user-doctor text-cyan-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Ficha del Paciente</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Pega los enlaces de Canva (solo lectura) u otros archivos para vincular a este llavero:</p>
+            
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-emerald-400 block mb-1">🥗 Enlace · Dieta / Menú Fit:</label>
+                    <input type="url" id="admin-canva-dieta" placeholder="https://www.canva.com/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-emerald-400">
+                </div>
+                <div>
+                    <label class="font-bold text-cyan-400 block mb-1">🏋️ Enlace · Rutina de Ejercicios:</label>
+                    <input type="url" id="admin-canva-rutina" placeholder="https://www.canva.com/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
+                </div>
+            </div>
+
+            <div class="modal-actions mt-4">
+                <button onclick="guardarEnlacesNutri()" class="modal-btn-primary" style="background: linear-gradient(135deg, #00E5FF, #0077b6); color:#020617;">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar en Llavero
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarNutriAdmin()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL RESERVA DE CITA CON JUSTIFICANTE DE PAGO -->
+    <div id="modal-reserva-pago" class="modal-overlay">
+        <div class="modal-box text-left" style="max-width: 360px;">
+            <button class="modal-close-btn" onclick="cerrarModalReserva()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-calendar-check text-cyan-400 text-lg"></i>
+                <h3 class="text-white text-sm font-black uppercase tracking-wider">Reserva de Consulta</h3>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Para confirmar y agendar tu hueco en consulta, realiza el Bizum e introduce la referencia:</p>
+            
+            <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl mb-3 flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Bizum de la Consulta:</span>
+                    <span id="reserva-bizum-num" class="text-sm font-black text-white font-mono tracking-wider">692 20 26 36</span>
+                </div>
+                <button onclick="copiarBizumReserva()" class="bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[10px] font-bold px-2.5 py-1.5 rounded-lg active:scale-95 transition">
+                    <i class="fa-solid fa-copy mr-1"></i>Copiar
+                </button>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">Tu Nombre Completo:</label>
+                    <input type="text" id="reserva-nombre-input" placeholder="Ej: María Gómez" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="font-bold text-amber-400 block mb-1">Referencia Bizum / Teléfono Emisor:</label>
+                    <input type="text" id="reserva-ref-input" oninput="validarFormularioReserva()" placeholder="Ej: Ref. 482910 o Tu móvil emisor" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none focus:border-amber-400">
+                </div>
+            </div>
+
+            <div class="modal-actions mt-4">
+                <button id="btn-enviar-reserva-wa" onclick="enviarReservaConfirmadaWA()" disabled class="modal-btn-primary opacity-50 cursor-not-allowed transition" style="background: linear-gradient(135deg, #25D366, #128c7e); color:#fff;">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Confirmar y Agendar por WhatsApp
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarModalReserva()">Volver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TEST ERGONÓMICO (IBERLAX) -->
+    <div id="modal-asesor" class="modal-overlay" onclick="cerrarAsesor(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <button class="modal-close-btn" onclick="cerrarAsesorBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="color: var(--color-acento); font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-bed-pulse"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Test Ergonómico</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;">Configuración de descanso en 3 toques</p>
+            <div class="selector-box">
+                <span class="selector-label">1. Postura de Descanso:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('postura', 'De Lado', this)"><i class="fa-solid fa-person"></i><br>De Lado</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Arriba', this)"><i class="fa-solid fa-bed"></i><br>De Espalda</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('postura', 'Boca Abajo', this)"><i class="fa-solid fa-child"></i><br>Boca Abajo</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label">2. Complexión / Peso:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '-70kg', this)">-70 kg</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('peso', '70-90kg', this)">70-90 kg</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('peso', '+90kg', this)">+90 kg</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label">3. Medida Deseada:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '135x190', this)">135x190</div>
+                    <div class="pill-btn active" onclick="seleccionarOpcionAsesor('medida', '150x190', this)">150x190</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionAsesor('medida', '180x200', this)">180x200</div>
+                </div>
+            </div>
+            <div class="card-resultado">
+                <div style="font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase;">Recomendación Ergonómica:</div>
+                <div id="diag-firmeza" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Firmeza Media Adaptable</div>
+                <div id="diag-tecnologia" style="font-size: 0.74rem; color: #cbd5e1; margin-top: 4px;">Muelles Ensacados + Viscoelástica transpirable.</div>
+            </div>
+            <div class="modal-actions">
+                <a id="btn-probar-tienda" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Probar este Modelo en Tienda</a>
+                <button class="modal-btn-secondary" onclick="cerrarAsesorBtn()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TASADOR LOGÍSTICA (IBERLAX) -->
+    <div id="modal-envio" class="modal-overlay" onclick="cerrarEnvio(event)">
+        <div class="modal-box" style="max-width: 380px;">
+            <button class="modal-close-btn" onclick="cerrarEnvioBtn()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="color: #30d158; font-size: 2.2rem; margin-bottom: 8px;"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <h3 style="color: #fff; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">Entrega & Retirada</h3>
+            <p style="font-size: 0.78rem; color: var(--color-gris); margin-bottom: 16px;">Tasador logístico a domicilio</p>
+            <div class="selector-box">
+                <span class="selector-label">1. Zona de Entrega:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('zona', 'Logroño Centro / Casco', this)">Logroño</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Alrededores (Oyón/Lardero)', this)">Cinturón</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('zona', 'Rioja / Otras localidades', this)">Comarca</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label">2. Acceso al Edificio:</span>
+                <div class="selector-pills">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('acceso', 'Con Ascensor / Planta Baja', this)">Ascensor</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (Hasta 2º)', this)">Esc. Baja</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('acceso', 'Escalera (3º o superior)', this)">Esc. Alta</div>
+                </div>
+            </div>
+            <div class="selector-box">
+                <span class="selector-label">3. Retirada de Usado:</span>
+                <div class="selector-pills" style="grid-template-columns: 1fr 1fr;">
+                    <div class="pill-btn active" onclick="seleccionarOpcionEnvio('retirada', 'Sí, retirar colchón antiguo', this)">Retirar Viejo</div>
+                    <div class="pill-btn" onclick="seleccionarOpcionEnvio('retirada', 'No, solo entrega nuevo', this)">Solo Entrega</div>
+                </div>
+            </div>
+            <div class="card-resultado" style="border-color: #30d158; background: rgba(48, 209, 88, 0.08);">
+                <div style="font-size: 0.72rem; color: #30d158; font-weight: 800; text-transform: uppercase;">Condición Estimada:</div>
+                <div id="diag-envio-titulo" style="font-size: 0.95rem; font-weight: 900; color: #fff; margin-top: 2px;">Servicio Bonificado en Tienda</div>
+                <div id="diag-envio-desc" style="font-size: 0.74rem; color: #cbd5e1; margin-top: 4px;">Ruta directa a domicilio con subida a habitación.</div>
+            </div>
+            <div class="modal-actions">
+                <a id="btn-confirmar-envio" href="#" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Consultar Ruta por WhatsApp</a>
+                <button class="modal-btn-secondary" onclick="cerrarEnvioBtn()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TECLADO PIN DIGITAL -->
+    <div id="modal-pin-auth" class="modal-overlay">
+        <div class="modal-box text-center" style="max-width: 320px;">
+            <button class="modal-close-btn" onclick="cerrarPinAuth()"><i class="fa-solid fa-xmark"></i></button>
+            <i class="fa-solid fa-shield-halved text-2xl mb-2" style="color:var(--color-acento);"></i>
+            <h3 class="text-white text-sm font-black uppercase tracking-wider mb-1">Zona Administración</h3>
+            <p class="text-[11px] text-slate-400 mb-4" id="pin-modal-desc">Introduce tu PIN de 4 dígitos</p>
+            <div class="flex justify-center gap-3 mb-5">
+                <div class="pin-dot" id="dot-0"></div><div class="pin-dot" id="dot-1"></div><div class="pin-dot" id="dot-2"></div><div class="pin-dot" id="dot-3"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-2.5 mb-3">
+                <button class="key-btn" onclick="teclearPin('1')">1</button><button class="key-btn" onclick="teclearPin('2')">2</button><button class="key-btn" onclick="teclearPin('3')">3</button>
+                <button class="key-btn" onclick="teclearPin('4')">4</button><button class="key-btn" onclick="teclearPin('5')">5</button><button class="key-btn" onclick="teclearPin('6')">6</button>
+                <button class="key-btn" onclick="teclearPin('7')">7</button><button class="key-btn" onclick="teclearPin('8')">8</button><button class="key-btn" onclick="teclearPin('9')">9</button>
+                <button class="key-btn text-xs text-amber-400 font-bold" onclick="alert('Usa el PIN por defecto: 1234')">SOS</button>
+                <button class="key-btn" onclick="teclearPin('0')">0</button>
+                <button class="key-btn text-rose-400" onclick="borrarPin()"><i class="fa-solid fa-delete-left"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HUB PRINCIPAL -->
+    <div class="halo-wrapper">
+        <div class="hub-container">
+            
+            <div class="top-bar-controls">
+                <button class="owner-btn" id="btn-owner-gear" onclick="iniciarAuthPropietario()" title="Ajustes Dueño">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+
+            <div class="status-badge">
+                <span class="ping-light"></span>
+                <span id="badge-text">PUNTO DE CONEXIÓN ACTIVO</span>
+            </div>
+
+            <div class="logo-container" id="hub-logo-box">
+                <img id="hub-logo" alt="Logo">
+            </div>
+
+            <h1 id="client-name">STUDIO 42</h1>
+            <div class="propietario" id="client-subtitle">ECOSISTEMA PHYGITAL</div>
+
+            <!-- CONTENEDOR DINÁMICO -->
+            <div id="dynamic-menu">
+                <div style="text-align: center; padding: 40px 0; color: #94a3b8; font-size: 13px;">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-cyan-400 mb-2"></i>
+                    <p>Cargando menú interactivo...</p>
+                </div>
+            </div>
+
+            <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+        </div>
+    </div>
+
+    <script>
+        let datosPerfilGlobal = null;
+        let googleReviewUrlGlobal = "https://maps.google.com";
+        let whatsappGerenciaGlobal = "";
+        let whatsappTiendaGlobal = "";
+        let nombreNegocioGlobal = "Profesional";
+        let clienteSlugGlobal = "demo";
+
+        let pinBuffer = "";
+        const PIN_DEFAULT = "1234";
+
+        let estadoAsesor = { postura: 'De Lado', peso: '70-90kg', medida: '150x190' };
+        let estadoEnvio = { zona: 'Logroño Centro / Casco', acceso: 'Con Ascensor / Planta Baja', retirada: 'Sí, retirar colchón antiguo' };
+
+        function vibrarMovil(ms = 35) { if ("vibrate" in navigator) navigator.vibrate(ms); }
+
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalActions = document.getElementById('modal-actions');
+        const modalPin = document.getElementById('modal-pin-auth');
+        const modalReservaPago = document.getElementById('modal-reserva-pago');
+        const modalNutriAdmin = document.getElementById('modal-nutri-admin');
+
+        function abrirModalCustom() { modalOverlay.style.display = 'flex'; setTimeout(() => { modalOverlay.style.opacity = '1'; }, 10); }
+        function cerrarModal(e) { if(e.target === modalOverlay) cerrarModalBtn(); }
+        function cerrarModalBtn() { modalOverlay.style.opacity = '0'; setTimeout(() => { modalOverlay.style.display = 'none'; }, 250); }
+
+        // ==========================================
+        // FITNESS & NUTRICIÓN (NUTRITION PLANET)
+        // ==========================================
+        function abrirCalculadoraProteina() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-calculator text-red-500"></i>';
+            document.getElementById('modal-title').innerText = "Calculadora de Proteína Diaria";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="flex flex-col gap-2 text-left mb-3">
+                    <label class="text-[11px] text-slate-400 font-bold">Tu peso (kg):</label>
+                    <input type="number" id="input-peso-fit" placeholder="Ej: 75" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                    <label class="text-[11px] text-slate-400 font-bold">Objetivo (Base SPN 1.5g/kg):</label>
+                    <select id="select-objetivo-fit" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-white text-xs outline-none">
+                        <option value="1.5">Rendimiento / Mantenimiento (1.5g/kg)</option>
+                        <option value="1.8">Ganancia Muscular (1.8g/kg)</option>
+                        <option value="2.2">Definición Extrema (2.2g/kg)</option>
+                    </select>
+                    <button onclick="calcularResultadoProteina()" class="w-full bg-red-600 text-white font-black py-2.5 rounded-xl uppercase text-xs mt-2">Calcular Ingesta</button>
+                    <div id="resultado-proteina-box" class="hidden bg-slate-900/90 border border-red-500/30 p-3 rounded-xl mt-2 text-center">
+                        <span class="text-xs text-slate-300">Ingesta recomendada:</span>
+                        <div id="resultado-gramos" class="text-2xl font-black text-white my-1"></div>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            abrirModalCustom();
+        }
+
+        function calcularResultadoProteina() {
+            vibrarMovil(30);
+            const peso = parseFloat(document.getElementById('input-peso-fit').value);
+            const factor = parseFloat(document.getElementById('select-objetivo-fit').value);
+            if (!peso) return alert("Por favor, introduce tu peso en kg.");
+            document.getElementById('resultado-gramos').innerText = `${Math.round(peso * factor)} g / día`;
+            document.getElementById('resultado-proteina-box').classList.remove('hidden');
+        }
+
+        function abrirGuiaCreatina() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-bottle-droplet text-white"></i>';
+            document.getElementById('modal-title').innerText = "Protocolo de Creatina";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-white">⚡ Dosis:</b> 3g a 5g diarios sostenidos.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">⏰ Cuándo:</b> Post-entreno con agua o un batido de proteína. Tomar también en días de descanso.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirNutriAdmin() {
+            vibrarMovil(40);
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
+            document.getElementById('admin-canva-dieta').value = localStorage.getItem(`canva_dieta_${claveUnica}`) || "";
+            document.getElementById('admin-canva-rutina').value = localStorage.getItem(`canva_rutina_${claveUnica}`) || "";
+            
+            modalNutriAdmin.style.display = 'flex';
+            setTimeout(() => { modalNutriAdmin.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarNutriAdmin() {
+            modalNutriAdmin.style.opacity = '0';
+            setTimeout(() => { modalNutriAdmin.style.display = 'none'; }, 250);
+        }
+
+        function guardarEnlacesNutri() {
+            vibrarMovil(60);
+            const urlParams = new URLSearchParams(window.location.search);
+            const idLlavero = urlParams.get('k') || urlParams.get('key') || '00';
+            const claveUnica = `${clienteSlugGlobal}_${idLlavero}`;
+
+            const urlDieta = document.getElementById('admin-canva-dieta').value.trim();
+            const urlRutina = document.getElementById('admin-canva-rutina').value.trim();
+
+            if (urlDieta) localStorage.setItem(`canva_dieta_${claveUnica}`, urlDieta);
+            if (urlRutina) localStorage.setItem(`canva_rutina_${claveUnica}`, urlRutina);
+
+            cerrarNutriAdmin();
+            alert(`✅ ¡Pautas vinculadas al llavero #${idLlavero} con éxito!`);
+            cargarEnginePhygital();
+        }
+
+        // ==========================================
+        // KEBAB (ANKARA KEBAB)
+        // ==========================================
+        function abrirConfiguradorKebab() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-utensils text-orange-500"></i>';
+            document.getElementById('modal-title').innerText = "Arma tu Menú";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Configura tu plato y envíalo a cocina:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-3">
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">1. Formato:</label>
+                        <select id="kebab-formato" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Dürüm Rollo Gigante">Dürüm Rollo Gigante</option>
+                            <option value="Kebab en Pan de Pita">Pita Clásica</option>
+                            <option value="Plato Kebab Completo">Plato Kebab</option>
+                            <option value="Kebab Box">Kebab Box</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">2. Carne:</label>
+                        <select id="kebab-carne" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Carne Mixta">Mixto (Pollo y Ternera)</option>
+                            <option value="Solo Ternera">Solo Ternera</option>
+                            <option value="Solo Pollo">Solo Pollo</option>
+                            <option value="Falafel">Falafel (Vegetariano)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-slate-400 font-bold">3. Salsas:</label>
+                        <select id="kebab-salsa" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-xs outline-none">
+                            <option value="Salsa Blanca">Salsa Blanca (Yogur)</option>
+                            <option value="Blanca + Picante">Blanca + Toque Picante</option>
+                            <option value="Muy Picante">Salsa Roja Picante</option>
+                            <option value="Sin Salsas">Sin salsa</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            modalActions.innerHTML = `
+                <button onclick="enviarPedidoKebabWA()" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp</button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cancelar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        function enviarPedidoKebabWA() {
+            vibrarMovil(50);
+            const f = document.getElementById('kebab-formato').value;
+            const c = document.getElementById('kebab-carne').value;
+            const s = document.getElementById('kebab-salsa').value;
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const mesa = urlParams.get('mesa') || 'Barra';
+
+            window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(`¡Hola ${nombreNegocioGlobal}! He armado mi pedido desde la mesa/llavero [ ${mesa} ]:\n- Formato:${f}\n- Carne: ${c}\n- Salsa:${s}\n\n¿Cuánto tarda en estar listo?`)}`, '_blank');
+        }
+
+        function abrirAlergenosKebab() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-wheat-awn-circle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Alérgenos & Salsas";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-left text-xs text-slate-300 space-y-2">
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-amber-400">🌾 Gluten:</b> Presente en Pita, Dürüm y Falafel. Opción sin gluten: Plato Kebab solo carne y ensalada.</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-cyan-400">🥛 Lácteos:</b> Presentes en la Salsa Blanca tradicional (yogur).</div>
+                    <div class="bg-black/50 p-2.5 rounded-xl border border-white/5"><b class="text-rose-400">🌶 Picante:</b> Salsa roja a base de chile natural. Libre de lácteos.</div>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        // ==========================================
+        // MASCOTAS (RESCATE, VACUNAS, TRIAJE)
+        // ==========================================
+        function abrirAsistenciaRuta() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-location-crosshairs text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Hospitales 24h & GPS";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 mb-3 text-left">Localiza centros veterinarios de urgencia abiertos o envía tu ubicación GPS al dueño:</p>
+                <div class="flex flex-col gap-2.5 text-left mb-2">
+                    <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white text-xs font-bold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-hospital text-cyan-400"></i> Buscar Urgencias 24h en Google Maps
+                    </button>
+                    <button onclick="compartirUbicacionMascota()" class="w-full bg-emerald-600/20 border border-emerald-500 rounded-xl p-3 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-emerald-400"></i> Enviar Mi Posición GPS al Dueño
+                    </button>
+                </div>
+            `;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>`;
+            abrirModalCustom();
+        }
+
+        function compartirUbicacionMascota() {
+            vibrarMovil(50);
+            const petNom = nombreNegocioGlobal.split('·')[0].trim();
+            const msgDefault = `¡Hola! Acabo de escanear la placa de ${petNom} y está conmigo. ¿Cómo coordinamos para entregarlo?`;
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lng = pos.coords.longitude;
+                        const msgGPS = `¡Hola! Tengo a ${petNom} conmigo. Esta es mi ubicación GPS exacta: https://maps.google.com/?q=${lat},${lng}`;
+                        window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgGPS)}`, '_blank');
+                    },
+                    () => { window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgDefault)}`, '_blank'); }
+                );
+            } else {
+                window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(msgDefault)}`, '_blank');
+            }
+        }
+
+        function abrirCarnetVacunacion(vacunas) {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-dog text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Carnet de Vacunación";
+            let todas = [...(vacunas || [])];
+            let html = `<div class="space-y-2 text-left my-2 max-h-60 overflow-y-auto pr-1">`;
+            
+            if(todas.length === 0) {
+                html += `<p class="text-xs text-slate-400 text-center py-4">No hay vacunas registradas en el sistema.</p>`;
+            } else {
+                todas.forEach(v => {
+                    html += `
+                        <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-white">${v.nombre}</span>
+                                <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5 rounded-full font-bold uppercase">Vigente</span>
+                            </div>
+                            <div class="text-[11px] text-slate-300">${v.subtitulo || ''}</div>
+                            <div class="text-[10px] text-slate-400 mt-1"><i class="fa-solid fa-clock text-cyan-400 mr-1"></i>${v.momento || 'Al Día'}</div>
+                        </div>
+                    `;
+                });
+            }
+            html += `</div>`;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirChecklistClinico() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-notes-medical text-amber-400"></i>';
+            document.getElementById('modal-title').innerText = "Ficha Médica & Cuidados";
+            
+            const d = datosPerfilGlobal || {};
+            const chip = d.microchip || "No registrado";
+            const raza = d.raza || "No especificada";
+            const peso = d.peso || "-- kg";
+            const esterilizado = d.esterilizado || "Sí";
+            const seguro = d.seguro || "Sí, Vigente";
+            const alergias = d.alergias || "Ninguna alergia crítica reportada.";
+            const medicacion = d.medicacion || "Ninguna medicación diaria activa.";
+            const vet = d.veterinario || "Contactar Dueño";
+            const caracter = d.caracter || "Sociable y amigable.";
+
+            let html = `
+                <div class="space-y-2.5 text-left my-2 max-h-64 overflow-y-auto pr-1 text-xs">
+                    <div class="bg-rose-950/40 border border-rose-800/80 p-2.5 rounded-xl">
+                        <div class="text-rose-400 font-bold uppercase tracking-wider text-[11px] mb-1">🚨 Alertas Críticas & Alergias</div>
+                        <p class="text-slate-200">${alergias}</p>
+                        <p class="text-amber-300 font-semibold mt-1">💊 Medicación: ${medicacion}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl space-y-1">
+                        <div class="text-cyan-400 font-bold uppercase tracking-wider text-[11px] mb-1.5">📋 Ficha Técnica Oficial</div>
+                        <div class="flex justify-between"><span class="text-slate-400">Microchip:</span> <span class="text-white font-mono font-bold">${chip}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Raza / Peso:</span> <span class="text-white">${raza} (${peso})</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Esterilizado:</span> <span class="text-white">${esterilizado}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Seguro R.C.:</span> <span class="text-emerald-400 font-semibold">${seguro}</span></div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-amber-400 font-bold uppercase tracking-wider text-[11px] mb-1">🐕 Carácter & Trato</div>
+                        <p class="text-slate-200">${caracter}</p>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-700/80 p-2.5 rounded-xl">
+                        <div class="text-slate-400 text-[10px] uppercase font-bold">Clínica de Cabecera:</div>
+                        <div class="text-white font-bold">${vet}</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `<button class="modal-btn-secondary" onclick="cerrarModalBtn()">Entendido</button>`;
+            abrirModalCustom();
+        }
+
+        function abrirTriajeUrgencias(alertas) {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
+            document.getElementById('modal-title').innerText = "Triaje & Urgencias SOS";
+            let html = `<p class="text-xs text-slate-300 text-left mb-2">Pautas críticas ante sospecha de intoxicación o herida:</p><div class="space-y-2 text-left my-2 max-h-56 overflow-y-auto pr-1">`;
+            
+            if (alertas && Array.isArray(alertas) && alertas.length > 0) {
+                alertas.forEach(al => {
+                    html += `
+                        <div class="bg-rose-950/40 border border-rose-800/80 p-2 rounded-xl text-xs text-rose-200 flex items-start gap-2">
+                            <i class="fa-solid fa-skull-crossbones text-rose-400 mt-0.5"></i>
+                            <span>${al}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `
+                    <div class="bg-rose-950/40 border border-rose-800/80 p-2 rounded-xl text-xs text-rose-200 flex items-start gap-2">
+                        <i class="fa-solid fa-skull-crossbones text-rose-400 mt-0.5"></i>
+                        <span>Contactar inmediatamente con emergencias 24h. No suministrar medicamentos humanos.</span>
+                    </div>
+                `;
+            }
+
+            html += `</div><p class="text-[11px] text-amber-300 mt-2 font-bold text-center">⚠️ No induzcas el vómito sin autorización médica expresa.</p>`;
+            document.getElementById('modal-text').innerHTML = html;
+            modalActions.innerHTML = `
+                <button onclick="window.open('https://www.google.com/maps/search/hospital+veterinario+urgencias+24+horas/', '_blank')" class="modal-btn-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff;">
+                    <i class="fa-solid fa-hospital mr-1"></i> Buscar Urgencias 24h
+                </button>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+            abrirModalCustom();
+        }
+
+        // ==========================================
+        // DIAGNÓSTICO DE FATIGA DEL COLCHÓN (IBERLAX)
+        // ==========================================
+        function abrirTestDesgaste() {
+            vibrarMovil(40);
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-microscope text-amber-400"></i>';
+            document.getElementById('modal-title').innerText = "Diagnóstico de Fatiga";
+            document.getElementById('modal-text').innerHTML = `
+                <p class="text-xs text-slate-300 text-left mb-3">Evalúa la pérdida de sustentación y firmeza de tu equipo actual:</p>
+                <div class="space-y-3 text-left mb-2 text-xs">
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">¿Cuántos años tiene tu colchón actual?</label>
+                        <select id="desgaste-anios" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
+                            <option value="1">Menos de 3 años (Óptimo)</option>
+                            <option value="2">De 4 a 7 años (Desgaste progresivo)</option>
+                            <option value="3">De 8 a 10 años (Límite de vida útil)</option>
+                            <option value="4">Más de 10 años (Fatiga severa)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">Sensación al despertar:</label>
+                        <select id="desgaste-sensacion" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white outline-none">
+                            <option value="ok">Descanso reparador / Sin molestias</option>
+                            <option value="leve">Leve pesadez o rigidez lumbar</option>
+                            <option value="dolor">Puntos de presión o molestia cervical/espalda</option>
+                            <option value="hundido">Noto hueco o deformación visible</option>
+                        </select>
+                    </div>
+                    <button onclick="calcularFatigaColchon()" class="w-full bg-amber-500 text-slate-950 font-black py-2.5 rounded-xl uppercase text-xs mt-2">
+                        Analizar Estado
+                    </button>
+                    <div id="res-desgaste-box" class="hidden bg-slate-900/90 border border-amber-500/30 p-3 rounded-xl mt-2 text-center">
+                        <div id="res-desgaste-titulo" class="text-xs font-bold text-amber-400 mb-1"></div>
+                        <div id="res-desgaste-desc" class="text-[11px] text-slate-300 leading-relaxed"></div>
+                    </div>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <a id="btn-wa-desgaste" href="#" target="_blank" class="modal-btn-primary hidden" style="background: linear-gradient(135deg, #25D366, #128c7e); color:#fff;">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Consultar Plan Renove en Tienda
+                </a>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+            `;
+
+            abrirModalCustom();
+        }
+
+        function calcularFatigaColchon() {
+            vibrarMovil(35);
+            const anios = parseInt(document.getElementById('desgaste-anios').value);
+            const sensacion = document.getElementById('desgaste-sensacion').value;
+            const box = document.getElementById('res-desgaste-box');
+            const titulo = document.getElementById('res-desgaste-titulo');
+            const desc = document.getElementById('res-desgaste-desc');
+            const btnWa = document.getElementById('btn-wa-desgaste');
+
+            let diagnostico = "";
+            let detalle = "";
+
+            if (anios >= 3 || sensacion === 'dolor' || sensacion === 'hundido') {
+                diagnostico = "⚠️ Pérdida Crítica de Soporte Biomecánico";
+                detalle = "Los núcleos elásticos han superado su resiliencia útil. Tu columna compensa la falta de soporte generando tensión muscular.";
+            } else if (anios === 2 || sensacion === 'leve') {
+                diagnostico = "⚡ Fatiga Intermedia Detectada";
+                detalle = "El equipo mantiene parte de la acogida pero ha perdido alineación ergonómica continua.";
+            } else {
+                diagnostico = "✅ Estado Operativo Favorable";
+                detalle = "Tu colchón se encuentra dentro del rango de respuesta mecánica adecuado.";
+            }
+
+            titulo.innerText = diagnostico;
+            desc.innerText = detalle;
+            box.classList.remove('hidden');
+
+            const msg = encodeURIComponent(`Hola Iberlax, realicé el Diagnóstico de Fatiga en vuestra pantalla:\n- Antigüedad: ${anios > 2 ? '+8 años' : 'Intermedia'}\n- Diagnóstico: ${diagnostico}\n¿Tenéis opciones o plan renove disponible?`);
+            btnWa.href = `${whatsappTiendaGlobal || 'https://wa.me/34643186453'}?text=${msg}`;
+            btnWa.classList.remove('hidden');
+        }
+
+        // ==========================================
+        // RESERVA DE CITA GENERAL
+        // ==========================================
+        function abrirModalReserva() {
+            vibrarMovil(40);
+            const telBizum = (datosPerfilGlobal && datosPerfilGlobal.datosPago && datosPerfilGlobal.datosPago.bizum) 
+                             ? datosPerfilGlobal.datosPago.bizum : "692202636";
+            document.getElementById('reserva-bizum-num').innerText = telBizum;
+            document.getElementById('reserva-nombre-input').value = "";
+            document.getElementById('reserva-ref-input').value = "";
+            validarFormularioReserva();
+
+            modalReservaPago.style.display = 'flex';
+            setTimeout(() => { modalReservaPago.style.opacity = '1'; }, 10);
+        }
+
+        function cerrarModalReserva() {
+            modalReservaPago.style.opacity = '0';
+            setTimeout(() => { modalReservaPago.style.display = 'none'; }, 250);
+        }
+
+        function copiarBizumReserva() {
+            vibrarMovil(30);
+            const num = document.getElementById('reserva-bizum-num').innerText.replace(/\D/g, '');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(num);
+                alert("📋 Número copiado al portapapeles.");
+            }
+        }
+
+        function validarFormularioReserva() {
+            const ref = document.getElementById('reserva-ref-input').value.trim();
+            const btn = document.getElementById('btn-enviar-reserva-wa');
+            if (ref.length >= 3) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function enviarReservaConfirmadaWA() {
+            vibrarMovil(50);
+            const nom = document.getElementById('reserva-nombre-input').value.trim() || "Cliente";
+            const ref = document.getElementById('reserva-ref-input').value.trim();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+
+            const textoMsg = `¡Hola ${nombreNegocioGlobal}! He emitido el pago para mi cita/consulta:\n` +
+                             `👤 Nombre: ${nom}\n` +
+                             `💳 Ref. / Justificante: ${ref}\n` +
+                             `🔑 Terminal: [ ${codigoLlaveroNFC} ]\n\n` +
+                             `¿Qué huecos tenéis disponibles para agendar?`;
+
+            cerrarModalReserva();
+            window.open(`${whatsappTiendaGlobal}?text=${encodeURIComponent(textoMsg)}`, '_blank');
+        }
+
+        // ==========================================
+        // PIN & SEGURIDAD
+        // ==========================================
+        function iniciarAuthPropietario() {
+            vibrarMovil(50);
+            pinBuffer = "";
+            actualizarPuntosPin();
+            modalPin.style.display = 'flex';
+            setTimeout(() => { modalPin.style.opacity = '1'; }, 10);
+        }
+        function cerrarPinAuth() { modalPin.style.opacity = '0'; setTimeout(() => { modalPin.style.display = 'none'; }, 250); }
+        function teclearPin(num) {
+            vibrarMovil(30);
+            if (pinBuffer.length < 4) {
+                pinBuffer += num;
+                actualizarPuntosPin();
+                if (pinBuffer.length === 4) setTimeout(verificarPin, 200);
+            }
+        }
+        function borrarPin() { vibrarMovil(20); pinBuffer = pinBuffer.slice(0, -1); actualizarPuntosPin(); }
+        function actualizarPuntosPin() {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i < pinBuffer.length) dot.classList.add('filled');
+                else dot.classList.remove('filled');
+            }
+        }
+        function verificarPin() {
+            if (pinBuffer === PIN_DEFAULT) {
+                vibrarMovil([50, 50, 50]);
+                cerrarPinAuth();
+                
+                const nLower = (datosPerfilGlobal && datosPerfilGlobal.nombre) ? datosPerfilGlobal.nombre.toLowerCase() : "";
+                const sLower = (datosPerfilGlobal && datosPerfilGlobal.subtitulo) ? datosPerfilGlobal.subtitulo.toLowerCase() : "";
+
+                const esNutri = nLower.includes('nutrition') || sLower.includes('nutrición') || sLower.includes('consulta');
+
+                if (esNutri) {
+                    abrirNutriAdmin();
+                } else {
+                    alert(`Modo Administrador activado para ${nombreNegocioGlobal}.`);
+                }
+            } else {
+                vibrarMovil(250);
+                document.getElementById('pin-modal-desc').innerText = "❌ PIN Incorrecto";
+                document.getElementById('pin-modal-desc').style.color = "#f43f5e";
+                pinBuffer = "";
+                actualizarPuntosPin();
+                setTimeout(() => {
+                    document.getElementById('pin-modal-desc').innerText = "Introduce tu PIN de 4 dígitos";
+                    document.getElementById('pin-modal-desc').style.color = "#94a3b8";
+                }, 1500);
+            }
+        }
+
+        // ==========================================
+        // BIZUM INTERACTIVO
+        // ==========================================
+        function abrirModalBizum() {
+            vibrarMovil(45);
+            let telBizum = "692202636";
+            let conceptoBizum = nombreNegocioGlobal;
+
+            if (datosPerfilGlobal && datosPerfilGlobal.datosPago) {
+                if (datosPerfilGlobal.datosPago.bizum) telBizum = String(datosPerfilGlobal.datosPago.bizum).trim();
+                if (datosPerfilGlobal.datosPago.concepto) conceptoBizum = datosPerfilGlobal.datosPago.concepto;
+            } else if (whatsappTiendaGlobal) {
+                telBizum = whatsappTiendaGlobal.replace(/\D/g, '');
+                if (telBizum.startsWith('34') && telBizum.length === 11) telBizum = telBizum.substring(2);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(telBizum.replace(/\D/g, '')).catch(() => {});
+            }
+
+            document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-mobile-screen-button text-cyan-400"></i>';
+            document.getElementById('modal-title').innerText = "Pago Rápido con Bizum";
+            document.getElementById('modal-text').innerHTML = `
+                <div class="text-center my-2">
+                    <span class="text-[11px] text-slate-400 uppercase font-bold block mb-1">Número Oficial:</span>
+                    <div class="text-2xl font-black text-white tracking-widest bg-slate-900 border border-cyan-500/40 py-3 px-4 rounded-2xl inline-block shadow-lg shadow-cyan-500/10">
+                        ${telBizum}
+                    </div>
+                    <p class="text-xs text-emerald-400 font-bold mt-2 animate-pulse">
+                        <i class="fa-solid fa-circle-check mr-1"></i>¡Número copiado al portapapeles!
+                    </p>
+                    <p class="text-[11px] text-slate-300 mt-2 leading-relaxed">
+                        Abre tu app bancaria, pulsa <b>Pegar</b> en destinatario y pon en concepto: <b class="text-white">${conceptoBizum}</b>.
+                    </p>
+                </div>
+            `;
+
+            modalActions.innerHTML = `
+                <a href="${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, acabo de emitir un Bizum al${telBizum} para abonar mi compra.`)}" 
+                   target="_blank" 
+                   class="modal-btn-primary" 
+                   style="background: linear-gradient(135deg, #00c3ff, #0077b6); color:#fff;">
+                   <i class="fa-brands fa-whatsapp mr-1"></i> Notificar Pago por WhatsApp
+                </a>
+                <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Listo, volver</button>
+            `;
+
+            abrirModalCustom();
+        }
+
+        // ==========================================
+        // IBERLAX: ERGONOMÍA & LOGÍSTICA
+        // ==========================================
+        const modalAsesor = document.getElementById('modal-asesor');
+        function abrirAsesor(e) { if(e) e.preventDefault(); modalAsesor.style.display = 'flex'; setTimeout(() => { modalAsesor.style.opacity = '1'; }, 10); }
+        function cerrarAsesor(e) { if(e.target === modalAsesor) cerrarAsesorBtn(); }
+        function cerrarAsesorBtn() { modalAsesor.style.opacity = '0'; setTimeout(() => { modalAsesor.style.display = 'none'; }, 250); }
+        function seleccionarOpcionAsesor(grupo, valor, elemento) {
+            estadoAsesor[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoAsesor();
+        }
+        function actualizarCalculoAsesor() {
+            let firmeza = "Firmeza Media Adaptable";
+            let tecnologia = "Muelles Ensacados 7 Zonas + Viscoelástica transpirable.";
+            if (estadoAsesor.peso === '+90kg' || estadoAsesor.postura === 'Boca Arriba') {
+                firmeza = "Firmeza Alta Ergonómica";
+                tecnologia = "Núcleo reforzado Titanium Pocket + Refuerzo lumbar.";
+            } else if (estadoAsesor.postura === 'De Lado' && estadoAsesor.peso === '-70kg') {
+                firmeza = "Firmeza Media-Suave Acogedora";
+                tecnologia = "Viscoelástica suave con alivio de presión.";
+            }
+            const elF = document.getElementById('diag-firmeza');
+            const elT = document.getElementById('diag-tecnologia');
+            if (elF) elF.innerText = firmeza;
+            if (elT) elT.innerText = `${tecnologia} (Medida: ${estadoAsesor.medida}).`;
+            const btnP = document.getElementById('btn-probar-tienda');
+            if (btnP) btnP.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, completé el test:%0A- Postura: ${estadoAsesor.postura}\%0A- Peso:${estadoAsesor.peso}%0A- Medida: ${estadoAsesor.medida}\%0AResultado:${firmeza}. ¿Qué modelo puedo probar?`)}`;
+        }
+
+        const modalEnvio = document.getElementById('modal-envio');
+        function abrirEnvio(e) { if(e) e.preventDefault(); modalEnvio.style.display = 'flex'; setTimeout(() => { modalEnvio.style.opacity = '1'; }, 10); }
+        function cerrarEnvio(e) { if(e.target === modalEnvio) cerrarEnvioBtn(); }
+        function cerrarEnvioBtn() { modalEnvio.style.opacity = '0'; setTimeout(() => { modalEnvio.style.display = 'none'; }, 250); }
+        function seleccionarOpcionEnvio(grupo, valor, elemento) {
+            estadoEnvio[grupo] = valor;
+            elemento.parentElement.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+            elemento.classList.add('active');
+            actualizarCalculoEnvio();
+        }
+        function actualizarCalculoEnvio() {
+            let titulo = "Servicio Bonificado en Tienda";
+            let desc = "Ruta directa a domicilio con subida a habitación.";
+            if (estadoEnvio.acceso.includes('3º o superior') || estadoEnvio.acceso.includes('Esc. Alta')) {
+                titulo = "Suplemento de Acceso / 2 Operarios";
+                desc = "Requiere subida por escalera estrecha.";
+            } else if (estadoEnvio.zona.includes('Rioja') || estadoEnvio.zona.includes('Comarca')) {
+                titulo = "Ruta Interurbana";
+                desc = "Consolidado en rutas semanales programadas.";
+            }
+            const elT = document.getElementById('diag-envio-titulo');
+            const elD = document.getElementById('diag-envio-desc');
+            if (elT) elT.innerText = titulo;
+            if (elD) elD.innerText = desc;
+            const btnC = document.getElementById('btn-confirmar-envio');
+            if (btnC) btnC.href = `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, he consultado el servicio logístico:%0A- Zona: ${estadoEnvio.zona}%0A- Acceso: ${estadoEnvio.acceso}\%0A- Retirada:${estadoEnvio.retirada}%0A¿Me confirmáis disponibilidad?`)}`;
+        }
+
+        // ==========================================
+        // RESEÑAS & PARKING
+        // ==========================================
+        function simularFiltro(nota) {
+            const estrellas = document.querySelectorAll('#escudo-estrellas i');
+            const mensaje = document.getElementById('mensaje-filtro');
+            estrellas.forEach((e, i) => { e.className = i < nota ? 'fa-solid fa-star star-active text-3xl' : 'fa-solid fa-star star-inactive text-3xl'; });
+            mensaje.classList.remove('hidden');
+
+            setTimeout(() => {
+                mensaje.classList.add('hidden');
+                if (nota <= 3) {
+                    const urlQueja = whatsappGerenciaGlobal 
+                                     || `${whatsappTiendaGlobal}?text=${encodeURIComponent(`Hola ${nombreNegocioGlobal}, quisiera comentar una disconformidad con mi visita.`)}`;
+
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-solid fa-shield-halved text-rose-500"></i>';
+                    document.getElementById('modal-title').innerText = "Tu Opinión Nos Importa";
+                    document.getElementById('modal-text').innerHTML = `Has calificado con <b>${nota} estrella(s)</b>.<br><br>En <b>${nombreNegocioGlobal}</b> tu satisfacción es lo primero. Te comunicamos directamente con Dirección:`;
+                    modalActions.innerHTML = `
+                        <a href="${urlQueja}" target="_blank" class="modal-btn-primary"><i class="fa-brands fa-whatsapp"></i> Hablar con Dirección</a>
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-secondary">Continuar a Google Maps</a>
+                    `;
+                } else {
+                    document.getElementById('modal-icon').innerHTML = '<i class="fa-brands fa-google text-amber-400"></i>';
+                    document.getElementById('modal-title').innerText = "¡Muchas Gracias!";
+                    document.getElementById('modal-text').innerHTML = `¡Nos alegra tu excelente experiencia de <b>${nota} estrellas</b>!<br><br>Ayúdanos confirmando tu valoración oficial:`;
+                    modalActions.innerHTML = `
+                        <a href="${googleReviewUrlGlobal}" target="_blank" class="modal-btn-google"><i class="fa-solid fa-star"></i> Publicar en Google Maps (5★)</a>
+                        <button class="modal-btn-secondary" onclick="cerrarModalBtn()">Cerrar</button>
+                    `;
+                }
+                abrirModalCustom();
+                estrellas.forEach(e => e.className = 'fa-solid fa-star star-inactive text-3xl');
+            }, 300);
+        }
+
+        function descargarVCardDinamica() {
+            const telLimpio = whatsappTiendaGlobal.replace(/\D/g, '');
+            const vcardContent = `BEGIN:VCARD\nVERSION:3.0\nFN:${nombreNegocioGlobal}\nORG:${nombreNegocioGlobal}\nTEL;TYPE=WORK,VOICE:+${telLimpio || '34672294962'}\nNOTE:Contacto inteligente Studio 42\nEND:VCARD`;
+            const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${clienteSlugGlobal}.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function gestionarParking(e) {
+            if (e) e.preventDefault();
+            const lat = localStorage.getItem('parking_lat');
+            const lng = localStorage.getItem('parking_lng');
+            if (lat && lng) {
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank');
+                localStorage.removeItem('parking_lat');
+                localStorage.removeItem('parking_lng');
+                alert("📍 Posición de parking eliminada.");
+            } else {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            localStorage.setItem('parking_lat', pos.coords.latitude);
+                            localStorage.setItem('parking_lng', pos.coords.longitude);
+                            alert("📍 ¡Posición guardada! Vuelve a pulsar este botón al salir para regresar a pie a tu coche.");
+                        },
+                        () => alert("No se pudo obtener señal GPS.")
+                    );
+                }
+            }
+        }
+
+        // ==========================================
+        // MOTOR DE CARGA Y RENDER DINÁMICO
+        // ==========================================
+        function renderMenu(data) {
+            const menuContainer = document.getElementById('dynamic-menu');
+            menuContainer.innerHTML = '';
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigoLlaveroNFC = urlParams.get('k') || urlParams.get('key') || 'MOSTRADOR';
+            const claveLlavero = `${clienteSlugGlobal}_${codigoLlaveroNFC}`;
+
+            if (data.secciones && Array.isArray(data.secciones)) {
+                data.secciones.forEach((sec, sIdx) => {
+                    if (sec.titulo) menuContainer.innerHTML += `<div class="section-title">${sec.titulo}</div>`;
+                    const block = document.createElement('div');
+                    block.className = 'apps-menu';
+
+                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
+
+                    if (sec.escudoResenas) {
+                        block.innerHTML += `
+                            <div class="app-btn flex-col items-center p-5 border border-slate-700/80 bg-gradient-to-b from-slate-800/60 to-slate-900/90 cursor-default rounded-3xl shadow-xl shadow-black/40">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-2.5 shadow-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-7 h-7">
+                                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                    </svg>
+                                </div>
+                                <div class="app-name text-center text-white text-base font-extrabold mb-0.5">¿Qué tal ha sido tu experiencia?</div>
+                                <div class="text-xs text-slate-300 text-center font-medium mb-2">Tu valoración nos ayuda a crecer</div>
+                                <div class="stars-container star-rating my-1" id="escudo-estrellas">
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(1)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(2)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(3)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(4)"></i>
+                                    <i class="fa-solid fa-star star-inactive text-3xl" onclick="simularFiltro(5)"></i>
+                                </div>
+                                <p class="text-[11px] text-zinc-400 text-center mt-1">Toca las estrellas para calificar el servicio</p>
+                                <p id="mensaje-filtro" class="text-xs text-amber-300 text-center w-full mt-2 font-bold hidden animate-pulse">Conectando con Google Maps...</p>
+                            </div>
+                        `;
+                    } else if (sec.botones && Array.isArray(sec.botones)) {
+                        sec.botones.forEach((btn, bIdx) => {
+                            const bTipo = (btn.tipo || '').toLowerCase();
+                            const nLower = (btn.nombre || '').toLowerCase();
+                            const btnId = `btn_${sIdx}_${bIdx}`;
+
+                            // FITNESS: PROTEINA
+                            if (bTipo === 'calc_proteina' || nLower.includes('calculadora de proteína')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirCalculadoraProteina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(230, 0, 0, 0.2); color: #e60000;'}"><i class="${btn.icono || 'fa-solid fa-calculator'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // FITNESS: CREATINA
+                            else if (bTipo === 'guia_creatina' || nLower.includes('creatina')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirGuiaCreatina()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255, 255, 255, 0.12); color: #ffffff;'}"><i class="${btn.icono || 'fa-solid fa-bottle-droplet'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // KEBAB: CONFIGURADOR
+                            else if (bTipo === 'configurador_kebab' || nLower.includes('arma tu menú') || nLower.includes('menú kebab')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirConfiguradorKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(250, 132, 5, 0.2); color: #FA8405;'}"><i class="${btn.icono || 'fa-solid fa-utensils'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // KEBAB: ALÉRGENOS
+                            else if (bTipo === 'guia_alergenos_kebab' || nLower.includes('alérgenos') || nLower.includes('salsas')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirAlergenosKebab()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.18); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-wheat-awn-circle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: GPS / ASISTENCIA
+                            else if (bTipo === 'asistencia_ruta' || nLower.includes('hospitales 24h') || nLower.includes('gps')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirAsistenciaRuta()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 229, 255, 0.2); color: var(--color-acento);'}"><i class="${btn.icono || 'fa-solid fa-location-crosshairs'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: CARNET VACUNAS
+                            else if (bTipo === 'carnet_vacunacion' || nLower.includes('vacuna')) {
+                                window[btnId + '_data'] = btn.vacunas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirCarnetVacunacion(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(56, 189, 248, 0.2); color: #38BDF8;'}"><i class="${btn.icono || 'fa-solid fa-shield-dog'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: CHECKLIST / DIETA
+                            else if (bTipo === 'checklist_parto' || bTipo === 'checklist' || nLower.includes('ficha médica')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirChecklistClinico()" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #F59E0B;'}"><i class="${btn.icono || 'fa-solid fa-clipboard-list'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // MASCOTAS: TRIAJE SOS
+                            else if (bTipo === 'triaje_urgencias' || nLower.includes('semáforo sos') || nLower.includes('intoxicaciones')) {
+                                window[btnId + '_data'] = btn.alertas || [];
+                                block.innerHTML += `
+                                    <div onclick="abrirTriajeUrgencias(window['${btnId}_data'])" role="button" class="app-btn">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(239, 68, 68, 0.22); color: #EF4444;'}"><i class="${btn.icono || 'fa-solid fa-triangle-exclamation'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // TEST DE FATIGA DEL COLCHÓN (IBERLAX)
+                            else if (bTipo === 'test_desgaste' || nLower.includes('fatiga') || nLower.includes('desgaste')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirTestDesgaste()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(255, 180, 0, 0.15); color: #FFB400;'}"><i class="${btn.icono || 'fa-solid fa-microscope'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // TEST ERGONÓMICO (IBERLAX)
+                            else if (bTipo === 'test_ergonomico' || bTipo === 'ergonomia' || nLower.includes('ergonómico')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirAsesor(event)" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;'}"><i class="${btn.icono || 'fa-solid fa-bed-pulse'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // TASADOR LOGÍSTICA (IBERLAX)
+                            else if (bTipo === 'tasador_retirada' || bTipo === 'logistica' || nLower.includes('logística') || nLower.includes('entrega')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirEnvio(event)" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background-color: rgba(48, 209, 88, 0.15); color: #30d158;'}"><i class="${btn.icono || 'fa-solid fa-truck-ramp-box'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // RESCATE DE LLAVES
+                            else if (bTipo === 'recuperar_llaves' || nLower.includes('llaves')) {
+                                const waMsg = encodeURIComponent(`¡Hola ${nombreNegocioGlobal}! He encontrado unas llaves con vuestro llavero inteligente.\n🔑 CÓDIGO: [ ${codigoLlaveroNFC} ]`);
+                                block.innerHTML += `
+                                    <a class="app-btn btn-rescate-llaves" href="${whatsappTiendaGlobal}?text=${waMsg}" target="_blank">
+                                        <div class="app-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;"><i class="fa-solid fa-key animate-bounce"></i></div>
+                                        <div class="app-info">
+                                            <div class="app-name flex items-center">${btn.nombre}<span class="badge-rescate-sos">SOS</span></div>
+                                            <div class="app-desc">${btn.descripcion}</div>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-amber-400 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // RESERVA DE CITA
+                            else if (bTipo === 'reserva_cita' || nLower.includes('cita') || nLower.includes('bioimpedancia')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirModalReserva()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(245, 158, 11, 0.2); color: #f59e0b;'}"><i class="${btn.icono || 'fa-solid fa-calendar-check'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // BIZUM
+                            else if (bTipo === 'bizum' || nLower.includes('bizum')) {
+                                block.innerHTML += `
+                                    <div onclick="abrirModalBizum()" role="button" class="app-btn ${btn.destacado ? 'destacado' : ''}">
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(0, 195, 255, 0.2); color: #00c3ff;'}"><i class="${btn.icono || 'fa-solid fa-mobile-screen-button'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // PARKING GPS
+                            else if (bTipo === 'parking' || nLower.includes('aparqué') || nLower.includes('parking')) {
+                                block.innerHTML += `
+                                    <div onclick="gestionarParking(event)" role="button" class="app-btn">
+                                        <div class="app-icon" style="background: rgba(142,142,147,0.15); color: #8e8e93;"><i class="fa-solid fa-location-crosshairs"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </div>
+                                `;
+                            }
+                            // VCARD
+                            else if (bTipo === 'vcard' || nLower.includes('agenda') || (btn.url && btn.url.endsWith('.vcf'))) {
+                                const tieneArchivo = btn.url && !btn.url.includes('contacto.vcf');
+                                block.innerHTML += `
+                                    <a class="app-btn" href="${tieneArchivo ? btn.url : 'javascript:void(0)'}" ${tieneArchivo ? '' : 'onclick="descargarVCardDinamica()"'}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-address-card'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                            // ENLACES PERSONALIZADOS DE CANVA (DIETA Y RUTINA VINCULADOS AL LLAVERO)
+                            else {
+                                let finalUrl = btn.url || '#';
+                                
+                                if (nLower.includes('comidas') || nLower.includes('menú fit') || nLower.includes('dieta')) {
+                                    const savedDieta = localStorage.getItem(`canva_dieta_${claveLlavero}`);
+                                    if (savedDieta) finalUrl = savedDieta;
+                                } else if (nLower.includes('entrenamiento') || nLower.includes('rutina')) {
+                                    const savedRutina = localStorage.getItem(`canva_rutina_${claveLlavero}`);
+                                    if (savedRutina) finalUrl = savedRutina;
+                                }
+
+                                block.innerHTML += `
+                                    <a class="app-btn ${btn.destacado ? 'destacado' : ''}" href="${finalUrl}" ${finalUrl.startsWith('http') || finalUrl.startsWith('tel:') ? 'target="_blank"' : ''}>
+                                        <div class="app-icon" style="${btn.estiloIcono || 'background: rgba(255,255,255,0.06); color: #fff;'}"><i class="${btn.icono || 'fa-solid fa-link'}"></i></div>
+                                        <div class="app-info"><div class="app-name">${btn.nombre}</div><div class="app-desc">${btn.descripcion || ''}</div></div>
+                                        <i class="fa-solid fa-chevron-right text-zinc-500 text-xs"></i>
+                                    </a>
+                                `;
+                            }
+                        });
+                    }
+                    menuContainer.appendChild(block);
+                });
+            }
+        }
+
+        async function cargarEnginePhygital() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteCod = (urlParams.get('cod') || urlParams.get('id') || 'demo').toLowerCase().trim();
+            clienteSlugGlobal = clienteCod;
+
+            let data = null;
+
+            try {
+                let res = await fetch(`./${clienteCod}.json?v=${Date.now()}`);
+                if (!res.ok) res = await fetch(`../c/${clienteCod}.json?v=${Date.now()}`);
+                if (!res.ok) res = await fetch(`./json/${clienteCod}.json?v=${Date.now()}`);
+                if (res.ok) data = await res.json();
+            } catch(e) {}
+
+            if (!data) {
+                try {
+                    const urlGit = `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/${clienteCod}.json?v=${Date.now()}`;
+                    const resG = await fetch(urlGit);
+                    if (resG.ok) data = await resG.json();
+                } catch(e) {}
+            }
+
+            // Si falla completamente, mostramos el error y quitamos el fondo transparente
+            if (!data) {
+                document.getElementById('dynamic-menu').innerHTML = '<div style="text-align:center; padding:40px 0; color:#ef4444;"><i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i><p>Terminal no encontrada</p></div>';
+                document.body.style.opacity = "1";
+                return;
+            }
+
+            datosPerfilGlobal = data;
+            nombreNegocioGlobal = data.nombre || "Profesional";
+
+            if (data.whatsapp && data.whatsapp.trim() !== "") {
+                whatsappTiendaGlobal = data.whatsapp.split('?')[0];
+                whatsappGerenciaGlobal = data.whatsapp;
+            }
+
+            if (data.secciones && Array.isArray(data.secciones)) {
+                data.secciones.forEach(sec => {
+                    if (sec.urlGoogleResenas) googleReviewUrlGlobal = sec.urlGoogleResenas;
+                    
+                    if (sec.whatsappGerencia) {
+                        whatsappGerenciaGlobal = sec.whatsappGerencia;
+                        if (!whatsappTiendaGlobal) {
+                            whatsappTiendaGlobal = sec.whatsappGerencia.split('?')[0];
+                        }
+                    }
+
+                    if (sec.botones && Array.isArray(sec.botones)) {
+                        sec.botones.forEach(b => {
+                            if (b.url && b.url.includes('wa.me') && !whatsappTiendaGlobal) {
+                                whatsappTiendaGlobal = b.url.split('?')[0];
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Muestra el engranaje si es cliente médico/nutricional o mascota
+            const nLower = (data.nombre) ? data.nombre.toLowerCase() : "";
+            const sLower = (data.subtitulo) ? data.subtitulo.toLowerCase() : "";
+            const esMascotaONutri = nLower.includes('nutrition') || sLower.includes('nutrición') || sLower.includes('consulta') || (data.tipoPerfil === 'mascota') || sLower.includes('canino');
+
+            const btnGear = document.getElementById('btn-owner-gear');
+            if (btnGear) btnGear.style.display = esMascotaONutri ? 'flex' : 'none';
+
+            // Estilos del tema
+            const colorAcentoFinal = data.colorAcento || "#00E5FF";
+            const colorPrincipalFinal = data.colorPrincipal || "#0B0C10";
+            const fondoLogoFinal = data.fondoLogo || "#0b0c10";
+
+            document.documentElement.style.setProperty('--color-principal', colorPrincipalFinal);
+            document.documentElement.style.setProperty('--color-acento', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-edge', colorAcentoFinal);
+            document.documentElement.style.setProperty('--halo-glow', colorAcentoFinal + '66');
+            document.documentElement.style.setProperty('--fondo-logo', fondoLogoFinal);
+
+            // ACTIVACIÓN DE TEMA INDUSTRIAL
+            const hubContainer = document.querySelector('.hub-container');
+            if (data.tema === 'industrial') {
+                hubContainer.classList.add('tema-industrial');
+            } else {
+                hubContainer.classList.remove('tema-industrial');
+            }
+
+            // Identidad y textos
+            document.getElementById('page-title').innerText = `${data.nombre} | Studio 42`;
+            document.getElementById('client-name').innerText = data.nombre;
+            document.getElementById('client-subtitle').innerText = data.subtitulo || "Ecosistema Phygital";
+            document.getElementById('badge-text').innerText = data.textoBadge || "PUNTO DE CONEXIÓN ACTIVO";
+
+            // LOGO: SISTEMA INTELIGENTE DE RESOLUCIÓN DE IMÁGENES
+            const hubImg = document.getElementById('hub-logo');
+            const hubLogoBox = document.getElementById('hub-logo-box');
+            
+            hubLogoBox.style.maxWidth = data.logoAnchoMax || "270px";
+            hubLogoBox.style.height = data.logoAlto || "84px";
+            hubLogoBox.style.background = fondoLogoFinal;
+            hubImg.style.padding = data.paddingLogo || "4px 10px";
+            hubImg.style.filter = `drop-shadow(0 0 10px ${colorAcentoFinal}80)`;
+            
+            // Limpiamos la ruta del JSON para tener solo el nombre del archivo
+            const nombreImgLimpio = (data.logo || "logo.png").replace(/^(\.\/|\/|\.\.\/|c\/)/, '');
+            
+            // Rutas candidatas automáticas
+            const rutasPosibles = [
+                data.logo,                             
+                `./${nombreImgLimpio}`,                 
+                `../${nombreImgLimpio}`,                
+                `./c/${nombreImgLimpio}`,               
+                `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/${nombreImgLimpio}`, 
+                `https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/${nombreImgLimpio}`   
+            ];
+
+            let intentoActual = 0;
+            hubImg.onerror = function() {
+                intentoActual++;
+                if (intentoActual < rutasPosibles.length) {
+                    hubImg.src = rutasPosibles[intentoActual];
+                } else {
+                    hubImg.style.display = 'none';
+                    hubLogoBox.innerHTML = `<span style="color:#fff;font-weight:900;letter-spacing:1px;font-size:1.1rem;">${data.nombre}</span>`;
+                }
+            };
+            hubImg.src = rutasPosibles[0];
+
+            // Renderizar los botones interactivos
+            renderMenu(data);
+
+            // TODO LISTO: MOSTRAR LA WEB CON FADE-IN SUAVE
+            setTimeout(() => {
+                document.body.style.opacity = "1";
+            }, 50);
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarEnginePhygital);
+    </script>
+</body>
+</html>

@@ -1,38 +1,65 @@
 {
+  "version": 2,
   "nombre": "CLÍNICA DENTAL RUIZ MAZO",
-  "modoDemo": false,
   "subtitulo": "Odontología Avanzada & Salud Bucal",
   "textoBadge": "NODO CLÍNICO ACTIVO · VARA DE REY 51",
   "logo": "logo-ruizmazo.png",
   "fondoLogo": "#ffffff",
   "colorPrincipal": "#0A0E14",
   "colorAcento": "#8DB600",
+  "whatsapp": "https://wa.me/34691613796",
   "secciones": [
     {
       "titulo": "Atención Inmediata & Diagnóstico",
       "botones": [
         {
-          "tipo": "urgencia_dental",
-          "nombre": "🚨 SOS Dolor / Urgencia Dental",
+          "tipo": "asistente",
+          "nombre": "SOS Dolor / Urgencia Dental",
           "descripcion": "Triaje prioritario para dolor agudo, flemón o rotura de pieza",
-          "icono": "fa-solid fa-tooth",
-          "estiloIcono": "background: rgba(225, 29, 72, 0.18); color: #E11D48;",
-          "url": "https://wa.me/34691613796?text=🚨%20URGENCIA%20DENTAL:%20Hola,%20presento%20molestia%20o%20dolor%20agudo%20y%20necesito%20atención%20prioritaria.",
-          "destacado": true
+          "icono": "alert",
+          "colorIcono": "#E11D48",
+          "destacado": true,
+          "titulo": "Urgencia dental",
+          "intro": "Cuéntanos qué te pasa y avisamos a la clínica con prioridad:",
+          "pasos": [
+            {
+              "titulo": "Qué te ocurre",
+              "opciones": [
+                "Dolor agudo de muela",
+                "Flemón o hinchazón",
+                "Pieza rota o caída",
+                "Sangrado o golpe"
+              ]
+            },
+            {
+              "titulo": "Desde cuándo",
+              "opciones": [
+                "Desde hoy",
+                "1-2 días",
+                "Más de 3 días"
+              ]
+            }
+          ],
+          "botonTexto": "Avisar a la clínica por WhatsApp",
+          "aviso": "En caso de emergencia vital llama al 112.",
+          "mensaje": "🚨 URGENCIA DENTAL — {negocio}\nMotivo: {Qué te ocurre}\nDesde cuándo: {Desde cuándo}\nNecesito atención prioritaria. ¿Cuándo puedo ir?"
         },
         {
-          "nombre": "Simulador: Tratamiento en Cuotas",
-          "descripcion": "Calcula tu presupuesto estimado para implantes u ortodoncia",
-          "icono": "fa-solid fa-calculator",
-          "estiloIcono": "background: rgba(141, 182, 0, 0.18); color: #8DB600;",
-          "url": "https://wa.me/34691613796?text=Hola,%20quisiera%20consultar%20las%20opciones%20de%20financiación%20a%20medida%20para%20un%20tratamiento."
+          "tipo": "whatsapp",
+          "nombre": "Tratamiento en Cuotas",
+          "descripcion": "Consulta financiación a medida para implantes u ortodoncia",
+          "icono": "calculator",
+          "colorIcono": "#8DB600",
+          "mensaje": "Hola, quisiera consultar las opciones de financiación a medida para un tratamiento."
         },
         {
+          "tipo": "reserva_cita",
           "nombre": "Cita Previa / Revisión General",
           "descripcion": "Agenda tu diagnóstico digital y limpieza preventiva",
-          "icono": "fa-solid fa-calendar-check",
-          "estiloIcono": "background: rgba(16, 185, 129, 0.18); color: #10B981;",
-          "url": "https://wa.me/34691613796?text=Hola%20Ruiz%20Mazo,%20quisiera%20reservar%20cita%20para%20una%20revisión%20general."
+          "icono": "calendar",
+          "colorIcono": "#10B981",
+          "titulo": "Cita previa",
+          "mensaje": "¡Hola Ruiz Mazo! Quisiera reservar cita para una revisión general.\n👤 Nombre: {nombre}\n¿Qué huecos tenéis disponibles?"
         }
       ]
     },
@@ -40,46 +67,65 @@
       "titulo": "Espacio del Paciente & Servicios del Llavero",
       "botones": [
         {
-          "tipo": "recuperar_llaves",
-          "nombre": "🔑 ¿Encontraste estas llaves?",
-          "descripcion": "Avisa a la clínica para coordinar la devolución segura al paciente",
-          "icono": "fa-solid fa-key"
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Avisa a la clínica para coordinar la devolución segura al paciente"
         },
         {
+          "tipo": "enlace",
           "nombre": "Guía Pre y Post Operatoria",
           "descripcion": "Pautas de medicación y dieta tras cirugías o implantes",
-          "icono": "fa-solid fa-notes-medical",
-          "estiloIcono": "background: rgba(14, 165, 233, 0.18); color: #0EA5E9;",
+          "icono": "file",
+          "colorIcono": "#0EA5E9",
           "url": "https://ruizmazo.es/tratamientos-dentales/"
         },
         {
+          "tipo": "enlace",
           "nombre": "Bono Amigo: Comparte 30 € de Descuento",
           "descripcion": "Recomienda la clínica a un familiar para su primer tratamiento",
-          "icono": "fa-solid fa-gift",
-          "estiloIcono": "background: rgba(168, 85, 247, 0.18); color: #A855F7;",
-          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20contacto%20de%20confianza%20para%20tu%20salud%20dental%20en%20Logroño:%20https://ruizmazo.es"
+          "icono": "gift",
+          "colorIcono": "#A855F7",
+          "url": "https://wa.me/?text=%C2%A1Hola%21%20Te%20comparto%20este%20contacto%20de%20confianza%20para%20tu%20salud%20dental%20en%20Logro%C3%B1o%3A%20https%3A%2F%2Fruizmazo.es"
         },
         {
           "tipo": "parking",
           "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la ubicación GPS de tu coche en Vara de Rey",
-          "icono": "fa-solid fa-location-crosshairs",
-          "estiloIcono": "background: rgba(142, 142, 147, 0.15); color: #94A3B8;"
+          "icono": "locate",
+          "colorIcono": "#94A3B8"
         },
         {
+          "tipo": "vcard",
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Descarga directa de vCard con teléfono de urgencias y WhatsApp",
-          "icono": "fa-solid fa-address-card",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #fff;",
-          "url": "./contacto.vcf"
+          "descripcion": "Descarga directa de vCard con teléfono y WhatsApp",
+          "icono": "contact",
+          "colorIcono": "#ffffff"
         }
       ]
     },
     {
       "titulo": "Tu Opinión Nos Importa",
-      "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJyxr-bESrWg0RqSInorqaJuw",
-      "whatsappGerencia": "https://wa.me/34691613796?text=Hola%20Dirección%20Ruiz%20Mazo,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20atención."
+      "botones": [
+        {
+          "tipo": "opinion",
+          "urlGoogle": "https://search.google.com/local/writereview?placeid=ChIJyxr-bESrWg0RqSInorqaJuw",
+          "whatsappGerencia": "https://wa.me/34691613796?text=Hola%20Direcci%C3%B3n%20Ruiz%20Mazo%2C%20quisiera%20comentar%20un%20aspecto%20de%20mi%20atenci%C3%B3n."
+        }
+      ]
+    }
+  ],
+  "_pendientes": [
+    {
+      "que": "«Simulador: Tratamiento en Cuotas»",
+      "por_que": "Solo era un enlace a WhatsApp, no calculaba nada. Ahora se llama «Tratamiento en Cuotas» (honesto). Con precios reales se puede hacer un simulador."
+    },
+    {
+      "que": "«Guía Pre y Post Operatoria»",
+      "por_que": "Apunta a la página general de tratamientos de la web, no a una guía de pautas. Hace falta el PDF o la página real."
+    },
+    {
+      "que": "Tarjeta contacto-ruizmazo.vcf (no se usa: el botón genera la tarjeta con el WhatsApp)",
+      "por_que": "Aparece +941583060 (falta el 34) y un móvil +34669161379 distinto del WhatsApp de la página (34691613796). Cuando se confirmen los teléfonos se puede usar esa tarjeta, que es más completa (dirección, email, web)."
     }
   ]
 }

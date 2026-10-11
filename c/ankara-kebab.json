@@ -1,32 +1,91 @@
 {
+  "version": 2,
   "nombre": "ANKARA KEBAB",
-  "modoDemo": false,
   "subtitulo": "Auténtico Sabor Tradicional",
   "textoBadge": "PUNTO DE PEDIDO CONECTADO",
   "logo": "ankara-logo.png",
   "fondoLogo": "#0b0c10",
-  "whatsapp": "https://wa.me/34602552973",
-  "audioFondo": "",
   "colorPrincipal": "#0B0D14",
   "colorAcento": "#FA8405",
+  "whatsapp": "https://wa.me/34602552973",
   "secciones": [
     {
       "titulo": "Herramientas de Mesa & Mostrador",
       "botones": [
         {
-          "tipo": "configurador_kebab",
+          "tipo": "asistente",
           "nombre": "Armar Mi Menú Kebab",
-          "descripcion": "Elige carne, pan, vegetales y salsas al momento",
-          "icono": "fa-solid fa-utensils",
-          "estiloIcono": "background: rgba(250, 132, 5, 0.2); color: #FA8405;",
-          "destacado": true
+          "descripcion": "Elige formato, carne y salsa y envíalo a cocina",
+          "icono": "utensils",
+          "colorIcono": "#FA8405",
+          "destacado": true,
+          "titulo": "Arma tu Menú",
+          "intro": "Configura tu plato y envíalo a cocina:",
+          "pasos": [
+            {
+              "titulo": "Formato",
+              "opciones": [
+                "Dürüm Rollo Gigante",
+                "Pita Clásica",
+                "Plato Kebab",
+                "Kebab Box"
+              ]
+            },
+            {
+              "titulo": "Carne",
+              "opciones": [
+                "Mixto (Pollo y Ternera)",
+                "Solo Ternera",
+                "Solo Pollo",
+                "Falafel (Vegetariano)"
+              ]
+            },
+            {
+              "titulo": "Salsa",
+              "opciones": [
+                "Salsa Blanca (Yogur)",
+                "Blanca + Toque Picante",
+                "Salsa Roja Picante",
+                "Sin salsa"
+              ]
+            }
+          ],
+          "botonTexto": "Pedir por WhatsApp",
+          "mensaje": "¡Hola {negocio}! He armado mi pedido desde la mesa/llavero [ {mesa} ]:\n- Formato: {Formato}\n- Carne: {Carne}\n- Salsa: {Salsa}\n\n¿Cuánto tarda en estar listo?"
         },
         {
-          "tipo": "guia_alergenos_kebab",
+          "tipo": "info",
           "nombre": "Guía de Alérgenos & Salsas",
           "descripcion": "Consulta gluten, lácteos y nivel de picante",
-          "icono": "fa-solid fa-wheat-awn-circle-exclamation",
-          "estiloIcono": "background: rgba(239, 68, 68, 0.18); color: #EF4444;"
+          "icono": "alert",
+          "colorIcono": "#EF4444",
+          "titulo": "Alérgenos & Salsas",
+          "tarjetas": [
+            {
+              "nivel": "aviso",
+              "titulo": "🌾 Gluten",
+              "texto": "Presente en Pita, Dürüm y Falafel. Opción sin gluten: Plato Kebab solo carne y ensalada."
+            },
+            {
+              "nivel": "info",
+              "titulo": "🥛 Lácteos",
+              "texto": "Presentes en la Salsa Blanca tradicional (yogur)."
+            },
+            {
+              "nivel": "alerta",
+              "titulo": "🌶 Picante",
+              "texto": "Salsa roja a base de chile natural. Libre de lácteos."
+            }
+          ],
+          "aviso": "Si tienes una alergia grave, díselo al personal antes de pedir.",
+          "acciones": [
+            {
+              "texto": "Consultar alérgenos por WhatsApp",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, tengo una duda sobre alérgenos antes de pedir."
+            }
+          ]
         }
       ]
     },
@@ -34,39 +93,43 @@
       "titulo": "Pedidos & Servicios del Llavero",
       "botones": [
         {
-          "tipo": "recuperar_llaves",
-          "nombre": "🔑 ¿Encontraste estas llaves?",
-          "descripcion": "Avisa al local para coordinar la devolución segura",
-          "icono": "fa-solid fa-key"
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Avisa al local para coordinar la devolución segura"
         },
         {
+          "tipo": "whatsapp",
           "nombre": "Pedir por WhatsApp",
           "descripcion": "Encarga para recoger o entrega a domicilio",
-          "icono": "fa-brands fa-whatsapp",
-          "url": "https://wa.me/34602552973?text=Hola%20Ankara%20Kebab,%20quisiera%20hacer%20un%20pedido%20para%20recoger/llevar.",
-          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;"
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "mensaje": "Hola {negocio}, quisiera hacer un pedido para recoger/llevar."
         },
         {
           "tipo": "parking",
           "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la posición GPS de tu coche para volver",
-          "icono": "fa-solid fa-location-crosshairs",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #94A3B8;"
+          "icono": "locate",
+          "colorIcono": "#94A3B8"
         },
         {
+          "tipo": "vcard",
           "nombre": "Guardar Contacto en Agenda",
           "descripcion": "Descarga nuestro teléfono directo al móvil",
-          "icono": "fa-solid fa-address-card",
-          "estiloIcono": "background: rgba(250, 132, 5, 0.15); color: #FA8405;",
-          "url": "./contacto.vcf"
+          "icono": "contact",
+          "colorIcono": "#FA8405"
         }
       ]
     },
     {
       "titulo": "Tu Opinión Nos Importa",
-      "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJUQUjoe1VRQ0RoEKpuucdgF0",
-      "whatsappGerencia": "https://wa.me/34602552973?text=Hola%20Gerencia%20de%20Ankara%20Kebab,%20quisiera%20comentar%20un%20aspecto%20de%20mi%20pedido"
+      "botones": [
+        {
+          "tipo": "opinion",
+          "urlGoogle": "https://search.google.com/local/writereview?placeid=ChIJUQUjoe1VRQ0RoEKpuucdgF0",
+          "whatsappGerencia": "https://wa.me/34602552973?text=Hola%20Gerencia%20de%20Ankara%20Kebab%2C%20quisiera%20comentar%20un%20aspecto%20de%20mi%20pedido"
+        }
+      ]
     }
   ]
 }

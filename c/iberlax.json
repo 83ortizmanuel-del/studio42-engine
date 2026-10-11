@@ -1,45 +1,244 @@
 {
+  "version": 2,
   "nombre": "IBERLAX COLCHONES",
-  "modoDemo": false,
   "subtitulo": "Especialistas en Descanso & Ergonomía",
-  "subtituloOverlay": "Bienvenido al Ecosistema Iberlax Phygital",
+  "textoBadge": "ECOSISTEMA IBERLAX PHYGITAL",
   "logo": "iberlax-logo.jpg",
   "fondoLogo": "#ffffff",
   "colorPrincipal": "#0F2C59",
   "colorAcento": "#00A8E8",
-  "audioFondo": "ambiente2.mp3",
+  "whatsapp": "https://wa.me/34643186453",
   "secciones": [
     {
       "titulo": "Diagnóstico & Asesoría en Tienda",
       "botones": [
         {
-          "tipo": "test_desgaste",
+          "tipo": "asistente",
           "nombre": "Diagnóstico de Fatiga del Colchón",
-          "descripcion": "Calcula el desgaste biomecánico y pérdida de soporte de tu cama actual",
-          "icono": "fa-solid fa-microscope",
-          "estiloIcono": "background-color: rgba(255, 180, 0, 0.15); color: #FFB400;",
-          "destacado": true
+          "descripcion": "Calcula el desgaste y la pérdida de soporte de tu cama actual",
+          "icono": "search",
+          "colorIcono": "#FFB400",
+          "destacado": true,
+          "titulo": "Diagnóstico de Fatiga",
+          "intro": "Evalúa la pérdida de sustentación y firmeza de tu equipo actual:",
+          "pasos": [
+            {
+              "titulo": "Antigüedad del colchón",
+              "opciones": [
+                "Menos de 3 años (Óptimo)",
+                "De 4 a 7 años (Desgaste progresivo)",
+                "De 8 a 10 años (Límite de vida útil)",
+                "Más de 10 años (Fatiga severa)"
+              ]
+            },
+            {
+              "titulo": "Sensación al despertar",
+              "opciones": [
+                "Descanso reparador / Sin molestias",
+                "Leve pesadez o rigidez lumbar",
+                "Puntos de presión o molestia cervical/espalda",
+                "Noto hueco o deformación visible"
+              ]
+            }
+          ],
+          "resultado": {
+            "etiqueta": "Diagnóstico",
+            "reglas": [
+              {
+                "si": {
+                  "Antigüedad del colchón": [
+                    "De 8 a 10 años (Límite de vida útil)",
+                    "Más de 10 años (Fatiga severa)"
+                  ]
+                },
+                "titulo": "⚠️ Pérdida crítica de soporte",
+                "texto": "Los núcleos elásticos han superado su resiliencia útil. Tu columna compensa la falta de soporte generando tensión muscular."
+              },
+              {
+                "si": {
+                  "Sensación al despertar": [
+                    "Puntos de presión o molestia cervical/espalda",
+                    "Noto hueco o deformación visible"
+                  ]
+                },
+                "titulo": "⚠️ Pérdida crítica de soporte",
+                "texto": "Los núcleos elásticos han superado su resiliencia útil. Tu columna compensa la falta de soporte generando tensión muscular."
+              },
+              {
+                "si": {
+                  "Antigüedad del colchón": [
+                    "De 4 a 7 años (Desgaste progresivo)"
+                  ]
+                },
+                "titulo": "⚡ Fatiga intermedia detectada",
+                "texto": "El equipo mantiene parte de la acogida pero ha perdido alineación ergonómica continua."
+              },
+              {
+                "si": {
+                  "Sensación al despertar": [
+                    "Leve pesadez o rigidez lumbar"
+                  ]
+                },
+                "titulo": "⚡ Fatiga intermedia detectada",
+                "texto": "El equipo mantiene parte de la acogida pero ha perdido alineación ergonómica continua."
+              }
+            ],
+            "porDefecto": {
+              "titulo": "✅ Estado operativo favorable",
+              "texto": "Tu colchón se encuentra dentro del rango de respuesta mecánica adecuado."
+            }
+          },
+          "botonTexto": "Consultar Plan Renove en Tienda",
+          "mensaje": "Hola {negocio}, realicé el Diagnóstico de Fatiga en vuestra pantalla:\n- Antigüedad: {Antigüedad del colchón}\n- Sensación: {Sensación al despertar}\n- Diagnóstico: {resultado}\n¿Tenéis opciones o plan renove disponible?"
         },
         {
-          "tipo": "test_ergonomico",
+          "tipo": "asistente",
           "nombre": "Test Ergonómico: Firmeza & Medidas",
           "descripcion": "Configura en 3 pasos tu colchón y base adecuada",
-          "icono": "fa-solid fa-bed-pulse",
-          "estiloIcono": "background-color: rgba(0, 168, 232, 0.15); color: #00A8E8;"
+          "icono": "bed",
+          "colorIcono": "#00A8E8",
+          "titulo": "Test Ergonómico",
+          "intro": "Configuración de descanso en 3 toques",
+          "pasos": [
+            {
+              "titulo": "Postura de descanso",
+              "opciones": [
+                "De lado",
+                "Boca arriba",
+                "Boca abajo"
+              ],
+              "defecto": "De lado"
+            },
+            {
+              "titulo": "Complexión / peso",
+              "opciones": [
+                "Menos de 70 kg",
+                "70-90 kg",
+                "Más de 90 kg"
+              ],
+              "defecto": "70-90 kg"
+            },
+            {
+              "titulo": "Medida deseada",
+              "opciones": [
+                "135x190",
+                "150x190",
+                "180x200"
+              ],
+              "defecto": "150x190"
+            }
+          ],
+          "resultado": {
+            "etiqueta": "Recomendación ergonómica",
+            "reglas": [
+              {
+                "si": {
+                  "Complexión / peso": [
+                    "Más de 90 kg"
+                  ]
+                },
+                "titulo": "Firmeza alta ergonómica",
+                "texto": "Núcleo reforzado Titanium Pocket + refuerzo lumbar."
+              },
+              {
+                "si": {
+                  "Postura de descanso": [
+                    "Boca arriba"
+                  ]
+                },
+                "titulo": "Firmeza alta ergonómica",
+                "texto": "Núcleo reforzado Titanium Pocket + refuerzo lumbar."
+              },
+              {
+                "si": {
+                  "Postura de descanso": [
+                    "De lado"
+                  ],
+                  "Complexión / peso": [
+                    "Menos de 70 kg"
+                  ]
+                },
+                "titulo": "Firmeza media-suave acogedora",
+                "texto": "Viscoelástica suave con alivio de presión."
+              }
+            ],
+            "porDefecto": {
+              "titulo": "Firmeza media adaptable",
+              "texto": "Muelles ensacados 7 zonas + viscoelástica transpirable."
+            }
+          },
+          "botonTexto": "Probar este modelo en tienda",
+          "mensaje": "Hola {negocio}, completé el test ergonómico:\n- Postura: {Postura de descanso}\n- Peso: {Complexión / peso}\n- Medida: {Medida deseada}\nResultado: {resultado}. ¿Qué modelo puedo probar?"
         },
         {
-          "tipo": "tasador_retirada",
+          "tipo": "asistente",
           "nombre": "Servicio de Logística & Entrega",
           "descripcion": "Consulta accesos, transporte y plazos para tu domicilio",
-          "icono": "fa-solid fa-truck-ramp-box",
-          "estiloIcono": "background-color: rgba(48, 209, 88, 0.15); color: #30d158;"
+          "icono": "truck",
+          "colorIcono": "#30d158",
+          "titulo": "Entrega & Retirada",
+          "intro": "Tasador logístico a domicilio",
+          "pasos": [
+            {
+              "titulo": "Zona de entrega",
+              "opciones": [
+                "Logroño Centro / Casco",
+                "Alrededores (Oyón/Lardero)",
+                "Rioja / Otras localidades"
+              ]
+            },
+            {
+              "titulo": "Acceso al edificio",
+              "opciones": [
+                "Con ascensor / Planta baja",
+                "Escalera (hasta 2º)",
+                "Escalera (3º o superior)"
+              ]
+            },
+            {
+              "titulo": "Retirada de usado",
+              "opciones": [
+                "Sí, retirar colchón antiguo",
+                "No, solo entrega nuevo"
+              ]
+            }
+          ],
+          "resultado": {
+            "etiqueta": "Condición estimada",
+            "reglas": [
+              {
+                "si": {
+                  "Acceso al edificio": [
+                    "Escalera (3º o superior)"
+                  ]
+                },
+                "titulo": "Suplemento de acceso / 2 operarios",
+                "texto": "Requiere subida por escalera estrecha."
+              },
+              {
+                "si": {
+                  "Zona de entrega": [
+                    "Rioja / Otras localidades"
+                  ]
+                },
+                "titulo": "Ruta interurbana",
+                "texto": "Consolidado en rutas semanales programadas."
+              }
+            ],
+            "porDefecto": {
+              "titulo": "Servicio bonificado en tienda",
+              "texto": "Ruta directa a domicilio con subida a habitación."
+            }
+          },
+          "botonTexto": "Consultar ruta por WhatsApp",
+          "mensaje": "Hola {negocio}, he consultado el servicio logístico:\n- Zona: {Zona de entrega}\n- Acceso: {Acceso al edificio}\n- Retirada: {Retirada de usado}\n¿Me confirmáis disponibilidad?"
         },
         {
           "tipo": "parking",
           "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la ubicación GPS de tu coche para volver al salir",
-          "icono": "fa-solid fa-location-crosshairs",
-          "estiloIcono": "background-color: rgba(142, 142, 147, 0.15); color: #94A3B8;"
+          "icono": "locate",
+          "colorIcono": "#94A3B8"
         }
       ]
     },
@@ -47,32 +246,36 @@
       "titulo": "Servicios VIP & Prescripción",
       "botones": [
         {
-          "tipo": "recuperar_llaves",
-          "nombre": "🔑 ¿Encontraste estas llaves?",
-          "descripcion": "Avisa a Iberlax para coordinar la devolución segura al propietario",
-          "icono": "fa-solid fa-key"
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Avisa a Iberlax para coordinar la devolución segura al propietario"
         },
         {
+          "tipo": "enlace",
           "nombre": "Club Embajador: Regala 50 € a un Amigo",
-          "descripcion": "Comparte un bono exclusivo de 50 € para el nuevo descanso de un familiar o amigo",
-          "icono": "fa-solid fa-gift",
-          "estiloIcono": "background-color: rgba(168, 85, 247, 0.15); color: #A855F7;",
-          "url": "https://wa.me/?text=¡Hola!%20Te%20comparto%20este%20bono%20exclusivo%20de%2050%20€%20de%20descuento%20para%20tu%20nuevo%20colchón%20en%20Iberlax.%20Pruébalo%20aquí:%20https://wa.me/34643186453"
+          "descripcion": "Comparte un bono de 50 € para el nuevo descanso de un familiar o amigo",
+          "icono": "gift",
+          "colorIcono": "#A855F7",
+          "url": "https://wa.me/?text=%C2%A1Hola%21%20Te%20comparto%20este%20bono%20exclusivo%20de%2050%20%E2%82%AC%20de%20descuento%20para%20tu%20nuevo%20colch%C3%B3n%20en%20Iberlax.%20Pru%C3%A9balo%20aqu%C3%AD%3A%20https%3A%2F%2Fwa.me%2F34643186453"
         },
         {
+          "tipo": "vcard",
           "nombre": "Guardar Contacto en Agenda",
           "descripcion": "Añade el WhatsApp y teléfono directo a tus contactos",
-          "icono": "fa-solid fa-address-card",
-          "estiloIcono": "background-color: rgba(0, 229, 255, 0.15); color: #00A8E8;",
-          "url": "./contacto.vcf"
+          "icono": "contact",
+          "colorIcono": "#00A8E8"
         }
       ]
     },
     {
       "titulo": "Tu Experiencia en Iberlax",
-      "escudoResenas": true,
-      "urlGoogleResenas": "https://search.google.com/local/writereview?placeid=ChIJXy9Psu6qWg0R2MztIZPHsPQ",
-      "whatsappGerencia": "https://wa.me/34643186453?text=Hola%20Gerencia%20Iberlax,%20quisiera%20comentar%20una%20disconformidad%20con%20mi%20visita"
+      "botones": [
+        {
+          "tipo": "opinion",
+          "urlGoogle": "https://search.google.com/local/writereview?placeid=ChIJXy9Psu6qWg0R2MztIZPHsPQ",
+          "whatsappGerencia": "https://wa.me/34643186453?text=Hola%20Gerencia%20Iberlax%2C%20quisiera%20comentar%20una%20disconformidad%20con%20mi%20visita"
+        }
+      ]
     }
   ]
 }

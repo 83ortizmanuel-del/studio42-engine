@@ -1,0 +1,27 @@
+name: Validar JSON de clientes
+
+# Se ejecuta cada vez que alguien (tú, el script automático o un Closer)
+# sube o cambia un archivo dentro de c/ o el esquema.
+on:
+  push:
+    paths:
+      - "c/*.json"
+      - "schema.json"
+  pull_request:
+    paths:
+      - "c/*.json"
+      - "schema.json"
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Comprobar que cada c/*.json cumple schema.json
+        run: npx --yes ajv-cli@5 validate -s schema.json -d "c/*.json" --strict=false

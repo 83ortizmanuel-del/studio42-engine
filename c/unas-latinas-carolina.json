@@ -1,7 +1,6 @@
 {
+  "version": 2,
   "nombre": "UÑAS LATINAS CAROLINA",
-  "modoDemo": false,
-  "whatsapp": "https://wa.me/34747412712",
   "subtitulo": "El arte de resaltar tu mirada y tus manos",
   "textoBadge": "PUESTO ACTIVO · AGENDA & MOSTRADOR VIP",
   "logo": "unas-latinas-carolina.png",
@@ -11,7 +10,7 @@
   "fondoLogo": "transparent",
   "colorPrincipal": "#190610",
   "colorAcento": "#EC4899",
-  "esMascota": false,
+  "whatsapp": "https://wa.me/34747412712",
   "datosPago": {
     "bizum": "747412712",
     "concepto": "Uñas Latinas Carolina"
@@ -21,20 +20,21 @@
       "titulo": "Servicios & Reserva de Cita",
       "botones": [
         {
+          "tipo": "whatsapp",
           "nombre": "Pedir Cita por WhatsApp",
           "descripcion": "Reserva tu hora para pestañas, acrílicas o manicura",
-          "icono": "fa-brands fa-whatsapp",
-          "url": "https://wa.me/34747412712?text=¡Hola%20Carolina!%20Vengo%20desde%20tu%20pantalla%20interactiva%20y%20quisiera%20pedir%20cita.",
-          "estiloIcono": "background: rgba(37, 211, 102, 0.2); color: #25D366;",
-          "destacado": true
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "destacado": true,
+          "mensaje": "¡Hola Carolina! Vengo desde tu pantalla interactiva y quisiera pedir cita."
         },
         {
+          "tipo": "whatsapp",
           "nombre": "Carta de Servicios & Cuidados",
           "descripcion": "Volumen Ruso 3D/4D, Porcelana, Acrigel y Pedicura Prémium",
-          "icono": "fa-solid fa-hand-sparkles",
-          "url": "https://wa.me/34747412712?text=Hola%20Carolina,%20¿me%20podrías%20enviar%20la%20lista%20de%20precios%20y%20servicios?",
-          "estiloIcono": "background: rgba(168, 85, 247, 0.2); color: #a855f7;",
-          "destacado": false
+          "icono": "heart",
+          "colorIcono": "#a855f7",
+          "mensaje": "Hola Carolina, ¿me podrías enviar la lista de precios y servicios?"
         }
       ]
     },
@@ -42,20 +42,20 @@
       "titulo": "Redes Sociales & Trabajos",
       "botones": [
         {
+          "tipo": "enlace",
           "nombre": "Galería de Diseños en Instagram",
           "descripcion": "Inspírate con los últimos sets, pestañas y nail art",
-          "icono": "fa-brands fa-instagram",
-          "url": "https://www.instagram.com/unaslatinascarolina?stkn=bmFqbjJ5endidXgw",
-          "estiloIcono": "background: rgba(236, 72, 153, 0.2); color: #EC4899;",
-          "destacado": false
+          "icono": "instagram",
+          "colorIcono": "#EC4899",
+          "url": "https://www.instagram.com/unaslatinascarolina"
         },
         {
+          "tipo": "enlace",
           "nombre": "Página Oficial de Facebook",
           "descripcion": "Síguenos para novedades, promociones y opiniones",
-          "icono": "fa-brands fa-facebook",
-          "url": "https://www.facebook.com/unaslatinascarolina",
-          "estiloIcono": "background: rgba(24, 119, 242, 0.2); color: #1877F2;",
-          "destacado": false
+          "icono": "facebook",
+          "colorIcono": "#1877F2",
+          "url": "https://www.facebook.com/unaslatinascarolina"
         }
       ]
     },
@@ -66,36 +66,44 @@
           "tipo": "bizum",
           "nombre": "Pagar por Bizum en Mostrador",
           "descripcion": "Toca para copiar el número (747 41 27 12) y abonar tu cita",
-          "icono": "fa-solid fa-mobile-screen-button",
-          "estiloIcono": "background: rgba(0, 195, 255, 0.2); color: #00c3ff;"
+          "icono": "phone",
+          "colorIcono": "#00c3ff"
         },
         {
-          "tipo": "recuperar_llaves",
-          "nombre": "🔑 ¿Encontraste estas llaves?",
-          "descripcion": "Pulsa aquí para avisar a Uñas Latinas Carolina y devolverlas",
-          "icono": "fa-solid fa-key"
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Pulsa aquí para avisar a Uñas Latinas Carolina y devolverlas"
         },
         {
-          "nombre": "¿Dónde aparqué?",
           "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
           "descripcion": "Guarda la posición GPS de tu coche mientras disfrutas tu cita",
-          "icono": "fa-solid fa-location-crosshairs",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.08); color: #9ca3af;"
+          "icono": "locate",
+          "colorIcono": "#9ca3af"
         },
         {
+          "tipo": "vcard",
           "nombre": "Guardar Contacto en Agenda",
-          "descripcion": "Descarga nuestro teléfono y ubicación directa al móvil",
-          "icono": "fa-solid fa-address-card",
-          "url": "./contacto.vcf",
-          "estiloIcono": "background: rgba(255, 255, 255, 0.12); color: #ffffff;"
+          "descripcion": "Descarga nuestro teléfono directo al móvil",
+          "icono": "contact",
+          "colorIcono": "#ffffff"
         }
       ]
     },
     {
       "titulo": "Tu Opinión Nos Importa",
-      "escudoResenas": true,
-      "urlGoogleResenas": "https://maps.google.com",
-      "whatsappGerencia": "https://wa.me/34747412712?text=Hola%20Carolina,%20quisiera%20comentarte%20un%20aspecto%20sobre%20mi%20servicio."
+      "botones": [
+        {
+          "tipo": "opinion",
+          "whatsappGerencia": "https://wa.me/34747412712?text=Hola%20Carolina%2C%20quisiera%20comentarte%20un%20aspecto%20sobre%20mi%20servicio."
+        }
+      ]
+    }
+  ],
+  "_pendientes": [
+    {
+      "que": "Enlace de reseñas de Google",
+      "por_que": "Estaba puesto https://maps.google.com (la portada de Maps, no la ficha). El botón de Google queda oculto hasta poner el enlace real: search.google.com/local/writereview?placeid=..."
     }
   ]
 }

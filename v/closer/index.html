@@ -2,12 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Studio 42 | Diagnóstico Closer</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         :root {
             --color-accent: #c4c4c4;
@@ -35,7 +32,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--color-fondo);
             background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
             background-size: 28px 28px;
@@ -47,7 +44,6 @@
             justify-content: center;
             padding: 16px;
             overflow-x: hidden;
-            user-select: none;
         }
 
         .neon-card-wrapper {
@@ -283,19 +279,53 @@
         .hidden-element {
             display: none !important;
         }
-    </style>
+    
+        /* ---- añadidos v2 ---- */
+        textarea.input-cyber { resize: vertical; min-height: 64px; line-height: 1.4; }
+        .ayuda { font-size: 10px; color: #7b8494; margin: 5px 4px 0; line-height: 1.4; }
+        .ayuda b { color: #c4c4c4; }
+        .req { color: #f87171; }
+        details.mas { border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 10px 12px; background: rgba(255,255,255,0.02); }
+        details.mas summary { cursor: pointer; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #9ca3af; list-style: none; }
+        details.mas summary::-webkit-details-marker { display: none; }
+        details.mas summary::before { content: '＋ '; color: var(--color-accent); }
+        details.mas[open] summary::before { content: '－ '; }
+        details.mas .form-group { margin-top: 12px; }
+        .chip-friccion { text-align: left; font-family: inherit; }
+        .chip-friccion .caja { width: 14px; height: 14px; border: 1.5px solid #9ca3af; border-radius: 4px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; line-height: 1; }
+        .chip-friccion.active .caja { background: var(--color-accent); border-color: var(--color-accent); color: var(--btn-text-color); }
+        .btn-cyber-submit:disabled { opacity: .6; cursor: wait; }
+        .candado { position: absolute; right: 14px; font-size: 12px; }
+        #panel-progreso { margin-top: 14px; padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); font-size: 12px; }
+        .paso { display: flex; align-items: center; gap: 10px; padding: 6px 0; color: #6b7280; font-weight: 600; }
+        .paso .punto { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #4b5563; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; }
+        .paso.activo { color: #fff; }
+        .paso.activo .punto { border-color: var(--color-accent); border-top-color: transparent; animation: girar 0.9s linear infinite; }
+        .paso.hecho { color: #34d399; }
+        .paso.hecho .punto { border-color: #34d399; background: #34d399; color: #04130c; }
+        .paso.fallo { color: #f87171; }
+        .paso.fallo .punto { border-color: #f87171; }
+        @keyframes girar { to { transform: rotate(360deg); } }
+        .aviso-lista { margin: 10px 0 0; padding: 10px 12px; border-radius: 12px; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.35); color: #fcd34d; font-size: 11px; line-height: 1.45; text-align: left; }
+        .aviso-lista li { margin-left: 16px; }
+        .error-msg { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.4); color: #fecaca; font-size: 12px; line-height: 1.45; text-align: left; }
+        .acciones-fin { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+        .btn-fin { display: block; text-align: center; text-decoration: none; font-family: inherit; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 13px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #fff; cursor: pointer; }
+        .btn-fin.principal { background: var(--gradient-btn); color: var(--btn-text-color); border: none; box-shadow: 0 0 18px var(--color-glow); }
+        .url-final { word-break: break-all; font-size: 11px; color: var(--color-accent); margin-top: 8px; text-align: center; }
+</style>
 </head>
 
 <body>
 
     <div class="neon-card-wrapper">
         <main class="neon-card-content">
-            
+
             <header>
-                <img src="/logo.png" alt="Studio 42" class="logo-hero" onerror="this.src='logo.png'">
+                <img src="logo.png" alt="Studio 42" class="logo-hero">
                 <div>
                     <h1 class="title-phygital">Diagnóstico Phygital</h1>
-                    <p class="subtitle-phygital">Engine v3 // Identidad Inteligente</p>
+                    <p class="subtitle-phygital">Engine v2 // Identidad Inteligente</p>
                 </div>
                 <div class="badge-closer">
                     <span class="dot-pulse"></span>
@@ -303,23 +333,23 @@
                 </div>
             </header>
 
-            <form id="form-diagnostico">
-                
+            <form id="form-diagnostico" autocomplete="off" novalidate>
+
                 <div class="form-group">
-                    <label style="color: var(--color-accent);">ID Responsable (Closer)</label>
+                    <label for="closer_id" style="color: var(--color-accent);">ID Responsable (Closer)</label>
                     <div class="relative-box">
                         <input type="text" id="closer_id" value="MO001" class="input-cyber input-locked" readonly required>
-                        <i class="fa-solid fa-lock"></i>
+                        <span class="candado" aria-hidden="true">🔒</span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Nombre Comercial del Negocio</label>
-                    <input type="text" id="nombre_comercio" placeholder="Ej: Centro Veterinario Norte" class="input-cyber" required>
+                    <label for="nombre_comercio">Nombre Comercial del Negocio <span class="req">*</span></label>
+                    <input type="text" id="nombre_comercio" maxlength="60" placeholder="Ej: Centro Veterinario Norte" class="input-cyber" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Sector del Negocio</label>
+                    <label for="sector_select">Sector del Negocio <span class="req">*</span></label>
                     <select id="sector_select" class="input-cyber" required>
                         <option value="" disabled selected>-- Selecciona el Sector --</option>
                         <option value="Hostelería y Restauración">🍽️ Hostelería, Cafetería o Restauración</option>
@@ -333,35 +363,73 @@
                 </div>
 
                 <div id="campo-otro-sector-container" class="form-group hidden-element">
-                    <label style="color: #34d399;">Especifica el Sector Novedoso</label>
-                    <input type="text" id="sector_otro_input" placeholder="Ej: Escuela de Buceo..." class="input-cyber">
+                    <label for="sector_otro_input" style="color: #34d399;">Especifica el Sector Novedoso</label>
+                    <input type="text" id="sector_otro_input" maxlength="60" placeholder="Ej: Escuela de Buceo..." class="input-cyber">
                 </div>
 
                 <div id="cuestionario-sector-container" class="panel-fricciones hidden-element">
                     <label style="color: #34d399; margin: 0;">Fricciones Detectadas en el Pitch</label>
                     <div id="chips-fricciones" class="chips-container"></div>
-                    <input type="text" id="fricciones_extra" placeholder="Otra fricción comentada..." class="input-cyber" style="margin-top: 6px; font-size: 11px;">
+                    <textarea id="fricciones_extra" maxlength="500" placeholder="Cuéntame con tus palabras lo que viste: qué le pregunta la gente, qué le hace perder tiempo o clientes…" class="input-cyber" style="margin-top: 6px; font-size: 12px;"></textarea>
+                    <p class="ayuda">Cuanto más concreto, mejores serán los botones que diseñe la IA.</p>
                 </div>
 
                 <div class="form-group">
-                    <label>Identidad Visual / Paleta de Colores</label>
+                    <label for="whatsapp">WhatsApp del Negocio <span class="req">*</span></label>
+                    <input type="tel" inputmode="tel" id="whatsapp" maxlength="25" placeholder="Ej: 600 11 22 33" class="input-cyber" required>
+                    <p class="ayuda">Si es de España basta con las 9 cifras. Otro país: con prefijo (+58…).</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="google">Enlace para Reseñas de Google</label>
+                    <input type="url" inputmode="url" id="google" maxlength="300" placeholder="https://g.page/r/…/review" class="input-cyber">
+                    <p class="ayuda"><b>Dónde sacarlo:</b> Perfil de empresa de Google → <b>Pedir reseñas</b> → Copiar enlace. No sirve la portada de Google Maps.</p>
+                </div>
+
+                <details class="mas">
+                    <summary>Más datos del negocio (opcional)</summary>
+                    <div class="form-group">
+                        <label for="instagram">Instagram</label>
+                        <input type="text" id="instagram" maxlength="120" placeholder="@usuario o enlace" class="input-cyber">
+                    </div>
+                    <div class="form-group">
+                        <label for="facebook">Facebook</label>
+                        <input type="text" id="facebook" maxlength="160" placeholder="usuario o enlace de la página" class="input-cyber">
+                    </div>
+                    <div class="form-group">
+                        <label for="web">Web</label>
+                        <input type="text" id="web" maxlength="200" placeholder="www.minegocio.es" class="input-cyber">
+                    </div>
+                    <div class="form-group">
+                        <label for="bizum">Bizum del negocio</label>
+                        <input type="tel" inputmode="tel" id="bizum" maxlength="20" placeholder="9 cifras" class="input-cyber">
+                    </div>
+                </details>
+
+                <div class="form-group">
+                    <label for="branding">Identidad Visual / Paleta de Colores</label>
                     <div class="color-row">
-                        <input type="text" id="branding" placeholder="#0070F3 // Neón" class="input-cyber" required>
-                        <input type="color" id="color-picker" value="#00E5FF" class="color-picker-input">
+                        <input type="text" id="branding" maxlength="120" placeholder="#0070F3 // Neón" class="input-cyber">
+                        <input type="color" id="color-picker" value="#00e5ff" class="color-picker-input" aria-label="Elegir color de acento">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>URL del Logo / Observaciones Extra</label>
-                    <input type="text" id="logo_extra" placeholder="Enlace a web o Drive..." class="input-cyber">
+                    <label for="logo_extra">URL del Logo (imagen directa)</label>
+                    <input type="text" id="logo_extra" maxlength="300" placeholder="https://…/logo.png  (no enlaces de Drive)" class="input-cyber">
+                    <p class="ayuda">Si no hay logo, se mostrará el nombre del negocio. El archivo se puede subir después.</p>
                 </div>
 
-                <button type="submit" id="btn-enviar" class="btn-cyber-submit">
-                    Registrar Diagnóstico
-                </button>
+                <button type="submit" id="btn-enviar" class="btn-cyber-submit">Registrar Diagnóstico</button>
             </form>
 
-            <div id="mensaje-estado" class="hidden-element" style="margin-top: 14px; padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.06); text-align: center; font-size: 11px; font-weight: bold;"></div>
+            <div id="panel-progreso" class="hidden-element" aria-live="polite">
+                <div class="paso" id="p1"><span class="punto"></span><span>Enviando el diagnóstico</span></div>
+                <div class="paso" id="p2"><span class="punto"></span><span>La IA diseña los botones y se guarda en GitHub</span></div>
+                <div class="paso" id="p3"><span class="punto"></span><span>Publicando en studio42.es</span></div>
+                <div id="zona-avisos"></div>
+                <div id="zona-final"></div>
+            </div>
 
         </main>
     </div>
@@ -405,53 +473,54 @@
             ]
         };
 
+        /* =================== CONFIGURACIÓN (lo único que hay que tocar) =================== */
+        // URL de la "aplicación web" de Apps Script (Implementar → Administrar implementaciones).
+        // Si actualizas la implementación existente con "Nueva versión", la URL NO cambia.
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec";
+        // Dónde se publican las interfaces. En studio42.es se usa su propio dominio.
+        const BASE = /(^|\.)studio42\.es$/.test(location.hostname) ? "https://studio42.es" : location.origin;
+        const ESPERA_MAX_MS = 150000;   // tiempo máximo esperando a que aparezca la interfaz
+        const CADA_MS = 2500;
+
+        const $ = (id) => document.getElementById(id);
+        const sectorSelect = $('sector_select'), campoOtroContainer = $('campo-otro-sector-container'), sectorOtroInput = $('sector_otro_input');
+        const cuestionarioContainer = $('cuestionario-sector-container'), chipsContainer = $('chips-fricciones');
+        const form = $('form-diagnostico'), btnEnviar = $('btn-enviar'), panel = $('panel-progreso');
+
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const closerCod = (urlParams.get('cod') || urlParams.get('closer') || 'MO001').toUpperCase().trim();
-            const inputCloser = document.getElementById('closer_id');
-            const badgeText = document.getElementById('badge-closer-text');
-
-            if (inputCloser) inputCloser.value = closerCod;
-
-            // Si es Melina se pone rosa, si eres tú (MO001) u otro closer se pone en titanio/plata
+            const closerCod = (urlParams.get('cod') || urlParams.get('closer') || 'MO001').toUpperCase().trim().replace(/[^A-Z0-9_-]/g, '').slice(0, 20) || 'MO001';
+            $('closer_id').value = closerCod;
+            // Melina en rosa; el resto de closers en titanio/plata
             if (closerCod.includes('MEL')) {
                 document.body.classList.add('theme-melina');
-                if (badgeText) badgeText.innerText = "Acceso Exclusivo Melina";
+                $('badge-closer-text').textContent = "Acceso Exclusivo Melina";
             } else {
-                document.body.classList.remove('theme-melina');
-                if (badgeText) badgeText.innerText = "Acceso Exclusivo Closer: " + closerCod;
+                $('badge-closer-text').textContent = "Acceso Exclusivo Closer: " + closerCod;
             }
         });
 
-        const sectorSelect = document.getElementById('sector_select');
-        const campoOtroContainer = document.getElementById('campo-otro-sector-container');
-        const sectorOtroInput = document.getElementById('sector_otro_input');
-        const cuestionarioContainer = document.getElementById('cuestionario-sector-container');
-        const chipsContainer = document.getElementById('chips-fricciones');
-
         sectorSelect.addEventListener('change', () => {
             const sector = sectorSelect.value;
-            chipsContainer.innerHTML = '';
-
-            if (sector === 'Otros') {
-                campoOtroContainer.classList.remove('hidden-element');
-                sectorOtroInput.required = true;
-            } else {
-                campoOtroContainer.classList.add('hidden-element');
-                sectorOtroInput.required = false;
-                sectorOtroInput.value = '';
-            }
-            
+            chipsContainer.textContent = '';
+            const esOtros = sector === 'Otros';
+            campoOtroContainer.classList.toggle('hidden-element', !esOtros);
+            sectorOtroInput.required = esOtros;
+            if (!esOtros) sectorOtroInput.value = '';
             if (FRICCIONES_POR_SECTOR[sector]) {
                 cuestionarioContainer.classList.remove('hidden-element');
-                FRICCIONES_POR_SECTOR[sector].forEach(friccion => {
-                    const chip = document.createElement('div');
+                FRICCIONES_POR_SECTOR[sector].forEach((friccion) => {
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
                     chip.className = 'chip-friccion';
-                    chip.innerHTML = `<i class="fa-regular fa-square"></i> <span>${friccion}</span>`;
+                    chip.setAttribute('aria-pressed', 'false');
+                    const caja = document.createElement('span'); caja.className = 'caja';
+                    const txt = document.createElement('span'); txt.textContent = friccion;
+                    chip.append(caja, txt);
                     chip.addEventListener('click', () => {
-                        chip.classList.toggle('active');
-                        const icon = chip.querySelector('i');
-                        icon.className = chip.classList.contains('active') ? "fa-solid fa-square-check" : "fa-regular fa-square";
+                        const on = chip.classList.toggle('active');
+                        chip.setAttribute('aria-pressed', String(on));
+                        caja.textContent = on ? '✓' : '';
                     });
                     chipsContainer.appendChild(chip);
                 });
@@ -460,92 +529,144 @@
             }
         });
 
-        const colorPicker = document.getElementById('color-picker');
-        const inputBranding = document.getElementById('branding');
-        colorPicker.addEventListener('input', (e) => {
-            inputBranding.value = `${e.target.value} // Tono Neón`;
+        $('color-picker').addEventListener('input', (e) => {
+            $('branding').value = `${e.target.value} // Tono Neón`;
             document.documentElement.style.setProperty('--color-glow', e.target.value + '88');
         });
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec";
-        const form = document.getElementById('form-diagnostico');
-        const btnEnviar = document.getElementById('btn-enviar');
-        const mensajeEstado = document.getElementById('mensaje-estado');
+        /* ------------------------------- utilidades ------------------------------- */
+        // Misma regla que usa el servidor para crear la dirección (por si la respuesta no se puede leer).
+        function slugify(nombre) {
+            return nombre.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+                .replace(/[^a-z0-9\s-]/g, '').trim().replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40).replace(/-+$/g, '');
+        }
+        function nuevaPeticion() {
+            const a = new Uint8Array(8);
+            (window.crypto || window.msCrypto).getRandomValues(a);
+            return Array.from(a, (b) => b.toString(16).padStart(2, '0')).join('');
+        }
+        const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 
-        function iniciarCuentaRegresiva(urlDestino) {
-            let segs = 35;
-            mensajeEstado.className = "";
-            mensajeEstado.style.display = "block";
-            mensajeEstado.innerHTML = `
-                <div style="color: #34d399; margin-bottom: 6px;">⚡ Nodo Phygital Compilado</div>
-                <div id="btn-countdown" style="padding: 10px; background: rgba(255,255,255,0.15); border-radius: 50px; color: #fff;">
-                    ⏳ Desplegando en Servidor (<span id="reloj">${segs}</span>s)
-                </div>
-            `;
+        function marcar(id, estado) { const el = $(id); el.className = 'paso' + (estado ? ' ' + estado : ''); el.querySelector('.punto').textContent = estado === 'hecho' ? '✓' : estado === 'fallo' ? '!' : ''; }
+        function reiniciarPanel() { ['p1', 'p2', 'p3'].forEach((p) => marcar(p, '')); $('zona-avisos').textContent = ''; $('zona-final').textContent = ''; }
 
-            const intervalo = setInterval(() => {
-                segs--;
-                const reloj = document.getElementById('reloj');
-                if (reloj) reloj.innerText = segs;
-                if (segs <= 0) {
-                    clearInterval(intervalo);
-                    const btn = document.getElementById('btn-countdown');
-                    if (btn) {
-                        btn.style.background = "#fff";
-                        btn.style.color = "#000";
-                        btn.style.cursor = "pointer";
-                        btn.innerText = "👉 ¡Ver Demo en Vivo!";
-                        btn.onclick = () => window.open(urlDestino, '_blank');
-                    }
+        function mostrarAvisos(lista) {
+            const z = $('zona-avisos'); z.textContent = '';
+            if (!lista || !lista.length) return;
+            const ul = document.createElement('ul'); ul.className = 'aviso-lista';
+            const t = document.createElement('div'); t.textContent = '⚠️ Revisa estos puntos:'; t.style.fontWeight = '800'; t.style.marginBottom = '4px';
+            z.appendChild(t); lista.forEach((a) => { const li = document.createElement('li'); li.textContent = a; ul.appendChild(li); }); z.appendChild(ul);
+        }
+        function mostrarError(msg, conReintento) {
+            const z = $('zona-final'); z.textContent = '';
+            const e = document.createElement('div'); e.className = 'error-msg'; e.textContent = msg; z.appendChild(e);
+            const acc = document.createElement('div'); acc.className = 'acciones-fin';
+            if (conReintento) { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn-fin principal'; b.textContent = 'Reintentar'; b.addEventListener('click', () => enviar(ultimoEnvio, true)); acc.appendChild(b); }
+            const v = document.createElement('button'); v.type = 'button'; v.className = 'btn-fin'; v.textContent = 'Corregir datos'; v.addEventListener('click', volverAlFormulario); acc.appendChild(v);
+            z.appendChild(acc);
+        }
+        function volverAlFormulario() { panel.classList.add('hidden-element'); form.classList.remove('hidden-element'); btnEnviar.disabled = false; btnEnviar.textContent = 'Registrar Diagnóstico'; }
+
+        function mostrarListo(url, avisosIA) {
+            marcar('p3', 'hecho');
+            const z = $('zona-final'); z.textContent = '';
+            const ok = document.createElement('div'); ok.style.cssText = 'text-align:center;color:#34d399;font-weight:800;margin-top:10px'; ok.textContent = '⚡ ¡Interfaz lista!' + (avisosIA ? '' : '');
+            const u = document.createElement('div'); u.className = 'url-final'; u.textContent = url;
+            const acc = document.createElement('div'); acc.className = 'acciones-fin';
+            const abrir = document.createElement('a'); abrir.className = 'btn-fin principal'; abrir.href = url; abrir.target = '_blank'; abrir.rel = 'noopener'; abrir.textContent = '👉 Ver interfaz en vivo';
+            const copiar = document.createElement('button'); copiar.type = 'button'; copiar.className = 'btn-fin'; copiar.textContent = 'Copiar enlace';
+            copiar.addEventListener('click', async () => { try { await navigator.clipboard.writeText(url); copiar.textContent = '¡Copiado!'; } catch (e) { copiar.textContent = 'Mantén pulsado el enlace'; } });
+            const nuevo = document.createElement('button'); nuevo.type = 'button'; nuevo.className = 'btn-fin'; nuevo.textContent = 'Nuevo diagnóstico';
+            nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+            acc.append(abrir, copiar, nuevo);
+            z.append(ok, u, acc);
+        }
+
+        /* Espera a que Netlify sirva el JSON recién subido. Se reconoce por el código de petición,
+           así nunca se confunde con una versión anterior del mismo negocio. */
+        async function esperarPublicacion(slug, peticion) {
+            const t0 = Date.now();
+            while (Date.now() - t0 < ESPERA_MAX_MS) {
+                try {
+                    const r = await fetch(`${BASE}/c/${slug}.json?t=${Date.now()}`, { cache: 'no-store' });
+                    if (r.ok) { const j = await r.json(); if (j && j._peticion === peticion) return true; }
+                } catch (e) { /* aún no existe: seguimos esperando */ }
+                await espera(CADA_MS);
+            }
+            return false;
+        }
+
+        let ultimoEnvio = null;
+
+        /* ---------------------------------- envío ---------------------------------- */
+        async function enviar(datos, esReintento) {
+            ultimoEnvio = datos;
+            form.classList.add('hidden-element');
+            panel.classList.remove('hidden-element');
+            reiniciarPanel();
+            marcar('p1', 'activo');
+            let slug = slugify(datos.nombre), respuesta = null, noLegible = false;
+
+            try {
+                const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(datos), redirect: 'follow' });
+                marcar('p1', 'hecho'); marcar('p2', 'activo');
+                respuesta = await resp.json();
+            } catch (e) {
+                // Puede que el servidor SÍ lo haya recibido pero el navegador no pueda leer la respuesta.
+                // No reenviamos (evitaría duplicar): comprobamos si aparece la interfaz.
+                noLegible = true;
+            }
+
+            if (respuesta && respuesta.ok === false) {
+                marcar('p2', 'fallo');
+                mostrarError(respuesta.error || 'El servidor no pudo crear la interfaz.', false);
+                return;
+            }
+            if (respuesta && respuesta.ok) {
+                slug = respuesta.slug || slug;
+                marcar('p2', 'hecho'); mostrarAvisos(respuesta.avisos);
+                if (respuesta.ia === false) {
+                    const z = $('zona-avisos'); const n = document.createElement('div'); n.className = 'aviso-lista'; n.textContent = 'La IA no pudo proponer botones a medida esta vez: se publicó la interfaz básica. Puedes volver a enviar el diagnóstico para reintentarlo.'; z.appendChild(n);
                 }
-            }, 1000);
+            } else {
+                marcar('p1', 'hecho'); marcar('p2', 'hecho');
+                const z = $('zona-avisos'); z.textContent = '';
+                const n = document.createElement('div'); n.className = 'aviso-lista'; n.textContent = 'No se pudo leer la confirmación del servidor; comprobando si la interfaz ya está publicada…'; z.appendChild(n);
+            }
+
+            marcar('p3', 'activo');
+            const listo = await esperarPublicacion(slug, datos.peticion);
+            if (listo) { mostrarListo(`${BASE}/c/?cod=${slug}`); return; }
+            marcar('p3', 'fallo');
+            mostrarError(noLegible
+                ? 'No hemos podido confirmar la publicación. Revisa tu conexión y pulsa Reintentar (no se duplicará nada). Si sigue igual, mira la columna Estado de la hoja "Diagnósticos".'
+                : 'El servidor confirmó el envío, pero la página aún no aparece. Netlify puede tardar un poco más: abre el enlace en un minuto.', true);
+            if (respuesta && respuesta.ok) { const z = $('zona-final'); const a = document.createElement('div'); a.className = 'url-final'; a.textContent = `${BASE}/c/?cod=${slug}`; z.appendChild(a); }
         }
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            btnEnviar.disabled = true;
-            btnEnviar.innerText = "Compilando Phygital Engine...";
+            const val = (id) => $(id).value.trim();
+            const errores = [];
+            if (val('nombre_comercio').length < 2) errores.push('Falta el nombre del negocio.');
+            if (!sectorSelect.value) errores.push('Elige el sector.');
+            if (sectorSelect.value === 'Otros' && !val('sector_otro_input')) errores.push('Especifica el sector novedoso.');
+            if (val('whatsapp').replace(/\D/g, '').length < 9) errores.push('El WhatsApp necesita al menos 9 cifras.');
+            if (errores.length) { alert(errores.join('\n')); return; }
+            if (!SCRIPT_URL || /PEGA_AQUI/.test(SCRIPT_URL)) { alert('Falta configurar SCRIPT_URL en este archivo.'); return; }
 
-            const closerVal = document.getElementById('closer_id').value.trim();
-            const nombreComercio = document.getElementById('nombre_comercio').value.trim();
-            let sectorVal = document.getElementById('sector_select').value;
-            if (sectorVal === 'Otros') {
-                sectorVal = sectorOtroInput.value.trim() ? `Otros (${sectorOtroInput.value.trim()})` : 'Sector Novedoso';
-            }
+            let sector = sectorSelect.value;
+            if (sector === 'Otros') sector = 'Otros (' + val('sector_otro_input') + ')';
+            const chips = Array.from(document.querySelectorAll('.chip-friccion.active span:last-child')).map((s) => s.textContent);
+            btnEnviar.disabled = true; btnEnviar.textContent = 'Compilando Phygital Engine...';
 
-            const chips = Array.from(document.querySelectorAll('.chip-friccion.active span')).map(s => s.innerText);
-            const extra = document.getElementById('fricciones_extra').value.trim();
-            if (extra) chips.push(extra);
-
-            const slug = nombreComercio.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, '').trim().replace(/[\s_-]+/g, '-');
-
-            const params = new URLSearchParams();
-            params.append("closer_id", closerVal);
-            params.append("nombre_sector", `${nombreComercio} / ${sectorVal}`);
-            params.append("fricciones", chips.length ? chips.join(" | ") : "Optimización integral");
-            params.append("branding", document.getElementById('branding').value.trim());
-            params.append("logo_extra", document.getElementById('logo_extra').value.trim());
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: params.toString()
-            })
-            .then(() => {
-                iniciarCuentaRegresiva(`https://studio42.es/c/?cod=${slug}`);
-                form.reset();
-                document.getElementById('closer_id').value = closerVal;
-                cuestionarioContainer.classList.add('hidden-element');
-                campoOtroContainer.classList.add('hidden-element');
-            })
-            .catch(() => {
-                iniciarCuentaRegresiva(`https://studio42.es/c/?cod=${slug}`);
-            })
-            .finally(() => {
-                btnEnviar.disabled = false;
-                btnEnviar.innerText = "Registrar Diagnóstico";
-            });
+            enviar({
+                closer_id: val('closer_id'), nombre: val('nombre_comercio'), sector: sector, whatsapp: val('whatsapp'),
+                fricciones: chips, notas: val('fricciones_extra'),
+                google: val('google'), instagram: val('instagram'), facebook: val('facebook'), web: val('web'), bizum: val('bizum'),
+                estilo: val('branding'), color: $('color-picker').value, logo: val('logo_extra'),
+                peticion: nuevaPeticion()
+            }, false);
         });
     </script>
 </body>
