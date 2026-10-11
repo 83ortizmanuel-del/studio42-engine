@@ -1,768 +1,735 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Sucursal | Hub Inteligente Multi-Sede</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --color-principal: #d4af37;
-            --color-dorado-brillo: #f5e298;
-            --color-secundario: #00e5ff;
-            --color-estrellas: #ffb400;
-            --color-fondo: #060608; 
-            --color-tarjeta: rgba(18, 18, 24, 0.78); 
-            --color-boton: rgba(28, 28, 38, 0.65); 
-            --color-boton-borde: rgba(255, 255, 255, 0.08);
-            --color-texto: #ffffff;
-            --color-texto-secundario: #9a9aa5;
-            --color-neon-gold: rgba(212, 175, 55, 0.7);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060608">
+<meta name="description" content="La Sucursal · Barbería y estilo en Logroño. Reserva tu cita, guarda el contacto, paga por Bizum y más.">
+<title>La Sucursal | Barbería & Estilo · Logroño</title>
+<style>
+    /* FUENTES: sin Google Fonts (más rápido y sin enviar la IP del visitante a Google).
+       Si quieres las tipografías originales, descarga los .woff2, súbelos junto al index
+       y descomenta este bloque:
+    @font-face { font-family: "Plus Jakarta Sans"; src: url("fonts/plus-jakarta-sans.woff2") format("woff2"); font-weight: 400 800; font-display: swap; }
+    @font-face { font-family: "Space Grotesk"; src: url("fonts/space-grotesk.woff2") format("woff2"); font-weight: 600 700; font-display: swap; }
+    */
+    :root {
+        --color-principal: #d4af37;
+        --color-secundario: #00e5ff;
+        --color-fondo: #060608;
+        --color-tarjeta: rgba(18, 18, 24, 0.84);
+        --color-boton: rgba(28, 28, 38, 0.72);
+        --color-boton-borde: rgba(255, 255, 255, 0.08);
+        --color-texto: #ffffff;
+        --color-texto-secundario: #a3a3ae;
+        --fuente: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        --fuente-titulo: "Space Grotesk", var(--fuente);
+    }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    [hidden] { display: none !important; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--color-principal); outline-offset: 3px; }
 
-        body { 
-            background-color: var(--color-fondo); 
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.12) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(0, 229, 255, 0.06) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.01) 0px, transparent 100%);
-            color: var(--color-texto); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            padding: 24px 16px; 
-            overflow-x: hidden; 
-        }
-        
-        /* BORDE NEÓN ROTATIVO EN LA PORTADA SPLASH */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #050507;
-            background-image: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.5s ease; padding: 20px;
-        }
+    body {
+        font-family: var(--fuente);
+        background-color: var(--color-fondo);
+        background-image:
+            radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.12) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(0, 229, 255, 0.06) 0px, transparent 50%);
+        color: var(--color-texto);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 24px 16px;
+        overflow-x: hidden;
+    }
 
-        .splash-neon-wrapper {
-            position: relative;
-            border-radius: 36px;
-            overflow: hidden;
-            padding: 2px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.35);
-        }
+    /* ICONOS SVG (sin librería externa) */
+    .ic { width: 1em; height: 1em; display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-        .splash-neon-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                transparent 0%,
-                transparent 35%,
-                var(--color-principal) 48%,
-                #ffffff 52%,
-                var(--color-principal) 56%,
-                transparent 68%,
-                transparent 100%
-            );
-            animation: rotateNeonGold 5s linear infinite;
-            z-index: 0;
-        }
+    /* SPLASH */
+    #splash-screen {
+        position: fixed; inset: 0;
+        background-color: #050507;
+        background-image: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        z-index: 9999; transition: opacity 0.4s ease; padding: 20px;
+    }
+    .splash-neon-wrapper {
+        position: relative; border-radius: 36px; overflow: hidden; padding: 2px;
+        width: 100%; max-width: 380px; box-shadow: 0 0 50px rgba(212, 175, 55, 0.35);
+    }
+    .splash-neon-wrapper::before {
+        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: conic-gradient(transparent 0%, transparent 35%, var(--color-principal) 48%, #ffffff 52%, var(--color-principal) 56%, transparent 68%, transparent 100%);
+        animation: rotateNeonGold 5s linear infinite; will-change: transform; z-index: 0;
+    }
+    @keyframes rotateNeonGold { to { transform: rotate(360deg); } }
+    .splash-inner-box {
+        position: relative; background: rgba(14, 14, 18, 0.97); border-radius: 34px;
+        padding: 44px 24px; display: flex; flex-direction: column; align-items: center; z-index: 1;
+    }
+    #btn-entrar {
+        background: linear-gradient(135deg, #d4af37 0%, #fae8a4 50%, #aa820a 100%);
+        color: #080808; padding: 16px 45px; font-size: 1rem; font-weight: 800; letter-spacing: 2px;
+        font-family: var(--fuente-titulo); border-radius: 50px; text-transform: uppercase;
+        box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); transition: transform 0.25s ease, box-shadow 0.25s ease;
+        margin-top: 28px; width: 100%; max-width: 240px;
+    }
+    #btn-entrar:hover { transform: translateY(-2px); box-shadow: 0 14px 35px rgba(212, 175, 55, 0.55); }
+    #btn-entrar:active { transform: scale(0.97); }
 
-        @keyframes rotateNeonGold {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    /* SELECTOR DE SEDES */
+    #modal-selector-sedes {
+        position: fixed; inset: 0; background: rgba(4, 4, 6, 0.95);
+        display: flex; overflow-y: auto; z-index: 9998; padding: 20px;
+    }
+    .selector-inner { margin: auto; width: 100%; max-width: 360px; display: flex; flex-direction: column; align-items: center; }
+    .sede-card-select {
+        background: rgba(22, 22, 30, 0.85); border: 1px solid rgba(212, 175, 55, 0.25);
+        border-radius: 20px; padding: 18px 22px; width: 100%; margin-bottom: 14px;
+        display: flex; align-items: center; justify-content: space-between; text-align: left;
+        transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+    .sede-card-select:hover, .sede-card-select:active {
+        border-color: var(--color-principal); background: rgba(32, 32, 45, 0.95);
+        transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25);
+    }
+    .sede-nombre { display: block; color: var(--color-principal); font-weight: 700; font-size: 0.98rem; }
+    .sede-zona { display: block; color: var(--color-texto-secundario); font-size: 0.78rem; margin-top: 2px; }
+    .sede-card-select .ic { color: var(--color-principal); }
 
-        .splash-inner-box {
-            position: relative;
-            background: rgba(14, 14, 18, 0.95);
-            backdrop-filter: blur(25px);
-            border-radius: 34px;
-            padding: 44px 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 1;
-        }
+    /* BOTÓN MUTE */
+    #mute-btn {
+        position: fixed; bottom: calc(25px + env(safe-area-inset-bottom, 0px)); right: 25px;
+        width: 52px; height: 52px; border-radius: 50%; background: rgba(20, 20, 26, 0.92);
+        border: 1.5px solid var(--color-principal); color: var(--color-principal); font-size: 1.3rem;
+        display: flex; justify-content: center; align-items: center; z-index: 1000;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7); transition: transform 0.3s ease;
+    }
+    #mute-btn:hover { transform: scale(1.08); }
+    #mute-btn.silenciado { border-color: var(--color-texto-secundario); color: var(--color-texto-secundario); }
 
-        #btn-entrar {
-            background: linear-gradient(135deg, #d4af37 0%, #fae8a4 50%, #aa820a 100%);
-            color: #080808;
-            padding: 16px 45px; 
-            font-size: 1rem; 
-            font-weight: 800; 
-            letter-spacing: 2px;
-            font-family: 'Space Grotesk', sans-serif;
-            border: none; 
-            border-radius: 50px; 
-            cursor: pointer;
-            text-transform: uppercase; 
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); 
-            transition: all 0.25s ease;
-            margin-top: 28px; 
-            width: 100%; 
-            max-width: 240px;
-        }
-        #btn-entrar:hover { transform: translateY(-2px); box-shadow: 0 14px 35px rgba(212, 175, 55, 0.55); }
-        #btn-entrar:active { transform: scale(0.97); }
+    /* BADGE SEDE */
+    .sede-badge-container {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(212, 175, 55, 0.12); border: 1px solid rgba(212, 175, 55, 0.35);
+        padding: 7px 16px; border-radius: 50px; margin-bottom: 18px;
+        transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+    .sede-badge-container:hover { background: rgba(212, 175, 55, 0.22); border-color: var(--color-principal); transform: translateY(-1px); }
+    .sede-badge-dot { width: 8px; height: 8px; background-color: #00e676; border-radius: 50%; box-shadow: 0 0 10px #00e676; animation: pulseDot 2s infinite; }
+    @keyframes pulseDot {
+        0%, 100% { transform: scale(0.9); opacity: 0.8; }
+        50% { transform: scale(1.2); opacity: 1; }
+    }
+    #badge-sede-nombre { font-size: 0.75rem; font-weight: 700; color: var(--color-principal); text-transform: uppercase; letter-spacing: 1px; }
+    .sede-badge-container .ic { font-size: 0.8rem; color: var(--color-texto-secundario); margin-left: 2px; }
 
-        /* MODAL SELECTOR DE SEDES */
-        #modal-selector-sedes {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 4, 6, 0.92); 
-            backdrop-filter: blur(20px);
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9998; padding: 20px;
-        }
-        .sede-card-select {
-            background: rgba(22, 22, 30, 0.7); 
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 20px; 
-            padding: 18px 22px; 
-            width: 100%; 
-            max-width: 360px;
-            margin-bottom: 14px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            cursor: pointer; 
-            transition: all 0.25s ease; 
-            text-align: left;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
-        .sede-card-select:hover, .sede-card-select:active {
-            border-color: var(--color-principal); 
-            background: rgba(32, 32, 45, 0.9); 
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25);
-        }
+    /* CONTENEDOR PRINCIPAL */
+    .hub-container {
+        background: var(--color-tarjeta);
+        -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+        width: 100%; max-width: 420px; border-radius: 32px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        padding: 34px 22px; text-align: center; position: relative;
+    }
+    .logo-container {
+        width: 102px; height: 102px; margin: 0 auto 16px auto; border-radius: 28px;
+        border: 2px solid rgba(212, 175, 55, 0.6); overflow: hidden;
+        background: radial-gradient(circle, #1a1a1f 0%, #08080a 100%);
+        display: flex; justify-content: center; align-items: center;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+    .logo-container img { width: 85%; height: 85%; object-fit: contain; }
+    h1 {
+        font-family: var(--fuente-titulo); font-size: 1.6rem; font-weight: 800; letter-spacing: 2px;
+        margin-bottom: 3px; text-transform: uppercase;
+        background: linear-gradient(180deg, #ffffff 40%, #c4c4cc 100%);
+        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .propietario { color: var(--color-texto-secundario); font-size: 0.9rem; margin-bottom: 14px; font-weight: 500; }
 
-        /* BOTÓN FLOTANTE MUTE */
-        #mute-btn {
-            position: fixed; bottom: 25px; right: 25px;
-            width: 52px; height: 52px; border-radius: 50%;
-            background: rgba(20, 20, 26, 0.85);
-            backdrop-filter: blur(15px);
-            border: 1.5px solid var(--color-principal);
-            color: var(--color-principal); 
-            font-size: 1.2rem;
-            display: none; justify-content: center; align-items: center;
-            z-index: 1000; cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.7); 
-            transition: all 0.3s ease;
-        }
-        #mute-btn:hover { transform: scale(1.08); }
+    .section-title {
+        display: flex; align-items: center; gap: 10px; text-align: left; font-size: 0.72rem;
+        text-transform: uppercase; letter-spacing: 2px; color: var(--color-texto-secundario);
+        margin: 20px 0 10px 8px; font-weight: 700;
+    }
+    .section-title::after { content: ''; flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.3) 0%, transparent 100%); }
 
-        /* BADGE SEDE ACTIVA */
-        .sede-badge-container {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(212, 175, 55, 0.12); 
-            border: 1px solid rgba(212, 175, 55, 0.35);
-            padding: 7px 16px; border-radius: 50px; margin-bottom: 18px; cursor: pointer;
-            transition: all 0.25s ease;
-            backdrop-filter: blur(10px);
-        }
-        .sede-badge-container:hover { 
-            background: rgba(212, 175, 55, 0.22); 
-            border-color: var(--color-principal);
-            transform: translateY(-1px);
-        }
-        .sede-badge-dot { 
-            width: 8px; height: 8px; 
-            background-color: #00e676; 
-            border-radius: 50%; 
-            box-shadow: 0 0 10px #00e676;
-            animation: pulseDot 2s infinite;
-        }
-        @keyframes pulseDot {
-            0% { transform: scale(0.9); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px #00e676; }
-            100% { transform: scale(0.9); opacity: 0.8; }
-        }
+    .apps-menu { display: flex; flex-direction: column; gap: 11px; }
+    .app-btn {
+        display: flex; align-items: center; width: 100%; text-decoration: none; color: inherit;
+        padding: 14px 18px; border-radius: 20px; background: var(--color-boton);
+        border: 1px solid var(--color-boton-borde); text-align: left; cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .app-btn:hover { transform: translateY(-2px); background: rgba(38, 38, 52, 0.9); border-color: rgba(212, 175, 55, 0.4); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45); }
+    .app-btn:active { transform: scale(0.98); background-color: rgba(26, 26, 36, 0.95); }
 
-        /* CONTENEDOR PRINCIPAL GLASS */
-        .hub-container { 
-            background: var(--color-tarjeta); 
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            width: 100%; 
-            max-width: 420px; 
-            border-radius: 32px; 
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.85),
-                0 0 0 1px rgba(255, 255, 255, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15); 
-            padding: 34px 22px; 
-            text-align: center; 
-            position: relative;
-        }
-        
-        .logo-container { 
-            width: 102px; height: 102px; margin: 0 auto 16px auto; 
-            border-radius: 28px; 
-            border: 2px solid rgba(212, 175, 55, 0.6); 
-            overflow: hidden; 
-            background: radial-gradient(circle, #1a1a1f 0%, #08080a 100%); 
-            display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 12px 28px rgba(0,0,0,0.6), 0 0 20px rgba(212, 175, 55, 0.2);
-        }
-        .logo-container img { width: 85%; height: 85%; object-fit: contain; }
-        
-        h1 { 
-            font-size: 1.6rem; 
-            font-weight: 800; 
-            letter-spacing: 2px; 
-            margin-bottom: 3px; 
-            text-transform: uppercase; 
-            font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(180deg, #ffffff 40%, #c4c4cc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .propietario { color: var(--color-texto-secundario); font-size: 0.9rem; margin-bottom: 14px; font-weight: 500; }
-        
-        .section-title { 
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-align: left; 
-            font-size: 0.72rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            color: var(--color-texto-secundario); 
-            margin: 20px 0 10px 8px; 
-            font-weight: 700; 
-        }
-        .section-title::after {
-            content: '';
-            flex-grow: 1;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(212, 175, 55, 0.3) 0%, transparent 100%);
-        }
-        
-        .apps-menu { display: flex; flex-direction: column; gap: 11px; }
-        .app-btn { 
-            display: flex; 
-            align-items: center; 
-            text-decoration: none; 
-            padding: 14px 18px; 
-            border-radius: 20px; 
-            background: var(--color-boton); 
-            border: 1px solid var(--color-boton-borde); 
-            backdrop-filter: blur(15px);
-            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            cursor: pointer; 
-            text-align: left; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-        }
-        .app-btn:hover { 
-            transform: translateY(-2px); 
-            background: rgba(38, 38, 52, 0.85); 
-            border-color: rgba(212, 175, 55, 0.4);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.45);
-        }
-        .app-btn:active { transform: scale(0.98); background-color: rgba(26, 26, 36, 0.95); }
-        
-        .app-icon { 
-            width: 44px; height: 44px; border-radius: 14px; 
-            display: flex; justify-content: center; align-items: center; 
-            margin-right: 15px; font-size: 1.25rem; 
-            flex-shrink: 0;
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.15);
-        }
-        
-        .icon-contact { background: linear-gradient(135deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 150, 200, 0.1) 100%); color: #00e5ff; }
-        .icon-booking { background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(170, 130, 10, 0.1) 100%); color: #d4af37; }
-        .icon-bizum { background: linear-gradient(135deg, rgba(0, 200, 83, 0.25) 0%, rgba(0, 140, 60, 0.1) 100%); color: #00e676; }
-        .icon-insta { background: linear-gradient(135deg, rgba(225, 48, 108, 0.25) 0%, rgba(150, 20, 80, 0.1) 100%); color: #ff3b7c; }
-        .icon-review { background: linear-gradient(135deg, rgba(255, 180, 0, 0.25) 0%, rgba(180, 120, 0, 0.1) 100%); color: #ffb400; }
-        .icon-parking { background: rgba(142, 142, 147, 0.15); color: #b0b0b8; }
-        .icon-parking-active { background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(170, 130, 10, 0.2) 100%); color: var(--color-principal); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+    .app-icon {
+        width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center;
+        margin-right: 15px; font-size: 1.3rem; flex-shrink: 0; box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    }
+    .icon-contact { background: linear-gradient(135deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 150, 200, 0.1) 100%); color: #00e5ff; }
+    .icon-booking { background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(170, 130, 10, 0.1) 100%); color: #d4af37; }
+    .icon-bizum { background: linear-gradient(135deg, rgba(0, 200, 83, 0.25) 0%, rgba(0, 140, 60, 0.1) 100%); color: #00e676; }
+    .icon-insta { background: linear-gradient(135deg, rgba(225, 48, 108, 0.25) 0%, rgba(150, 20, 80, 0.1) 100%); color: #ff3b7c; }
+    .icon-review { background: linear-gradient(135deg, rgba(255, 180, 0, 0.25) 0%, rgba(180, 120, 0, 0.1) 100%); color: #ffb400; }
+    .icon-parking { background: rgba(142, 142, 147, 0.15); color: #b0b0b8; }
+    .icon-parking.activo { background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(170, 130, 10, 0.2) 100%); color: var(--color-principal); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
 
-        .app-info { flex-grow: 1; }
-        .app-name { font-size: 0.98rem; font-weight: 700; color: var(--color-texto); margin-bottom: 2px; }
-        .app-desc { font-size: 0.78rem; color: var(--color-texto-secundario); font-weight: 500; }
-        .app-arrow { color: var(--color-texto-secundario); font-size: 0.85rem; opacity: 0.4; transition: transform 0.2s ease, opacity 0.2s ease; }
-        .app-btn:hover .app-arrow { transform: translateX(3px); opacity: 0.9; color: var(--color-principal); }
-        
-        .stars-container { font-size: 1.9rem; margin-top: 10px; display: flex; justify-content: center; gap: 10px; width: 100%; }
-        .star-rating i { cursor: pointer; transition: transform 0.2s, color 0.2s, filter 0.2s; }
-        .star-rating i:hover { transform: scale(1.25); }
-        .star-active { color: var(--color-estrellas); filter: drop-shadow(0 0 10px rgba(255, 180, 0, 0.6)); }
-        .star-inactive { color: #373746; }
-        
-        .footer-brand { margin-top: 32px; font-size: 0.78rem; color: var(--color-texto-secundario); letter-spacing: 1px; font-weight: 500; }
-        .footer-brand span { color: var(--color-principal); font-weight: 800; }
-    </style>
+    .app-info { flex-grow: 1; min-width: 0; }
+    .app-name { font-size: 0.98rem; font-weight: 700; color: var(--color-texto); margin-bottom: 2px; }
+    .app-name.activo { color: var(--color-principal); }
+    .app-desc { font-size: 0.78rem; color: var(--color-texto-secundario); font-weight: 500; }
+    .app-arrow { color: var(--color-texto-secundario); font-size: 0.9rem; opacity: 0.45; margin-left: 8px; transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease; }
+    .app-btn:hover .app-arrow { transform: translateX(3px); opacity: 0.9; color: var(--color-principal); }
+
+    .footer-brand { margin-top: 32px; font-size: 0.78rem; color: var(--color-texto-secundario); letter-spacing: 1px; font-weight: 500; }
+    .footer-brand span { color: var(--color-principal); font-weight: 800; }
+    .footer-brand a { color: var(--color-texto-secundario); display: inline-block; margin-top: 8px; font-size: 0.72rem; }
+
+    /* MODAL GENÉRICO */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); display: flex; overflow-y: auto; z-index: 10000; padding: 20px; }
+    .modal-box {
+        margin: auto; background: rgba(22, 22, 28, 0.98); border: 1.5px solid var(--color-principal); border-radius: 26px;
+        padding: 28px 22px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85);
+    }
+    .modal-box h3 { color: var(--color-principal); font-size: 1.15rem; margin-bottom: 10px; text-transform: uppercase; font-family: var(--fuente-titulo); }
+    .modal-box p { color: var(--color-texto); font-size: 0.88rem; line-height: 1.55; }
+    .modal-logo { width: 65px; height: 65px; margin: 0 auto 14px auto; border-radius: 50%; border: 2px solid var(--color-principal); overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center; }
+    .modal-logo img { width: 80%; height: 80%; object-fit: contain; }
+    .modal-firma { color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 16px; font-style: italic; }
+    .modal-numero { background: rgba(32, 32, 42, 0.85); border-radius: 16px; padding: 14px; margin-bottom: 16px; border: 1px dashed rgba(212, 175, 55, 0.45); }
+    .modal-numero span { font-size: 0.75rem; color: var(--color-texto-secundario); display: block; margin-bottom: 2px; }
+    .modal-numero strong { font-size: 1.35rem; color: #00e676; letter-spacing: 1.5px; user-select: all; -webkit-user-select: all; }
+    .modal-pasos { text-align: left; margin-bottom: 22px; }
+    .modal-pasos p { margin-bottom: 7px; }
+    .modal-acciones { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .btn-oro {
+        background: linear-gradient(135deg, #d4af37 0%, #fae8a4 50%, #aa820a 100%); color: #000; font-weight: 800;
+        padding: 14px 30px; border-radius: 25px; text-transform: uppercase; font-size: 0.9rem; width: 100%;
+        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+    }
+    .btn-sec { border: 1px solid var(--color-boton-borde); color: var(--color-texto-secundario); padding: 13px 30px; border-radius: 25px; font-weight: 700; font-size: 0.85rem; width: 100%; }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+</style>
 </head>
 <body>
 
-    <!-- 1. SPLASH SCREEN CON BORDE NEÓN ROTATIVO -->
-    <div id="splash-screen">
-        <div class="splash-neon-wrapper">
-            <div class="splash-inner-box">
-                <div class="logo-container" style="width: 110px; height: 110px; margin-bottom: 20px;">
-                    <img src="logo.png" alt="La Sucursal">
-                </div>
-                <h1 style="background: linear-gradient(135deg, #fff 30%, #d4af37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px;">LA SUCURSAL</h1>
-                <p style="color: var(--color-texto-secundario); margin-top: 4px; font-size: 0.85rem;">Barbería & Estilo // Logroño</p>
-                <button id="btn-entrar">ENTRAR</button>
+<!-- ICONOS SVG -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></symbol>
+        <symbol id="i-contact" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="11" r="2.5"/><path d="M5 17c.7-2 2.1-3 4-3s3.3 1 4 3M15 9.5h3M15 13h3"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></symbol>
+        <symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+        <symbol id="i-nav" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"/></symbol>
+        <symbol id="i-insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.5 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.2A8.4 8.4 0 1 1 21 11.5z"/></symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4L4 9M4 4v5h5M4 13a8 8 0 0 0 14 4l2-2M20 20v-5h-5"/></symbol>
+        <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+        <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="m17 9 5 6M22 9l-5 6"/></symbol>
+    </defs>
+</svg>
+
+<!-- 1. SPLASH -->
+<div id="splash-screen">
+    <div class="splash-neon-wrapper">
+        <div class="splash-inner-box">
+            <div class="logo-container" style="width:110px;height:110px;margin-bottom:20px;">
+                <img src="logo.png" alt="La Sucursal" width="110" height="110" fetchpriority="high">
             </div>
+            <h1 style="background:linear-gradient(135deg,#fff 30%,#d4af37 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">LA SUCURSAL</h1>
+            <p style="color:var(--color-texto-secundario);margin-top:4px;font-size:0.85rem;">Barbería &amp; Estilo // Logroño</p>
+            <button id="btn-entrar" type="button">ENTRAR</button>
         </div>
     </div>
+</div>
 
-    <!-- 2. SELECTOR DE SEDES -->
-    <div id="modal-selector-sedes">
-        <div class="logo-container" style="width: 80px; height: 80px; margin-bottom: 15px;">
-            <img src="logo.png" alt="La Sucursal">
+<!-- 2. SELECTOR DE SEDES (se rellena solo desde DATOS_SEDES) -->
+<div id="modal-selector-sedes" role="dialog" aria-modal="true" aria-labelledby="sel-titulo" hidden>
+    <div class="selector-inner">
+        <div class="logo-container" style="width:80px;height:80px;margin-bottom:15px;">
+            <img src="logo.png" alt="La Sucursal" width="80" height="80">
         </div>
-        <h2 style="color: #fff; font-size: 1.25rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; font-family: 'Space Grotesk', sans-serif;">Selecciona tu Sede</h2>
-        <p style="color: var(--color-texto-secundario); font-size: 0.82rem; margin-bottom: 22px;">Elige el local donde te encuentras:</p>
+        <h2 id="sel-titulo" style="color:#fff;font-size:1.25rem;font-weight:800;text-transform:uppercase;margin-bottom:4px;font-family:var(--fuente-titulo);">Selecciona tu sede</h2>
+        <p style="color:var(--color-texto-secundario);font-size:0.82rem;margin-bottom:22px;">Elige el local donde te encuentras:</p>
+        <div id="lista-sedes" style="width:100%;"></div>
+    </div>
+</div>
 
-        <div class="sede-card-select" onclick="seleccionarSedeManualmente('centro')">
-            <div>
-                <div style="color: var(--color-principal); font-weight: 700; font-size: 0.98rem;">Sede Centro (Principal)</div>
-                <div style="color: var(--color-texto-secundario); font-size: 0.78rem;">Logroño Centro</div>
-            </div>
-            <i class="fa-solid fa-chevron-right" style="color: var(--color-principal);"></i>
-        </div>
+<!-- 3. AUDIO (no se descarga hasta que el visitante pulsa Entrar) -->
+<audio id="bg-audio" loop preload="none">
+    <source src="ambiente.mp3" type="audio/mpeg">
+</audio>
 
-        <div class="sede-card-select" onclick="seleccionarSedeManualmente('lirios')">
-            <div>
-                <div style="color: var(--color-principal); font-weight: 700; font-size: 0.98rem;">Sede Los Lirios</div>
-                <div style="color: var(--color-texto-secundario); font-size: 0.78rem;">Barrio Los Lirios // Logroño</div>
-            </div>
-            <i class="fa-solid fa-chevron-right" style="color: var(--color-principal);"></i>
-        </div>
+<!-- 4. BOTÓN MUTE -->
+<button id="mute-btn" type="button" aria-label="Silenciar música" aria-pressed="false" hidden>
+    <svg class="ic" aria-hidden="true"><use id="mute-icon" href="#i-volume"/></svg>
+</button>
 
-        <div class="sede-card-select" onclick="seleccionarSedeManualmente('villamediana')">
-            <div>
-                <div style="color: var(--color-principal); font-weight: 700; font-size: 0.98rem;">Sede Villamediana</div>
-                <div style="color: var(--color-texto-secundario); font-size: 0.78rem;">Villamediana de Iregua</div>
-            </div>
-            <i class="fa-solid fa-chevron-right" style="color: var(--color-principal);"></i>
-        </div>
+<!-- CONTENEDOR PRINCIPAL -->
+<main class="hub-container">
+    <div class="logo-container">
+        <img src="logo.png" alt="Logo de La Sucursal" width="87" height="87" decoding="async">
     </div>
 
-    <!-- 3. AUDIO OCULTO -->
-    <audio id="bg-audio" loop>
-        <source src="ambiente.mp3" type="audio/mpeg">
-    </audio>
+    <h1>LA SUCURSAL</h1>
+    <div class="propietario" id="propietario-nombre">por Fernando Ambuila Ortíz</div>
 
-    <!-- 4. BOTÓN FLOTANTE MUTE -->
-    <button id="mute-btn">
-        <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+    <button type="button" class="sede-badge-container" onclick="abrirSelectorSedes()" aria-label="Cambiar de sede">
+        <span class="sede-badge-dot"></span>
+        <span id="badge-sede-nombre">Sede Centro</span>
+        <svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>
     </button>
 
-    <!-- CONTENEDOR PRINCIPAL -->
-    <div class="hub-container">
-        <div class="logo-container">
-            <img src="logo.png" alt="Logo">
-        </div>
+    <div class="apps-menu">
 
-        <h1>LA SUCURSAL</h1>
-        <div class="propietario" id="propietario-nombre">por Fernando Ambuila Ortíz</div>
+        <div class="section-title">Barbería</div>
 
-        <!-- BADGE SEDE ACTIVA -->
-        <div class="sede-badge-container" onclick="abrirSelectorSedes()">
-            <span class="sede-badge-dot"></span>
-            <span id="badge-sede-nombre" style="font-size: 0.75rem; font-weight: 700; color: var(--color-principal); text-transform: uppercase; letter-spacing: 1px;">Sede Centro</span>
-            <i class="fa-solid fa-arrows-rotate" style="font-size: 0.7rem; color: var(--color-texto-secundario); margin-left: 4px;"></i>
-        </div>
-
-        <div class="apps-menu">
-            
-            <div class="section-title">Barbería</div>
-
-            <a id="btn-booking" href="https://lasucursalstoreart.com/appointment.php" target="_blank" class="app-btn">
-                <div class="app-icon icon-booking"><i class="fa-solid fa-calendar-check"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Reservar Cita</div>
-                    <div class="app-desc" id="booking-desc">Agenda online en Sede Centro</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <!-- GUARDAR CONTACTO -->
-            <a id="btn-vcf" href="contacto_centro.vcf" download="Contacto_Sede_Centro.vcf" class="app-btn">
-                <div class="app-icon icon-contact"><i class="fa-solid fa-address-card"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Guardar Contacto</div>
-                    <div class="app-desc" id="vcf-desc">Teléfono y dirección de Centro</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <!-- PAGO POR BIZUM -->
-            <a href="#" onclick="pagarPorBizum(event)" class="app-btn" id="btn-bizum">
-                <div class="app-icon icon-bizum"><i class="fa-solid fa-mobile-screen-button"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Pagar por Bizum</div>
-                    <div class="app-desc" id="bizum-desc">Copiar número e instrucciones</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <!-- GESTOR DE PARKING -->
-            <a href="#" onclick="gestionarParking(event)" class="app-btn" id="btn-parking">
-                <div class="app-icon icon-parking" id="parking-icon-container">
-                    <i id="parking-icon" class="fa-solid fa-location-crosshairs"></i>
-                </div>
-                <div class="app-info">
-                    <div class="app-name" id="parking-name">¿Dónde aparqué?</div>
-                    <div class="app-desc" id="parking-desc">Guarda tu coche para volver</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <div class="section-title">Redes Sociales</div>
-
-            <a id="btn-insta-barberia" href="https://www.instagram.com/la_sucursal_the_barber/?hl=es" target="_blank" class="app-btn">
-                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Instagram Barbería</div>
-                    <div class="app-desc" id="insta-desc">Nuestros mejores cortes</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <a id="btn-insta-tienda" href="https://www.instagram.com/la_sucursal_store/?hl=es" target="_blank" class="app-btn">
-                <div class="app-icon icon-insta"><i class="fa-brands fa-instagram"></i></div>
-                <div class="app-info">
-                    <div class="app-name">Instagram Tienda</div>
-                    <div class="app-desc">Conoce nuestra ropa de autor</div>
-                </div>
-                <div class="app-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-
-            <div class="section-title">¿Te ha gustado?</div>
-
-            <!-- ESCUDO ANTI-RESEÑAS -->
-            <div class="app-btn" style="flex-direction: column; cursor: default;">
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <div class="app-icon icon-review"><i class="fa-brands fa-google"></i></div>
-                    <div class="app-info">
-                        <div class="app-name">Valora tu experiencia</div>
-                        <div class="app-desc" id="review-desc">Ayúdanos a mejorar en Centro</div>
-                    </div>
-                </div>
-                <div class="stars-container star-rating" id="escudo-estrellas">
-                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(1)"></i>
-                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(2)"></i>
-                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(3)"></i>
-                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(4)"></i>
-                    <i class="fa-solid fa-star star-inactive" onclick="rateExperience(5)"></i>
-                </div>
-                <p id="star-feedback" style="font-size: 0.78rem; color: var(--color-principal); text-align: center; width: 100%; margin-top: 10px; display: none; font-weight: 600;">Procesando valoración...</p>
+        <a id="btn-booking" href="#" target="_blank" rel="noopener" class="app-btn">
+            <div class="app-icon icon-booking"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg></div>
+            <div class="app-info">
+                <div class="app-name">Reservar cita</div>
+                <div class="app-desc" id="booking-desc">Agenda online en Sede Centro</div>
             </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </a>
 
-        </div>
+        <a id="btn-vcf" href="#" download class="app-btn">
+            <div class="app-icon icon-contact"><svg class="ic" aria-hidden="true"><use href="#i-contact"/></svg></div>
+            <div class="app-info">
+                <div class="app-name">Guardar contacto</div>
+                <div class="app-desc" id="vcf-desc">Teléfono y dirección de Centro</div>
+            </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </a>
 
-        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+        <button type="button" id="btn-bizum" class="app-btn" onclick="pagarPorBizum()">
+            <div class="app-icon icon-bizum"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></div>
+            <div class="app-info">
+                <div class="app-name">Pagar por Bizum</div>
+                <div class="app-desc" id="bizum-desc">Copiar número e instrucciones</div>
+            </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </button>
+
+        <button type="button" id="btn-parking" class="app-btn" onclick="gestionarParking()">
+            <div class="app-icon icon-parking" id="parking-icon-container"><svg class="ic" aria-hidden="true"><use id="parking-icon" href="#i-locate"/></svg></div>
+            <div class="app-info">
+                <div class="app-name" id="parking-name">¿Dónde aparqué?</div>
+                <div class="app-desc" id="parking-desc">Guarda tu coche para volver</div>
+            </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </button>
+
+        <div class="section-title">Redes sociales</div>
+
+        <a id="btn-insta-barberia" href="#" target="_blank" rel="noopener" class="app-btn">
+            <div class="app-icon icon-insta"><svg class="ic" aria-hidden="true"><use href="#i-insta"/></svg></div>
+            <div class="app-info">
+                <div class="app-name">Instagram Barbería</div>
+                <div class="app-desc">Nuestros mejores cortes</div>
+            </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </a>
+
+        <a id="btn-insta-tienda" href="#" target="_blank" rel="noopener" class="app-btn">
+            <div class="app-icon icon-insta"><svg class="ic" aria-hidden="true"><use href="#i-insta"/></svg></div>
+            <div class="app-info">
+                <div class="app-name">Instagram Tienda</div>
+                <div class="app-desc">Conoce nuestra ropa de autor</div>
+            </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </a>
+
+        <div class="section-title">Tu opinión</div>
+
+        <!-- Dos vías iguales para todos los clientes: sin filtro por estrellas -->
+        <a id="btn-google-review" href="#" target="_blank" rel="noopener" class="app-btn">
+            <div class="app-icon icon-review"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg></div>
+            <div class="app-info">
+                <div class="app-name">Dejar mi opinión en Google</div>
+                <div class="app-desc" id="review-desc">Cuéntanos qué tal fue en Sede Centro</div>
+            </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </a>
+
+        <a id="btn-feedback" href="#" target="_blank" rel="noopener" class="app-btn">
+            <div class="app-icon icon-contact"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg></div>
+            <div class="app-info">
+                <div class="app-name">Enviar un comentario privado a la gerencia</div>
+                <div class="app-desc">Te respondemos directamente por WhatsApp</div>
+            </div>
+            <svg class="ic app-arrow" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </a>
+
     </div>
 
-    <!-- SCRIPTS -->
-    <script>
-        const DATOS_SEDES = {
-            centro: {
-                nombre: "Sede Centro",
-                responsable: "por Fernando Ambuila Ortíz",
-                reserva_url: "https://lasucursalstoreart.com/appointment.php",
-                reserva_desc: "Agenda online en Sede Centro",
-                vcf_archivo: "contacto_centro.vcf",
-                vcf_desc: "Teléfono y dirección de Centro",
-                bizum: "643186453",
-                whatsapp_soporte: "34643023681",
-                insta_barberia: "https://www.instagram.com/la_sucursal_the_barber/?hl=es",
-                insta_tienda: "https://www.instagram.com/la_sucursal_store/?hl=es",
-                google_review_url: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI"
-            },
-            lirios: {
-                nombre: "Sede Los Lirios",
-                responsable: "por Equipo La Sucursal Lirios",
-                reserva_url: "https://lasucursalstoreart.com/appointment.php",
-                reserva_desc: "Agenda online en Los Lirios",
-                vcf_archivo: "contacto_lirios.vcf",
-                vcf_desc: "Teléfono y dirección de Los Lirios",
-                bizum: "640745248",
-                whatsapp_soporte: "34643023681",
-                insta_barberia: "https://www.instagram.com/la_sucursal_barber_loslirios?igsi=MXh2dGkwaWlqcXV3OA==",
-                insta_tienda: "https://www.instagram.com/la_sucursal_store/?hl=es",
-                google_review_url: "https://search.google.com/local/writereview?placeid=ChIJz6zuGwCrWg0RMmghwkrmcoc"
-            },
-            villamediana: {
-                nombre: "Sede Villamediana de Iregua",
-                responsable: "por Equipo La Sucursal Villamediana de Iregua",
-                reserva_url: "https://lasucursalstoreart.com/appointment.php",
-                reserva_desc: "Agenda online en Villamediana",
-                vcf_archivo: "contacto_villamediana.vcf",
-                vcf_desc: "Teléfono y dirección de Villamediana",
-                bizum: "643519678",
-                whatsapp_soporte: "34643618452",
-                insta_barberia: "https://www.instagram.com/sucursal_barber_villamediana?igsi=NHQ5aG9oem5uYWF2",
-                insta_tienda: "https://www.instagram.com/la_sucursal_store/?hl=es",
-                google_review_url: "https://search.google.com/local/writereview?placeid=ChIJpyfKYQCrWg0RWqKa-uaku1Y"
+    <div class="footer-brand">
+        Desarrollado por <span>Studio 42</span>
+        <div id="footer-privacidad" hidden><a id="link-privacidad" href="#" target="_blank" rel="noopener">Política de privacidad</a></div>
+    </div>
+</main>
+
+<script>
+    /* ============================================================
+       CONFIGURACIÓN: aquí están las 3 sedes. Para añadir una nueva,
+       copia un bloque, cambia la clave y rellena los datos.
+       ============================================================ */
+    const SEDE_POR_DEFECTO = "centro";
+    const POLITICA_PRIVACIDAD_URL = ""; // Pega aquí el enlace cuando exista; si está vacío, no se muestra.
+
+    const DATOS_SEDES = {
+        centro: {
+            nombre: "Sede Centro",
+            etiqueta: "Sede Centro (Principal)",
+            zona: "Logroño Centro",
+            responsable: "por Fernando Ambuila Ortíz",
+            firma: "Fernando Ambuila",
+            reserva_url: "https://lasucursalstoreart.com/appointment.php?sede=centro",
+            reserva_desc: "Agenda online en Sede Centro",
+            vcf_archivo: "contacto_centro.vcf",
+            vcf_desc: "Teléfono y dirección de Centro",
+            bizum: "643186453",
+            whatsapp_soporte: "34643023681",
+            insta_barberia: "https://www.instagram.com/la_sucursal_the_barber/",
+            insta_tienda: "https://www.instagram.com/la_sucursal_store/",
+            google_review_url: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI"
+        },
+        lirios: {
+            nombre: "Sede Los Lirios",
+            etiqueta: "Sede Los Lirios",
+            zona: "Barrio Los Lirios // Logroño",
+            responsable: "por Equipo La Sucursal Lirios",
+            firma: "Equipo La Sucursal Lirios",
+            reserva_url: "https://lasucursalstoreart.com/appointment.php?sede=lirios",
+            reserva_desc: "Agenda online en Los Lirios",
+            vcf_archivo: "contacto_lirios.vcf",
+            vcf_desc: "Teléfono y dirección de Los Lirios",
+            bizum: "640745248",
+            whatsapp_soporte: "34643023681",
+            insta_barberia: "https://www.instagram.com/la_sucursal_barber_loslirios/",
+            insta_tienda: "https://www.instagram.com/la_sucursal_store/",
+            google_review_url: "https://search.google.com/local/writereview?placeid=ChIJz6zuGwCrWg0RMmghwkrmcoc"
+        },
+        villamediana: {
+            nombre: "Sede Villamediana de Iregua",
+            etiqueta: "Sede Villamediana",
+            zona: "Villamediana de Iregua",
+            responsable: "por Equipo La Sucursal Villamediana de Iregua",
+            firma: "Equipo La Sucursal Villamediana",
+            reserva_url: "https://lasucursalstoreart.com/appointment.php?sede=villamediana",
+            reserva_desc: "Agenda online en Villamediana",
+            vcf_archivo: "contacto_villamediana.vcf",
+            vcf_desc: "Teléfono y dirección de Villamediana",
+            bizum: "643519678",
+            whatsapp_soporte: "34643618452",
+            insta_barberia: "https://www.instagram.com/sucursal_barber_villamediana/",
+            insta_tienda: "https://www.instagram.com/la_sucursal_store/",
+            google_review_url: "https://search.google.com/local/writereview?placeid=ChIJpyfKYQCrWg0RWqKa-uaku1Y"
+        }
+    };
+
+    /* ============================================================
+       UTILIDADES
+       ============================================================ */
+    const $ = (id) => document.getElementById(id);
+    let sedeActual = SEDE_POR_DEFECTO;
+
+    const almacen = {
+        get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+        set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+        del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+    };
+
+    function sedeDesdeURL() {
+        const p = new URLSearchParams(window.location.search).get("sede");
+        const key = p ? p.toLowerCase() : null;
+        return key && DATOS_SEDES[key] ? key : null;
+    }
+
+    /* ============================================================
+       MODAL GENÉRICO (sustituye a alert / confirm / prompt)
+       ============================================================ */
+    let ultimoFoco = null;
+
+    function cerrarModal() {
+        const m = $("modal-generico");
+        if (m) {
+            m.remove();
+            if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus();
+        }
+    }
+
+    function mostrarModal({ html, botones }) {
+        cerrarModal();
+        ultimoFoco = document.activeElement;
+        const overlay = document.createElement("div");
+        overlay.id = "modal-generico";
+        overlay.className = "modal-overlay";
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+
+        const box = document.createElement("div");
+        box.className = "modal-box";
+        box.innerHTML = html; // contenido interno del propio código, nunca datos del visitante
+
+        const acciones = document.createElement("div");
+        acciones.className = "modal-acciones";
+        (botones || [{ texto: "Entendido" }]).forEach((b) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = b.secundario ? "btn-sec" : "btn-oro";
+            btn.textContent = b.texto;
+            btn.addEventListener("click", () => { cerrarModal(); if (b.accion) b.accion(); });
+            acciones.appendChild(btn);
+        });
+        box.appendChild(acciones);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+        const primero = acciones.querySelector("button");
+        if (primero) primero.focus();
+    }
+
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarModal(); });
+
+    /* ============================================================
+       SEDES
+       ============================================================ */
+    function aplicarSede(key) {
+        const k = DATOS_SEDES[key] ? key : SEDE_POR_DEFECTO;
+        const d = DATOS_SEDES[k];
+        sedeActual = k;
+
+        $("badge-sede-nombre").textContent = d.nombre;
+        $("propietario-nombre").textContent = d.responsable;
+
+        $("btn-booking").href = d.reserva_url;
+        $("booking-desc").textContent = d.reserva_desc;
+
+        const vcf = $("btn-vcf");
+        vcf.href = d.vcf_archivo;
+        vcf.setAttribute("download", d.vcf_archivo);
+        $("vcf-desc").textContent = d.vcf_desc;
+
+        $("btn-insta-barberia").href = d.insta_barberia;
+        $("btn-insta-tienda").href = d.insta_tienda;
+
+        $("btn-google-review").href = d.google_review_url;
+        $("review-desc").textContent = "Cuéntanos qué tal fue en " + d.nombre;
+
+        const texto = "Hola, quería enviar un comentario sobre mi visita a La Sucursal (" + d.nombre + ").";
+        $("btn-feedback").href = "https://wa.me/" + d.whatsapp_soporte + "?text=" + encodeURIComponent(texto);
+    }
+
+    function construirSelector() {
+        const cont = $("lista-sedes");
+        Object.keys(DATOS_SEDES).forEach((key) => {
+            const d = DATOS_SEDES[key];
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "sede-card-select";
+            b.innerHTML =
+                '<span><span class="sede-nombre"></span><span class="sede-zona"></span></span>' +
+                '<svg class="ic" aria-hidden="true"><use href="#i-chevron"/></svg>';
+            b.querySelector(".sede-nombre").textContent = d.etiqueta;
+            b.querySelector(".sede-zona").textContent = d.zona;
+            b.addEventListener("click", () => seleccionarSedeManualmente(key));
+            cont.appendChild(b);
+        });
+    }
+
+    function abrirSelectorSedes() { $("modal-selector-sedes").hidden = false; }
+    function seleccionarSedeManualmente(key) {
+        aplicarSede(key);
+        $("modal-selector-sedes").hidden = true;
+    }
+
+    /* ============================================================
+       SPLASH + AUDIO
+       ============================================================ */
+    const splash = $("splash-screen");
+    const bgAudio = $("bg-audio");
+    const muteBtn = $("mute-btn");
+    let entro = false;
+    let silenciadoPorUsuario = false;
+
+    $("btn-entrar").addEventListener("click", () => {
+        entro = true;
+        splash.style.opacity = "0";
+        setTimeout(() => { splash.style.display = "none"; }, 400);
+
+        muteBtn.hidden = false;
+        bgAudio.play().catch(() => {});
+
+        if (!sedeDesdeURL()) abrirSelectorSedes();
+    });
+
+    muteBtn.addEventListener("click", () => {
+        if (bgAudio.paused) {
+            bgAudio.play().catch(() => {});
+            silenciadoPorUsuario = false;
+        } else {
+            bgAudio.pause();
+            silenciadoPorUsuario = true;
+        }
+        muteBtn.classList.toggle("silenciado", silenciadoPorUsuario);
+        muteBtn.setAttribute("aria-pressed", String(silenciadoPorUsuario));
+        muteBtn.setAttribute("aria-label", silenciadoPorUsuario ? "Activar música" : "Silenciar música");
+        $("mute-icon").setAttribute("href", silenciadoPorUsuario ? "#i-mute" : "#i-volume");
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            bgAudio.pause();
+        } else if (entro && !silenciadoPorUsuario) {
+            bgAudio.play().catch(() => {});
+        }
+    });
+
+    /* ============================================================
+       BIZUM
+       ============================================================ */
+    async function copiarTexto(texto) {
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(texto);
+                return true;
             }
-        };
+        } catch (e) {}
+        try {
+            const ta = document.createElement("textarea");
+            ta.value = texto;
+            ta.setAttribute("readonly", "");
+            ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;";
+            document.body.appendChild(ta);
+            ta.select();
+            ta.setSelectionRange(0, texto.length);
+            const ok = document.execCommand("copy");
+            ta.remove();
+            return ok;
+        } catch (e) {
+            return false;
+        }
+    }
 
-        let sedeActual = "centro";
+    async function pagarPorBizum() {
+        const d = DATOS_SEDES[sedeActual] || DATOS_SEDES[SEDE_POR_DEFECTO];
+        if ("vibrate" in navigator) navigator.vibrate(60);
 
-        function aplicarSede(key) {
-            const data = DATOS_SEDES[key] || DATOS_SEDES.centro;
-            sedeActual = key;
-
-            document.getElementById('badge-sede-nombre').innerText = data.nombre;
-            document.getElementById('propietario-nombre').innerText = data.responsable;
-            document.getElementById('booking-desc').innerText = data.reserva_desc;
-            document.getElementById('btn-booking').href = data.reserva_url;
-            
-            const btnVcf = document.getElementById('btn-vcf');
-            btnVcf.href = data.vcf_archivo;
-            btnVcf.setAttribute('download', data.vcf_archivo);
-            document.getElementById('vcf-desc').innerText = data.vcf_desc;
-
-            document.getElementById('btn-insta-barberia').href = data.insta_barberia;
-            document.getElementById('btn-insta-tienda').href = data.insta_tienda;
-            document.getElementById('review-desc').innerText = `Ayúdanos a mejorar en ${data.nombre}`;
+        const copiado = await copiarTexto(d.bizum);
+        const desc = $("bizum-desc");
+        if (copiado) {
+            desc.textContent = "¡Número copiado en tu móvil!";
+            setTimeout(() => { desc.textContent = "Copiar número e instrucciones"; }, 4000);
         }
 
-        function abrirSelectorSedes() {
-            document.getElementById('modal-selector-sedes').style.display = 'flex';
-        }
+        const paso2 = copiado
+            ? '<b>2.</b> En la sección Bizum, mantén pulsado en el teléfono y selecciona <b>"Pegar"</b>.'
+            : '<b>2.</b> En la sección Bizum, escribe el número que ves arriba (mantén pulsado para copiarlo).';
 
-        function seleccionarSedeManualmente(key) {
-            aplicarSede(key);
-            document.getElementById('modal-selector-sedes').style.display = 'none';
-        }
-
-        const splashScreen = document.getElementById('splash-screen');
-        const btnEntrar = document.getElementById('btn-entrar');
-        const bgAudio = document.getElementById('bg-audio');
-        const muteBtn = document.getElementById('mute-btn');
-        const muteIcon = document.getElementById('mute-icon');
-        let userMuted = false;
-
-        btnEntrar.addEventListener('click', () => {
-            splashScreen.style.opacity = '0';
-            setTimeout(() => { splashScreen.style.display = 'none'; }, 500);
-            
-            muteBtn.style.display = 'flex';
-            bgAudio.play().catch(e => console.log("Autoplay bloqueado:", e));
-
-            const urlParams = new URLSearchParams(window.location.search);
-            if (!urlParams.get('sede')) {
-                abrirSelectorSedes();
-            }
+        mostrarModal({
+            html:
+                '<div class="modal-logo"><img src="logo.png" alt="La Sucursal" width="52" height="52"></div>' +
+                '<h3>¡Gracias por tu visita! 💈</h3>' +
+                '<div class="modal-firma">' + d.firma + '</div>' +
+                '<div class="modal-numero"><span>' + (copiado ? "Número Bizum copiado:" : "Número Bizum:") + '</span><strong>' + d.bizum + '</strong></div>' +
+                '<div class="modal-pasos">' +
+                    '<p><b>1.</b> Abre la app de tu banco habitual.</p>' +
+                    '<p>' + paso2 + '</p>' +
+                    '<p><b>3.</b> Pon el importe de tu servicio y confirma.</p>' +
+                '</div>',
+            botones: [{ texto: "¡Entendido!" }]
         });
+    }
 
-        muteBtn.addEventListener('click', () => {
-            if (bgAudio.paused) {
-                bgAudio.play();
-                userMuted = false;
-                muteIcon.className = "fa-solid fa-volume-high";
-                muteBtn.style.borderColor = "var(--color-principal)";
-                muteBtn.style.color = "var(--color-principal)";
-            } else {
-                bgAudio.pause();
-                userMuted = true;
-                muteIcon.className = "fa-solid fa-volume-xmark";
-                muteBtn.style.borderColor = "var(--color-texto-secundario)";
-                muteBtn.style.color = "var(--color-texto-secundario)";
-            }
-        });
+    /* ============================================================
+       PARKING (la ubicación se guarda solo en el móvil del visitante)
+       ============================================================ */
+    const CLAVE_LAT = "barberia_lat";
+    const CLAVE_LNG = "barberia_lng";
 
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                bgAudio.pause();
-            } else {
-                if (!userMuted && splashScreen.style.display === 'none') {
-                    bgAudio.play().catch(e => {});
-                }
-            }
-        });
+    function comprobarEstadoParking() {
+        const guardado = almacen.get(CLAVE_LAT) && almacen.get(CLAVE_LNG);
+        $("parking-icon").setAttribute("href", guardado ? "#i-nav" : "#i-locate");
+        $("parking-icon-container").className = "app-icon icon-parking" + (guardado ? " activo" : "");
+        const nombre = $("parking-name");
+        nombre.textContent = guardado ? "Ir a mi coche (a pie)" : "¿Dónde aparqué?";
+        nombre.className = "app-name" + (guardado ? " activo" : "");
+        $("parking-desc").textContent = guardado ? "Toca para abrir la ruta en el mapa" : "Guarda tu coche para volver";
+    }
 
-        function rateExperience(stars) {
-            const allStars = document.querySelectorAll('#escudo-estrellas i');
-            const data = DATOS_SEDES[sedeActual] || DATOS_SEDES.centro;
-            
-            allStars.forEach((star, index) => {
-                if (index < stars) {
-                    star.classList.replace('star-inactive', 'star-active');
-                } else {
-                    star.classList.replace('star-active', 'star-inactive');
-                }
-            });
+    function gestionarParking() {
+        const lat = almacen.get(CLAVE_LAT);
+        const lng = almacen.get(CLAVE_LNG);
 
-            document.getElementById('star-feedback').style.display = 'block';
-
+        if (lat && lng) {
+            window.open(
+                "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(lat) + "," + encodeURIComponent(lng) + "&travelmode=walking",
+                "_blank", "noopener"
+            );
             setTimeout(() => {
-                if (stars <= 3) {
-                    window.location.href = `https://wa.me/+${data.whatsapp_soporte}?text=Hola,%20tengo%20una%20sugerencia%20para%20mejorar%20mi%20experiencia%20en%20La%20Sucursal%20(${encodeURIComponent(data.nombre)}).`;
-                } else {
-                    window.open(data.google_review_url, '_blank');
-                }
-                document.getElementById('star-feedback').style.display = 'none';
-            }, 600);
+                mostrarModal({
+                    html: '<h3>🚙 Ruta abierta</h3><p>Hemos abierto la ruta a pie en Google Maps.<br><br>¿Ya has llegado a tu coche? Si quieres, borramos la ubicación guardada.</p>',
+                    botones: [
+                        { texto: "Borrar ubicación", accion: () => { almacen.del(CLAVE_LAT); almacen.del(CLAVE_LNG); comprobarEstadoParking(); } },
+                        { texto: "Mantenerla guardada", secundario: true }
+                    ]
+                });
+            }, 1000);
+            return;
         }
 
-        function comprobarEstadoParkingBarberia() {
-            const lat = localStorage.getItem('barberia_lat');
-            const lng = localStorage.getItem('barberia_lng');
-            const icon = document.getElementById('parking-icon');
-            const iconContainer = document.getElementById('parking-icon-container');
-            const title = document.getElementById('parking-name');
-            const subtitle = document.getElementById('parking-desc');
-
-            if (!icon || !iconContainer || !title || !subtitle) return;
-
-            if (lat && lng) {
-                icon.className = "fa-solid fa-person-walking";
-                iconContainer.className = "app-icon icon-parking-active";
-                title.innerText = "Ir a mi coche (A pie)";
-                title.style.color = "var(--color-principal)";
-                subtitle.innerText = "Toca para abrir la ruta en el mapa";
-            } else {
-                icon.className = "fa-solid fa-location-crosshairs";
-                iconContainer.className = "app-icon icon-parking";
-                title.innerText = "¿Dónde aparqué?";
-                title.style.color = "var(--color-texto)";
-                subtitle.innerText = "Guarda tu coche para volver";
-            }
+        if (!navigator.geolocation) {
+            mostrarModal({ html: "<h3>Sin GPS</h3><p>Tu navegador no permite obtener la ubicación.</p>" });
+            return;
         }
 
-        function gestionarParking(e) {
-            if (e) e.preventDefault(); 
-            
-            const lat = localStorage.getItem('barberia_lat');
-            const lng = localStorage.getItem('barberia_lng');
+        $("parking-desc").textContent = "Obteniendo señal GPS…";
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const ok = almacen.set(CLAVE_LAT, pos.coords.latitude) && almacen.set(CLAVE_LNG, pos.coords.longitude);
+                comprobarEstadoParking();
+                mostrarModal({
+                    html: ok
+                        ? "<h3>📍 Ubicación guardada</h3><p>Tu coche queda guardado solo en este móvil. Disfruta de tu visita a La Sucursal.</p>"
+                        : "<h3>No se pudo guardar</h3><p>Tu navegador no permite guardar datos (¿modo privado?). Prueba desde una ventana normal.</p>"
+                });
+            },
+            () => {
+                comprobarEstadoParking();
+                mostrarModal({ html: "<h3>No hemos podido ubicarte</h3><p>Activa el GPS del móvil y permite el acceso a la ubicación para esta página; después vuelve a intentarlo.</p>" });
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+    }
 
-            if (lat && lng) {
-                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
-                window.open(mapsUrl, '_blank');
+    /* ============================================================
+       ARRANQUE
+       ============================================================ */
+    document.addEventListener("DOMContentLoaded", () => {
+        construirSelector();
+        aplicarSede(sedeDesdeURL() || SEDE_POR_DEFECTO);
+        comprobarEstadoParking();
 
-                setTimeout(() => {
-                    const yaLlego = confirm("🚙 Hemos abierto la ruta en Google Maps.\n\n¿Has llegado ya a tu vehículo y quieres BORRAR esta ubicación?\n\n• Pulsa ACEPTAR para borrar el coche.\n• Pulsa CANCELAR para mantenerlo guardado.");
-                    if (yaLlego) {
-                        localStorage.removeItem('barberia_lat');
-                        localStorage.removeItem('barberia_lng');
-                        comprobarEstadoParkingBarberia();
-                    }
-                }, 1000);
-
-            } else {
-                if (navigator.geolocation) {
-                    const subtitle = document.getElementById('parking-desc');
-                    if (subtitle) subtitle.innerText = "Obteniendo signal GPS...";
-
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            localStorage.setItem('barberia_lat', position.coords.latitude);
-                            localStorage.setItem('barberia_lng', position.coords.longitude);
-                            comprobarEstadoParkingBarberia();
-                            alert("📍 ¡Ubicación guardada con éxito! Ya puedes disfrutar de tu visita a La Sucursal.");
-                        },
-                        (error) => {
-                            alert("No pudimos obtener tu ubicación. Asegúrate de tener activado el GPS en el móvil.");
-                            comprobarEstadoParkingBarberia();
-                        },
-                        { enableHighAccuracy: true }
-                    );
-                } else {
-                    alert("Tu navegador no soporta geolocalización GPS.");
-                }
-            }
+        if (POLITICA_PRIVACIDAD_URL) {
+            $("link-privacidad").href = POLITICA_PRIVACIDAD_URL;
+            $("footer-privacidad").hidden = false;
         }
-
-        function pagarPorBizum(e) {
-            if (e) e.preventDefault();
-            const data = DATOS_SEDES[sedeActual] || DATOS_SEDES.centro;
-            const numeroTelefono = data.bizum;
-            
-            if ("vibrate" in navigator) {
-                navigator.vibrate(60);
-            }
-
-            navigator.clipboard.writeText(numeroTelefono).then(() => {
-                const desc = document.getElementById('bizum-desc');
-                if (desc) desc.innerText = "¡Número copiado en tu móvil!";
-
-                mostrarAvisoFernando(numeroTelefono);
-
-                setTimeout(() => {
-                    if (desc) desc.innerText = "Copiar número e instrucciones";
-                }, 4000);
-
-            }).catch(err => {
-                prompt("Mantén pulsado para copiar este número de Bizum:", numeroTelefono);
-            });
-        }
-
-        function mostrarAvisoFernando(numero) {
-            let modal = document.getElementById('modal-bizum-fernando');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'modal-bizum-fernando';
-                modal.style.cssText = `
-                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                    background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(15px); display: flex; justify-content: center;
-                    align-items: center; z-index: 10000; padding: 20px;
-                `;
-                modal.innerHTML = `
-                    <div style="background: rgba(22, 22, 28, 0.95); border: 1.5px solid var(--color-principal); border-radius: 26px; padding: 28px 22px; max-width: 360px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.85);">
-                        <div style="width: 65px; height: 65px; margin: 0 auto 14px auto; border-radius: 50%; border: 2px solid var(--color-principal); overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center;">
-                            <img src="logo.png" alt="La Sucursal" style="width: 80%; height: 80%; object-fit: contain;">
-                        </div>
-                        <h3 style="color: var(--color-principal); font-size: 1.15rem; margin-bottom: 4px; text-transform: uppercase; font-family: 'Space Grotesk', sans-serif;">¡Gracias por tu visita! 💈</h3>
-                        <p style="color: var(--color-texto-secundario); font-size: 0.85rem; margin-bottom: 16px; font-style: italic;">Fernando Ambuila</p>
-                        
-                        <div style="background: rgba(32, 32, 42, 0.8); border-radius: 16px; padding: 14px; margin-bottom: 16px; border: 1px dashed rgba(212,175,55,0.45);">
-                            <span style="font-size: 0.75rem; color: var(--color-texto-secundario); display: block; margin-bottom: 2px;">Número Bizum Copiado:</span>
-                            <strong style="font-size: 1.35rem; color: #00e676; letter-spacing: 1.5px;">${numero}</strong>
-                        </div>
-
-                        <div style="text-align: left; font-size: 0.85rem; color: #fff; line-height: 1.55; margin-bottom: 22px;">
-                            <p style="margin-bottom: 7px;"><b>1.</b> Abre la app de tu banco habitual.</p>
-                            <p style="margin-bottom: 7px;"><b>2.</b> En la sección Bizum, mantén pulsado en el teléfono y selecciona <b>"Pegar"</b>.</p>
-                            <p><b>3.</b> Pon el importe de tu servicio y confirma.</p>
-                        </div>
-
-                        <button onclick="document.getElementById('modal-bizum-fernando').remove()" style="background: linear-gradient(135deg, #d4af37 0%, #fae8a4 50%, #aa820a 100%); color: #000; font-weight: 800; border: none; padding: 14px 30px; border-radius: 25px; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; width: 100%; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);">¡ENTENDIDO!</button>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sedeParam = urlParams.get('sede');
-
-            if (sedeParam && DATOS_SEDES[sedeParam.toLowerCase()]) {
-                aplicarSede(sedeParam.toLowerCase());
-            } else {
-                aplicarSede('centro');
-            }
-
-            comprobarEstadoParkingBarberia();
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
