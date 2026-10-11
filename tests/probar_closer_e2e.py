@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recorrido completo SIN internet: formulario del Closer → doPost real de Code.gs (simulado Google/GitHub/Gemini)
+"""Recorrido completo SIN internet: formulario del Closer → doPost real de Code.gs (simulado Google/GitHub/Claude)
 → archivo c/<slug>.json → interfaz renderizada por el motor. Uso: python3 tests/probar_closer_e2e.py"""
 import http.server, json, os, re, shutil, socketserver, subprocess, sys, tempfile, threading
 from playwright.sync_api import sync_playwright
@@ -102,7 +102,7 @@ with sync_playwright() as pw:
     ok(pg.get_attribute("a.btn-fin.principal", "href").endswith("cod=taller-rapido-norte"), "detecta la publicación por el código de petición")
     ctx.close()
 
-    print("● 4) Gemini caído → interfaz básica + aviso al closer")
+    print("● 4) Claude caído → interfaz básica + aviso al closer")
     ctx, pg, errs = nuevo(ia="caida")
     pg.goto(BASE + "/v/closer/"); rellenar(pg, "Bar Sin IA", sector="Hostelería y Restauración"); pg.click("#btn-enviar")
     pg.wait_for_selector("a.btn-fin.principal", timeout=20000)
@@ -114,6 +114,45 @@ with sync_playwright() as pw:
     pg.on("dialog", lambda d: (msgs.append(d.message), d.dismiss()))
     pg.goto(BASE + "/v/closer/"); pg.fill("#nombre_comercio", "Sin Telefono"); pg.select_option("#sector_select", "Otros"); pg.fill("#sector_otro_input", "Buceo"); pg.click("#btn-enviar")
     ok(any("WhatsApp" in m for m in msgs) and not os.path.exists(SITIO + "/c/sin-telefono.json"), "no envía sin WhatsApp")
+    ctx.close()
+
+    print("● 6) Buscador de Google Maps → Place ID → reseña directa")
+    ctx, pg, errs = nuevo()
+    pg.goto(BASE + "/v/closer/")
+    pg.fill("#maps_consulta", "sol y luna alcobendas"); pg.click("#btn-buscar")
+    pg.wait_for_selector(".maps-item", timeout=10000)
+    ok(pg.locator(".maps-item").count() == 1 and "Alcobendas" in pg.inner_text(".maps-item"), "lista un candidato con su dirección")
+    pg.click(".maps-item")
+    ok(pg.input_value("#nombre_comercio") == "Peluquería Sol & Luna", "rellena el nombre")
+    ok(pg.input_value("#sector_select") == "Belleza y Estética", "elige el sector según Google")
+    ok(pg.input_value("#whatsapp") == "34600112233" and pg.input_value("#web") == "https://solyluna.example", "propone WhatsApp y web")
+    ok(pg.input_value("#place_id").startswith("ChIJ") and "Reseña directa" in pg.inner_text("#maps-ok"), "guarda el Place ID y lo confirma")
+    pg.wait_for_selector(".chip-friccion"); pg.locator(".chip-friccion").nth(0).click()
+    pg.click("#btn-enviar")
+    pg.wait_for_selector("a.btn-fin.principal", timeout=20000)
+    j = json.load(open(SITIO + "/c/peluqueria-sol-luna.json"))
+    ok(j["secciones"][3]["botones"][0]["urlGoogle"] == "https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38", "la interfaz publicada abre la reseña directa")
+    ok(not errs, "sin errores JS %s" % errs)
+    ctx.close()
+
+    print("● 7) Maps no configurado → mensaje claro, el formulario sigue en modo manual")
+    ctx = nav.new_context(viewport={"width": 390, "height": 844}); pg = ctx.new_page()
+    ctx.route(re.compile(r"^https://script\.google\.com/"), lambda r: r.fulfill(status=200, content_type="application/json", headers={"access-control-allow-origin": "*"},
+              body=json.dumps({"ok": False, "codigo": "sin_maps", "error": "El buscador de Google Maps no está configurado todavía. Rellena los datos a mano."})))
+    pg.goto(BASE + "/v/closer/"); pg.fill("#maps_consulta", "cualquier cosa"); pg.click("#btn-buscar")
+    pg.wait_for_function("document.getElementById('maps-msg').textContent.length > 0")
+    ok("no está configurado" in pg.inner_text("#maps-msg") and pg.locator("#nombre_comercio").is_enabled(), "avisa y permite escribir a mano")
+    ctx.close()
+
+    print("● 8) Los 17 sectores del formulario existen y muestran fricciones")
+    ctx, pg, errs = nuevo(); pg.goto(BASE + "/v/closer/")
+    valores = pg.eval_on_selector_all("#sector_select option:not([disabled])", "o => o.map(x => x.value)")
+    ok(len(valores) == 17, "17 sectores en el desplegable (%d)" % len(valores))
+    sin = []
+    for v in valores:
+        pg.select_option("#sector_select", v)
+        if v != "Otros" and pg.locator(".chip-friccion").count() < 3: sin.append(v)
+    ok(not sin, "todos los sectores traen al menos 3 fricciones sugeridas %s" % sin)
     ctx.close()
     nav.close()
 

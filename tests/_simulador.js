@@ -1,14 +1,15 @@
-/* Simulador compartido: servicios de Apps Script + GitHub en memoria + Gemini guionizado. */
+/* Simulador compartido: servicios de Apps Script + GitHub en memoria + Claude (Anthropic) y Google Maps guionizados. */
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const RAIZ = path.resolve(__dirname, '..');
 
-function entorno(props, repo, gemini) {
+function entorno(props, repo, ia, maps) {
   const log = { fetch: [], hoja: [] };
+  const cacheMem = {};
   const ctx = {
     console: { log() {}, warn() {}, error() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty: (k) => (k in props ? props[k] : null) }) },
     LockService: { getScriptLock: () => ({ tryLock: () => true, releaseLock() {} }) },
-    CacheService: { getScriptCache: () => { const m = {}; return { get: (k) => m[k] || null, put: (k, v) => { m[k] = v; } }; } },
+    CacheService: { getScriptCache: () => ({ get: (k) => cacheMem[k] || null, put: (k, v) => { cacheMem[k] = v; } }) },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput: (s) => ({ s, setMimeType() { return this; } }) },
     SpreadsheetApp: { getActive: () => ({ getSheetByName: () => ({ getLastRow: () => 1, appendRow: (f) => log.hoja.push(f), setFrozenRows() {} }), insertSheet: () => null }) },
     Utilities: {
@@ -32,10 +33,17 @@ function entorno(props, repo, gemini) {
           repo.commits.push({ ruta, mensaje: b.message, rama: b.branch });
           return resp(201, { ok: true });
         }
-        if (url.startsWith('https://generativelanguage.googleapis.com/')) {
-          log.geminiHeaders = o.headers; log.geminiBody = JSON.parse(o.payload); log.geminiUrl = url;
-          const r = gemini(log.geminiBody);
+        if (url.startsWith('https://api.anthropic.com/v1/messages')) {
+          log.iaHeaders = o.headers; log.iaBody = JSON.parse(o.payload); log.iaUrl = url; log.iaLlamadas = (log.iaLlamadas || 0) + 1;
+          const r = ia(log.iaBody);
           return resp(r.code, r.body);
+        }
+        if (url.startsWith('https://places.googleapis.com/v1/')) {
+          log.mapsHeaders = o.headers; log.mapsUrl = url; log.mapsLlamadas = (log.mapsLlamadas || 0) + 1;
+          if (!maps) return resp(500, 'maps no simulado');
+          if (url.includes('places:searchText')) { log.mapsBusqueda = JSON.parse(o.payload); const r = maps.buscar(log.mapsBusqueda); return resp(r.code, r.body); }
+          const id = decodeURIComponent(url.split('/places/')[1].split('?')[0]);
+          const r = maps.detalle(id); return resp(r.code, r.body);
         }
         throw new Error('URL inesperada: ' + url);
       }
@@ -46,8 +54,9 @@ function entorno(props, repo, gemini) {
   return { ctx, log };
 }
 
-const PROPS = { GITHUB_TOKEN: 'ghp_FAKE', GEMINI_API_KEY: 'AIza_FAKE', CLOSERS: 'MO001,MEL001' };
-const iaOK = (obj) => () => ({ code: 200, body: { candidates: [{ content: { parts: [{ text: JSON.stringify(obj) }] } }] } });
+const PROPS = { GITHUB_TOKEN: 'ghp_FAKE', ANTHROPIC_API_KEY: 'sk-ant-FAKE', CLOSERS: 'MO001,MEL001' };
+const iaTexto = (t) => ({ code: 200, body: { content: [{ type: 'text', text: t }], stop_reason: 'end_turn' } });
+const iaOK = (obj) => () => iaTexto(JSON.stringify(obj));
 const post = (ctx, d) => JSON.parse(vm.runInContext('doPost', ctx)({ postData: { contents: JSON.stringify(d) }, parameter: {} }).s);
 const PROPUESTA = {
   subtitulo: 'Tu pelo, tu cita, sin esperas', textoBadge: 'agenda activa', tituloSeccion: 'Reserva y ahorra tiempo',
@@ -64,4 +73,15 @@ const PROPUESTA = {
 };
 
 
-module.exports = { entorno, PROPS, iaOK, PROPUESTA, RAIZ };
+const PLACE_ID = 'ChIJ7xPNJJ6rWg0RWllatpjaQ38';
+const MAPS_OK = {
+  buscar: () => ({ code: 200, body: { places: [
+    { id: PLACE_ID, displayName: { text: 'Peluquería Sol & Luna' }, formattedAddress: 'Calle Mayor 5, 28100 Alcobendas, Madrid', internationalPhoneNumber: '+34 600 11 22 33', websiteUri: 'https://solyluna.example', types: ['hair_care', 'beauty_salon'] },
+    { id: 'id corto', displayName: { text: 'Malo' } }
+  ] } }),
+  detalle: (id) => id === PLACE_ID ? { code: 200, body: { id, displayName: { text: 'Peluquería Sol & Luna' }, formattedAddress: 'Calle Mayor 5, 28100 Alcobendas, Madrid',
+    internationalPhoneNumber: '+34 916 11 22 33', websiteUri: 'https://solyluna.example', googleMapsUri: 'https://maps.google.com/?cid=123456789', types: ['hair_care', 'beauty_salon'],
+    regularOpeningHours: { weekdayDescriptions: ['lunes: 9:00–14:00, 17:00–20:00', 'martes: 9:00–14:00', 'domingo: Cerrado'] } } } : { code: 404, body: { error: 'not found' } }
+};
+
+module.exports = { entorno, PROPS, iaOK, iaTexto, PROPUESTA, MAPS_OK, PLACE_ID, RAIZ };
