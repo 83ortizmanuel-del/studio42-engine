@@ -42,7 +42,7 @@
  * ============================================================================
  */
 
-var VERSION = '3.0';
+var VERSION = '3.1';
 
 // Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
@@ -158,7 +158,10 @@ function doPost(e) {
     if (!tuvoLock) return json_({ ok: false, error: 'Hay otro diagnóstico en curso. Espera 20 segundos y vuelve a enviarlo.' });
     var datos = leerPeticion_(e);
     var acc = String(datos.accion || '');
-    var r = acc.indexOf('pet_') === 0 ? petRouter_(datos) : (acc === 'buscar' ? buscar_(datos) : procesar_(datos));
+    var r = acc.indexOf('pet_') === 0 ? petRouter_(datos)
+      : acc.indexOf('panel_') === 0 ? panelRouter_(datos)
+      : acc === 'pedido_guardar' ? pedidoGuardar_(datos)
+      : acc === 'buscar' ? buscar_(datos) : procesar_(datos);
     return json_(r);
   } catch (err) {
     console.error('doPost: ' + (err && err.stack || err));
@@ -974,6 +977,8 @@ function PROBAR_CONFIGURACION() {
   salida.push((c.anthropicKey ? '✔' : '✘') + ' ANTHROPIC_API_KEY ' + (c.anthropicKey ? 'guardada' : 'FALTA'));
   salida.push((c.mapsKey ? '✔' : '⚠') + ' GOOGLE_MAPS_API_KEY ' + (c.mapsKey ? 'guardada' : 'no guardada (el buscador de Maps no funcionará; modo manual)'));
   salida.push('Closers permitidos: ' + (c.closers.length ? c.closers.join(', ') : '(cualquiera con formato válido — conviene definir CLOSERS)'));
+  var pc = PropertiesService.getScriptProperties().getProperty('PANEL_CLAVE') || '';
+  salida.push(pc.length >= 6 ? '✔ Panel de control: contraseña configurada (studio42.es/panel/)' : '✘ Panel de control: crea la propiedad PANEL_CLAVE (mínimo 6 caracteres) para entrar en studio42.es/panel/');
   if (c.githubToken) {
     var r = UrlFetchApp.fetch('https://api.github.com/repos/' + c.repo, { headers: ghHeaders_(c), muteHttpExceptions: true });
     var code = r.getResponseCode();
@@ -1181,4 +1186,249 @@ function RESETEAR_PIN_PET() {
   f.hoja.getRange(f.fila, 2).setValue('libre');
   f.hoja.getRange(f.fila, 8).setValue('');
   console.log('✔ PIN borrado. La chapa ' + SLUG + ' se puede volver a configurar.');
+}
+
+/* ===================================== PEDIDOS =====================================
+ * El Closer, tras enseñar la landing, prepara el pedido con el cliente: pack + piezas.
+ * El total SIEMPRE lo calcula el servidor con esta tabla (el navegador solo lo muestra).
+ * Cambia aquí los precios si algún día los modificas en la web.
+ * ==================================================================================== */
+
+var IVA = 0.21;
+var CATALOGO = {
+  piezas: {
+    display:  { nombre: 'Display acrílico NFC',       precio: 49 },
+    llavero:  { nombre: 'Llavero Smart Drop',         precio: 19.9 },
+    tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
+    welcome:  { nombre: 'Welcome Pack directivos',    precio: 89 },
+    petpass:  { nombre: 'Chapa Pet Pass',             precio: 14.9 },
+    camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null }   // a consultar: no suma
+  },
+  packs: {
+    ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0,   incluye: {} },
+    prueba:        { nombre: 'Prueba Logroño',         precio: 89,  incluye: { display: 1, llavero: 1 } },
+    iman:          { nombre: 'Imán de mostrador',      precio: 149, incluye: { display: 1, llavero: 2 } },
+    multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
+    dominio:       { nombre: 'Dominio local total',    precio: 549, incluye: { display: 2, llavero: 25, welcome: 1 } }
+  }
+};
+var ESTADOS_PEDIDO = ['Por despachar', 'Grabado', 'Entregado', 'Cobrado', 'Cancelado'];
+var PEDIDOS_HOJA = 'Pedidos';
+var PEDIDOS_COLS = ['ID', 'Fecha', 'Closer', 'Cliente', 'Slug', 'URL', 'Pack', 'Detalle', 'Total (IVA incl.)', 'Estado', 'Notas', 'Datos'];
+
+function redondear_(n) { return Math.round(n * 100) / 100; }
+
+/** cantidades = unidades TOTALES que se lleva el cliente de cada pieza (incluidas las del pack). */
+function pedidoCalcular_(packId, cantidades, promo) {
+  var pack = CATALOGO.packs[packId] ? packId : 'ninguno';
+  var P = CATALOGO.packs[pack], lineas = [], base = P.precio, aConsultar = false;
+  if (P.precio) lineas.push({ concepto: 'Pack ' + P.nombre, unidades: 1, importe: P.precio });
+  Object.keys(CATALOGO.piezas).forEach(function (k) {
+    var pz = CATALOGO.piezas[k], incl = P.incluye[k] || 0;
+    var total = Math.max(incl, Math.min(500, Math.floor(Number((cantidades || {})[k]) || 0)));
+    var extra = total - incl;
+    if (!total) return;
+    var l = { pieza: k, concepto: pz.nombre, unidades: total, incluidas: incl, extra: extra, precioUnidad: pz.precio, importe: 0 };
+    if (extra > 0) {
+      if (pz.precio === null) { aConsultar = true; l.aConsultar = true; }
+      else { l.importe = redondear_(extra * pz.precio); base += l.importe; }
+    }
+    lineas.push(l);
+  });
+  var regalo = promo ? 2 : 0;
+  if (regalo) lineas.push({ pieza: 'llavero', concepto: 'Promo lanzamiento: llaveros de regalo', unidades: regalo, regalo: true, importe: 0 });
+  base = redondear_(base);
+  return { pack: pack, packNombre: P.nombre, lineas: lineas, base: base, iva: redondear_(base * IVA), total: redondear_(base * (1 + IVA)), aConsultar: aConsultar, llaverosRegalo: regalo };
+}
+
+function pedidosHoja_() {
+  var libro = SpreadsheetApp.getActive();
+  var hoja = libro.getSheetByName(PEDIDOS_HOJA) || libro.insertSheet(PEDIDOS_HOJA);
+  if (hoja.getLastRow() === 0) { hoja.appendRow(PEDIDOS_COLS); hoja.setFrozenRows(1); }
+  return hoja;
+}
+
+function pedidoGuardar_(raw) {
+  var c = cfg_();
+  var au = autorizarCloser_(c, raw);
+  if (au.error) return { ok: false, error: au.error };
+  var slug = String(raw.slug || '').toLowerCase().trim();
+  if (!/^[a-z0-9-]{2,40}$/.test(slug)) return { ok: false, error: 'Falta la landing del cliente.' };
+  var cliente = limpiar_(sinEtiquetas_(raw.cliente), 60) || slug;
+  var calc = pedidoCalcular_(String(raw.pack || ''), raw.cantidades || {}, raw.promo === true);
+  if (!calc.lineas.length) return { ok: false, error: 'El pedido está vacío.' };
+  var id = 'P' + Utilities.formatDate(new Date(), 'Europe/Madrid', 'yyMMdd') + '-' + Utilities.getUuid().slice(0, 4).toUpperCase();
+  var url = c.dominio + '/c/?cod=' + slug;
+  var detalle = calc.lineas.map(function (l) { return l.unidades + ' × ' + l.concepto + (l.extra ? ' (' + l.extra + ' extra)' : ''); }).join(' | ');
+  var notas = limpiar_(sinEtiquetas_(raw.notas), 300);
+  var datos = { id: id, cliente: cliente, slug: slug, url: url, closer: au.closer, calc: calc };
+  pedidosHoja_().appendRow([id, new Date(), au.closer, cliente, slug, url, calc.packNombre, detalle, calc.aConsultar ? calc.total + ' + piezas a consultar' : calc.total, 'Por despachar', notas, JSON.stringify(datos)]);
+  return { ok: true, pedido: datos };
+}
+
+/* ====================================== PANEL ======================================
+ * Panel de control de Studio 42 (studio42.es/panel/). Entra con la contraseña guardada en
+ * la propiedad PANEL_CLAVE. La sesión dura 6 horas.
+ * ==================================================================================== */
+
+function panelRouter_(d) {
+  var props = PropertiesService.getScriptProperties();
+  var clave = String(props.getProperty('PANEL_CLAVE') || '');
+  var cache = CacheService.getScriptCache();
+  if (d.accion === 'panel_login') {
+    if (clave.length < 6) return { ok: false, error: 'Falta crear la propiedad PANEL_CLAVE (mínimo 6 caracteres) en Apps Script.' };
+    var fallos = Number(cache.get('panelfail') || '0');
+    if (fallos >= 10) return { ok: false, error: 'Demasiados intentos. Espera 15 minutos.' };
+    if (String(d.clave || '') !== clave) { cache.put('panelfail', String(fallos + 1), 900); return { ok: false, error: 'Contraseña incorrecta.' }; }
+    var token = Utilities.getUuid() + Utilities.getUuid();
+    cache.put('ptok_' + token, '1', 21600);
+    return { ok: true, token: token };
+  }
+  if (!d.token || !cache.get('ptok_' + d.token)) return { ok: false, sesion: false, error: 'La sesión ha caducado. Vuelve a entrar.' };
+  var c = cfg_();
+  if (d.accion === 'panel_datos') return panelDatos_(c);
+  if (d.accion === 'panel_pedido_estado') return panelPedidoEstado_(d);
+  if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
+  if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
+  return { ok: false, error: 'Acción desconocida.' };
+}
+
+function githubListar_(c, carpeta) {
+  var r = UrlFetchApp.fetch(ghUrl_(c, carpeta) + '?ref=' + encodeURIComponent(c.rama), { method: 'get', headers: ghHeaders_(c), muteHttpExceptions: true });
+  if (r.getResponseCode() !== 200) return [];
+  try { return JSON.parse(r.getContentText()); } catch (e) { return []; }
+}
+
+function panelDatos_(c) {
+  var clientes = [];
+  if (c.githubToken) {
+    githubListar_(c, c.carpeta).forEach(function (f) {
+      if (f && f.type === 'file' && /\.json$/.test(f.name)) clientes.push(f.name.replace(/\.json$/, ''));
+    });
+  }
+  var pedidos = [];
+  var hp = pedidosHoja_().getDataRange().getValues();
+  for (var i = 1; i < hp.length; i++) {
+    var datos = {}; try { datos = JSON.parse(hp[i][11] || '{}'); } catch (e) {}
+    pedidos.push({ fila: i + 1, id: hp[i][0], fecha: hp[i][1] instanceof Date ? hp[i][1].toISOString() : String(hp[i][1]), closer: hp[i][2], cliente: hp[i][3], slug: hp[i][4], url: hp[i][5], pack: hp[i][6], detalle: hp[i][7], total: hp[i][8], estado: hp[i][9], notas: hp[i][10], calc: datos.calc || null });
+  }
+  var chapas = [];
+  var hc = petHoja_().getDataRange().getValues();
+  for (var j = 1; j < hc.length; j++) chapas.push({ slug: hc[j][0], estado: hc[j][1], entregadaPor: hc[j][2], url: hc[j][3] });
+  return { ok: true, clientes: clientes, pedidos: pedidos.reverse(), chapas: chapas, estados: ESTADOS_PEDIDO, catalogo: CATALOGO, dominio: c.dominio };
+}
+
+function panelPedidoEstado_(d) {
+  if (ESTADOS_PEDIDO.indexOf(d.estado) < 0) return { ok: false, error: 'Estado no válido.' };
+  var hoja = pedidosHoja_(), datos = hoja.getDataRange().getValues();
+  for (var i = 1; i < datos.length; i++) {
+    if (String(datos[i][0]) === String(d.id)) { hoja.getRange(i + 1, 10).setValue(d.estado); return { ok: true }; }
+  }
+  return { ok: false, error: 'No encuentro el pedido ' + d.id };
+}
+
+/* ---------- Cambios con Claude: propone, se previsualiza y solo se publica si lo apruebas ---------- */
+
+var TIPOS_BOTON = ['enlace', 'whatsapp', 'vcard', 'llaves', 'bizum', 'reserva_cita', 'parking', 'asistente', 'calculadora', 'info', 'asistencia_ruta', 'opinion'];
+
+function panelCambio_(c, d, cache) {
+  var slug = String(d.slug || '').toLowerCase();
+  if (!/^[a-z0-9-]{2,40}$/.test(slug)) return { ok: false, error: 'Cliente no válido.' };
+  var instr = limpiar_(sinEtiquetas_(d.instruccion), 1500);
+  if (instr.length < 4) return { ok: false, error: 'Escribe qué quieres cambiar.' };
+  if (!c.anthropicKey || !c.githubToken) return { ok: false, error: 'Faltan ANTHROPIC_API_KEY o GITHUB_TOKEN en Apps Script.' };
+  var base = d.partirDeBorrador ? JSON.parse(cache.get('pdraft_' + slug) || 'null') : null;
+  if (!base) {
+    var actual = githubLeer_(c, c.carpeta + '/' + slug + '.json');
+    if (actual.error) return { ok: false, error: 'GitHub: ' + actual.error };
+    if (!actual.existe || !actual.json) return { ok: false, error: 'No encuentro la landing de ' + slug + '.' };
+    base = actual.json;
+  }
+  var sistema = [
+    'Eres el editor de landings de Studio 42. Cada landing es un JSON que interpreta un motor web.',
+    'Recibes el JSON actual y una petición del dueño de la agencia. Devuelve SOLO un objeto JSON, sin texto alrededor:',
+    '{"resumen":"1-2 frases en español con lo que has cambiado","operaciones":[...]}',
+    'Operaciones permitidas (rutas con puntos e índices numéricos, empezando en 0):',
+    ' {"op":"set","ruta":"secciones.0.botones.1.nombre","valor":"…"}  cambia o crea un campo',
+    ' {"op":"insertar","ruta":"secciones.0.botones","indice":2,"valor":{…}}  añade un elemento a una lista',
+    ' {"op":"quitar","ruta":"secciones.0.botones.3"}  elimina un elemento o campo',
+    'Reglas: cambia solo lo pedido; tipos de botón válidos: ' + TIPOS_BOTON.join(', ') + '; copia la estructura de los botones que ya existen;',
+    'no inventes teléfonos, direcciones, precios ni enlaces que no estén en el JSON o en la petición; colores en formato #RRGGBB;',
+    'textos breves en español, sin HTML; nunca toques _generado ni _peticion; si la petición es imposible o ambigua, devuelve operaciones vacías y explícalo en "resumen".'
+  ].join('\n');
+  var usuario = 'Petición: ' + instr + '\n\nJSON actual de la landing "' + slug + '":\n' + JSON.stringify(base);
+  var resp = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    headers: { 'x-api-key': c.anthropicKey, 'anthropic-version': '2023-06-01' },
+    payload: JSON.stringify({ model: c.modelo, max_tokens: 4096, system: sistema, messages: [{ role: 'user', content: usuario }] })
+  });
+  if (resp.getResponseCode() !== 200) return { ok: false, error: 'Claude no respondió (HTTP ' + resp.getResponseCode() + '). Revisa el saldo en console.anthropic.com.' };
+  var r;
+  try {
+    var t = (JSON.parse(resp.getContentText()).content || []).filter(function (x) { return x.type === 'text'; }).map(function (x) { return x.text; }).join('');
+    t = t.replace(/^[\s\S]*?(\{[\s\S]*\})[\s\S]*$/, '$1');
+    r = JSON.parse(t);
+  } catch (e) { return { ok: false, error: 'No entendí la respuesta de Claude. Prueba a explicarlo de otra forma.' }; }
+  var ops = Array.isArray(r.operaciones) ? r.operaciones.slice(0, 40) : [];
+  var resumen = limpiar_(sinEtiquetas_(r.resumen), 400);
+  if (!ops.length) return { ok: true, sinCambios: true, resumen: resumen || 'Claude no ha hecho cambios.' };
+  var nuevo = JSON.parse(JSON.stringify(base));
+  for (var i = 0; i < ops.length; i++) {
+    var e = aplicarOp_(nuevo, ops[i]);
+    if (e) return { ok: false, error: 'Claude propuso un cambio que no se puede aplicar (' + e + '). Prueba a pedirlo de otra forma.' };
+  }
+  var antes = validarCliente_(base), despues = validarCliente_(nuevo);
+  var nuevosFallos = despues.filter(function (x) { return antes.indexOf(x) < 0; });
+  if (nuevosFallos.length) return { ok: false, error: 'El cambio rompería la landing (' + nuevosFallos.slice(0, 3).join(', ') + '). No se ha guardado nada.' };
+  var texto = JSON.stringify(nuevo);
+  if (texto.length > 90000) return { ok: false, error: 'La landing resultante es demasiado grande.' };
+  cache.put('pdraft_' + slug, texto, 21600);
+  return { ok: true, resumen: resumen, operaciones: ops.length, propuesta: nuevo };
+}
+
+/** Aplica una operación de Claude. Devuelve un texto de error o '' si fue bien. */
+function aplicarOp_(obj, op) {
+  if (!op || typeof op !== 'object') return 'operación vacía';
+  var partes = String(op.ruta || '').split('.').filter(function (x) { return x !== ''; });
+  if (!partes.length) return 'ruta vacía';
+  if (partes.some(function (p) { return p === '_generado' || p === '_peticion' || p === '__proto__' || p === 'constructor' || p === 'prototype'; })) return 'ruta protegida';
+  var limpio = function (v) { return JSON.parse(JSON.stringify(v === undefined ? null : v, function (k, x) { return typeof x === 'string' ? sinEtiquetas_(x).slice(0, 1200) : x; })); };
+  var padre = obj;
+  var hasta = op.op === 'insertar' ? partes.length : partes.length - 1;
+  for (var i = 0; i < hasta; i++) {
+    var k = /^\d+$/.test(partes[i]) ? Number(partes[i]) : partes[i];
+    if (padre[k] === undefined || padre[k] === null) {
+      if (op.op !== 'set') return 'no existe ' + partes.slice(0, i + 1).join('.');
+      padre[k] = /^\d+$/.test(partes[i + 1] || '') ? [] : {};
+    }
+    padre = padre[k];
+    if (typeof padre !== 'object') return 'ruta no válida';
+  }
+  if (op.op === 'insertar') {
+    if (!Array.isArray(padre)) return 'no es una lista';
+    var idx = Math.max(0, Math.min(padre.length, Number(op.indice) >= 0 ? Number(op.indice) : padre.length));
+    padre.splice(idx, 0, limpio(op.valor));
+    return '';
+  }
+  var ult = partes[partes.length - 1], key = /^\d+$/.test(ult) ? Number(ult) : ult;
+  if (op.op === 'set') { padre[key] = limpio(op.valor); return ''; }
+  if (op.op === 'quitar') {
+    if (Array.isArray(padre) && typeof key === 'number') { if (key >= padre.length) return 'índice fuera de rango'; padre.splice(key, 1); }
+    else delete padre[key];
+    return '';
+  }
+  return 'operación desconocida';
+}
+
+function panelPublicar_(c, d, cache) {
+  var slug = String(d.slug || '').toLowerCase();
+  var texto = cache.get('pdraft_' + slug);
+  if (!texto) return { ok: false, error: 'La propuesta ha caducado. Vuelve a pedir el cambio.' };
+  var ruta = c.carpeta + '/' + slug + '.json';
+  var prev = githubLeer_(c, ruta);
+  if (prev.error) return { ok: false, error: 'GitHub: ' + prev.error };
+  var w = githubEscribir_(c, ruta, JSON.stringify(JSON.parse(texto), null, 2) + '\n', prev.existe ? prev.sha : null, 'Panel: cambio en ' + slug);
+  if (w.error) return { ok: false, error: 'GitHub: ' + w.error };
+  cache.remove('pdraft_' + slug);
+  return { ok: true, url: c.dominio + '/c/?cod=' + slug };
 }
