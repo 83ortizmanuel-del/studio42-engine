@@ -1,0 +1,234 @@
+{
+  "version": 2,
+  "nombre": "VALERIA RODRÍGUEZ",
+  "subtitulo": "Belleza y estética: reserva fácil y atención a tu medida",
+  "textoBadge": "BELLEZA Y ESTÉTICA",
+  "colorPrincipal": "#1c1d21",
+  "colorAcento": "#ffffff",
+  "whatsapp": "https://wa.me/34601425785",
+  "secciones": [
+    {
+      "titulo": "Reserva y cuida tu cita",
+      "botones": [
+        {
+          "tipo": "asistente",
+          "nombre": "Cambiar o cancelar mi cita",
+          "descripcion": "Avísanos a tiempo y otra persona podrá aprovechar tu hueco.",
+          "icono": "calendar",
+          "titulo": "Cambiar o cancelar cita",
+          "intro": "Si no puedes venir, avísanos cuanto antes. Así podemos ofrecer tu hueco a otra persona.",
+          "botonTexto": "Avisar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Gestión",
+              "opciones": [
+                "Cambiar mi cita",
+                "Cancelar mi cita"
+              ]
+            },
+            {
+              "titulo": "Cuándo es tu cita",
+              "opciones": [
+                "Hoy",
+                "Mañana",
+                "Esta semana",
+                "Más adelante"
+              ]
+            },
+            {
+              "titulo": "Mejor momento nuevo",
+              "opciones": [
+                "Por la mañana",
+                "Por la tarde",
+                "Me da igual",
+                "No quiero nueva cita"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, os aviso sobre mi cita:\n- Gestión: {Gestión}\n- Fecha de mi cita: {Cuándo es tu cita}\n- Nueva cita preferida: {Mejor momento nuevo}\nGracias por confirmarlo.",
+          "destacado": true
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Pedir precio y reservar",
+          "descripcion": "Elige tu servicio y te respondemos con precio y hueco disponible.",
+          "icono": "clipboard",
+          "titulo": "Precio y cita",
+          "intro": "Cuéntanos qué te interesa y te contestamos por WhatsApp con el precio y los huecos libres.",
+          "botonTexto": "Pedir por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Servicio",
+              "opciones": [
+                "Manicura y uñas",
+                "Depilación",
+                "Tratamiento facial",
+                "Cejas y pestañas",
+                "Tratamiento corporal",
+                "No lo sé, necesito consejo"
+              ]
+            },
+            {
+              "titulo": "Día preferido",
+              "opciones": [
+                "Hoy",
+                "Mañana",
+                "Esta semana",
+                "La semana que viene"
+              ]
+            },
+            {
+              "titulo": "Franja",
+              "opciones": [
+                "Por la mañana",
+                "Por la tarde",
+                "Me da igual"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, me gustaría reservar cita y saber el precio:\n- Servicio: {Servicio}\n- Día: {Día preferido}\n- Franja: {Franja}\n¿Qué huecos tenéis y cuánto costaría?"
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "¿Qué servicio me conviene?",
+          "descripcion": "Responde dos preguntas y te orientamos hacia el servicio.",
+          "icono": "search",
+          "titulo": "Encuentra tu servicio",
+          "intro": "Dos preguntas rápidas y te orientamos. La propuesta final te la confirmamos por WhatsApp.",
+          "botonTexto": "Consultar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Zona",
+              "opciones": [
+                "Manos y pies",
+                "Rostro",
+                "Cejas y pestañas",
+                "Cuerpo"
+              ]
+            },
+            {
+              "titulo": "Ocasión",
+              "opciones": [
+                "Cuidado habitual",
+                "Un evento especial",
+                "Quiero probar algo nuevo",
+                "Un momento de relax"
+              ]
+            }
+          ],
+          "resultado": {
+            "etiqueta": "Te orientamos",
+            "reglas": [
+              {
+                "si": {
+                  "Ocasión": [
+                    "Un evento especial"
+                  ]
+                },
+                "titulo": "Reserva con antelación",
+                "texto": "Para un evento conviene reservar con tiempo. Envíanos tu elección y te proponemos el servicio y la fecha."
+              },
+              {
+                "si": {
+                  "Ocasión": [
+                    "Un momento de relax"
+                  ]
+                },
+                "titulo": "Pide una propuesta relajante",
+                "texto": "Cuéntanos tu zona y te sugerimos opciones pensadas para desconectar."
+              }
+            ],
+            "porDefecto": {
+              "titulo": "Te asesoramos en cabina",
+              "texto": "Envíanos tu elección y te recomendamos el servicio que mejor encaja contigo."
+            }
+          },
+          "mensaje": "Hola {negocio}, necesito ayuda para elegir servicio:\n- Zona: {Zona}\n- Ocasión: {Ocasión}\n¿Qué me recomendáis?"
+        },
+        {
+          "tipo": "info",
+          "nombre": "Cuidados después del servicio",
+          "descripcion": "Consejos generales tras tu visita y qué hacer si tienes dudas.",
+          "icono": "heart",
+          "titulo": "Cuidados posteriores",
+          "intro": "Orientación general. Para tu caso concreto, pregúntanos.",
+          "tarjetas": [
+            {
+              "nivel": "info",
+              "titulo": "Sigue las indicaciones recibidas",
+              "texto": "Te explicamos los cuidados de tu servicio al terminar. Si no los recuerdas, pídenos que te los enviemos por WhatsApp."
+            },
+            {
+              "nivel": "aviso",
+              "titulo": "¿Tienes dudas o molestias?",
+              "texto": "Escríbenos y te respondemos lo antes posible. Es mejor preguntar que quedarte con la duda."
+            },
+            {
+              "nivel": "alerta",
+              "titulo": "Si es urgente",
+              "texto": "Si es una urgencia médica, llama al 112."
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Preguntar por WhatsApp",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, tengo una duda sobre los cuidados después de mi servicio."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Contacto & Redes",
+      "botones": [
+        {
+          "tipo": "whatsapp",
+          "nombre": "Escríbenos por WhatsApp",
+          "descripcion": "Respuesta directa del equipo",
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "mensaje": "Hola {negocio}, quisiera más información."
+        },
+        {
+          "tipo": "vcard",
+          "nombre": "Guardar contacto en la agenda",
+          "descripcion": "Descarga nuestro teléfono directo al móvil",
+          "icono": "contact",
+          "colorIcono": "#ffffff"
+        }
+      ]
+    },
+    {
+      "titulo": "Servicios del llavero",
+      "botones": [
+        {
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Avisa al local para coordinar la devolución segura"
+        },
+        {
+          "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
+          "descripcion": "Guarda la posición GPS de tu coche para volver",
+          "icono": "locate",
+          "colorIcono": "#94A3B8"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "botones": [
+        {
+          "tipo": "opinion",
+          "whatsappGerencia": "https://wa.me/34601425785?text=Hola%2C%20quisiera%20enviar%20un%20comentario%20privado%20sobre%20mi%20visita%20a%20Valeria%20Rodr%C3%ADguez."
+        }
+      ]
+    }
+  ],
+  "_generado": true,
+  "_peticion": "c708da7102b98d24",
+  "_closer": "MEL042",
+  "_fecha": "2026-10-12T15:20:14.449Z"
+}
