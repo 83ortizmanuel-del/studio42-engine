@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SPN · Nutrition Planet Logroño</title>
+<meta name="description" content="Nutrition Planet (SPN) en Logroño: suplementación deportiva, tu protocolo en 20 segundos, aviso de reposición y el club del llavero.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#08090c">
+<link rel="icon" href="logo.png" type="image/png">
+<style>
+@font-face{font-family:"Inter";font-weight:400;font-display:swap;src:url("../fonts/Inter-Regular.woff") format("woff")}
+@font-face{font-family:"Inter";font-weight:600;font-display:swap;src:url("../fonts/Inter-SemiBold.woff") format("woff")}
+@font-face{font-family:"Disp";font-weight:800;font-display:swap;src:url("../fonts/InterDisplay-ExtraBold.woff") format("woff")}
+:root{--bg:#08090c;--bg2:#111318;--bg3:#181b22;--line:rgba(255,255,255,.09);--txt:#f2f3f5;--mut:#9aa0aa;--red:#e60000;--red2:#ff2a2a;--chrome:linear-gradient(180deg,#fff,#c9ccd2 55%,#8a8f98);--r:16px}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);font:400 16px/1.55 Inter,system-ui,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+ radial-gradient(700px 400px at 100% 0,rgba(230,0,0,.18),transparent 60%),
+ repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 44px),
+ repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 44px)}
+h1,h2,h3{font-family:Disp,Inter,sans-serif;font-weight:800;margin:0;letter-spacing:-.02em;text-transform:uppercase}
+p{margin:0}a{color:inherit}button{font:inherit;color:inherit}
+.w{width:min(100% - 32px,560px);margin-inline:auto}
+.it{font-style:italic;display:inline-block;transform:skewX(-8deg)}
+
+/* Franja de propuesta */
+.prop{position:sticky;top:0;z-index:50;background:#000;border-bottom:1px solid var(--line);font-size:12px;color:var(--mut);text-align:center;padding:7px 12px}
+.prop b{color:var(--txt)}
+
+/* Intro 3-2-1 */
+#intro{position:fixed;inset:0;z-index:100;background:#000;display:grid;place-items:center;transition:opacity .5s,visibility .5s}
+#intro.fuera{opacity:0;visibility:hidden}
+#intro .n{font:800 34vmin/1 Disp,sans-serif;color:var(--red);text-shadow:0 0 40px rgba(230,0,0,.8);font-style:italic;animation:golpe .6s ease-out}
+@keyframes golpe{0%{transform:scale(2.2);opacity:0}40%{opacity:1}100%{transform:scale(1)}}
+#intro .skip{position:absolute;bottom:28px;background:none;border:1px solid var(--line);color:var(--mut);padding:8px 16px;border-radius:99px;cursor:pointer}
+
+/* Cabecera */
+.top{padding:28px 0 8px;text-align:center}
+.logo{width:min(250px,64vw);margin:0 auto;filter:drop-shadow(0 0 24px rgba(230,0,0,.45));animation:neon 3.4s ease-in-out infinite}
+@keyframes neon{0%,100%{filter:drop-shadow(0 0 18px rgba(230,0,0,.35))}50%{filter:drop-shadow(0 0 34px rgba(230,0,0,.7))}}
+.tag{margin-top:10px;font:600 11px Inter;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+.estado{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:7px 14px;border-radius:99px;background:var(--bg2);border:1px solid var(--line);font-size:13px}
+.estado i{width:8px;height:8px;border-radius:50%;background:#555}
+.estado.ab i{background:#22c55e;box-shadow:0 0 10px #22c55e}
+.estado.ce i{background:var(--red)}
+
+/* Selector de tienda */
+.sedes{display:flex;gap:6px;margin:18px 0 0;padding:4px;background:var(--bg2);border:1px solid var(--line);border-radius:99px}
+.sedes button{flex:1;border:0;background:none;padding:10px 6px;border-radius:99px;font-size:13px;font-weight:600;color:var(--mut);cursor:pointer}
+.sedes button.on{background:var(--red);color:#fff;box-shadow:0 6px 20px -6px rgba(230,0,0,.7)}
+
+/* Acciones rápidas */
+.rap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.rap a{display:grid;justify-items:center;gap:6px;padding:14px 4px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;text-decoration:none;font-size:12px;font-weight:600;transition:transform .2s,border-color .2s}
+.rap a:active{transform:scale(.95)}.rap a:hover{border-color:rgba(230,0,0,.6)}
+.rap svg{width:22px;height:22px;color:var(--red2)}
+
+section{padding:34px 0 0}
+.h{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.h .num{font:800 13px Disp;color:var(--red);letter-spacing:.1em}
+.h h2{font-size:22px}
+.sub{color:var(--mut);font-size:14px;margin:-6px 0 16px}
+
+/* Coach: protocolo */
+.coach{background:linear-gradient(160deg,#1a0d0d,var(--bg2) 55%);border:1px solid rgba(230,0,0,.35);border-radius:var(--r);padding:18px;position:relative;overflow:hidden}
+.coach::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(230,0,0,.25),transparent 65%);pointer-events:none}
+.lbl{display:block;font-size:12px;font-weight:600;color:var(--mut);letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px}
+.lbl:first-child{margin-top:0}
+.obj{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.obj button{padding:14px 10px;border-radius:12px;background:var(--bg3);border:1.5px solid var(--line);cursor:pointer;text-align:left;font-weight:600;font-size:14px}
+.obj button small{display:block;color:var(--mut);font-weight:400;font-size:12px;margin-top:2px}
+.obj button.on{border-color:var(--red);background:rgba(230,0,0,.12)}
+.peso{display:flex;align-items:center;gap:12px}
+.peso input{flex:1;accent-color:var(--red);height:30px}
+.peso output{font:800 26px Disp;min-width:90px;text-align:right}
+.peso output small{font:600 13px Inter;color:var(--mut)}
+.dias{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.dias button{padding:10px 0;border-radius:10px;background:var(--bg3);border:1.5px solid var(--line);cursor:pointer;font-weight:600}
+.dias button.on{border-color:var(--red);background:rgba(230,0,0,.12)}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.res div{background:#000;border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center}
+.res b{display:block;font:800 26px/1 Disp;background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent}
+.res span{display:block;font-size:11px;color:var(--mut);margin-top:6px;line-height:1.3}
+.stack{margin-top:14px;display:grid;gap:8px}
+.stack div{display:flex;gap:10px;align-items:flex-start;font-size:14px;padding:10px 12px;background:var(--bg3);border-radius:10px;border-left:3px solid var(--red)}
+.stack div b{white-space:nowrap}
+.nota{font-size:11.5px;color:var(--mut);margin-top:12px}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;border-radius:14px;border:0;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;margin-top:14px}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 12px 30px -10px rgba(230,0,0,.8)}
+.btn-red:active{transform:scale(.98)}
+.btn-line{background:transparent;border:1.5px solid rgba(255,255,255,.25)}
+
+/* Categorías */
+.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.cat{position:relative;padding:16px 14px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);text-decoration:none;overflow:hidden;min-height:92px;display:flex;flex-direction:column;justify-content:flex-end}
+.cat .k{position:absolute;top:8px;right:10px;font:800 34px Disp;color:rgba(255,255,255,.06);font-style:italic}
+.cat b{font:800 16px Disp;text-transform:uppercase}
+.cat span{font-size:12px;color:var(--mut)}
+.cat:hover{border-color:rgba(230,0,0,.6)}
+
+/* Marcas en movimiento */
+.marcas{overflow:hidden;border-block:1px solid var(--line);padding:14px 0;margin-top:30px;mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marcas div{display:flex;gap:28px;width:max-content;animation:corre 40s linear infinite}
+.marcas span{font:800 15px Disp;text-transform:uppercase;color:#6b7079;white-space:nowrap;font-style:italic}
+.marcas span:nth-child(3n){color:var(--txt)}
+@keyframes corre{to{transform:translateX(-50%)}}
+
+/* Club del llavero */
+.club{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--bg2)}
+.club-top{padding:20px 18px;background:linear-gradient(135deg,#2a0000,#0b0c10 70%);display:flex;gap:16px;align-items:center}
+.key{width:64px;height:84px;flex:none;border-radius:32px 32px 32px 32px/40px 40px 44px 44px;background:linear-gradient(145deg,#f4f5f7,#9a9fa8 50%,#2b2e34);position:relative;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(230,0,0,.35);animation:flota 4s ease-in-out infinite}
+.key::before{content:"";position:absolute;top:8px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#08090c}
+.key::after{content:"SPN";position:absolute;bottom:18px;left:0;right:0;text-align:center;font:800 13px Disp;color:var(--red);font-style:italic}
+@keyframes flota{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.club-top h3{font-size:19px}
+.club-top p{font-size:13px;color:#cfd2d8;margin-top:4px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;padding:12px 4px;font-size:12.5px;font-weight:600;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent}
+.tabs button.on{color:var(--txt);border-bottom-color:var(--red)}
+.panel{padding:18px;display:none}.panel.on{display:block}
+.panel p{font-size:14px;color:#cfd2d8}
+.sel{width:100%;padding:12px;border-radius:10px;background:var(--bg3);border:1px solid var(--line);color:var(--txt);font:inherit;margin-top:8px}
+.barra{height:12px;border-radius:99px;background:#000;border:1px solid var(--line);overflow:hidden;margin-top:14px}
+.barra i{display:block;height:100%;background:linear-gradient(90deg,var(--red),#ff6a3d);border-radius:99px;transition:width .6s}
+.quedan{display:flex;justify-content:space-between;margin-top:8px;font-size:13px;color:var(--mut)}
+.quedan b{color:var(--txt);font:800 20px Disp}
+.perdida{margin-top:12px;padding:14px;border-radius:12px;background:#000;border:1px dashed rgba(255,255,255,.2);text-align:center}
+.perdida .t{font:800 15px Disp;text-transform:uppercase}
+.perdida small{display:block;color:var(--mut);margin-top:4px;font-size:12px}
+.lista{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
+.lista li{display:flex;gap:10px;font-size:14px}
+.lista li::before{content:"";flex:none;width:8px;height:8px;margin-top:7px;background:var(--red);transform:rotate(45deg)}
+
+/* Bioimpedancia */
+.bio{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;padding:18px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--line)}
+.anillo{width:86px;height:86px;border-radius:50%;background:conic-gradient(var(--red) 0 72%,#222 72% 100%);display:grid;place-items:center;animation:gira 6s linear infinite}
+.anillo div{width:68px;height:68px;border-radius:50%;background:var(--bg2);display:grid;place-items:center;font:800 18px Disp;animation:gira 6s linear infinite reverse}
+@keyframes gira{to{transform:rotate(360deg)}}
+.bio h3{font-size:17px}.bio p{font-size:13.5px;color:var(--mut);margin-top:4px}
+
+/* Opinión */
+.op{padding:20px 18px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--line);text-align:center}
+.op h3{font-size:19px}.op p{color:var(--mut);font-size:14px;margin-top:6px}
+.op .two{display:grid;gap:8px;margin-top:14px}
+.op .two a{margin:0}
+
+footer{padding:36px 0 40px;text-align:center;font-size:12px;color:#5d626b}
+footer a{color:var(--mut)}
+.hecho{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 12px;border:1px solid var(--line);border-radius:99px}
+
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div id="intro" aria-hidden="true"><div class="n" id="cuenta">3</div><button class="skip" id="saltar">Saltar</button></div>
+
+<div class="prop">Propuesta de <b>Studio 42</b> para Nutrition Planet · demo funcional</div>
+
+<header class="top w">
+  <img class="logo" src="logo.png" width="283" height="178" alt="SPN Sport Planet Nutrition">
+  <p class="tag">Nutrición deportiva · Logroño · Burgos</p>
+  <div class="estado" id="estado"><i></i><span id="estadoTxt">Comprobando horario…</span></div>
+  <div class="sedes" role="tablist" aria-label="Elige tu tienda">
+    <button class="on" data-sede="murrieta">Murrieta 31</button>
+    <button data-sede="duquesa">Duquesa Victoria</button>
+    <button data-sede="burgos">Burgos</button>
+  </div>
+  <nav class="rap" aria-label="Acciones rápidas">
+    <a id="aWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v11H9l-5 4z"/></svg>WhatsApp</a>
+    <a id="aTel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Llamar</a>
+    <a id="aRuta" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Cómo llegar</a>
+    <a href="https://nutritionplanet.es/es/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14l-1.5 11h-11z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>Tienda online</a>
+  </nav>
+</header>
+
+<main class="w">
+
+  <!-- 01 · Protocolo -->
+  <section id="protocolo" class="rv">
+    <div class="h"><span class="num">01</span><h2>Tu protocolo <span class="it" style="color:var(--red)">en 20 s</span></h2></div>
+    <p class="sub">Dinos qué buscas y te decimos por dónde empezar. Luego lo afinamos contigo en tienda.</p>
+    <div class="coach">
+      <span class="lbl">Objetivo</span>
+      <div class="obj" id="obj">
+        <button class="on" data-o="masa">Ganar músculo<small>Volumen limpio</small></button>
+        <button data-o="definir">Definir<small>Perder grasa, no fuerza</small></button>
+        <button data-o="rendimiento">Rendimiento<small>Running, ciclismo, crossfit</small></button>
+        <button data-o="salud">Salud y energía<small>Rutina y bienestar</small></button>
+      </div>
+      <span class="lbl">Tu peso</span>
+      <div class="peso"><input type="range" id="peso" min="45" max="130" value="75" aria-label="Peso en kilos"><output id="pesoV">75 <small>kg</small></output></div>
+      <span class="lbl">Entrenos por semana</span>
+      <div class="dias" id="dias"><button data-d="2">1–2</button><button class="on" data-d="4">3–4</button><button data-d="5">5</button><button data-d="6">6+</button></div>
+      <div class="res">
+        <div><b id="rProt">150</b><span>g de proteína al día</span></div>
+        <div><b id="rCrea">3–5</b><span>g de creatina al día</span></div>
+        <div><b id="rAgua">2,6</b><span>litros de agua al día</span></div>
+      </div>
+      <div class="stack" id="stack"></div>
+      <p class="nota">Cifras orientativas para personas sanas que entrenan. No sustituyen el consejo de un profesional sanitario, sobre todo si tomas medicación o tienes alguna patología.</p>
+      <a class="btn btn-red" id="btnProto" target="_blank" rel="noopener">Enviar mi protocolo a la tienda</a>
+    </div>
+  </section>
+
+  <!-- 02 · Club del llavero -->
+  <section id="club" class="rv">
+    <div class="h"><span class="num">02</span><h2>El club <span class="it" style="color:var(--red)">del llavero</span></h2></div>
+    <p class="sub">El llavero SPN va con tus llaves, no en un cajón. Y trabaja para ti cada día.</p>
+    <div class="club">
+      <div class="club-top">
+        <div class="key" aria-hidden="true"></div>
+        <div><h3>Un toque. Tres superpoderes.</h3><p>Sin app, sin tarjetas de sellos, sin contraseñas.</p></div>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="on" data-p="repo">Reposición</button>
+        <button data-p="llaves">Llaves perdidas</button>
+        <button data-p="socio">Socio SPN</button>
+      </div>
+      <div class="panel on" id="p-repo">
+        <p>¿Cuándo se te acaba el bote? Te avisamos antes de que te quedes sin él y te lo apartamos en tu tienda.</p>
+        <select class="sel" id="bote" aria-label="Tamaño del bote">
+          <option value="30">Proteína 1 kg (≈30 tomas)</option>
+          <option value="66" selected>Proteína 2 kg (≈66 tomas)</option>
+          <option value="100">Creatina 300 g (≈100 tomas)</option>
+          <option value="60">Multivitamínico 60 cápsulas</option>
+        </select>
+        <select class="sel" id="compra" aria-label="Cuándo lo compraste">
+          <option value="0">Lo he comprado hoy</option>
+          <option value="14">Hace 2 semanas</option>
+          <option value="30" selected>Hace 1 mes</option>
+          <option value="50">Hace 7 semanas</option>
+        </select>
+        <div class="barra"><i id="barra" style="width:50%"></i></div>
+        <div class="quedan"><span>Te quedan aprox.</span><b id="quedan">36 días</b></div>
+        <a class="btn btn-red" id="btnRepo" target="_blank" rel="noopener">Avisadme por WhatsApp</a>
+      </div>
+      <div class="panel" id="p-llaves">
+        <p>Si pierdes las llaves, quien las encuentre acerca el móvil al llavero y ve esto:</p>
+        <div class="perdida">
+          <div class="t">🔑 Estas llaves tienen dueño</div>
+          <small>Pulsa para avisarle. No verás su nombre ni su teléfono.</small>
+          <a class="btn btn-line" style="margin-top:10px" href="#" onclick="return false">Avisar al dueño</a>
+        </div>
+        <p style="margin-top:12px;font-size:12.5px;color:var(--mut)">El aviso llega a tu WhatsApp. Si nadie responde, quien las encontró puede dejarlas en cualquier tienda SPN. Solo se activa si tú das tu consentimiento.</p>
+      </div>
+      <div class="panel" id="p-socio">
+        <p>No es un club de regalos: es un club de <b>acceso</b>.</p>
+        <ul class="lista">
+          <li>Avisos de novedades y sabores nuevos antes que nadie.</li>
+          <li>Probar los productos nuevos en tienda primero.</li>
+          <li>Ofertas de los Packs Ahorro solo para socios.</li>
+          <li>Tu historial de compras para repetir sin pensar.</li>
+        </ul>
+        <a class="btn btn-red" id="btnSocio" target="_blank" rel="noopener">Quiero mi llavero SPN</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Categorías -->
+  <section id="tienda" class="rv">
+    <div class="h"><span class="num">03</span><h2>¿Qué buscas hoy?</h2></div>
+    <div class="cats">
+      <a class="cat" href="https://nutritionplanet.es/es/" target="_blank" rel="noopener"><span class="k">P</span><b>Proteínas</b><span>Whey, isolate, caseína</span></a>
+      <a class="cat" href="https://nutritionplanet.es/es/" target="_blank" rel="noopener"><span class="k">C</span><b>Creatina</b><span>Monohidrato y más</span></a>
+      <a class="cat" href="https://nutritionplanet.es/es/" target="_blank" rel="noopener"><span class="k">⚡</span><b>Pre-entrenos</b><span>Incluida gama EE. UU.</span></a>
+      <a class="cat" href="https://nutritionplanet.es/es/" target="_blank" rel="noopener"><span class="k">R</span><b>Recuperadores</b><span>Aminoácidos e intra</span></a>
+      <a class="cat" href="https://nutritionplanet.es/es/" target="_blank" rel="noopener"><span class="k">V</span><b>Vitaminas</b><span>Micronutrientes y omega</span></a>
+      <a class="cat" href="https://nutritionplanet.es/es/" target="_blank" rel="noopener"><span class="k">%</span><b>Packs Ahorro</b><span>Combos al mejor precio</span></a>
+    </div>
+  </section>
+</main>
+
+<div class="marcas" aria-label="Marcas disponibles"><div id="marcas"></div></div>
+
+<main class="w">
+  <!-- 04 · Bioimpedancia -->
+  <section class="rv">
+    <div class="h"><span class="num">04</span><h2>Mide tu progreso</h2></div>
+    <div class="bio">
+      <div class="anillo"><div>%</div></div>
+      <div><h3>Bioimpedancia y asesoría</h3><p>Grasa, músculo y agua en minutos. Pide tu cita y sigue tu evolución.</p></div>
+    </div>
+    <a class="btn btn-line" id="btnBio" target="_blank" rel="noopener">Pedir cita</a>
+  </section>
+
+  <!-- 05 · Opinión -->
+  <section class="rv">
+    <div class="op">
+      <h3>¿Qué tal te hemos atendido?</h3>
+      <p>Tu opinión nos ayuda a mejorar y a que otros deportistas nos encuentren.</p>
+      <div class="two">
+        <a class="btn btn-red" id="btnResena" target="_blank" rel="noopener">Dejar mi opinión en Google</a>
+        <a class="btn btn-line" id="btnGer" target="_blank" rel="noopener">Hablar con el encargado</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="w">
+  <p>Nutrition Planet · Salomon RMI Fit, S.L.</p>
+  <p style="margin-top:4px"><a href="https://www.instagram.com/sportplanetnutrition/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.facebook.com/spnstore/" target="_blank" rel="noopener">Facebook</a></p>
+  <a class="hecho" href="https://studio42.es/" target="_blank" rel="noopener">Experiencia phygital por Studio 42</a>
+</footer>
+
+<script>
+(function(){
+  /* ---------- Datos (confirmar con la tienda) ---------- */
+  var WA = '34691145445'; // teléfono de la web; confirmar si es también WhatsApp
+  var SEDES = {
+    murrieta:{n:'C/ Murrieta 31, Logroño', tel:'691145445', mapa:'Nutrition Planet, Calle Murrieta 31, 26005 Logroño',
+      h:{1:[[660,845],[1080,1240]],2:[[660,845],[1080,1240]],3:[[660,845],[1080,1240]],4:[[660,845],[1080,1240]],5:[[660,845],[1080,1240]],6:[[660,855]]}},
+    duquesa:{n:'Duquesa de la Victoria 23, Logroño', tel:'691145445', mapa:'Nutrition Planet, Duquesa de la Victoria 23, 26003 Logroño',
+      h:{1:[[660,840],[1080,1230]],2:[[660,840],[1080,1230]],3:[[660,840],[1080,1230]],4:[[660,840],[1080,1230]],5:[[660,840],[1080,1230]],6:[[660,840]]}},
+    burgos:{n:'C. Canónigo Isidoro Díaz Murugarren, Burgos', tel:'677095302', mapa:'Nutrition Planet, Calle Canónigo Isidoro Díaz Murugarren, 09007 Burgos',
+      h:{1:[[660,840],[1080,1230]],2:[[660,840],[1080,1230]],3:[[660,840],[1080,1230]],4:[[660,840],[1080,1230]],5:[[660,840],[1080,1230]],6:[[660,840]]}}
+  };
+  var MARCAS = ['226ERS','AMIX','Biotech USA','BSN','Cellucor','GN Nutrition','Haya Labs','iO.GENIX','Life Extension','Mr. Popper\'s','Powerlabs','Scientiffic Nutrition','Scitec Nutrition','Stacker','Starlabs','Vit O Best','Wheyland','Zoomad Labs','Eleven Fit','El Granero Integral'];
+  var sede = 'murrieta';
+  var $ = function(id){return document.getElementById(id)};
+  var wa = function(t){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(t)};
+
+  /* ---------- Intro 3-2-1-GO (solo una vez por sesión) ---------- */
+  var intro=$('intro'), c=$('cuenta'), visto=false;
+  try{visto=sessionStorage.getItem('spnIntro')==='1'}catch(e){}
+  function fin(){intro.classList.add('fuera');try{sessionStorage.setItem('spnIntro','1')}catch(e){}}
+  if(visto||matchMedia('(prefers-reduced-motion: reduce)').matches){intro.style.display='none'}
+  else{var seq=['3','2','1','GO'],i=0;(function paso(){c.textContent=seq[i];c.style.animation='none';void c.offsetWidth;c.style.animation='';i++;if(i<seq.length)setTimeout(paso,620);else setTimeout(fin,650)})()}
+  $('saltar').onclick=fin;
+
+  /* ---------- Sede, horario y acciones ---------- */
+  function abierto(s){var d=new Date(),dia=d.getDay(),m=d.getHours()*60+d.getMinutes(),f=SEDES[s].h[dia]||[];
+    for(var k=0;k<f.length;k++){if(m>=f[k][0]&&m<f[k][1])return{ab:true,hasta:f[k][1]}}
+    for(k=0;k<f.length;k++){if(m<f[k][0])return{ab:false,abre:f[k][0]}}return{ab:false}}
+  function hh(m){return Math.floor(m/60)+':'+String(m%60).padStart(2,'0')}
+  function pintarSede(){var s=SEDES[sede],e=abierto(sede),el=$('estado');
+    el.className='estado '+(e.ab?'ab':'ce');
+    $('estadoTxt').textContent=e.ab?'Abierto ahora · hasta las '+hh(e.hasta):(e.abre?'Cerrado · abre hoy a las '+hh(e.abre):'Cerrado ahora');
+    $('aTel').href='tel:+34'+s.tel;
+    $('aRuta').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.mapa);
+    $('aWa').href=wa('Hola SPN, tengo una consulta para la tienda de '+s.n+'.');
+    $('btnBio').href=wa('Hola SPN, quiero pedir cita de bioimpedancia en '+s.n+'.');
+    $('btnGer').href=wa('Hola, quería comentar mi experiencia en la tienda de '+s.n+'.');
+    $('btnResena').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.mapa);
+    $('btnSocio').href=wa('Hola SPN, quiero mi llavero del club. Mi tienda es '+s.n+'.');
+    pintarRepo();pintarProto()}
+  document.querySelectorAll('.sedes button').forEach(function(b){b.onclick=function(){
+    document.querySelectorAll('.sedes button').forEach(function(o){o.classList.toggle('on',o===b)});sede=b.dataset.sede;pintarSede()}});
+
+  /* ---------- Protocolo ---------- */
+  var obj='masa',dias=4;
+  var FACT={masa:1.8,definir:2.0,rendimiento:1.6,salud:1.2};
+  var STACK={
+    masa:[['Proteína','batido tras entrenar para llegar a tu cifra diaria.'],['Creatina','cada día, también los de descanso.'],['Carbohidratos','si te cuesta comer lo suficiente.']],
+    definir:[['Proteína','te ayuda a mantener el músculo mientras bajas grasa.'],['Creatina','para no perder fuerza en déficit.'],['L-carnitina u omega 3','como apoyo, pregúntanos cuál te encaja.']],
+    rendimiento:[['Isotónicos y geles','en sesiones de más de una hora.'],['Intra-entreno o aminoácidos','para aguantar el volumen.'],['Recuperador','tras las sesiones largas.']],
+    salud:[['Multivitamínico y omega 3','base para el día a día.'],['Proteína','si no llegas con la dieta.'],['Probióticos','si buscas cuidar la digestión.']]};
+  function pintarProto(){var p=+$('peso').value,extra=dias>=5?0.1:0;
+    var prot=Math.round(p*(FACT[obj]+extra)),agua=(p*0.033+dias*0.08).toFixed(1).replace('.',',');
+    $('pesoV').innerHTML=p+' <small>kg</small>';$('rProt').textContent=prot;$('rAgua').textContent=agua;
+    $('rCrea').textContent=obj==='salud'?'3':'3–5';
+    $('stack').innerHTML=STACK[obj].map(function(x){return '<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'}).join('');
+    var nom={masa:'ganar músculo',definir:'definir',rendimiento:'rendimiento',salud:'salud y energía'}[obj];
+    $('btnProto').href=wa('Hola SPN 👋 Mi protocolo: objetivo '+nom+', '+p+' kg, '+dias+' entrenos/semana. Proteína '+prot+' g/día. ¿Qué me recomendáis? Tienda: '+SEDES[sede].n)}
+  $('peso').oninput=pintarProto;
+  document.querySelectorAll('#obj button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#obj button').forEach(function(o){o.classList.toggle('on',o===b)});obj=b.dataset.o;pintarProto()}});
+  document.querySelectorAll('#dias button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#dias button').forEach(function(o){o.classList.toggle('on',o===b)});dias=+b.dataset.d;pintarProto()}});
+
+  /* ---------- Club: reposición ---------- */
+  function pintarRepo(){var tot=+$('bote').value,us=+$('compra').value,q=Math.max(0,tot-us);
+    $('barra').style.width=Math.round(q/tot*100)+'%';
+    $('quedan').textContent=q===0?'¡Se ha acabado!':q+' días';
+    var t=$('bote').options[$('bote').selectedIndex].text;
+    $('btnRepo').href=wa('Hola SPN, avisadme para reponer: '+t+'. Me quedan unos '+q+' días. Tienda: '+SEDES[sede].n)}
+  $('bote').onchange=pintarRepo;$('compra').onchange=pintarRepo;
+  document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){
+    document.querySelectorAll('.tabs button').forEach(function(o){o.classList.toggle('on',o===b)});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('on',p.id==='p-'+b.dataset.p)})}});
+
+  /* ---------- Marcas ---------- */
+  var html=MARCAS.map(function(m){return '<span>'+m+'</span>'}).join('');$('marcas').innerHTML=html+html;
+
+  /* ---------- Aparición al hacer scroll ---------- */
+  var rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});rv.forEach(function(e){io.observe(e)})}
+  else rv.forEach(function(e){e.classList.add('in')});
+
+  pintarSede();
+})();
+</script>
+</body>
+</html>
