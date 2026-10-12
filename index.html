@@ -1,921 +1,634 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPXJ4FNYBS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CPXJ4FNYBS');
-    </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 | Estaciones Digitales de Mostrador & Ecosistemas Phygital</title>
-    <meta name="description" content="Studio 42: Estudio boutique de Estaciones Digitales de Mostrador, hardware NFC NTAG216 y posicionamiento local en Logroño.">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio 42 | Estaciones NFC de mostrador para negocios locales en Logroño</title>
+    <meta name="description" content="Estaciones NFC y QR para el mostrador de tu negocio: una landing a medida, reseña directa en Google y un canal privado con la gerencia. Demo gratis en tu local en Logroño.">
+    <meta name="theme-color" content="#0b0b0c">
+    <link rel="canonical" href="https://studio42.es/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Studio 42 | Estaciones NFC de mostrador">
+    <meta property="og:description" content="Un toque y tu cliente llega a tu landing, a la reseña de Google o a la gerencia. Demo gratis en Logroño.">
+    <meta property="og:url" content="https://studio42.es/">
+    <meta property="og:image" content="https://studio42.es/img/expositor.webp">
+    <link rel="icon" href="img/logo.webp" type="image/webp">
+    <link rel="preload" href="fonts/InterDisplay-ExtraBold.woff" as="font" type="font/woff" crossorigin>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"LocalBusiness","name":"Studio 42","url":"https://studio42.es/","telephone":"+34672294962",
+     "address":{"@type":"PostalAddress","streetAddress":"Calle Carmen Medrano 5","addressLocality":"Logroño","addressRegion":"La Rioja","addressCountry":"ES"},
+     "description":"Estaciones digitales NFC y QR para el mostrador de negocios locales."}
+    </script>
 
     <style>
+        /* Tipografías alojadas en este mismo sitio (Inter, licencia SIL OFL): no se carga nada de terceros. */
+        @font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("fonts/Inter-Regular.woff") format("woff"); }
+        @font-face { font-family: "Inter"; font-weight: 600; font-display: swap; src: url("fonts/Inter-SemiBold.woff") format("woff"); }
+        @font-face { font-family: "Inter Display"; font-weight: 600; font-display: swap; src: url("fonts/InterDisplay-SemiBold.woff") format("woff"); }
+        @font-face { font-family: "Inter Display"; font-weight: 800; font-display: swap; src: url("fonts/InterDisplay-ExtraBold.woff") format("woff"); }
+
         :root {
-            --color-silver: #c4c4c4;
-            --color-silver-light: #ffffff;
-            --color-silver-dark: #8e8e93;
-            --color-silver-glow: rgba(196, 196, 196, 0.4);
-            --bg-dark: #07080b;
-            --bg-card: #0d0f14;
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-silver: rgba(196, 196, 196, 0.4);
+            --ink: #0b0b0c;          /* negro del logo y de las fotos de caja y camiseta */
+            --ink-2: #151517;
+            --line: rgba(243, 241, 236, .14);
+            --brass: #d9a02d;        /* dorado del cohete */
+            --brass-deep: #a8741a;
+            --stone: #c4c4c4;        /* gris exacto del fondo de las fotos de producto */
+            --bone: #f3f1ec;
+            --muted: #a9a7a1;
+            --wa: #25d366;
+            --radius: 18px;
+            --wrap: 1120px;
+            --f-display: "Inter Display", "Inter", system-ui, sans-serif;
+            --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
         }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
+        body { margin: 0; background: var(--ink); color: var(--bone); font: 400 1.0625rem/1.6 var(--f-body); overflow-x: hidden; }
+        img { max-width: 100%; display: block; height: auto; }
+        a { color: inherit; }
+        h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; }
+        p { margin: 0; }
+        :focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; border-radius: 6px; }
+        .wrap { width: min(100% - 2rem, var(--wrap)); margin-inline: auto; }
+        .skip { position: absolute; left: -999px; top: 8px; background: var(--brass); color: var(--ink); padding: .6rem 1rem; border-radius: 8px; z-index: 100; font-weight: 600; }
+        .skip:focus { left: 8px; }
 
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden !important;
-            position: relative;
-            background-color: var(--bg-dark);
-            color: #E2E8F0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+        /* Botones */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; font: 600 .98rem/1 var(--f-body); padding: 1rem 1.5rem; border-radius: 999px; border: 1.5px solid transparent; text-decoration: none; cursor: pointer; transition: transform .2s, background .2s, color .2s, border-color .2s; min-height: 52px; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-brass { background: var(--brass); color: var(--ink); }
+        .btn-brass:hover { background: #e8b345; }
+        .btn-line { border-color: rgba(243,241,236,.35); color: var(--bone); background: transparent; }
+        .btn-line:hover { border-color: var(--bone); }
+        .btn-ink { background: var(--ink); color: var(--bone); }
+        .btn-ink:hover { background: #1d1d20; }
+        .btn-sm { padding: .7rem 1.1rem; min-height: 44px; font-size: .9rem; }
+        .ico { width: 1.15em; height: 1.15em; flex: none; }
 
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
-        }
+        /* Navegación */
+        .nav { position: fixed; inset: 0 0 auto; z-index: 40; background: rgba(11,11,12,.86); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+        .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 1rem; }
+        .brand { display: flex; align-items: center; gap: .65rem; text-decoration: none; font: 800 1.15rem var(--f-display); letter-spacing: -.01em; }
+        .brand img { width: 38px; height: 38px; }
+        .nav-links { display: none; gap: 1.6rem; font-size: .95rem; color: var(--muted); }
+        .nav-links a { text-decoration: none; transition: color .2s; }
+        .nav-links a:hover { color: var(--bone); }
+        .nav-actions { display: flex; align-items: center; gap: .75rem; }
+        .nav-vcard { display: none; font-size: .9rem; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
+        @media (min-width: 900px) { .nav-links { display: flex; } .nav-vcard { display: inline; } }
 
-        .bg-grid-tech {
-            background-image: radial-gradient(rgba(196, 196, 196, 0.12) 1px, transparent 1px);
-            background-size: 28px 28px;
-        }
+        /* Hero */
+        .hero { padding: 7.5rem 0 4.5rem; position: relative; overflow: hidden; }
+        .hero .wrap { display: grid; gap: 3.5rem; align-items: center; }
+        .hero h1 { font-weight: 800; font-size: clamp(2.5rem, 7.2vw, 4.7rem); line-height: 1.02; letter-spacing: -.035em; }
+        .hero .lead { margin-top: 1.4rem; max-width: 34em; font-size: clamp(1.05rem, 2vw, 1.25rem); color: #d8d6d0; }
+        .hero .cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+        .facts { display: flex; flex-wrap: wrap; gap: .5rem 1.6rem; margin: 2.4rem 0 0; padding: 1.4rem 0 0; border-top: 1px solid var(--line); list-style: none; color: var(--muted); font-size: .95rem; }
+        .facts li { display: flex; align-items: center; gap: .5rem; }
+        .facts li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--brass); }
+        @media (min-width: 960px) { .hero { padding: 9.5rem 0 6rem; } .hero .wrap { grid-template-columns: 1.15fr .85fr; } }
 
-        .text-silver-gradient {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 40%, #E2E8F0 70%, #CBD5E1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.25));
-        }
+        /* Móvil de demostración con anillos NFC: el único movimiento propio de la página */
+        .stage { position: relative; display: grid; place-items: center; min-height: 560px; }
+        .ring { position: absolute; width: 330px; height: 330px; border-radius: 50%; border: 1.5px solid var(--brass); opacity: 0; animation: pulse 4.2s ease-out infinite; }
+        .ring:nth-child(2) { animation-delay: 1.4s; } .ring:nth-child(3) { animation-delay: 2.8s; }
+        @keyframes pulse { 0% { transform: scale(.55); opacity: .0; } 15% { opacity: .55; } 100% { transform: scale(1.65); opacity: 0; } }
+        .phone { position: relative; width: min(300px, 82vw); border-radius: 38px; padding: 12px; background: #1c1c1f; border: 1.5px solid rgba(243,241,236,.22); box-shadow: 0 40px 80px -20px rgba(0,0,0,.9), 0 0 0 6px #0f0f11; }
+        .screen { background: var(--ink-2); border-radius: 28px; padding: 1.4rem 1.1rem 1.2rem; text-align: center; }
+        .screen .mini-logo { width: 44px; height: 44px; margin: 0 auto .6rem; }
+        .screen h3 { font-size: 1.05rem; letter-spacing: .02em; font-weight: 800; }
+        .screen .sub { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+        .app-btns { display: grid; gap: .5rem; margin-top: 1.1rem; }
+        .app-btn { display: flex; align-items: center; gap: .7rem; padding: .7rem .8rem; border-radius: 14px; background: rgba(243,241,236,.06); border: 1px solid var(--line); font-size: .86rem; font-weight: 600; text-align: left; color: var(--bone); }
+        .app-btn svg { width: 18px; height: 18px; color: var(--brass); flex: none; }
+        .opinion { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+        .opinion p { font-size: .8rem; color: var(--muted); margin-bottom: .6rem; }
+        .opinion .two { display: grid; gap: .5rem; }
+        .opinion button { font: 600 .84rem var(--f-body); padding: .8rem; border-radius: 12px; border: 1.5px solid rgba(243,241,236,.3); background: transparent; color: var(--bone); cursor: pointer; min-height: 44px; transition: background .2s, border-color .2s; }
+        .opinion button:hover, .opinion button[aria-pressed="true"] { border-color: var(--brass); background: rgba(217,160,45,.12); }
+        .reaction { margin-top: .7rem; min-height: 4.6em; font-size: .8rem; line-height: 1.45; color: #d8d6d0; text-align: left; }
+        .reaction strong { color: var(--brass); display: block; margin-bottom: .15rem; }
+        .stage-note { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-size: .85rem; color: var(--muted); }
 
-        .card-silver-premium {
-            background: linear-gradient(180deg, rgba(22, 25, 34, 0.95) 0%, rgba(11, 13, 18, 0.98) 100%);
-            border: 1px solid rgba(196, 196, 196, 0.45);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(196, 196, 196, 0.22);
-            border-radius: 24px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        /* Secciones */
+        section { padding: 5rem 0; }
+        .section-head { max-width: 40rem; margin-bottom: 2.6rem; }
+        .section-head h2 { font-weight: 600; font-size: clamp(1.9rem, 4.2vw, 3rem); line-height: 1.08; letter-spacing: -.025em; }
+        .section-head p { margin-top: .9rem; color: var(--muted); }
+        .on-stone .section-head p { color: #3a3a3c; }
 
-        .card-silver-premium:hover {
-            border-color: rgba(255, 255, 255, 0.85);
-            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.98), 0 0 45px 0px rgba(196, 196, 196, 0.4);
-        }
+        /* Cómo funciona: una secuencia real de tres pasos */
+        .steps { display: grid; gap: 1.2rem; counter-reset: paso; list-style: none; padding: 0; margin: 0; }
+        .steps li { counter-increment: paso; border-top: 1.5px solid var(--brass); padding-top: 1.1rem; }
+        .steps li::before { content: counter(paso); font: 800 2.6rem/1 var(--f-display); color: var(--brass); display: block; margin-bottom: .6rem; }
+        .steps h3 { font-size: 1.25rem; font-weight: 600; }
+        .steps p { margin-top: .5rem; color: var(--muted); }
+        .promise { margin-top: 2.6rem; padding: 1.3rem 1.5rem; border-left: 3px solid var(--brass); background: var(--ink-2); border-radius: 0 var(--radius) var(--radius) 0; max-width: 46rem; }
+        .promise strong { color: var(--bone); }
+        .promise p { color: #d8d6d0; }
+        @media (min-width: 800px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
 
-        .card-base {
-            background: rgba(13, 15, 21, 0.85);
-            border: 1px solid var(--border-subtle);
-            border-radius: 22px;
-            transition: all 0.3s ease;
-        }
+        /* Antes / ahora */
+        .versus { display: grid; gap: 2.2rem; }
+        .versus h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; }
+        .versus ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
+        .versus li { display: flex; gap: .75rem; color: var(--muted); }
+        .versus li::before { content: "–"; color: #7c7a75; flex: none; }
+        .versus .new li { color: var(--bone); } .versus .new li::before { content: "+"; color: var(--brass); font-weight: 600; }
+        @media (min-width: 800px) { .versus { grid-template-columns: 1fr 1fr; gap: 4rem; } .versus > div + div { border-left: 1px solid var(--line); padding-left: 4rem; } }
 
-        .card-base:hover {
-            border-color: rgba(196, 196, 196, 0.4);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-        }
+        /* Piezas sobre el gris de las fotos: los productos "flotan" en la página */
+        .on-stone { background: var(--stone); color: #141414; }
+        .on-stone h2, .on-stone h3 { color: #101010; }
+        .pieces { display: grid; gap: 3rem 2rem; }
+        .piece { display: flex; flex-direction: column; }
+        .piece .photo { aspect-ratio: 1; display: grid; place-items: center; }
+        .piece .photo img { width: 100%; height: 100%; object-fit: contain; transition: transform .5s cubic-bezier(.16,1,.3,1); }
+        .piece:hover .photo img { transform: scale(1.04) rotate(-1deg); }
+        .piece .photo.framed img { border-radius: 22px; object-fit: cover; }
+        .piece .row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: .9rem; }
+        .piece h3 { font-size: 1.3rem; font-weight: 600; }
+        .piece .price { font: 600 1.15rem var(--f-display); white-space: nowrap; }
+        .piece .price small { font: 400 .8rem var(--f-body); color: #4a4a4c; }
+        .piece p { margin-top: .4rem; color: #2e2e30; font-size: .98rem; }
+        .piece .acts { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+        .on-stone .btn-line { border-color: rgba(16,16,16,.45); color: #101010; }
+        .on-stone .btn-line:hover { border-color: #101010; }
+        @media (min-width: 720px) { .pieces { grid-template-columns: repeat(6, 1fr); } .piece { grid-column: span 2; } .piece.big { grid-column: span 3; } }
+        .note-iva { margin-top: 2.4rem; font-size: .9rem; color: #3a3a3c; }
 
-        .btn-silver {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%);
-            color: #07080B;
-            font-weight: 800;
-            letter-spacing: 0.9px;
-            box-shadow: 0 6px 22px rgba(196, 196, 196, 0.35);
-            transition: all 0.25s ease;
-        }
+        /* Packs */
+        .packs { display: grid; gap: 1.2rem; align-items: stretch; }
+        .pack { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; background: var(--ink-2); display: flex; flex-direction: column; }
+        .pack.rec { border-color: var(--brass); background: linear-gradient(180deg, #1c1810, var(--ink-2) 60%); position: relative; }
+        .pack .tag { position: absolute; top: -.8rem; left: 1.8rem; background: var(--brass); color: var(--ink); font: 600 .78rem var(--f-body); padding: .25rem .7rem; border-radius: 999px; }
+        .pack h3 { font-size: 1.4rem; font-weight: 600; }
+        .pack .for { color: var(--muted); font-size: .95rem; margin-top: .3rem; min-height: 3em; }
+        .pack .cost { margin: 1.2rem 0; font: 800 2.8rem/1 var(--f-display); letter-spacing: -.03em; }
+        .pack .cost small { font: 400 .9rem var(--f-body); color: var(--muted); letter-spacing: 0; margin-left: .35rem; }
+        .pack ul { list-style: none; margin: 0 0 1.6rem; padding: 0; display: grid; gap: .7rem; font-size: .96rem; color: #d8d6d0; flex: 1; }
+        .pack li { display: flex; gap: .65rem; }
+        .pack li::before { content: ""; flex: none; width: 7px; height: 7px; margin-top: .6em; background: var(--brass); border-radius: 2px; transform: rotate(45deg); }
+        .pack li b { color: var(--bone); font-weight: 600; }
+        @media (min-width: 900px) { .packs { grid-template-columns: repeat(3, 1fr); } .pack.rec { transform: translateY(-14px); } }
 
-        .btn-silver:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(241, 245, 249, 0.55);
-            filter: brightness(1.08);
-        }
+        /* Calculadora */
+        .calc { display: grid; gap: 2rem; align-items: center; background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; }
+        .calc label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: .8rem; gap: 1rem; }
+        .calc input[type=range] { width: 100%; accent-color: var(--brass); height: 32px; }
+        .results { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); text-align: left; }
+        .results output { display: block; font: 800 2rem/1 var(--f-display); letter-spacing: -.02em; }
+        .results span { display: block; font-size: .82rem; color: var(--muted); margin-top: .4rem; line-height: 1.35; }
+        .disclaimer { margin-top: 1rem; font-size: .88rem; color: var(--muted); }
+        @media (min-width: 860px) { .calc { grid-template-columns: 1fr 1.2fr; padding: 2.4rem; gap: 3rem; } }
+        @media (max-width: 520px) { .results { grid-template-columns: 1fr; } }
 
-        .btn-vcard-cyber {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.04) 100%);
-            border: 1px solid rgba(196, 196, 196, 0.5);
-            box-shadow: 0 0 20px rgba(196, 196, 196, 0.15), inset 0 0 12px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        /* FAQ */
+        .faq { max-width: 52rem; }
+        .faq details { border-top: 1px solid var(--line); padding: 1.2rem 0; }
+        .faq details:last-child { border-bottom: 1px solid var(--line); }
+        .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 1.5rem; font: 600 1.08rem/1.35 var(--f-display); }
+        .faq summary::-webkit-details-marker { display: none; }
+        .faq summary::after { content: "+"; font: 400 1.6rem/1 var(--f-body); color: var(--brass); flex: none; transition: transform .25s; }
+        .faq details[open] summary::after { transform: rotate(45deg); }
+        .faq details p { margin-top: .9rem; color: #cfcdc7; max-width: 44em; }
 
-        .btn-vcard-cyber:hover {
-            border-color: #FFFFFF;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.35), inset 0 0 18px rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
+        /* Equipo */
+        .team { display: grid; gap: 2.4rem; }
+        .person { display: grid; grid-template-columns: 96px 1fr; gap: 1.2rem; align-items: start; }
+        .person img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid var(--brass); }
+        .person h3 { font-size: 1.25rem; font-weight: 600; }
+        .person .role { color: var(--brass); font-size: .92rem; margin: .1rem 0 .5rem; }
+        .person p:last-child { color: var(--muted); font-size: .98rem; }
+        @media (min-width: 800px) { .team { grid-template-columns: 1fr 1fr; gap: 3.5rem; } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Cierre */
+        .closing { background: var(--brass); color: var(--ink); text-align: left; padding: 5rem 0; }
+        .closing .wrap { display: grid; gap: 2rem; align-items: center; }
+        .closing h2 { font-weight: 800; font-size: clamp(2rem, 5vw, 3.6rem); letter-spacing: -.03em; line-height: 1.05; }
+        .closing p { margin-top: 1rem; max-width: 34em; font-size: 1.1rem; }
+        @media (min-width: 860px) { .closing .wrap { grid-template-columns: 1.4fr auto; gap: 4rem; } }
 
-        .animate-fade-in {
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        footer { padding: 3rem 0 6.5rem; color: var(--muted); font-size: .92rem; }
+        footer .wrap { display: grid; gap: 1.6rem; }
+        footer .cols { display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; }
+        footer a { text-decoration: underline; text-underline-offset: 4px; }
+        footer a:hover { color: var(--bone); }
 
-        details summary::-webkit-details-marker { display: none; }
-        details summary { list-style: none; }
-        details[open] summary .faq-chevron { transform: rotate(180deg); color: #FFFFFF; }
-        details[open] { border-color: rgba(196, 196, 196, 0.5); background-color: rgba(18, 21, 29, 0.95); }
+        /* Barra fija en móvil */
+        .sticky { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 35; transform: translateY(140%); transition: transform .35s cubic-bezier(.16,1,.3,1); }
+        .sticky.on { transform: none; }
+        .sticky .btn { width: 100%; box-shadow: 0 12px 30px rgba(0,0,0,.6); }
+        @media (min-width: 900px) { .sticky { display: none; } footer { padding-bottom: 3rem; } }
 
-        body.modal-open { overflow: hidden; }
+        /* Ficha de pieza */
+        .modal { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 1rem; background: rgba(0,0,0,.82); opacity: 0; pointer-events: none; transition: opacity .25s; }
+        .modal.on { opacity: 1; pointer-events: auto; }
+        .sheet { background: var(--ink-2); border: 1px solid var(--line); border-radius: 24px; width: min(860px, 100%); max-height: 92vh; overflow: auto; display: grid; position: relative; }
+        .sheet .pic { background: var(--stone); display: grid; place-items: center; aspect-ratio: 1; }
+        .sheet .pic img { width: 100%; height: 100%; object-fit: contain; }
+        .sheet .txt { padding: 1.6rem; display: flex; flex-direction: column; gap: .8rem; }
+        .sheet h3 { font-size: 1.6rem; font-weight: 600; }
+        .sheet .p { font: 800 1.5rem var(--f-display); color: var(--brass); }
+        .sheet ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .6rem; font-size: .95rem; color: #d8d6d0; }
+        .sheet li { display: flex; gap: .6rem; } .sheet li::before { content: "✓"; color: var(--brass); }
+        .sheet .x { position: absolute; top: .7rem; right: .7rem; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: rgba(11,11,12,.8); color: var(--bone); font-size: 1.3rem; cursor: pointer; z-index: 2; }
+        @media (min-width: 760px) { .sheet { grid-template-columns: 1fr 1fr; } .sheet .pic { aspect-ratio: auto; min-height: 420px; } .sheet .txt { padding: 2.2rem; justify-content: center; } }
+        body.lock { overflow: hidden; }
+
+        @media (prefers-reduced-motion: reduce) { .ring { animation: none; opacity: .25; transform: scale(1); } .ring:nth-child(n+2) { display: none; } html { scroll-behavior: auto; } * { transition-duration: .01ms !important; } }
     </style>
 </head>
 
-<body class="bg-grid-tech selection:bg-[#C4C4C4] selection:text-black">
+<body>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
 
-    <!-- NAVEGACIÓN BOUTIQUE CON LOGO DESTACADO Y NOTABLE -->
-    <nav class="bg-[#07080B]/95 backdrop-blur-2xl fixed w-full z-40 top-0 border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.95)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex justify-between items-center min-h-[85px] sm:min-h-[95px] md:min-h-[110px]">
-            
-            <!-- LOGO NOTABLE (ESCALA AJUSTADA) -->
-            <a href="/" class="flex items-center shrink-0 group py-1">
-                <img src="studio42-logo.png" 
-                     alt="Studio 42 - Identidad Inteligente" 
-                     class="h-16 sm:h-20 md:h-24 lg:h-28 w-auto max-w-[210px] sm:max-w-[290px] md:max-w-none object-contain drop-shadow-[0_8px_22px_rgba(0,0,0,0.95)] scale-110 sm:scale-105 origin-left group-hover:scale-115 transition-all duration-300"/>
-            </a>
-            
-            <div class="hidden xl:flex space-x-7 font-semibold text-xs tracking-widest text-zinc-400 uppercase items-center mr-8">
-                <a href="#demo-interactiva" class="text-zinc-200 hover:text-white transition duration-300 flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                    <span>Demo en Vivo</span>
-                </a>
-                <a href="#soluciones" class="hover:text-white transition duration-300">Estaciones</a>
-                <a href="#hardware" class="hover:text-white transition duration-300">Hardware</a>
-                <a href="#simulador" class="hover:text-white transition duration-300">Simulador ROI</a>
-                <a href="#comparativa" class="hover:text-white transition duration-300">Por qué Nosotros</a>
-                <a href="#faq" class="hover:text-white transition duration-300">Preguntas</a>
+    <nav class="nav" aria-label="Principal">
+        <div class="wrap">
+            <a class="brand" href="#top" aria-label="Studio 42, inicio"><img src="img/logo.webp" width="38" height="38" alt="">Studio 42</a>
+            <div class="nav-links">
+                <a href="#como">Cómo funciona</a>
+                <a href="#piezas">Piezas</a>
+                <a href="#packs">Packs</a>
+                <a href="#calculadora">Calculadora</a>
+                <a href="#faq">Preguntas</a>
             </div>
-
-            <div class="flex items-center gap-3 sm:gap-4 shrink-0">
-                <a id="btn-vcard-dinamico" href="contacto.vcf?v=2" download="Studio42-Contacto.vcf" class="btn-vcard-cyber flex items-center gap-2 text-white text-xs font-bold uppercase tracking-wider py-2 sm:py-2.5 px-3.5 sm:px-4 rounded-full">
-                    <i class="fa-solid fa-id-badge text-cyan-300 text-sm"></i>
-                    <span id="txt-vcard-dinamico" class="hidden sm:inline">Guardar VCard VIP</span>
-                    <span class="sm:hidden">VCard</span>
-                </a>
-                <a href="#contacto" class="btn-silver px-4 sm:px-5 py-2 sm:py-2.5 text-xs uppercase tracking-wider rounded-full flex items-center gap-1.5 sm:gap-2">
-                    <span>Agendar</span>
-                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                </a>
+            <div class="nav-actions">
+                <a class="nav-vcard" href="contacto.vcf?v=2" download="Studio42-Contacto.vcf">Guardar contacto</a>
+                <a class="btn btn-brass btn-sm" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20una%20demo%20en%20mi%20local." target="_blank" rel="noopener">Pedir demo</a>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <header class="relative pt-36 sm:pt-44 md:pt-52 pb-16 px-4 sm:px-6 text-center overflow-hidden">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[550px] h-[250px] bg-[#C4C4C4]/15 blur-[100px] rounded-full pointer-events-none"></div>
-
-        <div class="max-w-5xl mx-auto relative z-10">
-            <div class="inline-flex items-center gap-2 bg-white/5 border border-[#C4C4C4]/40 px-3.5 py-1.5 rounded-full mb-5 sm:mb-8 backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                <span class="text-zinc-200 font-bold text-[10px] sm:text-xs uppercase tracking-widest">Estaciones Digitales de Mostrador // Logroño</span>
-            </div>
-
-            <h1 class="font-display text-3xl sm:text-5xl md:text-7xl font-black mb-5 sm:mb-8 leading-[1.14] tracking-tight text-white">
-                Consigue reseñas de 5 estrellas todos los días, <br class="hidden md:block">
-                <span class="text-silver-gradient block sm:inline mt-1">sin tener que pedir favores.</span>
-            </h1>
-
-            <p class="text-sm sm:text-lg md:text-xl text-zinc-300 mb-8 sm:mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-                El 90% de tus clientes satisfechos se van sin opinar y las quejas injustas dañan tu reputación. Con nuestra <strong>Estación Digital en metacrilato y madera noble con chip NFC NTAG216</strong>, tus clientes acercan su teléfono para agilizar gestiones, resolver dudas y valorar con 5★ en Google Maps con Escudo Activo de incidencias.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full max-w-md mx-auto sm:max-w-none">
-                <a href="#contacto" class="btn-silver px-8 sm:px-10 py-4 rounded-full text-xs font-black uppercase tracking-widest w-full sm:w-auto shadow-xl text-center flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-base"></i>
-                    <span>Probar Demo Gratis en mi Local</span>
-                </a>
-                <a href="#demo-interactiva" class="bg-white/5 hover:bg-white/10 text-white border border-white/20 px-6 sm:px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest w-full sm:w-auto transition duration-300 flex items-center justify-center gap-2 text-center">
-                    <i class="fa-solid fa-play text-[#C4C4C4] text-xs"></i>
-                    <span>Ver Cómo Funciona en Vivo</span>
-                </a>
-            </div>
-
-            <div class="mt-12 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <main id="contenido">
+        <header class="hero" id="top">
+            <div class="wrap">
                 <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-white">+18.400</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Interacciones NFC</div>
-                </div>
-                <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-[#C4C4C4]">4 Casos</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Activos en Logroño</div>
-                </div>
-                <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-cyan-400">4.9 ★</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Media en Google</div>
-                </div>
-                <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-white">0 €</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Cuotas Ocultas</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- WELCOME PACK (AJUSTADO EN ESCRITORIO SIN RECORTES) -->
-        <div class="max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto mt-12 relative w-full px-4 sm:px-6">
-            <div class="card-silver-premium p-3 sm:p-5 flex flex-col items-center">
-                <div class="w-full h-auto max-h-[320px] sm:max-h-[380px] md:max-h-[440px] rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 flex items-center justify-center p-2">
-                    <img src="caja-real.png" alt="Welcome Pack Studio 42" class="w-full h-auto max-h-full object-contain object-center drop-shadow-2xl">
-                </div>
-                <div class="w-full mt-4 pt-3 sm:pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center text-left text-xs text-zinc-400 gap-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#C4C4C4] shrink-0 border border-white/10">
-                            <i class="fa-solid fa-box-open"></i>
-                        </div>
-                        <div>
-                            <strong class="text-white block">Equipamiento Físico Premium</strong>
-                            <span class="text-[11px] sm:text-xs">Caja rígida imantada, tarjeta de madera noble y display acrílico.</span>
-                        </div>
+                    <h1>Que valorar tu negocio sea cuestión de un toque.</h1>
+                    <p class="lead">Estaciones NFC y QR para tu mostrador. El cliente acerca el móvil y llega a tu landing a medida, a la ventana de reseña de Google o a un WhatsApp con la gerencia. Él elige. Nada se filtra.</p>
+                    <div class="cta">
+                        <a class="btn btn-brass" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20una%20demo%20gratis%20en%20mi%20local." target="_blank" rel="noopener">
+                            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>
+                            Pedir demo gratis en mi local
+                        </a>
+                        <a class="btn btn-line" href="#demo">Probarlo aquí mismo</a>
                     </div>
-                    <div class="inline-flex items-center gap-2 bg-white/10 text-zinc-200 px-3.5 py-1 rounded-full font-bold text-[11px] shrink-0 border border-white/20">
-                        <i class="fa-solid fa-bolt text-[#C4C4C4]"></i>
-                        <span>Entrega Llave en Mano en tu Negocio</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <section id="demo-interactiva" class="py-20 px-4 sm:px-6 bg-[#0B0D13] border-t border-white/5">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/20 px-3 py-1 rounded-full mb-4">
-                <i class="fa-solid fa-hand-pointer text-[#C4C4C4] text-xs"></i>
-                <span class="text-zinc-200 font-bold text-xs uppercase tracking-widest">Simulador Interactivo</span>
-            </div>
-            <h2 class="font-display text-2xl sm:text-4xl font-black text-white mb-3">Toca la pantalla y prueba el sistema</h2>
-            <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto mb-10 font-light">Esto es exactamente lo que ve tu cliente al acercar su móvil a la Estación de Mostrador.</p>
-
-            <div class="max-w-sm mx-auto bg-[#12151F] border-2 border-[#C4C4C4] rounded-[36px] p-6 shadow-2xl relative text-center">
-                <div class="w-14 h-14 mx-auto rounded-full bg-black border-2 border-[#C4C4C4] overflow-hidden flex items-center justify-center mb-3">
-                    <img src="studio42-logo.png" alt="Logo Demo" class="w-10 h-10 object-contain">
-                </div>
-                <h3 class="text-white font-black text-lg tracking-wide mb-0.5">TU NEGOCIO LOCAL</h3>
-                <p class="text-zinc-400 text-xs font-light mb-6">Asistente de Mostrador & Escudo Activo</p>
-
-                <div class="flex justify-center gap-2 text-2xl mb-6" id="demo-stars">
-                    <i class="fa-solid fa-star text-zinc-600 hover:text-[#C4C4C4] cursor-pointer transition transform hover:scale-125" onclick="testDemo(1)"></i>
-                    <i class="fa-solid fa-star text-zinc-600 hover:text-[#C4C4C4] cursor-pointer transition transform hover:scale-125" onclick="testDemo(2)"></i>
-                    <i class="fa-solid fa-star text-zinc-600 hover:text-[#C4C4C4] cursor-pointer transition transform hover:scale-125" onclick="testDemo(3)"></i>
-                    <i class="fa-solid fa-star text-zinc-600 hover:text-[#C4C4C4] cursor-pointer transition transform hover:scale-125" onclick="testDemo(4)"></i>
-                    <i class="fa-solid fa-star text-zinc-600 hover:text-[#C4C4C4] cursor-pointer transition transform hover:scale-125" onclick="testDemo(5)"></i>
-                </div>
-
-                <div id="demo-output" class="bg-black/60 p-4 rounded-xl border border-white/10 text-xs text-zinc-300 min-h-[90px] flex items-center justify-center">
-                    <span>👆 Haz clic en las estrellas para simular la reacción del sistema.</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="comparativa" class="py-20 px-4 sm:px-6 bg-[#07080B] border-t border-white/5">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-14">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Comparativa Directa</span>
-                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-3">El viejo método vs. Estación Studio 42</h2>
-                <p class="text-zinc-400 text-xs sm:text-sm font-light">Por qué los carteles de papel y pedir favores de palabra están costándote clientes cada semana.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-red-950/20 border border-red-500/30 p-6 sm:p-8 rounded-3xl">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-lg font-bold">✕</div>
-                        <h3 class="text-lg font-bold text-white">Método Antiguo (Papel o de palabra)</h3>
-                    </div>
-                    <ul class="space-y-4 text-xs text-zinc-400 font-light">
-                        <li class="flex items-start gap-2.5"><span class="text-red-400 font-bold">✕</span> El cliente promete dejar la reseña pero lo olvida en cuanto cruza la puerta.</li>
-                        <li class="flex items-start gap-2.5"><span class="text-red-400 font-bold">✕</span> Los clientes insatisfechos van directos a ponerte 1★ pública sin dar opción a solucionarlo.</li>
-                        <li class="flex items-start gap-2.5"><span class="text-red-400 font-bold">✕</span> Cartelería de papel arrugada y URLs que nadie teclea en el teléfono.</li>
-                        <li class="flex items-start gap-2.5"><span class="text-red-400 font-bold">✕</span> Recepción y mostrador saturados resolviendo dudas y cobros repetitivos.</li>
+                    <ul class="facts" aria-label="Datos clave">
+                        <li>Sin app que instalar</li>
+                        <li>Funciona con NFC y con QR</li>
+                        <li>Pago único, desde 149 € + IVA</li>
+                        <li>Hecho en Logroño</li>
                     </ul>
                 </div>
 
-                <div class="bg-[#10131A] border-2 border-[#C4C4C4] p-6 sm:p-8 rounded-3xl shadow-xl relative">
-                    <span class="absolute -top-3 right-6 bg-gradient-to-r from-zinc-200 to-[#C4C4C4] text-black font-black text-[9px] uppercase px-3 py-0.5 rounded-full shadow-md">Solución Definitiva</span>
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center text-lg font-bold border border-white/20">✓</div>
-                        <h3 class="text-lg font-bold text-white">Estación Phygital Studio 42</h3>
-                    </div>
-                    <ul class="space-y-4 text-xs text-zinc-200 font-light">
-                        <li class="flex items-start gap-2.5"><span class="text-[#C4C4C4] font-bold">✓</span> <strong>1 Toque con el móvil:</strong> Abre la landing operativa y la ventana de 5★ en 2 segundos.</li>
-                        <li class="flex items-start gap-2.5"><span class="text-[#C4C4C4] font-bold">✓</span> <strong>Escudo Activo:</strong> Las incidencias van a tu WhatsApp antes de ser públicas en Google.</li>
-                        <li class="flex items-start gap-2.5"><span class="text-[#C4C4C4] font-bold">✓</span> <strong>Hardware de Lujo:</strong> Metacrilato pulido y tarjetas de madera que elevan la categoría del local.</li>
-                        <li class="flex items-start gap-2.5"><span class="text-[#C4C4C4] font-bold">✓</span> <strong>Asistente Operativo:</strong> Enlaces para citas, triaje o Bizum actualizables en la nube sin reimprimir.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="simulador" class="py-20 px-4 sm:px-6 bg-gradient-to-b from-[#080A0F] to-[#0D1017] border-t border-white/5">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/20 px-3 py-1 rounded-full mb-4">
-                <i class="fa-solid fa-bolt text-[#C4C4C4] text-xs"></i>
-                <span class="text-zinc-200 font-bold text-xs uppercase tracking-widest">Calculadora de Potencial</span>
-            </div>
-            <h2 class="font-display text-2xl sm:text-4xl font-black text-white mb-4 tracking-tight">¿Cuánto dinero dejas sobre la mesa cada mes?</h2>
-            <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto mb-8 sm:mb-10 font-light">Calcula el impacto de convertir solo el 3% de tus clientes presenciales en reseñas de 5 estrellas con Studio 42.</p>
-
-            <div class="bg-[#10131B] border border-[#C4C4C4]/35 p-6 sm:p-8 rounded-3xl shadow-2xl text-left">
-                <div class="mb-6 sm:mb-8">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-3 gap-1">
-                        <label class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Clientes presenciales por semana:</label>
-                        <span id="label-clientes" class="text-lg sm:text-xl font-black text-zinc-100">300 clientes</span>
-                    </div>
-                    <input id="slider-clientes" type="range" min="50" max="1500" step="50" value="300" class="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-[#C4C4C4]">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-6 border-t border-white/10 text-center">
-                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Nuevas Reseñas 5★ / Mes</span>
-                        <span id="calc-resenas" class="text-2xl sm:text-3xl font-black text-white">+36</span>
-                        <span class="text-[10px] text-emerald-400 block mt-1">Con Escudo Activado</span>
-                    </div>
-                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Posición en Google Maps</span>
-                        <span id="calc-ranking" class="text-2xl sm:text-3xl font-black text-zinc-200">Top 3</span>
-                        <span class="text-[10px] text-zinc-400 block mt-1">En tu código postal</span>
-                    </div>
-                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Impacto Estimado / Mes</span>
-                        <span id="calc-facturacion" class="text-2xl sm:text-3xl font-black text-emerald-400">+1.200 €</span>
-                        <span class="text-[10px] text-zinc-400 block mt-1">Nuevos clientes atraídos</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="soluciones" class="py-24 sm:py-28 px-4 sm:px-6 bg-[#07080B] border-t border-white/5 relative">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16 sm:mb-20">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Infraestructura Phygital Llave en Mano</span>
-                <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">Estaciones Digitales de Mostrador</h2>
-                <p class="text-zinc-400 max-w-2xl mx-auto text-xs sm:text-sm md:text-base font-light">Hardware de diseño en mostrador conectado a una landing operativa a medida: agiliza la atención de tu equipo, desvía quejas por privado y dispara tus 5 estrellas en Google Maps.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
-                <div class="card-base p-6 sm:p-8 flex flex-col justify-between">
-                    <div>
-                        <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full inline-block mb-4 border border-white/10">Punto de Cobro Individual</span>
-                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Imán de Mostrador</h3>
-                        <p class="text-zinc-400 text-xs font-light mb-6">Convierte la zona de caja en un asistente rápido sin esperas ni fricción.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/10">
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-white font-black text-3xl sm:text-4xl">149,00 €</span>
-                                <span class="text-zinc-500 text-xs">+ IVA</span>
+                <div class="stage" id="demo">
+                    <span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span>
+                    <div class="phone" role="group" aria-label="Demostración de la pantalla que ve tu cliente">
+                        <div class="screen">
+                            <img class="mini-logo" src="img/logo.webp" width="44" height="44" alt="">
+                            <h3>TU NEGOCIO LOCAL</h3>
+                            <p class="sub">Lo que ve tu cliente al acercar el móvil</p>
+                            <div class="app-btns">
+                                <div class="app-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Reservar mesa o cita</div>
+                                <div class="app-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Cómo llegar</div>
+                                <div class="app-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Carta, servicios y precios</div>
                             </div>
-                            <span class="text-[11px] text-zinc-500 block mt-1">Pago único // Sin mensualidades</span>
+                            <div class="opinion">
+                                <p>¿Qué tal ha ido todo?</p>
+                                <div class="two">
+                                    <button type="button" data-op="google" aria-pressed="false">Dejar mi opinión en Google</button>
+                                    <button type="button" data-op="gerencia" aria-pressed="false">Hablar con la gerencia</button>
+                                </div>
+                                <div class="reaction" id="reaccion" aria-live="polite">Pulsa una de las dos. Las dos están siempre a la vista y el cliente decide.</div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-                        <ul class="space-y-3.5 text-zinc-300 text-xs font-light mb-8">
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Landing Operativa a Medida:</strong> Menú móvil interactivo con botones rápidos (citas, contacto y servicios) sin instalar apps.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Escudo Activo de Reputación:</strong> Filtro que guía las 5★ directas a Google Maps y desvía quejas a WhatsApp privado.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>1 Display Acrílico Biselado</strong> de 3 mm con antena NFC NTAG216 Última Generación y QR dinámico.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>2 Llaveros Smart NFC</strong> NTAG216 de cuero cosido para atención móvil en sala.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Entrega e Instalación Llave en Mano:</strong> Configurado y probado en tu local en Logroño.</span></li>
+        <section id="como" style="padding-top:3rem">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>De acercar el móvil a tu reseña, en tres pasos</h2>
+                    <p>Sin descargar nada y sin pedirle favores a nadie.</p>
+                </div>
+                <ol class="steps">
+                    <li><h3>El cliente acerca el móvil</h3><p>Al display, al llavero del camarero o a la tarjeta. Si su móvil no lee NFC, escanea el QR que va impreso junto al chip.</p></li>
+                    <li><h3>Se abre tu landing a medida</h3><p>Botones útiles para tu negocio: pedir cita, ver la carta, cómo llegar, pagar por Bizum, guardar tu contacto.</p></li>
+                    <li><h3>Elige cómo contarte su experiencia</h3><p>Dos botones iguales: dejar su opinión directamente en la ventana de reseña de tu ficha de Google, o hablar con la gerencia por WhatsApp.</p></li>
+                </ol>
+                <div class="promise">
+                    <p><strong>Cumple las normas de Google.</strong> No filtramos por estrellas, no ocultamos opiniones y no ofrecemos nada a cambio de una reseña. Eso protege tu ficha.</p>
+                </div>
+            </div>
+        </section>
+
+        <section style="background: var(--ink-2); border-block: 1px solid var(--line)">
+            <div class="wrap">
+                <div class="section-head"><h2>Lo que cambia en tu mostrador</h2></div>
+                <div class="versus">
+                    <div>
+                        <h3>Hoy</h3>
+                        <ul>
+                            <li>El cliente promete opinar y se le olvida al cruzar la puerta.</li>
+                            <li>Si algo falló, no hay un canal fácil para contártelo en privado.</li>
+                            <li>Carteles de papel y enlaces largos que nadie teclea.</li>
+                            <li>El equipo repite las mismas respuestas y cobros una y otra vez.</li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20instalar%20el%20Pack%20Imán%20de%20Mostrador." target="_blank" class="block w-full py-3.5 text-center text-xs font-extrabold uppercase tracking-wider rounded-xl border border-white/20 text-white hover:bg-white hover:text-black transition duration-300">
-                        Digitalizar mi Mostrador
-                    </a>
-                </div>
-
-                <div class="card-silver-premium p-6 sm:p-8 flex flex-col justify-between transform lg:-translate-y-4 shadow-2xl relative">
-                    <div>
-                        <div class="flex items-center justify-between gap-2 mb-4">
-                            <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
-                                Equipo y Sala
-                            </span>
-                            <span class="bg-gradient-to-r from-zinc-100 to-[#C4C4C4] text-black text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md shrink-0">
-                                ★ RECOMENDADO
-                            </span>
-                        </div>
-
-                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Efecto Multiplicador</h3>
-                        <p class="text-zinc-400 text-xs font-light mb-6">Despliegue operativo completo para coordinar a tu equipo y proteger la reputación del negocio.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/10">
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-white font-black text-3xl sm:text-4xl">349,00 €</span>
-                                <span class="text-zinc-500 text-xs">+ IVA</span>
-                            </div>
-                            <span class="text-[11px] text-zinc-300 font-semibold block mt-1">Amortizado en las primeras semanas</span>
-                        </div>
-
-                        <ul class="space-y-3.5 text-zinc-200 text-xs font-light mb-8">
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-white mt-0.5"></i><span><strong>Estación de Sala Avanzada:</strong> Landing con utilidades operativas (asistente de dudas frecuentes, gestor GPS de parking y triaje).</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-white mt-0.5"></i><span><strong>Escudo Anti-Quejas Privado:</strong> Bloqueo preventivo de reseñas negativas públicas derivando el contacto al responsable.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-white mt-0.5"></i><span><strong>10 Llaveros Smart NFC NTAG216:</strong> Un punto de captación individual para cada empleado o mesa.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-white mt-0.5"></i><span><strong>1 Display Acrílico Central:</strong> Soporte de alto impacto para mostrador o recepción.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-white mt-0.5"></i><span><strong>Tarjeta Ejecutiva en Madera Noble NFC NTAG216:</strong> Para gerencia con chip de contacto vCard ilimitado.</span></li>
+                    <div class="new">
+                        <h3>Con Studio 42</h3>
+                        <ul>
+                            <li>Un toque y está en la ventana de reseña de tu ficha de Google.</li>
+                            <li>Quien prefiere hablar contigo en privado tiene su botón, igual de visible.</li>
+                            <li>Hardware cuidado que sube la categoría del local.</li>
+                            <li>Citas, carta o Bizum en la misma pantalla, y los enlaces se cambian en remoto sin reimprimir.</li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20Pack%20Efecto%20Multiplicador." target="_blank" class="btn-silver block w-full py-3.5 sm:py-4 text-center text-xs font-black uppercase tracking-widest rounded-xl shadow-lg">
-                        Activar para mi Equipo
-                    </a>
                 </div>
+            </div>
+        </section>
 
-                <div class="card-base p-6 sm:p-8 flex flex-col justify-between">
-                    <div>
-                        <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full inline-block mb-4 border border-white/10">Infraestructura Boutique</span>
-                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Dominio Local Total</h3>
-                        <p class="text-zinc-400 text-xs font-light mb-6">Infraestructura phygital integral y producción audiovisual para el local referente de su zona.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/10">
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-white font-black text-3xl sm:text-4xl">549,00 €</span>
-                                <span class="text-zinc-500 text-xs">+ IVA</span>
-                            </div>
-                            <span class="text-[11px] text-zinc-500 block mt-1">Monopolio visual y técnico</span>
-                        </div>
+        <section id="piezas" class="on-stone">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Las piezas donde vive tu landing</h2>
+                    <p>Todas llevan chip NFC NTAG216. Tú eliges dónde quieres el toque: en la barra, en el bolsillo del camarero o en la manga del equipo.</p>
+                </div>
+                <div class="pieces">
+                    <article class="piece big">
+                        <div class="photo"><img src="img/expositor.webp" width="1000" height="1000" alt="Display acrílico inclinado con QR y chip NFC de Studio 42" loading="lazy"></div>
+                        <div class="row"><h3>Display acrílico inclinado</h3><span class="price">49 €<small> + IVA</small></span></div>
+                        <p>Para la barra o la caja. Metacrilato biselado de 3 mm con chip NFC y QR grabado.</p>
+                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="expositor">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20solicitar%20el%20Display%20Acrílico.">Pedir por WhatsApp</a></div>
+                    </article>
+                    <article class="piece big">
+                        <div class="photo"><img src="img/llavero.webp" width="1000" height="1000" alt="Llavero de cuero con chip NFC y cohete de Studio 42" loading="lazy"></div>
+                        <div class="row"><h3>Llavero smart de cuero</h3><span class="price">24,90 €<small> + IVA</small></span></div>
+                        <p>Para el personal de sala: piel cosida, resistente al agua y con chip de uso intensivo.</p>
+                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="llavero">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20Llaveros%20Smart%20de%20cuero.">Pedir por WhatsApp</a></div>
+                    </article>
+                    <article class="piece">
+                        <div class="photo"><img src="img/tarjeta-madera.webp" width="1000" height="1000" alt="Tarjeta ejecutiva de madera con chip NFC" loading="lazy"></div>
+                        <div class="row"><h3>Tarjeta de madera</h3><span class="price">39,90 €<small> + IVA</small></span></div>
+                        <p>Tu contacto directo a la agenda del cliente, en madera natural grabada.</p>
+                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="tarjeta">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20la%20Tarjeta%20Ejecutiva%20en%20Madera%20Noble.">Pedir</a></div>
+                    </article>
+                    <article class="piece wide">
+                        <div class="photo framed"><img src="img/welcome-pack.webp" width="1100" height="1100" alt="Caja Welcome Pack abierta con tarjeta de madera, display y llavero" loading="lazy"></div>
+                        <div class="row"><h3>Welcome Pack directivos</h3><span class="price">89 €<small> + IVA</small></span></div>
+                        <p>Caja rígida imantada con tarjeta de madera, display y dos llaveros listos para usar.</p>
+                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="pack">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20el%20Welcome%20Pack.">Pedir</a></div>
+                    </article>
+                    <article class="piece wide">
+                        <div class="photo framed"><img src="img/camiseta.webp" width="1000" height="1000" alt="Manga de camiseta negra con parche NFC Tap to review" loading="lazy"></div>
+                        <div class="row"><h3>Camiseta del equipo</h3><span class="price" style="font-size:1rem">Precio a consultar</span></div>
+                        <p>Parche NFC en la manga: el cliente acerca el móvil al brazo del camarero.</p>
+                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="camiseta">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20información%20y%20precio%20de%20las%20camisetas%20NFC.">Pedir precio</a></div>
+                    </article>
+                </div>
+            </div>
+        </section>
 
-                        <ul class="space-y-3.5 text-zinc-300 text-xs font-light mb-8">
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Micro-Tour Cinematográfico con Dron AESA:</strong> Grabación aérea de interior y fachada optimizada para Google Maps e Instagram.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Welcome Pack VIP:</strong> Caja ejecutiva imantada + Tarjeta de madera noble grabada.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>2 Displays Acrílicos:</strong> Cobertura simultánea para la puerta de entrada y caja de cobro.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>25 Llaveros Smart NFC NTAG216:</strong> Dotación total para flotas de personal y atención en exteriores.</span></li>
-                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-zinc-200 mt-0.5"></i><span><strong>Centro de Mando Personalizado:</strong> Landing multi-utilidad conectada a la nube serverless con Escudo Activo.</span></li>
+        <section id="packs">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Tres packs, pago único</h2>
+                    <p>Incluyen la landing a medida, configurada y probada en tu local de Logroño. Precios sin IVA.</p>
+                </div>
+                <div class="packs">
+                    <article class="pack">
+                        <h3>Imán de mostrador</h3>
+                        <p class="for">Convierte la zona de caja en un asistente rápido, sin esperas.</p>
+                        <p class="cost">149 €<small>+ IVA</small></p>
+                        <ul>
+                            <li><span><b>Landing a medida</b> con botones rápidos para citas, contacto y servicios.</span></li>
+                            <li><span><b>Reseña directa y canal privado:</b> dos botones igual de visibles.</span></li>
+                            <li><span><b>1 display acrílico</b> biselado de 3 mm con chip NFC y QR.</span></li>
+                            <li><span><b>2 llaveros smart</b> de cuero con chip NFC.</span></li>
+                            <li><span><b>Instalación llave en mano</b> y prueba en tu local.</span></li>
                         </ul>
-                    </div>
-                    <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20el%20Pack%20Dominio%20Local." target="_blank" class="block w-full py-3.5 text-center text-xs font-extrabold uppercase tracking-wider rounded-xl border border-white/20 text-white hover:bg-white hover:text-black transition duration-300">
-                        Dominar mi Sector
-                    </a>
+                        <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20instalar%20el%20Pack%20Imán%20de%20Mostrador.">Quiero este pack</a>
+                    </article>
+                    <article class="pack rec">
+                        <span class="tag">El más elegido para equipos</span>
+                        <h3>Efecto multiplicador</h3>
+                        <p class="for">Para equipos con varios puntos de atención.</p>
+                        <p class="cost">349 €<small>+ IVA</small></p>
+                        <ul>
+                            <li><span><b>Landing avanzada</b> con dudas frecuentes, parking por GPS y triaje.</span></li>
+                            <li><span><b>Canal privado con la gerencia</b> junto a la reseña pública, sin sustituirla.</span></li>
+                            <li><span><b>10 llaveros smart</b> con chip NFC: uno por empleado o mesa.</span></li>
+                            <li><span><b>1 display acrílico</b> para mostrador o recepción.</span></li>
+                            <li><span><b>Tarjeta de madera</b> para gerencia, con tu contacto vCard.</span></li>
+                        </ul>
+                        <a class="btn btn-brass" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20Pack%20Efecto%20Multiplicador.">Quiero este pack</a>
+                    </article>
+                    <article class="pack">
+                        <h3>Dominio local total</h3>
+                        <p class="for">Infraestructura completa y vídeo para el local de referencia de su zona.</p>
+                        <p class="cost">549 €<small>+ IVA</small></p>
+                        <ul>
+                            <li><span><b>Micro-tour con dron</b> (piloto certificado AESA) de interior y fachada, listo para Google Maps e Instagram.</span></li>
+                            <li><span><b>Welcome Pack</b>: caja imantada y tarjeta de madera grabada.</span></li>
+                            <li><span><b>2 displays acrílicos</b> para la puerta y la caja.</span></li>
+                            <li><span><b>25 llaveros smart</b> con chip NFC.</span></li>
+                            <li><span><b>Centro de mando</b> personalizado conectado a la nube.</span></li>
+                        </ul>
+                        <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20el%20Pack%20Dominio%20Local.">Quiero este pack</a>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="hardware" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#090B10] border-t border-white/5">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-14 sm:mb-16">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Módulos Individuales</span>
-                <h2 class="font-display text-2xl sm:text-3xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">Hardware de Ampliación</h2>
-                <p class="text-zinc-400 max-w-2xl mx-auto text-xs sm:text-sm md:text-base font-light">Dispositivos adicionales para clientes que ya disponen de una estación phygital o desean ampliar puntos de interacción.</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#C4C4C4]/50 transition duration-300">
+        <section id="calculadora" style="background: var(--ink-2); border-block: 1px solid var(--line)">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>¿Cuántas reseñas podrías sumar?</h2>
+                    <p>Una simulación orientativa con un supuesto: que 3 de cada 100 clientes dejan su opinión.</p>
+                </div>
+                <div class="calc">
                     <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5 relative overflow-hidden">
-                            <div class="absolute w-32 h-32 bg-[#C4C4C4]/15 rounded-full blur-2xl pointer-events-none"></div>
-                            <img src="expositor-real.png" alt="Display Acrílico NFC" class="relative z-10 max-h-full max-w-full object-contain drop-shadow-md">
+                        <label for="clientes">Clientes por semana <output id="clientes-val">300</output></label>
+                        <input id="clientes" type="range" min="50" max="1500" step="50" value="300">
+                    </div>
+                    <div>
+                        <div class="results">
+                            <div><output id="r-mes">+36</output><span>reseñas nuevas al mes</span></div>
+                            <div><output id="r-anio">+432</output><span>reseñas en 12 meses</span></div>
+                            <div><output id="r-vistas">1.200</output><span>clientes ven tu mostrador al mes</span></div>
                         </div>
-                        <span class="text-[10px] font-bold text-[#C4C4C4] uppercase tracking-widest">Mostrador</span>
-                        <h4 class="text-base font-bold text-white mt-1 mb-2">Display Acrílico Inclinado</h4>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Soporte A6 biselado para barras y cajas con antena NFC NTAG216 de máxima memoria y QR grabado.</p>
-                    </div>
-                    <div>
-                        <div class="text-xl font-black text-white mb-3">49,00 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
-                        <button onclick="abrirModalHardware('expositor')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/15 transition">
-                            Ver Especificaciones
-                        </button>
+                        <p class="disclaimer">Es un supuesto, no una garantía ni una media de nuestros clientes. El resultado real depende de tu local.</p>
                     </div>
                 </div>
-
-                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#C4C4C4]/50 transition duration-300">
-                    <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5 relative overflow-hidden">
-                            <div class="absolute w-32 h-32 bg-[#C4C4C4]/15 rounded-full blur-2xl pointer-events-none"></div>
-                            <img src="llavero-real.png" alt="Llavero Cuero NFC" class="relative z-10 max-h-full max-w-full object-contain drop-shadow-md">
-                        </div>
-                        <span class="text-[10px] font-bold text-[#C4C4C4] uppercase tracking-widest">Personal de Sala</span>
-                        <h4 class="text-base font-bold text-white mt-1 mb-2">Llavero Cuero Smart NFC</h4>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Acabado en piel cosida, impermeable y equipado con chip NFC NTAG216 para uso intensivo.</p>
-                    </div>
-                    <div>
-                        <div class="text-xl font-black text-white mb-3">24,90 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
-                        <button onclick="abrirModalHardware('llavero')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/15 transition">
-                            Ver Especificaciones
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#C4C4C4]/50 transition duration-300">
-                    <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5 relative overflow-hidden">
-                            <div class="absolute w-32 h-32 bg-[#C4C4C4]/15 rounded-full blur-2xl pointer-events-none"></div>
-                            <img src="tarjeta-madera-real.png" alt="Tarjeta Ejecutiva en Madera Noble NFC" class="relative z-10 max-h-full max-w-full object-contain drop-shadow-md">
-                        </div>
-                        <span class="text-[10px] font-bold text-[#C4C4C4] uppercase tracking-widest">Networking VIP</span>
-                        <h4 class="text-base font-bold text-white mt-1 mb-2">Tarjeta Ejecutiva en Madera Noble NFC</h4>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Madera natural grabada con chip NTAG216 invisible. Entrega tus datos vCard directo a la agenda de tu cliente.</p>
-                    </div>
-                    <div>
-                        <div class="text-xl font-black text-white mb-3">39,90 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
-                        <button onclick="abrirModalHardware('tarjeta')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/15 transition">
-                            Ver Especificaciones
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-[#C4C4C4]/50 transition duration-300">
-                    <div>
-                        <div class="h-44 bg-black/40 rounded-xl mb-4 flex items-center justify-center p-4 border border-white/5 relative overflow-hidden">
-                            <div class="absolute w-32 h-32 bg-[#C4C4C4]/15 rounded-full blur-2xl pointer-events-none"></div>
-                            <img src="caja-real.png" alt="Welcome Pack Directivos" class="relative z-10 max-h-full max-w-full object-contain drop-shadow-md">
-                        </div>
-                        <span class="text-[10px] font-bold text-[#C4C4C4] uppercase tracking-widest">Edición Especial</span>
-                        <h4 class="text-base font-bold text-white mt-1 mb-2">Welcome Pack Directivos</h4>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed mb-4">Caja rígida imantada con tarjeta de madera, display y dos llaveros de control con hardware NTAG216.</p>
-                    </div>
-                    <div>
-                        <div class="text-xl font-black text-white mb-3">89,00 € <span class="text-xs text-zinc-500 font-normal">+ IVA</span></div>
-                        <button onclick="abrirModalHardware('camisetacaja')" class="w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/15 transition">
-                            Ver Especificaciones
-                        </button>
-                    </div>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="estudio" class="py-20 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-white/5">
-        <div class="text-center mb-14 sm:mb-16">
-            <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Identidad Local</span>
-            <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-4">El Equipo Detrás de Studio 42</h2>
-            <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto font-light">Ingeniería técnica y diseño visual con base en Logroño.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
-            <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 sm:p-8 text-center hover:border-white/40 transition duration-300">
-                <img src="manuel.jpg" alt="Manuel - Estrategia Técnica" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full mx-auto mb-5 sm:mb-6 object-cover border-2 border-[#C4C4C4] shadow-lg">
-                <h3 class="text-xl sm:text-2xl font-black text-white mb-1">Manuel</h3>
-                <p class="text-zinc-300 font-bold tracking-widest uppercase text-[10px] mb-4">ESTRATEGIA TÉCNICA & OPERACIONES</p>
-                <p class="text-zinc-400 text-xs font-light leading-relaxed">
-                    Tecnico en desarrollo web serverless, SEO Local y piloto de dron certificado por AESA. Coordino la arquitectura digital para que cada chip NTAG216 y redirección funcione con precisión absoluta en tu local.
-                </p>
-            </div>
-
-            <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 sm:p-8 text-center hover:border-white/40 transition duration-300">
-                <img src="melina.jpg" alt="Melina - Dirección de Arte" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full mx-auto mb-5 sm:mb-6 object-cover border-2 border-[#C4C4C4] shadow-lg">
-                <h3 class="text-xl sm:text-2xl font-black text-white mb-1">Melina</h3>
-                <p class="text-zinc-300 font-bold tracking-widest uppercase text-[10px] mb-4">DIRECCIÓN DE ARTE & PACKAGING</p>
-                <p class="text-zinc-400 text-xs font-light leading-relaxed">
-                    Responsable del acabado estético y la presentación física del estudio. Cuido cada textura, empaque de lujo y combinación cromática para que el cliente perciba tu marca como un referente de distinción.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#080A0F] border-t border-white/5">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-14 sm:mb-16">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Claridad Absoluta</span>
-                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-4">Resolvemos Todas tus Dudas</h2>
-                <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto font-light">Todo lo que necesitas saber antes de transformar tu mostrador.</p>
-            </div>
-
-            <div class="space-y-4 text-left">
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">01.</span> ¿Cómo funciona exactamente el sistema para filtrar quejas y potenciar las 5 estrellas?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        Al aproximar el teléfono al soporte, se despliega una interfaz rápida. Si el cliente selecciona 4 o 5 estrellas, el sistema lo conduce directamente a la ventana oficial de Google Maps para publicar su reseña pública. Si pulsa una valoración menor, se activa de forma prioritaria un canal privado de WhatsApp hacia el teléfono del responsable del local. De este modo, solucionas el descontento en privado, fidelizas al cliente y evitas manchas públicas en tu perfil.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">02.</span> ¿Cumple esta metodología con la legalidad de Consumo y las políticas de Google?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        Sí, al 100%. A diferencia de herramientas que intentan engañar a los algoritmos con bots o reseñas falsas (lo cual Google penaliza cerrando fichas), nuestra tecnología no inventa nada: canaliza opiniones de clientes reales que están físicamente en tu local. Además, la interfaz incluye siempre la opción de continuar a Google de forma voluntaria, actuando legítimamente como un canal de atención prioritaria y resolución de incidencias.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">03.</span> ¿Qué ocurre si el móvil de mi cliente es antiguo o no tiene el chip NFC encendido?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        Nuestros displays y tótems incorporan un código QR dinámico de alta resolución serigrafiado junto al sensor NFC. Si un cliente tiene un teléfono que no lee NFC o lo tiene desactivado, simplemente abre la cámara de fotos, enfoca el código y accede exactamente a la misma experiencia interactiva. Cubrimos el 100% de los teléfonos del mercado.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">04.</span> ¿Tengo que pagar cuotas mensuales o comisiones por cada reseña obtenida?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        No. Nuestras Estaciones Phygital son de pago único llave en mano. El hardware, la programación de la landing serverless y la configuración inicial quedan pagados el primer día. Los dispositivos físicos son 100% de tu propiedad y no te cobramos comisiones por las reseñas o clientes que consigas.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">05.</span> Si cambio de carta, de número de teléfono o abro otra sede, ¿tengo que cambiar el hardware?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        Para nada. Esta es la gran ventaja de la tecnología Studio 42. Los chips apuntan a enlaces inteligentes en la nube (*arquitectura serverless*). Si cambias de carta, de número de Bizum o de sede, nosotros actualizamos el destino en nuestro sistema de forma remota en menos de 5 minutos, sin que tengas que gastar un solo euro en cambiar los soportes de tu local.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">06.</span> ¿En cuánto tiempo amortizo la inversión de un Pack?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        La mayoría de negocios locales en Logroño amortizan el pack durante las primeras 3 a 6 semanas. Escalar solo dos posiciones en el mapa de Google genera entre un 15% y un 30% más de llamadas, clics de navegación y visitas físicas. Con captar 3 o 4 clientes nuevos que elijan tu negocio en vez del de la acera de enfrente, el sistema ya está pagado de sobra.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">07.</span> ¿En qué consiste exactamente el Micro-Tour con dron del Pack Dominio?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        Manuel Ortiz acude personalmente a tu local con dron equipado con protecciones completas para interiores y certificación oficial de piloto UAS por AESA. Grabamos un recorrido cinematográfico dinámico del interior y fachada de tu negocio, editamos el vídeo con música y lo optimizamos para subirlo a tu ficha de Google Maps e Instagram, multiplicando el impacto visual de tu local.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span class="flex items-center gap-2.5 sm:gap-3">
-                            <span class="text-[#C4C4C4]">08.</span> ¿Necesitáis las contraseñas de mi cuenta de Google o de mi ordenador?
-                        </span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        Jamás. No solicitamos credenciales, claves ni acceso a tus dispositivos. Conectamos directamente el identificador público de tu negocio (Place ID) con nuestra nube. Tú mantienes la privacidad y el control absoluto de tu negocio en todo momento.
-                    </p>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <section id="contacto" class="py-20 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-[#07080B] to-[#11141C] text-center border-t border-white/5">
-        <div class="max-w-3xl mx-auto">
-            <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Atención Personalizada</span>
-            <h2 class="font-display text-3xl sm:text-5xl font-black text-white mt-2 mb-6">¿Quieres ver la Estación en tu mostrador?</h2>
-            <p class="text-zinc-400 mb-8 sm:mb-10 text-xs sm:text-base font-light leading-relaxed">
-                Agenda una visita técnica sin coste en Logroño y alrededores. Llevamos las muestras físicas y hacemos la prueba en vivo con tu propio smartphone.
-            </p>
-            
-            <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20agendar%20una%20demostración%20en%20mi%20local." target="_blank" class="btn-silver inline-flex items-center justify-center gap-2.5 sm:gap-3 px-8 sm:px-10 py-4 rounded-full text-xs font-black uppercase tracking-widest shadow-2xl w-full sm:w-auto">
-                <i class="fa-brands fa-whatsapp text-lg"></i>
-                <span>Agendar Demostración Presencial</span>
-            </a>
-        </div>
-    </section>
-
-    <footer id="footer-site" class="bg-[#050608] text-zinc-500 py-12 sm:py-16 text-xs border-t border-white/5">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-center md:text-left">
-                <p class="text-white font-bold tracking-widest uppercase text-xs mb-1">Studio 42 | Identidad Inteligente</p>
-                <p class="text-zinc-500">Calle Carmen Medrano 5 · Logroño, La Rioja</p>
-                <p class="text-zinc-600 mt-1">Estaciones Phygital · SEO Local · Piloto Oficial UAS AESA</p>
-            </div>
-
-            <div class="text-center md:text-right">
-                <p class="text-zinc-500 mb-2">&copy; 2026 Studio 42. Todos los derechos reservados.</p>
-                <div class="flex gap-4 justify-center md:justify-end text-zinc-400">
-                    <a href="/talent/" class="hover:text-white transition">Studio 42 Talent</a>
-                    <span>·</span>
-                    <a href="privacidad.html" class="hover:text-white transition">Privacidad</a>
-                    <span>·</span>
-                    <a href="cookies.html" class="hover:text-white transition">Cookies</a>
+        <section id="faq">
+            <div class="wrap">
+                <div class="section-head"><h2>Preguntas frecuentes</h2></div>
+                <div class="faq">
+                    <details><summary>¿Cómo funciona el sistema para facilitar las reseñas?</summary><p>Al acercar el teléfono al soporte se abre una interfaz con los botones útiles de tu negocio. Al final hay dos opciones igual de visibles: una lleva directamente a la ventana de reseña de tu ficha de Google y la otra abre un WhatsApp con la gerencia. No se filtra por estrellas, no se oculta ninguna opinión y no se ofrece nada a cambio de reseñas, como piden las normas de Google.</p></details>
+                    <details><summary>¿Cumple las políticas de Google y la normativa de consumo?</summary><p>Está diseñado para cumplirlas: solo canaliza opiniones de clientes reales que están en tu local, deja siempre elegir al cliente y no usa bots ni reseñas inventadas. Si Google o la normativa cambian sus reglas, adaptamos el sistema.</p></details>
+                    <details><summary>¿Y si el móvil del cliente es antiguo o no tiene el NFC activado?</summary><p>Los displays llevan un código QR junto al chip. Con la cámara del móvil se accede a exactamente la misma pantalla.</p></details>
+                    <details><summary>¿Hay cuotas mensuales o comisiones por reseña?</summary><p>No. Los packs son de pago único: el hardware, la programación de la landing y la configuración inicial. Las piezas son tuyas y no cobramos comisión por las reseñas ni por los clientes que consigas.</p></details>
+                    <details><summary>Si cambio de carta, de teléfono o abro otra sede, ¿tengo que cambiar las piezas?</summary><p>No. Los chips apuntan a enlaces en la nube, así que cambiamos el destino en remoto sin que tengas que reponer los soportes del local.</p></details>
+                    <details><summary>¿En cuánto tiempo recupero la inversión?</summary><p>Depende de cada negocio y no podemos garantizar un plazo ni un resultado. Más reseñas recientes y una ficha de Google cuidada ayudan a que te elijan frente a otros locales. Para saber si te compensa, calcula cuántos clientes nuevos necesitarías para cubrir la inversión. En la demo lo vemos con tus números.</p></details>
+                    <details><summary>¿En qué consiste el micro-tour con dron del pack Dominio?</summary><p>Manuel acude a tu local con un dron equipado con protecciones para interiores y con certificación de piloto UAS de AESA. Grabamos un recorrido del interior y la fachada, lo editamos con música y lo dejamos listo para tu ficha de Google Maps y para Instagram.</p></details>
+                    <details><summary>¿Necesitáis mis contraseñas de Google o de mi ordenador?</summary><p>No. No pedimos credenciales ni acceso a tus dispositivos. Para el botón de reseña usamos el identificador público de tu negocio en Google (el Place ID).</p></details>
                 </div>
             </div>
+        </section>
+
+        <section id="equipo" style="background: var(--ink-2); border-block: 1px solid var(--line)">
+            <div class="wrap">
+                <div class="section-head"><h2>Quién está detrás</h2><p>Un estudio pequeño de Logroño. Hablas con las dos personas que hacen el trabajo.</p></div>
+                <div class="team">
+                    <div class="person">
+                        <img src="img/manuel.webp" width="96" height="96" alt="Manuel" loading="lazy">
+                        <div><h3>Manuel</h3><p class="role">Estrategia técnica y operaciones</p><p>Desarrollo web, SEO local y piloto de dron certificado por AESA. Se asegura de que cada chip y cada enlace funcionen en tu local.</p></div>
+                    </div>
+                    <div class="person">
+                        <img src="img/melina.webp" width="96" height="96" alt="Melina" loading="lazy">
+                        <div><h3>Melina</h3><p class="role">Dirección de arte y packaging</p><p>Cuida el acabado y la presentación física: texturas, empaque y color para que tu marca se vea como se merece.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing" id="contacto">
+            <div class="wrap">
+                <div>
+                    <h2>¿Lo vemos en tu mostrador?</h2>
+                    <p>Vamos a tu local en Logroño y alrededores con las piezas reales, y lo probamos con tu propio móvil. Sin coste y sin compromiso.</p>
+                </div>
+                <a class="btn btn-ink" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20agendar%20una%20demostración%20en%20mi%20local.">Agendar demostración por WhatsApp</a>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer-site">
+        <div class="wrap">
+            <div>
+                <strong style="color:var(--bone)">Studio 42</strong> · Calle Carmen Medrano 5, Logroño, La Rioja<br>
+                Estaciones NFC, SEO local y piloto de dron con certificación AESA.
+            </div>
+            <div class="cols">
+                <a href="/talent/">Studio 42 Talent</a>
+                <a href="privacidad.html">Privacidad</a>
+                <a href="cookies.html">Cookies</a>
+                <a href="contacto.vcf?v=2" download="Studio42-Contacto.vcf">Guardar contacto</a>
+            </div>
+            <div>&copy; 2026 Studio 42. Todos los derechos reservados.</div>
         </div>
     </footer>
 
-    <div id="sticky-cta" class="fixed bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 z-40 transition-all duration-300 transform translate-y-28 opacity-0 pointer-events-none max-w-2xl mx-auto">
-        <div class="bg-[#0A0C12]/95 border border-[#C4C4C4]/40 backdrop-blur-xl p-3 sm:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.95)] flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping hidden sm:block"></div>
-                <div class="text-left">
-                    <span class="text-white font-bold text-xs sm:text-sm block">¿Listo para blindar tu negocio?</span>
-                    <span class="text-zinc-400 text-[10px] sm:text-xs">Demostración en tu mostrador en Logroño</span>
-                </div>
-            </div>
-            <a href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20probar%20la%20demo%20en%20mi%20local." target="_blank" class="btn-silver px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-xs font-black uppercase tracking-wider shrink-0 flex items-center gap-2">
-                <i class="fa-brands fa-whatsapp text-sm"></i>
-                <span class="hidden sm:inline">Probar en Local</span>
-                <span class="sm:hidden">Probar Demo</span>
-            </a>
-        </div>
+    <div class="sticky" id="sticky">
+        <a class="btn btn-brass" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20una%20demo%20en%20mi%20local.">Pedir demo gratis por WhatsApp</a>
     </div>
 
-    <div id="modal-hardware" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-[#0E1118] border border-[#C4C4C4]/40 rounded-3xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row relative shadow-[0_25px_60px_rgba(0,0,0,0.98)]" id="modal-content-box">
-            
-            <button onclick="cerrarModalHardware()" class="absolute top-4 right-4 z-20 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold transition">
-                &times;
-            </button>
-
-            <div class="w-full md:w-1/2 bg-gradient-to-b from-[#151924] to-[#07090E] flex items-center justify-center p-4 sm:p-8 border-b md:border-b-0 md:border-r border-white/10 relative overflow-hidden min-h-[280px] sm:min-h-[380px]">
-                <div class="absolute w-56 h-56 bg-[#C4C4C4]/20 rounded-full blur-3xl pointer-events-none"></div>
-                <img id="modal-img" src="" alt="Hardware NFC NTAG216" class="relative z-10 w-full h-full max-h-[340px] sm:max-h-[420px] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)]">
-            </div>
-
-            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between">
-                <div>
-                    <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-full border border-white/20 inline-block mb-2">Ficha Técnica Oficial</span>
-                    <h3 id="modal-title" class="text-xl sm:text-2xl font-black text-white mt-1 mb-1">Título</h3>
-                    <p id="modal-price" class="text-xl sm:text-2xl font-black text-[#C4C4C4] mb-3 sm:mb-4 pb-3 border-b border-white/10">Precio</p>
-                    <p id="modal-desc" class="text-zinc-300 text-xs sm:text-sm font-light leading-relaxed mb-5"></p>
-                    <ul id="modal-features" class="space-y-2.5 sm:space-y-3 mb-6 text-xs text-zinc-300"></ul>
-                </div>
-                <a id="modal-btn" href="#" target="_blank" class="btn-silver w-full text-center py-4 rounded-xl text-xs font-black uppercase tracking-widest block shadow-xl">
-                    Pedir Vía WhatsApp
-                </a>
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" aria-hidden="true">
+        <div class="sheet">
+            <button type="button" class="x" id="m-close" aria-label="Cerrar ficha">×</button>
+            <div class="pic"><img id="m-img" src="" alt="" width="800" height="800"></div>
+            <div class="txt">
+                <h3 id="m-title"></h3>
+                <p class="p" id="m-price"></p>
+                <p id="m-desc"></p>
+                <ul id="m-list"></ul>
+                <a id="m-wa" class="btn btn-brass" target="_blank" rel="noopener" href="#">Pedir por WhatsApp</a>
             </div>
         </div>
     </div>
 
     <script>
-        const stickyCta = document.getElementById('sticky-cta');
-        const footerSite = document.getElementById('footer-site');
-
-        window.addEventListener('scroll', () => {
-            const footerRect = footerSite.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-
-            if (window.scrollY > 300 && footerRect.top > (viewportHeight - 20)) {
-                stickyCta.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
-            } else {
-                stickyCta.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
-            }
-        });
-
-        function testDemo(stars) {
-            const starsContainer = document.querySelectorAll('#demo-stars i');
-            const output = document.getElementById('demo-output');
-            
-            starsContainer.forEach((star, index) => {
-                if (index < stars) {
-                    star.className = "fa-solid fa-star text-zinc-100 cursor-pointer transition transform scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]";
-                } else {
-                    star.className = "fa-solid fa-star text-zinc-600 cursor-pointer transition";
-                }
+        /* Demo: dos opciones iguales, el cliente decide. */
+        (function () {
+            var out = document.getElementById('reaccion');
+            var btns = document.querySelectorAll('.opinion button');
+            var texto = {
+                google: ['Reseña directa', 'Se abre la ventana de valoración de la ficha de Google del negocio. El cliente elige sus estrellas y escribe lo que quiera.'],
+                gerencia: ['Canal privado', 'Se abre un WhatsApp con la gerencia para quien prefiera contar algo en privado. Es una opción más, no un sustituto de la reseña pública.']
+            };
+            btns.forEach(function (b) {
+                b.addEventListener('click', function () {
+                    btns.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+                    var t = texto[b.dataset.op];
+                    out.textContent = '';
+                    var s = document.createElement('strong'); s.textContent = t[0];
+                    out.appendChild(s); out.appendChild(document.createTextNode(t[1]));
+                });
             });
+        })();
 
-            if (stars >= 4) {
-                output.innerHTML = `
-                    <div class="text-cyan-300 font-semibold animate-fade-in">
-                        <i class="fa-solid fa-circle-check text-base mb-1 block"></i>
-                        <strong>¡Valoración Excelente! (${stars}★)</strong><br>
-                        El móvil abre Google Maps directamente para publicar su reseña pública de 5 estrellas.
-                    </div>
-                `;
-            } else {
-                output.innerHTML = `
-                    <div class="text-amber-400 font-semibold animate-fade-in">
-                        <i class="fa-solid fa-shield-halved text-base mb-1 block"></i>
-                        <strong>¡Canal Privado Activado! (${stars}★)</strong><br>
-                        Google queda bloqueado. Se abre tu WhatsApp privado para resolver la queja en privado sin manchar tu nota.
-                    </div>
-                `;
+        /* Calculadora: simulación con un supuesto del 3 %. */
+        (function () {
+            var r = document.getElementById('clientes'); if (!r) return;
+            var f = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); };
+            function pintar() {
+                var c = parseInt(r.value, 10), mes = Math.round(c * 0.03 * 4);
+                document.getElementById('clientes-val').textContent = f(c);
+                document.getElementById('r-mes').textContent = '+' + f(mes);
+                document.getElementById('r-anio').textContent = '+' + f(mes * 12);
+                document.getElementById('r-vistas').textContent = f(c * 4);
             }
-        }
+            r.addEventListener('input', pintar); pintar();
+        })();
 
-        const sliderClientes = document.getElementById('slider-clientes');
-        const labelClientes = document.getElementById('label-clientes');
-        const calcResenas = document.getElementById('calc-resenas');
-        const calcRanking = document.getElementById('calc-ranking');
-        const calcFacturacion = document.getElementById('calc-facturacion');
+        /* Barra fija de WhatsApp en móvil: aparece tras el hero y se oculta al llegar al cierre. */
+        (function () {
+            var bar = document.getElementById('sticky'), hero = document.getElementById('top'), cierre = document.getElementById('contacto');
+            if (!('IntersectionObserver' in window)) return;
+            var enHero = true, enCierre = false;
+            function act() { bar.classList.toggle('on', !enHero && !enCierre); }
+            new IntersectionObserver(function (e) { enHero = e[0].isIntersecting; act(); }).observe(hero);
+            new IntersectionObserver(function (e) { enCierre = e[0].isIntersecting; act(); }).observe(cierre);
+        })();
 
-        if (sliderClientes) {
-            sliderClientes.addEventListener('input', (e) => {
-                const clientes = parseInt(e.target.value);
-                labelClientes.innerText = `${clientes} clientes`;
-
-                const resenasMes = Math.round(clientes * 0.03 * 4);
-                calcResenas.innerText = `+${resenasMes}`;
-
-                if (clientes < 250) {
-                    calcRanking.innerText = 'Top 5';
-                } else if (clientes < 600) {
-                    calcRanking.innerText = 'Top 3';
-                } else {
-                    calcRanking.innerText = 'Top 1';
-                }
-
-                const facturacionExtra = Math.round((resenasMes / 10) * 350);
-                calcFacturacion.innerText = `+${facturacionExtra.toLocaleString('es-ES')} €`;
-            });
-        }
-
-        const hardwareData = {
-            'expositor': {
-                title: 'Display Acrílico Inclinado',
-                price: '49,00 € + IVA',
-                img: 'expositor-real.png',
-                desc: 'Soporte de metacrilato transparente de alta densidad con chip NFC NTAG216 integrado y QR grabado. Diseñado para situarse frente a la caja o en la barra de atención sin ocupar espacio.',
-                features: [
-                    'Antena NFC NTAG216 de máxima capacidad y lectura ultra rápida a 2 cm.',
-                    'Acrílico cristalino biselado de 3 mm resistente a golpes.',
-                    'Enlace dinámico actualizable remotamente sin coste.'
-                ],
-                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20solicitar%20el%20Display%20Acrílico.'
-            },
-            'llavero': {
-                title: 'Llavero Cuero Smart NFC',
-                price: '24,90 € + IVA',
-                img: 'llavero-real.png',
-                desc: 'Accesorio en piel con pespunte perimetral reforzado. Diseñado para el personal de servicio o para el llavero corporativo de la gerencia.',
-                features: [
-                    'Sellado impermeable y resistencia al desgaste diario.',
-                    'Chip NTAG216 de alta velocidad protegido contra interferencias magnéticas.',
-                    'Ideal para solicitar valoraciones directamente en mesa.'
-                ],
-                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20Llaveros%20Smart%20de%20cuero.'
-            },
-            'tarjeta': {
-                title: 'Tarjeta Ejecutiva en Madera Noble NFC',
-                price: '39,90 € + IVA',
-                img: 'tarjeta-madera-real.png',
-                desc: 'Tarjeta de presentación ejecutiva fabricada en madera natural seleccionada con chip NFC NTAG216 invisible. Transmite tu identidad comercial y vCard completa a la agenda del smartphone de tus clientes sin fricción.',
-                features: [
-                    'Madera noble tratada a mano, resistente al desgaste y sostenible.',
-                    'Chip NFC NTAG216 de última generación con respuesta táctil instantánea.',
-                    'Reemplaza miles de tarjetas de papel tradicionales para siempre.',
-                    'Actualización remota de teléfono, web y redes sin cambiar la madera.'
-                ],
-                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20la%20Tarjeta%20Ejecutiva%20en%20Madera%20Noble.'
-            },
-            'camisetacaja': {
-                title: 'Welcome Pack Directivos',
-                price: '89,00 € + IVA',
-                img: 'caja-real.png',
-                desc: 'Caja rígida imantada con acabado mate antihuellas y acolchado troquelado. Incluye una tarjeta de madera noble grabada, display acrílico de sobremesa y dos llaveros de cuero con tecnología NTAG216.',
-                features: [
-                    'Cierre magnético de precisión y presentación boutique.',
-                    'Equipamiento completo para punto físico y networking.',
-                    'Chips NTAG216 programados y listos para su uso inmediato.'
-                ],
-                whatsapp: 'https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20el%20Welcome%20Pack%20CEO.'
-            }
+        /* Fichas de pieza */
+        var WA = 'https://wa.me/34672294962?text=';
+        var piezas = {
+            expositor: { t: 'Display acrílico inclinado', p: '49,00 € + IVA', img: 'img/expositor.webp',
+                d: 'Soporte de metacrilato transparente con chip NFC NTAG216 integrado y QR grabado. Pensado para ir frente a la caja o en la barra sin ocupar espacio.',
+                l: ['Chip NFC NTAG216 de gran capacidad, con lectura a unos 2 cm.', 'Acrílico biselado de 3 mm resistente a golpes.', 'El enlace se puede actualizar en remoto sin coste.'],
+                w: 'Hola, Studio42. Quiero solicitar el Display Acrílico.' },
+            llavero: { t: 'Llavero smart de cuero', p: '24,90 € + IVA', img: 'img/llavero.webp',
+                d: 'Piel cosida y resistente al agua, con chip NFC NTAG216. Ideal para que cada camarero lleve su propio punto de contacto.',
+                l: ['Chip NTAG216 para uso intensivo.', 'Cada llavero puede apuntar a una mesa, a una persona o a una zona.', 'Se actualiza en remoto sin cambiar la pieza.'],
+                w: 'Hola, Studio42. Quiero pedir Llaveros Smart de cuero.' },
+            tarjeta: { t: 'Tarjeta ejecutiva de madera', p: '39,90 € + IVA', img: 'img/tarjeta-madera.webp',
+                d: 'Madera natural grabada con chip NTAG216 integrado. Entrega tus datos de contacto directamente a la agenda del cliente.',
+                l: ['Tu vCard llega al móvil en un toque.', 'Sustituye a las tarjetas de papel.', 'Teléfono, web y redes se actualizan en remoto sin cambiar la madera.'],
+                w: 'Hola, Studio42. Me interesa la Tarjeta Ejecutiva en Madera Noble.' },
+            pack: { t: 'Welcome Pack directivos', p: '89,00 € + IVA', img: 'img/welcome-pack.webp',
+                d: 'Caja rígida imantada con acabado mate. Incluye una tarjeta de madera grabada, un display acrílico de sobremesa y dos llaveros de cuero con chip NTAG216.',
+                l: ['Cierre magnético y presentación de regalo.', 'Todo lo necesario para empezar en tu punto físico.', 'Chips programados y listos para usar.'],
+                w: 'Hola, Studio42. Quiero pedir el Welcome Pack.' },
+            camiseta: { t: 'Camiseta del equipo con NFC', p: 'Precio a consultar', img: 'img/camiseta.webp',
+                d: 'Camiseta negra con un parche NFC en la manga. El cliente acerca el móvil al brazo del camarero y llega a tu landing.',
+                l: ['El punto de contacto va con tu equipo, no solo en la barra.', 'Parche discreto que combina con tu uniforme.', 'Te damos el precio según la cantidad de camisetas.'],
+                w: 'Hola, Studio42. Quiero información y precio de las camisetas NFC.' }
         };
-
-        const modal = document.getElementById('modal-hardware');
-
-        function abrirModalHardware(id) {
-            const data = hardwareData[id];
-            if (!data) return;
-
-            document.getElementById('modal-title').innerText = data.title;
-            document.getElementById('modal-price').innerText = data.price;
-            document.getElementById('modal-desc').innerText = data.desc;
-            document.getElementById('modal-img').src = data.img;
-            document.getElementById('modal-btn').href = data.whatsapp;
-
-            const ul = document.getElementById('modal-features');
-            ul.innerHTML = '';
-            data.features.forEach(feat => {
-                const li = document.createElement('li');
-                li.className = 'flex items-center gap-2';
-                li.innerHTML = '<i class="fa-solid fa-circle-check text-[#C4C4C4] text-xs"></i><span>' + feat + '</span>';
-                ul.appendChild(li);
-            });
-
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            document.body.classList.add('modal-open');
+        var modal = document.getElementById('modal'), ultimo = null;
+        function abrir(id, origen) {
+            var d = piezas[id]; if (!d) return; ultimo = origen;
+            document.getElementById('m-title').textContent = d.t;
+            document.getElementById('m-price').textContent = d.p;
+            document.getElementById('m-desc').textContent = d.d;
+            var im = document.getElementById('m-img'); im.src = d.img; im.alt = d.t;
+            document.getElementById('m-wa').href = WA + encodeURIComponent(d.w);
+            var ul = document.getElementById('m-list'); ul.textContent = '';
+            d.l.forEach(function (x) { var li = document.createElement('li'); li.textContent = x; ul.appendChild(li); });
+            modal.classList.add('on'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('lock');
+            document.getElementById('m-close').focus();
         }
-
-        function cerrarModalHardware() {
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            document.body.classList.remove('modal-open');
-        }
-
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) cerrarModalHardware();
-        });
+        function cerrar() { modal.classList.remove('on'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('lock'); if (ultimo) ultimo.focus(); }
+        document.querySelectorAll('[data-ficha]').forEach(function (b) { b.addEventListener('click', function () { abrir(b.dataset.ficha, b); }); });
+        document.getElementById('m-close').addEventListener('click', cerrar);
+        modal.addEventListener('click', function (e) { if (e.target === modal) cerrar(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('on')) cerrar(); });
     </script>
 </body>
 </html>
