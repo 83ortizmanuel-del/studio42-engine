@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /panel/
+Disallow: /v/
+Disallow: /vault/
+Disallow: /apps-script/
+Disallow: /tests/
+Disallow: /docs/
+
+Sitemap: https://studio42.es/sitemap.xml
