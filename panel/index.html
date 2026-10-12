@@ -299,11 +299,25 @@ var vistos=null,recientes={},ultimaCarga=null;
 function libre(){return!$('#vApp').hidden&&!document.hidden&&!document.querySelector('.sheet-bg.on')&&!$('#vCliente').classList.contains('on')}
 setInterval(function(){if(libre())cargar()},DEMO?15000:45000);
 document.addEventListener('visibilitychange',function(){if(libre()&&ultimaCarga&&Date.now()-ultimaCarga>15000)cargar()});
+/* Clientes con landing hecha a medida (fuera del motor c/): clientes/a-medida.json */
+var MEDIDA=[];
+function esMedida(s){return MEDIDA.some(function(x){return x.slug===s})}
+function medida(s){return MEDIDA.filter(function(x){return x.slug===s})[0]||null}
+function todosClientes(){return D.clientes.concat(MEDIDA.map(function(x){return x.slug}).filter(function(s){return D.clientes.indexOf(s)<0}))}
+function cargarMedida(){
+  return fetch('../clientes/a-medida.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():[]}).then(function(l){
+    MEDIDA=Array.isArray(l)?l.filter(function(x){return x&&/^[a-z0-9-]{2,40}$/.test(x.slug)}):[];
+    return Promise.all(MEDIDA.map(function(x){
+      fichas[x.slug]={nombre:x.nombre,subtitulo:x.sub||'Diseño a medida',logo:x.logo?'..'+x.logo:'',colorAcento:x.color||'',_medida:true};
+      return fetch('../estado/'+x.slug+'.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){x.pausada=!!(j&&j.pausada)}).catch(function(){});
+    }));
+  }).catch(function(){MEDIDA=[]});
+}
 function cargarFichas(){
-  return Promise.all(D.clientes.map(function(slug){
+  return Promise.all([cargarMedida()].concat(D.clientes.map(function(slug){
     if(fichas[slug])return null;
     return fetch('../c/'+slug+'.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j)fichas[slug]=j}).catch(function(){});
-  })).then(function(){pintarClientes();pintarKpis()});
+  }))).then(function(){pintarClientes();pintarKpis()});
 }
 
 /* ---------- Suscripciones ---------- */
@@ -323,7 +337,7 @@ function pintarKpis(){
   var act=D.chapas.filter(function(c){return c.estado==='activa'}).length;
   $('#kpis').innerHTML=
     '<div class="kpi'+(pend?' hot':'')+'"><b>'+pend+'</b><span>Por despachar</span></div>'+
-    '<div class="kpi"><b>'+D.clientes.length+'</b><span>Clientes</span></div>'+
+    '<div class="kpi"><b>'+todosClientes().length+'</b><span>Clientes</span></div>'+
     '<div class="kpi"><b>'+(mrr>=1000?(mrr/1000).toFixed(1).replace('.',',')+'k':Math.round(mrr))+'€</b><span>Cuotas / mes</span></div>'+
     '<div class="kpi"><b>'+act+'<small style="font-size:.7rem;color:var(--muted)">/'+D.chapas.length+'</small></b><span>Chapas</span></div>';
   var bd=$('#badge');bd.hidden=!pend;bd.textContent=pend;
@@ -392,26 +406,29 @@ $$('.sheet-bg').forEach(function(bg){bg.addEventListener('click',function(e){if(
 /* ---------- Clientes ---------- */
 var q='';
 function pintarClientes(){
-  var lista=D.clientes.filter(function(s){var f=fichas[s]||{};return !q||(s+' '+(f.nombre||'')+' '+(f.subtitulo||'')).toLowerCase().indexOf(q)>=0});
-  var h='<div class="h2"><h2>Clientes</h2><small>'+D.clientes.length+' landings</small></div><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input class="inp" id="qC" placeholder="Buscar cliente…" value="'+esc(q)+'"></div>';
+  var lista=todosClientes().filter(function(s){var f=fichas[s]||{};return !q||(s+' '+(f.nombre||'')+' '+(f.subtitulo||'')).toLowerCase().indexOf(q)>=0});
+  var h='<div class="h2"><h2>Clientes</h2><small>'+todosClientes().length+' landings</small></div><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input class="inp" id="qC" placeholder="Buscar cliente…" value="'+esc(q)+'"></div>';
   if(!lista.length)h+='<div class="empty">Ningún cliente coincide.</div>';
   lista.forEach(function(s){
     var f=fichas[s]||{},logo=logoDe(f,s),np=D.pedidos.filter(function(p){return p.slug===s&&p.estado==='Por despachar'}).length;
-    h+='<button type="button" class="card" data-s="'+esc(s)+'"><span class="av"'+(f.colorAcento?' style="background:'+esc(f.colorAcento)+'"':'')+'>'+(logo?'<img src="'+esc(logo)+'" alt="" loading="lazy" onerror="this.remove()">':esc((f.nombre||s).charAt(0).toUpperCase()))+'</span><span class="mid"><b>'+esc(f.nombre||s)+'</b><small>'+esc(f.subtitulo||('studio42.es/c/?cod='+s))+'</small></span>'+'<span class="rt">'+pillSusc(susc(s))+'<div class="mini">'+est(s).vista+' visitas · '+est(s).resena+' reseñas</div></span></button>';
+    h+='<button type="button" class="card" data-s="'+esc(s)+'"><span class="av"'+(f.colorAcento?' style="background:'+esc(f.colorAcento)+'"':'')+'>'+(logo?'<img src="'+esc(logo)+'" alt="" loading="lazy" onerror="this.remove()">':esc((f.nombre||s).charAt(0).toUpperCase()))+'</span><span class="mid"><b>'+esc(f.nombre||s)+'</b><small>'+(f._medida?'<span class="pill ss-sin" style="margin-right:6px">A medida</span>':'')+esc(f.subtitulo||('studio42.es/c/?cod='+s))+'</small></span>'+'<span class="rt">'+(f._medida&&medida(s).pausada?'<span class="pill ss-pausada">⏸ pausada</span>':pillSusc(susc(s)))+'<div class="mini">'+est(s).vista+' visitas · '+est(s).resena+' reseñas</div></span></button>';
   });
   $('#tabClientes').innerHTML=h;
   var inp=$('#qC');inp.oninput=function(){q=inp.value.toLowerCase();var pos=inp.selectionStart;pintarClientes();var n=$('#qC');n.focus();n.setSelectionRange(pos,pos)};
   $$('#tabClientes .card').forEach(function(b){b.onclick=function(){abrirCliente(b.dataset.s)}});
 }
-function logoDe(f,s){if(!f.logo)return'';return/^https:\/\//.test(f.logo)?f.logo:'../c/'+String(f.logo).replace(/^(\.\/|\/|c\/)/,'')}
-function urlCliente(s){return(D&&D.dominio||'https://studio42.es')+'/c/?cod='+s}
+function logoDe(f,s){if(!f.logo)return'';if(f._medida)return f.logo;return/^https:\/\//.test(f.logo)?f.logo:'../c/'+String(f.logo).replace(/^(\.\/|\/|c\/)/,'')}
+function urlCliente(s){var m=medida(s);return(D&&D.dominio||'https://studio42.es')+(m?m.url:'/c/?cod='+s)}
 function abrirCliente(s){
   cur=s;propuesta=null;var f=fichas[s]||{};
   $('#cNombre').textContent=f.nombre||s;$('#flag').hidden=true;
-  $('#frame').src='../c/?cod='+encodeURIComponent(s)+'&preview=1';
+  var m=medida(s);
+  $('#frame').src=m?'..'+(m.previa||m.url)+((m.previa||m.url).indexOf('?')>=0?'&':'?')+'preview=1':'../c/?cod='+encodeURIComponent(s)+'&preview=1';
   $('#bAbrir').href=urlCliente(s);
+  $('#bCambio').hidden=!!m;
   var ps=D.pedidos.filter(function(p){return p.slug===s});
-  var h='',x=susc(s),e=est(s),pausada=x&&x.landing&&x.landing!=='activa';
+  var h='',x=susc(s),e=est(s),pausada=m?!!m.pausada:(x&&x.landing&&x.landing!=='activa');
+  if(m)h+='<div class="mini" style="margin:0 0 12px">🎨 Diseño a medida'+(m.previa?' · la vista previa muestra la nueva versión':'')+'. Los cambios de diseño pídemelos a mí en el chat.</div>';
   h+='<div class="sus-box"><div class="top2"><h4>'+(x&&x.plan?'Plan '+esc(((D.catalogo.planes||{})[x.plan]||{}).nombre||x.plan)+' · '+esc(x.periodo||''):'Sin suscripción')+'</h4>'+pillSusc(x)+'</div>';
   if(x&&x.plan)h+='<div class="mini">'+euro(precioPlan(x.plan,x.periodo)*1.21)+' IVA incl. · '+(x.proximo?'próximo cobro '+esc(fechaCorta(x.proximo).split(' · ')[0]):'sin fecha de cobro')+(x.email?' · '+esc(x.email):'')+'</div>';
   h+='<div class="sec" style="margin-top:12px">Últimos 30 días</div><div class="stats"><div><b>'+e.vista+'</b><span>Visitas</span></div><div><b>'+e.resena+'</b><span>Reseñas</span></div><div><b>'+(e.whatsapp+e.gerencia)+'</b><span>WhatsApp</span></div><div><b>'+(e.llamada+e.ruta)+'</b><span>Llamadas</span></div></div>';
@@ -421,14 +438,16 @@ function abrirCliente(s){
   if(ps.length){h+='<div class="sec" style="margin-top:22px">Pedidos de este cliente</div>';ps.forEach(function(p){var i=ESTADOS.indexOf(p.estado);h+='<button type="button" class="card" data-p="'+esc(p.id)+'" style="margin-top:8px"><span class="mid"><b>'+esc(p.pack)+'</b><small>'+esc(p.id)+' · '+esc(fechaCorta(p.fecha))+'</small></span><span class="rt"><b>'+euro(p.calc?p.calc.total:p.total)+'</b><span class="pill st-'+(i<0?0:i)+'">'+esc(p.estado)+'</span></span></button>'});
     var piezas=[];ps.filter(function(p){return p.estado!=='Cancelado'}).forEach(function(p){piezas=piezas.concat(enlacesNFC(p))});
     if(piezas.length)h+='<div class="sec" style="margin-top:18px">Piezas NFC activas ('+piezas.length+')</div><div class="sub" style="margin:.3rem 0 0;color:var(--muted);font-size:.82rem">Cada llavero o display tiene su código. Así sabes por cuál entra cada cliente.</div>'+piezas.map(function(x){return'<div class="nfc"><b>'+esc(x[0])+'</b><code>'+esc(x[1].replace('https://',''))+'</code><button type="button" data-u="'+esc(x[1])+'">Copiar</button></div>'}).join('');}
+  else if(m&&m.piezas&&m.piezas.length)h+='<div class="sec" style="margin-top:22px">Piezas NFC ('+m.piezas.length+')</div>'+m.piezas.map(function(p){return'<div class="nfc"><b>'+esc(p[0])+'</b><code>'+esc(String(p[1]).replace('https://',''))+'</code><button type="button" data-u="'+esc(p[1])+'">Copiar</button></div>'}).join('');
   else h+='<div class="empty" style="padding-top:22px">Este cliente aún no tiene pedidos registrados en el panel.</div>';
   $('#cPedidos').innerHTML=h;
   $$('#cPedidos .card').forEach(function(b){b.onclick=function(){abrirPedido(b.dataset.p)}});
   $('#bPausa').onclick=function(){
     var pausar=!pausada;if(pausar&&!confirm('¿Pausar la landing de '+(f.nombre||s)+'? Sus clientes verán «en pausa» hasta que la reactives.'))return;
     var b=$('#bPausa');b.disabled=true;b.textContent='Guardando…';
-    api({accion:'panel_pausar',slug:s,pausar:pausar}).then(function(r){
+    api({accion:'panel_pausar',slug:s,pausar:pausar,medida:!!m}).then(function(r){
       if(!r.ok){toast(r.error||'No se pudo');abrirCliente(s);return}
+      if(m)m.pausada=pausar;
       if(x)x.landing=pausar?'pausada':'activa';else (D.suscripciones=D.suscripciones||[]).push({slug:s,landing:pausar?'pausada':'activa',estado:''});
       toast(pausar?'Landing en pausa (se verá en 1 minuto)':'Landing reactivada');pintarClientes();abrirCliente(s);
     }).catch(function(){toast('Sin conexión');abrirCliente(s)});

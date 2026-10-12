@@ -44,7 +44,7 @@
  * ============================================================================
  */
 
-var VERSION = '3.5';
+var VERSION = '3.6';
 
 // Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
@@ -1715,10 +1715,25 @@ function landingPausar_(c, slug, pausar) {
   var ruta = c.carpeta + '/' + slug + '.json';
   var a = githubLeer_(c, ruta);
   if (a.error) return { error: a.error };
-  if (!a.existe || !a.json) return { error: 'No existe la landing ' + slug };
+  if (!a.existe) return medidaPausar_(c, slug, pausar); // landing hecha a medida (fuera de c/)
+  if (!a.json) return { error: 'No existe la landing ' + slug };
   if (!!a.json.pausada === pausar) return { ok: true };
   if (pausar) a.json.pausada = true; else delete a.json.pausada;
   var w = githubEscribir_(c, ruta, JSON.stringify(a.json, null, 2) + '\n', a.sha, (pausar ? 'Pausar ' : 'Reactivar ') + slug);
+  return w.error ? { error: w.error } : { ok: true };
+}
+
+/** Landings a medida (clientes/a-medida.json): la pausa se guarda en estado/<slug>.json y la lee js/s42-medida.js */
+function medidaPausar_(c, slug, pausar) {
+  var reg = githubLeer_(c, 'clientes/a-medida.json');
+  if (reg.error) return { error: reg.error };
+  var lista = Array.isArray(reg.json) ? reg.json : [];
+  if (!lista.some(function (x) { return x && x.slug === slug; })) return { error: 'No existe la landing ' + slug };
+  var ruta = 'estado/' + slug + '.json';
+  var a = githubLeer_(c, ruta);
+  if (a.error) return { error: a.error };
+  if (a.existe && a.json && !!a.json.pausada === pausar) return { ok: true };
+  var w = githubEscribir_(c, ruta, JSON.stringify({ pausada: pausar, fecha: new Date().toISOString() }, null, 2) + '\n', a.existe ? a.sha : null, (pausar ? 'Pausar ' : 'Reactivar ') + slug);
   return w.error ? { error: w.error } : { ok: true };
 }
 

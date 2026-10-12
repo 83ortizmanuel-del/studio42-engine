@@ -435,7 +435,7 @@ function icono(id) { return '<svg class="ic"><use href="#i-' + id + '"/></svg>';
 
 /* ---------- Contador anónimo (sin cookies): sede, pieza y tipo de acción ---------- */
 function contar(tipo) {
-  if (!CONFIG.estadisticas || params.get("debug") || /^(localhost|127\.)/.test(location.hostname)) return;
+  if (!CONFIG.estadisticas || params.get("debug") || params.get("preview") || /^(localhost|127\.)/.test(location.hostname)) return;
   try {
     const cuerpo = JSON.stringify({ accion: "ev", c: CONFIG.slug, k: ((sede || "").toUpperCase() + (PIEZA ? "-" + PIEZA : "")).slice(0, 20), t: tipo });
     const blob = new Blob([cuerpo], { type: "text/plain" });
@@ -645,5 +645,6 @@ document.querySelectorAll(".aparece").forEach((el) => (obs ? obs.observe(el) : e
   }, 900);
 })();
 </script>
+<script src="../../js/s42-medida.js" data-slug="la-sucursal" data-nombre="La Sucursal" defer></script>
 </body>
 </html>

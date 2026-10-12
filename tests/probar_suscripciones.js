@@ -7,6 +7,7 @@ const check = (cond, msg) => { if (!cond) { console.error('✘ ' + msg); process
 function montar(props, stripeMock) {
   const repo = { files: {}, commits: [] };
   repo.files['c/ankara-kebab.json'] = fs.readFileSync(path.join(__dirname, '..', 'c', 'ankara-kebab.json'), 'utf8');
+  repo.files['clientes/a-medida.json'] = fs.readFileSync(path.join(__dirname, '..', 'clientes', 'a-medida.json'), 'utf8');
   const { ctx } = entorno(props, repo, () => ({ code: 500, body: '' }));
   const hojas = {};
   const nueva = () => { const filas = []; return { filas, getLastRow: () => filas.length, appendRow: (r) => filas.push(r.slice()), setFrozenRows() {},
@@ -107,6 +108,11 @@ vm.runInContext('SINCRONIZAR_STRIPE', t.ctx)();
 check(JSON.parse(t.repo.files['c/ankara-kebab.json']).pausada === true, 'una pausa manual no la deshace la sincronización');
 t.post({ accion: 'panel_pausar', token: tk, slug: 'ankara-kebab', pausar: false });
 check(!JSON.parse(t.repo.files['c/ankara-kebab.json']).pausada, 'reactivar a mano');
+r = t.post({ accion: 'panel_pausar', token: tk, slug: 'la-sucursal', pausar: true, medida: true });
+check(r.ok && JSON.parse(t.repo.files['estado/la-sucursal.json']).pausada === true, 'landing a medida (La Sucursal): la pausa se guarda en estado/la-sucursal.json');
+t.post({ accion: 'panel_pausar', token: tk, slug: 'la-sucursal', pausar: false, medida: true });
+check(JSON.parse(t.repo.files['estado/la-sucursal.json']).pausada === false, 'landing a medida: reactivar');
+check(!t.post({ accion: 'panel_pausar', token: tk, slug: 'no-existe', pausar: true }).ok && !t.repo.files['estado/no-existe.json'], 'no se puede pausar un cliente que no está registrado');
 
 /* ---- Estadísticas ---- */
 ['vista', 'vista', 'vista', 'resena', 'whatsapp', 'gerencia'].forEach((tp, i) => t.post({ accion: 'ev', c: 'ankara-kebab', k: i < 2 ? 'L01' : 'mostrador', t: tp }));

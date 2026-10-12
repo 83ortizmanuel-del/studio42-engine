@@ -74,18 +74,17 @@
             <div class="w-14 h-14 bg-laserYellow/10 border border-laserYellow/30 text-laserYellow rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
                 <i class="fa-solid fa-headset"></i>
             </div>
-            <h3 class="text-base font-extrabold text-white uppercase tracking-wider mb-2">Canal Prioritario de Dirección</h3>
+            <h3 class="text-base font-extrabold text-white uppercase tracking-wider mb-2">¡Gracias por tu opinión!</h3>
             <p class="text-xs text-gray-300 leading-relaxed mb-5">
-                Tu experiencia en mostrador es vital. Queremos resolver al instante cualquier incidencia directamente con gerencia antes de que salgas del local.
+                Elige cómo quieres contárnoslo:
             </p>
-            
-            <button id="modal-wa-btn" class="w-full py-3.5 px-4 bg-laserYellow hover:bg-laserHover text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-neon-subtle mb-3 active:scale-95">
-                Contactar por WhatsApp Directo
+
+            <button onclick="continuarAGoogle()" class="w-full py-3.5 px-4 bg-laserYellow hover:bg-laserHover text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-neon-subtle mb-3 active:scale-95">
+                Dejar mi opinión en Google
             </button>
-            
-            <!-- Salida legal no restrictiva -->
-            <button onclick="continuarAGoogle()" class="text-[11px] text-gray-400 underline hover:text-gray-200 transition">
-                Prefiero valorar directamente en Google Maps
+
+            <button id="modal-wa-btn" class="w-full py-3.5 px-4 bg-laserYellow hover:bg-laserHover text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-neon-subtle active:scale-95">
+                Comentario privado a la gerencia
             </button>
         </div>
     </div>
@@ -201,7 +200,7 @@
         function archivoSeleccionado(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
-                documentoadjunto = file.name;
+                documentoAdjunto = file.name;
                 const feedback = document.getElementById('fileFeedback');
                 feedback.innerText = `Listo para enviar: ${file.name} (${(file.size/1024).toFixed(0)} KB)`;
                 feedback.classList.remove('hidden');
@@ -213,6 +212,7 @@
             if (documentoAdjunto) {
                 mensaje += ` ${documentoAdjunto}`;
             }
+            if (window.S42) S42.contar('whatsapp');
             window.location.href = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(mensaje)}`;
         }
 
@@ -231,15 +231,9 @@
                 }
             });
 
-            notice.innerText = estrellas === 5 ? "¡Excelente! Redirigiendo..." : "Procesando...";
-
-            setTimeout(() => {
-                if (estrellas >= 4) {
-                    window.location.href = CONFIG.googlePlaceUrl;
-                } else {
-                    abrirModalEmpatico();
-                }
-            }, 350);
+            notice.innerText = "¡Gracias!";
+            // Misma salida para cualquier nota: Google y gerencia con el mismo peso (sin filtrar por estrellas)
+            setTimeout(abrirModalEmpatico, 300);
         }
 
         function abrirModalEmpatico() {
@@ -248,15 +242,19 @@
 
             btnWA.onclick = () => {
                 const msgIncidencia = "Hola, he tenido un detalle con mi servicio en Copy Laser y deseo comentarlo con un responsable:";
+                if (window.S42) S42.contar('gerencia');
                 window.location.href = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msgIncidencia)}`;
             };
 
+            modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
             modal.classList.add('active');
         }
 
         function continuarAGoogle() {
+            if (window.S42) S42.contar('resena');
             window.location.href = CONFIG.googlePlaceUrl;
         }
     </script>
+<script src="../../js/s42-medida.js" data-slug="copy-laser" data-nombre="Copy Laser" data-contar="1" defer></script>
 </body>
 </html>
