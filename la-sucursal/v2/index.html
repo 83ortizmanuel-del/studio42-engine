@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#09080a">
 <meta name="robots" content="noindex">
 <title>La Sucursal · Barbería & Estilo · Logroño</title>
-<meta name="description" content="La Sucursal, barbería y ropa de autor en Logroño. Reserva tu cita, mira si estamos abiertos, guarda tu tarjeta de fidelidad y paga por Bizum.">
+<meta name="description" content="La Sucursal, barbería y ropa de autor en Logroño. Reserva tu cita, mira si estamos abiertos, conoce al equipo y paga por Bizum.">
 <link rel="icon" href="logo.webp" type="image/webp">
 <link rel="apple-touch-icon" href="logo.webp">
 <link rel="preload" href="logo.webp" as="image">
@@ -40,6 +40,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* Aviso de vista previa */
 .previa{font:600 .72rem var(--fb);color:#1a1405;background:var(--oro-grad);text-align:center;padding:7px 12px;letter-spacing:.02em}
 
+.previa-btn{font:800 .72rem var(--fb);color:#1a1405;text-decoration:underline;padding:0 2px}
 /* Intro (1 segundo, sin botón) */
 #intro{position:fixed;inset:0;z-index:50;background:var(--negro);display:grid;place-items:center;transition:opacity .45s ease,visibility .45s}
 #intro.fuera{opacity:0;visibility:hidden}
@@ -90,22 +91,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sec-t span{font-size:.75rem;color:var(--gris)}
 .card{background:var(--tarjeta);border:1px solid var(--linea2);border-radius:var(--r);padding:18px}
 
-/* Fidelidad */
-.fid{position:relative;overflow:hidden;background:linear-gradient(145deg,#1f1a12,#141216 60%);border-color:var(--linea)}
-.fid::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(217,180,90,.22),transparent 70%)}
-.fid-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative}
-.fid-cab b{display:block;font:800 1.08rem var(--fd)}
-.fid-cab small{color:var(--gris);font-size:.8rem}
-.fid-cab .num{font:800 1.9rem/1 var(--fd);color:var(--oro2);white-space:nowrap}
-.fid-cab .num i{font-style:normal;font-size:1rem;color:var(--gris)}
-.sellos{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0 14px;position:relative}
-.sello{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:1.5px dashed rgba(232,206,140,.28);color:var(--gris2);font:800 .78rem var(--fd)}
-.sello.ok{border:0;background:var(--oro-grad);color:#1a1405;box-shadow:0 6px 16px rgba(217,180,90,.3)}
-.sello.ok .ic{font-size:1.15rem}
-.sello.premio{border-color:var(--oro);color:var(--oro2)}
-.sello.nuevo{animation:sellar .6s cubic-bezier(.2,1.6,.4,1)}
-@keyframes sellar{from{transform:scale(1.8) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
-.fid-pie{display:flex;gap:8px;position:relative}
 .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 14px;border-radius:14px;border:1px solid var(--linea);background:rgba(255,255,255,.04);font:600 .86rem var(--fb);color:var(--hueso)}
 .btn .ic{color:var(--oro2)}
 .btn.oro{background:var(--oro-grad);border:0;color:#1a1405}
@@ -178,6 +163,67 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .err{color:var(--rojo);font-size:.82rem;text-align:center;min-height:1.2em;margin:8px 0}
 .acciones{display:flex;flex-direction:column;gap:9px;margin-top:6px}
 
+
+/* Extras de tarjetas */
+.grito,.sticker{display:none}
+.tecnica{display:block;margin-top:8px;font-size:.7rem;color:var(--gris);line-height:1.35;text-transform:uppercase;letter-spacing:.06em}
+.tecnica b{color:var(--oro2);font-size:.8rem;letter-spacing:.02em;text-transform:none}
+
+/* ================= PIEL «MANGA URBANO» (body.manga) =================
+   Lenguaje de cómic sin personajes: trama de puntos, viñetas, líneas de velocidad,
+   onomatopeyas, aura de energía y stickers urbanos. */
+body.manga{--tinta:#050505;--papel:#f5f1e8;--cian:#38e1ff;--magenta:#ff3d7f;
+  background-color:#0b0a0d;
+  background-image:radial-gradient(rgba(217,180,90,.13) 1.2px,transparent 1.4px),radial-gradient(120% 60% at 50% -10%,rgba(217,180,90,.18),transparent 60%);
+  background-size:9px 9px,auto}
+body.manga .top .marca b{font-style:italic;letter-spacing:.08em;text-shadow:2px 2px 0 var(--oro3)}
+body.manga .hero{border:3px solid var(--tinta);outline:2px solid var(--oro);outline-offset:-7px;border-radius:14px;
+  background:radial-gradient(circle at 50% 120%,rgba(217,180,90,.35),transparent 55%),
+    repeating-conic-gradient(from 0deg at 50% 115%,rgba(245,241,232,.07) 0deg 2deg,transparent 2deg 9deg),
+    linear-gradient(180deg,#16131a,#0d0b0f);
+  box-shadow:8px 8px 0 var(--oro3),0 30px 60px rgba(0,0,0,.6);transform:rotate(-.6deg)}
+body.manga .hero > *{transform:rotate(.6deg)}
+body.manga .hero h1{font-style:italic;font-size:2.45rem;padding-right:22px;text-transform:uppercase;letter-spacing:.01em;line-height:.95;
+  -webkit-text-stroke:1.2px var(--tinta);paint-order:stroke fill;filter:drop-shadow(3px 3px 0 var(--oro3))}
+body.manga .hero .sede{display:inline-block;background:var(--oro);color:var(--tinta);padding:4px 10px;border-radius:4px;transform:skew(-10deg);letter-spacing:.12em}
+body.manga .hero .lema{font-style:italic;color:#ddd5c6;border-left:3px solid var(--oro);padding-left:10px;margin-top:6px}
+body.manga .estado{border-radius:6px;border:2px solid var(--tinta);background:rgba(0,0,0,.55);box-shadow:3px 3px 0 rgba(217,180,90,.5)}
+body.manga .cta{border-radius:10px;border:3px solid var(--tinta);text-transform:uppercase;font-style:italic;font-size:1.15rem;letter-spacing:.06em;
+  box-shadow:5px 5px 0 var(--tinta),0 0 0 0 rgba(243,220,154,.7);animation:aura 2.2s ease-in-out infinite}
+@keyframes aura{0%,100%{box-shadow:5px 5px 0 var(--tinta),0 0 14px 2px rgba(243,220,154,.35)}50%{box-shadow:5px 5px 0 var(--tinta),0 0 34px 10px rgba(243,220,154,.6),0 0 60px 18px rgba(56,225,255,.18)}}
+body.manga .rapido{border-radius:8px;border:2px solid var(--tinta);background:#1b181f;box-shadow:3px 3px 0 rgba(217,180,90,.55);text-transform:uppercase;font-size:.66rem;letter-spacing:.05em}
+body.manga .rapido:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(217,180,90,.55)}
+body.manga .sec-t h2{display:inline-block;font-style:italic;text-transform:uppercase;font-size:1.15rem;background:var(--papel);color:var(--tinta);
+  padding:5px 12px 4px;border:2px solid var(--tinta);box-shadow:3px 3px 0 var(--oro);transform:rotate(-1.5deg)}
+body.manga .card,body.manga .item,body.manga .fila-a,body.manga .opi{border-radius:10px;border:2.5px solid var(--tinta);background:#18151b;box-shadow:5px 5px 0 rgba(217,180,90,.45)}
+body.manga .item:nth-child(even){transform:rotate(.8deg)}
+body.manga .item:nth-child(odd){transform:rotate(-.6deg)}
+body.manga .carril{padding:6px 10px 14px}
+body.manga .foto{border-bottom:2.5px solid var(--tinta);
+  background:radial-gradient(rgba(5,5,5,.55) 1.3px,transparent 1.5px),repeating-conic-gradient(from 0deg at 50% 50%,rgba(217,180,90,.14) 0deg 3deg,transparent 3deg 12deg),linear-gradient(160deg,#2a2330,#120f14);
+  background-size:7px 7px,auto,auto}
+body.manga .equipo .foto{border:2.5px solid var(--tinta);box-shadow:0 0 0 3px var(--oro),0 0 22px rgba(243,220,154,.35)}
+body.manga .grito{display:block;position:absolute;top:10px;right:10px;font:800 1.15rem var(--fd);font-style:italic;color:var(--oro2);
+  -webkit-text-stroke:1px var(--tinta);paint-order:stroke fill;text-shadow:2px 2px 0 var(--tinta);transform:rotate(-8deg)}
+body.manga .sticker{display:block;position:absolute;top:10px;left:-6px;background:var(--magenta);color:#fff;font:800 .66rem var(--fb);letter-spacing:.1em;
+  padding:5px 12px 5px 14px;transform:rotate(-6deg);border:2px solid var(--tinta);box-shadow:2px 2px 0 var(--tinta)}
+body.manga .sticker::after{content:"";position:absolute;right:-10px;top:-6px;width:26px;height:12px;background:rgba(245,241,232,.55);transform:rotate(35deg)}
+body.manga .precio{font-style:italic;font-size:1.25rem;text-shadow:2px 2px 0 var(--tinta)}
+body.manga .mini{border-radius:6px;border:2px solid var(--tinta);background:var(--oro);color:var(--tinta);font-weight:800;text-transform:uppercase;font-size:.68rem;box-shadow:2px 2px 0 var(--tinta)}
+body.manga .btn{border-radius:8px;border:2px solid var(--tinta);box-shadow:3px 3px 0 rgba(217,180,90,.5);text-transform:uppercase;font-size:.78rem;letter-spacing:.04em}
+body.manga .prox .cal{border:2.5px solid var(--tinta);border-radius:6px;box-shadow:3px 3px 0 var(--oro3)}
+body.manga .fila-a .ico,body.manga .opi .ico{border-radius:8px;border:2px solid var(--tinta);background:var(--oro);color:var(--tinta)}
+body.manga .hoja{border:3px solid var(--tinta);border-bottom:0;box-shadow:0 -6px 0 var(--oro3)}
+body.manga .pie b{font-style:italic}
+/* Onomatopeyas al tocar */
+.pum{position:fixed;z-index:70;pointer-events:none;font:800 1.9rem var(--fd);font-style:italic;color:#ffe9a8;letter-spacing:.02em;
+  -webkit-text-stroke:1.6px #050505;paint-order:stroke fill;text-shadow:3px 3px 0 #050505;animation:pum .75s cubic-bezier(.2,1.4,.4,1) forwards}
+.pum::before{content:"";position:absolute;inset:-22px -30px;z-index:-1;background:repeating-conic-gradient(rgba(217,180,90,.9) 0deg 6deg,transparent 6deg 18deg);
+  -webkit-mask:radial-gradient(circle,transparent 30%,#000 32%,transparent 70%);mask:radial-gradient(circle,transparent 30%,#000 32%,transparent 70%)}
+@keyframes pum{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-14deg)}35%{opacity:1;transform:translate(-50%,-60%) scale(1.15) rotate(-6deg)}100%{opacity:0;transform:translate(-50%,-110%) scale(1) rotate(-4deg)}}
+body.manga #intro{background:#0b0a0d repeating-conic-gradient(from 0deg at 50% 50%,rgba(217,180,90,.16) 0deg 2deg,transparent 2deg 10deg)}
+@media (prefers-reduced-motion:reduce){body.manga .hero,body.manga .hero > *,body.manga .item{transform:none}}
+
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;z-index:60;background:#f5f1e8;color:#141216;font:600 .85rem var(--fb);padding:11px 18px;border-radius:99px;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:.3s;pointer-events:none;max-width:90vw;text-align:center}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 
@@ -210,7 +256,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <symbol id="i-persona" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.2-6 8-6s7 2 8 6"/></symbol>
 </svg>
 
-<div class="previa" id="avisoPrevia" hidden>Vista previa v2 · los datos marcados con * son de ejemplo</div>
+<div class="previa" id="avisoPrevia" hidden>Vista previa · lo marcado con * está por confirmar · <button type="button" id="bEstilo" class="previa-btn">Ver clásico</button></div>
 <div id="intro" aria-hidden="true"><img src="logo.webp" alt=""></div>
 
 <div class="wrap">
@@ -224,7 +270,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <span class="poste" aria-hidden="true"></span>
     <div class="sede" id="hSede">Logroño</div>
     <h1>La Sucursal</h1>
-    <p class="lema">Barbería &amp; ropa de autor</p>
+    <p class="lema">No es solo un corte de pelo, es una experiencia.</p>
     <div class="estado" id="estado"><span class="dot" id="dotEstado"></span><span id="tEstado">Consultando horario…</span></div>
     <a class="cta" id="bReserva" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-cal"/></svg>Reservar cita</a>
     <div class="rapidos">
@@ -232,21 +278,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <a class="rapido" id="bWa" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-wa"/></svg>WhatsApp</a>
       <a class="rapido" id="bRuta" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-ruta"/></svg>Llegar</a>
       <button type="button" class="rapido" id="bBizum"><svg class="ic"><use href="#i-bizum"/></svg>Bizum</button>
-    </div>
-  </section>
-
-  <section class="sec aparece">
-    <div class="sec-t"><h2>Tu tarjeta de fidelidad</h2><span id="fidSede"></span></div>
-    <div class="card fid">
-      <div class="fid-cab">
-        <div><b id="fidTitulo">Tu corte gratis te espera</b><small id="fidSub">Cada visita suma un sello</small></div>
-        <div class="num" id="fidNum">0<i>/10</i></div>
-      </div>
-      <div class="sellos" id="sellos"></div>
-      <div class="fid-pie">
-        <button type="button" class="btn oro" id="bSellar"><svg class="ic"><use href="#i-tijera"/></svg>Sellar mi visita</button>
-      </div>
-      <p class="nota">El sello lo pone tu barbero con su código. La tarjeta se guarda en este móvil.</p>
     </div>
   </section>
 
@@ -288,6 +319,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <section class="sec aparece">
     <div class="lista">
       <button type="button" class="fila-a" id="bParking"><span class="ico"><svg class="ic"><use id="uParking" href="#i-coche"/></svg></span><span class="t"><b id="parkT">¿Dónde aparqué?</b><small id="parkS">Guarda tu coche para volver a pie</small></span><svg class="ic"><use href="#i-flecha"/></svg></button>
+      <a class="fila-a" id="bWeb" href="https://lasucursalstoreart.com/" target="_blank" rel="noopener"><span class="ico"><svg class="ic"><use href="#i-ruta"/></svg></span><span class="t"><b>Nuestra web</b><small>Galería, precios y reservas</small></span><svg class="ic"><use href="#i-flecha"/></svg></a>
       <button type="button" class="fila-a" id="bContacto"><span class="ico"><svg class="ic"><use href="#i-contacto"/></svg></span><span class="t"><b>Guardar contacto</b><small id="contactoS">Teléfono y dirección</small></span><svg class="ic"><use href="#i-flecha"/></svg></button>
     </div>
   </section>
@@ -309,69 +341,76 @@ const CONFIG = {
   slug: "la-sucursal",              // para el contador anónimo de Studio 42
   estadisticas: "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec",
   sedePorDefecto: "centro",
-  semanasProximoCorte: 3,
-  fidelidad: { sellos: 10, premio: "Corte gratis", horasEntreSellos: 3, ejemplo: true }
+  semanasProximoCorte: 3
 };
 
 /* Horario: 0 = domingo … 6 = sábado. Cada día, lista de tramos [abre, cierra]. */
-const HORARIO_EJEMPLO = { 0: [], 1: [["10:00","14:00"],["16:30","20:30"]], 2: [["10:00","14:00"],["16:30","20:30"]], 3: [["10:00","14:00"],["16:30","20:30"]], 4: [["10:00","14:00"],["16:30","20:30"]], 5: [["10:00","20:30"]], 6: [["10:00","14:00"]] };
+/* Horario publicado en lasucursalstoreart.com (lunes a sábado 10:30–14:00 y 16:00–21:00). Pendiente de confirmar por sede.
+   0 = domingo … 6 = sábado. Cada día, lista de tramos [abre, cierra]. */
+const T = [["10:30","14:00"],["16:00","21:00"]];
+const HORARIO_WEB = { 0: [], 1: T, 2: T, 3: T, 4: T, 5: T, 6: T };
 
 const SEDES = {
   centro: {
-    nombre: "Sede Centro", zona: "Logroño Centro",
-    direccion: "Calle Carmen Medrano, 28, 26005 Logroño",
-    telefono: "+34643023681", whatsapp: "34643023681", bizum: "643186453",
-    reserva: "https://lasucursalstoreart.com/appointment.php?sede=centro",
+    nombre: "Sede Centro", zona: "Pérez Galdós · Logroño",
+    direccion: "Calle Pérez Galdós, 78, Bajo 1, Logroño",
+    telefono: "+34643186453", whatsapp: "34643023681", bizum: "643186453",
+    reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
-    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Barberia&query_place_id=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
+    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Barberia+Logro%C3%B1o&query_place_id=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
     insta: "https://www.instagram.com/la_sucursal_the_barber/",
-    responsable: "Fernando Ambuila",
-    horario: HORARIO_EJEMPLO, horarioEjemplo: true,
-    pinHash: "" // se rellena abajo con el PIN de ejemplo
+    responsable: "Fernando y Alejandro",
+    horario: HORARIO_WEB, horarioEjemplo: true
   },
   lirios: {
-    nombre: "Sede Los Lirios", zona: "Barrio Los Lirios · Logroño",
-    direccion: "Los Lirios, Logroño", direccionEjemplo: true,
-    telefono: "+34643023681", telefonoEjemplo: true, whatsapp: "34643023681", bizum: "640745248",
-    reserva: "https://lasucursalstoreart.com/appointment.php?sede=lirios",
+    nombre: "Sede Los Lirios", zona: "Parque Los Lirios · Logroño",
+    direccion: "Parque Los Lirios, 4, Logroño",
+    telefono: "+34643023681", whatsapp: "34643023681", bizum: "640745248",
+    reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJz6zuGwCrWg0RMmghwkrmcoc",
-    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Los+Lirios&query_place_id=ChIJz6zuGwCrWg0RMmghwkrmcoc",
+    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Los+Lirios+Logro%C3%B1o&query_place_id=ChIJz6zuGwCrWg0RMmghwkrmcoc",
     insta: "https://www.instagram.com/la_sucursal_barber_loslirios/",
-    responsable: "Equipo Los Lirios",
-    horario: HORARIO_EJEMPLO, horarioEjemplo: true, pinHash: ""
+    responsable: "Mikel",
+    horario: HORARIO_WEB, horarioEjemplo: true
   },
   villamediana: {
     nombre: "Sede Villamediana", zona: "Villamediana de Iregua",
-    direccion: "Villamediana de Iregua, La Rioja", direccionEjemplo: true,
+    direccion: "Calle Constitución, 2, Bajo, Villamediana de Iregua",
     telefono: "+34643618452", whatsapp: "34643618452", bizum: "643519678",
-    reserva: "https://lasucursalstoreart.com/appointment.php?sede=villamediana",
+    reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
-    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Villamediana&query_place_id=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
+    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Villamediana+de+Iregua&query_place_id=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
     insta: "https://www.instagram.com/sucursal_barber_villamediana/",
-    responsable: "Equipo Villamediana",
-    horario: HORARIO_EJEMPLO, horarioEjemplo: true, pinHash: ""
+    responsable: "Santiago",
+    horario: HORARIO_WEB, horarioEjemplo: true
   }
 };
 const INSTA_TIENDA = "https://www.instagram.com/la_sucursal_store/";
+const WEB = "https://lasucursalstoreart.com/";
+const EMAIL = "barberia@lasucursalstoreart.com";
 
-/* Fotos: pon el nombre del archivo (subido a esta carpeta) en  foto: "corte-fade.webp" */
+/* Servicios y precios de lasucursalstoreart.com. Fotos: pon el archivo en esta carpeta y  foto: "corte.webp" */
 const SERVICIOS = [
-  { nombre: "Corte clásico", desc: "Tijera y máquina, lavado y peinado", precio: "15 €", ejemplo: true },
-  { nombre: "Fade + diseño", desc: "Degradado a navaja con detalle", precio: "18 €", ejemplo: true },
-  { nombre: "Arreglo de barba", desc: "Perfilado, toalla caliente y aceite", precio: "10 €", ejemplo: true },
-  { nombre: "Corte + barba", desc: "El combo completo de La Sucursal", precio: "24 €", ejemplo: true }
+  { nombre: "Corte degradado", desc: "El fade de la casa · 20 min", precio: "15 €", grito: "¡FADE!" },
+  { nombre: "Corte + barba", desc: "El combo completo · 30 min", precio: "20 €", grito: "¡COMBO!" },
+  { nombre: "Corte de barba", desc: "Perfilado y arreglo · 20 min", precio: "10 €", grito: "¡ZAS!" },
+  { nombre: "Corte Free Style", desc: "Diseño a tu medida · 30 min", precio: "50 €", grito: "¡ARTE!" },
+  { nombre: "Mechas", desc: "Color con estilo · 30 min", precio: "100 €", grito: "¡FLASH!" },
+  { nombre: "Platinado", desc: "Rubio platino total · 30 min", precio: "130 €", grito: "¡BOOM!" },
+  { nombre: "Corte jubilados", desc: "Precio especial · 20 min", precio: "10 €", grito: "¡RESPETO!" }
 ];
+/* Barberos de la agenda online (lasucursalstoreart.com/appointment.php) */
 const EQUIPO = [
-  { nombre: "Fernando", rol: "Fundador · Barber & Stylist", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
-  { nombre: "Barbero 2", rol: "Especialista en fades", ejemplo: true },
-  { nombre: "Barbero 3", rol: "Barbas y afeitado clásico", ejemplo: true }
+  { nombre: "Fernando", rol: "Fundador · Sede Centro", sede: "centro", tecnica: "Fade relámpago", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
+  { nombre: "Alejandro", rol: "Barbero · Sede Centro", sede: "centro", tecnica: "Barba de acero", insta: "https://www.instagram.com/_alejandro_silvaa" },
+  { nombre: "Mikel", rol: "Barbero · Los Lirios", sede: "lirios", tecnica: "Corte sombra", insta: "https://www.instagram.com/la_sucursal_barber_loslirios/" },
+  { nombre: "Santiago", rol: "Barbero · Villamediana", sede: "villamediana", tecnica: "Diseño libre", insta: "https://www.instagram.com/sucursal_barber_villamediana/" }
 ];
 const TIENDA = [
-  { nombre: "Camiseta Sucursal", desc: "Algodón grueso, edición limitada", precio: "29 €", ejemplo: true },
-  { nombre: "Sudadera de autor", desc: "Bordado dorado en el pecho", precio: "49 €", ejemplo: true },
-  { nombre: "Gorra Sucursal", desc: "Talla única ajustable", precio: "22 €", ejemplo: true }
+  { nombre: "Camiseta personalizada", desc: "Ropa de autor La Sucursal", precio: "15 €", etiqueta: "NUEVO DROP" },
+  { nombre: "Cera Bravo", desc: "Fijación para tu peinado", precio: "12 €", etiqueta: "TOP VENTAS" },
+  { nombre: "Polvos de volumen", desc: "Textura y volumen al instante", precio: "11 €", etiqueta: "FAVORITO" }
 ];
-const PIN_EJEMPLO = "4242"; // PIN de muestra para sellar en la vista previa (cada sede tendrá el suyo)
 
 /* ===================================================================== */
 const $ = (id) => document.getElementById(id);
@@ -438,8 +477,7 @@ function aplicarSede(k, guardar) {
   $("bResena").href = s.resena;
   $("resenaTxt").textContent = "Cuenta qué tal en " + s.nombre.replace("Sede ", "");
   $("bGerencia").href = "https://wa.me/" + s.whatsapp + "?text=" + encodeURIComponent("Hola, quería comentar algo sobre mi visita a La Sucursal (" + s.nombre + ").");
-  $("contactoS").textContent = s.nombre + " · " + s.direccion + ast(s.direccionEjemplo || s.telefonoEjemplo);
-  $("fidSede").textContent = "Válida en las 3 sedes";
+  $("contactoS").textContent = s.nombre + " · " + s.direccion;
   pintarEstado();
   if ($("servicios").childElementCount) pintarCarruseles();
 }
@@ -483,55 +521,6 @@ $("bBizum").addEventListener("click", async () => {
     '<div class="acciones"><button type="button" class="btn oro" id="hOk">Entendido</button></div>', (h) => h.querySelector("#hOk").onclick = cerrarHoja);
 });
 
-/* ---------- Fidelidad (sellos guardados en este móvil; los pone el barbero con su PIN) ---------- */
-const F_KEY = "ls_sellos", F_ULT = "ls_ultimo_sello";
-function sellos() { return Math.max(0, Math.min(CONFIG.fidelidad.sellos, parseInt(almacen.get(F_KEY) || "0", 10) || 0)); }
-function pintarSellos(nuevo) {
-  const n = sellos(), tot = CONFIG.fidelidad.sellos, falta = tot - n;
-  $("fidNum").innerHTML = n + "<i>/" + tot + "</i>";
-  $("fidTitulo").textContent = n === 0 ? "Tu primer sello te espera" : n >= tot ? "¡" + CONFIG.fidelidad.premio + " desbloqueado!" : falta === 1 ? "¡Te falta 1 para tu " + CONFIG.fidelidad.premio.toLowerCase() + "!" : "Te faltan " + falta + " para tu " + CONFIG.fidelidad.premio.toLowerCase();
-  $("fidSub").textContent = n >= tot ? "Enséñaselo a tu barbero en tu próxima visita" : "Cada visita suma un sello" + ast(CONFIG.fidelidad.ejemplo);
-  let h = "";
-  for (let i = 1; i <= tot; i++) h += i <= n ? '<span class="sello ok' + (i === nuevo ? " nuevo" : "") + '">' + icono("check") + '</span>' : i === tot ? '<span class="sello premio">' + icono("regalo") + '</span>' : '<span class="sello">' + i + '</span>';
-  $("sellos").innerHTML = h;
-  $("bSellar").innerHTML = n >= tot ? icono("regalo") + "Canjear mi premio" : icono("tijera") + "Sellar mi visita";
-}
-async function hashPin(pin, k) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("lasucursal|" + k + "|" + pin));
-  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-$("bSellar").addEventListener("click", () => {
-  const canje = sellos() >= CONFIG.fidelidad.sellos;
-  abrirHoja('<h3>' + (canje ? "Canjear premio" : "Sellar visita") + '</h3><p>Pásale el móvil a tu barbero para que ponga el código de ' + esc(SEDES[sede].nombre) + '.</p>' +
-    '<div class="pin">' + [0, 1, 2, 3].map(() => '<input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito">').join("") + '</div>' +
-    '<div class="err" id="pinErr"></div>' + (CONFIG.previa ? '<p style="text-align:center;font-size:.76rem">Vista previa: el código de prueba es ' + PIN_EJEMPLO + '</p>' : "") +
-    '<div class="acciones"><button type="button" class="btn" id="hNo">Cancelar</button></div>', (h) => {
-      const ins = Array.from(h.querySelectorAll(".pin input"));
-      h.querySelector("#hNo").onclick = cerrarHoja;
-      setTimeout(() => ins[0].focus(), 80);
-      ins.forEach((inp, i) => {
-        inp.addEventListener("input", async () => {
-          inp.value = inp.value.replace(/\D/g, "").slice(-1);
-          if (inp.value && i < 3) ins[i + 1].focus();
-          const pin = ins.map((x) => x.value).join("");
-          if (pin.length < 4) return;
-          const intentos = parseInt(sessionStorage.getItem("ls_int") || "0", 10);
-          if (intentos >= 5) { $("pinErr").textContent = "Demasiados intentos. Prueba en unos minutos."; return; }
-          const ok = (await hashPin(pin, sede)) === SEDES[sede].pinHash;
-          if (!ok) { try { sessionStorage.setItem("ls_int", String(intentos + 1)); } catch (e) {} $("pinErr").textContent = "Código incorrecto"; ins.forEach((x) => (x.value = "")); ins[0].focus(); if (navigator.vibrate) navigator.vibrate([60, 40, 60]); return; }
-          if (canje) { almacen.set(F_KEY, "0"); cerrarHoja(); pintarSellos(); toast("🎁 ¡Premio canjeado! Empieza una nueva tarjeta"); return; }
-          const ult = parseInt(almacen.get(F_ULT) || "0", 10);
-          if (Date.now() - ult < CONFIG.fidelidad.horasEntreSellos * 3600e3) { $("pinErr").textContent = "Esta visita ya está sellada."; return; }
-          const n = sellos() + 1;
-          almacen.set(F_KEY, String(n)); almacen.set(F_ULT, String(Date.now()));
-          cerrarHoja(); pintarSellos(n); if (navigator.vibrate) navigator.vibrate(80);
-          toast(n >= CONFIG.fidelidad.sellos ? "🎉 ¡Tarjeta completa! Tu próximo corte es gratis" : "✂️ ¡Sello " + n + " añadido! Gracias por venir");
-        });
-        inp.addEventListener("keydown", (e) => { if (e.key === "Backspace" && !inp.value && i > 0) ins[i - 1].focus(); });
-      });
-    });
-});
-
 /* ---------- Próximo corte (archivo de calendario) ---------- */
 function fechaProxima() { const d = new Date(); d.setDate(d.getDate() + CONFIG.semanasProximoCorte * 7); d.setHours(10, 0, 0, 0); return d; }
 function pintarProximo() {
@@ -558,7 +547,7 @@ function descargar(texto, nombre, tipo) {
 /* ---------- Contacto (se genera al momento, siempre con la sede correcta) ---------- */
 $("bContacto").addEventListener("click", () => {
   const s = SEDES[sede];
-  const v = ["BEGIN:VCARD", "VERSION:3.0", "N:La Sucursal;" + s.nombre + ";;;", "FN:La Sucursal · " + s.nombre, "ORG:La Sucursal Barbería", "TEL;TYPE=CELL,VOICE:" + s.telefono,
+  const v = ["BEGIN:VCARD", "VERSION:3.0", "N:La Sucursal;" + s.nombre + ";;;", "FN:La Sucursal · " + s.nombre, "ORG:La Sucursal Barbería", "TEL;TYPE=CELL,VOICE:" + s.telefono, "EMAIL:" + EMAIL,
     "ADR;TYPE=WORK:;;" + s.direccion.replace(/,/g, "\\,") + ";;;;España", "URL:" + location.origin + location.pathname + "?sede=" + sede, "NOTE:Reserva tu cita: " + s.reserva, "END:VCARD"].join("\r\n");
   descargar(v, "la-sucursal-" + sede + ".vcf", "text/vcard");
   toast("📇 Ábrelo para guardar el contacto");
@@ -588,12 +577,14 @@ $("bParking").addEventListener("click", () => {
 
 /* ---------- Carruseles ---------- */
 function tarjeta(it, ico, extra) {
-  return '<article class="item"><div class="foto">' + (it.foto ? '<img src="' + esc(it.foto) + '" alt="' + esc(it.nombre) + '" loading="lazy">' : icono(ico) + (CONFIG.previa ? "<em>foto pendiente</em>" : "")) + '</div>' +
+  return '<article class="item"><div class="foto">' + (it.foto ? '<img src="' + esc(it.foto) + '" alt="' + esc(it.nombre) + '" loading="lazy">' : icono(ico) + (CONFIG.previa ? "<em>foto pendiente</em>" : "")) +
+    (it.grito ? '<span class="grito">' + esc(it.grito) + '</span>' : "") + (it.etiqueta ? '<span class="sticker">' + esc(it.etiqueta) + '</span>' : "") + '</div>' +
     '<div class="cuerpo"><b>' + esc(it.nombre) + ast(it.ejemplo) + '</b><small>' + esc(it.desc || it.rol || "") + '</small>' + (extra || "") + '</div></article>';
 }
 function pintarCarruseles() {
   $("servicios").innerHTML = SERVICIOS.map((s) => tarjeta(s, "tijera", '<div class="fila"><span class="precio">' + esc(s.precio) + '</span><a class="mini" href="' + esc(SEDES[sede].reserva) + '" target="_blank" rel="noopener">Reservar</a></div>')).join("");
-  $("equipo").innerHTML = EQUIPO.map((p) => tarjeta(p, "persona", p.insta ? '<div class="fila" style="justify-content:center"><a class="mini" href="' + esc(p.insta) + '" target="_blank" rel="noopener">Ver sus cortes</a></div>' : "")).join("");
+  const eq = EQUIPO.slice().sort((a, b) => (b.sede === sede) - (a.sede === sede));
+  $("equipo").innerHTML = eq.map((p) => tarjeta(p, "persona", (p.tecnica ? '<span class="tecnica">Técnica especial<br><b>' + esc(p.tecnica) + '</b></span>' : "") + (p.insta ? '<div class="fila" style="justify-content:center"><a class="mini" href="' + esc(p.insta) + '" target="_blank" rel="noopener">Ver sus cortes</a></div>' : ""))).join("");
   $("tienda").innerHTML = TIENDA.map((p) => tarjeta(p, "camiseta", '<div class="fila"><span class="precio">' + esc(p.precio) + '</span><a class="mini" target="_blank" rel="noopener" href="https://wa.me/' + SEDES[sede].whatsapp + "?text=" + encodeURIComponent("Hola, me interesa «" + p.nombre + "» de la tienda de La Sucursal. ¿Está disponible?") + '">Lo quiero</a></div>')).join("");
   const algunEjemplo = (l) => CONFIG.previa && l.some((x) => x.ejemplo) ? "* ejemplo" : "";
   $("servNota").textContent = algunEjemplo(SERVICIOS); $("equipoNota").textContent = algunEjemplo(EQUIPO); $("tiendaNota").textContent = algunEjemplo(TIENDA);
@@ -607,6 +598,30 @@ $("bMusica").addEventListener("click", () => {
 });
 document.addEventListener("visibilitychange", () => { if (document.hidden) { $("audio").pause(); $("bMusica").setAttribute("aria-pressed", "false"); } });
 
+
+/* ---------- Piel manga y onomatopeyas ---------- */
+const ESTILO_POR_DEFECTO = "manga"; // "manga" o "clasico"
+function aplicarEstilo(e) {
+  document.body.classList.toggle("manga", e === "manga");
+  const b = $("bEstilo"); b.textContent = e === "manga" ? "Ver clásico" : "Ver manga";
+  try { sessionStorage.setItem("ls_estilo", e); } catch (x) {}
+}
+let estiloIni = (params.get("estilo") || "").toLowerCase();
+try { if (!estiloIni) estiloIni = sessionStorage.getItem("ls_estilo") || ""; } catch (x) {}
+aplicarEstilo(estiloIni === "clasico" ? "clasico" : ESTILO_POR_DEFECTO);
+if (CONFIG.previa) { $("bEstilo").addEventListener("click", () => aplicarEstilo(document.body.classList.contains("manga") ? "clasico" : "manga")); }
+const GRITOS = { bReserva: "¡ZAS!", bLlamar: "¡RING!", bWa: "¡PLING!", bRuta: "¡FIUU!", bBizum: "¡CLINK!", bResena: "¡BOOM!", bGerencia: "¡PSST!", bRecordar: "¡TIC-TAC!", bContacto: "¡CLIC!", bParking: "¡BRRUM!" };
+document.addEventListener("pointerdown", (e) => {
+  if (!document.body.classList.contains("manga") || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const el = e.target.closest && e.target.closest("#bReserva,#bLlamar,#bWa,#bRuta,#bBizum,#bResena,#bGerencia,#bRecordar,#bContacto,#bParking,.mini");
+  if (!el) return;
+  const t = document.createElement("span"); t.className = "pum";
+  t.textContent = GRITOS[el.id] || (el.textContent.trim() === "Lo quiero" ? "¡MÍO!" : "¡ZAS!");
+  t.style.left = Math.min(innerWidth - 70, Math.max(70, e.clientX)) + "px"; t.style.top = e.clientY + "px";
+  document.body.appendChild(t); setTimeout(() => t.remove(), 800);
+  if (navigator.vibrate) navigator.vibrate(25);
+});
+
 /* ---------- Animación al hacer scroll ---------- */
 const obs = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visto"); obs.unobserve(e.target); } }), { threshold: .12 }) : null;
 document.querySelectorAll(".aparece").forEach((el) => (obs ? obs.observe(el) : el.classList.add("visto")));
@@ -614,11 +629,10 @@ document.querySelectorAll(".aparece").forEach((el) => (obs ? obs.observe(el) : e
 /* ---------- Arranque ---------- */
 (async function () {
   if (CONFIG.previa) $("avisoPrevia").hidden = false;
-  if (CONFIG.previa) for (const k of Object.keys(SEDES)) if (!SEDES[k].pinHash) SEDES[k].pinHash = await hashPin(PIN_EJEMPLO, k);
   const deURL = (params.get("sede") || "").toLowerCase(), guardada = almacen.get("ls_sede");
   const inicial = SEDES[deURL] ? deURL : SEDES[guardada] ? guardada : CONFIG.sedePorDefecto;
   aplicarSede(inicial, !!SEDES[deURL]);
-  pintarSellos(); pintarProximo(); pintarParking(); pintarCarruseles();
+  pintarProximo(); pintarParking(); pintarCarruseles();
   contar("vista");
   setTimeout(() => {
     $("intro").classList.add("fuera");
