@@ -1,63 +1,29 @@
 # Studio 42 · Pet Pass
 
-Chapa NFC para collares con la ficha completa de la mascota: datos, dueño, veterinario, vacunas, alergias y agenda de visitas. Enfoque: cualquiera que escanee la chapa accede a la información, pero **solo el dueño** puede editarla con un PIN.
+Chapa NFC para el collar con la ficha de la mascota. **Nace en blanco**: el veterinario (o la familia) la activa al escanearla, rellena la ficha en 2 minutos y elige un PIN. A partir de ahí queda **bloqueada**: cualquiera que la escanee la lee y puede llamar a la familia, pero solo con el PIN se edita.
 
-## URLs
+## Enlaces
+- Chapa demo ya activada: `studio42.es/pets/?id=demo` (PIN `1234`)
+- Chapa demo en blanco (ver cómo se activa): `studio42.es/pets/?id=nueva`
+- Chapa real: `studio42.es/pets/?id=<código>` (el código lo crea Studio 42)
+- Venta a clínicas y peluquerías: `studio42.es/pets/clinicas/`
 
-- Demo pública: `https://studio42.es/pets/?id=demo` (PIN: `1234`)
-- Ficha de un cliente real: `https://studio42.es/pets/?id=<slug>` (necesita el fichero `pets/<slug>.json` en el repo)
+Las dos demos guardan los datos solo en el navegador. Las chapas reales guardan en el servidor.
 
-## Cómo funciona
+## Cómo crear chapas (Studio 42)
+1. En el Google Sheet → Extensiones → Apps Script, abre `CREAR_CHAPAS_PET`.
+2. Cambia `CANTIDAD` y `ENTREGADA_POR` (nombre de la clínica, o vacío).
+3. Ejecuta ▶. En la pestaña **PetPass** aparecen los códigos y sus URL.
+4. Graba cada URL en una chapa NFC (app NFC Tools, «Escribir → URL»).
 
-1. **Vista pública (lectura).** Al escanear la chapa, se abre esta página y se muestra la ficha de la mascota. El visitante puede:
-   - Llamar al dueño o escribirle por WhatsApp.
-   - Compartir su ubicación GPS directamente al WhatsApp del dueño.
-   - Ver alertas críticas (alergias, medicación), ficha completa, veterinario, vacunas y agenda.
+Si un dueño olvida el PIN: comprueba que es el dueño, pon el código en `RESETEAR_PIN_PET` y ejecuta. La ficha se conserva y la próxima persona que pulse «Editar ficha» elige un PIN nuevo.
 
-2. **Panel del dueño (edición).** Un botón flotante en la esquina abre el panel. Si la ficha está bloqueada, pide un **PIN de 4 a 6 dígitos**. El PIN no se guarda nunca en texto: se almacena su **hash SHA-256** en el campo `pinHash`. Una vez desbloqueado, el dueño:
-   - Edita los datos de la mascota, el dueño y el veterinario.
-   - Añade y borra vacunas.
-   - Añade visitas al veterinario (fecha, motivo, nota) a modo de agenda.
-   - Puede cambiar el PIN.
-   - Pulsa **Guardar y bloquear**: los cambios quedan persistidos y el panel se cierra. A partir de ese momento, quien escanee solo lee.
+## Seguridad
+- El PIN nunca se publica: se guarda cifrado (con sal) en la pestaña PetPass.
+- 5 PIN incorrectos bloquean esa chapa 15 minutos.
+- Solo se pueden activar chapas creadas por Studio 42 (códigos aleatorios).
+- El servidor filtra los campos y quita HTML antes de publicar `pets/<código>.json`.
+- La ficha (incluido el teléfono de la familia) es pública a propósito: es lo que permite que quien encuentre al animal llame. Mientras el repositorio sea público, también se ve en GitHub.
 
-3. **Dónde se guardan los cambios.** El JSON de base vive en el repositorio (`pets/<slug>.json`). Los cambios que haga el dueño desde el panel se guardan en el **localStorage del propio móvil** bajo las claves `s42_pet_<slug>` y `s42_pet_lock_<slug>`. Para una entrega profesional, basta con que el dueño abra la chapa en su móvil habitual (donde pondrá siempre al día las visitas).
-
-4. **Entrega al cliente.** Para cada mascota, Studio 42:
-   - Pide los datos al dueño.
-   - Genera el fichero `pets/<slug>.json`.
-   - Guarda el hash de un PIN que el dueño elija (`echo -n '1234' | sha256sum` lo calcula).
-   - Graba la URL `https://studio42.es/pets/?id=<slug>` en la chapa NFC NTAG216.
-
-## Estructura del JSON
-
-```json
-{
-  "schema": "s42-pet-pass-v1",
-  "nombre": "Toby",
-  "raza": "Golden Retriever",
-  "sexo": "Macho",
-  "fechaNac": "Mayo 2021",
-  "peso": 28.5,
-  "castrado": true,
-  "microchip": "981098108472911",
-  "fotoUrl": "",
-  "contactoNombre": "Manuel",
-  "contactoTelefono": "+34…",
-  "contactoWhatsapp": "+34…",
-  "alimentacion": "…",
-  "medicacion": "…",
-  "caracter": "…",
-  "alertas": ["Alérgico a …", "…"],
-  "vet": { "clinica": "…", "doctor": "…", "telefono": "+34…", "direccion": "…" },
-  "vacunas": [{ "nombre": "Rabia", "fecha": "Vigente" }],
-  "visitas": [{ "fecha": "2026-03-15", "motivo": "Revisión anual", "nota": "…" }],
-  "pinHash": "SHA-256 del PIN"
-}
-```
-
-## Qué queda pendiente (producción)
-
-- **Guardado remoto en GitHub (opcional).** Hoy los cambios viven en el navegador. Para que la ficha vaya en la nube, el panel puede enviar el JSON al Apps Script y este lo escribe en el repo (igual que hace Code.gs para los diagnósticos del Closer).
-- **Botón de descarga del JSON** por si el dueño quiere llevarse una copia a su correo (opcional).
-- Las piezas físicas: chapa de aluminio anodizado con el isotipo del cohete grabado y el chip NFC embebido. Posteriormente integrar en los packs del catálogo.
+## Requisitos
+Usa el mismo Apps Script que el Closer, con `GITHUB_TOKEN` configurado. Tras pegar el `Code.gs` nuevo hay que publicar una **Nueva versión** (Implementar → Administrar implementaciones).
