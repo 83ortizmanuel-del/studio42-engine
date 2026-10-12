@@ -44,7 +44,7 @@
  * ============================================================================
  */
 
-var VERSION = '3.4';
+var VERSION = '3.5';
 
 // Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
@@ -168,7 +168,7 @@ function doPost(e) {
     var r = acc.indexOf('pet_') === 0 ? petRouter_(datos)
       : acc.indexOf('panel_') === 0 ? panelRouter_(datos)
       : acc === 'pedido_guardar' ? pedidoGuardar_(datos)
-      : acc === 'buscar' ? buscar_(datos) : procesar_(datos);
+      : acc === 'buscar' ? buscar_(datos) : acc === 'ficha' ? ficha_(datos) : procesar_(datos);
     return json_(r);
   } catch (err) {
     console.error('doPost: ' + (err && err.stack || err));
@@ -252,6 +252,7 @@ function procesar_(raw) {
   var d = v.datos;
   d.closer = closer;
   d.lugar = lugar;
+  d.horarioMal = raw.horario_ok === false; // el Closer dijo que el horario de Google no es correcto
   if (avisoMaps) d.avisos.push(avisoMaps);
 
   var ruta = c.carpeta + '/' + d.slug + '.json';
@@ -373,13 +374,27 @@ function buscarPorNombre_(c, nombre) {
   } catch (e) { return null; }
 }
 
+/** Para el Closer: al elegir un negocio, trae toda su ficha de Google para revisarla en el local. */
+function ficha_(raw) {
+  var c = cfg_();
+  var au = autorizarCloser_(c, raw);
+  if (au.error) return { ok: false, error: au.error };
+  if (!c.mapsKey) return { ok: false, error: 'El buscador de Google Maps no está configurado.' };
+  var id = idLugar_(raw.place_id);
+  if (!id) return { ok: false, error: 'Negocio no válido.' };
+  if (!permitirPeticion_(c.maxBusquedas, 'b_')) return { ok: false, error: 'Demasiadas consultas esta hora. Inténtalo luego.' };
+  var det = detallesLugar_(c, id);
+  if (det.error) return { ok: false, error: det.error };
+  return { ok: true, lugar: det.lugar };
+}
+
 /** Ficha completa del negocio: teléfono, web, dirección, enlace a Maps, tipos y horario. */
 function detallesLugar_(c, id) {
   var r = UrlFetchApp.fetch('https://places.googleapis.com/v1/places/' + encodeURIComponent(id) + '?languageCode=es', {
     method: 'get', muteHttpExceptions: true,
     headers: {
       'X-Goog-Api-Key': c.mapsKey,
-      'X-Goog-FieldMask': 'id,displayName,formattedAddress,internationalPhoneNumber,websiteUri,types,googleMapsUri,regularOpeningHours.weekdayDescriptions'
+      'X-Goog-FieldMask': 'id,displayName,formattedAddress,internationalPhoneNumber,websiteUri,types,googleMapsUri,regularOpeningHours.weekdayDescriptions,businessStatus,rating,userRatingCount'
     }
   });
   var code = r.getResponseCode();
@@ -402,7 +417,11 @@ function detallesLugar_(c, id) {
     mapsUrl: maps,
     sector: sectorDesdeTipos_(p.types),
     tipos: (p.types || []).slice(0, 6).map(function (t) { return cadena_(t, 40); }),
-    horas: horas
+    horas: horas,
+    estado: /^(OPERATIONAL|CLOSED_TEMPORARILY|CLOSED_PERMANENTLY)$/.test(p.businessStatus || '') ? p.businessStatus : '',
+    rating: typeof p.rating === 'number' ? Math.round(p.rating * 10) / 10 : null,
+    resenas: typeof p.userRatingCount === 'number' ? p.userRatingCount : null,
+    whatsapp: telefonoMovilEs_(tel)
   } };
 }
 
@@ -870,7 +889,7 @@ function ensamblar_(d, personal) {
   var l = d.lugar;
   if (l && l.tel) contacto.push({ tipo: 'enlace', nombre: 'Llamar ahora', descripcion: 'Teléfono del negocio', icono: 'phone', colorIcono: '#34d399', url: 'tel:' + l.tel });
   if (l && l.mapsUrl) contacto.push({ tipo: 'enlace', nombre: 'Cómo llegar', descripcion: l.direccion || 'Abrir en Google Maps', icono: 'nav', colorIcono: '#4285F4', url: l.mapsUrl });
-  if (l && l.horas && l.horas.length) contacto.push({ tipo: 'info', nombre: 'Horario', descripcion: 'Días y horas de apertura', icono: 'clock',
+  if (l && l.horas && l.horas.length && !d.horarioMal) contacto.push({ tipo: 'info', nombre: 'Horario', descripcion: 'Días y horas de apertura', icono: 'clock',
     titulo: 'Horario de apertura', intro: 'Según la ficha de Google Maps. Puede variar en festivos.',
     tarjetas: [{ nivel: 'info', titulo: 'Semana', items: l.horas }],
     acciones: [{ texto: 'Preguntar por WhatsApp', whatsapp: true, estilo: 'whatsapp', mensaje: 'Hola {negocio}, quisiera confirmar el horario.' }] });

@@ -1,9 +1,9 @@
 BEGIN:VCARD
 VERSION:3.0
-N:Ambuila;Fernando;;;
-FN:Fernando Ambuila - La Sucursal Centro
+N:La Sucursal;Los Lirios;;;
+FN:La Sucursal Barbería - Los Lirios
 ORG:La Sucursal Barbería
 TEL;TYPE=CELL,VOICE:+34643023681
-ADR;TYPE=WORK:;;Logroño Centro;Logroño;La Rioja;;España
-URL:https://studio42.es/la-sucursal/?sede=centro
+ADR;TYPE=WORK:;;Parque Los Lirios, 4;Logroño;La Rioja;;España
+URL:https://studio42.es/la-sucursal/?sede=lirios
 END:VCARD

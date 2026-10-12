@@ -333,6 +333,19 @@
         .maps-item b { display: block; font-size: 13px; }
         .maps-item span { display: block; font-size: 11px; color: #9ca3af; margin-top: 2px; }
         .maps-ok { padding: 10px 12px; border-radius: 12px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.4); color: #a7f3d0; font-size: 12px; line-height: 1.45; }
+        .ficha{margin-top:10px;border-radius:14px;border:1px solid rgba(196,196,196,.25);background:rgba(255,255,255,.03);padding:12px;font-size:12px;line-height:1.45}
+        .ficha h4{margin:0 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent)}
+        .ficha .dato{display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+        .ficha .dato span:first-child{width:18px;flex:none;text-align:center}
+        .ficha .dato b{color:#f4f6f9;font-weight:600}
+        .ficha .dato small{color:#9aa0a9}
+        .ficha .tip{margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.3);color:#fde68a}
+        .ficha .preg{margin-top:8px;padding:10px;border-radius:12px;border:1px solid rgba(251,146,60,.5);background:rgba(251,146,60,.08);color:#fed7aa}
+        .ficha .preg.ok{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.08);color:#a7f3d0}
+        .ficha .preg .acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+        .ficha .preg button{padding:7px 11px;border-radius:99px;border:1px solid currentColor;background:none;color:inherit;font:600 11px inherit;font-family:inherit;cursor:pointer}
+        .ficha .preg.ok .acc{display:none}
+        .ficha .horas{margin:4px 0 0 26px;color:#c9ced6}
         .ayuda-inline{font-weight:400;opacity:.65;text-transform:none;letter-spacing:0;font-size:11px}
         .maps-ok b{color:#ecfdf5}
         .maps-ok button { margin-left: 8px; background: none; border: none; color: #fcd34d; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: 11px; }
@@ -415,6 +428,7 @@
                     </div>
                     <div id="maps-res" class="maps-res"></div>
                     <div id="maps-ok" class="maps-ok hidden-element"></div>
+                    <div id="ficha-google" class="ficha hidden-element" aria-live="polite"></div>
                     <div id="maps-msg" class="maps-msg"></div>
                     <p class="ayuda">Al elegirlo se rellenan nombre, sector, web y teléfono, y el botón de reseñas abrirá <b>directamente la ventana de valoración</b> de ese negocio. Si no aparece, rellena los datos a mano más abajo.</p>
                 </div>
@@ -728,6 +742,7 @@
         $('maps_consulta').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); buscarMaps(); } });
 
         function elegirLugar(x) {
+            const nombrePrevio = $('nombre_comercio').value.trim(), sectorPrevio = sectorSelect.value;
             $('place_id').value = x.id;
             $('nombre_comercio').value = x.nombre.slice(0, 60);
             if (x.sector && Array.from(sectorSelect.options).some((o) => o.value === x.sector)) {
@@ -743,13 +758,112 @@
             const editar = document.createElement('button'); editar.type = 'button'; editar.textContent = 'Cambiar nombre';
             editar.addEventListener('click', () => { $('grupo-nombre').classList.remove('hidden-element'); $('nombre_comercio').focus(); });
             const quitar = document.createElement('button'); quitar.type = 'button'; quitar.textContent = 'Quitar';
-            quitar.addEventListener('click', () => { $('place_id').value = ''; mapsOk.classList.add('hidden-element'); $('grupo-nombre').classList.remove('hidden-element'); $('grupo-google').classList.remove('hidden-element'); });
+            quitar.addEventListener('click', () => { $('place_id').value = ''; mapsOk.classList.add('hidden-element'); limpiarFicha(); $('grupo-nombre').classList.remove('hidden-element'); $('grupo-google').classList.remove('hidden-element'); });
             mapsOk.append(editar, quitar);
             mapsOk.classList.remove('hidden-element');
             // El nombre y el enlace de reseñas ya vienen de Maps: se esconden para no repetirlos
             $('grupo-nombre').classList.add('hidden-element');
             $('grupo-google').classList.add('hidden-element');
             if (!x.whatsapp) mapsMsg.textContent = 'Pide al dueño su WhatsApp y escríbelo abajo.';
+            cargarFicha(x, nombrePrevio, sectorPrevio);
+        }
+
+        /* ---------- Ficha de Google: todos los datos + lo que hay que validar con el dueño ---------- */
+        let pendientes = [];          // preguntas que el Closer debe validar antes de enviar
+        let horarioOk = null;         // false si el Closer dice que el horario de Google no es correcto
+        const normN = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+        function limpiarFicha() { pendientes = []; horarioOk = null; const f = $('ficha-google'); f.textContent = ''; f.classList.add('hidden-element'); }
+
+        async function cargarFicha(x, nombrePrevio, sectorPrevio) {
+            const f = $('ficha-google'); limpiarFicha();
+            f.classList.remove('hidden-element'); f.textContent = 'Leyendo la ficha completa de Google…';
+            let l = null;
+            try {
+                const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ accion: 'ficha', closer_id: $('closer_id').value, place_id: x.id }), redirect: 'follow' });
+                const r = await resp.json();
+                if (r.ok) l = r.lugar; else { f.textContent = r.error || 'No se pudo leer la ficha.'; return; }
+            } catch (e) { f.textContent = 'No se pudo leer la ficha completa (sin conexión). Revisa los datos a mano.'; return; }
+            if ($('place_id').value !== x.id) return; // el Closer cambió de negocio mientras cargaba
+            pintarFicha(l, nombrePrevio, sectorPrevio);
+        }
+
+        function el(tag, cls, txt) { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+        function dato(f, ico, titulo, valor, extra) {
+            const d = el('div', 'dato'); d.append(el('span', '', ico));
+            const t = el('div'); const b = el('b', '', titulo + ': '); t.append(b, document.createTextNode(valor || '—'));
+            if (extra) { t.append(document.createElement('br'), el('small', '', extra)); }
+            d.append(t); f.append(d); return d;
+        }
+        function pregunta(f, texto, opciones) {
+            const q = { hecho: false }; pendientes.push(q);
+            const box = el('div', 'preg'); const p = el('div', '', '❓ ' + texto); const acc = el('div', 'acc');
+            opciones.forEach((o) => {
+                const b = el('button', '', o.texto); b.type = 'button';
+                b.addEventListener('click', () => {
+                    const r = o.accion ? o.accion() : true;
+                    if (r === false) return;
+                    q.hecho = true; box.classList.add('ok'); p.textContent = '✓ ' + (o.resumen || texto);
+                });
+                acc.append(b);
+            });
+            box.append(p, acc); f.append(box); return q;
+        }
+
+        function pintarFicha(l, nombrePrevio, sectorPrevio) {
+            const f = $('ficha-google'); f.textContent = '';
+            f.append(el('h4', '', 'Ficha de Google · revísala con el dueño'));
+            const estados = { OPERATIONAL: 'Abierto', CLOSED_TEMPORARILY: 'Cerrado temporalmente', CLOSED_PERMANENTLY: 'Cerrado definitivamente' };
+            dato(f, '🏷️', 'Nombre', l.nombre);
+            dato(f, '📍', 'Dirección', l.direccion);
+            dato(f, '📞', 'Teléfono', l.tel || 'no tiene', l.tel ? (l.whatsapp ? 'Es un móvil' : 'Es un fijo: no sirve para WhatsApp') : '');
+            dato(f, '🌐', 'Web', l.web || 'no tiene');
+            const dh = dato(f, '🕒', 'Horario', l.horas && l.horas.length ? l.horas.length + ' días publicados' : 'no publicado');
+            if (l.horas && l.horas.length) { const hs = el('div', 'horas'); l.horas.forEach((h) => hs.append(el('div', '', h.etiqueta + ': ' + h.valor))); dh.after(hs); }
+            if (l.rating) dato(f, '⭐', 'Valoración', String(l.rating).replace('.', ',') + ' de 5', (l.resenas || 0) + ' reseñas en Google');
+            if (l.estado && l.estado !== 'OPERATIONAL') dato(f, '⚠️', 'Estado en Google', estados[l.estado] || l.estado);
+
+            // Argumento de venta
+            if (l.rating && (l.rating < 4.3 || (l.resenas || 0) < 30)) {
+                f.append(el('div', 'tip', '💡 Argumento de venta: ' + (l.rating < 4.3 ? 'tiene ' + String(l.rating).replace('.', ',') + '★. ' : '') + ((l.resenas || 0) < 30 ? 'Solo ' + (l.resenas || 0) + ' reseñas. ' : '') + (l.rating < 4.3 ? 'Con el botón de reseña directa y la vía privada para quejas, sube su nota sin pedir favores.' : 'Con el botón de reseña directa en el mostrador, multiplica sus reseñas cada semana.')));
+            } else if (!l.rating) {
+                f.append(el('div', 'tip', '💡 Argumento de venta: aún no tiene reseñas en Google. Las primeras 20 cambian cómo le ve la gente.'));
+            }
+
+            // ---- Validaciones ----
+            if (l.estado === 'CLOSED_PERMANENTLY' || l.estado === 'CLOSED_TEMPORARILY') {
+                pregunta(f, 'Google dice que este negocio está ' + estados[l.estado].toLowerCase() + '. ¿Es el negocio correcto y está abierto?', [
+                    { texto: 'Sí, es este y está abierto', resumen: 'Confirmado: está abierto. Dile que lo actualice en su perfil de Google.' },
+                    { texto: 'No, elegir otro', accion: () => { $('place_id').value = ''; mapsOk.classList.add('hidden-element'); limpiarFicha(); $('grupo-nombre').classList.remove('hidden-element'); $('grupo-google').classList.remove('hidden-element'); $('maps_consulta').focus(); return false; } }]);
+            }
+            if (nombrePrevio && normN(nombrePrevio) !== normN(l.nombre)) {
+                pregunta(f, 'Escribiste «' + nombrePrevio + '» pero en Google se llama «' + l.nombre + '». ¿Cuál ponemos en la landing?', [
+                    { texto: 'El de Google', resumen: 'Nombre: ' + l.nombre, accion: () => { $('nombre_comercio').value = l.nombre.slice(0, 60); } },
+                    { texto: 'El mío', resumen: 'Nombre: ' + nombrePrevio, accion: () => { $('nombre_comercio').value = nombrePrevio.slice(0, 60); } }]);
+            }
+            if (sectorPrevio && l.sector && sectorPrevio !== l.sector) {
+                pregunta(f, 'Elegiste el sector «' + sectorPrevio + '» y Google lo clasifica como «' + l.sector + '». ¿Cuál es?', [
+                    { texto: 'El de Google', resumen: 'Sector: ' + l.sector, accion: () => { sectorSelect.value = l.sector; sectorSelect.dispatchEvent(new Event('change')); } },
+                    { texto: 'El mío', resumen: 'Sector: ' + sectorPrevio, accion: () => { sectorSelect.value = sectorPrevio; sectorSelect.dispatchEvent(new Event('change')); } }]);
+            }
+            if (l.whatsapp) {
+                if (!$('whatsapp').value.trim()) $('whatsapp').value = l.whatsapp;
+                pregunta(f, '¿El móvil de Google (' + l.tel + ') es el WhatsApp del negocio?', [
+                    { texto: 'Sí', resumen: 'WhatsApp confirmado: ' + l.tel, accion: () => { $('whatsapp').value = l.whatsapp; } },
+                    { texto: 'No, es otro', resumen: 'WhatsApp distinto: escrito a mano', accion: () => { if ($('whatsapp').value.replace(/\D/g, '') === l.whatsapp) $('whatsapp').value = ''; $('whatsapp').focus(); $('whatsapp').scrollIntoView({ behavior: 'smooth', block: 'center' }); if ($('whatsapp').value.replace(/\D/g, '').length < 9) { alert('Escribe el WhatsApp del negocio y vuelve a pulsar «No, es otro».'); return false; } } }]);
+            } else {
+                pregunta(f, (l.tel ? 'El teléfono de Google es fijo (' + l.tel + ') y no sirve para WhatsApp.' : 'Google no tiene teléfono de este negocio.') + ' Pide al dueño su WhatsApp y escríbelo en su campo.', [
+                    { texto: 'Ya lo he escrito', resumen: 'WhatsApp escrito a mano', accion: () => { if ($('whatsapp').value.replace(/\D/g, '').length < 9) { $('whatsapp').focus(); $('whatsapp').scrollIntoView({ behavior: 'smooth', block: 'center' }); alert('Falta el WhatsApp (mínimo 9 cifras).'); return false; } } }]);
+            }
+            if (l.horas && l.horas.length) {
+                pregunta(f, '¿El horario de Google es el correcto? Saldrá en su landing.', [
+                    { texto: 'Sí, es correcto', resumen: 'Horario de Google confirmado', accion: () => { horarioOk = true; } },
+                    { texto: 'No', resumen: 'Horario de Google NO se publica. Dile que lo corrija en su perfil de Google.', accion: () => { horarioOk = false; } }]);
+            } else {
+                pregunta(f, 'Google no tiene su horario publicado, así que su landing no lo mostrará. Recomiéndale añadirlo en su perfil de Google.', [
+                    { texto: 'Entendido', resumen: 'Sin horario en Google: recomendado añadirlo' }]);
+            }
+            if (l.web) { if (!$('web').value.trim()) $('web').value = l.web; }
         }
 
         /* ------------------------------- utilidades ------------------------------- */
@@ -795,7 +909,7 @@
             const copiar = document.createElement('button'); copiar.type = 'button'; copiar.className = 'btn-fin'; copiar.textContent = 'Copiar enlace';
             copiar.addEventListener('click', async () => { try { await navigator.clipboard.writeText(url); copiar.textContent = '¡Copiado!'; } catch (e) { copiar.textContent = 'Mantén pulsado el enlace'; } });
             const nuevo = document.createElement('button'); nuevo.type = 'button'; nuevo.className = 'btn-fin'; nuevo.textContent = 'Nuevo diagnóstico';
-            nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; $('place_id').value = ''; mapsOk.classList.add('hidden-element'); $('grupo-nombre').classList.remove('hidden-element'); $('grupo-google').classList.remove('hidden-element'); mapsRes.textContent = ''; mapsMsg.textContent = ''; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+            nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; $('place_id').value = ''; mapsOk.classList.add('hidden-element'); limpiarFicha(); $('grupo-nombre').classList.remove('hidden-element'); $('grupo-google').classList.remove('hidden-element'); mapsRes.textContent = ''; mapsMsg.textContent = ''; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
             const ped = document.createElement('button'); ped.type = 'button'; ped.className = 'btn-fin principal'; ped.textContent = '🛒 Preparar el pedido';
             ped.addEventListener('click', () => abrirPedido(url));
             acc.append(abrir, ped, copiar, nuevo);
@@ -1101,6 +1215,11 @@
             if (sectorSelect.value === 'Otros' && !val('sector_otro_input')) errores.push('Especifica el sector novedoso.');
             if (val('whatsapp').replace(/\D/g, '').length < 9) errores.push('El WhatsApp necesita al menos 9 cifras.');
             if (errores.length) { alert(errores.join('\n')); return; }
+            const sinValidar = pendientes.filter((q) => !q.hecho).length;
+            if (val('place_id') && sinValidar) {
+                alert('Te ' + (sinValidar === 1 ? 'queda 1 dato' : 'quedan ' + sinValidar + ' datos') + ' de la ficha de Google por validar con el dueño (recuadros naranjas).');
+                $('ficha-google').scrollIntoView({ behavior: 'smooth', block: 'center' }); return;
+            }
             if (!val('place_id') && !val('google')) {
                 const buscar = confirm('⚠️ No has elegido el negocio en el buscador de Google Maps.\n\nSin eso la landing puede salir SIN el botón de reseña de Google (intentaré encontrarlo por su nombre).\n\nAceptar = buscarlo ahora\nCancelar = enviar igualmente');
                 if (buscar) { $('maps_consulta').value = val('nombre_comercio'); $('maps-box').scrollIntoView({ behavior: 'smooth', block: 'center' }); buscarMaps(); return; }
@@ -1115,7 +1234,7 @@
             enviar({
                 closer_id: val('closer_id'), nombre: val('nombre_comercio'), sector: sector, whatsapp: val('whatsapp'),
                 fricciones: chips, notas: val('fricciones_extra'),
-                place_id: val('place_id'), google: val('google'), instagram: val('instagram'), facebook: val('facebook'), web: val('web'), bizum: val('bizum'),
+                place_id: val('place_id'), horario_ok: horarioOk, google: val('google'), instagram: val('instagram'), facebook: val('facebook'), web: val('web'), bizum: val('bizum'),
                 estilo: val('branding'), color: $('color-picker').value, logo: val('logo_extra'),
                 peticion: nuevaPeticion()
             }, false);
