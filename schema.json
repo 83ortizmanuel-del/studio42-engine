@@ -81,6 +81,10 @@
     "paddingLogo": {
       "type": "string",
       "pattern": "^\\d{1,2}px( \\d{1,2}px)?$"
+    },
+    "pausada": {
+      "type": "boolean",
+      "description": "Lo pone Studio 42 cuando la suscripción no está al día: la landing muestra «en pausa»."
     }
   },
   "definitions": {

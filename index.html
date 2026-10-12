@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studio 42 · Agencia phygital en Logroño · NFC, reseñas y Pet Pass</title>
-    <meta name="description" content="Studio 42 es la primera agencia phygital de Logroño: unimos lo físico (chapas, llaveros y displays NFC) con lo digital (landings a medida, reseñas de Google, Pet Pass para mascotas). Pago único desde 89 €.">
+    <meta name="description" content="Studio 42 es la primera agencia phygital de Logroño: unimos lo físico (chapas, llaveros y displays NFC) con lo digital (landings a medida, reseñas de Google, Pet Pass para mascotas). Apertura desde 89 € y cuota desde 19 €/mes, sin permanencia.">
     <meta name="keywords" content="agencia phygital Logroño, phygital, NFC Logroño, reseñas Google Logroño, pet pass mascota, chapa NFC perro, landing NFC bar, hostelería Logroño, La Rioja, QR mostrador">
     <meta name="theme-color" content="#07080b">
     <meta name="author" content="Studio 42 · Manuel Alejandro Ortiz">
@@ -13,13 +13,13 @@
     <meta property="og:locale" content="es_ES">
     <meta property="og:site_name" content="Studio 42">
     <meta property="og:title" content="Studio 42 · Agencia phygital en Logroño">
-    <meta property="og:description" content="Chapas, llaveros y displays NFC con landing a medida. Para hostelería, comercio y mascotas. Pago único desde 89 €.">
+    <meta property="og:description" content="Chapas, llaveros y displays NFC con landing a medida. Para hostelería, comercio y mascotas. Apertura desde 89 € y cuota desde 19 €/mes, sin permanencia.">
     <meta property="og:url" content="https://studio42.es/">
     <meta property="og:image" content="https://studio42.es/img/expositor.webp">
     <meta property="og:image:alt" content="Display NFC phygital de Studio 42 sobre el mostrador de un comercio de Logroño">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Studio 42 · Agencia phygital en Logroño">
-    <meta name="twitter:description" content="Lo físico se encuentra con lo digital. Pago único desde 89 €.">
+    <meta name="twitter:description" content="Lo físico se encuentra con lo digital. Apertura desde 89 € · desde 19 €/mes.">
     <meta name="twitter:image" content="https://studio42.es/img/expositor.webp">
     <link rel="icon" href="img/logo.webp" type="image/webp">
     <link rel="preload" href="fonts/InterDisplay-ExtraBold.woff" as="font" type="font/woff" crossorigin>
@@ -35,7 +35,7 @@
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
      {"@type":"Question","name":"¿Cómo funciona el sistema NFC de Studio 42 para reseñas?","acceptedAnswer":{"@type":"Answer","text":"El cliente acerca el móvil al display o al llavero del camarero y se abre una landing a medida. Al final hay dos botones iguales: dejar la opinión directamente en la ventana de reseña de la ficha de Google o hablar con la gerencia por WhatsApp. Nadie se filtra por estrellas."}},
-     {"@type":"Question","name":"¿Hay cuotas mensuales?","acceptedAnswer":{"@type":"Answer","text":"No. Los packs son de pago único: hardware, landing a medida e instalación. Sin comisiones por reseña ni cuotas mensuales."}},
+     {"@type":"Question","name":"¿Hay cuota mensual?","acceptedAnswer":{"@type":"Answer","text":"Sí, pequeña y sin permanencia: Ecosistema Activo desde 19 € al mes + IVA. Incluye la landing activa, cambios, informe mensual con tus números y soporte. Cada pack incluye meses gratis. Sin comisiones por reseña."}},
      {"@type":"Question","name":"¿Y si el móvil del cliente no tiene NFC?","acceptedAnswer":{"@type":"Answer","text":"Los displays llevan un código QR junto al chip. Con la cámara del móvil se accede a la misma landing."}},
      {"@type":"Question","name":"¿Cumple las políticas de Google?","acceptedAnswer":{"@type":"Answer","text":"Sí. No se filtra por estrellas, no se oculta ninguna opinión y no se ofrece nada a cambio de reseñas. Las dos opciones (Google y gerencia) son igual de visibles."}}
     ]}
@@ -215,6 +215,17 @@
         .promo-logrono .tag-promo { background: var(--ti-grad); color: #0b0c0f; font: 800 .72rem var(--f-body); padding: .25rem .6rem; border-radius: 999px; letter-spacing: .04em; flex: none; margin-top: .1rem; }
         .promo-logrono strong { color: var(--bone); }
 
+        .gift { margin: -.6rem 0 1rem; font: 600 .82rem var(--f-body); color: #e6eaf0; background: rgba(220,228,240,.08); border: 1px dashed rgba(220,228,240,.3); border-radius: 10px; padding: .45rem .7rem; }
+        .periodo { display: inline-grid; grid-template-columns: repeat(3, auto); gap: 4px; padding: 4px; border-radius: 999px; background: var(--ink-2); border: 1px solid var(--line); margin-bottom: 1.8rem; }
+        .periodo button { border: 0; background: none; color: var(--muted); font: 600 .88rem var(--f-body); padding: .65rem 1.1rem; border-radius: 999px; cursor: pointer; }
+        .periodo button.on { background: var(--ti-grad); color: #0b0c0f; }
+        .periodo small { display: block; font-size: .7rem; opacity: .8; }
+        .plan .cost { margin: .8rem 0 .2rem; }
+        .plan .eq { color: var(--muted); font-size: .85rem; min-height: 1.3em; margin-bottom: 1rem; }
+        .roi { display: grid; gap: 1rem; margin-top: 2rem; }
+        .roi div { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.3rem; background: linear-gradient(165deg, rgba(255,255,255,.05), transparent 60%); color: #d8d6d0; font-size: .95rem; }
+        .roi b { color: var(--bone); display: block; font: 800 1.2rem var(--f-display); margin-bottom: .2rem; }
+        @media (min-width: 800px) { .roi { grid-template-columns: repeat(3, 1fr); } .planes { grid-template-columns: repeat(3, 1fr) !important; } }
         /* Antes / ahora */
         .versus { display: grid; gap: 2.2rem; }
         .versus h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; }
@@ -370,6 +381,7 @@
                 <a href="#como">Cómo funciona</a>
                 <a href="#piezas">Piezas</a>
                 <a href="#packs">Packs</a>
+                <a href="#planes">Planes</a>
                 <a href="/pets/clinicas/">Pet Pass</a>
                 <a href="#faq">Preguntas</a>
             </div>
@@ -397,7 +409,7 @@
                     <ul class="facts" aria-label="Datos clave">
                         <li>Sin app que instalar</li>
                         <li>Funciona con NFC y con QR</li>
-                        <li>Pago único, desde 149 € + IVA</li>
+                        <li>Apertura desde 89 € · desde 19 €/mes</li>
                         <li>Hecho en Logroño</li>
                     </ul>
                 </div>
@@ -602,7 +614,7 @@
             <div class="wrap">
                 <div class="section-head rv">
                     <h2>Elige cómo entras en Studio 42</h2>
-                    <p>Cuatro formas de empezar según el tamaño de tu local. Pago único, sin cuotas mensuales ni comisiones por reseña. Precios sin IVA.</p>
+                    <p>El pack es el pago de apertura: piezas, diseño de tu landing e instalación. Cada uno incluye meses gratis de <a href="#planes" style="color:#e6eaf0">Ecosistema Activo Pro</a>; después eliges tu plan, desde 19 €/mes y sin permanencia. Precios sin IVA.</p>
                 </div>
                 <div class="rv promo-logrono"><span class="tag-promo">Lanzamiento Logroño</span><div><strong>Primeros 15 locales de Logroño:</strong> instalación, foto profesional del mostrador para tu ficha de Google y 2 llaveros extra sin coste. Vigente mientras duren las plazas.</div></div>
                 <div class="rv packs">
@@ -610,6 +622,7 @@
                         <h3>Prueba Logroño</h3>
                         <p class="for">Para probar la tecnología sin comprometerte. Mide el impacto en 30 días.</p>
                         <p class="cost">89 €<small>+ IVA</small></p>
+                        <p class="gift">🎁 Incluye 1 mes de Ecosistema Pro</p>
                         <ul>
                             <li><span><b>Landing esencial</b> con reseña directa y canal privado.</span></li>
                             <li><span><b>1 display acrílico</b> biselado con chip NFC y QR.</span></li>
@@ -623,6 +636,7 @@
                         <h3>Imán de mostrador</h3>
                         <p class="for">Convierte la zona de caja en un asistente rápido, sin esperas.</p>
                         <p class="cost">149 €<small>+ IVA</small></p>
+                        <p class="gift">🎁 Incluye 2 meses de Ecosistema Pro</p>
                         <ul>
                             <li><span><b>Landing a medida</b> con botones rápidos para citas, contacto y servicios.</span></li>
                             <li><span><b>Reseña directa y canal privado:</b> dos botones igual de visibles.</span></li>
@@ -637,6 +651,7 @@
                         <h3>Efecto multiplicador</h3>
                         <p class="for">Para equipos con varios puntos de atención.</p>
                         <p class="cost">349 €<small>+ IVA</small></p>
+                        <p class="gift">🎁 Incluye 3 meses de Ecosistema Pro</p>
                         <ul>
                             <li><span><b>Landing avanzada</b> con dudas frecuentes, parking por GPS y triaje.</span></li>
                             <li><span><b>Canal privado con la gerencia</b> junto a la reseña pública, sin sustituirla.</span></li>
@@ -650,6 +665,7 @@
                         <h3>Dominio local total</h3>
                         <p class="for">Infraestructura completa y vídeo para el local de referencia de su zona.</p>
                         <p class="cost">549 €<small>+ IVA</small></p>
+                        <p class="gift">🎁 Incluye 6 meses de Ecosistema Pro</p>
                         <ul>
                             <li><span><b>Micro-tour con dron</b> (piloto certificado AESA) de interior y fachada, listo para Google Maps e Instagram.</span></li>
                             <li><span><b>Welcome Pack</b>: caja imantada y tarjeta de madera grabada.</span></li>
@@ -660,6 +676,66 @@
                         <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20el%20Pack%20Dominio%20Local.">Quiero este pack</a>
                     </article>
                 </div>
+            </div>
+        </section>
+
+
+        <section id="planes" style="background: var(--ink-2); border-block: 1px solid var(--line)">
+            <div class="wrap">
+                <div class="section-head rv">
+                    <h2>Ecosistema Activo: tu sistema, siempre vivo</h2>
+                    <p>La cuota que mantiene tu landing activa, la mejora cada mes y te enseña con números lo que te aporta. Sin permanencia: cancelas cuando quieras.</p>
+                </div>
+                <div class="periodo" role="tablist" aria-label="Forma de pago">
+                    <button type="button" class="on" data-per="mensual">Mensual</button>
+                    <button type="button" data-per="trimestral">Trimestral<small>−5 %</small></button>
+                    <button type="button" data-per="anual">Anual<small>2 meses gratis</small></button>
+                </div>
+                <div class="packs planes">
+                    <article class="pack plan">
+                        <h3>Esencial</h3>
+                        <p class="for">Para que todo siga funcionando sin preocuparte.</p>
+                        <p class="cost" data-m="19">19 €<small>/mes + IVA</small></p><p class="eq"></p>
+                        <ul>
+                            <li><span><b>Landing activa</b> y alojada, con reseña directa y canal privado.</span></li>
+                            <li><span><b>2 cambios al mes</b>: horario, carta, teléfono, promociones.</span></li>
+                            <li><span><b>Informe mensual</b> en tu correo: visitas, reseñas y WhatsApp.</span></li>
+                            <li><span><b>Soporte por WhatsApp</b> en 48 h.</span></li>
+                        </ul>
+                        <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20plan%20Esencial.">Quiero Esencial</a>
+                    </article>
+                    <article class="pack plan rec">
+                        <span class="tag">El que más rinde</span>
+                        <h3>Pro</h3>
+                        <p class="for">Para exprimir cada toque y ver qué funciona.</p>
+                        <p class="cost" data-m="39">39 €<small>/mes + IVA</small></p><p class="eq"></p>
+                        <ul>
+                            <li><span><b>Cambios ilimitados</b> en 24 h.</span></li>
+                            <li><span><b>Informe por pieza y por empleado</b>: qué llavero trae más reseñas.</span></li>
+                            <li><span><b>Campañas de temporada</b>: menú del día, rebajas, Navidad.</span></li>
+                            <li><span><b>2 llaveros de reposición</b> al año y atención prioritaria.</span></li>
+                        </ul>
+                        <a class="btn btn-brass" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Me%20interesa%20el%20plan%20Pro.">Quiero Pro</a>
+                    </article>
+                    <article class="pack plan">
+                        <h3>Multi-sede</h3>
+                        <p class="for">Para negocios con varios locales.</p>
+                        <p class="cost" data-m="79">79 €<small>/mes + IVA</small></p><p class="eq"></p>
+                        <ul>
+                            <li><span><b>Todo lo de Pro</b> en cada local.</span></li>
+                            <li><span><b>Landing hub</b> con todas tus sedes en un toque.</span></li>
+                            <li><span><b>Informe comparado</b> entre sedes.</span></li>
+                            <li><span><b>+29 €/mes</b> por cada sede extra.</span></li>
+                        </ul>
+                        <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Tengo%20varias%20sedes%20y%20me%20interesa%20el%20plan%20Multi-sede.">Quiero Multi-sede</a>
+                    </article>
+                </div>
+                <div class="roi">
+                    <div><b>Menos de 1,10 € al día</b>Pro en pago anual: 390 € al año. Menos que un café.</div>
+                    <div><b>Se paga con 3 clientes</b>Si tu ticket medio es 15 €, tres clientes más al mes cubren la cuota.</div>
+                    <div><b>Ves lo que te aporta</b>Cada mes, un informe con tus números. Si no te compensa, cancelas.</div>
+                </div>
+                <p class="disclaimer" style="margin-top:1.4rem">¿Clínica veterinaria o peluquería canina? Plan <a href="/pets/clinicas/" style="color:#e6eaf0">Pet Pass Clínica</a>: 29 €/mes + IVA. Precios sin IVA. Si la cuota no se paga, la landing se pone en pausa y se reactiva al pagar.</p>
             </div>
         </section>
 
@@ -693,7 +769,8 @@
                     <details><summary>¿Cómo funciona el sistema para facilitar las reseñas?</summary><p>Al acercar el teléfono al soporte se abre una interfaz con los botones útiles de tu negocio. Al final hay dos opciones igual de visibles: una lleva directamente a la ventana de reseña de tu ficha de Google y la otra abre un WhatsApp con la gerencia. No se filtra por estrellas, no se oculta ninguna opinión y no se ofrece nada a cambio de reseñas, como piden las normas de Google.</p></details>
                     <details><summary>¿Cumple las políticas de Google y la normativa de consumo?</summary><p>Está diseñado para cumplirlas: solo canaliza opiniones de clientes reales que están en tu local, deja siempre elegir al cliente y no usa bots ni reseñas inventadas. Si Google o la normativa cambian sus reglas, adaptamos el sistema.</p></details>
                     <details><summary>¿Y si el móvil del cliente es antiguo o no tiene el NFC activado?</summary><p>Los displays llevan un código QR junto al chip. Con la cámara del móvil se accede a exactamente la misma pantalla.</p></details>
-                    <details><summary>¿Hay cuotas mensuales o comisiones por reseña?</summary><p>No. Los packs son de pago único: el hardware, la programación de la landing y la configuración inicial. Las piezas son tuyas y no cobramos comisión por las reseñas ni por los clientes que consigas.</p></details>
+                    <details><summary>¿Hay cuota mensual?</summary><p>Sí, y pequeña: el plan Ecosistema Activo empieza en 19 € al mes + IVA, sin permanencia. Paga que tu landing siga activa y mejorando, los cambios que pidas, el informe mensual con tus números y el soporte. Tu pack incluye meses gratis de Pro para que lo pruebes. No cobramos comisión por reseña ni por cliente.</p></details>
+                    <details><summary>¿Qué pasa si dejo de pagar la cuota?</summary><p>Te avisamos varias veces. Si no se regulariza, tu landing se pone en pausa (tus clientes verán «en pausa» al acercar el móvil). Las piezas son tuyas: en cuanto se paga, se reactiva al momento, sin cambiar nada.</p></details>
                     <details><summary>Si cambio de carta, de teléfono o abro otra sede, ¿tengo que cambiar las piezas?</summary><p>No. Los chips apuntan a enlaces en la nube, así que cambiamos el destino en remoto sin que tengas que reponer los soportes del local.</p></details>
                     <details><summary>¿En cuánto tiempo recupero la inversión?</summary><p>Depende de cada negocio y no podemos garantizar un plazo ni un resultado. Más reseñas recientes y una ficha de Google cuidada ayudan a que te elijan frente a otros locales. Para saber si te compensa, calcula cuántos clientes nuevos necesitarías para cubrir la inversión. En la demo lo vemos con tus números.</p></details>
                     <details><summary>¿En qué consiste el micro-tour con dron del pack Dominio?</summary><p>Manuel acude a tu local con un dron equipado con protecciones para interiores y con certificación de piloto UAS de AESA. Grabamos un recorrido del interior y la fachada, lo editamos con música y lo dejamos listo para tu ficha de Google Maps y para Instagram.</p></details>
@@ -738,6 +815,7 @@
             <div class="cols">
                 <a href="/pets/clinicas/">Pet Pass clínicas</a>
                 <a href="/talent/">Studio 42 Talent</a>
+                <a href="condiciones.html">Condiciones</a>
                 <a href="privacidad.html">Privacidad</a>
                 <a href="cookies.html">Cookies</a>
                 <a href="contacto.vcf?v=2" download="Studio42-Contacto.vcf">Guardar contacto</a>
@@ -879,6 +957,26 @@
         (function(){ var els=document.querySelectorAll('.rv'); if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
           var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
           els.forEach(function(e){io.observe(e)}); })();
+
+        /* Planes: mensual / trimestral (−5 %) / anual (10 meses) */
+        (function () {
+            var euros = function (n) { return (Math.round(n * 100) / 100).toLocaleString('es-ES', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €'; };
+            function pintar(per) {
+                document.querySelectorAll('.plan .cost').forEach(function (c) {
+                    var m = +c.dataset.m, eq = c.nextElementSibling;
+                    if (per === 'trimestral') { c.innerHTML = euros(m * 3 * .95) + '<small>/trimestre + IVA</small>'; eq.textContent = 'Equivale a ' + euros(m * .95) + ' al mes'; }
+                    else if (per === 'anual') { c.innerHTML = euros(m * 10) + '<small>/año + IVA</small>'; eq.textContent = 'Equivale a ' + euros(m * 10 / 12) + ' al mes · ahorras ' + euros(m * 2); }
+                    else { c.innerHTML = euros(m) + '<small>/mes + IVA</small>'; eq.textContent = 'Sin permanencia'; }
+                });
+            }
+            document.querySelectorAll('.periodo button').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    document.querySelectorAll('.periodo button').forEach(function (o) { o.classList.toggle('on', o === b); });
+                    pintar(b.dataset.per);
+                });
+            });
+            pintar('mensual');
+        })();
 </script>
 </body>
 </html>

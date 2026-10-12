@@ -42,7 +42,7 @@
  * ============================================================================
  */
 
-var VERSION = '3.1';
+var VERSION = '3.2';
 
 // Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
@@ -151,6 +151,11 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  // Contador anónimo de la landing: rápido y sin cerrojo (no debe esperar a nadie)
+  try {
+    var pe = leerPeticion_(e);
+    if (pe.accion === 'ev') return json_(registrarEvento_(pe));
+  } catch (x) { /* sigue el flujo normal */ }
   var lock = LockService.getScriptLock();
   var tuvoLock = false;
   try {
@@ -978,6 +983,8 @@ function PROBAR_CONFIGURACION() {
   salida.push((c.mapsKey ? '✔' : '⚠') + ' GOOGLE_MAPS_API_KEY ' + (c.mapsKey ? 'guardada' : 'no guardada (el buscador de Maps no funcionará; modo manual)'));
   salida.push('Closers permitidos: ' + (c.closers.length ? c.closers.join(', ') : '(cualquiera con formato válido — conviene definir CLOSERS)'));
   var pc = PropertiesService.getScriptProperties().getProperty('PANEL_CLAVE') || '';
+  var sk = stripeClave_(), pr = preciosStripe_();
+  salida.push(!sk ? '· Stripe: sin configurar (cuando tengas la cuenta, crea STRIPE_SECRET_KEY)' : (/^sk_test_/.test(sk) ? '✔ Stripe en MODO PRUEBA' : '✔ Stripe en modo REAL') + (Object.keys(pr).length ? ' · ' + Object.keys(pr).length + ' precios creados' : ' · ✘ falta ejecutar CREAR_PRODUCTOS_STRIPE'));
   salida.push(pc.length >= 6 ? '✔ Panel de control: contraseña configurada (studio42.es/panel/)' : '✘ Panel de control: crea la propiedad PANEL_CLAVE (mínimo 6 caracteres) para entrar en studio42.es/panel/');
   if (c.githubToken) {
     var r = UrlFetchApp.fetch('https://api.github.com/repos/' + c.repo, { headers: ghHeaders_(c), muteHttpExceptions: true });
@@ -1205,13 +1212,31 @@ var CATALOGO = {
     camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null }   // a consultar: no suma
   },
   packs: {
-    ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0,   incluye: {} },
-    prueba:        { nombre: 'Prueba Logroño',         precio: 89,  incluye: { display: 1, llavero: 1 } },
-    iman:          { nombre: 'Imán de mostrador',      precio: 149, incluye: { display: 1, llavero: 2 } },
-    multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
-    dominio:       { nombre: 'Dominio local total',    precio: 549, incluye: { display: 2, llavero: 25, welcome: 1 } }
+    ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0,   mesesPro: 0, incluye: {} },
+    prueba:        { nombre: 'Prueba Logroño',         precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 } },
+    iman:          { nombre: 'Imán de mostrador',      precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 } },
+    multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
+    dominio:       { nombre: 'Dominio local total',    precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, welcome: 1 } }
+  },
+  /* Suscripción «Ecosistema Activo»: precio mensual sin IVA. Trimestral −5 %, anual = 10 meses (2 gratis). */
+  planes: {
+    esencial:  { nombre: 'Esencial',          mensual: 19 },
+    pro:       { nombre: 'Pro',               mensual: 39 },
+    multisede: { nombre: 'Multi-sede',        mensual: 79 },
+    clinica:   { nombre: 'Pet Pass Clínica',  mensual: 29 }
   }
 };
+var PERIODOS = { mensual: { nombre: 'Mensual', intervalo: 'month', cada: 1 }, trimestral: { nombre: 'Trimestral', intervalo: 'month', cada: 3 }, anual: { nombre: 'Anual', intervalo: 'year', cada: 1 } };
+
+/** Precio de un plan por periodo, sin IVA. */
+function precioPlan_(plan, periodo) {
+  var m = (CATALOGO.planes[plan] || {}).mensual;
+  if (!m) return null;
+  if (periodo === 'trimestral') return redondear_(m * 3 * 0.95);
+  if (periodo === 'anual') return redondear_(m * 10);
+  return m;
+}
+
 var ESTADOS_PEDIDO = ['Por despachar', 'Grabado', 'Entregado', 'Cobrado', 'Cancelado'];
 var PEDIDOS_HOJA = 'Pedidos';
 var PEDIDOS_COLS = ['ID', 'Fecha', 'Closer', 'Cliente', 'Slug', 'URL', 'Pack', 'Detalle', 'Total (IVA incl.)', 'Estado', 'Notas', 'Datos'];
@@ -1256,14 +1281,22 @@ function pedidoGuardar_(raw) {
   if (!/^[a-z0-9-]{2,40}$/.test(slug)) return { ok: false, error: 'Falta la landing del cliente.' };
   var cliente = limpiar_(sinEtiquetas_(raw.cliente), 60) || slug;
   var calc = pedidoCalcular_(String(raw.pack || ''), raw.cantidades || {}, raw.promo === true);
-  if (!calc.lineas.length) return { ok: false, error: 'El pedido está vacío.' };
+  if (!calc.lineas.length && !CATALOGO.planes[raw.plan]) return { ok: false, error: 'El pedido está vacío.' };
   var id = 'P' + Utilities.formatDate(new Date(), 'Europe/Madrid', 'yyMMdd') + '-' + Utilities.getUuid().slice(0, 4).toUpperCase();
   var url = c.dominio + '/c/?cod=' + slug;
   var detalle = calc.lineas.map(function (l) { return l.unidades + ' × ' + l.concepto + (l.extra ? ' (' + l.extra + ' extra)' : ''); }).join(' | ');
   var notas = limpiar_(sinEtiquetas_(raw.notas), 300);
   var datos = { id: id, cliente: cliente, slug: slug, url: url, closer: au.closer, calc: calc };
+  var plan = CATALOGO.planes[raw.plan] ? String(raw.plan) : '';
+  var periodo = PERIODOS[raw.periodo] ? String(raw.periodo) : 'mensual';
+  if (plan) datos.suscripcion = { plan: plan, periodo: periodo, precio: precioPlan_(plan, periodo), mesesGratis: CATALOGO.packs[calc.pack].mesesPro || 0 };
   pedidosHoja_().appendRow([id, new Date(), au.closer, cliente, slug, url, calc.packNombre, detalle, calc.aConsultar ? calc.total + ' + piezas a consultar' : calc.total, 'Por despachar', notas, JSON.stringify(datos)]);
-  return { ok: true, pedido: datos };
+  var pago = null;
+  if (plan) {
+    suscripcionGuardar_(slug, { cliente: cliente, plan: plan, periodo: periodo, estado: 'pendiente de pago', pedido: id, email: limpiar_(raw.email, 120) });
+    pago = crearPago_(c, datos, limpiar_(raw.email, 120));
+  }
+  return { ok: true, pedido: datos, pago: pago };
 }
 
 /* ====================================== PANEL ======================================
@@ -1290,6 +1323,14 @@ function panelRouter_(d) {
   if (d.accion === 'panel_pedido_estado') return panelPedidoEstado_(d);
   if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
   if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
+  if (d.accion === 'panel_pausar') {
+    var sl = String(d.slug || '').toLowerCase();
+    if (!/^[a-z0-9-]{2,40}$/.test(sl)) return { ok: false, error: 'Cliente no válido.' };
+    var rr = landingPausar_(c, sl, d.pausar === true);
+    if (rr.error) return { ok: false, error: rr.error };
+    suscripcionGuardar_(sl, { landing: d.pausar === true ? 'pausada' : 'activa' });
+    return { ok: true };
+  }
   return { ok: false, error: 'Acción desconocida.' };
 }
 
@@ -1315,7 +1356,9 @@ function panelDatos_(c) {
   var chapas = [];
   var hc = petHoja_().getDataRange().getValues();
   for (var j = 1; j < hc.length; j++) chapas.push({ slug: hc[j][0], estado: hc[j][1], entregadaPor: hc[j][2], url: hc[j][3] });
-  return { ok: true, clientes: clientes, pedidos: pedidos.reverse(), chapas: chapas, estados: ESTADOS_PEDIDO, catalogo: CATALOGO, dominio: c.dominio };
+  var hasta = new Date(), desde = new Date(hasta.getTime() - 30 * 86400000);
+  return { ok: true, clientes: clientes, pedidos: pedidos.reverse(), chapas: chapas, estados: ESTADOS_PEDIDO, catalogo: CATALOGO, dominio: c.dominio,
+    suscripciones: suscripciones_(), estadisticas: estadisticas_(desde, hasta), stripe: !!stripeClave_() };
 }
 
 function panelPedidoEstado_(d) {
@@ -1431,4 +1474,243 @@ function panelPublicar_(c, d, cache) {
   if (w.error) return { ok: false, error: 'GitHub: ' + w.error };
   cache.remove('pdraft_' + slug);
   return { ok: true, url: c.dominio + '/c/?cod=' + slug };
+}
+
+/* =================================== SUSCRIPCIONES ===================================
+ * Cobro recurrente con Stripe. Pasos (una vez):
+ *  1) Propiedad STRIPE_SECRET_KEY = clave secreta de Stripe (sk_test_… para probar, sk_live_… real).
+ *  2) Ejecuta CREAR_PRODUCTOS_STRIPE: crea los planes y precios en Stripe (IVA incluido).
+ *  3) Ejecuta INSTALAR_AUTOMATIZACIONES: sincroniza cada hora y envía el informe el día 1.
+ * El Closer genera el enlace de pago al confirmar el pedido: cobra hoy la apertura y la
+ * cuota empieza cuando acaban los meses de Pro incluidos en el pack.
+ * ==================================================================================== */
+
+var SUSC_HOJA = 'Suscripciones';
+var SUSC_COLS = ['Slug', 'Cliente', 'Plan', 'Periodo', 'Estado', 'Email', 'Próximo cobro', 'Pedido', 'Stripe suscripción', 'Landing', 'Actualizado'];
+var STRIPE_VERSION = '2024-06-20';
+
+function suscHoja_() {
+  var libro = SpreadsheetApp.getActive();
+  var hoja = libro.getSheetByName(SUSC_HOJA) || libro.insertSheet(SUSC_HOJA);
+  if (hoja.getLastRow() === 0) { hoja.appendRow(SUSC_COLS); hoja.setFrozenRows(1); }
+  return hoja;
+}
+
+function suscripciones_() {
+  var v = suscHoja_().getDataRange().getValues(), out = [];
+  for (var i = 1; i < v.length; i++) {
+    out.push({ fila: i + 1, slug: String(v[i][0]), cliente: v[i][1], plan: v[i][2], periodo: v[i][3], estado: v[i][4], email: v[i][5],
+      proximo: v[i][6] instanceof Date ? v[i][6].toISOString() : String(v[i][6] || ''), pedido: v[i][7], stripe: v[i][8], landing: v[i][9] || 'activa' });
+  }
+  return out;
+}
+
+/** Crea o actualiza la fila de un cliente. Solo cambia los campos que se pasan. */
+function suscripcionGuardar_(slug, campos) {
+  var hoja = suscHoja_(), filas = suscripciones_(), f = null;
+  for (var i = 0; i < filas.length; i++) if (filas[i].slug === slug) f = filas[i];
+  var orden = ['slug', 'cliente', 'plan', 'periodo', 'estado', 'email', 'proximo', 'pedido', 'stripe', 'landing'];
+  if (!f) {
+    var fila = orden.map(function (k) { return k === 'slug' ? slug : (campos[k] !== undefined ? campos[k] : (k === 'landing' ? 'activa' : '')); });
+    fila.push(new Date());
+    hoja.appendRow(fila);
+    return;
+  }
+  orden.forEach(function (k, j) { if (campos[k] !== undefined && campos[k] !== '') hoja.getRange(f.fila, j + 1).setValue(campos[k]); });
+  hoja.getRange(f.fila, 11).setValue(new Date());
+}
+
+/* ---------- Stripe ---------- */
+
+function stripeClave_() { return String(PropertiesService.getScriptProperties().getProperty('STRIPE_SECRET_KEY') || '').trim(); }
+
+/** Convierte {a:{b:1}, c:[{d:2}]} en a[b]=1&c[0][d]=2 (formato que pide Stripe). */
+function formStripe_(obj, prefijo, out) {
+  out = out || [];
+  Object.keys(obj).forEach(function (k) {
+    var v = obj[k], key = prefijo ? prefijo + '[' + k + ']' : k;
+    if (v === undefined || v === null || v === '') return;
+    if (typeof v === 'object') formStripe_(v, key, out);
+    else out.push(encodeURIComponent(key) + '=' + encodeURIComponent(String(v)));
+  });
+  return out;
+}
+
+function stripe_(metodo, ruta, params) {
+  var clave = stripeClave_();
+  if (!clave) return { error: 'Stripe no está configurado (falta STRIPE_SECRET_KEY).', sinStripe: true };
+  var url = 'https://api.stripe.com/v1/' + ruta, o = { method: metodo, muteHttpExceptions: true, headers: { Authorization: 'Bearer ' + clave, 'Stripe-Version': STRIPE_VERSION } };
+  var q = params ? formStripe_(params).join('&') : '';
+  if (metodo === 'get') { if (q) url += (url.indexOf('?') < 0 ? '?' : '&') + q; }
+  else { o.contentType = 'application/x-www-form-urlencoded'; o.payload = q; }
+  var r = UrlFetchApp.fetch(url, o), code = r.getResponseCode(), j = {};
+  try { j = JSON.parse(r.getContentText()); } catch (e) {}
+  if (code >= 200 && code < 300) return j;
+  return { error: 'Stripe (' + code + '): ' + ((j.error && j.error.message) || 'error').slice(0, 200) };
+}
+
+function preciosStripe_() { try { return JSON.parse(PropertiesService.getScriptProperties().getProperty('STRIPE_PRECIOS') || '{}'); } catch (e) { return {}; } }
+
+/** Enlace de pago (Stripe Checkout): apertura hoy + suscripción con los meses de Pro gratis del pack. */
+function crearPago_(c, datos, email) {
+  var s = datos.suscripcion;
+  var precio = preciosStripe_()[s.plan + '_' + s.periodo];
+  if (!stripeClave_() || !precio) return { sinStripe: true, error: 'El cobro automático aún no está activado. Cobra la apertura como hasta ahora y activa la suscripción desde el panel cuando Stripe esté listo.' };
+  var lineas = [{ price: precio, quantity: 1 }];
+  var apertura = Math.round((datos.calc.total || 0) * 100);
+  if (apertura > 0) lineas.push({ quantity: 1, price_data: { currency: 'eur', unit_amount: apertura, product_data: { name: 'Apertura · ' + datos.calc.packNombre + ' (IVA incluido)' } } });
+  var p = {
+    mode: 'subscription', locale: 'es', client_reference_id: datos.slug, line_items: lineas,
+    success_url: c.dominio + '/gracias.html?cod=' + datos.slug, cancel_url: c.dominio + '/c/?cod=' + datos.slug,
+    subscription_data: { metadata: { slug: datos.slug, plan: s.plan, periodo: s.periodo, pedido: datos.id } },
+    metadata: { slug: datos.slug, pedido: datos.id }
+  };
+  if (s.mesesGratis > 0) p.subscription_data.trial_period_days = s.mesesGratis * 30;
+  if (email && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) p.customer_email = email;
+  var r = stripe_('post', 'checkout/sessions', p);
+  if (r.error) return { error: r.error };
+  return { url: r.url, id: r.id };
+}
+
+/** Ejecutar UNA vez desde el editor: crea los productos y precios (IVA incluido) en Stripe. */
+function CREAR_PRODUCTOS_STRIPE() {
+  if (!stripeClave_()) { console.log('✘ Crea antes la propiedad STRIPE_SECRET_KEY.'); return; }
+  var props = PropertiesService.getScriptProperties(), precios = preciosStripe_();
+  Object.keys(CATALOGO.planes).forEach(function (plan) {
+    var pl = CATALOGO.planes[plan];
+    if (Object.keys(PERIODOS).every(function (per) { return precios[plan + '_' + per]; })) return;
+    var prod = stripe_('post', 'products', { name: 'Studio 42 · Ecosistema Activo ' + pl.nombre, metadata: { plan: plan } });
+    if (prod.error) { console.log('✘ ' + prod.error); return; }
+    Object.keys(PERIODOS).forEach(function (per) {
+      if (precios[plan + '_' + per]) return;
+      var base = precioPlan_(plan, per), P = PERIODOS[per];
+      var pr = stripe_('post', 'prices', { product: prod.id, currency: 'eur', unit_amount: Math.round(base * (1 + IVA) * 100), nickname: pl.nombre + ' ' + P.nombre,
+        recurring: { interval: P.intervalo, interval_count: P.cada }, metadata: { plan: plan, periodo: per } });
+      if (pr.error) { console.log('✘ ' + pr.error); return; }
+      precios[plan + '_' + per] = pr.id;
+      console.log('✔ ' + pl.nombre + ' ' + P.nombre + ': ' + (base * (1 + IVA)).toFixed(2) + ' € (IVA incl.)');
+    });
+  });
+  props.setProperty('STRIPE_PRECIOS', JSON.stringify(precios));
+  console.log('Listo. Ahora ejecuta INSTALAR_AUTOMATIZACIONES.');
+}
+
+var ESTADO_STRIPE = { trialing: 'prueba', active: 'activa', past_due: 'impagada', unpaid: 'impagada', canceled: 'cancelada', incomplete: 'pendiente de pago', incomplete_expired: 'cancelada', paused: 'pausada' };
+
+/** Cada hora: lee las suscripciones de Stripe, actualiza la hoja y pausa/reactiva landings. */
+function SINCRONIZAR_STRIPE() {
+  if (!stripeClave_()) return;
+  var c = cfg_(), auto = PropertiesService.getScriptProperties().getProperty('PAUSA_AUTOMATICA') !== '0';
+  var actuales = {}; suscripciones_().forEach(function (x) { actuales[x.slug] = x; });
+  var despues = '', vueltas = 0;
+  do {
+    var r = stripe_('get', 'subscriptions', { status: 'all', limit: 100, starting_after: despues, 'expand[]': 'data.customer' });
+    if (r.error) { console.warn(r.error); return; }
+    (r.data || []).forEach(function (sub) {
+      var slug = sub.metadata && sub.metadata.slug;
+      if (!slug || !/^[a-z0-9-]{2,40}$/.test(slug)) return;
+      var estado = ESTADO_STRIPE[sub.status] || sub.status;
+      var prev = actuales[slug];
+      // Si el cliente tiene varias suscripciones (p. ej. una antigua cancelada), manda la vigente
+      if (prev && prev._visto && (estado === 'cancelada')) return;
+      var campos = { estado: estado, plan: sub.metadata.plan || '', periodo: sub.metadata.periodo || '', stripe: sub.id,
+        email: sub.customer && sub.customer.email || '', proximo: sub.current_period_end ? new Date(sub.current_period_end * 1000) : '' };
+      if (auto) {
+        var landing = prev ? prev.landing : 'activa';
+        if ((sub.status === 'unpaid' || sub.status === 'canceled' || sub.status === 'incomplete_expired') && landing === 'activa') {
+          if (!landingPausar_(c, slug, true).error) campos.landing = 'pausada por impago';
+        } else if ((sub.status === 'active' || sub.status === 'trialing') && landing === 'pausada por impago') {
+          if (!landingPausar_(c, slug, false).error) campos.landing = 'activa';
+        }
+      }
+      suscripcionGuardar_(slug, campos);
+      actuales[slug] = actuales[slug] || {}; actuales[slug]._visto = true;
+    });
+    despues = r.has_more && r.data.length ? r.data[r.data.length - 1].id : '';
+  } while (despues && ++vueltas < 20);
+}
+
+/** Pone o quita "pausada": true en la landing (el motor muestra «servicio en pausa»). */
+function landingPausar_(c, slug, pausar) {
+  var ruta = c.carpeta + '/' + slug + '.json';
+  var a = githubLeer_(c, ruta);
+  if (a.error) return { error: a.error };
+  if (!a.existe || !a.json) return { error: 'No existe la landing ' + slug };
+  if (!!a.json.pausada === pausar) return { ok: true };
+  if (pausar) a.json.pausada = true; else delete a.json.pausada;
+  var w = githubEscribir_(c, ruta, JSON.stringify(a.json, null, 2) + '\n', a.sha, (pausar ? 'Pausar ' : 'Reactivar ') + slug);
+  return w.error ? { error: w.error } : { ok: true };
+}
+
+function INSTALAR_AUTOMATIZACIONES() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (['SINCRONIZAR_STRIPE', 'INFORME_MENSUAL'].indexOf(t.getHandlerFunction()) >= 0) ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('SINCRONIZAR_STRIPE').timeBased().everyHours(1).create();
+  ScriptApp.newTrigger('INFORME_MENSUAL').timeBased().onMonthDay(1).atHour(9).create();
+  console.log('✔ Automatizaciones activas: sincronización con Stripe cada hora e informe a clientes el día 1 de cada mes.');
+}
+
+/* ============================ ESTADÍSTICAS (anónimas) ============================
+ * La landing avisa de: vista (alguien la abrió), resena, gerencia, whatsapp, llamada, ruta, enlace.
+ * No se guarda nada de la persona: ni IP, ni cookies, ni identificadores. Solo fecha, cliente,
+ * pieza (k) y tipo. Máximo 3.000 avisos por cliente y día.
+ * ================================================================================ */
+
+var EV_HOJA = 'Eventos';
+var EV_TIPOS = ['vista', 'resena', 'gerencia', 'whatsapp', 'llamada', 'ruta', 'enlace'];
+
+function registrarEvento_(d) {
+  var slug = String(d.c || '').toLowerCase(), tipo = String(d.t || ''), k = String(d.k || 'MOSTRADOR').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 20) || 'MOSTRADOR';
+  if (!/^[a-z0-9-]{2,40}$/.test(slug) || EV_TIPOS.indexOf(tipo) < 0) return { ok: false };
+  try {
+    var cache = CacheService.getScriptCache(), clave = 'evc_' + slug + '_' + Utilities.formatDate(new Date(), 'UTC', 'yyyyMMdd');
+    var n = Number(cache.get(clave) || '0');
+    if (n >= 3000) return { ok: false };
+    cache.put(clave, String(n + 1), 90000);
+  } catch (e) {}
+  var libro = SpreadsheetApp.getActive();
+  var hoja = libro.getSheetByName(EV_HOJA) || libro.insertSheet(EV_HOJA);
+  if (hoja.getLastRow() === 0) { hoja.appendRow(['Fecha', 'Cliente', 'Pieza', 'Tipo']); hoja.setFrozenRows(1); }
+  hoja.appendRow([new Date(), slug, k, tipo]);
+  return { ok: true };
+}
+
+/** Suma los eventos entre dos fechas: { slug: { vista: n, resena: n, …, piezas: { L01: n } } } */
+function estadisticas_(desde, hasta) {
+  var hoja = SpreadsheetApp.getActive().getSheetByName(EV_HOJA), out = {};
+  if (!hoja || hoja.getLastRow() < 2) return out;
+  hoja.getDataRange().getValues().slice(1).forEach(function (r) {
+    var f = r[0] instanceof Date ? r[0] : new Date(r[0]);
+    if (f < desde || f >= hasta) return;
+    var s = out[r[1]] = out[r[1]] || { vista: 0, resena: 0, gerencia: 0, whatsapp: 0, llamada: 0, ruta: 0, enlace: 0, piezas: {} };
+    s[r[3]] = (s[r[3]] || 0) + 1;
+    if (r[3] === 'vista') s.piezas[r[2]] = (s.piezas[r[2]] || 0) + 1;
+  });
+  return out;
+}
+
+/** Día 1 de cada mes: envía a cada cliente con suscripción su informe del mes anterior. */
+function INFORME_MENSUAL() {
+  var c = cfg_(), hoy = new Date();
+  var hasta = new Date(hoy.getFullYear(), hoy.getMonth(), 1), desde = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
+  var mes = Utilities.formatDate(desde, 'Europe/Madrid', 'MMMM yyyy');
+  var est = estadisticas_(desde, hasta), enviados = 0;
+  suscripciones_().forEach(function (s) {
+    if (!s.email || ['activa', 'prueba'].indexOf(s.estado) < 0) return;
+    var e = est[s.slug] || { vista: 0, resena: 0, gerencia: 0, whatsapp: 0, llamada: 0, ruta: 0, piezas: {} };
+    var top = Object.keys(e.piezas).sort(function (a, b) { return e.piezas[b] - e.piezas[a]; })[0];
+    var cifra = function (n, t) { return '<td style="padding:14px;text-align:center;background:#14171c;border-radius:12px"><div style="font:800 28px Arial;color:#fff">' + n + '</div><div style="font:12px Arial;color:#9aa0a9">' + t + '</div></td>'; };
+    var html = '<div style="background:#07080b;padding:24px;font-family:Arial;color:#f4f6f9"><div style="max-width:520px;margin:auto">' +
+      '<p style="color:#9aa0a9;font-size:12px;letter-spacing:2px;text-transform:uppercase">Studio 42 · Informe de ' + mes + '</p>' +
+      '<h1 style="font-size:24px;margin:0 0 6px">' + (s.cliente || s.slug) + '</h1><p style="color:#c9ced6;margin:0 0 18px">Esto es lo que ha hecho tu ecosistema phygital este mes.</p>' +
+      '<table style="width:100%;border-spacing:8px"><tr>' + cifra(e.vista, 'personas lo abrieron') + cifra(e.resena, 'fueron a dejar reseña') + '</tr><tr>' +
+      cifra(e.whatsapp + e.gerencia, 'te escribieron') + cifra(e.llamada + e.ruta, 'llamadas y rutas') + '</tr></table>' +
+      (top ? '<p style="color:#c9ced6">La pieza con más toques: <b>' + top + '</b> (' + e.piezas[top] + ').</p>' : '') +
+      '<p style="color:#9aa0a9;font-size:13px">¿Quieres cambiar algo de tu landing? Responde a este correo o escríbenos por WhatsApp al +34 672 294 962.</p>' +
+      '<p style="margin-top:22px"><a href="' + c.dominio + '/c/?cod=' + s.slug + '" style="background:#e6eaf0;color:#0b0c0f;padding:12px 18px;border-radius:99px;text-decoration:none;font-weight:bold">Ver mi landing</a></p></div></div>';
+    try { MailApp.sendEmail({ to: s.email, subject: 'Tu ecosistema Studio 42 en ' + mes + ': ' + e.vista + ' visitas', htmlBody: html, name: 'Studio 42' }); enviados++; }
+    catch (err) { console.warn('No se pudo enviar a ' + s.email + ': ' + err); }
+  });
+  console.log('Informes enviados: ' + enviados);
 }
