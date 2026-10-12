@@ -1,0 +1,25 @@
+[
+  {
+    "slug": "la-sucursal",
+    "nombre": "La Sucursal",
+    "sub": "Barbería · 3 sedes · diseño a medida",
+    "url": "/la-sucursal/",
+    "previa": "/la-sucursal/v2/?sede=centro",
+    "logo": "/la-sucursal/v2/logo.webp",
+    "color": "#d9b45a",
+    "piezas": [
+      ["Sede Centro", "https://studio42.es/la-sucursal/?sede=centro"],
+      ["Sede Los Lirios", "https://studio42.es/la-sucursal/?sede=lirios"],
+      ["Sede Villamediana", "https://studio42.es/la-sucursal/?sede=villamediana"]
+    ]
+  },
+  {
+    "slug": "copy-laser",
+    "nombre": "Copy Laser",
+    "sub": "Impresión · diseño a medida",
+    "url": "/c/copy-laser/",
+    "logo": "/c/copy-laser/logo.png",
+    "color": "#FACC15",
+    "piezas": [["Mostrador", "https://studio42.es/c/copy-laser/"]]
+  }
+]
