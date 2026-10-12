@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#09080a">
+<meta name="robots" content="noindex">
+<title>La Sucursal · Barbería & Estilo · Logroño</title>
+<meta name="description" content="La Sucursal, barbería y ropa de autor en Logroño. Reserva tu cita, mira si estamos abiertos, guarda tu tarjeta de fidelidad y paga por Bizum.">
+<link rel="icon" href="logo.webp" type="image/webp">
+<link rel="apple-touch-icon" href="logo.webp">
+<link rel="preload" href="logo.webp" as="image">
+<style>
+@font-face{font-family:"Inter";font-weight:400;font-display:swap;src:url("../../fonts/Inter-Regular.woff") format("woff")}
+@font-face{font-family:"Inter";font-weight:600;font-display:swap;src:url("../../fonts/Inter-SemiBold.woff") format("woff")}
+@font-face{font-family:"Inter Display";font-weight:600;font-display:swap;src:url("../../fonts/InterDisplay-SemiBold.woff") format("woff")}
+@font-face{font-family:"Inter Display";font-weight:800;font-display:swap;src:url("../../fonts/InterDisplay-ExtraBold.woff") format("woff")}
+:root{
+  --negro:#09080a;--carbon:#121014;--tarjeta:#17151a;--tarjeta2:#1e1b21;
+  --linea:rgba(232,206,140,.14);--linea2:rgba(255,255,255,.07);
+  --oro:#d9b45a;--oro2:#f3dc9a;--oro3:#9c7a2b;
+  --oro-grad:linear-gradient(135deg,#f6e3a6 0%,#d9b45a 38%,#a9832f 72%,#e9cf86 100%);
+  --hueso:#f5f1e8;--gris:#a39d93;--gris2:#6f6a63;
+  --verde:#3ddc84;--rojo:#ff6b5e;
+  --r:22px;
+  --fb:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fd:"Inter Display","Inter",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html{background:var(--negro)}
+body{font-family:var(--fb);color:var(--hueso);background:var(--negro);min-height:100dvh;overflow-x:hidden;
+  background-image:radial-gradient(120% 60% at 50% -10%,rgba(217,180,90,.16),transparent 60%),radial-gradient(80% 50% at 110% 110%,rgba(217,180,90,.07),transparent 60%)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--oro);outline-offset:3px;border-radius:12px}
+.ic{width:1em;height:1em;display:block;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{max-width:460px;margin:0 auto;padding:calc(10px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom))}
+
+/* Aviso de vista previa */
+.previa{font:600 .72rem var(--fb);color:#1a1405;background:var(--oro-grad);text-align:center;padding:7px 12px;letter-spacing:.02em}
+
+/* Intro (1 segundo, sin botón) */
+#intro{position:fixed;inset:0;z-index:50;background:var(--negro);display:grid;place-items:center;transition:opacity .45s ease,visibility .45s}
+#intro.fuera{opacity:0;visibility:hidden}
+#intro img{width:92px;height:auto;animation:introLogo 1s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 0 30px rgba(217,180,90,.35))}
+@keyframes introLogo{from{opacity:0;transform:scale(.82) translateY(8px)}to{opacity:1;transform:none}}
+
+/* Barra superior */
+.top{display:flex;align-items:center;gap:10px;padding:6px 0 14px}
+.top .marca{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.top .marca img{width:34px;height:auto}
+.top .marca b{font:800 .95rem var(--fd);letter-spacing:.14em;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:99px;border:1px solid var(--linea);background:rgba(255,255,255,.03);font:600 .78rem var(--fb);color:var(--hueso);white-space:nowrap}
+.chip .ic{font-size:.95rem;color:var(--oro)}
+.chip.mus[aria-pressed="true"]{border-color:var(--oro);color:var(--oro2)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gris2);flex:none}
+.dot.on{background:var(--verde);box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:latido 2.2s infinite}
+@keyframes latido{70%{box-shadow:0 0 0 7px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+
+/* Cabecera */
+.hero{position:relative;border-radius:30px;overflow:hidden;padding:26px 20px 20px;border:1px solid var(--linea);
+  background:linear-gradient(180deg,rgba(23,21,26,.4),rgba(23,21,26,.95) 70%),var(--hero-img,radial-gradient(90% 80% at 80% 0%,rgba(217,180,90,.22),transparent 60%)),var(--carbon);
+  background-size:cover;background-position:center;box-shadow:0 30px 60px rgba(0,0,0,.55)}
+.poste{position:absolute;right:18px;top:18px;width:14px;height:64px;border-radius:8px;overflow:hidden;border:1.5px solid rgba(243,220,154,.55);box-shadow:0 0 18px rgba(217,180,90,.25)}
+.poste::before{content:"";position:absolute;inset:-64px 0 0;background:repeating-linear-gradient(-45deg,var(--hueso) 0 6px,#c0392b 6px 12px,var(--hueso) 12px 18px,#1f4e9c 18px 24px);animation:poste 2.4s linear infinite}
+@keyframes poste{to{transform:translateY(34px)}}
+.hero .sede{font:600 .72rem var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--oro)}
+.hero h1{font:800 2.35rem/1 var(--fd);letter-spacing:.02em;margin:8px 0 6px;
+  background:linear-gradient(100deg,#fff 0%,#fff 35%,var(--oro2) 50%,#fff 65%,#fff 100%);background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:brillo 6s ease-in-out infinite}
+@keyframes brillo{0%,60%{background-position:100% 0}100%{background-position:-50% 0}}
+.hero .lema{color:var(--gris);font-size:.92rem}
+.estado{display:inline-flex;align-items:center;gap:8px;margin:16px 0 18px;padding:8px 13px;border-radius:99px;background:rgba(0,0,0,.35);border:1px solid var(--linea2);font:600 .8rem var(--fb)}
+.estado small{color:var(--gris);font-weight:400}
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px 18px;border-radius:18px;background:var(--oro-grad);color:#1a1405;font:800 1.02rem var(--fd);letter-spacing:.03em;box-shadow:0 14px 34px rgba(217,180,90,.32),inset 0 1px 0 rgba(255,255,255,.55);position:relative;overflow:hidden}
+.cta::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);animation:barrido 4.5s ease-in-out 1.6s infinite}
+@keyframes barrido{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.cta .ic{font-size:1.2rem}
+.cta:active{transform:scale(.985)}
+.rapidos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.rapido{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 4px 10px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--linea2);font:600 .72rem var(--fb);color:var(--hueso)}
+.rapido .ic{font-size:1.3rem;color:var(--oro2)}
+.rapido:active{background:rgba(217,180,90,.12)}
+
+/* Secciones */
+.sec{margin-top:26px}
+.sec-t{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 4px 12px}
+.sec-t h2{font:800 1.05rem var(--fd);letter-spacing:.02em}
+.sec-t span{font-size:.75rem;color:var(--gris)}
+.card{background:var(--tarjeta);border:1px solid var(--linea2);border-radius:var(--r);padding:18px}
+
+/* Fidelidad */
+.fid{position:relative;overflow:hidden;background:linear-gradient(145deg,#1f1a12,#141216 60%);border-color:var(--linea)}
+.fid::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(217,180,90,.22),transparent 70%)}
+.fid-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative}
+.fid-cab b{display:block;font:800 1.08rem var(--fd)}
+.fid-cab small{color:var(--gris);font-size:.8rem}
+.fid-cab .num{font:800 1.9rem/1 var(--fd);color:var(--oro2);white-space:nowrap}
+.fid-cab .num i{font-style:normal;font-size:1rem;color:var(--gris)}
+.sellos{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0 14px;position:relative}
+.sello{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:1.5px dashed rgba(232,206,140,.28);color:var(--gris2);font:800 .78rem var(--fd)}
+.sello.ok{border:0;background:var(--oro-grad);color:#1a1405;box-shadow:0 6px 16px rgba(217,180,90,.3)}
+.sello.ok .ic{font-size:1.15rem}
+.sello.premio{border-color:var(--oro);color:var(--oro2)}
+.sello.nuevo{animation:sellar .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes sellar{from{transform:scale(1.8) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
+.fid-pie{display:flex;gap:8px;position:relative}
+.btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 14px;border-radius:14px;border:1px solid var(--linea);background:rgba(255,255,255,.04);font:600 .86rem var(--fb);color:var(--hueso)}
+.btn .ic{color:var(--oro2)}
+.btn.oro{background:var(--oro-grad);border:0;color:#1a1405}
+.btn.oro .ic{color:#1a1405}
+.nota{font-size:.74rem;color:var(--gris2);margin-top:10px;line-height:1.45;position:relative}
+
+/* Próximo corte */
+.prox{display:flex;align-items:center;gap:14px}
+.prox .cal{width:54px;flex:none;border-radius:14px;overflow:hidden;text-align:center;border:1px solid var(--linea);background:#0f0e11}
+.prox .cal small{display:block;background:var(--oro-grad);color:#1a1405;font:800 .62rem var(--fb);letter-spacing:.08em;padding:3px 0;text-transform:uppercase}
+.prox .cal b{display:block;font:800 1.35rem/1.6 var(--fd)}
+.prox .txt{flex:1;min-width:0}
+.prox .txt b{display:block;font-weight:600;font-size:.95rem}
+.prox .txt small{color:var(--gris);font-size:.8rem}
+
+/* Carruseles */
+.carril{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 4px 6px;margin:0 -4px;scrollbar-width:none}
+.carril::-webkit-scrollbar{display:none}
+.item{flex:0 0 72%;max-width:250px;scroll-snap-align:start;background:var(--tarjeta);border:1px solid var(--linea2);border-radius:20px;overflow:hidden}
+.foto{aspect-ratio:4/3;display:grid;place-items:center;background:radial-gradient(80% 80% at 30% 20%,rgba(217,180,90,.18),transparent 60%),linear-gradient(160deg,#221e25,#121014);color:var(--oro);position:relative}
+.foto .ic{font-size:2.2rem;opacity:.75}
+.foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.foto em{position:absolute;bottom:8px;left:10px;font:600 .62rem var(--fb);font-style:normal;color:var(--gris);letter-spacing:.06em;text-transform:uppercase}
+.item .cuerpo{padding:13px 14px 14px}
+.item b{display:block;font-weight:600;font-size:.93rem}
+.item small{display:block;color:var(--gris);font-size:.78rem;margin-top:3px;line-height:1.4}
+.item .fila{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.precio{font:800 1.1rem var(--fd);color:var(--oro2)}
+.mini{padding:8px 12px;border-radius:99px;background:rgba(217,180,90,.12);border:1px solid var(--linea);font:600 .76rem var(--fb);color:var(--oro2)}
+.equipo .item{flex-basis:42%;max-width:170px;text-align:center}
+.equipo .foto{aspect-ratio:1;border-radius:50%;margin:14px auto 0;width:76%}
+.equipo .foto .ic{font-size:1.8rem}
+.equipo .foto em{display:none}
+
+/* Lista de acciones */
+.lista{display:flex;flex-direction:column;gap:9px}
+.fila-a{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;background:var(--tarjeta);border:1px solid var(--linea2);text-align:left;width:100%}
+.fila-a .ico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:rgba(217,180,90,.1);color:var(--oro2);font-size:1.2rem;flex:none}
+.fila-a .t{flex:1;min-width:0}
+.fila-a .t b{display:block;font-weight:600;font-size:.95rem}
+.fila-a .t small{display:block;color:var(--gris);font-size:.78rem;margin-top:2px}
+.fila-a > .ic{color:var(--gris2)}
+.fila-a.activo .ico{background:var(--oro-grad);color:#1a1405}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.opi{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:18px;background:var(--tarjeta);border:1px solid var(--linea2);text-align:left}
+.opi .ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(217,180,90,.1);color:var(--oro2);font-size:1.15rem}
+.opi b{font-weight:600;font-size:.9rem;line-height:1.3}
+.opi small{color:var(--gris);font-size:.74rem;line-height:1.35}
+.redes{display:flex;gap:9px}
+.redes a{flex:1}
+
+.pie{text-align:center;margin-top:34px;color:var(--gris2);font-size:.74rem;letter-spacing:.04em}
+.pie b{color:var(--oro);font-weight:600}
+
+/* Hoja inferior (sedes, PIN, avisos) */
+.velo{position:fixed;inset:0;z-index:40;background:rgba(5,4,6,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.velo.on{opacity:1;visibility:visible}
+.hoja{width:100%;max-width:460px;background:#151317;border:1px solid var(--linea);border-bottom:0;border-radius:28px 28px 0 0;padding:10px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(30px);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:88dvh;overflow-y:auto}
+.velo.on .hoja{transform:none}
+.asa{width:42px;height:5px;border-radius:9px;background:rgba(255,255,255,.18);margin:0 auto 16px}
+.hoja h3{font:800 1.2rem var(--fd);margin-bottom:4px}
+.hoja p{color:var(--gris);font-size:.88rem;line-height:1.5}
+.hoja .lista{margin-top:16px}
+.bizum{margin:16px 0;padding:16px;border-radius:16px;border:1px dashed rgba(232,206,140,.4);background:rgba(0,0,0,.3);text-align:center}
+.bizum span{display:block;font-size:.75rem;color:var(--gris)}
+.bizum strong{display:block;font:800 1.6rem var(--fd);letter-spacing:.06em;color:var(--verde);margin-top:3px;user-select:all;-webkit-user-select:all}
+.pasos{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;font-size:.88rem;color:var(--hueso)}
+.pin{display:flex;gap:10px;justify-content:center;margin:18px 0 6px}
+.pin input{width:54px;height:62px;border-radius:14px;border:1px solid var(--linea);background:#0e0d10;color:var(--hueso);font:800 1.5rem var(--fd);text-align:center}
+.err{color:var(--rojo);font-size:.82rem;text-align:center;min-height:1.2em;margin:8px 0}
+.acciones{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;z-index:60;background:#f5f1e8;color:#141216;font:600 .85rem var(--fb);padding:11px 18px;border-radius:99px;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:.3s;pointer-events:none;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+.aparece{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.aparece.visto{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.aparece{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M9 15.5l2 2 4-4"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M20.5 11.6a8.6 8.6 0 0 1-12.7 7.5L3.5 20.5l1.4-4.1a8.6 8.6 0 1 1 15.6-4.8z"/><path d="M9 9.2c.3 1.7 1.9 3.5 3.8 4.3l1.2-1.1 1.8.8c-.3 1-1.2 1.6-2.2 1.5-3-.4-5.6-3-5.9-6 0-1 .6-1.9 1.5-2.2l.8 1.8z"/></symbol>
+  <symbol id="i-ruta" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-bizum" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 6h4M12 17.5h.01"/></symbol>
+  <symbol id="i-tijera" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-regalo" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8S10.5 3 7.5 4.2C5.7 5 7 8 12 8zm0 0s1.5-5 4.5-3.8C18.3 5 17 8 12 8z"/></symbol>
+  <symbol id="i-campana" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 1 1 12 0v5l2 2H4zM10 21h4"/></symbol>
+  <symbol id="i-estrella" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.5 2.9 1-6.1-4.3-4.3 6.1-.9z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></symbol>
+  <symbol id="i-insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-contacto" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="11" r="2.5"/><path d="M5 17c.7-2 2.1-3 4-3s3.3 1 4 3M15 9.5h3M15 13h3"/></symbol>
+  <symbol id="i-coche" viewBox="0 0 24 24"><path d="M5 16h14v-4l-2-5H7l-2 5zM5 16v2M19 16v2"/><circle cx="8" cy="13" r=".8" fill="currentColor"/><circle cx="16" cy="13" r=".8" fill="currentColor"/></symbol>
+  <symbol id="i-flecha" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-cambio" viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></symbol>
+  <symbol id="i-musica" viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
+  <symbol id="i-camiseta" viewBox="0 0 24 24"><path d="M8 3 3 6l2 4 2-1v12h10V9l2 1 2-4-5-3c-.5 1.7-2 3-4 3S8.5 4.7 8 3z"/></symbol>
+  <symbol id="i-persona" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.2-6 8-6s7 2 8 6"/></symbol>
+</svg>
+
+<div class="previa" id="avisoPrevia" hidden>Vista previa v2 · los datos marcados con * son de ejemplo</div>
+<div id="intro" aria-hidden="true"><img src="logo.webp" alt=""></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="marca"><img src="logo.webp" alt="La Sucursal" width="34" height="48"><b>LA SUCURSAL</b></div>
+    <button type="button" class="chip mus" id="bMusica" aria-pressed="false" aria-label="Música de ambiente"><svg class="ic"><use href="#i-musica"/></svg></button>
+    <button type="button" class="chip" id="bSede"><span class="dot" id="dotSede"></span><span id="tSede">Sede</span><svg class="ic"><use href="#i-cambio"/></svg></button>
+  </header>
+
+  <section class="hero" id="hero">
+    <span class="poste" aria-hidden="true"></span>
+    <div class="sede" id="hSede">Logroño</div>
+    <h1>La Sucursal</h1>
+    <p class="lema">Barbería &amp; ropa de autor</p>
+    <div class="estado" id="estado"><span class="dot" id="dotEstado"></span><span id="tEstado">Consultando horario…</span></div>
+    <a class="cta" id="bReserva" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-cal"/></svg>Reservar cita</a>
+    <div class="rapidos">
+      <a class="rapido" id="bLlamar" href="#"><svg class="ic"><use href="#i-tel"/></svg>Llamar</a>
+      <a class="rapido" id="bWa" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-wa"/></svg>WhatsApp</a>
+      <a class="rapido" id="bRuta" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-ruta"/></svg>Llegar</a>
+      <button type="button" class="rapido" id="bBizum"><svg class="ic"><use href="#i-bizum"/></svg>Bizum</button>
+    </div>
+  </section>
+
+  <section class="sec aparece">
+    <div class="sec-t"><h2>Tu tarjeta de fidelidad</h2><span id="fidSede"></span></div>
+    <div class="card fid">
+      <div class="fid-cab">
+        <div><b id="fidTitulo">Tu corte gratis te espera</b><small id="fidSub">Cada visita suma un sello</small></div>
+        <div class="num" id="fidNum">0<i>/10</i></div>
+      </div>
+      <div class="sellos" id="sellos"></div>
+      <div class="fid-pie">
+        <button type="button" class="btn oro" id="bSellar"><svg class="ic"><use href="#i-tijera"/></svg>Sellar mi visita</button>
+      </div>
+      <p class="nota">El sello lo pone tu barbero con su código. La tarjeta se guarda en este móvil.</p>
+    </div>
+  </section>
+
+  <section class="sec aparece">
+    <div class="card prox">
+      <div class="cal"><small id="calMes">mes</small><b id="calDia">--</b></div>
+      <div class="txt"><b>Tu próximo corte</b><small id="proxTxt">Te recordamos en 3 semanas para que no se te pase</small></div>
+      <button type="button" class="mini" id="bRecordar">Recordar</button>
+    </div>
+  </section>
+
+  <section class="sec aparece">
+    <div class="sec-t"><h2>Servicios</h2><span id="servNota"></span></div>
+    <div class="carril" id="servicios"></div>
+  </section>
+
+  <section class="sec aparece equipo">
+    <div class="sec-t"><h2>El equipo</h2><span id="equipoNota"></span></div>
+    <div class="carril" id="equipo"></div>
+  </section>
+
+  <section class="sec aparece">
+    <div class="sec-t"><h2>La tienda · ropa de autor</h2><span id="tiendaNota"></span></div>
+    <div class="carril" id="tienda"></div>
+    <div class="redes" style="margin-top:12px">
+      <a class="btn" id="bInstaB" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-insta"/></svg>Barbería</a>
+      <a class="btn" id="bInstaT" href="#" target="_blank" rel="noopener"><svg class="ic"><use href="#i-insta"/></svg>Tienda</a>
+    </div>
+  </section>
+
+  <section class="sec aparece">
+    <div class="sec-t"><h2>¿Qué tal tu visita?</h2></div>
+    <div class="dos">
+      <a class="opi" id="bResena" href="#" target="_blank" rel="noopener"><span class="ico"><svg class="ic"><use href="#i-estrella"/></svg></span><b>Opinar en Google</b><small id="resenaTxt">Ayudas a otros a encontrarnos</small></a>
+      <a class="opi" id="bGerencia" href="#" target="_blank" rel="noopener"><span class="ico"><svg class="ic"><use href="#i-chat"/></svg></span><b>Hablar con la gerencia</b><small>Mensaje privado por WhatsApp</small></a>
+    </div>
+  </section>
+
+  <section class="sec aparece">
+    <div class="lista">
+      <button type="button" class="fila-a" id="bParking"><span class="ico"><svg class="ic"><use id="uParking" href="#i-coche"/></svg></span><span class="t"><b id="parkT">¿Dónde aparqué?</b><small id="parkS">Guarda tu coche para volver a pie</small></span><svg class="ic"><use href="#i-flecha"/></svg></button>
+      <button type="button" class="fila-a" id="bContacto"><span class="ico"><svg class="ic"><use href="#i-contacto"/></svg></span><span class="t"><b>Guardar contacto</b><small id="contactoS">Teléfono y dirección</small></span><svg class="ic"><use href="#i-flecha"/></svg></button>
+    </div>
+  </section>
+
+  <p class="pie">Experiencia phygital por <b>Studio 42</b></p>
+</div>
+
+<div class="velo" id="velo" role="dialog" aria-modal="true"><div class="hoja" id="hoja"></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<audio id="audio" loop preload="none"><source src="../ambiente.mp3" type="audio/mpeg"></audio>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN · todo lo de La Sucursal está aquí (un solo archivo).
+   Lo que lleve  ejemplo: true  se marca con * hasta que Fernando lo confirme.
+   ===================================================================== */
+const CONFIG = {
+  previa: true,                     // false cuando esté todo confirmado (quita la franja y los *)
+  slug: "la-sucursal",              // para el contador anónimo de Studio 42
+  estadisticas: "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec",
+  sedePorDefecto: "centro",
+  semanasProximoCorte: 3,
+  fidelidad: { sellos: 10, premio: "Corte gratis", horasEntreSellos: 3, ejemplo: true }
+};
+
+/* Horario: 0 = domingo … 6 = sábado. Cada día, lista de tramos [abre, cierra]. */
+const HORARIO_EJEMPLO = { 0: [], 1: [["10:00","14:00"],["16:30","20:30"]], 2: [["10:00","14:00"],["16:30","20:30"]], 3: [["10:00","14:00"],["16:30","20:30"]], 4: [["10:00","14:00"],["16:30","20:30"]], 5: [["10:00","20:30"]], 6: [["10:00","14:00"]] };
+
+const SEDES = {
+  centro: {
+    nombre: "Sede Centro", zona: "Logroño Centro",
+    direccion: "Calle Carmen Medrano, 28, 26005 Logroño",
+    telefono: "+34643023681", whatsapp: "34643023681", bizum: "643186453",
+    reserva: "https://lasucursalstoreart.com/appointment.php?sede=centro",
+    resena: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
+    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Barberia&query_place_id=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
+    insta: "https://www.instagram.com/la_sucursal_the_barber/",
+    responsable: "Fernando Ambuila",
+    horario: HORARIO_EJEMPLO, horarioEjemplo: true,
+    pinHash: "" // se rellena abajo con el PIN de ejemplo
+  },
+  lirios: {
+    nombre: "Sede Los Lirios", zona: "Barrio Los Lirios · Logroño",
+    direccion: "Los Lirios, Logroño", direccionEjemplo: true,
+    telefono: "+34643023681", telefonoEjemplo: true, whatsapp: "34643023681", bizum: "640745248",
+    reserva: "https://lasucursalstoreart.com/appointment.php?sede=lirios",
+    resena: "https://search.google.com/local/writereview?placeid=ChIJz6zuGwCrWg0RMmghwkrmcoc",
+    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Los+Lirios&query_place_id=ChIJz6zuGwCrWg0RMmghwkrmcoc",
+    insta: "https://www.instagram.com/la_sucursal_barber_loslirios/",
+    responsable: "Equipo Los Lirios",
+    horario: HORARIO_EJEMPLO, horarioEjemplo: true, pinHash: ""
+  },
+  villamediana: {
+    nombre: "Sede Villamediana", zona: "Villamediana de Iregua",
+    direccion: "Villamediana de Iregua, La Rioja", direccionEjemplo: true,
+    telefono: "+34643618452", whatsapp: "34643618452", bizum: "643519678",
+    reserva: "https://lasucursalstoreart.com/appointment.php?sede=villamediana",
+    resena: "https://search.google.com/local/writereview?placeid=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
+    mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Villamediana&query_place_id=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
+    insta: "https://www.instagram.com/sucursal_barber_villamediana/",
+    responsable: "Equipo Villamediana",
+    horario: HORARIO_EJEMPLO, horarioEjemplo: true, pinHash: ""
+  }
+};
+const INSTA_TIENDA = "https://www.instagram.com/la_sucursal_store/";
+
+/* Fotos: pon el nombre del archivo (subido a esta carpeta) en  foto: "corte-fade.webp" */
+const SERVICIOS = [
+  { nombre: "Corte clásico", desc: "Tijera y máquina, lavado y peinado", precio: "15 €", ejemplo: true },
+  { nombre: "Fade + diseño", desc: "Degradado a navaja con detalle", precio: "18 €", ejemplo: true },
+  { nombre: "Arreglo de barba", desc: "Perfilado, toalla caliente y aceite", precio: "10 €", ejemplo: true },
+  { nombre: "Corte + barba", desc: "El combo completo de La Sucursal", precio: "24 €", ejemplo: true }
+];
+const EQUIPO = [
+  { nombre: "Fernando", rol: "Fundador · Barber & Stylist", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
+  { nombre: "Barbero 2", rol: "Especialista en fades", ejemplo: true },
+  { nombre: "Barbero 3", rol: "Barbas y afeitado clásico", ejemplo: true }
+];
+const TIENDA = [
+  { nombre: "Camiseta Sucursal", desc: "Algodón grueso, edición limitada", precio: "29 €", ejemplo: true },
+  { nombre: "Sudadera de autor", desc: "Bordado dorado en el pecho", precio: "49 €", ejemplo: true },
+  { nombre: "Gorra Sucursal", desc: "Talla única ajustable", precio: "22 €", ejemplo: true }
+];
+const PIN_EJEMPLO = "4242"; // PIN de muestra para sellar en la vista previa (cada sede tendrá el suyo)
+
+/* ===================================================================== */
+const $ = (id) => document.getElementById(id);
+const almacen = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+const params = new URLSearchParams(location.search);
+const PIEZA = (params.get("k") || "").toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 12);
+let sede = null;
+const ast = (flag) => (CONFIG.previa && flag ? " *" : "");
+
+function toast(t) { const e = $("toast"); e.textContent = t; e.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove("on"), 2600); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m])); }
+function icono(id) { return '<svg class="ic"><use href="#i-' + id + '"/></svg>'; }
+
+/* ---------- Contador anónimo (sin cookies): sede, pieza y tipo de acción ---------- */
+function contar(tipo) {
+  if (!CONFIG.estadisticas || params.get("debug") || /^(localhost|127\.)/.test(location.hostname)) return;
+  try {
+    const cuerpo = JSON.stringify({ accion: "ev", c: CONFIG.slug, k: ((sede || "").toUpperCase() + (PIEZA ? "-" + PIEZA : "")).slice(0, 20), t: tipo });
+    const blob = new Blob([cuerpo], { type: "text/plain" });
+    if (!(navigator.sendBeacon && navigator.sendBeacon(CONFIG.estadisticas, blob))) fetch(CONFIG.estadisticas, { method: "POST", body: cuerpo, mode: "no-cors", keepalive: true }).catch(() => {});
+  } catch (e) {}
+}
+document.addEventListener("click", (e) => {
+  const a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
+  const u = a.getAttribute("href") || "";
+  const t = /writereview/.test(u) ? "resena" : a.id === "bGerencia" ? "gerencia" : /wa\.me/.test(u) ? "whatsapp" : /^tel:/.test(u) ? "llamada" : /google\.[a-z.]+\/maps/.test(u) ? "ruta" : /^https?:/.test(u) ? "enlace" : "";
+  if (t) contar(t);
+});
+
+/* ---------- Hoja inferior ---------- */
+function abrirHoja(html, alAbrir) {
+  $("hoja").innerHTML = '<div class="asa"></div>' + html;
+  $("velo").classList.add("on"); document.body.style.overflow = "hidden";
+  if (alAbrir) alAbrir($("hoja"));
+}
+function cerrarHoja() { $("velo").classList.remove("on"); document.body.style.overflow = ""; }
+$("velo").addEventListener("click", (e) => { if (e.target === $("velo")) cerrarHoja(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarHoja(); });
+
+/* ---------- Sedes ---------- */
+function elegirSede(primeraVez) {
+  abrirHoja('<h3>' + (primeraVez ? "¿En qué sede estás?" : "Cambiar de sede") + '</h3><p>Lo recordaremos para la próxima vez.</p><div class="lista">' +
+    Object.keys(SEDES).map((k) => { const s = SEDES[k], ab = estadoAhora(s);
+      return '<button type="button" class="fila-a' + (k === sede ? " activo" : "") + '" data-s="' + k + '"><span class="ico">' + icono("ruta") + '</span><span class="t"><b>' + esc(s.nombre) + '</b><small>' + esc(s.zona) + ' · ' + (ab.abierto ? "abierta ahora" : "cerrada ahora") + '</small></span>' + icono("flecha") + '</button>'; }).join("") + '</div>',
+    (h) => h.querySelectorAll("[data-s]").forEach((b) => b.addEventListener("click", () => { aplicarSede(b.dataset.s, true); cerrarHoja(); })));
+}
+$("bSede").addEventListener("click", () => elegirSede(false));
+
+function aplicarSede(k, guardar) {
+  sede = SEDES[k] ? k : CONFIG.sedePorDefecto;
+  const s = SEDES[sede];
+  if (guardar) almacen.set("ls_sede", sede);
+  $("tSede").textContent = s.nombre.replace("Sede ", "");
+  $("hSede").textContent = s.nombre;
+  $("bReserva").href = s.reserva;
+  $("bLlamar").href = "tel:" + s.telefono;
+  $("bWa").href = "https://wa.me/" + s.whatsapp + "?text=" + encodeURIComponent("Hola, os escribo desde la web de La Sucursal (" + s.nombre + ").");
+  $("bRuta").href = s.mapa;
+  $("bInstaB").href = s.insta; $("bInstaT").href = INSTA_TIENDA;
+  $("bResena").href = s.resena;
+  $("resenaTxt").textContent = "Cuenta qué tal en " + s.nombre.replace("Sede ", "");
+  $("bGerencia").href = "https://wa.me/" + s.whatsapp + "?text=" + encodeURIComponent("Hola, quería comentar algo sobre mi visita a La Sucursal (" + s.nombre + ").");
+  $("contactoS").textContent = s.nombre + " · " + s.direccion + ast(s.direccionEjemplo || s.telefonoEjemplo);
+  $("fidSede").textContent = "Válida en las 3 sedes";
+  pintarEstado();
+  if ($("servicios").childElementCount) pintarCarruseles();
+}
+
+/* ---------- Abierto ahora (hora de Madrid) ---------- */
+function ahoraMadrid() {
+  const p = {}; new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false })
+    .formatToParts(new Date()).forEach((x) => (p[x.type] = x.value));
+  const dias = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  return { dia: dias[p.weekday], min: (+p.hour % 24) * 60 + (+p.minute) };
+}
+const aMin = (h) => { const [a, b] = h.split(":"); return +a * 60 + +b; };
+const NOMBRE_DIA = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+function estadoAhora(s) {
+  const { dia, min } = ahoraMadrid(), hoy = s.horario[dia] || [];
+  for (const [a, c] of hoy) if (min >= aMin(a) && min < aMin(c)) return { abierto: true, texto: "Abierto ahora", sub: "cierra a las " + c };
+  for (const [a] of hoy) if (min < aMin(a)) return { abierto: false, texto: "Cerrado ahora", sub: "abre hoy a las " + a };
+  for (let i = 1; i <= 7; i++) { const d = (dia + i) % 7, t = s.horario[d] || [];
+    if (t.length) return { abierto: false, texto: "Cerrado ahora", sub: "abre " + (i === 1 ? "mañana" : "el " + NOMBRE_DIA[d]) + " a las " + t[0][0] }; }
+  return { abierto: false, texto: "Horario por confirmar", sub: "" };
+}
+function pintarEstado() {
+  const s = SEDES[sede], e = estadoAhora(s);
+  $("dotEstado").className = "dot" + (e.abierto ? " on" : ""); $("dotSede").className = "dot" + (e.abierto ? " on" : "");
+  $("tEstado").innerHTML = esc(e.texto) + (e.sub ? ' <small>· ' + esc(e.sub) + ast(s.horarioEjemplo) + '</small>' : "");
+}
+setInterval(() => sede && pintarEstado(), 60000);
+
+/* ---------- Bizum ---------- */
+async function copiar(t) {
+  try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(t); return true; } } catch (e) {}
+  try { const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select(); const ok = document.execCommand("copy"); ta.remove(); return ok; } catch (e) { return false; }
+}
+$("bBizum").addEventListener("click", async () => {
+  const s = SEDES[sede], ok = await copiar(s.bizum);
+  if (navigator.vibrate) navigator.vibrate(40);
+  contar("enlace");
+  abrirHoja('<h3>Pagar por Bizum 💈</h3><p>' + esc(s.nombre) + ' · ' + esc(s.responsable) + '</p>' +
+    '<div class="bizum"><span>' + (ok ? "Número copiado" : "Número Bizum") + '</span><strong>' + esc(s.bizum.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3")) + '</strong></div>' +
+    '<div class="pasos"><span><b>1.</b> Abre la app de tu banco.</span><span><b>2.</b> Ve a Bizum → Enviar y ' + (ok ? "pega el número." : "escribe el número.") + '</span><span><b>3.</b> Pon el importe de tu servicio y confirma.</span></div>' +
+    '<div class="acciones"><button type="button" class="btn oro" id="hOk">Entendido</button></div>', (h) => h.querySelector("#hOk").onclick = cerrarHoja);
+});
+
+/* ---------- Fidelidad (sellos guardados en este móvil; los pone el barbero con su PIN) ---------- */
+const F_KEY = "ls_sellos", F_ULT = "ls_ultimo_sello";
+function sellos() { return Math.max(0, Math.min(CONFIG.fidelidad.sellos, parseInt(almacen.get(F_KEY) || "0", 10) || 0)); }
+function pintarSellos(nuevo) {
+  const n = sellos(), tot = CONFIG.fidelidad.sellos, falta = tot - n;
+  $("fidNum").innerHTML = n + "<i>/" + tot + "</i>";
+  $("fidTitulo").textContent = n === 0 ? "Tu primer sello te espera" : n >= tot ? "¡" + CONFIG.fidelidad.premio + " desbloqueado!" : falta === 1 ? "¡Te falta 1 para tu " + CONFIG.fidelidad.premio.toLowerCase() + "!" : "Te faltan " + falta + " para tu " + CONFIG.fidelidad.premio.toLowerCase();
+  $("fidSub").textContent = n >= tot ? "Enséñaselo a tu barbero en tu próxima visita" : "Cada visita suma un sello" + ast(CONFIG.fidelidad.ejemplo);
+  let h = "";
+  for (let i = 1; i <= tot; i++) h += i <= n ? '<span class="sello ok' + (i === nuevo ? " nuevo" : "") + '">' + icono("check") + '</span>' : i === tot ? '<span class="sello premio">' + icono("regalo") + '</span>' : '<span class="sello">' + i + '</span>';
+  $("sellos").innerHTML = h;
+  $("bSellar").innerHTML = n >= tot ? icono("regalo") + "Canjear mi premio" : icono("tijera") + "Sellar mi visita";
+}
+async function hashPin(pin, k) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("lasucursal|" + k + "|" + pin));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+$("bSellar").addEventListener("click", () => {
+  const canje = sellos() >= CONFIG.fidelidad.sellos;
+  abrirHoja('<h3>' + (canje ? "Canjear premio" : "Sellar visita") + '</h3><p>Pásale el móvil a tu barbero para que ponga el código de ' + esc(SEDES[sede].nombre) + '.</p>' +
+    '<div class="pin">' + [0, 1, 2, 3].map(() => '<input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito">').join("") + '</div>' +
+    '<div class="err" id="pinErr"></div>' + (CONFIG.previa ? '<p style="text-align:center;font-size:.76rem">Vista previa: el código de prueba es ' + PIN_EJEMPLO + '</p>' : "") +
+    '<div class="acciones"><button type="button" class="btn" id="hNo">Cancelar</button></div>', (h) => {
+      const ins = Array.from(h.querySelectorAll(".pin input"));
+      h.querySelector("#hNo").onclick = cerrarHoja;
+      setTimeout(() => ins[0].focus(), 80);
+      ins.forEach((inp, i) => {
+        inp.addEventListener("input", async () => {
+          inp.value = inp.value.replace(/\D/g, "").slice(-1);
+          if (inp.value && i < 3) ins[i + 1].focus();
+          const pin = ins.map((x) => x.value).join("");
+          if (pin.length < 4) return;
+          const intentos = parseInt(sessionStorage.getItem("ls_int") || "0", 10);
+          if (intentos >= 5) { $("pinErr").textContent = "Demasiados intentos. Prueba en unos minutos."; return; }
+          const ok = (await hashPin(pin, sede)) === SEDES[sede].pinHash;
+          if (!ok) { try { sessionStorage.setItem("ls_int", String(intentos + 1)); } catch (e) {} $("pinErr").textContent = "Código incorrecto"; ins.forEach((x) => (x.value = "")); ins[0].focus(); if (navigator.vibrate) navigator.vibrate([60, 40, 60]); return; }
+          if (canje) { almacen.set(F_KEY, "0"); cerrarHoja(); pintarSellos(); toast("🎁 ¡Premio canjeado! Empieza una nueva tarjeta"); return; }
+          const ult = parseInt(almacen.get(F_ULT) || "0", 10);
+          if (Date.now() - ult < CONFIG.fidelidad.horasEntreSellos * 3600e3) { $("pinErr").textContent = "Esta visita ya está sellada."; return; }
+          const n = sellos() + 1;
+          almacen.set(F_KEY, String(n)); almacen.set(F_ULT, String(Date.now()));
+          cerrarHoja(); pintarSellos(n); if (navigator.vibrate) navigator.vibrate(80);
+          toast(n >= CONFIG.fidelidad.sellos ? "🎉 ¡Tarjeta completa! Tu próximo corte es gratis" : "✂️ ¡Sello " + n + " añadido! Gracias por venir");
+        });
+        inp.addEventListener("keydown", (e) => { if (e.key === "Backspace" && !inp.value && i > 0) ins[i - 1].focus(); });
+      });
+    });
+});
+
+/* ---------- Próximo corte (archivo de calendario) ---------- */
+function fechaProxima() { const d = new Date(); d.setDate(d.getDate() + CONFIG.semanasProximoCorte * 7); d.setHours(10, 0, 0, 0); return d; }
+function pintarProximo() {
+  const d = fechaProxima();
+  $("calMes").textContent = d.toLocaleDateString("es-ES", { month: "short" }).replace(".", "");
+  $("calDia").textContent = d.getDate();
+  $("proxTxt").textContent = "Te avisamos el " + d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+}
+$("bRecordar").addEventListener("click", () => {
+  const s = SEDES[sede], d = fechaProxima(), f = (x) => x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const fin = new Date(d.getTime() + 30 * 60000);
+  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Studio 42//La Sucursal//ES", "BEGIN:VEVENT", "UID:" + Date.now() + "@lasucursal", "DTSTAMP:" + f(new Date()),
+    "DTSTART:" + f(d), "DTEND:" + f(fin), "SUMMARY:Toca corte en La Sucursal ✂️", "DESCRIPTION:Reserva tu cita: " + s.reserva, "LOCATION:" + s.direccion.replace(/,/g, "\\,"),
+    "BEGIN:VALARM", "TRIGGER:-PT0M", "ACTION:DISPLAY", "DESCRIPTION:Toca corte en La Sucursal", "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+  descargar(ics, "proximo-corte-la-sucursal.ics", "text/calendar");
+  toast("📅 Ábrelo para añadirlo a tu calendario");
+});
+function descargar(texto, nombre, tipo) {
+  const url = URL.createObjectURL(new Blob([texto], { type: tipo + ";charset=utf-8" }));
+  const a = document.createElement("a"); a.href = url; a.download = nombre; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+/* ---------- Contacto (se genera al momento, siempre con la sede correcta) ---------- */
+$("bContacto").addEventListener("click", () => {
+  const s = SEDES[sede];
+  const v = ["BEGIN:VCARD", "VERSION:3.0", "N:La Sucursal;" + s.nombre + ";;;", "FN:La Sucursal · " + s.nombre, "ORG:La Sucursal Barbería", "TEL;TYPE=CELL,VOICE:" + s.telefono,
+    "ADR;TYPE=WORK:;;" + s.direccion.replace(/,/g, "\\,") + ";;;;España", "URL:" + location.origin + location.pathname + "?sede=" + sede, "NOTE:Reserva tu cita: " + s.reserva, "END:VCARD"].join("\r\n");
+  descargar(v, "la-sucursal-" + sede + ".vcf", "text/vcard");
+  toast("📇 Ábrelo para guardar el contacto");
+});
+
+/* ---------- Parking ---------- */
+function pintarParking() {
+  const g = almacen.get("ls_lat") && almacen.get("ls_lng");
+  $("bParking").classList.toggle("activo", !!g);
+  $("parkT").textContent = g ? "Ir a mi coche" : "¿Dónde aparqué?";
+  $("parkS").textContent = g ? "Toca para abrir la ruta a pie" : "Guarda tu coche para volver a pie";
+}
+$("bParking").addEventListener("click", () => {
+  const lat = almacen.get("ls_lat"), lng = almacen.get("ls_lng");
+  if (lat && lng) {
+    window.open("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng + "&travelmode=walking", "_blank", "noopener");
+    setTimeout(() => abrirHoja('<h3>🚙 Ruta abierta</h3><p>¿Ya estás en tu coche? Puedes borrar la ubicación guardada.</p><div class="acciones" style="margin-top:16px"><button type="button" class="btn oro" id="hBorra">Borrar ubicación</button><button type="button" class="btn" id="hDeja">Mantenerla</button></div>',
+      (h) => { h.querySelector("#hBorra").onclick = () => { almacen.del("ls_lat"); almacen.del("ls_lng"); pintarParking(); cerrarHoja(); }; h.querySelector("#hDeja").onclick = cerrarHoja; }), 900);
+    return;
+  }
+  if (!navigator.geolocation) { toast("Tu móvil no permite usar la ubicación aquí"); return; }
+  $("parkS").textContent = "Buscando señal GPS…";
+  navigator.geolocation.getCurrentPosition((p) => {
+    almacen.set("ls_lat", p.coords.latitude.toFixed(6)); almacen.set("ls_lng", p.coords.longitude.toFixed(6)); pintarParking(); toast("📍 Coche guardado solo en este móvil");
+  }, () => { pintarParking(); toast("Activa el GPS y permite la ubicación"); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+});
+
+/* ---------- Carruseles ---------- */
+function tarjeta(it, ico, extra) {
+  return '<article class="item"><div class="foto">' + (it.foto ? '<img src="' + esc(it.foto) + '" alt="' + esc(it.nombre) + '" loading="lazy">' : icono(ico) + (CONFIG.previa ? "<em>foto pendiente</em>" : "")) + '</div>' +
+    '<div class="cuerpo"><b>' + esc(it.nombre) + ast(it.ejemplo) + '</b><small>' + esc(it.desc || it.rol || "") + '</small>' + (extra || "") + '</div></article>';
+}
+function pintarCarruseles() {
+  $("servicios").innerHTML = SERVICIOS.map((s) => tarjeta(s, "tijera", '<div class="fila"><span class="precio">' + esc(s.precio) + '</span><a class="mini" href="' + esc(SEDES[sede].reserva) + '" target="_blank" rel="noopener">Reservar</a></div>')).join("");
+  $("equipo").innerHTML = EQUIPO.map((p) => tarjeta(p, "persona", p.insta ? '<div class="fila" style="justify-content:center"><a class="mini" href="' + esc(p.insta) + '" target="_blank" rel="noopener">Ver sus cortes</a></div>' : "")).join("");
+  $("tienda").innerHTML = TIENDA.map((p) => tarjeta(p, "camiseta", '<div class="fila"><span class="precio">' + esc(p.precio) + '</span><a class="mini" target="_blank" rel="noopener" href="https://wa.me/' + SEDES[sede].whatsapp + "?text=" + encodeURIComponent("Hola, me interesa «" + p.nombre + "» de la tienda de La Sucursal. ¿Está disponible?") + '">Lo quiero</a></div>')).join("");
+  const algunEjemplo = (l) => CONFIG.previa && l.some((x) => x.ejemplo) ? "* ejemplo" : "";
+  $("servNota").textContent = algunEjemplo(SERVICIOS); $("equipoNota").textContent = algunEjemplo(EQUIPO); $("tiendaNota").textContent = algunEjemplo(TIENDA);
+}
+
+/* ---------- Música (opcional, solo si el cliente la activa) ---------- */
+$("bMusica").addEventListener("click", () => {
+  const a = $("audio"), b = $("bMusica");
+  if (a.paused) { a.volume = .5; a.play().then(() => b.setAttribute("aria-pressed", "true")).catch(() => toast("No se pudo reproducir")); }
+  else { a.pause(); b.setAttribute("aria-pressed", "false"); }
+});
+document.addEventListener("visibilitychange", () => { if (document.hidden) { $("audio").pause(); $("bMusica").setAttribute("aria-pressed", "false"); } });
+
+/* ---------- Animación al hacer scroll ---------- */
+const obs = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visto"); obs.unobserve(e.target); } }), { threshold: .12 }) : null;
+document.querySelectorAll(".aparece").forEach((el) => (obs ? obs.observe(el) : el.classList.add("visto")));
+
+/* ---------- Arranque ---------- */
+(async function () {
+  if (CONFIG.previa) $("avisoPrevia").hidden = false;
+  if (CONFIG.previa) for (const k of Object.keys(SEDES)) if (!SEDES[k].pinHash) SEDES[k].pinHash = await hashPin(PIN_EJEMPLO, k);
+  const deURL = (params.get("sede") || "").toLowerCase(), guardada = almacen.get("ls_sede");
+  const inicial = SEDES[deURL] ? deURL : SEDES[guardada] ? guardada : CONFIG.sedePorDefecto;
+  aplicarSede(inicial, !!SEDES[deURL]);
+  pintarSellos(); pintarProximo(); pintarParking(); pintarCarruseles();
+  contar("vista");
+  setTimeout(() => {
+    $("intro").classList.add("fuera");
+    if (!SEDES[deURL] && !SEDES[guardada]) setTimeout(() => elegirSede(true), 350);
+  }, 900);
+})();
+</script>
+</body>
+</html>
