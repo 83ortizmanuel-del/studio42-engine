@@ -1,0 +1,275 @@
+{
+  "version": 2,
+  "nombre": "CLINICA DENTAL CERROLAZA.",
+  "subtitulo": "Tu clínica dental de confianza, a un toque del móvil",
+  "textoBadge": "CLÍNICA DENTAL",
+  "colorPrincipal": "#0a1b21",
+  "colorAcento": "#00e5ff",
+  "whatsapp": "https://wa.me/34941206467",
+  "secciones": [
+    {
+      "titulo": "¿En qué podemos ayudarte?",
+      "botones": [
+        {
+          "tipo": "asistente",
+          "nombre": "Pedir cita sin llamar",
+          "descripcion": "Elige motivo y día, y el equipo te confirma el hueco por WhatsApp.",
+          "icono": "calendar",
+          "titulo": "Pide tu cita",
+          "intro": "Cuéntanos qué necesitas y te respondemos con un hueco.",
+          "botonTexto": "Enviar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Motivo de la cita",
+              "opciones": [
+                "Primera visita",
+                "Revisión periódica",
+                "Seguimiento de tratamiento",
+                "Otro motivo"
+              ]
+            },
+            {
+              "titulo": "Cuándo te viene bien",
+              "opciones": [
+                "Lo antes posible",
+                "Esta semana",
+                "La próxima semana",
+                "Me da igual"
+              ]
+            },
+            {
+              "titulo": "Franja horaria",
+              "opciones": [
+                "Mañana",
+                "Tarde",
+                "Indiferente"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, quiero pedir cita:\n- Motivo: {Motivo de la cita}\n- Cuándo: {Cuándo te viene bien}\n- Franja: {Franja horaria}\n¿Tenéis hueco?",
+          "destacado": true
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Reservar mi revisión periódica",
+          "descripcion": "Dinos cuándo fue la última y te ayudamos a agendar la siguiente.",
+          "icono": "check",
+          "titulo": "Tu revisión periódica",
+          "intro": "Es un momento y nos encargamos de buscarte hueco.",
+          "botonTexto": "Solicitar mi revisión",
+          "pasos": [
+            {
+              "titulo": "Mi última revisión fue",
+              "opciones": [
+                "Hace menos de 6 meses",
+                "Hace entre 6 y 12 meses",
+                "Hace más de un año",
+                "No lo recuerdo"
+              ]
+            },
+            {
+              "titulo": "Prefiero",
+              "opciones": [
+                "Cita esta semana",
+                "Cita en las próximas semanas",
+                "Que me escribáis con opciones"
+              ]
+            }
+          ],
+          "resultado": {
+            "etiqueta": "Siguiente paso",
+            "reglas": [],
+            "porDefecto": {
+              "titulo": "Vamos a buscarte hueco",
+              "texto": "Envía tu solicitud y el equipo de la clínica te propondrá fecha y hora para tu revisión."
+            }
+          },
+          "mensaje": "Hola {negocio}, quiero agendar mi revisión periódica.\n- Última revisión: {Mi última revisión fue}\n- Preferencia: {Prefiero}\n¿Me podéis proponer fecha?"
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Consultar un tratamiento o presupuesto",
+          "descripcion": "Elige qué te interesa y te responde el equipo, sin esperas al teléfono.",
+          "icono": "clipboard",
+          "titulo": "Información sobre tratamientos",
+          "intro": "Dinos qué te interesa y el equipo te contestará personalmente.",
+          "botonTexto": "Enviar consulta por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Me interesa",
+              "opciones": [
+                "Limpieza dental",
+                "Ortodoncia",
+                "Implantes",
+                "Blanqueamiento",
+                "Empastes o endodoncia",
+                "Otro tratamiento"
+              ]
+            },
+            {
+              "titulo": "Quiero saber",
+              "opciones": [
+                "Cómo es el proceso",
+                "Presupuesto",
+                "Opciones de financiación",
+                "Si necesito una primera visita"
+              ]
+            }
+          ],
+          "resultado": {
+            "etiqueta": "Qué ocurre ahora",
+            "reglas": [
+              {
+                "si": {
+                  "Quiero saber": [
+                    "Presupuesto",
+                    "Opciones de financiación"
+                  ]
+                },
+                "titulo": "Te lo detalla el equipo",
+                "texto": "Presupuestos y financiación los explica directamente la clínica. Envía tu consulta y te responderán."
+              }
+            ],
+            "porDefecto": {
+              "titulo": "Tu consulta llegará a la clínica",
+              "texto": "Envíala por WhatsApp y el equipo te responderá con la información que necesitas."
+            }
+          },
+          "mensaje": "Hola {negocio}, quería información:\n- Tratamiento: {Me interesa}\n- Consulta: {Quiero saber}\n¿Me podéis orientar?"
+        },
+        {
+          "tipo": "info",
+          "nombre": "Tengo una urgencia dental",
+          "descripcion": "Qué hacer si necesitas atención con prisa y cómo avisar a la clínica.",
+          "icono": "alert",
+          "titulo": "Urgencia dental",
+          "intro": "Avisa a la clínica cuanto antes para que puedan atenderte.",
+          "tarjetas": [
+            {
+              "nivel": "alerta",
+              "titulo": "Emergencia médica",
+              "texto": "Si es una emergencia médica o te encuentras mal en general, llama al 112."
+            },
+            {
+              "nivel": "info",
+              "titulo": "Avisa a la clínica",
+              "texto": "Escríbenos o llama al centro explicando brevemente qué ocurre. El equipo te dirá cómo proceder."
+            },
+            {
+              "nivel": "aviso",
+              "titulo": "Sin consejos por aquí",
+              "texto": "Esta app no da indicaciones clínicas. Solo el equipo de la clínica puede valorar tu caso."
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Avisar por WhatsApp",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, tengo una urgencia dental y necesito que me atendáis lo antes posible. ¿Qué puedo hacer?"
+            }
+          ]
+        },
+        {
+          "tipo": "info",
+          "nombre": "Primera visita y nervios al dentista",
+          "descripcion": "Cómo preparar tu visita y cómo avisarnos si el dentista te impone.",
+          "icono": "heart",
+          "titulo": "Tu primera visita",
+          "intro": "Queremos que vengas tranquilo. Esto te ayuda a prepararte.",
+          "tarjetas": [
+            {
+              "nivel": "ok",
+              "titulo": "Cuéntanos si te da miedo",
+              "texto": "Es muy habitual. Si nos lo dices al pedir cita, el equipo lo tendrá en cuenta para tu visita."
+            },
+            {
+              "nivel": "info",
+              "titulo": "Si tienes informes previos",
+              "texto": "Si tienes radiografías o informes de otros dentistas, llévalos o avísanos."
+            },
+            {
+              "nivel": "info",
+              "titulo": "Información de salud",
+              "texto": "Si tomas medicación o tienes alergias, díselo al equipo en la consulta."
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Pedir cita avisando de mis nervios",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, me gustaría pedir una primera cita. Me pone nervioso/a ir al dentista, ¿podéis tenerlo en cuenta?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Contacto & Redes",
+      "botones": [
+        {
+          "tipo": "whatsapp",
+          "nombre": "Escríbenos por WhatsApp",
+          "descripcion": "Respuesta directa del equipo",
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "mensaje": "Hola {negocio}, quisiera más información."
+        },
+        {
+          "tipo": "enlace",
+          "nombre": "Página de Facebook",
+          "descripcion": "Novedades y promociones",
+          "icono": "facebook",
+          "colorIcono": "#1877F2",
+          "url": "https://www.facebook.com/share/1H3AEJqrtB/"
+        },
+        {
+          "tipo": "enlace",
+          "nombre": "Nuestra web",
+          "descripcion": "Toda la información del negocio",
+          "icono": "globe",
+          "url": "https://cerrolaza.com/"
+        },
+        {
+          "tipo": "vcard",
+          "nombre": "Guardar contacto en la agenda",
+          "descripcion": "Descarga nuestro teléfono directo al móvil",
+          "icono": "contact",
+          "colorIcono": "#ffffff"
+        }
+      ]
+    },
+    {
+      "titulo": "Servicios del llavero",
+      "botones": [
+        {
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Avisa al local para coordinar la devolución segura"
+        },
+        {
+          "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
+          "descripcion": "Guarda la posición GPS de tu coche para volver",
+          "icono": "locate",
+          "colorIcono": "#94A3B8"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "botones": [
+        {
+          "tipo": "opinion",
+          "whatsappGerencia": "https://wa.me/34941206467?text=Hola%2C%20quisiera%20enviar%20un%20comentario%20privado%20sobre%20mi%20visita%20a%20Clinica%20Dental%20Cerrolaza.."
+        }
+      ]
+    }
+  ],
+  "_generado": true,
+  "_peticion": "a99a28ec0aca32bd",
+  "_closer": "MO001",
+  "_fecha": "2026-10-12T14:49:51.588Z",
+  "logo": "https://cerrolaza.com/sites/default/files/logo.png"
+}
