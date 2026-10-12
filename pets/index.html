@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pet Pass · Studio 42 · Chapa NFC con la ficha veterinaria de tu mascota</title>
+    <meta name="description" content="Pet Pass de Studio 42: chapa NFC para collares que lleva la ficha de tu mascota (datos, veterinario, vacunas, alertas). El dueño edita con PIN, los demás solo leen.">
+    <meta name="theme-color" content="#07080b">
+    <link rel="canonical" href="https://studio42.es/pets/">
+    <link rel="icon" href="../img/logo.webp" type="image/webp">
+    <style>
+        @font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("../fonts/Inter-Regular.woff") format("woff"); }
+        @font-face { font-family: "Inter"; font-weight: 600; font-display: swap; src: url("../fonts/Inter-SemiBold.woff") format("woff"); }
+        @font-face { font-family: "Inter Display"; font-weight: 800; font-display: swap; src: url("../fonts/InterDisplay-ExtraBold.woff") format("woff"); }
+        :root { --ink:#07080b; --ink-2:#101216; --line:rgba(196,196,196,.18); --ti:#d5d9e0; --ti-grad:linear-gradient(135deg,#fff 0%,#e6eaf0 22%,#c4c4c4 48%,#8e8e93 74%,#d9dde3 100%); --bone:#f4f6f9; --muted:#9ea3ab; --wa:#25d366; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --f-d:"Inter Display",system-ui,sans-serif; --f-b:"Inter",system-ui,-apple-system,sans-serif; }
+        *,*::before,*::after { box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+        body { margin: 0; min-height: 100vh; background: radial-gradient(1000px 500px at 50% -10%, rgba(150,160,180,.14), transparent 60%), var(--ink); color: var(--bone); font: 400 1rem/1.6 var(--f-b); }
+        a { color: inherit; }
+        .wrap { width: min(100% - 2rem, 720px); margin: 0 auto; padding: 1.6rem 0 4rem; }
+        /* Cabecera */
+        .top { display: flex; align-items: center; gap: .8rem; padding: .6rem 0 1.2rem; }
+        .top img { width: 36px; height: 36px; filter: drop-shadow(0 0 6px rgba(217,160,45,.4)); }
+        .top .brand { font: 800 1.1rem var(--f-d); }
+        .top .powered { margin-left: auto; font-size: .78rem; color: var(--muted); text-decoration: none; }
+        .top .powered:hover { color: var(--bone); }
+        /* Tarjeta cabecera mascota */
+        .hero { background: linear-gradient(165deg, rgba(255,255,255,.08), rgba(220,228,240,.03) 70%); border: 1px solid var(--line); border-radius: 20px; padding: 1.6rem; display: grid; gap: 1rem; grid-template-columns: 92px 1fr; align-items: center; margin-bottom: 1.4rem; }
+        .hero .foto { width: 92px; height: 92px; border-radius: 50%; background: var(--ti-grad); display: grid; place-items: center; font: 800 1.6rem var(--f-d); color: #0b0c0f; overflow: hidden; }
+        .hero .foto img { width: 100%; height: 100%; object-fit: cover; }
+        .hero h1 { margin: 0; font: 800 1.6rem/1.1 var(--f-d); letter-spacing: -.02em; }
+        .hero .meta { margin-top: .3rem; font-size: .88rem; color: var(--muted); }
+        .hero .state { display: inline-flex; align-items: center; gap: .4rem; margin-top: .55rem; padding: .25rem .6rem; border-radius: 999px; font: 700 .72rem var(--f-b); letter-spacing: .04em; }
+        .state.on { background: rgba(34,197,94,.14); color: #86efac; }
+        .state.off { background: rgba(239,68,68,.14); color: #fca5a5; }
+        /* Sección */
+        .card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 1.3rem 1.3rem; margin-bottom: 1.1rem; }
+        .card h2 { margin: 0 0 .9rem; font: 800 1.1rem var(--f-d); letter-spacing: .01em; display: flex; align-items: center; gap: .55rem; }
+        .card h2 svg { width: 20px; height: 20px; color: var(--ti); }
+        .row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .55rem 0; border-top: 1px solid var(--line); font-size: .95rem; }
+        .row:first-of-type { border-top: 0; }
+        .row .k { color: var(--muted); font-size: .86rem; }
+        .row .v { font-weight: 600; text-align: right; }
+        .pills { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .3rem; }
+        .pill { display: inline-flex; align-items: center; gap: .35rem; padding: .2rem .55rem; border-radius: 999px; font: 600 .76rem var(--f-b); border: 1px solid var(--line); }
+        .pill.alert { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.3); color: #fca5a5; }
+        .pill.ok { background: rgba(34,197,94,.08); border-color: rgba(34,197,94,.3); color: #86efac; }
+        .pill.info { background: rgba(96,165,250,.08); border-color: rgba(96,165,250,.3); color: #93c5fd; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font: 600 .92rem var(--f-b); padding: .85rem 1.2rem; border-radius: 14px; border: 1.5px solid transparent; cursor: pointer; min-height: 48px; text-decoration: none; width: 100%; transition: filter .2s, border-color .2s, background .2s; }
+        .btn-primary { background: var(--ti-grad); color: #0b0c0f; }
+        .btn-primary:hover { filter: brightness(1.07); }
+        .btn-ghost { border-color: rgba(220,228,240,.3); color: var(--bone); background: transparent; }
+        .btn-ghost:hover { border-color: #cfd4dc; background: rgba(220,228,240,.06); }
+        .btn-danger { background: rgba(239,68,68,.12); color: #fca5a5; border-color: rgba(239,68,68,.4); }
+        .btn-grid { display: grid; gap: .6rem; margin-top: 1rem; }
+        .btn-wa { background: #25d366; color: #053f1b; }
+        .btn-call { background: #22c55e; color: #052e1a; }
+        /* Agenda vet */
+        .visita { padding: .9rem 0; border-top: 1px solid var(--line); display: grid; gap: .3rem; }
+        .visita:first-child { border-top: 0; }
+        .visita .fecha { font: 700 .82rem var(--f-b); color: var(--ti); letter-spacing: .04em; }
+        .visita .motivo { font-weight: 600; }
+        .visita .nota { font-size: .9rem; color: var(--muted); }
+        .vacio { color: var(--muted); font-size: .9rem; padding: .8rem 0; }
+        /* Formularios panel */
+        label { display: block; font: 700 .78rem var(--f-b); letter-spacing: .04em; color: var(--muted); margin: 1rem 0 .35rem; text-transform: uppercase; }
+        input[type=text], input[type=tel], input[type=date], input[type=password], input[type=number], textarea, select { width: 100%; background: var(--ink); color: var(--bone); border: 1.5px solid var(--line); border-radius: 10px; padding: .75rem .85rem; font: 400 .95rem var(--f-b); min-height: 46px; }
+        textarea { min-height: 80px; resize: vertical; }
+        input:focus, textarea:focus, select:focus { outline: 2px solid var(--ti); outline-offset: 2px; }
+        .grid-2 { display: grid; gap: .6rem; }
+        @media (min-width: 540px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+        /* Modal panel edición */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,.84); z-index: 50; display: none; padding: 1rem; overflow: auto; }
+        .modal.on { display: block; }
+        .modal-box { background: var(--ink-2); border: 1px solid var(--line); border-radius: 20px; max-width: 640px; margin: 2rem auto; padding: 1.6rem; }
+        .modal-box h2 { margin: 0 0 .5rem; font: 800 1.3rem var(--f-d); }
+        .modal-box p.lead { color: var(--muted); font-size: .92rem; margin: 0 0 1rem; }
+        .close { background: transparent; border: 1px solid var(--line); color: var(--bone); width: 40px; height: 40px; border-radius: 50%; float: right; cursor: pointer; font-size: 1.1rem; }
+        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; margin: 1rem 0; }
+        .tab { background: transparent; border: 1px solid var(--line); color: var(--muted); padding: .6rem .4rem; border-radius: 10px; cursor: pointer; font: 600 .82rem var(--f-b); min-height: 40px; }
+        .tab.on { background: rgba(220,228,240,.14); color: var(--bone); border-color: #cfd4dc; }
+        .tab-pane { display: none; }
+        .tab-pane.on { display: block; }
+        .add-row { display: flex; gap: .5rem; margin-top: .5rem; }
+        .add-row input, .add-row select { flex: 1; min-height: 42px; }
+        .add-btn { background: var(--ti); color: #0b0c0f; border: none; border-radius: 10px; padding: 0 1rem; font-weight: 700; cursor: pointer; }
+        .list-item { background: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .9rem; margin-top: .5rem; display: flex; align-items: start; justify-content: space-between; gap: .7rem; }
+        .list-item .main { flex: 1; min-width: 0; }
+        .list-item strong { display: block; }
+        .list-item small { color: var(--muted); font-size: .82rem; }
+        .del { background: transparent; border: 1px solid rgba(239,68,68,.3); color: #fca5a5; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; flex: none; }
+        /* Toast */
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--ink-2); color: var(--bone); border: 1px solid #cfd4dc; padding: .8rem 1.2rem; border-radius: 999px; font: 600 .9rem var(--f-b); box-shadow: 0 20px 40px rgba(0,0,0,.5); z-index: 60; transition: transform .3s; max-width: 90vw; }
+        .toast.on { transform: translateX(-50%) translateY(0); }
+        /* Botón fijo del dueño */
+        .fab { position: fixed; right: 16px; bottom: 16px; background: var(--ti-grad); color: #0b0c0f; border: none; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; box-shadow: 0 20px 40px rgba(0,0,0,.5); z-index: 40; transition: transform .2s; }
+        .fab:hover { transform: scale(1.08); }
+        .fab svg { width: 22px; height: 22px; }
+        /* Mensaje de carga */
+        .loading { text-align: center; padding: 3rem 0; color: var(--muted); }
+        .error { text-align: center; padding: 2rem; background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3); border-radius: 14px; color: #fca5a5; }
+        @media (max-width: 420px) { .hero { grid-template-columns: 72px 1fr; padding: 1.2rem; } .hero .foto { width: 72px; height: 72px; } }
+    </style>
+</head>
+<body>
+    <div class="wrap" id="wrap">
+        <header class="top">
+            <img src="../img/logo.webp" alt="">
+            <span class="brand">Studio 42</span>
+            <a class="powered" href="https://studio42.es/#packs">Powered by Studio 42 Pet Pass</a>
+        </header>
+        <div id="app"><p class="loading">Cargando ficha de la mascota…</p></div>
+    </div>
+
+    <button class="fab" id="fab" aria-label="Panel del dueño" title="Panel del dueño">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+    </button>
+
+    <!-- Modal panel del dueño -->
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title">
+        <div class="modal-box">
+            <button class="close" id="m-close" aria-label="Cerrar">×</button>
+            <h2 id="m-title">Panel del dueño</h2>
+            <p class="lead" id="m-lead">Introduce el PIN para desbloquear la edición.</p>
+            <div id="m-body"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    (function () {
+        'use strict';
+        var $ = function (s) { return document.querySelector(s); };
+        var $$ = function (s) { return [].slice.call(document.querySelectorAll(s)); };
+        var app = $('#app');
+        var LS_KEY, LS_LOCK_KEY, data, locked = true;
+
+        // 1) Decidir qué pet cargar: ?id=<slug>  (por defecto: 'demo')
+        var params = new URLSearchParams(location.search);
+        var id = params.value || params.get('id') || 'demo';
+        LS_KEY = 's42_pet_' + id;
+        LS_LOCK_KEY = 's42_pet_lock_' + id;
+
+        // 2) Cargar JSON base (local al folder) y mezclar con cambios locales
+        fetch(id + '.json', { cache: 'no-cache' })
+            .then(function (r) { if (!r.ok) throw new Error('No existe la ficha ' + id); return r.json(); })
+            .then(function (base) {
+                data = base;
+                try { var saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); if (saved) data = saved; } catch (e) {}
+                try { var l = localStorage.getItem(LS_LOCK_KEY); if (l !== null) locked = l === '1'; } catch (e) {}
+                render();
+            })
+            .catch(function (e) {
+                app.innerHTML = '<div class="error"><strong>No se encuentra la ficha.</strong><br>' + e.message + '<br><br>Prueba con <a href="?id=demo" style="color:#cfd4dc">?id=demo</a>.</div>';
+            });
+
+        function render() {
+            document.title = (data.nombre || 'Pet Pass') + ' · Studio 42 Pet Pass';
+            var dog = data;
+            var html = '';
+            // Cabecera mascota
+            html += '<div class="hero">';
+            html += '  <div class="foto">' + (dog.fotoUrl ? '<img src="' + esc(dog.fotoUrl) + '" alt="">' : esc((dog.nombre || '?').charAt(0))) + '</div>';
+            html += '  <div>';
+            html += '    <h1>' + esc(dog.nombre || 'Sin nombre') + '</h1>';
+            html += '    <div class="meta">' + esc([dog.raza, dog.sexo, dog.edad].filter(Boolean).join(' · ')) + '</div>';
+            html += '    <span class="state ' + (locked ? 'on' : 'off') + '">● ' + (locked ? 'Ficha bloqueada · solo lectura' : 'Edición activa') + '</span>';
+            html += '  </div>';
+            html += '</div>';
+
+            // SOS: botones principales de rescate
+            if (dog.contactoNombre || dog.contactoTelefono) {
+                html += '<div class="card">';
+                html += '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9a2 2 0 0 1 3.4 0l8 13.9A2 2 0 0 1 20 21H4a2 2 0 0 1-1.7-3.2z"/><path d="M12 9v5M12 17v.5"/></svg>¿Encontraste a ' + esc(dog.nombre) + '?</h2>';
+                html += '<p style="color:var(--muted);font-size:.9rem;margin:.2rem 0 .8rem">Avisa al dueño. Normalmente responde en minutos.</p>';
+                html += '<div class="btn-grid">';
+                if (dog.contactoTelefono) html += '<a class="btn btn-call" href="tel:' + esc(dog.contactoTelefono) + '">📞 Llamar a ' + esc(dog.contactoNombre || 'el dueño') + '</a>';
+                if (dog.contactoWhatsapp) {
+                    var msg = encodeURIComponent('¡Hola! Acabo de escanear la chapa de ' + (dog.nombre || 'tu mascota') + ' y la tengo conmigo. ¿Cómo coordinamos?');
+                    html += '<a class="btn btn-wa" href="https://wa.me/' + esc(dog.contactoWhatsapp.replace(/[^0-9]/g, '')) + '?text=' + msg + '" target="_blank" rel="noopener">💬 Avisar por WhatsApp</a>';
+                }
+                html += '<button class="btn btn-ghost" onclick="PETS.compartirUbicacion()">📍 Enviar mi ubicación GPS al dueño</button>';
+                html += '</div>';
+                html += '</div>';
+            }
+
+            // Alertas críticas
+            if (dog.alertas && dog.alertas.length) {
+                html += '<div class="card">';
+                html += '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 20h20z"/><path d="M12 10v4M12 17v.5"/></svg>Alertas críticas</h2>';
+                html += '<div class="pills">';
+                dog.alertas.forEach(function (a) { html += '<span class="pill alert">⚠ ' + esc(a) + '</span>'; });
+                html += '</div></div>';
+            }
+
+            // Datos clave
+            html += '<div class="card">';
+            html += '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4v12h16zM4 7l2-4h12l2 4"/></svg>Ficha de ' + esc(dog.nombre || 'la mascota') + '</h2>';
+            [
+                ['Microchip', dog.microchip],
+                ['Fecha de nacimiento', dog.fechaNac],
+                ['Castrado/esterilizado', dog.castrado ? 'Sí' : (dog.castrado === false ? 'No' : null)],
+                ['Peso', dog.peso ? dog.peso + ' kg' : null],
+                ['Alimentación', dog.alimentacion],
+                ['Medicación habitual', dog.medicacion],
+                ['Carácter', dog.caracter]
+            ].forEach(function (r) {
+                if (r[1]) html += '<div class="row"><span class="k">' + r[0] + '</span><span class="v">' + esc(r[1]) + '</span></div>';
+            });
+            html += '</div>';
+
+            // Veterinario de cabecera
+            if (dog.vet) {
+                html += '<div class="card">';
+                html += '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8M8 6h8"/><circle cx="12" cy="16" r="6"/><circle cx="12" cy="16" r="2"/></svg>Veterinario de cabecera</h2>';
+                [
+                    ['Clínica', dog.vet.clinica],
+                    ['Veterinario', dog.vet.doctor],
+                    ['Teléfono', dog.vet.telefono],
+                    ['Dirección', dog.vet.direccion]
+                ].forEach(function (r) { if (r[1]) html += '<div class="row"><span class="k">' + r[0] + '</span><span class="v">' + esc(r[1]) + '</span></div>'; });
+                if (dog.vet.telefono) html += '<div class="btn-grid" style="margin-top:1rem"><a class="btn btn-ghost" href="tel:' + esc(dog.vet.telefono) + '">Llamar a la clínica</a></div>';
+                html += '</div>';
+            }
+
+            // Vacunas
+            if (dog.vacunas && dog.vacunas.length) {
+                html += '<div class="card">';
+                html += '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l6-6M8 16l5-5m0 0 7-7m-7 7 4 4m3-11 4 4"/></svg>Vacunas y desparasitación</h2>';
+                dog.vacunas.forEach(function (v) {
+                    html += '<div class="row"><span class="k">' + esc(v.nombre) + '</span><span class="v">' + esc(v.fecha || v.estado || '') + '</span></div>';
+                });
+                html += '</div>';
+            }
+
+            // Agenda de visitas al veterinario
+            html += '<div class="card">';
+            html += '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Agenda veterinaria</h2>';
+            if (!dog.visitas || !dog.visitas.length) {
+                html += '<p class="vacio">Aún no hay visitas registradas. El dueño las añade desde el panel.</p>';
+            } else {
+                dog.visitas.slice().reverse().forEach(function (v) {
+                    html += '<div class="visita"><span class="fecha">' + esc(v.fecha) + '</span><span class="motivo">' + esc(v.motivo) + '</span>';
+                    if (v.nota) html += '<span class="nota">' + esc(v.nota) + '</span>';
+                    html += '</div>';
+                });
+            }
+            html += '</div>';
+
+            app.innerHTML = html;
+        }
+
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+
+        // ===== Panel del dueño =====
+        var modal = $('#modal'), mBody = $('#m-body'), mLead = $('#m-lead'), mTitle = $('#m-title');
+        $('#fab').addEventListener('click', abrirPanel);
+        $('#m-close').addEventListener('click', cerrar);
+        modal.addEventListener('click', function (e) { if (e.target === modal) cerrar(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrar(); });
+
+        function abrirPanel() {
+            if (locked) { pedirPIN(); } else { mostrarEditor(); }
+            modal.classList.add('on');
+        }
+        function cerrar() { modal.classList.remove('on'); }
+
+        function pedirPIN() {
+            mTitle.textContent = 'Panel del dueño';
+            mLead.textContent = 'Introduce el PIN para desbloquear la edición de la ficha. Mientras esté bloqueada, cualquiera que escanee la chapa solo puede leer.';
+            mBody.innerHTML =
+                '<label for="pin">PIN de 4 a 6 dígitos</label>' +
+                '<input id="pin" type="password" inputmode="numeric" maxlength="6" autocomplete="off">' +
+                '<p id="pin-err" style="color:#fca5a5;font-size:.85rem;margin:.5rem 0 0;display:none">PIN incorrecto. Prueba otra vez.</p>' +
+                '<div class="btn-grid" style="margin-top:1.1rem"><button class="btn btn-primary" id="pin-ok">Desbloquear</button></div>' +
+                '<p style="color:var(--muted);font-size:.78rem;margin-top:1rem;text-align:center">¿No recuerdas el PIN? Escribe por WhatsApp a +34 672 294 962.</p>';
+            setTimeout(function () { $('#pin').focus(); }, 50);
+            $('#pin-ok').addEventListener('click', function () {
+                var pin = $('#pin').value;
+                if (!pin) return;
+                // Hash SHA-256 del PIN
+                sha256(pin).then(function (h) {
+                    if (h === data.pinHash) {
+                        locked = false;
+                        try { localStorage.setItem(LS_LOCK_KEY, '0'); } catch (e) {}
+                        mostrarEditor();
+                        render();
+                        toast('Panel desbloqueado');
+                    } else {
+                        $('#pin-err').style.display = 'block';
+                        $('#pin').value = '';
+                        $('#pin').focus();
+                    }
+                });
+            });
+            $('#pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#pin-ok').click(); });
+        }
+
+        function mostrarEditor() {
+            mTitle.textContent = 'Panel del dueño · ' + (data.nombre || '');
+            mLead.textContent = 'Edita los datos. Pulsa Guardar y bloquear al terminar; a partir de ahí, quien escanee la chapa solo verá la ficha.';
+            mBody.innerHTML =
+                '<div class="tabs" role="tablist">' +
+                '  <button class="tab on" data-tab="datos" type="button">Datos</button>' +
+                '  <button class="tab" data-tab="salud" type="button">Salud</button>' +
+                '  <button class="tab" data-tab="visitas" type="button">Visitas</button>' +
+                '</div>' +
+                '<div class="tab-pane on" data-pane="datos"></div>' +
+                '<div class="tab-pane" data-pane="salud"></div>' +
+                '<div class="tab-pane" data-pane="visitas"></div>' +
+                '<div class="btn-grid" style="margin-top:1.4rem">' +
+                '  <button class="btn btn-primary" id="save-all">Guardar y bloquear</button>' +
+                '  <button class="btn btn-ghost" id="only-save">Guardar y seguir editando</button>' +
+                '  <button class="btn btn-ghost" id="change-pin">Cambiar el PIN</button>' +
+                '</div>';
+
+            paneDatos(); paneSalud(); paneVisitas();
+
+            $$('.tab').forEach(function (t) {
+                t.addEventListener('click', function () {
+                    $$('.tab').forEach(function (o) { o.classList.toggle('on', o === t); });
+                    $$('.tab-pane').forEach(function (p) { p.classList.toggle('on', p.dataset.pane === t.dataset.tab); });
+                });
+            });
+            $('#save-all').addEventListener('click', function () { if (recolectar()) { persistir(); locked = true; localStorage.setItem(LS_LOCK_KEY, '1'); cerrar(); render(); toast('Ficha guardada y bloqueada'); } });
+            $('#only-save').addEventListener('click', function () { if (recolectar()) { persistir(); render(); toast('Guardado'); } });
+            $('#change-pin').addEventListener('click', cambiarPIN);
+        }
+
+        function paneDatos() {
+            var d = data;
+            $('[data-pane=datos]').innerHTML =
+                '<label>Nombre</label><input type="text" id="f-nombre" value="' + esc(d.nombre || '') + '">' +
+                '<div class="grid-2"><div><label>Raza</label><input type="text" id="f-raza" value="' + esc(d.raza || '') + '"></div>' +
+                '<div><label>Sexo</label><select id="f-sexo"><option value=""></option><option' + (d.sexo==='Macho'?' selected':'') + '>Macho</option><option' + (d.sexo==='Hembra'?' selected':'') + '>Hembra</option></select></div></div>' +
+                '<div class="grid-2"><div><label>Edad / nacimiento</label><input type="text" id="f-fechaNac" placeholder="p. ej. 2021" value="' + esc(d.fechaNac || '') + '"></div>' +
+                '<div><label>Peso (kg)</label><input type="number" id="f-peso" step="0.1" value="' + esc(d.peso || '') + '"></div></div>' +
+                '<label>Microchip</label><input type="text" id="f-microchip" value="' + esc(d.microchip || '') + '">' +
+                '<label>Foto (URL opcional)</label><input type="text" id="f-fotoUrl" value="' + esc(d.fotoUrl || '') + '">' +
+                '<h3 style="margin:1.4rem 0 0;font-size:1rem">Dueño</h3>' +
+                '<div class="grid-2"><div><label>Nombre dueño</label><input type="text" id="f-contactoNombre" value="' + esc(d.contactoNombre || '') + '"></div>' +
+                '<div><label>Teléfono</label><input type="tel" id="f-contactoTelefono" value="' + esc(d.contactoTelefono || '') + '"></div></div>' +
+                '<label>WhatsApp (con prefijo, p. ej. +34…)</label><input type="tel" id="f-contactoWhatsapp" value="' + esc(d.contactoWhatsapp || '') + '">';
+        }
+
+        function paneSalud() {
+            var d = data;
+            var vet = d.vet || {};
+            var html =
+                '<h3 style="margin:0 0 .5rem;font-size:1rem">Veterinario de cabecera</h3>' +
+                '<div class="grid-2"><div><label>Clínica</label><input type="text" id="f-vet-clinica" value="' + esc(vet.clinica || '') + '"></div>' +
+                '<div><label>Doctor/a</label><input type="text" id="f-vet-doctor" value="' + esc(vet.doctor || '') + '"></div></div>' +
+                '<div class="grid-2"><div><label>Teléfono</label><input type="tel" id="f-vet-telefono" value="' + esc(vet.telefono || '') + '"></div>' +
+                '<div><label>Dirección</label><input type="text" id="f-vet-direccion" value="' + esc(vet.direccion || '') + '"></div></div>' +
+                '<label>Alimentación</label><input type="text" id="f-alimentacion" value="' + esc(d.alimentacion || '') + '">' +
+                '<label>Medicación habitual</label><input type="text" id="f-medicacion" value="' + esc(d.medicacion || '') + '">' +
+                '<label>Carácter y comportamiento</label><textarea id="f-caracter">' + esc(d.caracter || '') + '</textarea>' +
+                '<label>Alertas críticas (una por línea)</label>' +
+                '<textarea id="f-alertas">' + esc((d.alertas || []).join('\n')) + '</textarea>' +
+                '<h3 style="margin:1.4rem 0 .5rem;font-size:1rem">Vacunas</h3>' +
+                '<div id="f-vacunas-list"></div>' +
+                '<div class="add-row">' +
+                '  <input id="nv-nombre" type="text" placeholder="Vacuna (p. ej. Rabia)">' +
+                '  <input id="nv-fecha" type="text" placeholder="Fecha o estado">' +
+                '  <button type="button" class="add-btn" id="nv-add">+</button>' +
+                '</div>';
+            $('[data-pane=salud]').innerHTML = html;
+            pintarVacunas();
+            $('#nv-add').addEventListener('click', function () {
+                var n = $('#nv-nombre').value.trim(), f = $('#nv-fecha').value.trim();
+                if (!n) return;
+                if (!data.vacunas) data.vacunas = [];
+                data.vacunas.push({ nombre: n, fecha: f });
+                $('#nv-nombre').value = ''; $('#nv-fecha').value = '';
+                pintarVacunas();
+            });
+        }
+
+        function pintarVacunas() {
+            var box = $('#f-vacunas-list');
+            box.innerHTML = '';
+            (data.vacunas || []).forEach(function (v, i) {
+                var el = document.createElement('div');
+                el.className = 'list-item';
+                el.innerHTML = '<div class="main"><strong>' + esc(v.nombre) + '</strong><small>' + esc(v.fecha || v.estado || '') + '</small></div>' +
+                               '<button class="del" aria-label="Borrar">×</button>';
+                el.querySelector('.del').addEventListener('click', function () { data.vacunas.splice(i, 1); pintarVacunas(); });
+                box.appendChild(el);
+            });
+        }
+
+        function paneVisitas() {
+            var hoy = new Date().toISOString().slice(0, 10);
+            $('[data-pane=visitas]').innerHTML =
+                '<h3 style="margin:0 0 .5rem;font-size:1rem">Añadir visita o anotación</h3>' +
+                '<div class="grid-2"><div><label>Fecha</label><input type="date" id="nv-f-fecha" value="' + hoy + '"></div>' +
+                '<div><label>Motivo corto</label><input type="text" id="nv-f-motivo" placeholder="Revisión anual, vacuna…"></div></div>' +
+                '<label>Nota (opcional)</label><textarea id="nv-f-nota" placeholder="Peso, próxima cita, medicación…"></textarea>' +
+                '<div class="btn-grid" style="margin-top:.8rem"><button type="button" class="btn btn-ghost" id="nv-add-v">+ Añadir visita</button></div>' +
+                '<h3 style="margin:1.4rem 0 .5rem;font-size:1rem">Historial</h3>' +
+                '<div id="nv-list"></div>';
+            pintarVisitas();
+            $('#nv-add-v').addEventListener('click', function () {
+                var m = $('#nv-f-motivo').value.trim();
+                if (!m) return;
+                if (!data.visitas) data.visitas = [];
+                data.visitas.push({ fecha: $('#nv-f-fecha').value, motivo: m, nota: $('#nv-f-nota').value.trim() });
+                $('#nv-f-motivo').value = ''; $('#nv-f-nota').value = '';
+                pintarVisitas();
+            });
+        }
+
+        function pintarVisitas() {
+            var box = $('#nv-list'); box.innerHTML = '';
+            if (!data.visitas || !data.visitas.length) { box.innerHTML = '<p class="vacio">Todavía no hay visitas.</p>'; return; }
+            data.visitas.slice().reverse().forEach(function (v, idx) {
+                var realIdx = data.visitas.length - 1 - idx;
+                var el = document.createElement('div');
+                el.className = 'list-item';
+                el.innerHTML = '<div class="main"><strong>' + esc(v.motivo) + '</strong><small>' + esc(v.fecha) + (v.nota ? ' · ' + esc(v.nota) : '') + '</small></div><button class="del" aria-label="Borrar">×</button>';
+                el.querySelector('.del').addEventListener('click', function () { data.visitas.splice(realIdx, 1); pintarVisitas(); });
+                box.appendChild(el);
+            });
+        }
+
+        function recolectar() {
+            try {
+                data.nombre = $('#f-nombre').value.trim();
+                data.raza = $('#f-raza').value.trim();
+                data.sexo = $('#f-sexo').value;
+                data.fechaNac = $('#f-fechaNac').value.trim();
+                data.peso = $('#f-peso').value ? parseFloat($('#f-peso').value) : null;
+                data.microchip = $('#f-microchip').value.trim();
+                data.fotoUrl = $('#f-fotoUrl').value.trim();
+                data.contactoNombre = $('#f-contactoNombre').value.trim();
+                data.contactoTelefono = $('#f-contactoTelefono').value.trim();
+                data.contactoWhatsapp = $('#f-contactoWhatsapp').value.trim();
+                data.alimentacion = $('#f-alimentacion').value.trim();
+                data.medicacion = $('#f-medicacion').value.trim();
+                data.caracter = $('#f-caracter').value.trim();
+                data.alertas = $('#f-alertas').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+                data.vet = { clinica: $('#f-vet-clinica').value.trim(), doctor: $('#f-vet-doctor').value.trim(), telefono: $('#f-vet-telefono').value.trim(), direccion: $('#f-vet-direccion').value.trim() };
+                return true;
+            } catch (e) { toast('No se pudo guardar.'); return false; }
+        }
+
+        function persistir() {
+            try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch (e) {}
+        }
+
+        function cambiarPIN() {
+            var actual = prompt('Introduce el PIN actual para cambiarlo:'); if (!actual) return;
+            sha256(actual).then(function (h) {
+                if (h !== data.pinHash) { toast('PIN actual incorrecto'); return; }
+                var nuevo = prompt('Nuevo PIN (4 a 6 dígitos):'); if (!nuevo || nuevo.length < 4) return;
+                sha256(nuevo).then(function (hn) { data.pinHash = hn; persistir(); toast('PIN cambiado'); });
+            });
+        }
+
+        // ===== API expuesta: solo para onclick inline =====
+        window.PETS = {
+            compartirUbicacion: function () {
+                if (!navigator.geolocation) { toast('Este móvil no permite enviar ubicación'); return; }
+                navigator.geolocation.getCurrentPosition(function (p) {
+                    var url = 'https://maps.google.com/?q=' + p.coords.latitude + ',' + p.coords.longitude;
+                    var msg = encodeURIComponent('¡Hola! Tengo a ' + (data.nombre || 'tu mascota') + ' conmigo. Mi ubicación: ' + url);
+                    if (data.contactoWhatsapp) location.href = 'https://wa.me/' + data.contactoWhatsapp.replace(/[^0-9]/g, '') + '?text=' + msg;
+                    else toast('No hay WhatsApp del dueño configurado');
+                }, function () { toast('No se pudo obtener la ubicación'); });
+            }
+        };
+
+        // ===== Util: SHA-256 en el navegador =====
+        function sha256(str) {
+            var enc = new TextEncoder().encode(str);
+            return crypto.subtle.digest('SHA-256', enc).then(function (buf) {
+                return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+            });
+        }
+
+        // ===== Toast =====
+        var toastEl = $('#toast'), toTimer;
+        function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toTimer); toTimer = setTimeout(function () { toastEl.classList.remove('on'); }, 2200); }
+    })();
+    </script>
+</body>
+</html>
