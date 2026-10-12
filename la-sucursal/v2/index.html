@@ -121,6 +121,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .item .fila{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
 .precio{font:800 1.1rem var(--fd);color:var(--oro2)}
 .mini{padding:8px 12px;border-radius:99px;background:rgba(217,180,90,.12);border:1px solid var(--linea);font:600 .76rem var(--fb);color:var(--oro2)}
+.galeria .gal{flex:0 0 46%;max-width:190px;aspect-ratio:3/4;scroll-snap-align:start;border-radius:18px;overflow:hidden;border:1px solid var(--linea2);padding:0;background:#18151b}
+.galeria .gal img{width:100%;height:100%;object-fit:cover;display:block}
+body.manga .galeria .gal{border:2.5px solid var(--tinta);border-radius:10px;box-shadow:4px 4px 0 rgba(217,180,90,.45)}
+body.manga .galeria .gal:nth-child(odd){transform:rotate(-1deg)}body.manga .galeria .gal:nth-child(even){transform:rotate(1deg)}
+.visor{width:100%;border-radius:14px;display:block;max-height:70dvh;object-fit:contain;background:#000}
 .equipo .item{flex-basis:42%;max-width:170px;text-align:center}
 .equipo .foto{aspect-ratio:1;border-radius:50%;margin:14px auto 0;width:76%}
 .equipo .foto .ic{font-size:1.8rem}
@@ -297,6 +302,11 @@ body.manga .poste::before{background:repeating-linear-gradient(-45deg,var(--pape
     <div class="carril" id="servicios"></div>
   </section>
 
+  <section class="sec aparece">
+    <div class="sec-t"><h2>Galería de cortes</h2><span>Trabajos reales</span></div>
+    <div class="carril galeria" id="galeria"></div>
+  </section>
+
   <section class="sec aparece equipo">
     <div class="sec-t"><h2>El equipo</h2><span id="equipoNota"></span></div>
     <div class="carril" id="equipo"></div>
@@ -397,14 +407,16 @@ const EMAIL = "barberia@lasucursalstoreart.com";
 
 /* Servicios y precios de lasucursalstoreart.com. Fotos: pon el archivo en esta carpeta y  foto: "corte.webp" */
 const SERVICIOS_BASE = [
-  { nombre: "Corte degradado", desc: "El fade de la casa · 20 min", precio: "15 €", grito: "¡FADE!", foto: "fotos/corte-fade.webp", pos: "center 28%" },
-  { nombre: "Corte + barba", desc: "El combo completo · 30 min", precio: "20 €", grito: "¡COMBO!" },
-  { nombre: "Corte de barba", desc: "Perfilado y arreglo · 20 min", precio: "10 €", grito: "¡ZAS!" },
+  { nombre: "Corte degradado", desc: "El fade de la casa · 20 min", precio: "15 €", grito: "¡FADE!", foto: "fotos/corte-degradado.webp", pos: "center 35%" },
+  { nombre: "Corte + barba", desc: "El combo completo · 30 min", precio: "20 €", grito: "¡COMBO!", foto: "fotos/corte-barba-combo.webp", pos: "68% 30%" },
+  { nombre: "Corte de barba", desc: "Perfilado y arreglo · 20 min", precio: "10 €", grito: "¡ZAS!", foto: "fotos/corte-barba.webp", pos: "62% 40%" },
   { nombre: "Corte Free Style", desc: "Diseño a tu medida · 30 min", precio: "50 €", grito: "¡ARTE!", foto: "fotos/corte-diseno.webp", pos: "center 30%" },
-  { nombre: "Mechas", desc: "Color con estilo · 30 min", precio: "100 €", grito: "¡FLASH!" },
-  { nombre: "Platinado", desc: "Rubio platino total · 30 min", precio: "130 €", grito: "¡BOOM!", foto: "fotos/corte-platinado.webp", pos: "center 72%" },
+  { nombre: "Mechas", desc: "Color con estilo · 30 min", precio: "100 €", grito: "¡FLASH!", foto: "fotos/corte-mechas.webp", pos: "center 40%" },
+  { nombre: "Platinado", desc: "Rubio platino total · 30 min", precio: "130 €", grito: "¡BOOM!", foto: "fotos/corte-platinado.webp", pos: "center 35%" },
   { nombre: "Corte jubilados", desc: "Precio especial · 20 min", precio: "10 €", grito: "¡RESPETO!" }
 ];
+/* Galería: trabajos reales de La Sucursal (fotos/galeria-N.webp) */
+const GALERIA = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => "fotos/galeria-" + n + ".webp");
 const SERVICIOS = SERVICIOS_BASE.filter((x) => x.foto).concat(SERVICIOS_BASE.filter((x) => !x.foto));
 /* Barberos de la agenda online (lasucursalstoreart.com/appointment.php) */
 const EQUIPO = [
@@ -593,6 +605,8 @@ function pintarCarruseles() {
   const eq = EQUIPO.slice().sort((a, b) => (b.sede === sede) - (a.sede === sede));
   $("equipo").innerHTML = eq.map((p) => tarjeta(p, "persona", (p.tecnica ? '<span class="tecnica">Técnica especial<br><b>' + esc(p.tecnica) + '</b></span>' : "") + (p.insta ? '<div class="fila" style="justify-content:center"><a class="mini" href="' + esc(p.insta) + '" target="_blank" rel="noopener">Ver sus cortes</a></div>' : ""))).join("");
   $("tienda").innerHTML = TIENDA.map((p) => tarjeta(p, "camiseta", '<div class="fila"><span class="precio">' + esc(p.precio) + '</span><a class="mini" target="_blank" rel="noopener" href="https://wa.me/' + SEDES[sede].whatsapp + "?text=" + encodeURIComponent("Hola, me interesa «" + p.nombre + "» de la tienda de La Sucursal. ¿Está disponible?") + '">Lo quiero</a></div>')).join("");
+  $("galeria").innerHTML = GALERIA.map((f, i) => '<button type="button" class="gal" data-i="' + i + '" aria-label="Ver foto ' + (i + 1) + '"><img src="' + f + '" alt="Corte en La Sucursal" loading="lazy"></button>').join("");
+  $("galeria").querySelectorAll(".gal").forEach((b) => b.addEventListener("click", () => abrirHoja('<img class="visor" src="' + GALERIA[+b.dataset.i] + '" alt="Corte en La Sucursal"><div class="acciones" style="margin-top:12px"><a class="btn oro" href="' + esc(SEDES[sede].reserva) + '" target="_blank" rel="noopener">Quiero este corte · Reservar</a><button type="button" class="btn" id="hCerrar">Cerrar</button></div>', (h) => h.querySelector("#hCerrar").onclick = cerrarHoja)));
   const algunEjemplo = (l) => CONFIG.previa && l.some((x) => x.ejemplo) ? "* ejemplo" : "";
   $("servNota").textContent = algunEjemplo(SERVICIOS); $("equipoNota").textContent = algunEjemplo(EQUIPO); $("tiendaNota").textContent = algunEjemplo(TIENDA);
 }
