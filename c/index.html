@@ -1149,6 +1149,26 @@ async function iniciar() {
     if (estado.debug) mostrarDebug();
 }
 
+/* Vista previa desde el panel de Studio 42 (?preview=1 dentro de un iframe del mismo dominio):
+   el panel envía un JSON sin publicar y se pinta aquí sin tocar GitHub. */
+function pintarPrevia(raw) {
+    const d = normalizar(raw);
+    const problema = validarRaiz(d);
+    if (problema) { aviso(problema); mostrarError("config"); return; }
+    estado.avisos = [];
+    estado.data = d;
+    estado.negocio = String(d.nombre).trim();
+    estado.waNegocio = resolverWANegocio(d);
+    aplicarIdentidad(d);
+    renderMenu(d);
+}
+if (new URLSearchParams(location.search).get("preview") === "1" && window.parent !== window) {
+    window.addEventListener("message", (e) => {
+        if (e.origin !== location.origin || !e.data || e.data.tipo !== "s42-preview" || !e.data.json) return;
+        try { pintarPrevia(e.data.json); } catch (err) { console.warn(err); }
+    });
+}
+
 document.addEventListener("DOMContentLoaded", iniciar);
 
 })();

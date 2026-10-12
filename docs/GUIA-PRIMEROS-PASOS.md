@@ -74,6 +74,7 @@ Si estás leyendo esto en tu repositorio, los cambios ya están publicados (se a
    | `ANTHROPIC_API_KEY` | la clave del 2.1 |
    | `GOOGLE_MAPS_API_KEY` | la clave del 2.3 |
    | `CLOSERS` | los códigos de tus closers separados por coma, por ejemplo `MO001,MEL001` (los mismos que pongas en `?cod=` del formulario) |
+   | `PANEL_CLAVE` | la contraseña para entrar en tu panel de control (`studio42.es/panel/`). Mínimo 6 caracteres; que no sea la de tu correo |
 
    Guarda las propiedades.
 5. Vuelve al editor (`<>`). Arriba, en el desplegable de funciones, elige **`PROBAR_CONFIGURACION`** y pulsa **▶ Ejecutar**.
@@ -148,4 +149,18 @@ Para ver errores técnicos: Apps Script → icono **Ejecuciones** (a la izquierd
 5. ¿Alguien olvidó el PIN? Usa **`RESETEAR_PIN_PET`** con el código de la chapa.
 
 Más detalles en `pets/README.md`.
+
+## Pedidos y panel de control
+
+**Pedido en la visita (Closer):** cuando aparece «¡Interfaz lista!», pulsa **🛒 Preparar el pedido**. Elige el pack, ajusta las piezas con + y − (no se puede bajar de lo que incluye el pack; lo que pase de ahí se cobra por unidad) y marca la promo si aplica. **Revisar pedido** → **Confirmar pedido**. Aparece la lista de enlaces para grabar cada pieza con NFC Tools: cada llavero tiene su propio código (`&k=L01`, `L02`…), así sabes desde qué pieza entra cada cliente. El pedido queda en la pestaña **Pedidos** del Sheet como «Por despachar».
+
+> Los precios están en `Code.gs` (bloque `CATALOGO`) y en el formulario. El total que vale es el del servidor. Si cambias un precio, cámbialo en los dos sitios (una prueba automática avisa si no coinciden).
+
+**Panel (`studio42.es/panel/`):** entra con tu `PANEL_CLAVE` desde el móvil (puedes añadirlo a la pantalla de inicio). Tienes:
+- **Pedidos**: los pendientes arriba; tócalos para ver el detalle, copiar los enlaces NFC y cambiar el estado (Por despachar → Grabado → Entregado → Cobrado).
+- **Clientes**: todas las landings con vista previa en un móvil. **✨ Pedir un cambio a Claude**: escríbelo con tus palabras, Claude prepara la propuesta, la ves en la vista previa (marcada «sin publicar») y solo cuando pulsas **Publicar en la web** se guarda. Si algo no encaja, **Descartar**.
+- **Pet Pass**: las chapas de cada clínica y cuáles están activadas.
+- **Nuevo**: abre el formulario del Closer para dar de alta un cliente.
+
+Para verlo sin configurar nada: `studio42.es/panel/?demo=1` (datos de ejemplo, no guarda nada).
 

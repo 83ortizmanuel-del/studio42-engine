@@ -326,6 +326,43 @@
         .maps-ok button { margin-left: 8px; background: none; border: none; color: #fcd34d; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: 11px; }
         .maps-msg { font-size: 11px; color: #fcd34d; line-height: 1.4; }
         .url-final { word-break: break-all; font-size: 11px; color: var(--color-accent); margin-top: 8px; text-align: center; }
+
+        /* ---------- Pedido ---------- */
+        .ped h2 { font-size: 17px; font-weight: 900; letter-spacing: .5px; margin: 4px 0 2px; }
+        .ped .sub { font-size: 12px; color: #9ca3af; margin-bottom: 14px; }
+        .ped-tit { font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--color-accent); margin: 16px 0 8px; }
+        .packs-ped { display: grid; gap: 8px; }
+        .pack-op { display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; width: 100%; font-family: inherit; color: #fff; padding: 12px 14px; border-radius: 16px; border: 1.5px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); cursor: pointer; transition: border-color .2s, background .2s; }
+        .pack-op b { display: block; font-size: 13px; }
+        .pack-op small { display: block; font-size: 11px; color: #9ca3af; margin-top: 2px; }
+        .pack-op .pr { font-weight: 900; font-size: 15px; white-space: nowrap; }
+        .pack-op.on { border-color: var(--color-accent); background: rgba(255,255,255,.1); box-shadow: 0 0 16px var(--color-glow); }
+        .pieza { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,.08); }
+        .pieza:first-child { border-top: 0; }
+        .pieza .info { flex: 1; min-width: 0; }
+        .pieza b { display: block; font-size: 13px; }
+        .pieza small { display: block; font-size: 11px; color: #9ca3af; }
+        .pieza small.extra { color: #fcd34d; }
+        .stepper { display: flex; align-items: center; gap: 6px; }
+        .stepper button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.06); color: #fff; font-size: 18px; font-weight: 900; cursor: pointer; }
+        .stepper button:disabled { opacity: .3; cursor: default; }
+        .stepper input { width: 46px; text-align: center; background: transparent; border: none; color: #fff; font: 900 16px inherit; font-family: inherit; }
+        .promo { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 10px 12px; border-radius: 14px; border: 1px dashed rgba(252,211,77,.5); font-size: 12px; color: #fde68a; cursor: pointer; }
+        .promo input { width: 18px; height: 18px; accent-color: #fcd34d; }
+        .total-bar { position: sticky; bottom: 0; margin: 16px -4px -4px; padding: 12px 14px; border-radius: 18px; background: rgba(10,10,12,.96); border: 1px solid rgba(255,255,255,.18); box-shadow: 0 -10px 30px rgba(0,0,0,.6); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .total-bar small { display: block; font-size: 10px; color: #9ca3af; letter-spacing: 1px; text-transform: uppercase; }
+        .total-bar strong { font-size: 22px; font-weight: 900; }
+        .total-bar .btn-fin { padding: 12px 16px; }
+        .resumen-l { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,.08); }
+        .resumen-l span:last-child { font-weight: 800; white-space: nowrap; }
+        .resumen-l.tot { font-size: 17px; font-weight: 900; border-top: 1px solid rgba(255,255,255,.3); }
+        .nfc-l { display: flex; align-items: center; gap: 8px; padding: 9px 10px; margin-top: 6px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); font-size: 11px; }
+        .nfc-l b { flex: none; font-size: 12px; min-width: 76px; }
+        .nfc-l code { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #cbd5e1; }
+        .nfc-l button { flex: none; font-family: inherit; font-size: 10px; font-weight: 900; padding: 6px 10px; border-radius: 99px; border: none; background: var(--gradient-btn); color: var(--btn-text-color); cursor: pointer; }
+        .ok-ped { text-align: center; padding: 8px 0 4px; }
+        .ok-ped .ck { width: 64px; height: 64px; margin: 0 auto 10px; border-radius: 50%; display: grid; place-items: center; background: var(--gradient-btn); color: var(--btn-text-color); font-size: 30px; font-weight: 900; box-shadow: 0 0 26px var(--color-glow); }
+        .guia-nfc { font-size: 11px; color: #9ca3af; line-height: 1.5; margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.04); }
 </style>
 </head>
 
@@ -466,6 +503,8 @@
                 <div id="zona-avisos"></div>
                 <div id="zona-final"></div>
             </div>
+
+            <section id="pedido" class="ped hidden-element" aria-live="polite"></section>
 
         </main>
     </div>
@@ -712,7 +751,9 @@
             copiar.addEventListener('click', async () => { try { await navigator.clipboard.writeText(url); copiar.textContent = '¡Copiado!'; } catch (e) { copiar.textContent = 'Mantén pulsado el enlace'; } });
             const nuevo = document.createElement('button'); nuevo.type = 'button'; nuevo.className = 'btn-fin'; nuevo.textContent = 'Nuevo diagnóstico';
             nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; $('place_id').value = ''; mapsOk.classList.add('hidden-element'); mapsRes.textContent = ''; mapsMsg.textContent = ''; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-            acc.append(abrir, copiar, nuevo);
+            const ped = document.createElement('button'); ped.type = 'button'; ped.className = 'btn-fin principal'; ped.textContent = '🛒 Preparar el pedido';
+            ped.addEventListener('click', () => abrirPedido(url));
+            acc.append(abrir, ped, copiar, nuevo);
             z.append(ok, u, acc);
         }
 
@@ -776,6 +817,176 @@
                 ? 'No hemos podido confirmar la publicación. Revisa tu conexión y pulsa Reintentar (no se duplicará nada). Si sigue igual, mira la columna Estado de la hoja "Diagnósticos".'
                 : 'El servidor confirmó el envío, pero la página aún no aparece. GitHub Pages puede tardar un poco más: abre el enlace en un minuto.', true);
             if (respuesta && respuesta.ok) { const z = $('zona-final'); const a = document.createElement('div'); a.className = 'url-final'; a.textContent = `${BASE}/c/?cod=${slug}`; z.appendChild(a); }
+        }
+
+
+        /* ================================ PEDIDO ================================
+           Los precios se muestran aquí, pero el total que vale es el que calcula el servidor. */
+        const IVA = 0.21;
+        const CATALOGO = {
+            piezas: {
+                display:  { nombre: 'Display acrílico NFC', precio: 49 },
+                llavero:  { nombre: 'Llavero Smart Drop', precio: 19.9 },
+                tarjeta:  { nombre: 'Tarjeta de madera NFC', precio: 39.9 },
+                welcome:  { nombre: 'Welcome Pack directivos', precio: 89 },
+                petpass:  { nombre: 'Chapa Pet Pass', precio: 14.9 },
+                camiseta: { nombre: 'Camiseta del equipo NFC', precio: null }
+            },
+            packs: {
+                ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0, incluye: {} },
+                prueba:        { nombre: 'Prueba Logroño', precio: 89, incluye: { display: 1, llavero: 1 } },
+                iman:          { nombre: 'Imán de mostrador', precio: 149, incluye: { display: 1, llavero: 2 } },
+                multiplicador: { nombre: 'Efecto multiplicador', precio: 349, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
+                dominio:       { nombre: 'Dominio local total', precio: 549, incluye: { display: 2, llavero: 25, welcome: 1 } }
+            }
+        };
+        const euro = (n) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        let ped = null;
+
+        function abrirPedido(url) {
+            const slug = (new URL(url)).searchParams.get('cod');
+            ped = { url, slug, cliente: $('nombre_comercio').value.trim() || slug, pack: 'iman', cant: {}, promo: false, notas: '' };
+            aplicarPack('iman');
+            panel.classList.add('hidden-element'); form.classList.add('hidden-element');
+            $('pedido').classList.remove('hidden-element');
+            pintarPedido();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function aplicarPack(id) {
+            const inc = CATALOGO.packs[id].incluye;
+            ped.pack = id;
+            Object.keys(CATALOGO.piezas).forEach((k) => { ped.cant[k] = Math.max(inc[k] || 0, id === ped._packPrevio ? ped.cant[k] || 0 : (inc[k] || 0)); });
+            ped._packPrevio = id;
+        }
+        function calcular() {
+            const P = CATALOGO.packs[ped.pack]; let base = P.precio, consultar = false; const lineas = [];
+            if (P.precio) lineas.push([`Pack ${P.nombre}`, P.precio]);
+            Object.keys(CATALOGO.piezas).forEach((k) => {
+                const pz = CATALOGO.piezas[k], inc = P.incluye[k] || 0, extra = Math.max(0, (ped.cant[k] || 0) - inc);
+                if (!extra) return;
+                if (pz.precio === null) { consultar = true; lineas.push([`${extra} × ${pz.nombre}`, null]); return; }
+                const imp = Math.round(extra * pz.precio * 100) / 100; base += imp; lineas.push([`${extra} × ${pz.nombre} (extra)`, imp]);
+            });
+            base = Math.round(base * 100) / 100;
+            return { lineas, base, iva: Math.round(base * IVA * 100) / 100, total: Math.round(base * (1 + IVA) * 100) / 100, consultar };
+        }
+        function pintarPedido() {
+            const z = $('pedido'); z.textContent = '';
+            const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+            z.append(h('h2', null, 'Pedido · ' + ped.cliente), h('div', 'sub', 'Elige el pack y ajusta las piezas con + y −. El total se calcula solo.'));
+            z.append(h('div', 'ped-tit', '① Pack'));
+            const lp = h('div', 'packs-ped');
+            Object.entries(CATALOGO.packs).forEach(([id, p]) => {
+                const b = h('button', 'pack-op' + (ped.pack === id ? ' on' : '')); b.type = 'button';
+                const izq = h('div'); izq.append(h('b', null, p.nombre));
+                const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta de madera', 'tarjetas de madera'], welcome: ['Welcome Pack', 'Welcome Packs'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'] };
+                const inc = Object.entries(p.incluye).map(([k, n]) => n + ' ' + CORTO[k][n === 1 ? 0 : 1]).join(' · ');
+                izq.append(h('small', null, inc || 'Solo las piezas que elijas'));
+                b.append(izq, h('span', 'pr', p.precio ? euro(p.precio) : '—'));
+                b.addEventListener('click', () => { aplicarPack(id); pintarPedido(); });
+                lp.appendChild(b);
+            });
+            z.appendChild(lp);
+            z.append(h('div', 'ped-tit', '② Piezas'));
+            const lista = h('div');
+            const P = CATALOGO.packs[ped.pack];
+            Object.entries(CATALOGO.piezas).forEach(([k, pz]) => {
+                const inc = P.incluye[k] || 0, n = ped.cant[k] || 0, extra = Math.max(0, n - inc);
+                const fila = h('div', 'pieza'), info = h('div', 'info');
+                info.append(h('b', null, pz.nombre));
+                info.append(h('small', null, (inc ? `${inc} incluidas en el pack · ` : '') + (pz.precio === null ? 'precio a consultar' : euro(pz.precio) + ' la unidad extra')));
+                if (extra) info.append(h('small', 'extra', `+${extra} extra` + (pz.precio === null ? '' : ' = ' + euro(extra * pz.precio))));
+                const st = h('div', 'stepper');
+                const menos = h('button', null, '−'); menos.type = 'button'; menos.disabled = n <= inc; menos.setAttribute('aria-label', 'Quitar ' + pz.nombre);
+                const num = h('input'); num.type = 'number'; num.inputMode = 'numeric'; num.value = n; num.min = inc; num.setAttribute('aria-label', 'Unidades de ' + pz.nombre);
+                const mas = h('button', null, '+'); mas.type = 'button'; mas.setAttribute('aria-label', 'Añadir ' + pz.nombre);
+                menos.addEventListener('click', () => { ped.cant[k] = Math.max(inc, n - 1); pintarPedido(); });
+                mas.addEventListener('click', () => { ped.cant[k] = Math.min(500, n + 1); pintarPedido(); });
+                num.addEventListener('change', () => { ped.cant[k] = Math.max(inc, Math.min(500, parseInt(num.value, 10) || 0)); pintarPedido(); });
+                st.append(menos, num, mas); fila.append(info, st); lista.appendChild(fila);
+            });
+            z.appendChild(lista);
+            const pr = h('label', 'promo'); const cb = h('input'); cb.type = 'checkbox'; cb.checked = ped.promo;
+            cb.addEventListener('change', () => { ped.promo = cb.checked; });
+            pr.append(cb, h('span', null, 'Promo lanzamiento Logroño: +2 llaveros de regalo'));
+            z.appendChild(pr);
+            const nt = h('textarea', 'input-cyber'); nt.placeholder = 'Notas del pedido (colores, fecha de entrega, nombres para los llaveros…)'; nt.value = ped.notas; nt.style.marginTop = '12px'; nt.rows = 2;
+            nt.addEventListener('input', () => { ped.notas = nt.value; });
+            z.appendChild(nt);
+            const c = calcular();
+            const bar = h('div', 'total-bar'), t = h('div');
+            t.append(h('small', null, 'Total IVA incluido'), h('strong', null, euro(c.total) + (c.consultar ? ' +' : '')));
+            const rev = h('button', 'btn-fin principal', 'Revisar pedido'); rev.type = 'button';
+            rev.disabled = !c.base && !c.consultar;
+            rev.addEventListener('click', revisarPedido);
+            bar.append(t, rev); z.appendChild(bar);
+            const vol = h('button', 'btn-fin', '← Volver a la landing'); vol.type = 'button'; vol.style.marginTop = '14px';
+            vol.addEventListener('click', () => { $('pedido').classList.add('hidden-element'); panel.classList.remove('hidden-element'); });
+            z.appendChild(vol);
+        }
+        function revisarPedido() {
+            const z = $('pedido'); z.textContent = ''; const c = calcular();
+            const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+            z.append(h('h2', null, 'Resumen del pedido'), h('div', 'sub', ped.cliente + ' · ' + ped.url.replace('https://', '')));
+            const fila = (a, b, cls) => { const d = h('div', 'resumen-l' + (cls ? ' ' + cls : '')); d.append(h('span', null, a), h('span', null, b)); z.appendChild(d); };
+            const P = CATALOGO.packs[ped.pack];
+            Object.entries(ped.cant).forEach(([k, n]) => { if (n) fila(`${n} × ${CATALOGO.piezas[k].nombre}`, (P.incluye[k] || 0) >= n ? 'incluido' : ''); });
+            if (ped.promo) fila('2 × Llavero Smart Drop (promo)', 'regalo');
+            z.append(h('div', 'ped-tit', 'Importe'));
+            c.lineas.forEach(([a, b]) => fila(a, b === null ? 'a consultar' : euro(b)));
+            fila('Base imponible', euro(c.base)); fila('IVA 21 %', euro(c.iva)); fila('Total', euro(c.total) + (c.consultar ? ' + piezas a consultar' : ''), 'tot');
+            if (ped.notas.trim()) z.append(h('div', 'guia-nfc', 'Notas: ' + ped.notas.trim()));
+            const acc = h('div', 'acciones-fin');
+            const conf = h('button', 'btn-fin principal', '✓ Confirmar pedido'); conf.type = 'button';
+            const mod = h('button', 'btn-fin', 'Modificar'); mod.type = 'button';
+            conf.addEventListener('click', () => confirmarPedido(conf));
+            mod.addEventListener('click', pintarPedido);
+            acc.append(conf, mod); z.appendChild(acc);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        async function confirmarPedido(btn) {
+            btn.disabled = true; btn.textContent = 'Guardando pedido…';
+            try {
+                const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+                    body: JSON.stringify({ accion: 'pedido_guardar', closer_id: $('closer_id').value, slug: ped.slug, cliente: ped.cliente, pack: ped.pack, cantidades: ped.cant, promo: ped.promo, notas: ped.notas }) });
+                const r = await resp.json();
+                if (!r.ok) throw new Error(r.error || 'No se pudo guardar');
+                pedidoGuardado(r.pedido);
+            } catch (e) {
+                btn.disabled = false; btn.textContent = '✓ Confirmar pedido';
+                alert('No se pudo guardar el pedido: ' + (e.message || 'sin conexión') + '\nNo se ha duplicado nada: puedes volver a intentarlo.');
+            }
+        }
+        function enlacesNFC(url, cant, promo) {
+            const l = [];
+            for (let i = 1; i <= (cant.display || 0); i++) l.push(['Display ' + i, url + '&k=' + (i === 1 ? 'MOSTRADOR' : 'DISPLAY' + i)]);
+            const nll = (cant.llavero || 0) + (promo ? 2 : 0);
+            for (let i = 1; i <= nll; i++) l.push(['Llavero ' + i, url + '&k=L' + String(i).padStart(2, '0')]);
+            for (let i = 1; i <= (cant.tarjeta || 0); i++) l.push(['Tarjeta ' + i, url + '&k=TARJETA' + i]);
+            for (let i = 1; i <= (cant.welcome || 0); i++) l.push(['Welcome ' + i, url + '&k=WELCOME' + i]);
+            for (let i = 1; i <= (cant.camiseta || 0); i++) l.push(['Camiseta ' + i, url + '&k=CAMISETA' + i]);
+            return l;
+        }
+        function pedidoGuardado(p) {
+            const z = $('pedido'); z.textContent = '';
+            const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+            const ok = h('div', 'ok-ped'); ok.append(h('div', 'ck', '✓'), h('h2', null, 'Pedido ' + p.id + ' guardado'), h('div', 'sub', 'Estado: por despachar · Total ' + euro(p.calc.total)));
+            z.appendChild(ok);
+            z.append(h('div', 'ped-tit', 'Enlaces para grabar con NFC Tools'));
+            const lista = enlacesNFC(p.url, ped.cant, ped.promo);
+            lista.forEach(([nom, u]) => {
+                const f = h('div', 'nfc-l'); const b = h('button', null, 'Copiar'); b.type = 'button';
+                b.addEventListener('click', async () => { try { await navigator.clipboard.writeText(u); b.textContent = '✓'; } catch (e) { b.textContent = '—'; } });
+                f.append(h('b', null, nom), h('code', null, u.replace('https://', '')), b); z.appendChild(f);
+            });
+            z.append(h('div', 'guia-nfc', 'Cada pieza lleva su propio código (k=…), así sabrás desde qué llavero o display llega cada cliente. En NFC Tools: Escribir → Añadir un registro → URL → pega el enlace → Escribir y acerca la pieza. Si una pieza no lleva chip (camiseta), usa el QR.'));
+            const acc = h('div', 'acciones-fin');
+            const todo = h('button', 'btn-fin principal', 'Copiar todos los enlaces'); todo.type = 'button';
+            todo.addEventListener('click', async () => { try { await navigator.clipboard.writeText(lista.map(([n, u]) => n + ': ' + u).join('\n')); todo.textContent = '¡Copiados!'; } catch (e) {} });
+            const nuevo = h('button', 'btn-fin', 'Nuevo diagnóstico'); nuevo.type = 'button';
+            nuevo.addEventListener('click', () => location.reload());
+            acc.append(todo, nuevo); z.appendChild(acc);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         form.addEventListener('submit', (e) => {
