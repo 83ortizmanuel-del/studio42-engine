@@ -116,5 +116,6 @@
       "que": "Enlace de reseñas de Google",
       "por_que": "Era el texto de relleno AQUI_LINK_DE_GOOGLE_MAPS. El botón de Google queda oculto hasta poner el enlace real."
     }
-  ]
+  ],
+  "pausada": true
 }
