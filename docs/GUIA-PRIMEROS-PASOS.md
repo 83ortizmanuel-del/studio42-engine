@@ -164,3 +164,20 @@ Más detalles en `pets/README.md`.
 
 Para verlo sin configurar nada: `studio42.es/panel/?demo=1` (datos de ejemplo, no guarda nada).
 
+## Suscripciones (Ecosistema Activo) y cobro con Stripe
+
+**Precios:** Esencial 19 €, Pro 39 €, Multi-sede 79 € (+29 €/sede), Pet Pass Clínica 29 € al mes + IVA. Trimestral −5 %, anual = 10 meses. Cada pack incluye meses gratis: Prueba 1, Imán 2, Multiplicador 3, Dominio 6. Se cambian en `Code.gs` (bloque `CATALOGO`) y en el formulario del Closer (una prueba avisa si no coinciden).
+
+**Antes de cobrar de verdad:** alta de autónomo (Hacienda 036 + Seguridad Social con tarifa plana) y cuenta de Stripe activada como autónomo. Mientras tanto se puede montar y probar todo en **modo prueba** de Stripe.
+
+1. Stripe → Desarrolladores → Claves API → copia la **clave secreta** (`sk_test_…` en modo prueba). Pégala en Apps Script como propiedad `STRIPE_SECRET_KEY`. Nunca en un chat.
+2. En Stripe → Configuración → Pagos, activa **Adeudo directo SEPA** además de tarjeta.
+3. Stripe → Configuración → Facturación → Suscripciones: en «si fallan todos los reintentos», elige **marcar la suscripción como no pagada** (así la landing se pausa sola).
+4. En Apps Script ejecuta **CREAR_PRODUCTOS_STRIPE** (crea los 12 precios con IVA incluido) y luego **INSTALAR_AUTOMATIZACIONES** (sincroniza cada hora y envía el informe el día 1).
+5. Prueba completa en modo prueba: haz un pedido desde el formulario del Closer con plan, abre el enlace de pago y paga con la tarjeta de prueba `4242 4242 4242 4242` (cualquier fecha futura y CVC). Comprueba en Stripe que se cobró la apertura y que la suscripción queda «en prueba» con los meses gratis. En una hora aparece en el panel.
+6. Cuando tengas el alta: activa la cuenta en Stripe, cambia `STRIPE_SECRET_KEY` por la clave `sk_live_…`, borra la propiedad `STRIPE_PRECIOS` y vuelve a ejecutar **CREAR_PRODUCTOS_STRIPE**.
+
+**Qué pasa solo:** si un cliente deja de pagar, Stripe reintenta y avisa; cuando la suscripción queda «no pagada» o cancelada, la landing muestra «en pausa». Al pagar, se reactiva. Desde el panel puedes pausar o reactivar a mano (una pausa manual no la deshace la sincronización). Si no quieres pausas automáticas, crea la propiedad `PAUSA_AUTOMATICA` = `0`.
+
+**Estadísticas e informe:** cada landing cuenta de forma anónima visitas y clics (reseña, WhatsApp, llamada, ruta), por pieza. Se ven en el panel (últimos 30 días) y cada cliente con email recibe su informe el día 1. La pestaña «Eventos» del Sheet crece con el uso; cuando tengas muchos clientes conviene pasar a un servidor más potente.
+

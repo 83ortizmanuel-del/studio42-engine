@@ -255,7 +255,9 @@ const CONFIG = {
     rutasJSON: ["./{cod}.json", "../c/{cod}.json"],
     // Respaldo si el hosting principal falla. Pon "" para desactivarlo.
     respaldoGitHub: "https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/{cod}.json",
-    tiempoLimiteMs: 6000
+    tiempoLimiteMs: 6000,
+    // Contador anónimo de Studio 42 (sin cookies ni datos personales). Pon "" para desactivarlo.
+    estadisticas: "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec"
 };
 
 /* ============================== ESTADO GLOBAL ============================== */
@@ -1145,8 +1147,43 @@ async function iniciar() {
     if (Number(d.version) > 2) aviso("El JSON es de una versión posterior (" + d.version + "); puede que algunas funciones no se muestren.");
 
     aplicarIdentidad(d);
+    if (d.pausada === true) { mostrarPausa(d); return; }
     renderMenu(d);
     if (estado.debug) mostrarDebug();
+    contar("vista");
+    document.addEventListener("click", clasificarClic, true);
+}
+
+/* Servicio en pausa (lo activa Studio 42 si la suscripción no está al día). */
+function mostrarPausa(d) {
+    const menu = $("dynamic-menu");
+    menu.textContent = "";
+    menu.append(h("div", { class: "error-box" }, ico("clock"),
+        h("p", { text: "Este espacio digital de " + String(d.nombre).trim() + " está en pausa temporalmente." }),
+        h("p", { text: "Disculpa las molestias. Vuelve a intentarlo más tarde." })));
+}
+
+/* ---------- Contador anónimo: solo cliente, pieza (k) y tipo de acción ---------- */
+function contar(tipo) {
+    if (!CONFIG.estadisticas || estado.debug || /[?&]preview=1/.test(location.search)) return;
+    try {
+        const cuerpo = JSON.stringify({ accion: "ev", c: estado.cod, k: estado.llavero, t: tipo });
+        const blob = new Blob([cuerpo], { type: "text/plain" });
+        if (!(navigator.sendBeacon && navigator.sendBeacon(CONFIG.estadisticas, blob))) {
+            fetch(CONFIG.estadisticas, { method: "POST", body: cuerpo, mode: "no-cors", keepalive: true }).catch(() => {});
+        }
+    } catch (e) { /* nunca debe romper la landing */ }
+}
+function clasificarClic(e) {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    const u = a.getAttribute("href") || "";
+    const t = /writereview|g\.page\/r|search\.google\.com\/local/.test(u) ? "resena"
+        : /wa\.me|whatsapp/.test(u) ? (a.classList.contains("par-opinion") || /gerencia/i.test(a.textContent) ? "gerencia" : "whatsapp")
+        : /^tel:/.test(u) ? "llamada"
+        : /google\.[a-z.]+\/maps|maps\.app|maps\.google/.test(u) ? "ruta"
+        : /^https?:/.test(u) ? "enlace" : "";
+    if (t) contar(t);
 }
 
 /* Vista previa desde el panel de Studio 42 (?preview=1 dentro de un iframe del mismo dominio):

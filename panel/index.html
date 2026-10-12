@@ -144,6 +144,15 @@ textarea.inp{min-height:110px;resize:vertical}
 .prog .ko i{border-color:var(--red);background:var(--red);color:#fff}
 .bubble{background:linear-gradient(135deg,rgba(220,228,240,.1),rgba(220,228,240,.03));border:1px solid rgba(220,228,240,.25);border-radius:16px;padding:12px 14px;margin:12px 0;font-size:.92rem}
 .bubble b{display:flex;align-items:center;gap:.4rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.stats div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 4px;text-align:center}
+.stats b{display:block;font:800 1.15rem var(--fd)}
+.stats span{display:block;font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sus-box{background:linear-gradient(165deg,#1b1e24,#111317);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-top:18px}
+.sus-box .top2{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sus-box h4{margin:0;font:800 1.05rem var(--fd)}
+.ss-prueba{background:rgba(96,165,250,.15);color:#bfdbfe}.ss-activa{background:rgba(34,197,94,.15);color:#bbf7d0}.ss-impagada{background:rgba(239,68,68,.15);color:#fecaca}.ss-pendiente{background:rgba(251,191,36,.15);color:#fde68a}.ss-cancelada,.ss-pausada,.ss-sin{background:rgba(220,228,240,.1);color:#cbd5e1}
+.mini{font-size:.74rem;color:var(--muted);margin-top:3px}
 .toast{position:fixed;left:50%;top:max(14px,env(safe-area-inset-top));transform:translate(-50%,-20px);opacity:0;z-index:90;background:#1d2026;border:1px solid #cfd4dc;padding:.7rem 1.1rem;border-radius:99px;font:600 .86rem var(--fb);transition:.3s;pointer-events:none;max-width:92vw;text-align:center}
 .toast.on{transform:translate(-50%,0);opacity:1}
 @media (max-width:380px){.kpis{grid-template-columns:repeat(2,1fr)}.phone iframe{height:500px}}
@@ -272,16 +281,25 @@ function cargarFichas(){
   })).then(function(){pintarClientes();pintarKpis()});
 }
 
+/* ---------- Suscripciones ---------- */
+function susc(s){return (D.suscripciones||[]).filter(function(x){return x.slug===s})[0]||null}
+function precioPlan(plan,per){var p=(D.catalogo&&D.catalogo.planes||{})[plan];if(!p)return 0;return per==='trimestral'?Math.round(p.mensual*3*.95*100)/100:per==='anual'?p.mensual*10:p.mensual}
+function mensualEq(x){var p=precioPlan(x.plan,x.periodo);return x.periodo==='trimestral'?p/3:x.periodo==='anual'?p/12:p}
+function mrrTotal(){return (D.suscripciones||[]).filter(function(x){return x.estado==='activa'}).reduce(function(a,x){return a+mensualEq(x)},0)}
+function claseEstado(e){e=String(e||'');return e.indexOf('pendiente')===0?'ss-pendiente':('ss-'+(e||'sin'))}
+function pillSusc(x){if(!x)return'<span class="pill ss-sin">Sin plan</span>';var t=x.landing&&x.landing!=='activa'?'⏸ '+x.landing:x.estado;return'<span class="pill '+(x.landing&&x.landing!=='activa'?'ss-pausada':claseEstado(x.estado))+'">'+esc(t)+'</span>'}
+function est(s){return (D.estadisticas||{})[s]||{vista:0,resena:0,gerencia:0,whatsapp:0,llamada:0,ruta:0,piezas:{}}}
+
 /* ---------- KPIs ---------- */
 function pintarKpis(){
   var pend=D.pedidos.filter(function(p){return p.estado==='Por despachar'}).length;
   var mes=new Date().toISOString().slice(0,7);
-  var fact=D.pedidos.filter(function(p){return p.estado!=='Cancelado'&&String(p.fecha).slice(0,7)===mes}).reduce(function(a,p){return a+(p.calc?p.calc.total:(parseFloat(p.total)||0))},0);
+  var mrr=mrrTotal();
   var act=D.chapas.filter(function(c){return c.estado==='activa'}).length;
   $('#kpis').innerHTML=
     '<div class="kpi'+(pend?' hot':'')+'"><b>'+pend+'</b><span>Por despachar</span></div>'+
     '<div class="kpi"><b>'+D.clientes.length+'</b><span>Clientes</span></div>'+
-    '<div class="kpi"><b>'+(fact>=1000?(fact/1000).toFixed(1).replace('.',',')+'k':Math.round(fact))+'€</b><span>Ventas mes</span></div>'+
+    '<div class="kpi"><b>'+(mrr>=1000?(mrr/1000).toFixed(1).replace('.',',')+'k':Math.round(mrr))+'€</b><span>Cuotas / mes</span></div>'+
     '<div class="kpi"><b>'+act+'<small style="font-size:.7rem;color:var(--muted)">/'+D.chapas.length+'</small></b><span>Chapas</span></div>';
   var bd=$('#badge');bd.hidden=!pend;bd.textContent=pend;
 }
@@ -344,7 +362,7 @@ function pintarClientes(){
   if(!lista.length)h+='<div class="empty">Ningún cliente coincide.</div>';
   lista.forEach(function(s){
     var f=fichas[s]||{},logo=logoDe(f,s),np=D.pedidos.filter(function(p){return p.slug===s&&p.estado==='Por despachar'}).length;
-    h+='<button type="button" class="card" data-s="'+esc(s)+'"><span class="av"'+(f.colorAcento?' style="background:'+esc(f.colorAcento)+'"':'')+'>'+(logo?'<img src="'+esc(logo)+'" alt="" loading="lazy" onerror="this.remove()">':esc((f.nombre||s).charAt(0).toUpperCase()))+'</span><span class="mid"><b>'+esc(f.nombre||s)+'</b><small>'+esc(f.subtitulo||('studio42.es/c/?cod='+s))+'</small></span>'+(np?'<span class="pill st-0">'+np+' pedido</span>':'')+'</button>';
+    h+='<button type="button" class="card" data-s="'+esc(s)+'"><span class="av"'+(f.colorAcento?' style="background:'+esc(f.colorAcento)+'"':'')+'>'+(logo?'<img src="'+esc(logo)+'" alt="" loading="lazy" onerror="this.remove()">':esc((f.nombre||s).charAt(0).toUpperCase()))+'</span><span class="mid"><b>'+esc(f.nombre||s)+'</b><small>'+esc(f.subtitulo||('studio42.es/c/?cod='+s))+'</small></span>'+'<span class="rt">'+pillSusc(susc(s))+'<div class="mini">'+est(s).vista+' visitas · '+est(s).resena+' reseñas</div></span></button>';
   });
   $('#tabClientes').innerHTML=h;
   var inp=$('#qC');inp.oninput=function(){q=inp.value.toLowerCase();var pos=inp.selectionStart;pintarClientes();var n=$('#qC');n.focus();n.setSelectionRange(pos,pos)};
@@ -358,13 +376,28 @@ function abrirCliente(s){
   $('#frame').src='../c/?cod='+encodeURIComponent(s)+'&preview=1';
   $('#bAbrir').href=urlCliente(s);
   var ps=D.pedidos.filter(function(p){return p.slug===s});
-  var h='';
+  var h='',x=susc(s),e=est(s),pausada=x&&x.landing&&x.landing!=='activa';
+  h+='<div class="sus-box"><div class="top2"><h4>'+(x&&x.plan?'Plan '+esc(((D.catalogo.planes||{})[x.plan]||{}).nombre||x.plan)+' · '+esc(x.periodo||''):'Sin suscripción')+'</h4>'+pillSusc(x)+'</div>';
+  if(x&&x.plan)h+='<div class="mini">'+euro(precioPlan(x.plan,x.periodo)*1.21)+' IVA incl. · '+(x.proximo?'próximo cobro '+esc(fechaCorta(x.proximo).split(' · ')[0]):'sin fecha de cobro')+(x.email?' · '+esc(x.email):'')+'</div>';
+  h+='<div class="sec" style="margin-top:12px">Últimos 30 días</div><div class="stats"><div><b>'+e.vista+'</b><span>Visitas</span></div><div><b>'+e.resena+'</b><span>Reseñas</span></div><div><b>'+(e.whatsapp+e.gerencia)+'</b><span>WhatsApp</span></div><div><b>'+(e.llamada+e.ruta)+'</b><span>Llamadas</span></div></div>';
+  var top=Object.keys(e.piezas||{}).sort(function(a,b){return e.piezas[b]-e.piezas[a]}).slice(0,3);
+  if(top.length)h+='<div class="mini" style="margin-top:8px">Piezas con más toques: '+top.map(function(k){return esc(k)+' ('+e.piezas[k]+')'}).join(' · ')+'</div>';
+  h+='<button type="button" class="ghost" id="bPausa" style="width:100%;margin-top:12px'+(pausada?'':';color:#fca5a5;border-color:rgba(239,68,68,.35)')+'">'+(pausada?'▶ Reactivar la landing':'⏸ Pausar la landing (impago)')+'</button></div>';
   if(ps.length){h+='<div class="sec" style="margin-top:22px">Pedidos de este cliente</div>';ps.forEach(function(p){var i=ESTADOS.indexOf(p.estado);h+='<button type="button" class="card" data-p="'+esc(p.id)+'" style="margin-top:8px"><span class="mid"><b>'+esc(p.pack)+'</b><small>'+esc(p.id)+' · '+esc(fechaCorta(p.fecha))+'</small></span><span class="rt"><b>'+euro(p.calc?p.calc.total:p.total)+'</b><span class="pill st-'+(i<0?0:i)+'">'+esc(p.estado)+'</span></span></button>'});
     var piezas=[];ps.filter(function(p){return p.estado!=='Cancelado'}).forEach(function(p){piezas=piezas.concat(enlacesNFC(p))});
     if(piezas.length)h+='<div class="sec" style="margin-top:18px">Piezas NFC activas ('+piezas.length+')</div><div class="sub" style="margin:.3rem 0 0;color:var(--muted);font-size:.82rem">Cada llavero o display tiene su código. Así sabes por cuál entra cada cliente.</div>'+piezas.map(function(x){return'<div class="nfc"><b>'+esc(x[0])+'</b><code>'+esc(x[1].replace('https://',''))+'</code><button type="button" data-u="'+esc(x[1])+'">Copiar</button></div>'}).join('');}
   else h+='<div class="empty" style="padding-top:22px">Este cliente aún no tiene pedidos registrados en el panel.</div>';
   $('#cPedidos').innerHTML=h;
   $$('#cPedidos .card').forEach(function(b){b.onclick=function(){abrirPedido(b.dataset.p)}});
+  $('#bPausa').onclick=function(){
+    var pausar=!pausada;if(pausar&&!confirm('¿Pausar la landing de '+(f.nombre||s)+'? Sus clientes verán «en pausa» hasta que la reactives.'))return;
+    var b=$('#bPausa');b.disabled=true;b.textContent='Guardando…';
+    api({accion:'panel_pausar',slug:s,pausar:pausar}).then(function(r){
+      if(!r.ok){toast(r.error||'No se pudo');abrirCliente(s);return}
+      if(x)x.landing=pausar?'pausada':'activa';else (D.suscripciones=D.suscripciones||[]).push({slug:s,landing:pausar?'pausada':'activa',estado:''});
+      toast(pausar?'Landing en pausa (se verá en 1 minuto)':'Landing reactivada');pintarClientes();abrirCliente(s);
+    }).catch(function(){toast('Sin conexión');abrirCliente(s)});
+  };
   $$('#cPedidos .nfc button').forEach(function(b){b.onclick=function(){copiar(b.dataset.u,b)}});
   $('#vCliente').classList.add('on');$('#vCliente').scrollTop=0;document.body.style.overflow='hidden';
 }
@@ -452,9 +485,17 @@ function demoApi(b){
         {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-7C2D',fecha:h(1,17),closer:'MEL001',cliente:'Zombie Tattoo',slug:'zombie-tattoo',url:url('zombie-tattoo'),pack:'Prueba Logroño',estado:'Grabado',notas:'',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:1,incluidas:1,extra:0,importe:0}],base:89,iva:18.69,total:107.69}},
         {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-93BE',fecha:h(3,10),closer:'MO001',cliente:'Clínica Dental Mazo Ruiz',slug:'clinica-dental-mazo-ruiz',url:url('clinica-dental-mazo-ruiz'),pack:'Efecto multiplicador',estado:'Cobrado',notas:'',calc:{lineas:[{concepto:'Pack Efecto multiplicador',unidades:1,importe:349},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:10,incluidas:10,extra:0,importe:0},{pieza:'tarjeta',concepto:'Tarjeta de madera NFC',unidades:1,incluidas:1,extra:0,importe:0}],base:349,iva:73.29,total:422.29}}
       ],
+      catalogo:{planes:{esencial:{nombre:'Esencial',mensual:19},pro:{nombre:'Pro',mensual:39},multisede:{nombre:'Multi-sede',mensual:79},clinica:{nombre:'Pet Pass Clínica',mensual:29}}},
+      suscripciones:[
+        {slug:'ankara-kebab',cliente:'Ankara Kebab',plan:'pro',periodo:'mensual',estado:'prueba',email:'ankara@ejemplo.es',proximo:h(-58,9),landing:'activa'},
+        {slug:'clinica-dental-mazo-ruiz',cliente:'Clínica Dental Mazo Ruiz',plan:'pro',periodo:'anual',estado:'activa',email:'clinica@ejemplo.es',proximo:h(-300,9),landing:'activa'},
+        {slug:'iberlax',cliente:'Iberlax',plan:'esencial',periodo:'mensual',estado:'activa',email:'',proximo:h(-12,9),landing:'activa'},
+        {slug:'zombie-tattoo',cliente:'Zombie Tattoo',plan:'esencial',periodo:'trimestral',estado:'impagada',email:'',proximo:h(3,9),landing:'activa'},
+        {slug:'unas-latinas-carolina',cliente:'Uñas Latinas Carolina',plan:'pro',periodo:'mensual',estado:'activa',email:'',proximo:h(-20,9),landing:'activa'}],
+      estadisticas:{'ankara-kebab':{vista:412,resena:37,gerencia:4,whatsapp:58,llamada:9,ruta:21,piezas:{MOSTRADOR:198,L01:92,L02:71,L03:51}},'clinica-dental-mazo-ruiz':{vista:233,resena:19,gerencia:2,whatsapp:31,llamada:24,ruta:12,piezas:{MOSTRADOR:233}},'iberlax':{vista:96,resena:6,gerencia:1,whatsapp:14,llamada:3,ruta:8,piezas:{MOSTRADOR:96}},'zombie-tattoo':{vista:141,resena:11,gerencia:0,whatsapp:22,llamada:2,ruta:5,piezas:{MOSTRADOR:88,L01:53}},'unas-latinas-carolina':{vista:187,resena:15,gerencia:3,whatsapp:40,llamada:6,ruta:9,piezas:{MOSTRADOR:187}}},
       chapas:[{slug:'pk7m2xq9',estado:'activa',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=demo'},{slug:'pd3h8wna',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'},{slug:'pt9r4ceu',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'}]});
   }
-  if(b.accion==='panel_pedido_estado')return esperar(300,{ok:true});
+  if(b.accion==='panel_pedido_estado'||b.accion==='panel_pausar')return esperar(400,{ok:true});
   if(b.accion==='panel_cambio'){
     var base=JSON.parse(JSON.stringify(propuesta||fichas[b.slug]||{}));
     var t=b.instruccion.toLowerCase(),res;

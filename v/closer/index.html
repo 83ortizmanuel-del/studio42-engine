@@ -833,19 +833,29 @@
                 camiseta: { nombre: 'Camiseta del equipo NFC', precio: null }
             },
             packs: {
-                ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0, incluye: {} },
-                prueba:        { nombre: 'Prueba Logroño', precio: 89, incluye: { display: 1, llavero: 1 } },
-                iman:          { nombre: 'Imán de mostrador', precio: 149, incluye: { display: 1, llavero: 2 } },
-                multiplicador: { nombre: 'Efecto multiplicador', precio: 349, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
-                dominio:       { nombre: 'Dominio local total', precio: 549, incluye: { display: 2, llavero: 25, welcome: 1 } }
+                ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0, mesesPro: 0, incluye: {} },
+                prueba:        { nombre: 'Prueba Logroño', precio: 89, mesesPro: 1, incluye: { display: 1, llavero: 1 } },
+                iman:          { nombre: 'Imán de mostrador', precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 } },
+                multiplicador: { nombre: 'Efecto multiplicador', precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
+                dominio:       { nombre: 'Dominio local total', precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, welcome: 1 } }
+            },
+            planes: {
+                esencial:  { nombre: 'Esencial', mensual: 19 },
+                pro:       { nombre: 'Pro', mensual: 39 },
+                multisede: { nombre: 'Multi-sede', mensual: 79 },
+                clinica:   { nombre: 'Pet Pass Clínica', mensual: 29 }
             }
         };
+        const PERIODOS = { mensual: 'Mensual', trimestral: 'Trimestral −5 %', anual: 'Anual · 2 meses gratis' };
+        const precioPlan = (plan, per) => { const m = CATALOGO.planes[plan].mensual; return per === 'trimestral' ? Math.round(m * 3 * 0.95 * 100) / 100 : per === 'anual' ? m * 10 : m; };
+        const sufijo = { mensual: '/mes', trimestral: '/trimestre', anual: '/año' };
+        const DESC_PLAN = { esencial: 'Landing activa, 2 cambios al mes, informe mensual', pro: 'Cambios ilimitados en 24 h, informe por pieza, campañas', multisede: 'Varias sedes en una landing hub, informe comparado', clinica: 'Para veterinarias: chapas Pet Pass a precio de coste' };
         const euro = (n) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         let ped = null;
 
         function abrirPedido(url) {
             const slug = (new URL(url)).searchParams.get('cod');
-            ped = { url, slug, cliente: $('nombre_comercio').value.trim() || slug, pack: 'iman', cant: {}, promo: false, notas: '' };
+            ped = { url, slug, cliente: $('nombre_comercio').value.trim() || slug, pack: 'iman', cant: {}, promo: false, notas: '', plan: 'pro', periodo: 'mensual', email: '' };
             aplicarPack('iman');
             panel.classList.add('hidden-element'); form.classList.add('hidden-element');
             $('pedido').classList.remove('hidden-element');
@@ -906,6 +916,27 @@
                 st.append(menos, num, mas); fila.append(info, st); lista.appendChild(fila);
             });
             z.appendChild(lista);
+            z.append(h('div', 'ped-tit', '③ Suscripción · Ecosistema Activo'));
+            const meses = CATALOGO.packs[ped.pack].mesesPro;
+            const lpl = h('div', 'packs-ped');
+            [['', { nombre: 'Sin suscripción', mensual: 0 }]].concat(Object.entries(CATALOGO.planes)).forEach(([id, p]) => {
+                const b = h('button', 'pack-op' + (ped.plan === id ? ' on' : '')); b.type = 'button';
+                const izq = h('div'); izq.append(h('b', null, p.nombre));
+                izq.append(h('small', null, id ? (DESC_PLAN[id] || '') : 'Solo apertura. Sin cambios ni informe mensual.'));
+                b.append(izq, h('span', 'pr', id ? euro(precioPlan(id, ped.periodo)) + sufijo[ped.periodo] : '—'));
+                b.addEventListener('click', () => { ped.plan = id; pintarPedido(); });
+                lpl.appendChild(b);
+            });
+            z.appendChild(lpl);
+            if (ped.plan) {
+                const per = h('div', 'packs-ped'); per.style.cssText = 'grid-template-columns:repeat(3,1fr);margin-top:8px';
+                Object.entries(PERIODOS).forEach(([id, n]) => { const b = h('button', 'pack-op' + (ped.periodo === id ? ' on' : ''), n); b.type = 'button'; b.style.cssText = 'justify-content:center;font-size:11px;font-weight:800;text-align:center;padding:10px 6px'; b.addEventListener('click', () => { ped.periodo = id; pintarPedido(); }); per.appendChild(b); });
+                z.appendChild(per);
+                z.append(h('div', 'guia-nfc', (meses ? `🎁 El pack incluye ${meses} ${meses === 1 ? 'mes' : 'meses'} gratis. ` : '') + `Después: ${euro(precioPlan(ped.plan, ped.periodo) * 1.21)} ${sufijo[ped.periodo]} IVA incluido, sin permanencia.`));
+                const em = h('input', 'input-cyber'); em.type = 'email'; em.placeholder = 'Email del cliente (factura e informe mensual)'; em.value = ped.email; em.style.marginTop = '10px';
+                em.addEventListener('input', () => { ped.email = em.value.trim(); });
+                z.appendChild(em);
+            }
             const pr = h('label', 'promo'); const cb = h('input'); cb.type = 'checkbox'; cb.checked = ped.promo;
             cb.addEventListener('change', () => { ped.promo = cb.checked; });
             pr.append(cb, h('span', null, 'Promo lanzamiento Logroño: +2 llaveros de regalo'));
@@ -915,9 +946,10 @@
             z.appendChild(nt);
             const c = calcular();
             const bar = h('div', 'total-bar'), t = h('div');
-            t.append(h('small', null, 'Total IVA incluido'), h('strong', null, euro(c.total) + (c.consultar ? ' +' : '')));
+            t.append(h('small', null, 'Hoy · IVA incluido'), h('strong', null, euro(c.total) + (c.consultar ? ' +' : '')));
+            if (ped.plan) t.append(h('small', null, 'Después ' + euro(precioPlan(ped.plan, ped.periodo) * 1.21) + sufijo[ped.periodo]));
             const rev = h('button', 'btn-fin principal', 'Revisar pedido'); rev.type = 'button';
-            rev.disabled = !c.base && !c.consultar;
+            rev.disabled = !c.base && !c.consultar && !ped.plan;
             rev.addEventListener('click', revisarPedido);
             bar.append(t, rev); z.appendChild(bar);
             const vol = h('button', 'btn-fin', '← Volver a la landing'); vol.type = 'button'; vol.style.marginTop = '14px';
@@ -935,6 +967,12 @@
             z.append(h('div', 'ped-tit', 'Importe'));
             c.lineas.forEach(([a, b]) => fila(a, b === null ? 'a consultar' : euro(b)));
             fila('Base imponible', euro(c.base)); fila('IVA 21 %', euro(c.iva)); fila('Total', euro(c.total) + (c.consultar ? ' + piezas a consultar' : ''), 'tot');
+            if (ped.plan) {
+                const meses = CATALOGO.packs[ped.pack].mesesPro;
+                z.append(h('div', 'ped-tit', 'Suscripción'));
+                fila('Plan ' + CATALOGO.planes[ped.plan].nombre + ' · ' + PERIODOS[ped.periodo], euro(precioPlan(ped.plan, ped.periodo) * 1.21) + sufijo[ped.periodo]);
+                fila('Primer cobro de la cuota', meses ? 'en ' + meses + (meses === 1 ? ' mes' : ' meses') : 'hoy');
+            }
             if (ped.notas.trim()) z.append(h('div', 'guia-nfc', 'Notas: ' + ped.notas.trim()));
             const acc = h('div', 'acciones-fin');
             const conf = h('button', 'btn-fin principal', '✓ Confirmar pedido'); conf.type = 'button';
@@ -948,10 +986,10 @@
             btn.disabled = true; btn.textContent = 'Guardando pedido…';
             try {
                 const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
-                    body: JSON.stringify({ accion: 'pedido_guardar', closer_id: $('closer_id').value, slug: ped.slug, cliente: ped.cliente, pack: ped.pack, cantidades: ped.cant, promo: ped.promo, notas: ped.notas }) });
+                    body: JSON.stringify({ accion: 'pedido_guardar', closer_id: $('closer_id').value, slug: ped.slug, cliente: ped.cliente, pack: ped.pack, cantidades: ped.cant, promo: ped.promo, notas: ped.notas, plan: ped.plan, periodo: ped.periodo, email: ped.email }) });
                 const r = await resp.json();
                 if (!r.ok) throw new Error(r.error || 'No se pudo guardar');
-                pedidoGuardado(r.pedido);
+                pedidoGuardado(r.pedido, r.pago);
             } catch (e) {
                 btn.disabled = false; btn.textContent = '✓ Confirmar pedido';
                 alert('No se pudo guardar el pedido: ' + (e.message || 'sin conexión') + '\nNo se ha duplicado nada: puedes volver a intentarlo.');
@@ -967,11 +1005,31 @@
             for (let i = 1; i <= (cant.camiseta || 0); i++) l.push(['Camiseta ' + i, url + '&k=CAMISETA' + i]);
             return l;
         }
-        function pedidoGuardado(p) {
+        function pintarQR(texto) {
+            const pinta = () => { try { const q = qrcode(0, 'M'); q.addData(texto); q.make(); $('qr-pago').innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); } catch (e) { $('qr-pago').textContent = ''; } };
+            if (window.qrcode) return pinta();
+            const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'; sc.onload = pinta; sc.onerror = () => { $('qr-pago').style.display = 'none'; }; document.head.appendChild(sc);
+        }
+        function pedidoGuardado(p, pago) {
             const z = $('pedido'); z.textContent = '';
             const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
             const ok = h('div', 'ok-ped'); ok.append(h('div', 'ck', '✓'), h('h2', null, 'Pedido ' + p.id + ' guardado'), h('div', 'sub', 'Estado: por despachar · Total ' + euro(p.calc.total)));
             z.appendChild(ok);
+            if (pago && pago.url) {
+                z.append(h('div', 'ped-tit', '💳 Cobro: que el cliente pague ahora'));
+                const box = h('div', 'guia-nfc'); box.style.textAlign = 'center';
+                const qr = h('div'); qr.id = 'qr-pago'; qr.style.cssText = 'background:#fff;border-radius:14px;padding:12px;width:220px;margin:6px auto 10px';
+                box.append(h('div', null, 'Que escanee este QR con su móvil o envíale el enlace. Paga la apertura con tarjeta o domiciliación y la suscripción queda activada.'), qr);
+                const accP = h('div', 'acciones-fin');
+                const abrirP = h('a', 'btn-fin principal', 'Abrir el pago aquí'); abrirP.href = pago.url; abrirP.target = '_blank'; abrirP.rel = 'noopener';
+                const tel = ($('whatsapp').value || '').replace(/\D/g, ''), num = tel.length === 9 ? '34' + tel : tel;
+                const waP = h('a', 'btn-fin', 'Enviar el enlace por WhatsApp'); waP.target = '_blank'; waP.rel = 'noopener';
+                waP.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent('Hola, soy de Studio 42. Aquí tienes el enlace para activar tu ecosistema phygital: ' + pago.url);
+                accP.append(abrirP, waP); box.appendChild(accP); z.appendChild(box);
+                pintarQR(pago.url);
+            } else if (pago && pago.error) {
+                z.append(h('div', 'guia-nfc', '💳 ' + pago.error));
+            }
             z.append(h('div', 'ped-tit', 'Enlaces para grabar con NFC Tools'));
             const lista = enlacesNFC(p.url, ped.cant, ped.promo);
             lista.forEach(([nom, u]) => {
