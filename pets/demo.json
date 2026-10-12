@@ -1,0 +1,42 @@
+{
+  "schema": "s42-pet-pass-v1",
+  "nombre": "Toby",
+  "raza": "Golden Retriever",
+  "sexo": "Macho",
+  "fechaNac": "Mayo 2021",
+  "peso": 28.5,
+  "castrado": true,
+  "microchip": "981098108472911",
+  "fotoUrl": "",
+  "contactoNombre": "Manuel",
+  "contactoTelefono": "+34672294962",
+  "contactoWhatsapp": "+34672294962",
+  "alimentacion": "Pienso hipoalergénico (sin pollo ni cereales), 2 tomas al día",
+  "medicacion": "Condroprotector articular con el desayuno",
+  "caracter": "Muy sociable con personas y niños. Miedo intenso a petardos y tormentas. Pasea tranquilo.",
+  "alertas": [
+    "Alérgico estricto al pollo y a los cereales",
+    "Toma condroprotector a diario con el desayuno",
+    "Microchip homologado 981098108472911"
+  ],
+  "vet": {
+    "clinica": "Hospital Veterinario Rioja 24h",
+    "doctor": "Dra. Elena Pérez",
+    "telefono": "+34941000000",
+    "direccion": "Logroño"
+  },
+  "vacunas": [
+    { "nombre": "Rabia (anual)", "fecha": "Vigente" },
+    { "nombre": "Polivalente DHPPiL", "fecha": "Vigente" },
+    { "nombre": "Tos de las perreras (Bordetella)", "fecha": "Vigente" },
+    { "nombre": "Desparasitación interna", "fecha": "Trimestral" },
+    { "nombre": "Collar leishmaniosis", "fecha": "Continuo" }
+  ],
+  "visitas": [
+    { "fecha": "2026-03-15", "motivo": "Revisión anual", "nota": "Peso 27,8 kg. Analítica correcta." },
+    { "fecha": "2026-06-02", "motivo": "Vacuna rabia", "nota": "Dosis anual puesta." },
+    { "fecha": "2026-09-10", "motivo": "Dermatitis leve", "nota": "Cambio de pienso + crema 7 días." }
+  ],
+  "pinHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+  "_notas": "El PIN por defecto de esta demo es 1234. Para cada mascota real se genera un hash propio en el momento de grabar la chapa."
+}
