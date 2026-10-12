@@ -48,7 +48,7 @@ code{display:block;word-break:break-all;background:#000;border:1px solid var(--l
     <input type="text" id="nom" maxlength="24" placeholder="Laura" autocomplete="off">
     <div class="row">
       <div><label for="tel">Su móvil</label><input type="tel" id="tel" placeholder="612 345 678" autocomplete="off"></div>
-      <div><label for="cod">Código</label><input type="text" id="cod" maxlength="20" autocomplete="off"></div>
+      <div><label for="cod">Código del llavero</label><input type="text" id="cod" maxlength="12" placeholder="SPN001" autocomplete="off" style="text-transform:uppercase"></div>
     </div>
     <div class="err" id="eTel"></div>
   </div>
@@ -75,9 +75,9 @@ code{display:block;word-break:break-all;background:#000;border:1px solid var(--l
     <h2><i>4</i>Enviar</h2>
     <a class="btn" id="bEnviar" target="_blank" rel="noopener" aria-disabled="true">Enviar a la paciente por WhatsApp</a>
     <p class="mini">Le llega un único enlace. Al abrirlo, su móvil queda vinculado y a partir de ahí le basta con acercarlo a su llavero.</p>
-    <label>Enlace para grabar en su llavero (NFC Tools → Escribir → URL)</label>
+    <label>Este llavero abre</label>
     <code id="uLlavero">—</code>
-    <button class="btn line" id="bCopiar" type="button" aria-disabled="true">Copiar enlace del llavero</button>
+    <p class="mini">El código viene grabado en el llavero que le entregas (SPN001, SPN002…). Si se lo cambias por otro, vuelve a enviarle el WhatsApp con el código nuevo.</p>
   </div>
 </div>
 <script>
@@ -86,27 +86,23 @@ code{display:block;word-break:break-all;background:#000;border:1px solid var(--l
   var BASE=location.origin+location.pathname.replace(/alta\/?(index\.html)?$/,'socio/');
   var esCanva=function(u){try{var x=new URL(u);return x.protocol==='https:'&&/(^|\.)canva\.(com|link)$/.test(x.hostname)}catch(e){return false}};
   var sinAcentos=function(t){return t.normalize('NFD').replace(/[̀-ͯ]/g,'')};
-  var codTocado=false;
-  function sugerir(){if(codTocado)return;var n=sinAcentos($('nom').value).toUpperCase().replace(/[^A-Z]/g,'').slice(0,8);$('cod').value=n?n+(10+Math.floor(Math.random()*90)):''}
   function tel(){var n=$('tel').value.replace(/\D/g,'');if(n.length===9)n='34'+n;return n}
   function pintar(){
     var nom=$('nom').value.trim().replace(/[<>"]/g,''),cod=$('cod').value.toUpperCase().replace(/[^A-Z0-9]/g,''),t=tel(),d=$('die').value.trim(),r=$('rut').value.trim(),rev=$('rev').value.trim();
     $('eTel').textContent=$('tel').value&&t.length<11?'Revisa el móvil (9 cifras).':'';
     $('eDie').textContent=d&&!esCanva(d)?'Tiene que ser un enlace de Canva.':'';
     $('eRut').textContent=r&&!esCanva(r)?'Tiene que ser un enlace de Canva.':'';
-    var llavero=nom&&cod?BASE+'?k='+encodeURIComponent(cod)+'&n='+encodeURIComponent(nom):'';
-    $('uLlavero').textContent=llavero||'—';$('bCopiar').setAttribute('aria-disabled',llavero?'false':'true');
-    var listo=llavero&&t.length>=11&&esCanva(d)&&esCanva(r)&&$('ok').checked;
+    var llavero=cod.length>=3?BASE+'?k='+encodeURIComponent(cod):'';
+    $('uLlavero').textContent=llavero||'—';
+    var listo=llavero&&nom&&t.length>=11&&esCanva(d)&&esCanva(r)&&$('ok').checked;
     $('bEnviar').setAttribute('aria-disabled',listo?'false':'true');
-    if(listo){var vinc=llavero+'#d='+encodeURIComponent(d)+'&r='+encodeURIComponent(r)+(rev?'&rev='+encodeURIComponent(rev):'');
-      var msg='¡Hola '+nom+'! 💪 Aquí tienes tu plan de SPN Nutrition Planet: tu dieta y tu rutina en un solo sitio.\n\nAbre este enlace una vez desde tu móvil:\n'+vinc+'\n\nDespués solo tienes que acercar el móvil a tu llavero SPN y verás siempre la versión más actualizada. Tu código de socia es '+cod+'.';
+    if(listo){var vinc=llavero+'&n='+encodeURIComponent(nom)+'#d='+encodeURIComponent(d)+'&r='+encodeURIComponent(r)+(rev?'&rev='+encodeURIComponent(rev):'');
+      var msg='¡Hola '+nom+'! 💪 Aquí tienes tu plan de SPN Nutrition Planet: tu dieta y tu rutina en un solo sitio.\n\nAbre este enlace una vez desde tu móvil:\n'+vinc+'\n\nDespués solo tienes que acercar el móvil a tu llavero SPN y verás siempre la versión más actualizada. Tu código de socio es '+cod+'.';
       $('bEnviar').href='https://wa.me/'+t+'?text='+encodeURIComponent(msg)}
     else $('bEnviar').removeAttribute('href');
   }
-  $('nom').oninput=function(){sugerir();pintar()};
-  $('cod').oninput=function(){codTocado=!!$('cod').value;pintar()};
+  $('nom').oninput=pintar;$('cod').oninput=pintar;
   ['tel','die','rut','rev'].forEach(function(i){$(i).oninput=pintar});$('ok').onchange=pintar;
-  $('bCopiar').onclick=function(){var u=$('uLlavero').textContent;if(u==='—')return;navigator.clipboard.writeText(u).then(function(){$('bCopiar').textContent='✓ Copiado'})};
   pintar();
 })();
 </script>
