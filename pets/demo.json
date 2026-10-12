@@ -1,29 +1,63 @@
 {
-  "schema": "s42-pet-pass-v1",
+  "schema": "s42-pet-pass-v2",
+  "tipo": "perro",
   "nombre": "Toby",
   "raza": "Golden Retriever",
+  "color": "Dorado",
   "sexo": "Macho",
   "fechaNac": "Mayo 2021",
   "peso": 28.5,
   "castrado": true,
   "microchip": "981098108472911",
+  "pasaporteEuropeo": "ES123456789",
   "fotoUrl": "",
+  "modoPerdida": {
+    "activo": false,
+    "mensaje": "¡Toby se ha perdido! Por favor contacta ahora mismo.",
+    "recompensa": ""
+  },
   "contactoNombre": "Manuel",
   "contactoTelefono": "+34672294962",
   "contactoWhatsapp": "+34672294962",
+  "contactoRespaldoNombre": "Melina",
+  "contactoRespaldoTelefono": "+34600000000",
   "alimentacion": "Pienso hipoalergénico (sin pollo ni cereales), 2 tomas al día",
-  "medicacion": "Condroprotector articular con el desayuno",
   "caracter": "Muy sociable con personas y niños. Miedo intenso a petardos y tormentas. Pasea tranquilo.",
   "alertas": [
     "Alérgico estricto al pollo y a los cereales",
     "Toma condroprotector a diario con el desayuno",
     "Microchip homologado 981098108472911"
   ],
+  "medicacion": [
+    { "nombre": "Condroprotector articular", "dosis": "1 comprimido", "horario": "Con el desayuno", "hasta": "Permanente" }
+  ],
+  "proximaCita": {
+    "fecha": "2026-12-01",
+    "motivo": "Revisión y vacuna anual",
+    "clinica": "Hospital Veterinario Rioja 24h"
+  },
+  "pesos": [
+    { "fecha": "2026-03-15", "peso": 27.8 },
+    { "fecha": "2026-06-02", "peso": 28.1 },
+    { "fecha": "2026-09-10", "peso": 28.5 }
+  ],
   "vet": {
     "clinica": "Hospital Veterinario Rioja 24h",
     "doctor": "Dra. Elena Pérez",
     "telefono": "+34941000000",
-    "direccion": "Logroño"
+    "direccion": "Logroño",
+    "web": ""
+  },
+  "peluqueria": {
+    "nombre": "Peluquería Canina Bichón",
+    "telefono": "+34941111111",
+    "ultimoCorte": "2026-09-20",
+    "frecuencia": "Cada 8 semanas"
+  },
+  "seguro": {
+    "compania": "SegurosMascota",
+    "poliza": "SM-9988123",
+    "telefono": "+34900100100"
   },
   "vacunas": [
     { "nombre": "Rabia (anual)", "fecha": "Vigente" },
@@ -37,6 +71,12 @@
     { "fecha": "2026-06-02", "motivo": "Vacuna rabia", "nota": "Dosis anual puesta." },
     { "fecha": "2026-09-10", "motivo": "Dermatitis leve", "nota": "Cambio de pienso + crema 7 días." }
   ],
+  "entregadoPor": {
+    "nombre": "Hospital Veterinario Rioja 24h",
+    "tipo": "Clínica veterinaria",
+    "logoUrl": "",
+    "mensaje": "Esta chapa Pet Pass es un obsequio de tu clínica."
+  },
   "pinHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
-  "_notas": "El PIN por defecto de esta demo es 1234. Para cada mascota real se genera un hash propio en el momento de grabar la chapa."
+  "_notas": "El PIN por defecto de esta demo es 1234. Para cada mascota real se genera un hash propio."
 }
