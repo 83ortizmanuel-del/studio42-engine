@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alta de socio · SPN</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08090c">
+<link rel="icon" href="../logo.png" type="image/png">
+<style>
+@font-face{font-family:"Inter";font-weight:400;font-display:swap;src:url("../../fonts/Inter-Regular.woff") format("woff")}
+@font-face{font-family:"Inter";font-weight:600;font-display:swap;src:url("../../fonts/Inter-SemiBold.woff") format("woff")}
+@font-face{font-family:"Disp";font-weight:800;font-display:swap;src:url("../../fonts/InterDisplay-ExtraBold.woff") format("woff")}
+:root{--bg:#08090c;--bg2:#111318;--bg3:#181b22;--line:rgba(255,255,255,.1);--txt:#f2f3f5;--mut:#9aa0aa;--red:#e60000;--ok:#22c55e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:400 16px/1.5 Inter,system-ui,sans-serif}
+.w{width:min(100% - 32px,520px);margin:0 auto;padding:24px 0 48px}
+.logo{width:120px;display:block;margin:0 auto 6px;filter:drop-shadow(0 0 16px rgba(230,0,0,.4))}
+h1{font:800 24px Disp;text-transform:uppercase;text-align:center;margin:6px 0 4px}
+.sub{color:var(--mut);text-align:center;font-size:14px;margin:0 0 20px}
+.paso{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
+.paso h2{font:800 14px Disp;text-transform:uppercase;margin:0 0 10px;display:flex;gap:8px;align-items:center}
+.paso h2 i{font-style:normal;width:22px;height:22px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:12px}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 6px}
+input[type=text],input[type=tel],input[type=url]{width:100%;padding:13px;border-radius:12px;background:var(--bg3);border:1px solid var(--line);color:var(--txt);font:inherit}
+input:focus{outline:2px solid var(--red);border-color:transparent}
+.row{display:grid;grid-template-columns:1fr 130px;gap:8px}
+.err{color:#fca5a5;font-size:12.5px;margin-top:4px;min-height:1em}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#d4d7dd;margin-top:6px}
+.ck input{width:20px;height:20px;accent-color:var(--red);flex:none;margin-top:2px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;border-radius:14px;border:0;font:600 15px Inter;text-decoration:none;cursor:pointer;margin-top:10px;color:#fff;background:var(--red)}
+.btn[aria-disabled=true]{opacity:.35;pointer-events:none}
+.btn.line{background:transparent;border:1.5px solid rgba(255,255,255,.25)}
+code{display:block;word-break:break-all;background:#000;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px;color:#c9ccd2;margin-top:6px}
+.mini{font-size:12.5px;color:var(--mut);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="w">
+  <img class="logo" src="../logo.png" width="283" height="178" alt="SPN">
+  <h1>Alta de socio</h1>
+  <p class="sub">Para la nutricionista. Rellena, envía un WhatsApp y listo. No se guarda nada en ningún servidor.</p>
+
+  <div class="paso">
+    <h2><i>1</i>La paciente</h2>
+    <label for="nom">Nombre de pila (lo verá quien toque su llavero)</label>
+    <input type="text" id="nom" maxlength="24" placeholder="Laura" autocomplete="off">
+    <div class="row">
+      <div><label for="tel">Su móvil</label><input type="tel" id="tel" placeholder="612 345 678" autocomplete="off"></div>
+      <div><label for="cod">Código</label><input type="text" id="cod" maxlength="20" autocomplete="off"></div>
+    </div>
+    <div class="err" id="eTel"></div>
+  </div>
+
+  <div class="paso">
+    <h2><i>2</i>Sus enlaces de Canva</h2>
+    <label for="die">Enlace de la dieta</label>
+    <input type="url" id="die" placeholder="https://www.canva.com/design/…/view" autocomplete="off">
+    <div class="err" id="eDie"></div>
+    <label for="rut">Enlace de la rutina</label>
+    <input type="url" id="rut" placeholder="https://www.canva.com/design/…/view" autocomplete="off">
+    <div class="err" id="eRut"></div>
+    <label for="rev">Próxima revisión (opcional)</label>
+    <input type="text" id="rev" maxlength="40" placeholder="jue 22 · 18:30" autocomplete="off">
+    <p class="mini">En Canva: Compartir → «Cualquier persona con el enlace» puede ver. Cuando edites el diseño, el enlace sigue siendo el mismo: no hace falta volver a enviarlo.</p>
+  </div>
+
+  <div class="paso">
+    <h2><i>3</i>Consentimiento</h2>
+    <label class="ck"><input type="checkbox" id="ok"> La paciente acepta recibir su plan por este sistema y que su nombre de pila aparezca al tocar su llavero.</label>
+  </div>
+
+  <div class="paso">
+    <h2><i>4</i>Enviar</h2>
+    <a class="btn" id="bEnviar" target="_blank" rel="noopener" aria-disabled="true">Enviar a la paciente por WhatsApp</a>
+    <p class="mini">Le llega un único enlace. Al abrirlo, su móvil queda vinculado y a partir de ahí le basta con acercarlo a su llavero.</p>
+    <label>Enlace para grabar en su llavero (NFC Tools → Escribir → URL)</label>
+    <code id="uLlavero">—</code>
+    <button class="btn line" id="bCopiar" type="button" aria-disabled="true">Copiar enlace del llavero</button>
+  </div>
+</div>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var BASE=location.origin+location.pathname.replace(/alta\/?(index\.html)?$/,'socio/');
+  var esCanva=function(u){try{var x=new URL(u);return x.protocol==='https:'&&/(^|\.)canva\.(com|link)$/.test(x.hostname)}catch(e){return false}};
+  var sinAcentos=function(t){return t.normalize('NFD').replace(/[̀-ͯ]/g,'')};
+  var codTocado=false;
+  function sugerir(){if(codTocado)return;var n=sinAcentos($('nom').value).toUpperCase().replace(/[^A-Z]/g,'').slice(0,8);$('cod').value=n?n+(10+Math.floor(Math.random()*90)):''}
+  function tel(){var n=$('tel').value.replace(/\D/g,'');if(n.length===9)n='34'+n;return n}
+  function pintar(){
+    var nom=$('nom').value.trim().replace(/[<>"]/g,''),cod=$('cod').value.toUpperCase().replace(/[^A-Z0-9]/g,''),t=tel(),d=$('die').value.trim(),r=$('rut').value.trim(),rev=$('rev').value.trim();
+    $('eTel').textContent=$('tel').value&&t.length<11?'Revisa el móvil (9 cifras).':'';
+    $('eDie').textContent=d&&!esCanva(d)?'Tiene que ser un enlace de Canva.':'';
+    $('eRut').textContent=r&&!esCanva(r)?'Tiene que ser un enlace de Canva.':'';
+    var llavero=nom&&cod?BASE+'?k='+encodeURIComponent(cod)+'&n='+encodeURIComponent(nom):'';
+    $('uLlavero').textContent=llavero||'—';$('bCopiar').setAttribute('aria-disabled',llavero?'false':'true');
+    var listo=llavero&&t.length>=11&&esCanva(d)&&esCanva(r)&&$('ok').checked;
+    $('bEnviar').setAttribute('aria-disabled',listo?'false':'true');
+    if(listo){var vinc=llavero+'#d='+encodeURIComponent(d)+'&r='+encodeURIComponent(r)+(rev?'&rev='+encodeURIComponent(rev):'');
+      var msg='¡Hola '+nom+'! 💪 Aquí tienes tu plan de SPN Nutrition Planet: tu dieta y tu rutina en un solo sitio.\n\nAbre este enlace una vez desde tu móvil:\n'+vinc+'\n\nDespués solo tienes que acercar el móvil a tu llavero SPN y verás siempre la versión más actualizada. Tu código de socia es '+cod+'.';
+      $('bEnviar').href='https://wa.me/'+t+'?text='+encodeURIComponent(msg)}
+    else $('bEnviar').removeAttribute('href');
+  }
+  $('nom').oninput=function(){sugerir();pintar()};
+  $('cod').oninput=function(){codTocado=!!$('cod').value;pintar()};
+  ['tel','die','rut','rev'].forEach(function(i){$(i).oninput=pintar});$('ok').onchange=pintar;
+  $('bCopiar').onclick=function(){var u=$('uLlavero').textContent;if(u==='—')return;navigator.clipboard.writeText(u).then(function(){$('bCopiar').textContent='✓ Copiado'})};
+  pintar();
+})();
+</script>
+</body>
+</html>
