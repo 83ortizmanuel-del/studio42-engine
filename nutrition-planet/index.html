@@ -27,6 +27,7 @@ p{margin:0}a{color:inherit}button{font:inherit;color:inherit}
 /* Franja de propuesta */
 .prop{position:sticky;top:0;z-index:50;background:#000;border-bottom:1px solid var(--line);font-size:12px;color:var(--mut);text-align:center;padding:7px 12px}
 .prop b{color:var(--txt)}
+.ref{background:linear-gradient(90deg,#3a0000,#140405);border-bottom:1px solid rgba(230,0,0,.4);text-align:center;font-size:13.5px;padding:10px 12px}
 
 /* Intro 3-2-1 */
 #intro{position:fixed;inset:0;z-index:100;background:#000;display:grid;place-items:center;transition:opacity .5s,visibility .5s}
@@ -159,7 +160,8 @@ footer a{color:var(--mut)}
 
 <div id="intro" aria-hidden="true"><div class="n" id="cuenta">3</div><button class="skip" id="saltar">Saltar</button></div>
 
-<div class="prop">Propuesta de <b>Studio 42</b> para Nutrition Planet · demo funcional</div>
+<div class="prop">Propuesta de <b>Studio 42</b> para Nutrition Planet · <a href="socio/" style="color:#fff">ver el llavero del socio →</a></div>
+<div class="ref" id="refBan" hidden>💪 Vienes de parte de <b id="refNom"></b>. Díselo al mostrador.</div>
 
 <header class="top w">
   <img class="logo" src="logo.png" width="283" height="178" alt="SPN Sport Planet Nutrition">
@@ -322,7 +324,9 @@ footer a{color:var(--mut)}
   var MARCAS = ['226ERS','AMIX','Biotech USA','BSN','Cellucor','GN Nutrition','Haya Labs','iO.GENIX','Life Extension','Mr. Popper\'s','Powerlabs','Scientiffic Nutrition','Scitec Nutrition','Stacker','Starlabs','Vit O Best','Wheyland','Zoomad Labs','Eleven Fit','El Granero Integral'];
   var sede = 'murrieta';
   var $ = function(id){return document.getElementById(id)};
-  var wa = function(t){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(t)};
+  var REF=(new URLSearchParams(location.search).get('ref')||'').replace(/[^A-Za-z0-9]/g,'').slice(0,20).toUpperCase();
+  if(REF){$('refNom').textContent=REF;$('refBan').hidden=false}
+  var wa = function(t){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(t+(REF?' (vengo de parte de '+REF+')':''))};
 
   /* ---------- Intro 3-2-1-GO (solo una vez por sesión) ---------- */
   var intro=$('intro'), c=$('cuenta'), visto=false;
