@@ -8,7 +8,7 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITIO = tempfile.mkdtemp(prefix="s42site_")
 os.makedirs(SITIO + "/v/closer"); os.makedirs(SITIO + "/c")
 shutil.copy(RAIZ + "/v/closer/index.html", SITIO + "/v/closer/index.html")
-shutil.copy(RAIZ + "/v/closer/logo.png", SITIO + "/v/closer/logo.png")
+shutil.copy(RAIZ + "/studio42-logo.png", SITIO + "/studio42-logo.png")
 shutil.copy(RAIZ + "/c/index.html", SITIO + "/c/index.html")
 shutil.copy(RAIZ + "/c/ankara-kebab.json", SITIO + "/c/ankara-kebab.json")  # cliente real que NO se debe pisar
 
