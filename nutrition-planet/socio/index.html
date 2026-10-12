@@ -270,7 +270,7 @@ footer a{color:var(--mut)}
     $('bNut').href=wa('Hola, soy '+NOM+' ('+COD+'). Tengo una duda sobre mi plan con la nutricionista.');
     $('bCita').href=wa('Hola SPN, soy '+NOM+' ('+COD+'). Quería consultar mi próxima revisión'+(S.rev?' ('+S.rev+')':'')+'.');
     $('bMost').href=wa('Hola SPN, soy '+NOM+' ('+COD+'). Quiero hacer un pedido para recoger.');
-    var enlacePub=location.origin+location.pathname+'?k='+encodeURIComponent(COD)+'&n='+encodeURIComponent(NOM);
+    var enlacePub=location.origin+location.pathname+'?k='+encodeURIComponent(COD)+(NOM?'&n='+encodeURIComponent(NOM):'');
     $('bComp').onclick=function(){var t='Entreno con SPN Nutrition Planet. Si vas, di que vienes de mi parte: '+COD;
       if(navigator.share)navigator.share({title:'SPN Nutrition Planet',text:t,url:enlacePub}).catch(function(){});
       else{try{navigator.clipboard.writeText(t+' '+enlacePub);$('bComp').textContent='¡Enlace copiado!'}catch(e){}}};

@@ -1137,6 +1137,18 @@ async function iniciar() {
     const r = await cargarConfig(cod);
     if (r.error) { mostrarError(r.error); return; }
 
+    /* Redirección a una landing a medida (los soportes ya grabados siguen funcionando).
+       Solo rutas del propio sitio. Se conserva el código de pieza (?k=). Con ?debug=1 no redirige. */
+    const destino = r.data && r.data.redirigir;
+    if (typeof destino === "string" && /^\/(?!\/)[\w\-\/.?=&%]*$/.test(destino) && !estado.debug) {
+        const u = new URL(destino, location.origin);
+        const k = p.get("k") || p.get("key");
+        if (k && !u.searchParams.has("k")) u.searchParams.set("k", limpiarParam(k, "MOSTRADOR"));
+        if (p.get("preview")) u.searchParams.set("preview", "1");
+        location.replace(u.pathname + u.search);
+        return;
+    }
+
     const d = normalizar(r.data);
     const problema = validarRaiz(d);
     if (problema) { aviso(problema); mostrarError("config"); return; }

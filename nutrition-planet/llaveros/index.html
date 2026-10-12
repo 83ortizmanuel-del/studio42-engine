@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grabar piezas NFC · SPN</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#08090c">
+<style>
+@font-face{font-family:"Inter";font-weight:400;font-display:swap;src:url("../../fonts/Inter-Regular.woff") format("woff")}
+@font-face{font-family:"Inter";font-weight:600;font-display:swap;src:url("../../fonts/Inter-SemiBold.woff") format("woff")}
+@font-face{font-family:"Disp";font-weight:800;font-display:swap;src:url("../../fonts/InterDisplay-ExtraBold.woff") format("woff")}
+:root{--bg:#08090c;--bg2:#111318;--bg3:#181b22;--line:rgba(255,255,255,.1);--txt:#f2f3f5;--mut:#9aa0aa;--red:#e60000;--ok:#22c55e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:400 15px/1.5 Inter,system-ui,sans-serif}
+.w{width:min(100% - 28px,560px);margin:0 auto;padding:20px 0 48px}
+h1{font:800 22px Disp;text-transform:uppercase;margin:0}
+h2{font:800 14px Disp;text-transform:uppercase;margin:24px 0 8px;color:var(--mut);letter-spacing:.06em}
+.pasos{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px;font-size:13.5px;color:#d4d7dd}
+.pasos ol{margin:6px 0 0;padding-left:20px}
+.cnt{margin-top:10px;font-size:13px;color:var(--mut)}
+.cnt b{color:var(--ok)}
+.it{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 12px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;margin-top:6px}
+.it.ok{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.06)}
+.it .c{font:800 15px Disp;min-width:62px}
+.it code{font-size:11.5px;color:var(--mut);word-break:break-all}
+.it .b{display:flex;gap:6px}
+.it button{border:1px solid var(--line);background:var(--bg3);color:var(--txt);border-radius:10px;padding:9px 10px;font:600 12.5px Inter;cursor:pointer;white-space:nowrap}
+.it button.cp{background:var(--red);border-color:var(--red)}
+.it.ok .hecho{background:var(--ok);border-color:var(--ok);color:#000}
+.mas{margin-top:10px;width:100%;padding:12px;border-radius:12px;border:1.5px dashed var(--line);background:none;color:var(--mut);font:600 14px Inter;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="w">
+  <h1>Grabar piezas NFC · SPN</h1>
+  <div class="pasos">Con <b>NFC Tools</b> en el móvil:
+    <ol><li>Pulsa <b>Copiar</b> en la pieza.</li><li>NFC Tools → Escribir → Añadir un registro → URL → pega → Aceptar.</li><li>Escribir → acerca la pieza. Pruébala tocándola y marca <b>✓</b>.</li></ol>
+  </div>
+
+  <h2>Displays de mostrador</h2>
+  <div id="most"></div>
+
+  <h2>Llaveros de socio</h2>
+  <p class="cnt">Grabados: <b id="n">0</b> · Cada llavero lleva su código. Apunta o graba el código en la pieza para dárselo a la nutricionista.</p>
+  <div id="llav"></div>
+  <button class="mas" id="mas" type="button">+ 10 llaveros más</button>
+</div>
+<script>
+(function(){
+  var BASE='https://studio42.es/nutrition-planet/';
+  var MOST=[['Murrieta 31',BASE+'?sede=murrieta'],['Duquesa Victoria',BASE+'?sede=duquesa'],['Burgos',BASE+'?sede=burgos'],['Consulta nutri',BASE+'?k=CONSULTA']];
+  var hechos={};try{hechos=JSON.parse(localStorage.getItem('spn_grabados'))||{}}catch(e){}
+  var total=30;try{total=+localStorage.getItem('spn_total')||30}catch(e){}
+  function fila(cod,url){return '<div class="it'+(hechos[cod]?' ok':'')+'" data-c="'+cod+'" data-u="'+url+'"><span class="c">'+cod+'</span><code>'+url.replace('https://','')+'</code><span class="b"><button class="cp" type="button">Copiar</button><button class="hecho" type="button">✓</button></span></div>'}
+  function pintar(){
+    document.getElementById('most').innerHTML=MOST.map(function(m){return fila(m[0],m[1])}).join('');
+    var h='';for(var i=1;i<=total;i++){var c='SPN'+String(i).padStart(3,'0');h+=fila(c,BASE+'socio/?k='+c)}
+    document.getElementById('llav').innerHTML=h;
+    var n=0;for(i=1;i<=total;i++)if(hechos['SPN'+String(i).padStart(3,'0')])n++;document.getElementById('n').textContent=n+' de '+total;
+    document.querySelectorAll('.it').forEach(function(el){
+      el.querySelector('.cp').onclick=function(){var b=this;navigator.clipboard.writeText(el.dataset.u).then(function(){b.textContent='¡Copiado!';setTimeout(function(){b.textContent='Copiar'},1500)})};
+      el.querySelector('.hecho').onclick=function(){hechos[el.dataset.c]=!hechos[el.dataset.c];try{localStorage.setItem('spn_grabados',JSON.stringify(hechos))}catch(e){}pintar()};
+    });
+  }
+  document.getElementById('mas').onclick=function(){total+=10;try{localStorage.setItem('spn_total',total)}catch(e){}pintar()};
+  pintar();
+})();
+</script>
+</body>
+</html>
