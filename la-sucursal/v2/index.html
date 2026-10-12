@@ -222,6 +222,8 @@ body.manga .pie b{font-style:italic}
   -webkit-mask:radial-gradient(circle,transparent 30%,#000 32%,transparent 70%);mask:radial-gradient(circle,transparent 30%,#000 32%,transparent 70%)}
 @keyframes pum{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-14deg)}35%{opacity:1;transform:translate(-50%,-60%) scale(1.15) rotate(-6deg)}100%{opacity:0;transform:translate(-50%,-110%) scale(1) rotate(-4deg)}}
 body.manga #intro{background:#0b0a0d repeating-conic-gradient(from 0deg at 50% 50%,rgba(217,180,90,.16) 0deg 2deg,transparent 2deg 10deg)}
+body.manga .poste{border:2px solid var(--tinta);box-shadow:0 0 0 2px var(--oro),0 0 18px rgba(243,220,154,.45)}
+body.manga .poste::before{background:repeating-linear-gradient(-45deg,var(--papel) 0 6px,var(--oro) 6px 12px,var(--tinta) 12px 18px,var(--oro) 18px 24px)}
 @media (prefers-reduced-motion:reduce){body.manga .hero,body.manga .hero > *,body.manga .item{transform:none}}
 
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;z-index:60;background:#f5f1e8;color:#141216;font:600 .85rem var(--fb);padding:11px 18px;border-radius:99px;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:.3s;pointer-events:none;max-width:90vw;text-align:center}
