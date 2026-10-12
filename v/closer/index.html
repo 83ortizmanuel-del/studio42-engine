@@ -333,6 +333,8 @@
         .maps-item b { display: block; font-size: 13px; }
         .maps-item span { display: block; font-size: 11px; color: #9ca3af; margin-top: 2px; }
         .maps-ok { padding: 10px 12px; border-radius: 12px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.4); color: #a7f3d0; font-size: 12px; line-height: 1.45; }
+        .ayuda-inline{font-weight:400;opacity:.65;text-transform:none;letter-spacing:0;font-size:11px}
+        .maps-ok b{color:#ecfdf5}
         .maps-ok button { margin-left: 8px; background: none; border: none; color: #fcd34d; text-decoration: underline; cursor: pointer; font-family: inherit; font-size: 11px; }
         .maps-msg { font-size: 11px; color: #fcd34d; line-height: 1.4; }
         .url-final { word-break: break-all; font-size: 11px; color: var(--color-accent); margin-top: 8px; text-align: center; }
@@ -418,8 +420,8 @@
                 </div>
                 <input type="hidden" id="place_id" value="">
 
-                <div class="form-group">
-                    <label for="nombre_comercio">Nombre Comercial del Negocio <span class="req">*</span></label>
+                <div class="form-group" id="grupo-nombre">
+                    <label for="nombre_comercio">Nombre Comercial del Negocio <span class="req">*</span> <small class="ayuda-inline">(solo si no aparece en Maps)</small></label>
                     <input type="text" id="nombre_comercio" maxlength="60" placeholder="Ej: Centro Veterinario Norte" class="input-cyber" required>
                 </div>
 
@@ -465,7 +467,7 @@
                     <p class="ayuda">Si es de España basta con las 9 cifras. Otro país: con prefijo (+58…).</p>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="grupo-google">
                     <label for="google">Enlace para Reseñas de Google (solo si NO usaste el buscador de Maps)</label>
                     <input type="url" inputmode="url" id="google" maxlength="300" placeholder="https://g.page/r/…/review" class="input-cyber">
                     <p class="ayuda"><b>Dónde sacarlo:</b> Perfil de empresa de Google → <b>Pedir reseñas</b> → Copiar enlace. No sirve la portada de Google Maps.</p>
@@ -735,11 +737,18 @@
             if (x.web && !$('web').value.trim()) $('web').value = x.web;
             $('google').value = '';
             mapsRes.textContent = ''; mapsMsg.textContent = '';
-            mapsOk.textContent = '✓ ' + x.nombre + ' — ' + x.direccion + '. Reseña directa de Google activada. ';
+            mapsOk.textContent = '';
+            const nb = document.createElement('b'); nb.textContent = '✓ ' + x.nombre;
+            mapsOk.append(nb, document.createTextNode(' — ' + x.direccion + '. ⭐ Botón de reseña directa de Google activado.'));
+            const editar = document.createElement('button'); editar.type = 'button'; editar.textContent = 'Cambiar nombre';
+            editar.addEventListener('click', () => { $('grupo-nombre').classList.remove('hidden-element'); $('nombre_comercio').focus(); });
             const quitar = document.createElement('button'); quitar.type = 'button'; quitar.textContent = 'Quitar';
-            quitar.addEventListener('click', () => { $('place_id').value = ''; mapsOk.classList.add('hidden-element'); });
-            mapsOk.appendChild(quitar);
+            quitar.addEventListener('click', () => { $('place_id').value = ''; mapsOk.classList.add('hidden-element'); $('grupo-nombre').classList.remove('hidden-element'); $('grupo-google').classList.remove('hidden-element'); });
+            mapsOk.append(editar, quitar);
             mapsOk.classList.remove('hidden-element');
+            // El nombre y el enlace de reseñas ya vienen de Maps: se esconden para no repetirlos
+            $('grupo-nombre').classList.add('hidden-element');
+            $('grupo-google').classList.add('hidden-element');
             if (!x.whatsapp) mapsMsg.textContent = 'Pide al dueño su WhatsApp y escríbelo abajo.';
         }
 
@@ -786,7 +795,7 @@
             const copiar = document.createElement('button'); copiar.type = 'button'; copiar.className = 'btn-fin'; copiar.textContent = 'Copiar enlace';
             copiar.addEventListener('click', async () => { try { await navigator.clipboard.writeText(url); copiar.textContent = '¡Copiado!'; } catch (e) { copiar.textContent = 'Mantén pulsado el enlace'; } });
             const nuevo = document.createElement('button'); nuevo.type = 'button'; nuevo.className = 'btn-fin'; nuevo.textContent = 'Nuevo diagnóstico';
-            nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; $('place_id').value = ''; mapsOk.classList.add('hidden-element'); mapsRes.textContent = ''; mapsMsg.textContent = ''; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+            nuevo.addEventListener('click', () => { form.reset(); const c = $('closer_id').value; $('closer_id').value = c; $('place_id').value = ''; mapsOk.classList.add('hidden-element'); $('grupo-nombre').classList.remove('hidden-element'); $('grupo-google').classList.remove('hidden-element'); mapsRes.textContent = ''; mapsMsg.textContent = ''; chipsContainer.textContent = ''; cuestionarioContainer.classList.add('hidden-element'); campoOtroContainer.classList.add('hidden-element'); volverAlFormulario(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
             const ped = document.createElement('button'); ped.type = 'button'; ped.className = 'btn-fin principal'; ped.textContent = '🛒 Preparar el pedido';
             ped.addEventListener('click', () => abrirPedido(url));
             acc.append(abrir, ped, copiar, nuevo);
@@ -1092,6 +1101,10 @@
             if (sectorSelect.value === 'Otros' && !val('sector_otro_input')) errores.push('Especifica el sector novedoso.');
             if (val('whatsapp').replace(/\D/g, '').length < 9) errores.push('El WhatsApp necesita al menos 9 cifras.');
             if (errores.length) { alert(errores.join('\n')); return; }
+            if (!val('place_id') && !val('google')) {
+                const buscar = confirm('⚠️ No has elegido el negocio en el buscador de Google Maps.\n\nSin eso la landing puede salir SIN el botón de reseña de Google (intentaré encontrarlo por su nombre).\n\nAceptar = buscarlo ahora\nCancelar = enviar igualmente');
+                if (buscar) { $('maps_consulta').value = val('nombre_comercio'); $('maps-box').scrollIntoView({ behavior: 'smooth', block: 'center' }); buscarMaps(); return; }
+            }
             if (!SCRIPT_URL || /PEGA_AQUI/.test(SCRIPT_URL)) { alert('Falta configurar SCRIPT_URL en este archivo.'); return; }
 
             let sector = sectorSelect.value;

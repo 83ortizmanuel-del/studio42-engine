@@ -44,7 +44,7 @@
  * ============================================================================
  */
 
-var VERSION = '3.3';
+var VERSION = '3.4';
 
 // Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
@@ -228,10 +228,19 @@ function procesar_(raw) {
   // 0) Datos reales del negocio en Google Maps (si el Closer lo eligió en el buscador)
   var placeId = idLugar_(raw.place_id);
   var lugar = null, avisoMaps = '';
+  // Red de seguridad: si el Closer no eligió el negocio en Maps ni pegó enlace de reseñas,
+  // se busca por el nombre y solo se usa si el nombre coincide (para no poner la ficha de otro).
+  if (!placeId && !String(raw.google || '').trim() && c.mapsKey) {
+    var auto = buscarPorNombre_(c, limpiar_(raw.nombre, 60));
+    if (auto) {
+      placeId = auto.id;
+      avisoMaps = 'No elegiste el negocio en el buscador de Maps; lo encontré por su nombre: ' + auto.nombre + ' (' + auto.direccion + '). Si no es ese, vuelve a enviarlo eligiéndolo en el buscador.';
+    }
+  }
   if (placeId) {
     if (c.mapsKey) {
       var det = detallesLugar_(c, placeId);
-      if (det.error) { avisoMaps = det.error; if (det.invalido) placeId = ''; }
+      if (det.error) { avisoMaps = (avisoMaps ? avisoMaps + ' ' : '') + det.error; if (det.invalido) placeId = ''; }
       else lugar = det.lugar;
     } else {
       avisoMaps = 'Google Maps no está configurado (falta GOOGLE_MAPS_API_KEY): se usó el Place ID sin comprobar sus datos.';
@@ -339,6 +348,29 @@ function buscar_(raw) {
     };
   }).filter(Boolean);
   return { ok: true, resultados: lista };
+}
+
+/** Busca el negocio por su nombre y devuelve el primero SOLO si el nombre coincide claramente. */
+function normNombre_(t) {
+  return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+}
+function buscarPorNombre_(c, nombre) {
+  try {
+    var n = normNombre_(nombre);
+    if (n.length < 4 || !permitirPeticion_(c.maxBusquedas, 'b_')) return null;
+    var r = UrlFetchApp.fetch('https://places.googleapis.com/v1/places:searchText', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { 'X-Goog-Api-Key': c.mapsKey, 'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress' },
+      payload: JSON.stringify({ textQuery: nombre, languageCode: 'es', pageSize: 3, regionCode: 'ES' })
+    });
+    if (r.getResponseCode() !== 200) return null;
+    var p = (JSON.parse(r.getContentText()).places || [])[0];
+    if (!p) return null;
+    var g = normNombre_(p.displayName && p.displayName.text);
+    if (!g || !(g === n || g.indexOf(n) >= 0 || n.indexOf(g) >= 0)) return null;
+    var id = idLugar_(p.id);
+    return id ? { id: id, nombre: cadena_(p.displayName.text, 80), direccion: cadena_(p.formattedAddress, 140) } : null;
+  } catch (e) { return null; }
 }
 
 /** Ficha completa del negocio: teléfono, web, dirección, enlace a Maps, tipos y horario. */
@@ -1385,7 +1417,7 @@ function panelDatos_(c) {
   var chapas = [];
   var hc = petHoja_().getDataRange().getValues();
   for (var j = 1; j < hc.length; j++) chapas.push({ slug: hc[j][0], estado: hc[j][1], entregadaPor: hc[j][2], url: hc[j][3] });
-  var hasta = new Date(), desde = new Date(hasta.getTime() - 30 * 86400000);
+  var hasta = new Date(Date.now() + 60000), desde = new Date(hasta.getTime() - 30 * 86400000 - 60000);
   return { ok: true, clientes: clientes, pedidos: pedidos.reverse(), chapas: chapas, estados: ESTADOS_PEDIDO, catalogo: CATALOGO, dominio: c.dominio,
     suscripciones: suscripciones_(), estadisticas: estadisticas_(desde, hasta), stripe: !!stripeClave_() };
 }

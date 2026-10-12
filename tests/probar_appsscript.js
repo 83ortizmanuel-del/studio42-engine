@@ -256,6 +256,26 @@ flujo('Maps: Place ID → reseña directa (writereview), horario, llamar y cómo
     assert.ok(/Ficha de Google Maps → tipos: hair_care/.test(log.iaBody.messages[0].content), 'Claude recibe el contexto del negocio');
   }
 });
+flujo('Maps: sin elegir en el buscador → lo encuentra por el nombre y pone la reseña directa', {
+  props: PM, maps: MAPS_OK,
+  datos: Object.assign({}, base, { nombre: 'PELUQUERIA SOL & LUNA.', place_id: '', google: '' }),
+  comprobar(res, repo) {
+    assert.strictEqual(res.ok, true, JSON.stringify(res));
+    const j = JSON.parse(repo.files['c/peluqueria-sol-luna.json']);
+    assert.strictEqual(j.secciones[3].botones[0].urlGoogle, WR);
+    assert.ok(res.avisos.some((a) => /lo encontré por su nombre/.test(a)), 'avisa al Closer para que lo revise');
+  }
+});
+flujo('Maps: sin elegir y el nombre NO coincide → no se inventa la ficha de otro negocio', {
+  props: PM, maps: MAPS_OK,
+  datos: Object.assign({}, base, { nombre: 'Barbería Otra Distinta', place_id: '', google: '' }),
+  comprobar(res, repo) {
+    assert.strictEqual(res.ok, true, JSON.stringify(res));
+    const f = Object.keys(repo.files).find((k) => /^c\/barberia-otra/.test(k));
+    const op = JSON.parse(repo.files[f]).secciones.flatMap((x) => x.botones).find((b) => b.tipo === 'opinion');
+    assert.ok(!op.urlGoogle && op.whatsappGerencia);
+  }
+});
 flujo('Maps: el Place ID manda sobre un enlace pegado a mano (y se avisa)', {
   props: PM, maps: MAPS_OK,
   datos: Object.assign({}, base, { place_id: PLACE_ID }),
@@ -300,7 +320,10 @@ flujo('Place ID con formato raro (inyección) se ignora', {
   props: PM, maps: MAPS_OK, datos: Object.assign({}, base, { place_id: 'x"><script>alert(1)</script>', google: '' }),
   comprobar(res, repo) {
     assert.strictEqual(res.ok, true);
-    assert.ok(!/script|writereview/.test(repo.files['c/peluqueria-sol-luna.json']));
+    const txt = repo.files['c/peluqueria-sol-luna.json'];
+    assert.ok(!/script|alert/.test(txt), 'el id inyectado no llega a la landing');
+    // el id raro se descarta; la red de seguridad encuentra la ficha real por el nombre
+    assert.ok(!/writereview/.test(txt) || txt.includes('placeid=' + PLACE_ID));
   }
 });
 flujo('Maps: Claude puede proponer botones pero no inventar horarios ni enlaces de reseña', {
