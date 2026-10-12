@@ -37,12 +37,14 @@
  *      MAX_POR_HORA       (opcional)     tope de diagnósticos por hora. Por defecto: 30
  *      MAX_BUSQUEDAS_HORA (opcional)     tope de búsquedas en Maps por hora. Por defecto: 120
  *      PROMPT_EXTRA       (opcional)     texto que se añade al final de las instrucciones a Claude
+ *      AVISO_EMAIL        (opcional)     correo(s) que reciben un aviso por cada pedido nuevo.
+ *                                        Por defecto: el dueño del script. Pon 0 para no recibirlos.
  *
  *  Pruebas desde el editor (sin publicar nada): ejecuta  PROBAR_CONFIGURACION
  * ============================================================================
  */
 
-var VERSION = '3.2';
+var VERSION = '3.3';
 
 // Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
@@ -986,6 +988,8 @@ function PROBAR_CONFIGURACION() {
   var sk = stripeClave_(), pr = preciosStripe_();
   salida.push(!sk ? '· Stripe: sin configurar (cuando tengas la cuenta, crea STRIPE_SECRET_KEY)' : (/^sk_test_/.test(sk) ? '✔ Stripe en MODO PRUEBA' : '✔ Stripe en modo REAL') + (Object.keys(pr).length ? ' · ' + Object.keys(pr).length + ' precios creados' : ' · ✘ falta ejecutar CREAR_PRODUCTOS_STRIPE'));
   salida.push(pc.length >= 6 ? '✔ Panel de control: contraseña configurada (studio42.es/panel/)' : '✘ Panel de control: crea la propiedad PANEL_CLAVE (mínimo 6 caracteres) para entrar en studio42.es/panel/');
+  var av = String(PropertiesService.getScriptProperties().getProperty('AVISO_EMAIL') || '').trim();
+  salida.push(av === '0' ? '· Avisos de pedidos nuevos: desactivados (AVISO_EMAIL = 0)' : '✔ Avisos de pedidos nuevos por email a: ' + (av || Session.getEffectiveUser().getEmail() || 'el dueño del script'));
   if (c.githubToken) {
     var r = UrlFetchApp.fetch('https://api.github.com/repos/' + c.repo, { headers: ghHeaders_(c), muteHttpExceptions: true });
     var code = r.getResponseCode();
@@ -1296,7 +1300,32 @@ function pedidoGuardar_(raw) {
     suscripcionGuardar_(slug, { cliente: cliente, plan: plan, periodo: periodo, estado: 'pendiente de pago', pedido: id, email: limpiar_(raw.email, 120) });
     pago = crearPago_(c, datos, limpiar_(raw.email, 120));
   }
+  avisarPedido_(c, datos, detalle, notas);
   return { ok: true, pedido: datos, pago: pago };
+}
+
+/**
+ * Avisa al director por email de cada pedido nuevo (llega al móvil como cualquier correo).
+ * Propiedad AVISO_EMAIL: a qué correo(s) avisar (separados por coma). Si no existe, al dueño
+ * del script. Pon AVISO_EMAIL = 0 para no recibir avisos.
+ */
+function avisarPedido_(c, datos, detalle, notas) {
+  try {
+    var dest = String(PropertiesService.getScriptProperties().getProperty('AVISO_EMAIL') || '').trim();
+    if (dest === '0') return;
+    if (!dest) dest = Session.getEffectiveUser().getEmail();
+    if (!dest) return;
+    var total = datos.calc.total + ' €' + (datos.calc.aConsultar ? ' + a consultar' : '');
+    var susc = datos.suscripcion ? 'Plan ' + datos.suscripcion.plan + ' (' + datos.suscripcion.periodo + ', ' + datos.suscripcion.precio + ' €)' : 'Sin plan mensual';
+    var e = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]; }); };
+    var html = '<div style="font-family:Arial,sans-serif;max-width:520px">' +
+      '<h2 style="margin:0 0 4px">🛒 Nuevo pedido · ' + e(datos.cliente) + '</h2>' +
+      '<p style="color:#666;margin:0 0 14px">Closer <b>' + e(datos.closer) + '</b> · Pedido ' + e(datos.id) + '</p>' +
+      '<p><b>' + e(datos.calc.packNombre) + '</b> — ' + e(total) + '<br>' + e(detalle) + '<br>' + e(susc) + '</p>' +
+      (notas ? '<p>Notas: ' + e(notas) + '</p>' : '') +
+      '<p><a href="' + e(datos.url) + '">Ver la landing</a> · <a href="' + e(c.dominio) + '/panel/">Abrir el panel</a></p></div>';
+    MailApp.sendEmail({ to: dest, subject: '🛒 ' + datos.cliente + ' · ' + total + ' · ' + datos.closer, htmlBody: html, name: 'Studio 42 Pedidos' });
+  } catch (err) { /* el pedido ya está guardado; un fallo del aviso no lo estropea */ }
 }
 
 /* ====================================== PANEL ======================================

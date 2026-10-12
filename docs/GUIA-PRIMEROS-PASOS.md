@@ -118,6 +118,22 @@ Si estás leyendo esto en tu repositorio, los cambios ya están publicados (se a
 
 **Si aparece un aviso amarillo**, léelo con el dueño y vuelve a enviar con el mismo nombre: la demo se actualiza, no se duplica.
 
+## Equipo de Closers (tarjeta en el lanyard)
+
+**Cada Closer = un código.** El código va en su enlace: `https://studio42.es/v/closer/?cod=CÓDIGO` (por ejemplo `MO001`, `MEL042`). Con ese enlace la app sabe quién vende y cada pedido queda a su nombre.
+
+**Dar de alta a un Closer nuevo:**
+1. Inventa su código: letras y números, sin espacios ni tildes (`ANA007`).
+2. Apps Script → ⚙️ → Propiedades → `CLOSERS` → añádelo al final separado por coma → Guardar. (No hace falta volver a implementar.)
+3. Graba su tarjeta NFC con NFC Tools → Escribir → URL → `https://studio42.es/v/closer/?cod=ANA007`. Bloquéala (NFC Tools → Otros → Bloquear etiqueta) para que nadie la reescriba.
+4. Pídele que, la primera vez, acerque el móvil a su tarjeta y pulse **Añadir a pantalla de inicio**.
+
+**Dar de baja:** quita su código de `CLOSERS`. Su tarjeta deja de servir al momento; sus pedidos antiguos siguen en el panel.
+
+> El código es una identificación, no una contraseña: quien tenga la tarjeta puede usar la app. Si un Closer pierde la tarjeta, cámbiale el código.
+
+**Tú como director:** el panel (`studio42.es/panel/`) se actualiza solo cada 45 segundos y al volver a abrirlo. Cuando entra un pedido suena un aviso 🔔 y aparece marcado. Arriba de los pedidos ves a cada Closer con sus ventas del mes; toca uno para ver solo los suyos. Además te llega un **email por cada pedido** (al correo dueño del script, o al que pongas en la propiedad `AVISO_EMAIL`; `0` para desactivarlo).
+
 ## Qué hacer si algo falla
 
 | Síntoma | Qué significa | Qué hacer |
@@ -160,7 +176,7 @@ Más detalles en `pets/README.md`.
 - **Pedidos**: los pendientes arriba; tócalos para ver el detalle, copiar los enlaces NFC y cambiar el estado (Por despachar → Grabado → Entregado → Cobrado).
 - **Clientes**: todas las landings con vista previa en un móvil. **✨ Pedir un cambio a Claude**: escríbelo con tus palabras, Claude prepara la propuesta, la ves en la vista previa (marcada «sin publicar») y solo cuando pulsas **Publicar en la web** se guarda. Si algo no encaja, **Descartar**.
 - **Pet Pass**: las chapas de cada clínica y cuáles están activadas.
-- **Nuevo**: abre el formulario del Closer para dar de alta un cliente.
+- **Nuevo**: abre el formulario del Closer (con tu código) para dar de alta un cliente.
 
 Para verlo sin configurar nada: `studio42.es/panel/?demo=1` (datos de ejemplo, no guarda nada).
 

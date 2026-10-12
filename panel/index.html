@@ -67,6 +67,15 @@ a{color:inherit;text-decoration:none}
 .filters{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;scrollbar-width:none}
 .filters button{flex:none;padding:.42rem .8rem;border-radius:99px;border:1px solid var(--line);background:none;font:600 .78rem var(--fb);color:var(--muted)}
 .filters button.on{background:rgba(220,228,240,.14);color:var(--bone);border-color:#cfd4dc}
+.team{display:flex;gap:8px;overflow-x:auto;margin:0 0 12px;scrollbar-width:none}
+.team button{flex:none;text-align:left;padding:.55rem .8rem;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--bone);font:600 .8rem var(--fb)}
+.team button b{display:block;font-size:.95rem}
+.team button small{color:var(--muted);font-weight:500}
+.team button.on{border-color:#cfd4dc;background:rgba(220,228,240,.14)}
+.card.nuevo{box-shadow:0 0 0 2px #cfd4dc inset}
+.live{font:600 .7rem var(--fb);color:var(--muted);display:flex;align-items:center;gap:6px;margin:-4px 0 10px}
+.live i{width:7px;height:7px;border-radius:50%;background:#5bd68a;box-shadow:0 0 0 0 rgba(91,214,138,.6);animation:pulso 2s infinite}
+@keyframes pulso{70%{box-shadow:0 0 0 7px rgba(91,214,138,0)}100%{box-shadow:0 0 0 0 rgba(91,214,138,0)}}
 .card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 14px;margin-bottom:8px;transition:border-color .2s,transform .15s}
 .card:active{transform:scale(.985)}
 .card .av{width:46px;height:46px;flex:none;border-radius:14px;display:grid;place-items:center;font:800 1.1rem var(--fd);color:#0b0c0f;background:var(--ti);overflow:hidden}
@@ -220,7 +229,7 @@ textarea.inp{min-height:110px;resize:vertical}
 <script>
 (function(){'use strict';
 var SCRIPT_URL='https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec';
-var DEMO=new URLSearchParams(location.search).get('demo')==='1';
+var demoN=0;var DEMO=new URLSearchParams(location.search).get('demo')==='1';
 var $=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
 var KT='s42panel_token';
 var D=null, fichas={}, cur=null, propuesta=null;
@@ -268,12 +277,22 @@ function cargar(){
   return api({accion:'panel_datos'}).then(function(r){
     b.classList.remove('spin');
     if(!r.ok){toast(r.error||'Error al cargar');return}
+    var antes=vistos;vistos={};r.pedidos.forEach(function(p){vistos[p.id]=1});
+    if(antes){var nuevos=r.pedidos.filter(function(p){return!antes[p.id]});
+      nuevos.forEach(function(p){recientes[p.id]=1});
+      if(nuevos.length){toast(nuevos.length===1?'🔔 Nuevo pedido: '+nuevos[0].cliente+' · '+nuevos[0].closer:'🔔 '+nuevos.length+' pedidos nuevos');try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}}}
+    ultimaCarga=new Date();
     D=r;if(r.estados)ESTADOS=r.estados;
     pintarKpis();pintarPedidos();pintarClientes();pintarPets();
     return cargarFichas();
   }).catch(function(e){b.classList.remove('spin');if(e.message!=='sesion')toast('Sin conexión con el servidor')});
 }
 $('#bSync').onclick=function(){cargar().then(function(){toast('Actualizado')})};
+/* Tiempo real: se actualiza solo cada 45 s (y al volver a la app), salvo si estás dentro de una ficha */
+var vistos=null,recientes={},ultimaCarga=null;
+function libre(){return!$('#vApp').hidden&&!document.hidden&&!document.querySelector('.sheet-bg.on')&&!$('#vCliente').classList.contains('on')}
+setInterval(function(){if(libre())cargar()},DEMO?15000:45000);
+document.addEventListener('visibilitychange',function(){if(libre()&&ultimaCarga&&Date.now()-ultimaCarga>15000)cargar()});
 function cargarFichas(){
   return Promise.all(D.clientes.map(function(slug){
     if(fichas[slug])return null;
@@ -305,18 +324,28 @@ function pintarKpis(){
 }
 
 /* ---------- Pedidos ---------- */
-var filtroPed='Por despachar';
+var filtroPed='Por despachar',filtroCloser='';
+function totalPed(p){var t=p.calc?p.calc.total:parseFloat(String(p.total).replace(',','.'));return isNaN(t)?0:t}
+function equipoHtml(){
+  var mes=new Date().toISOString().slice(0,7),eq={};
+  D.pedidos.forEach(function(p){var c=String(p.closer||'?');var e=eq[c]=eq[c]||{n:0,mes:0,eur:0};e.n++;if(String(p.fecha).slice(0,7)===mes){e.mes++;e.eur+=totalPed(p)}});
+  var cs=Object.keys(eq).sort(function(a,b){return eq[b].eur-eq[a].eur||eq[b].n-eq[a].n});
+  if(!cs.length)return'';
+  return'<div class="team">'+cs.map(function(c){var e=eq[c];return'<button type="button" data-c="'+esc(c)+'"'+(c===filtroCloser?' class="on"':'')+'><b>'+esc(c)+'</b><small>'+e.mes+' este mes · '+euro(e.eur)+'</small></button>'}).join('')+'</div>';
+}
 function pintarPedidos(){
-  var lista=D.pedidos.filter(function(p){return filtroPed==='Todos'||p.estado===filtroPed});
-  var h='<div class="h2"><h2>Pedidos</h2><small>'+D.pedidos.length+' en total</small></div><div class="filters">'+
+  var lista=D.pedidos.filter(function(p){return(filtroPed==='Todos'||p.estado===filtroPed)&&(!filtroCloser||p.closer===filtroCloser)});
+  var h='<div class="h2"><h2>Pedidos</h2><small>'+D.pedidos.length+' en total</small></div>'+
+    '<div class="live"><i></i>En directo · '+(ultimaCarga?'actualizado '+ultimaCarga.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'')+(filtroCloser?' · solo '+esc(filtroCloser):'')+'</div>'+equipoHtml()+'<div class="filters">'+
     ['Por despachar','Grabado','Entregado','Cobrado','Todos'].map(function(f){var n=f==='Todos'?D.pedidos.length:D.pedidos.filter(function(p){return p.estado===f}).length;return'<button type="button" data-f="'+f+'"'+(f===filtroPed?' class="on"':'')+'>'+f+' · '+n+'</button>'}).join('')+'</div>';
   if(!lista.length)h+='<div class="empty">'+(filtroPed==='Por despachar'?'🎉 No hay nada pendiente de despachar.':'No hay pedidos en este estado.')+'<br><br>Los pedidos llegan desde el formulario del Closer.</div>';
   lista.forEach(function(p){
     var i=ESTADOS.indexOf(p.estado);
-    h+='<button type="button" class="card" data-p="'+esc(p.id)+'"><span class="av">'+esc((p.cliente||'?').charAt(0).toUpperCase())+'</span><span class="mid"><b>'+esc(p.cliente)+'</b><small>'+esc(p.pack)+' · '+esc(fechaCorta(p.fecha))+' · '+esc(p.closer)+'</small></span><span class="rt"><b>'+euro(p.calc?p.calc.total:p.total)+'</b><span class="pill st-'+(i<0?0:i)+'">'+esc(p.estado)+'</span></span></button>';
+    h+='<button type="button" class="card'+(recientes[p.id]?' nuevo':'')+'" data-p="'+esc(p.id)+'"><span class="av">'+esc((p.cliente||'?').charAt(0).toUpperCase())+'</span><span class="mid"><b>'+esc(p.cliente)+'</b><small>'+esc(p.pack)+' · '+esc(fechaCorta(p.fecha))+' · '+esc(p.closer)+'</small></span><span class="rt"><b>'+euro(p.calc?p.calc.total:p.total)+'</b><span class="pill st-'+(i<0?0:i)+'">'+esc(p.estado)+'</span></span></button>';
   });
   $('#tabPedidos').innerHTML=h;
   $$('#tabPedidos .filters button').forEach(function(b){b.onclick=function(){filtroPed=b.dataset.f;pintarPedidos()}});
+  $$('#tabPedidos .team button').forEach(function(b){b.onclick=function(){filtroCloser=filtroCloser===b.dataset.c?'':b.dataset.c;pintarPedidos()}});
   $$('#tabPedidos .card').forEach(function(b){b.onclick=function(){abrirPedido(b.dataset.p)}});
 }
 function unidades(p){var u={};(p.calc&&p.calc.lineas||[]).forEach(function(l){if(l.pieza)u[l.pieza]=(u[l.pieza]||0)+l.unidades});return u}
@@ -478,11 +507,11 @@ function demoApi(b){
   if(b.accion==='panel_datos'){
     var hoy=new Date(),h=function(d,hh){var x=new Date(hoy);x.setDate(x.getDate()-d);x.setHours(hh,15);return x.toISOString()};
     var url=function(s){return'https://studio42.es/c/?cod='+s};
-    return esperar(500,{ok:true,dominio:'https://studio42.es',estados:ESTADOS,
+    var R={ok:true,dominio:'https://studio42.es',estados:ESTADOS,
       clientes:['ankara-kebab','clinica-dental-mazo-ruiz','iberlax','nutrition-planet','unas-latinas-carolina','zombie-tattoo','dra-lisbeth-carolina-rangel-sanchez','spn-pacientes','pet-pass'],
       pedidos:[
         {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-A1F3',fecha:h(0,11),closer:'MO001',cliente:'Ankara Kebab',slug:'ankara-kebab',url:url('ankara-kebab'),pack:'Imán de mostrador',estado:'Por despachar',notas:'Llaveros para los 3 turnos',calc:{lineas:[{concepto:'Pack Imán de mostrador',unidades:1,importe:149},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:5,incluidas:2,extra:3,importe:59.7}],base:208.7,iva:43.83,total:252.53}},
-        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-7C2D',fecha:h(1,17),closer:'MEL001',cliente:'Zombie Tattoo',slug:'zombie-tattoo',url:url('zombie-tattoo'),pack:'Prueba Logroño',estado:'Grabado',notas:'',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:1,incluidas:1,extra:0,importe:0}],base:89,iva:18.69,total:107.69}},
+        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-7C2D',fecha:h(1,17),closer:'MEL042',cliente:'Zombie Tattoo',slug:'zombie-tattoo',url:url('zombie-tattoo'),pack:'Prueba Logroño',estado:'Grabado',notas:'',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:1,incluidas:1,extra:0,importe:0}],base:89,iva:18.69,total:107.69}},
         {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-93BE',fecha:h(3,10),closer:'MO001',cliente:'Clínica Dental Mazo Ruiz',slug:'clinica-dental-mazo-ruiz',url:url('clinica-dental-mazo-ruiz'),pack:'Efecto multiplicador',estado:'Cobrado',notas:'',calc:{lineas:[{concepto:'Pack Efecto multiplicador',unidades:1,importe:349},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:10,incluidas:10,extra:0,importe:0},{pieza:'tarjeta',concepto:'Tarjeta de madera NFC',unidades:1,incluidas:1,extra:0,importe:0}],base:349,iva:73.29,total:422.29}}
       ],
       catalogo:{planes:{esencial:{nombre:'Esencial',mensual:19},pro:{nombre:'Pro',mensual:39},multisede:{nombre:'Multi-sede',mensual:79},clinica:{nombre:'Pet Pass Clínica',mensual:29}}},
@@ -493,7 +522,10 @@ function demoApi(b){
         {slug:'zombie-tattoo',cliente:'Zombie Tattoo',plan:'esencial',periodo:'trimestral',estado:'impagada',email:'',proximo:h(3,9),landing:'activa'},
         {slug:'unas-latinas-carolina',cliente:'Uñas Latinas Carolina',plan:'pro',periodo:'mensual',estado:'activa',email:'',proximo:h(-20,9),landing:'activa'}],
       estadisticas:{'ankara-kebab':{vista:412,resena:37,gerencia:4,whatsapp:58,llamada:9,ruta:21,piezas:{MOSTRADOR:198,L01:92,L02:71,L03:51}},'clinica-dental-mazo-ruiz':{vista:233,resena:19,gerencia:2,whatsapp:31,llamada:24,ruta:12,piezas:{MOSTRADOR:233}},'iberlax':{vista:96,resena:6,gerencia:1,whatsapp:14,llamada:3,ruta:8,piezas:{MOSTRADOR:96}},'zombie-tattoo':{vista:141,resena:11,gerencia:0,whatsapp:22,llamada:2,ruta:5,piezas:{MOSTRADOR:88,L01:53}},'unas-latinas-carolina':{vista:187,resena:15,gerencia:3,whatsapp:40,llamada:6,ruta:9,piezas:{MOSTRADOR:187}}},
-      chapas:[{slug:'pk7m2xq9',estado:'activa',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=demo'},{slug:'pd3h8wna',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'},{slug:'pt9r4ceu',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'}]});
+      chapas:[{slug:'pk7m2xq9',estado:'activa',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=demo'},{slug:'pd3h8wna',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'},{slug:'pt9r4ceu',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'}]};
+    demoN=(demoN||0)+1;
+    if(demoN>1)R.pedidos.unshift({id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-N3W1',fecha:new Date().toISOString(),closer:'MEL042',cliente:'Bar La Laurel (ejemplo)',slug:'iberlax',url:url('iberlax'),pack:'Prueba Logroño',estado:'Por despachar',notas:'Pedido de ejemplo que llega en directo',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89}],total:89,pack:'prueba',packNombre:'Prueba Logroño'}});
+    return esperar(500,R);
   }
   if(b.accion==='panel_pedido_estado'||b.accion==='panel_pausar')return esperar(400,{ok:true});
   if(b.accion==='panel_cambio'){
