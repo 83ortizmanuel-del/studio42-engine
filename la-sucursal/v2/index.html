@@ -258,7 +258,7 @@ body.manga .poste::before{background:repeating-linear-gradient(-45deg,var(--pape
   <symbol id="i-persona" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.2-6 8-6s7 2 8 6"/></symbol>
 </svg>
 
-<div class="previa" id="avisoPrevia" hidden>Vista previa · lo marcado con * está por confirmar · <button type="button" id="bEstilo" class="previa-btn">Ver clásico</button></div>
+<div class="previa" id="avisoPrevia" hidden>Vista previa · datos de Google y de su web · lo marcado con * está por confirmar · <button type="button" id="bEstilo" class="previa-btn">Ver clásico</button></div>
 <div id="intro" aria-hidden="true"><img src="logo.webp" alt=""></div>
 
 <div class="wrap">
@@ -347,44 +347,47 @@ const CONFIG = {
 };
 
 /* Horario: 0 = domingo … 6 = sábado. Cada día, lista de tramos [abre, cierra]. */
-/* Horario publicado en lasucursalstoreart.com (lunes a sábado 10:30–14:00 y 16:00–21:00). Pendiente de confirmar por sede.
+/* Horarios de la ficha de Google de cada sede (leídos el 12/10/2026).
    0 = domingo … 6 = sábado. Cada día, lista de tramos [abre, cierra]. */
-const T = [["10:30","14:00"],["16:00","21:00"]];
-const HORARIO_WEB = { 0: [], 1: T, 2: T, 3: T, 4: T, 5: T, 6: T };
+const M = [["10:00","14:00"],["16:00","21:00"]];
+const H_CENTRO = { 0: [], 1: [["16:00","21:00"]], 2: M, 3: M, 4: M, 5: M, 6: M };
+const H_LIRIOS = { 0: [], 1: M, 2: M, 3: M, 4: M, 5: M, 6: M };
+const V = [["11:00","14:00"],["16:30","21:00"]];
+const H_VILLA = { 0: [], 1: V, 2: V, 3: V, 4: V, 5: V, 6: [["10:00","15:00"]] };
 
 const SEDES = {
   centro: {
     nombre: "Sede Centro", zona: "Pérez Galdós · Logroño",
-    direccion: "Calle Pérez Galdós, 78, Bajo 1, Logroño",
-    telefono: "+34643186453", whatsapp: "34643023681", bizum: "643186453",
+    direccion: "Av. Pérez Galdós, 78, Bajo 1, 26005 Logroño",
+    telefono: "+34643023681", whatsapp: "34643023681", bizum: "643186453",
     reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
     mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Barberia+Logro%C3%B1o&query_place_id=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
     insta: "https://www.instagram.com/la_sucursal_the_barber/",
     responsable: "Fernando y Alejandro",
-    horario: HORARIO_WEB, horarioEjemplo: true
+    horario: H_CENTRO
   },
   lirios: {
     nombre: "Sede Los Lirios", zona: "Parque Los Lirios · Logroño",
-    direccion: "Parque Los Lirios, 4, Logroño",
-    telefono: "+34643023681", whatsapp: "34643023681", bizum: "640745248",
+    direccion: "Parque de los Lirios, 4, 26006 Logroño",
+    telefono: "+34664418156", whatsapp: "34643023681", bizum: "640745248", telefonoDudoso: true,
     reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJz6zuGwCrWg0RMmghwkrmcoc",
     mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Los+Lirios+Logro%C3%B1o&query_place_id=ChIJz6zuGwCrWg0RMmghwkrmcoc",
     insta: "https://www.instagram.com/la_sucursal_barber_loslirios/",
     responsable: "Mikel",
-    horario: HORARIO_WEB, horarioEjemplo: true
+    horario: H_LIRIOS
   },
   villamediana: {
     nombre: "Sede Villamediana", zona: "Villamediana de Iregua",
-    direccion: "Calle Constitución, 2, Bajo, Villamediana de Iregua",
+    direccion: "C. Anastasio Mateo, 10, 26142 Villamediana de Iregua", direccionDudosa: true,
     telefono: "+34643618452", whatsapp: "34643618452", bizum: "643519678",
     reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
     mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Villamediana+de+Iregua&query_place_id=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
     insta: "https://www.instagram.com/sucursal_barber_villamediana/",
     responsable: "Santiago",
-    horario: HORARIO_WEB, horarioEjemplo: true
+    horario: H_VILLA
   }
 };
 const INSTA_TIENDA = "https://www.instagram.com/la_sucursal_store/";
@@ -479,7 +482,7 @@ function aplicarSede(k, guardar) {
   $("bResena").href = s.resena;
   $("resenaTxt").textContent = "Cuenta qué tal en " + s.nombre.replace("Sede ", "");
   $("bGerencia").href = "https://wa.me/" + s.whatsapp + "?text=" + encodeURIComponent("Hola, quería comentar algo sobre mi visita a La Sucursal (" + s.nombre + ").");
-  $("contactoS").textContent = s.nombre + " · " + s.direccion;
+  $("contactoS").textContent = s.nombre + " · " + s.direccion + ast(s.direccionDudosa || s.telefonoDudoso);
   pintarEstado();
   if ($("servicios").childElementCount) pintarCarruseles();
 }
