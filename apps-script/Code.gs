@@ -44,7 +44,7 @@
  * ============================================================================
  */
 
-var VERSION = '3.6';
+var VERSION = '3.7';
 
 // Iconos que sabe dibujar el motor (c/index.html). Claude solo puede elegir de aquí.
 var ICONOS_OK = ['utensils', 'alert', 'key', 'chat', 'locate', 'contact', 'calculator', 'bottle', 'shield',
@@ -1403,6 +1403,9 @@ function panelRouter_(d) {
   if (d.accion === 'panel_pedido_estado') return panelPedidoEstado_(d);
   if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
   if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
+  if (d.accion === 'panel_tarjeta_guardar') return tarjetaGuardar_(c, d);
+  if (d.accion === 'panel_tarjeta_estado') return tarjetaEstado_(c, d);
+  if (d.accion === 'panel_tarjeta_borrar') return tarjetaBorrar_(c, d);
   if (d.accion === 'panel_pausar') {
     var sl = String(d.slug || '').toLowerCase();
     if (!/^[a-z0-9-]{2,40}$/.test(sl)) return { ok: false, error: 'Cliente no válido.' };
@@ -1438,7 +1441,7 @@ function panelDatos_(c) {
   for (var j = 1; j < hc.length; j++) chapas.push({ slug: hc[j][0], estado: hc[j][1], entregadaPor: hc[j][2], url: hc[j][3] });
   var hasta = new Date(Date.now() + 60000), desde = new Date(hasta.getTime() - 30 * 86400000 - 60000);
   return { ok: true, clientes: clientes, pedidos: pedidos.reverse(), chapas: chapas, estados: ESTADOS_PEDIDO, catalogo: CATALOGO, dominio: c.dominio,
-    suscripciones: suscripciones_(), estadisticas: estadisticas_(desde, hasta), stripe: !!stripeClave_() };
+    suscripciones: suscripciones_(), estadisticas: estadisticas_(desde, hasta), stripe: !!stripeClave_(), tarjetas: tarjetasLista_(c) };
 }
 
 function panelPedidoEstado_(d) {
@@ -1735,6 +1738,149 @@ function medidaPausar_(c, slug, pausar) {
   if (a.existe && a.json && !!a.json.pausada === pausar) return { ok: true };
   var w = githubEscribir_(c, ruta, JSON.stringify({ pausada: pausar, fecha: new Date().toISOString() }, null, 2) + '\n', a.existe ? a.sha : null, (pausar ? 'Pausar ' : 'Reactivar ') + slug);
   return w.error ? { error: w.error } : { ok: true };
+}
+
+/* ================================ TARJETAS DIGITALES ================================
+ * Tarjeta de contacto (vCard viva) para directivos y profesionales: studio42.es/t/?id=<id>
+ * Los datos de la tarjeta viven SOLO en t/<id>.json (+ t/fotos/<id>.jpg): son los datos
+ * profesionales que la persona quiere repartir. La hoja «Tarjetas» guarda lo mínimo para
+ * gestionarlas (id, nombre, empresa, estado, fechas, quién paga y fecha del consentimiento).
+ * Borrar elimina el archivo, la foto y la fila (derecho de supresión).
+ * ==================================================================================== */
+var TARJETAS_HOJA = 'Tarjetas';
+var TARJETAS_COLS = ['ID', 'Nombre', 'Empresa', 'Estado', 'Alta', 'Actualizada', 'Paga', 'Consentimiento'];
+var TARJETA_ESTILOS = ['titanio', 'oro', 'minimal', 'marca'];
+
+function tarjetasHoja_() {
+  var libro = SpreadsheetApp.getActive();
+  var hoja = libro.getSheetByName(TARJETAS_HOJA) || libro.insertSheet(TARJETAS_HOJA);
+  if (hoja.getLastRow() === 0) { hoja.appendRow(TARJETAS_COLS); hoja.setFrozenRows(1); }
+  return hoja;
+}
+function tarjetaFila_(id) {
+  var v = tarjetasHoja_().getDataRange().getValues();
+  for (var i = 1; i < v.length; i++) if (String(v[i][0]) === id) return { n: i + 1, v: v[i] };
+  return null;
+}
+function tarjetasLista_(c) {
+  var lista = [];
+  try {
+    var f = function (x) { return x instanceof Date ? x.toISOString() : String(x || ''); };
+    lista = tarjetasHoja_().getDataRange().getValues().slice(1).filter(function (r) { return r[0]; }).map(function (r) {
+      return { id: String(r[0]), nombre: String(r[1]), empresa: String(r[2]), estado: String(r[3] || 'activa'), alta: f(r[4]), actualizada: f(r[5]), paga: String(r[6] || ''), consentimiento: f(r[7]) };
+    });
+  } catch (e) { lista = []; }
+  // Tarjetas que existen en la web pero aún no están en la Hoja (creadas a mano): se muestran para poder gestionarlas
+  try {
+    if (c && c.githubToken) githubListar_(c, 't').forEach(function (x) {
+      var id = x && x.type === 'file' && /\.json$/.test(x.name) ? x.name.replace(/\.json$/, '') : '';
+      if (id && tarjetaId_(id) && !lista.some(function (y) { return y.id === id; })) lista.push({ id: id, nombre: id, empresa: '', estado: 'activa', sinRegistro: true, consentimiento: '' });
+    });
+  } catch (e) {}
+  return lista;
+}
+function tarjetaId_(s) { var t = String(s || '').toLowerCase().trim(); return /^[a-z0-9](?:[a-z0-9-]{1,38}[a-z0-9])$/.test(t) ? t : ''; }
+
+/** Limpia lo que llega del panel: solo campos conocidos, solo enlaces https, textos cortos. */
+function tarjetaLimpia_(d, id) {
+  var tel = String(d.telefono || '').replace(/[^\d+]/g, '');
+  var wa = String(d.whatsapp || '').replace(/\D/g, '');
+  if (wa.length === 9) wa = '34' + wa;
+  var email = cadena_(d.email, 120);
+  var ig = String(d.instagram || '').trim();
+  if (/^@?[\w.]{2,30}$/.test(ig)) ig = 'https://www.instagram.com/' + ig.replace(/^@/, '');
+  var tk = String(d.tiktok || '').trim();
+  if (/^@?[\w.]{2,30}$/.test(tk)) tk = 'https://www.tiktok.com/@' + tk.replace(/^@/, '');
+  var t = {
+    version: 1, id: id,
+    nombre: cadena_(d.nombre, 60), cargo: cadena_(d.cargo, 60), empresa: cadena_(d.empresa, 60), bio: cadena_(d.bio, 200),
+    estilo: TARJETA_ESTILOS.indexOf(d.estilo) >= 0 ? d.estilo : 'titanio',
+    color: /^#[0-9a-f]{6}$/i.test(String(d.color || '')) ? String(d.color).toLowerCase() : '',
+    telefono: /^\+?\d{8,15}$/.test(tel) ? tel : '',
+    whatsapp: /^\d{8,15}$/.test(wa) ? wa : '',
+    email: /^[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}$/i.test(email) ? email : '',
+    web: urlHttps_(d.web), linkedin: urlHttps_(d.linkedin), instagram: urlHttps_(ig), tiktok: urlHttps_(tk),
+    direccion: cadena_(d.direccion, 140), reserva: urlHttps_(d.reserva), resena: urlHttps_(d.resena),
+    pausada: false
+  };
+  return t;
+}
+
+function tarjetaGuardar_(c, d) {
+  if (!c.githubToken) return { ok: false, error: 'Falta GITHUB_TOKEN.' };
+  var id = tarjetaId_(d.id);
+  if (!id) return { ok: false, error: 'El identificador solo puede tener letras minúsculas, números y guiones (3 a 40).' };
+  var t = tarjetaLimpia_(d.tarjeta || {}, id);
+  if (t.nombre.length < 2) return { ok: false, error: 'Falta el nombre.' };
+  var ruta = 't/' + id + '.json';
+  var prev = githubLeer_(c, ruta);
+  if (prev.error) return { ok: false, error: prev.error };
+  var fila = tarjetaFila_(id);
+  if (prev.existe && d.nueva === true) return { ok: false, error: 'Ya existe una tarjeta con ese identificador. Elige otro.' };
+  if (!prev.existe && d.consentimiento !== true && !(fila && fila.v[7])) return { ok: false, error: 'Marca que la persona ha aceptado publicar sus datos en la tarjeta.' };
+  if (prev.existe && prev.json) t.pausada = prev.json.pausada === true;
+  // Foto: llega ya reducida desde el panel (JPEG en base64). Si no llega, se conserva la anterior.
+  var foto = String(d.foto || '');
+  if (foto) {
+    var m = /^data:image\/jpeg;base64,([A-Za-z0-9+\/=]+)$/.exec(foto);
+    if (!m) return { ok: false, error: 'La foto debe ser JPEG.' };
+    if (m[1].length > 400000) return { ok: false, error: 'La foto es demasiado grande.' };
+    var rf = 't/fotos/' + id + '.jpg', pf = githubLeer_(c, rf);
+    var wf = githubEscribirB64_(c, rf, m[1], pf.existe ? pf.sha : null, 'Foto de la tarjeta ' + id);
+    if (wf.error) return { ok: false, error: wf.error };
+    t.foto = 'fotos/' + id + '.jpg?v=' + Date.now();
+  } else if (d.quitarFoto === true) {
+    githubBorrar_(c, 't/fotos/' + id + '.jpg', 'Quitar foto de ' + id);
+    t.foto = '';
+  } else if (prev.existe && prev.json && prev.json.foto) t.foto = String(prev.json.foto);
+  var w = githubEscribir_(c, ruta, JSON.stringify(t, null, 2) + '\n', prev.existe ? prev.sha : null, (prev.existe ? 'Actualizar' : 'Crear') + ' tarjeta ' + id);
+  if (w.error) return { ok: false, error: w.error };
+  var ahora = new Date(), hoja = tarjetasHoja_();
+  var consentida = fila && fila.v[7] ? fila.v[7] : (d.consentimiento === true || !prev.existe ? ahora : '');
+  var datos = [id, t.nombre, t.empresa, t.pausada ? 'pausada' : 'activa', fila ? fila.v[4] : ahora, ahora, cadena_(d.paga, 60) || (fila ? fila.v[6] : ''), consentida];
+  if (fila) datos.forEach(function (x, i) { hoja.getRange(fila.n, i + 1).setValue(x); }); else hoja.appendRow(datos);
+  return { ok: true, id: id, url: c.dominio + '/t/?id=' + id, tarjeta: t };
+}
+
+function tarjetaEstado_(c, d) {
+  var id = tarjetaId_(d.id); if (!id) return { ok: false, error: 'Tarjeta no válida.' };
+  var ruta = 't/' + id + '.json', a = githubLeer_(c, ruta);
+  if (a.error) return { ok: false, error: a.error };
+  if (!a.existe || !a.json) return { ok: false, error: 'No existe la tarjeta ' + id };
+  var pausar = d.pausar === true;
+  a.json.pausada = pausar;
+  var w = githubEscribir_(c, ruta, JSON.stringify(a.json, null, 2) + '\n', a.sha, (pausar ? 'Pausar' : 'Reactivar') + ' tarjeta ' + id);
+  if (w.error) return { ok: false, error: w.error };
+  var fila = tarjetaFila_(id); if (fila) tarjetasHoja_().getRange(fila.n, 4).setValue(pausar ? 'pausada' : 'activa');
+  return { ok: true };
+}
+
+function tarjetaBorrar_(c, d) {
+  var id = tarjetaId_(d.id); if (!id) return { ok: false, error: 'Tarjeta no válida.' };
+  var r1 = githubBorrar_(c, 't/' + id + '.json', 'Borrar tarjeta ' + id);
+  if (r1.error) return { ok: false, error: r1.error };
+  githubBorrar_(c, 't/fotos/' + id + '.jpg', 'Borrar foto de ' + id);
+  var fila = tarjetaFila_(id); if (fila) tarjetasHoja_().deleteRow(fila.n);
+  return { ok: true };
+}
+
+/** Sube un archivo binario (ya en base64) al repositorio. */
+function githubEscribirB64_(c, ruta, b64, sha, mensaje) {
+  var body = { message: mensaje, content: b64, branch: c.rama };
+  if (sha) body.sha = sha;
+  var r = UrlFetchApp.fetch(ghUrl_(c, ruta), { method: 'put', contentType: 'application/json', headers: ghHeaders_(c), muteHttpExceptions: true, payload: JSON.stringify(body) });
+  var code = r.getResponseCode();
+  return (code === 200 || code === 201) ? { ok: true } : { error: 'GitHub HTTP ' + code + ' al subir ' + ruta };
+}
+/** Borra un archivo del repositorio (si no existe, no pasa nada). */
+function githubBorrar_(c, ruta, mensaje) {
+  var a = githubLeer_(c, ruta);
+  if (a.error) return { error: a.error };
+  if (!a.existe) return { ok: true };
+  var r = UrlFetchApp.fetch(ghUrl_(c, ruta), { method: 'delete', contentType: 'application/json', headers: ghHeaders_(c), muteHttpExceptions: true,
+    payload: JSON.stringify({ message: mensaje, sha: a.sha, branch: c.rama }) });
+  var code = r.getResponseCode();
+  return code === 200 ? { ok: true } : { error: 'GitHub HTTP ' + code + ' al borrar ' + ruta };
 }
 
 function INSTALAR_AUTOMATIZACIONES() {

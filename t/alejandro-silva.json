@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "id": "alejandro-silva",
+  "nombre": "Alejandro Silva",
+  "cargo": "Barbero estilista",
+  "empresa": "La Sucursal Barbería",
+  "bio": "Fades, diseños y estilo urbano en La Sucursal · Logroño.",
+  "foto": "fotos/alejandro-silva.jpg",
+  "estilo": "oro",
+  "color": "#d9b45a",
+  "telefono": "+34681224374",
+  "whatsapp": "34681224374",
+  "email": "",
+  "web": "https://lasucursalstoreart.com/",
+  "linkedin": "",
+  "instagram": "https://www.instagram.com/_alejandro_silvaa",
+  "tiktok": "",
+  "direccion": "Av. Pérez Galdós, 78, Bajo 1, 26005 Logroño",
+  "reserva": "https://lasucursalstoreart.com/appointment.php",
+  "resena": "https://search.google.com/local/writereview?placeid=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
+  "pausada": false
+}

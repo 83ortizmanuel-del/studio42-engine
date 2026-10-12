@@ -106,13 +106,28 @@ a{color:inherit;text-decoration:none}
 
 /* Navegación inferior */
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(10,11,14,.9);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 10px max(8px,env(safe-area-inset-bottom))}
-.nav .in{width:min(100%,560px);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.nav .in{width:min(100%,560px);margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .nav button,.nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:0;background:none;font:600 .68rem var(--fb);color:var(--muted);position:relative}
 .nav svg{width:22px;height:22px}
 .nav .on{color:var(--bone)}
 .nav .on::before{content:"";position:absolute;top:-6px;width:28px;height:3px;border-radius:3px;background:var(--ti)}
 .nav .badge{position:absolute;top:2px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--amber);color:#111;font:800 .66rem/18px var(--fb)}
 .nav .new svg{background:var(--ti);color:#0b0c0f;border-radius:50%;padding:3px;width:26px;height:26px}
+
+/* Tarjetas digitales */
+.tj-form{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:6px}
+.tj-form>*,.tj-form label,.tj-form .inp{min-width:0}
+.tj-form label{display:grid;gap:5px;font:600 .74rem var(--fb);color:var(--muted);letter-spacing:.02em}
+.tj-form .dos{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.tj-foto{display:flex;align-items:center;gap:12px}
+.tj-foto .vista{width:64px;height:64px;border-radius:50%;background:var(--ink2) center/cover;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;color:var(--muted);font-size:.7rem}
+.tj-estilos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tj-estilos button{padding:.6rem .2rem;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font:600 .74rem var(--fb);color:#d6d9de}
+.tj-estilos button.on{border-color:#cfd4dc;background:rgba(220,228,240,.12);color:#fff}
+.tj-estilos i{display:block;width:18px;height:18px;border-radius:50%;margin:0 auto 4px}
+.tj-ok{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:14px;border:1px solid rgba(252,211,77,.3);background:rgba(252,211,77,.06);font-size:.82rem;color:#fde68a;line-height:1.4}
+.tj-ok input{width:20px;height:20px;flex:none;margin-top:1px}
+.card .av.foto img{object-fit:cover}
 
 /* Hojas y pantallas */
 .sheet-bg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -204,11 +219,13 @@ textarea.inp{min-height:110px;resize:vertical}
     <div id="tabPedidos"></div>
     <div id="tabClientes" hidden></div>
     <div id="tabPets" hidden></div>
+    <div id="tabTarjetas" hidden></div>
   </div>
   <nav class="nav"><div class="in">
     <button type="button" data-tab="Pedidos" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2h12l2 5H4z"/><path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 11h6"/></svg>Pedidos<span class="badge" id="badge" hidden></span></button>
     <button type="button" data-tab="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Clientes</button>
     <button type="button" data-tab="Pets"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="10" r="2.2"/><circle cx="9.5" cy="5.5" r="2.2"/><circle cx="14.5" cy="5.5" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M12 11c-3 0-6.5 4.6-6.5 7.2C5.5 20 7 21 8.6 21c1.5 0 2.2-.8 3.4-.8s1.9.8 3.4.8c1.6 0 3.1-1 3.1-2.8C18.5 15.6 15 11 12 11z"/></svg>Pet Pass</button>
+    <button type="button" data-tab="Tarjetas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="8.5" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 1.6-2.4 3-2.4s2.4.8 3 2.4M14.5 10h4M14.5 13.5h3"/></svg>Tarjetas</button>
     <a href="../v/closer/?cod=MO001" class="new" id="lNuevo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nuevo</a>
   </div></nav>
 </section>
@@ -224,6 +241,15 @@ textarea.inp{min-height:110px;resize:vertical}
       <button class="ghost" id="bCopiar" type="button">Copiar enlace</button>
     </div>
     <div id="cPedidos"></div>
+  </div>
+</section>
+
+<!-- ============ EDITOR DE TARJETA ============ -->
+<section class="full" id="vTarjeta" aria-modal="true" role="dialog">
+  <div class="wrap">
+    <header class="top"><button class="ib" id="tjBack" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><b id="tjTitulo">Nueva tarjeta</b><span class="sp"></span></header>
+    <div class="phone"><span class="flag" id="tjFlag">VISTA PREVIA</span><iframe id="tjFrame" title="Vista de la tarjeta"></iframe></div>
+    <div id="tjCuerpo"></div>
   </div>
 </section>
 
@@ -289,7 +315,7 @@ function cargar(){
       if(nuevos.length){toast(nuevos.length===1?'🔔 Nuevo pedido: '+nuevos[0].cliente+' · '+nuevos[0].closer:'🔔 '+nuevos.length+' pedidos nuevos');try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}}}
     ultimaCarga=new Date();
     D=r;if(r.estados)ESTADOS=r.estados;
-    pintarKpis();pintarPedidos();pintarClientes();pintarPets();
+    pintarKpis();pintarPedidos();pintarClientes();pintarPets();pintarTarjetas();
     return cargarFichas();
   }).catch(function(e){b.classList.remove('spin');if(e.message!=='sesion')toast('Sin conexión con el servidor')});
 }
@@ -518,10 +544,121 @@ function pintarPets(){
   $$('#tabPets .nfc button').forEach(function(b){b.onclick=function(){copiar(b.dataset.u,b)}});
 }
 
+/* ---------- Tarjetas digitales ---------- */
+var TJ=null; // tarjeta en edición: {id, nueva, datos, foto(dataURL nueva), quitarFoto}
+var TJ_ESTILOS=[['titanio','Titanio','linear-gradient(135deg,#fff,#8e8e93)'],['oro','Oro','linear-gradient(135deg,#f6e3a6,#a9832f)'],['minimal','Minimal','linear-gradient(135deg,#fff,#d8d4cc)'],['marca','Su color','conic-gradient(#e11d48,#f59e0b,#10b981,#3b82f6,#e11d48)']];
+var TJ_CAMPOS=[['nombre','Nombre y apellidos *','text'],['cargo','Cargo','text'],['empresa','Empresa','text'],['bio','Frase corta (opcional)','text'],['telefono','Teléfono','tel'],['whatsapp','WhatsApp (si es otro número)','tel'],['email','Email','email'],['web','Web','url'],['linkedin','LinkedIn (enlace)','url'],['instagram','Instagram (@usuario o enlace)','text'],['tiktok','TikTok (@usuario o enlace)','text'],['direccion','Dirección (opcional)','text'],['reserva','Enlace para reservar cita (opcional)','url'],['resena','Enlace de reseñas de Google (opcional)','url']];
+function slugTj(t){return String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)}
+function pintarTarjetas(){
+  var L=D.tarjetas||[];
+  var h='<div class="h2"><h2>Tarjetas</h2><small>'+L.length+' digitales</small></div>'+
+    '<button type="button" class="cta" id="tjNueva" style="margin-bottom:14px">＋ Nueva tarjeta</button>';
+  if(!L.length)h+='<div class="empty">Aún no hay tarjetas. Crea la primera: en dos minutos tienes su enlace para grabar en una tarjeta NFC.</div>';
+  L.forEach(function(t){
+    var e=est('t-'+t.id),pausada=t.estado==='pausada';
+    h+='<button type="button" class="card" data-tj="'+esc(t.id)+'"><span class="av foto"><img src="../t/fotos/'+esc(t.id)+'.jpg" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode(\''+esc(String(t.nombre||'?').charAt(0).toUpperCase())+'\'))"></span>'+
+      '<span class="mid"><b>'+esc(t.nombre)+'</b><small>'+(t.sinRegistro?'⚠️ Ábrela y guárdala para registrarla':esc(t.empresa||'—')+(t.paga?' · paga '+esc(t.paga):''))+'</small></span>'+
+      '<span class="rt"><span class="pill '+(pausada?'ss-pausada':'ss-activa')+'">'+(pausada?'⏸ pausada':'activa')+'</span><div class="mini">'+e.vista+' visitas</div></span></button>';
+  });
+  h+='<div class="mini" style="margin-top:14px;line-height:1.5">🔒 Los datos de cada tarjeta viven solo en su propia tarjeta. En tu Hoja solo queda el registro mínimo (nombre, empresa, estado, fechas y consentimiento). Al borrar, se elimina todo.</div>';
+  $('#tabTarjetas').innerHTML=h;
+  $('#tjNueva').onclick=function(){abrirTarjeta(null)};
+  $$('#tabTarjetas .card').forEach(function(b){b.onclick=function(){abrirTarjeta(b.dataset.tj)}});
+}
+function abrirTarjeta(id){
+  TJ={id:id||'',nueva:!id,datos:{estilo:'titanio',color:'#d9b45a'},foto:'',quitarFoto:false};
+  $('#tjTitulo').textContent=id?'Editar tarjeta':'Nueva tarjeta';
+  $('#tjFrame').src='../t/?preview=1'+(id?'&id='+encodeURIComponent(id):'');
+  $('#tjCuerpo').innerHTML='<div class="empty">Cargando…</div>';
+  $('#vTarjeta').classList.add('on');$('#vTarjeta').scrollTop=0;document.body.style.overflow='hidden';
+  var carga=id?fetch('../t/'+encodeURIComponent(id)+'.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():{}}).catch(function(){return{}}):Promise.resolve({});
+  carga.then(function(j){if(j&&j.nombre)TJ.datos=j;formTarjeta()});
+}
+function previaTarjeta(){
+  var d=JSON.parse(JSON.stringify(TJ.datos));
+  if(TJ.foto)d.foto=TJ.foto;else if(TJ.quitarFoto)d.foto='';else if(d.foto&&!/^(https:|data:)/.test(d.foto))d.foto='../t/'+d.foto;
+  var f=$('#tjFrame');try{f.contentWindow.postMessage({tipo:'s42-tarjeta',json:d},location.origin)}catch(e){}
+}
+window.addEventListener('message',function(e){if(e.origin===location.origin&&e.data&&e.data.tipo==='s42-tarjeta-lista'&&TJ)previaTarjeta()});
+function formTarjeta(){
+  var d=TJ.datos,t=(D.tarjetas||[]).filter(function(x){return x.id===TJ.id})[0]||{},pausada=d.pausada===true;
+  var h='<div class="tj-form">';
+  h+='<div class="tj-foto"><span class="vista" id="tjVista"'+(d.foto?' style="background-image:url(\''+esc(/^https:/.test(d.foto)?d.foto:'../t/'+d.foto)+'\')"':'')+'>'+(d.foto?'':'Sin foto')+'</span><div style="display:grid;gap:6px;flex:1"><label class="ghost" style="min-height:42px;cursor:pointer">📷 '+(d.foto?'Cambiar foto':'Subir foto')+'<input type="file" accept="image/*" id="tjFile" hidden></label>'+(d.foto?'<button type="button" class="ghost" id="tjQuitar" style="min-height:36px;font-size:.8rem">Quitar foto</button>':'')+'</div></div>';
+  TJ_CAMPOS.forEach(function(c){h+='<label>'+c[1]+'<input class="inp" data-c="'+c[0]+'" type="'+c[2]+'" value="'+esc(d[c[0]]||'')+'"'+(c[0]==='bio'?' maxlength="200"':'')+'></label>'});
+  h+='<label>Estilo<div class="tj-estilos">'+TJ_ESTILOS.map(function(e){return'<button type="button" data-e="'+e[0]+'"'+((d.estilo||'titanio')===e[0]?' class="on"':'')+'><i style="background:'+e[2]+'"></i>'+e[1]+'</button>'}).join('')+'</div></label>';
+  h+='<label id="tjColorL"'+(d.estilo==='marca'?'':' hidden')+'>Color de su marca<input class="inp" type="color" id="tjColor" value="'+esc(d.color||'#d9b45a')+'" style="padding:.3rem;min-height:46px"></label>';
+  h+='<div class="dos"><label>Identificador (enlace)<input class="inp" id="tjId" value="'+esc(TJ.id)+'"'+(TJ.nueva?'':' disabled')+' placeholder="nombre-apellido"></label><label>Quién paga<input class="inp" id="tjPaga" value="'+esc(t.paga||'')+'" placeholder="Empresa o persona"></label></div>';
+  if(TJ.nueva||!t.consentimiento)h+='<label class="tj-ok"><input type="checkbox" id="tjConsent"><span>La persona ha aceptado que estos datos se publiquen en su tarjeta digital. Se guarda la fecha como prueba de su consentimiento.</span></label>';
+  h+='<button type="button" class="cta" id="tjGuardar">'+(TJ.nueva?'Crear tarjeta':'Guardar cambios')+'</button>';
+  if(!TJ.nueva){
+    var url=(D.dominio||'https://studio42.es')+'/t/?id='+TJ.id;
+    h+='<div class="nfc" style="margin-top:4px"><b>Enlace NFC</b><code>'+esc(url.replace('https://',''))+'</code><button type="button" id="tjCopiar" data-u="'+esc(url)+'">Copiar</button></div>';
+    h+='<div class="acts"><a class="ghost" href="'+esc(url)+'" target="_blank" rel="noopener">Abrir tarjeta</a><button type="button" class="ghost" id="tjPausa"'+(pausada?'':' style="color:#fca5a5;border-color:rgba(239,68,68,.35)"')+'>'+(pausada?'▶ Reactivar':'⏸ Pausar')+'</button></div>';
+    var e=est('t-'+TJ.id);h+='<div class="mini">Últimos 30 días: '+e.vista+' visitas · '+(e.enlace||0)+' contactos guardados o enlaces · '+((e.whatsapp||0)+(e.llamada||0))+' WhatsApp/llamadas</div>';
+    h+='<button type="button" class="ghost" id="tjBorrar" style="color:#fca5a5;border-color:rgba(239,68,68,.35);margin-top:6px">🗑 Borrar tarjeta y sus datos</button>';
+  }
+  h+='</div>';
+  $('#tjCuerpo').innerHTML=h;
+  // eventos
+  $$('#tjCuerpo [data-c]').forEach(function(i){i.oninput=function(){TJ.datos[i.dataset.c]=i.value;if(i.dataset.c==='nombre'&&TJ.nueva&&!$('#tjId').dataset.tocado)$('#tjId').value=slugTj(i.value);previaTarjeta()}});
+  if(TJ.nueva)$('#tjId').oninput=function(){this.dataset.tocado='1';this.value=slugTj(this.value)};
+  $$('#tjCuerpo .tj-estilos button').forEach(function(b){b.onclick=function(){TJ.datos.estilo=b.dataset.e;$$('#tjCuerpo .tj-estilos button').forEach(function(o){o.classList.toggle('on',o===b)});$('#tjColorL').hidden=b.dataset.e!=='marca';previaTarjeta()}});
+  $('#tjColor').oninput=function(){TJ.datos.color=this.value;previaTarjeta()};
+  $('#tjFile').onchange=function(){var f=this.files&&this.files[0];if(!f)return;reducirFoto(f).then(function(u){TJ.foto=u;TJ.quitarFoto=false;var v=$('#tjVista');v.style.backgroundImage='url('+u+')';v.textContent='';previaTarjeta()}).catch(function(){toast('No se pudo leer la foto')})};
+  if($('#tjQuitar'))$('#tjQuitar').onclick=function(){TJ.foto='';TJ.quitarFoto=true;var v=$('#tjVista');v.style.backgroundImage='';v.textContent='Sin foto';previaTarjeta()};
+  $('#tjGuardar').onclick=guardarTarjeta;
+  if($('#tjCopiar'))$('#tjCopiar').onclick=function(){copiar(this.dataset.u,this)};
+  if($('#tjPausa'))$('#tjPausa').onclick=function(){
+    var pausar=!(TJ.datos.pausada===true);if(pausar&&!confirm('¿Pausar la tarjeta de '+(TJ.datos.nombre||TJ.id)+'? Quien la abra verá «tarjeta desactivada».'))return;
+    var b=this;b.disabled=true;b.textContent='Guardando…';
+    api({accion:'panel_tarjeta_estado',id:TJ.id,pausar:pausar}).then(function(r){
+      if(!r.ok){toast(r.error||'No se pudo');b.disabled=false;return}
+      TJ.datos.pausada=pausar;(D.tarjetas||[]).forEach(function(x){if(x.id===TJ.id)x.estado=pausar?'pausada':'activa'});
+      toast(pausar?'Tarjeta en pausa (en 1 minuto)':'Tarjeta reactivada');formTarjeta();pintarTarjetas();
+    }).catch(function(){toast('Sin conexión');b.disabled=false});
+  };
+  if($('#tjBorrar'))$('#tjBorrar').onclick=function(){
+    if(!confirm('¿Borrar la tarjeta de '+(TJ.datos.nombre||TJ.id)+'? Se eliminan sus datos y su foto. Su tarjeta NFC dejará de funcionar.'))return;
+    var b=this;b.disabled=true;b.textContent='Borrando…';
+    api({accion:'panel_tarjeta_borrar',id:TJ.id}).then(function(r){
+      if(!r.ok){toast(r.error||'No se pudo');b.disabled=false;return}
+      D.tarjetas=(D.tarjetas||[]).filter(function(x){return x.id!==TJ.id});toast('Tarjeta borrada');cerrarTarjeta();pintarTarjetas();
+    }).catch(function(){toast('Sin conexión');b.disabled=false});
+  };
+  previaTarjeta();
+}
+function reducirFoto(file){
+  return new Promise(function(res,rej){
+    var img=new Image(),u=URL.createObjectURL(file);
+    img.onload=function(){var s=Math.min(img.width,img.height),c=document.createElement('canvas');c.width=c.height=480;
+      c.getContext('2d').drawImage(img,(img.width-s)/2,(img.height-s)*0.35,s,s,0,0,480,480);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',0.82))};
+    img.onerror=rej;img.src=u;
+  });
+}
+function guardarTarjeta(){
+  var d=TJ.datos;
+  if(String(d.nombre||'').trim().length<2){toast('Falta el nombre');return}
+  var id=TJ.nueva?slugTj($('#tjId').value||d.nombre):TJ.id;
+  if(id.length<3){toast('El identificador es demasiado corto');return}
+  if($('#tjConsent')&&!$('#tjConsent').checked){toast('Marca el consentimiento de la persona');$('#tjConsent').focus();return}
+  var b=$('#tjGuardar');b.disabled=true;b.textContent='Publicando…';
+  var t={};TJ_CAMPOS.forEach(function(c){t[c[0]]=d[c[0]]||''});t.estilo=d.estilo||'titanio';t.color=d.color||'';
+  api({accion:'panel_tarjeta_guardar',id:id,nueva:TJ.nueva,consentimiento:$('#tjConsent')?true:undefined,paga:$('#tjPaga').value,foto:TJ.foto||'',quitarFoto:TJ.quitarFoto,tarjeta:t}).then(function(r){
+    b.disabled=false;b.textContent=TJ.nueva?'Crear tarjeta':'Guardar cambios';
+    if(!r.ok){toast(r.error||'No se pudo guardar');return}
+    var L=D.tarjetas=(D.tarjetas||[]),x=L.filter(function(y){return y.id===id})[0];
+    if(x){x.nombre=t.nombre;x.empresa=t.empresa;x.paga=$('#tjPaga').value;x.sinRegistro=false;x.consentimiento=x.consentimiento||new Date().toISOString()}else L.unshift({id:id,nombre:t.nombre,empresa:t.empresa,estado:'activa',paga:$('#tjPaga').value});
+    TJ.id=id;TJ.nueva=false;TJ.datos=r.tarjeta||TJ.datos;TJ.foto='';TJ.quitarFoto=false;
+    toast('✅ Tarjeta publicada · en 1 minuto está en su enlace');pintarTarjetas();$('#tjTitulo').textContent='Editar tarjeta';formTarjeta();
+  }).catch(function(){b.disabled=false;b.textContent='Guardar';toast('Sin conexión')});
+}
+function cerrarTarjeta(){$('#vTarjeta').classList.remove('on');document.body.style.overflow='';TJ=null}
+$('#tjBack').onclick=cerrarTarjeta;
+
 /* ---------- Pestañas ---------- */
 $$('.nav button[data-tab]').forEach(function(b){b.onclick=function(){
   $$('.nav button[data-tab]').forEach(function(o){o.classList.toggle('on',o===b)});
-  ['Pedidos','Clientes','Pets'].forEach(function(t){$('#tab'+t).hidden=t!==b.dataset.tab});
+  ['Pedidos','Clientes','Pets','Tarjetas'].forEach(function(t){$('#tab'+t).hidden=t!==b.dataset.tab});
   window.scrollTo(0,0);
 }});
 
@@ -547,12 +684,14 @@ function demoApi(b){
         {slug:'zombie-tattoo',cliente:'Zombie Tattoo',plan:'esencial',periodo:'trimestral',estado:'impagada',email:'',proximo:h(3,9),landing:'activa'},
         {slug:'unas-latinas-carolina',cliente:'Uñas Latinas Carolina',plan:'pro',periodo:'mensual',estado:'activa',email:'',proximo:h(-20,9),landing:'activa'}],
       estadisticas:{'ankara-kebab':{vista:412,resena:37,gerencia:4,whatsapp:58,llamada:9,ruta:21,piezas:{MOSTRADOR:198,L01:92,L02:71,L03:51}},'clinica-dental-mazo-ruiz':{vista:233,resena:19,gerencia:2,whatsapp:31,llamada:24,ruta:12,piezas:{MOSTRADOR:233}},'iberlax':{vista:96,resena:6,gerencia:1,whatsapp:14,llamada:3,ruta:8,piezas:{MOSTRADOR:96}},'zombie-tattoo':{vista:141,resena:11,gerencia:0,whatsapp:22,llamada:2,ruta:5,piezas:{MOSTRADOR:88,L01:53}},'unas-latinas-carolina':{vista:187,resena:15,gerencia:3,whatsapp:40,llamada:6,ruta:9,piezas:{MOSTRADOR:187}}},
-      chapas:[{slug:'pk7m2xq9',estado:'activa',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=demo'},{slug:'pd3h8wna',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'},{slug:'pt9r4ceu',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'}]};
+      chapas:[{slug:'pk7m2xq9',estado:'activa',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=demo'},{slug:'pd3h8wna',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'},{slug:'pt9r4ceu',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'}],
+      tarjetas:[{id:'alejandro-silva',nombre:'Alejandro Silva',empresa:'La Sucursal Barbería',estado:'activa',paga:'La Sucursal'}]};
     demoN=(demoN||0)+1;
     if(demoN>1)R.pedidos.unshift({id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-N3W1',fecha:new Date().toISOString(),closer:'MEL042',cliente:'Bar La Laurel (ejemplo)',slug:'iberlax',url:url('iberlax'),pack:'Prueba Logroño',estado:'Por despachar',notas:'Pedido de ejemplo que llega en directo',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89}],total:89,pack:'prueba',packNombre:'Prueba Logroño'}});
     return esperar(500,R);
   }
-  if(b.accion==='panel_pedido_estado'||b.accion==='panel_pausar')return esperar(400,{ok:true});
+  if(b.accion==='panel_pedido_estado'||b.accion==='panel_pausar'||b.accion==='panel_tarjeta_estado'||b.accion==='panel_tarjeta_borrar')return esperar(400,{ok:true});
+  if(b.accion==='panel_tarjeta_guardar')return esperar(900,{ok:true,id:b.id,url:'https://studio42.es/t/?id='+b.id,tarjeta:Object.assign({},b.tarjeta,{id:b.id,foto:b.foto||'',pausada:false})});
   if(b.accion==='panel_cambio'){
     var base=JSON.parse(JSON.stringify(propuesta||fichas[b.slug]||{}));
     var t=b.instruccion.toLowerCase(),res;
