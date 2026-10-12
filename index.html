@@ -3,21 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio 42 | Estaciones NFC de mostrador para negocios locales en Logroño</title>
-    <meta name="description" content="Estaciones NFC y QR para el mostrador de tu negocio: una landing a medida, reseña directa en Google y un canal privado con la gerencia. Demo gratis en tu local en Logroño.">
+    <title>Studio 42 · NFC y reseñas de Google para bares y comercios en Logroño</title>
+    <meta name="description" content="Estaciones NFC y QR de mostrador para hostelería y comercio en Logroño: landing a medida, reseña directa en Google y canal privado con la gerencia. Demo gratis en tu local, pago único desde 149 €.">
+    <meta name="keywords" content="NFC Logroño, reseñas Google Logroño, marketing local La Rioja, landing NFC bar, hostelería Logroño, tarjeta NFC comercio, QR mostrador, reseñas restaurante, pet pass NFC mascota, llavero NFC personalizado">
     <meta name="theme-color" content="#07080b">
+    <meta name="author" content="Studio 42 · Manuel Alejandro Ortiz">
     <link rel="canonical" href="https://studio42.es/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Studio 42 | Estaciones NFC de mostrador">
-    <meta property="og:description" content="Un toque y tu cliente llega a tu landing, a la reseña de Google o a la gerencia. Demo gratis en Logroño.">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Studio 42">
+    <meta property="og:title" content="Studio 42 · NFC y reseñas de Google para negocios de Logroño">
+    <meta property="og:description" content="Un toque y tu cliente llega a tu landing, a la ventana de reseña de Google o a la gerencia. Demo gratis en tu local, pago único desde 149 €.">
     <meta property="og:url" content="https://studio42.es/">
     <meta property="og:image" content="https://studio42.es/img/expositor.webp">
+    <meta property="og:image:alt" content="Display NFC Studio 42 sobre el mostrador de un comercio de Logroño">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Studio 42 · NFC y reseñas de Google en Logroño">
+    <meta name="twitter:description" content="Demo gratis en tu local. Pago único desde 149 €.">
+    <meta name="twitter:image" content="https://studio42.es/img/expositor.webp">
     <link rel="icon" href="img/logo.webp" type="image/webp">
     <link rel="preload" href="fonts/InterDisplay-ExtraBold.woff" as="font" type="font/woff" crossorigin>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"LocalBusiness","name":"Studio 42","url":"https://studio42.es/","telephone":"+34672294962",
-     "address":{"@type":"PostalAddress","streetAddress":"Calle Carmen Medrano 5","addressLocality":"Logroño","addressRegion":"La Rioja","addressCountry":"ES"},
-     "description":"Estaciones digitales NFC y QR para el mostrador de negocios locales."}
+     "image":"https://studio42.es/img/expositor.webp",
+     "address":{"@type":"PostalAddress","streetAddress":"Calle Carmen Medrano 5","addressLocality":"Logroño","addressRegion":"La Rioja","postalCode":"26006","addressCountry":"ES"},
+     "areaServed":[{"@type":"City","name":"Logroño"},{"@type":"AdministrativeArea","name":"La Rioja"}],
+     "priceRange":"€€",
+     "description":"Estaciones NFC y QR para el mostrador de bares, restaurantes y comercios locales. Reseñas de Google y canal privado con la gerencia.",
+     "sameAs":["https://www.instagram.com/studio42.es"]}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+     {"@type":"Question","name":"¿Cómo funciona el sistema NFC de Studio 42 para reseñas?","acceptedAnswer":{"@type":"Answer","text":"El cliente acerca el móvil al display o al llavero del camarero y se abre una landing a medida. Al final hay dos botones iguales: dejar la opinión directamente en la ventana de reseña de la ficha de Google o hablar con la gerencia por WhatsApp. Nadie se filtra por estrellas."}},
+     {"@type":"Question","name":"¿Hay cuotas mensuales?","acceptedAnswer":{"@type":"Answer","text":"No. Los packs son de pago único: hardware, landing a medida e instalación. Sin comisiones por reseña ni cuotas mensuales."}},
+     {"@type":"Question","name":"¿Y si el móvil del cliente no tiene NFC?","acceptedAnswer":{"@type":"Answer","text":"Los displays llevan un código QR junto al chip. Con la cámara del móvil se accede a la misma landing."}},
+     {"@type":"Question","name":"¿Cumple las políticas de Google?","acceptedAnswer":{"@type":"Answer","text":"Sí. No se filtra por estrellas, no se oculta ninguna opinión y no se ofrece nada a cambio de reseñas. Las dos opciones (Google y gerencia) son igual de visibles."}}
+    ]}
     </script>
 
     <style>
@@ -44,7 +65,7 @@
             --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
         }
         *, *::before, *::after { box-sizing: border-box; }
-        html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; -webkit-text-size-adjust: 100%; }
         body { margin: 0; background: var(--ink); color: var(--bone); font: 400 1.0625rem/1.6 var(--f-body); overflow-x: hidden; }
         img { max-width: 100%; display: block; height: auto; }
         a { color: inherit; }
@@ -70,9 +91,10 @@
 
         /* Navegación */
         .nav { position: fixed; inset: 0 0 auto; z-index: 40; background: rgba(7,8,11,.82); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-        .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 1rem; }
-        .brand { display: flex; align-items: center; gap: .65rem; text-decoration: none; font: 800 1.15rem var(--f-display); letter-spacing: -.01em; }
-        .brand img { width: 38px; height: 38px; }
+        .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 82px; gap: 1rem; }
+        .brand { display: flex; align-items: center; gap: .8rem; text-decoration: none; font: 800 1.4rem var(--f-display); letter-spacing: -.015em; }
+        .brand img { width: 54px; height: 54px; filter: drop-shadow(0 0 10px rgba(217, 160, 45, .35)); transition: transform .4s; }
+        .brand:hover img { transform: rotate(-8deg) scale(1.06); }
         .nav-links { display: none; gap: 1.6rem; font-size: .95rem; color: var(--muted); }
         .nav-links a { text-decoration: none; transition: color .2s; }
         .nav-links a:hover { color: var(--bone); }
@@ -91,27 +113,72 @@
         .facts li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--brass); }
         @media (min-width: 960px) { .hero { padding: 9.5rem 0 6rem; } .hero .wrap { grid-template-columns: 1.15fr .85fr; } }
 
-        /* Móvil de demostración con anillos NFC: el único movimiento propio de la página */
-        .stage { position: relative; display: grid; place-items: center; min-height: 560px; }
-        .ring { position: absolute; width: 330px; height: 330px; border-radius: 50%; border: 1.5px solid var(--brass); opacity: 0; animation: pulse 4.2s ease-out infinite; }
+        /* Móvil demo interactivo: simulación completa del toque NFC */
+        .stage { position: relative; display: grid; place-items: center; min-height: 640px; }
+        .ring { position: absolute; width: 330px; height: 330px; border-radius: 50%; border: 1.5px solid var(--brass); opacity: 0; animation: pulse 4.2s ease-out infinite; pointer-events: none; }
         .ring:nth-child(2) { animation-delay: 1.4s; } .ring:nth-child(3) { animation-delay: 2.8s; }
+        .stage[data-fase="landing"] .ring, .stage[data-fase="google"] .ring, .stage[data-fase="gerencia"] .ring { animation-play-state: paused; opacity: 0; }
         @keyframes pulse { 0% { transform: scale(.55); opacity: .0; } 15% { opacity: .55; } 100% { transform: scale(1.65); opacity: 0; } }
         .phone { position: relative; width: min(300px, 82vw); border-radius: 38px; padding: 12px; background: linear-gradient(145deg, #3a3d44, #15171b 40%, #2b2e34 70%, #12141a); border: 1.5px solid rgba(235,240,247,.4); box-shadow: 0 40px 80px -20px rgba(0,0,0,.9), 0 0 60px -10px rgba(190,198,212,.35), 0 0 0 6px #0b0c0f; }
-        .screen { position: relative; overflow: hidden; background: var(--ink-2); border-radius: 28px; padding: 1.4rem 1.1rem 1.2rem; text-align: center; }
-        .screen .mini-logo { width: 44px; height: 44px; margin: 0 auto .6rem; }
-        .screen h3 { font-size: 1.05rem; letter-spacing: .02em; font-weight: 800; }
-        .screen .sub { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+        .phone::before { content: ""; position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 90px; height: 20px; background: #000; border-radius: 20px; z-index: 3; }
+        .stage[data-fase="gerencia"] .phone::before { display: none; }
+        .screen { position: relative; overflow: hidden; background: var(--ink-2); border-radius: 28px; padding: 2.4rem 1rem 1.2rem; text-align: center; min-height: 520px; }
+        /* Fases */
+        .fase { display: none; animation: fade .35s ease-out both; }
+        .stage[data-fase="espera"] .fase-espera, .stage[data-fase="landing"] .fase-landing, .stage[data-fase="google"] .fase-google, .stage[data-fase="gerencia"] .fase-gerencia { display: block; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        /* Fase 0: esperando toque */
+        .nfc-chip { width: 92px; height: 92px; margin: 1.6rem auto 1.2rem; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 30% 30%, #e6eaf0, #8e8e93 60%, #15171b); box-shadow: 0 0 0 4px rgba(255,255,255,.08), 0 20px 40px rgba(0,0,0,.6); position: relative; cursor: pointer; transition: transform .3s; }
+        .nfc-chip:hover { transform: scale(1.05); }
+        .nfc-chip svg { width: 48px; height: 48px; color: #0b0b0e; position: relative; z-index: 2; }
+        .nfc-chip::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 2px solid rgba(220,228,240,.5); animation: tap 2.4s ease-out infinite; }
+        .nfc-chip::before { content: ""; position: absolute; inset: -24px; border-radius: 50%; border: 1.5px solid rgba(220,228,240,.3); animation: tap 2.4s ease-out .9s infinite; }
+        @keyframes tap { 0% { transform: scale(.6); opacity: 0; } 25% { opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        .fase-espera h3 { font-size: 1.1rem; font-weight: 800; margin: 0; letter-spacing: .02em; }
+        .fase-espera p { font-size: .8rem; color: var(--muted); margin: .3rem 0 1.1rem; }
+        .toque-btn { background: var(--ti-grad); color: #0b0c0f; font: 700 .88rem var(--f-body); padding: .85rem 1.3rem; border: none; border-radius: 999px; cursor: pointer; min-height: 46px; box-shadow: 0 10px 24px -8px rgba(220,228,240,.5); }
+        .toque-btn:hover { filter: brightness(1.07); }
+        /* Fase 1: landing */
+        .fase-landing .mini-logo { width: 56px; height: 56px; margin: 0 auto .7rem; filter: drop-shadow(0 0 10px rgba(217,160,45,.4)); }
+        .fase-landing h3 { font-size: 1.08rem; letter-spacing: .02em; font-weight: 800; margin: 0; }
+        .fase-landing .sub { font-size: .78rem; color: var(--muted); margin: .2rem 0 0; }
         .app-btns { display: grid; gap: .5rem; margin-top: 1.1rem; }
-        .app-btn { display: flex; align-items: center; gap: .7rem; padding: .7rem .8rem; border-radius: 14px; background: rgba(220,225,232,.06); border: 1px solid var(--line); font-size: .86rem; font-weight: 600; text-align: left; color: var(--bone); }
-        .app-btn svg { width: 18px; height: 18px; color: var(--brass); flex: none; }
-        .opinion { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--line); }
-        .opinion p { font-size: .8rem; color: var(--muted); margin-bottom: .6rem; }
+        .app-btn { display: flex; align-items: center; gap: .7rem; padding: .75rem .85rem; border-radius: 14px; background: rgba(220,225,232,.06); border: 1px solid var(--line); font: 600 .84rem var(--f-body); text-align: left; color: var(--bone); cursor: pointer; transition: transform .25s, border-color .25s, background .25s; animation: slideIn .4s ease-out both; width: 100%; }
+        .stage[data-fase="landing"] .app-btn:nth-child(1) { animation-delay: .05s; }
+        .stage[data-fase="landing"] .app-btn:nth-child(2) { animation-delay: .18s; }
+        .stage[data-fase="landing"] .app-btn:nth-child(3) { animation-delay: .31s; }
+        .app-btn:hover { transform: translateX(3px); border-color: rgba(230,235,242,.55); background: rgba(220,225,232,.1); }
+        .app-btn:active { transform: translateX(5px) scale(.98); }
+        .app-btn svg { width: 18px; height: 18px; color: #cfd4dc; flex: none; filter: drop-shadow(0 0 6px rgba(210,218,230,.6)); }
+        .app-pop { font-size: .72rem; color: var(--muted); text-align: left; padding: .5rem .5rem 0; min-height: 1.4em; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+        .opinion { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--line); animation: slideIn .4s ease-out .5s both; }
+        .opinion p { font-size: .8rem; color: var(--muted); margin: 0 0 .6rem; }
         .opinion .two { display: grid; gap: .5rem; }
-        .opinion button { font: 600 .84rem var(--f-body); padding: .8rem; border-radius: 12px; border: 1.5px solid rgba(220,225,232,.3); background: transparent; color: var(--bone); cursor: pointer; min-height: 44px; transition: background .2s, border-color .2s; }
-        .opinion button:hover, .opinion button[aria-pressed="true"] { border-color: var(--brass); background: rgba(196,200,208,.14); }
-        .reaction { margin-top: .7rem; min-height: 4.6em; font-size: .8rem; line-height: 1.45; color: #d8d6d0; text-align: left; }
-        .reaction strong { color: var(--brass); display: block; margin-bottom: .15rem; }
-        .stage-note { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-size: .85rem; color: var(--muted); }
+        .opinion button { font: 600 .84rem var(--f-body); padding: .8rem; border-radius: 12px; border: 1.5px solid rgba(220,228,240,.3); background: transparent; color: var(--bone); cursor: pointer; min-height: 44px; transition: background .2s, border-color .2s, transform .15s; }
+        .opinion button:hover { border-color: #cfd4dc; background: rgba(220,228,240,.1); }
+        .opinion button:active { transform: scale(.97); }
+        /* Fase Google */
+        .back-mini { background: transparent; border: 1px solid rgba(220,228,240,.3); color: var(--bone); padding: .5rem .9rem; border-radius: 999px; font: 600 .75rem var(--f-body); cursor: pointer; margin: 0 0 .8rem; display: inline-flex; align-items: center; gap: .35rem; }
+        .back-mini:hover { border-color: #cfd4dc; }
+        .google-card { background: #fff; color: #202124; border-radius: 12px; padding: 1rem .85rem; text-align: center; }
+        .google-card .gname { font: 700 .98rem var(--f-body); color: #202124; }
+        .google-card .gsub { font-size: .72rem; color: #5f6368; margin: .25rem 0 .9rem; }
+        .stars { display: flex; justify-content: center; gap: .2rem; margin: .5rem 0 .9rem; }
+        .star { width: 28px; height: 28px; color: #dadce0; cursor: pointer; transition: color .18s, transform .18s; }
+        .star:hover, .star.on { color: #f9ab00; transform: scale(1.08); }
+        .google-send { background: #1a73e8; color: #fff; border: none; padding: .7rem 1.4rem; border-radius: 8px; font: 600 .82rem var(--f-body); cursor: pointer; min-height: 42px; width: 100%; }
+        .google-note { font-size: .72rem; color: var(--muted); margin-top: .7rem; }
+        /* Fase Gerencia (WhatsApp) */
+        .wa-head { background: #075e54; color: #fff; margin: -2.4rem -1rem 0; padding: 1.6rem 1rem .9rem; display: flex; align-items: center; gap: .7rem; border-radius: 28px 28px 0 0; text-align: left; }
+        .wa-head .av { width: 36px; height: 36px; border-radius: 50%; background: var(--ti-grad); display: grid; place-items: center; font: 800 .8rem var(--f-body); color: #0b0c0f; }
+        .wa-head .nm { font-size: .88rem; font-weight: 600; } .wa-head .st { font-size: .68rem; opacity: .8; }
+        .wa-chat { background: #0b141a; margin: 0 -1rem; padding: 1rem; min-height: 220px; }
+        .wa-bubble { background: #005c4b; color: #fff; padding: .55rem .75rem; border-radius: 10px 10px 2px 10px; margin-left: auto; max-width: 85%; font-size: .82rem; text-align: left; margin-bottom: .4rem; animation: slideIn .4s ease-out both; }
+        .wa-bubble.them { background: #202c33; border-radius: 10px 10px 10px 2px; margin-left: 0; margin-right: auto; animation-delay: .6s; }
+        .wa-input { display: flex; gap: .4rem; align-items: center; background: #202c33; margin: 0 -1rem; padding: .6rem .9rem; }
+        .wa-input .fake { flex: 1; background: #2a3942; color: #8696a0; padding: .5rem .8rem; border-radius: 18px; font-size: .76rem; text-align: left; }
+        .wa-send { background: #00a884; color: #fff; width: 36px; height: 36px; border-radius: 50%; border: none; display: grid; place-items: center; cursor: pointer; }
 
         /* Secciones */
         section { padding: 5rem 0; }
@@ -130,6 +197,23 @@
         .promise strong { color: var(--bone); }
         .promise p { color: #d8d6d0; }
         @media (min-width: 800px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+
+        /* Qué llevo a tu local */
+        .demo-grid { display: grid; gap: 1.6rem; }
+        .demo-item { background: linear-gradient(165deg, rgba(255,255,255,.06), transparent 60%); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem 1.4rem; transition: border-color .3s, box-shadow .3s; }
+        .demo-item:hover { border-color: rgba(230,235,242,.5); box-shadow: 0 20px 50px -25px rgba(190,198,212,.4); }
+        .demo-ico { width: 44px; height: 44px; color: #cfd4dc; margin-bottom: 1rem; filter: drop-shadow(0 0 8px rgba(210,218,230,.4)); }
+        .demo-ico svg { width: 100%; height: 100%; }
+        .demo-item h3 { font-size: 1.08rem; font-weight: 600; margin-bottom: .4rem; }
+        .demo-item p { color: var(--muted); font-size: .95rem; }
+        .demo-foot { margin-top: 2rem; max-width: 44rem; color: var(--muted); font-size: .96rem; }
+        @media (min-width: 760px) { .demo-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1040px) { .demo-grid { grid-template-columns: repeat(4, 1fr); gap: 1.4rem; } }
+
+        /* Promo lanzamiento */
+        .promo-logrono { max-width: 46rem; margin: 0 0 2.4rem; padding: 1.1rem 1.4rem; border: 1px solid rgba(255,255,255,.3); border-radius: var(--radius); background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(220,228,240,.04)); font-size: .96rem; color: #d8d6d0; display: flex; gap: .9rem; align-items: flex-start; }
+        .promo-logrono .tag-promo { background: var(--ti-grad); color: #0b0c0f; font: 800 .72rem var(--f-body); padding: .25rem .6rem; border-radius: 999px; letter-spacing: .04em; flex: none; margin-top: .1rem; }
+        .promo-logrono strong { color: var(--bone); }
 
         /* Antes / ahora */
         .versus { display: grid; gap: 2.2rem; }
@@ -173,7 +257,10 @@
         .pack li { display: flex; gap: .65rem; }
         .pack li::before { content: ""; flex: none; width: 7px; height: 7px; margin-top: .6em; background: var(--brass); border-radius: 2px; transform: rotate(45deg); }
         .pack li b { color: var(--bone); font-weight: 600; }
-        @media (min-width: 900px) { .packs { grid-template-columns: repeat(3, 1fr); } .pack.rec { transform: translateY(-14px); } }
+        @media (min-width: 760px) { .packs { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1100px) { .packs { grid-template-columns: repeat(4, 1fr); } .pack.rec { transform: translateY(-14px); } }
+        .pack h3 { line-height: 1.15; }
+        .pack .cost { font-size: 2.4rem; }
 
         /* Calculadora */
         .calc { display: grid; gap: 2rem; align-items: center; background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem; }
@@ -314,26 +401,77 @@
                     </ul>
                 </div>
 
-                <div class="stage" id="demo">
+                <div class="stage" id="demo" data-fase="espera">
                     <span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span>
-                    <div class="phone" role="group" aria-label="Demostración de la pantalla que ve tu cliente">
+                    <div class="phone" role="group" aria-label="Demostración interactiva del toque NFC">
                         <div class="screen">
-                            <img class="mini-logo" src="img/logo.webp" width="44" height="44" alt="">
-                            <h3>TU NEGOCIO LOCAL</h3>
-                            <p class="sub">Lo que ve tu cliente al acercar el móvil</p>
-                            <div class="app-btns">
-                                <div class="app-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Reservar mesa o cita</div>
-                                <div class="app-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Cómo llegar</div>
-                                <div class="app-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Carta, servicios y precios</div>
+
+                            <!-- Fase 0: esperando toque -->
+                            <div class="fase fase-espera">
+                                <button type="button" class="nfc-chip" id="chip-tap" aria-label="Simular toque NFC">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 0 1 17 0"/><path d="M6.5 12a5.5 5.5 0 0 1 11 0"/><path d="M9.5 12a2.5 2.5 0 0 1 5 0"/></svg>
+                                </button>
+                                <h3>Acerca tu móvil</h3>
+                                <p>Pulsa el chip para simular el toque NFC que haría tu cliente.</p>
+                                <button type="button" class="toque-btn" id="start-demo">Toca aquí para empezar</button>
                             </div>
-                            <div class="opinion">
-                                <p>¿Qué tal ha ido todo?</p>
-                                <div class="two">
-                                    <button type="button" data-op="google" aria-pressed="false">Dejar mi opinión en Google</button>
-                                    <button type="button" data-op="gerencia" aria-pressed="false">Hablar con la gerencia</button>
+
+                            <!-- Fase 1: landing cargada -->
+                            <div class="fase fase-landing">
+                                <img class="mini-logo" src="img/logo.webp" width="56" height="56" alt="">
+                                <h3>TU NEGOCIO LOCAL</h3>
+                                <p class="sub">Logroño · abierto ahora</p>
+                                <div class="app-btns">
+                                    <button type="button" class="app-btn" data-pop="Se abre tu agenda de reservas o un formulario corto. Nada que descargar."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Reservar mesa o cita</button>
+                                    <button type="button" class="app-btn" data-pop="Google Maps traza la ruta desde donde está el cliente hasta tu puerta."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Cómo llegar</button>
+                                    <button type="button" class="app-btn" data-pop="Tu carta o lista de servicios, actualizable desde el móvil sin reimprimir."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Carta, servicios y precios</button>
                                 </div>
-                                <div class="reaction" id="reaccion" aria-live="polite">Pulsa una de las dos. Las dos están siempre a la vista y el cliente decide.</div>
+                                <div class="app-pop" id="app-pop" aria-live="polite">Pulsa cualquier botón para ver qué pasa.</div>
+                                <div class="opinion">
+                                    <p>¿Qué tal ha ido todo?</p>
+                                    <div class="two">
+                                        <button type="button" data-op="google">Dejar mi opinión en Google</button>
+                                        <button type="button" data-op="gerencia">Hablar con la gerencia</button>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Fase 2: Google reviews -->
+                            <div class="fase fase-google">
+                                <button type="button" class="back-mini" data-back>← Volver</button>
+                                <div class="google-card">
+                                    <div class="gname">TU NEGOCIO LOCAL</div>
+                                    <div class="gsub">Logroño, La Rioja · Google</div>
+                                    <div class="gsub" style="margin:-.4rem 0 .6rem">¿Cómo lo valoras?</div>
+                                    <div class="stars" id="stars">
+                                        <svg class="star" data-s="1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01z"/></svg>
+                                        <svg class="star" data-s="2" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01z"/></svg>
+                                        <svg class="star" data-s="3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01z"/></svg>
+                                        <svg class="star" data-s="4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01z"/></svg>
+                                        <svg class="star" data-s="5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01z"/></svg>
+                                    </div>
+                                    <button type="button" class="google-send" id="google-send">Publicar reseña</button>
+                                </div>
+                                <p class="google-note">En tu local esto abre la ventana real de reseña de tu ficha de Google (no esta simulación).</p>
+                            </div>
+
+                            <!-- Fase 3: Gerencia -->
+                            <div class="fase fase-gerencia">
+                                <div class="wa-head">
+                                    <div class="av">S42</div>
+                                    <div><div class="nm">Gerencia · TU NEGOCIO</div><div class="st">en línea</div></div>
+                                </div>
+                                <div class="wa-chat">
+                                    <div class="wa-bubble">Hola, acabo de estar en vuestro local y quería contaros algo en privado antes de dejar reseña 🙂</div>
+                                    <div class="wa-bubble them" id="wa-reply">Escribiendo…</div>
+                                </div>
+                                <div class="wa-input">
+                                    <div class="fake">Escribe un mensaje…</div>
+                                    <button type="button" class="wa-send" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+                                </div>
+                                <button type="button" class="back-mini" data-back style="margin-top:1rem">← Volver</button>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -383,6 +521,35 @@
             </div>
         </section>
 
+        <section id="demo-local" style="background: var(--ink-2); border-block: 1px solid var(--line)">
+            <div class="wrap">
+                <div class="section-head rv"><h2>Qué llevo a tu local el día de la demo</h2><p>Vas a ver y tocar las piezas reales con tu propio móvil. Sin presentaciones y sin PowerPoints.</p></div>
+                <div class="demo-grid rv">
+                    <div class="demo-item">
+                        <div class="demo-ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="8" width="28" height="36" rx="3"/><circle cx="24" cy="28" r="4"/><path d="M20 14h8"/></svg></div>
+                        <h3>Un display de demostración</h3>
+                        <p>Lo pongo sobre tu barra para que lo pruebes con tu propio móvil, igual que lo haría cualquier cliente que entre.</p>
+                    </div>
+                    <div class="demo-item">
+                        <div class="demo-ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="30" rx="12" ry="14"/><circle cx="24" cy="12" r="4"/><path d="M22 16v4h4v-4"/></svg></div>
+                        <h3>Dos llaveros smart</h3>
+                        <p>Uno de muestra para que lo toquen tus camareros, y otro con una landing demo configurada con tu nombre.</p>
+                    </div>
+                    <div class="demo-item">
+                        <div class="demo-ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="4" width="20" height="40" rx="4"/><circle cx="24" cy="38" r="2"/></svg></div>
+                        <h3>Tu landing lista en pantalla</h3>
+                        <p>En 10 minutos hago una versión demo con el nombre de tu local y las secciones básicas. La vemos juntos en tu móvil.</p>
+                    </div>
+                    <div class="demo-item">
+                        <div class="demo-ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 24h32M24 8v32"/><circle cx="24" cy="24" r="18"/></svg></div>
+                        <h3>Tu Place ID de Google</h3>
+                        <p>Lo saco yo delante de ti con el nombre de tu negocio. Así ves cómo quedaría el botón de reseña real.</p>
+                    </div>
+                </div>
+                <p class="demo-foot">Es gratis, dura unos 20 minutos y no hay compromiso. Si te encaja, apuntamos qué pack y cuántos llaveros necesitas y te lo entrego instalado en 5–7 días.</p>
+            </div>
+        </section>
+
         <section id="piezas" class="on-stone">
             <div class="wrap">
                 <div class="section-head rv">
@@ -397,10 +564,10 @@
                         <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="expositor">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20solicitar%20el%20Display%20Acrílico.">Pedir por WhatsApp</a></div>
                     </article>
                     <article class="rv piece big">
-                        <div class="photo"><img src="img/llavero.webp" width="1000" height="1000" alt="Llavero de cuero con chip NFC y cohete de Studio 42" loading="lazy"></div>
-                        <div class="row"><h3>Llavero smart de cuero</h3><span class="price">24,90 €<small> + IVA</small></span></div>
-                        <p>Para el personal de sala: piel cosida, resistente al agua y con chip de uso intensivo.</p>
-                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="llavero">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20Llaveros%20Smart%20de%20cuero.">Pedir por WhatsApp</a></div>
+                        <div class="photo"><img src="img/llavero.svg" width="1000" height="1000" alt="Llavero Studio 42 Smart Drop en acabado titanio pulido con el isotipo del cohete grabado y zona NFC" loading="lazy"></div>
+                        <div class="row"><h3>Llavero Smart Drop · titanio</h3><span class="price">19,90 €<small> + IVA</small></span></div>
+                        <p>Nuestro llavero propio inyectado en polímero técnico con acabado titanio. Ligero, resistente a golpes y agua, con zona NFC marcada y grabado láser de tu marca.</p>
+                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="llavero">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20Llaveros%20Smart%20Drop.">Pedir por WhatsApp</a></div>
                     </article>
                     <article class="rv piece">
                         <div class="photo"><img src="img/tarjeta-madera.webp" width="1000" height="1000" alt="Tarjeta ejecutiva de madera con chip NFC" loading="lazy"></div>
@@ -427,10 +594,24 @@
         <section id="packs">
             <div class="wrap">
                 <div class="section-head rv">
-                    <h2>Tres packs, pago único</h2>
-                    <p>Incluyen la landing a medida, configurada y probada en tu local de Logroño. Precios sin IVA.</p>
+                    <h2>Elige cómo entras en Studio 42</h2>
+                    <p>Cuatro formas de empezar según el tamaño de tu local. Pago único, sin cuotas mensuales ni comisiones por reseña. Precios sin IVA.</p>
                 </div>
+                <div class="rv promo-logrono"><span class="tag-promo">Lanzamiento Logroño</span><div><strong>Primeros 15 locales de Logroño:</strong> instalación, foto profesional del mostrador para tu ficha de Google y 2 llaveros extra sin coste. Vigente mientras duren las plazas.</div></div>
                 <div class="rv packs">
+                    <article class="rv pack">
+                        <h3>Prueba Logroño</h3>
+                        <p class="for">Para probar la tecnología sin comprometerte. Mide el impacto en 30 días.</p>
+                        <p class="cost">89 €<small>+ IVA</small></p>
+                        <ul>
+                            <li><span><b>Landing esencial</b> con reseña directa y canal privado.</span></li>
+                            <li><span><b>1 display acrílico</b> biselado con chip NFC y QR.</span></li>
+                            <li><span><b>1 llavero Smart Drop</b> para el equipo.</span></li>
+                            <li><span><b>Instalación y prueba</b> en tu local.</span></li>
+                            <li><span><b>Garantía de 30 días:</b> si no suben las interacciones, te devolvemos el 100 %.</span></li>
+                        </ul>
+                        <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20probar%20el%20Pack%20Prueba%20Logroño.">Empezar aquí</a>
+                    </article>
                     <article class="rv pack">
                         <h3>Imán de mostrador</h3>
                         <p class="for">Convierte la zona de caja en un asistente rápido, sin esperas.</p>
@@ -439,7 +620,7 @@
                             <li><span><b>Landing a medida</b> con botones rápidos para citas, contacto y servicios.</span></li>
                             <li><span><b>Reseña directa y canal privado:</b> dos botones igual de visibles.</span></li>
                             <li><span><b>1 display acrílico</b> biselado de 3 mm con chip NFC y QR.</span></li>
-                            <li><span><b>2 llaveros smart</b> de cuero con chip NFC.</span></li>
+                            <li><span><b>2 llaveros Smart Drop</b> de titanio con chip NFC.</span></li>
                             <li><span><b>Instalación llave en mano</b> y prueba en tu local.</span></li>
                         </ul>
                         <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20instalar%20el%20Pack%20Imán%20de%20Mostrador.">Quiero este pack</a>
@@ -452,7 +633,7 @@
                         <ul>
                             <li><span><b>Landing avanzada</b> con dudas frecuentes, parking por GPS y triaje.</span></li>
                             <li><span><b>Canal privado con la gerencia</b> junto a la reseña pública, sin sustituirla.</span></li>
-                            <li><span><b>10 llaveros smart</b> con chip NFC: uno por empleado o mesa.</span></li>
+                            <li><span><b>10 llaveros Smart Drop</b> con chip NFC: uno por empleado o mesa.</span></li>
                             <li><span><b>1 display acrílico</b> para mostrador o recepción.</span></li>
                             <li><span><b>Tarjeta de madera</b> para gerencia, con tu contacto vCard.</span></li>
                         </ul>
@@ -466,7 +647,7 @@
                             <li><span><b>Micro-tour con dron</b> (piloto certificado AESA) de interior y fachada, listo para Google Maps e Instagram.</span></li>
                             <li><span><b>Welcome Pack</b>: caja imantada y tarjeta de madera grabada.</span></li>
                             <li><span><b>2 displays acrílicos</b> para la puerta y la caja.</span></li>
-                            <li><span><b>25 llaveros smart</b> con chip NFC.</span></li>
+                            <li><span><b>25 llaveros Smart Drop</b> con chip NFC.</span></li>
                             <li><span><b>Centro de mando</b> personalizado conectado a la nube.</span></li>
                         </ul>
                         <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20el%20Pack%20Dominio%20Local.">Quiero este pack</a>
@@ -576,21 +757,46 @@
     </div>
 
     <script>
-        /* Demo: dos opciones iguales, el cliente decide. */
+        /* Demo interactiva: simula toque NFC → landing → reseña Google o WhatsApp con gerencia */
         (function () {
-            var out = document.getElementById('reaccion');
-            var btns = document.querySelectorAll('.opinion button');
-            var texto = {
-                google: ['Reseña directa', 'Se abre la ventana de valoración de la ficha de Google del negocio. El cliente elige sus estrellas y escribe lo que quiera.'],
-                gerencia: ['Canal privado', 'Se abre un WhatsApp con la gerencia para quien prefiera contar algo en privado. Es una opción más, no un sustituto de la reseña pública.']
-            };
-            btns.forEach(function (b) {
+            var stage = document.getElementById('demo');
+            if (!stage) return;
+            function fase(n) { stage.setAttribute('data-fase', n); }
+            // Toque simulado
+            function tocar() { fase('landing'); }
+            document.getElementById('chip-tap').addEventListener('click', tocar);
+            document.getElementById('start-demo').addEventListener('click', tocar);
+            // Botones de la landing: pop con qué pasa
+            var pop = document.getElementById('app-pop');
+            stage.querySelectorAll('.fase-landing .app-btn').forEach(function (b) {
+                b.addEventListener('click', function () { pop.textContent = b.dataset.pop; });
+            });
+            // Opinión: Google o Gerencia
+            stage.querySelectorAll('.opinion button').forEach(function (b) {
+                b.addEventListener('click', function () { fase(b.dataset.op); });
+            });
+            // Volver desde Google o Gerencia
+            stage.querySelectorAll('[data-back]').forEach(function (b) {
+                b.addEventListener('click', function () { fase('landing'); });
+            });
+            // Estrellas de Google
+            var stars = Array.from(stage.querySelectorAll('.star')), send = document.getElementById('google-send'), nota = 0;
+            stars.forEach(function (s, i) {
+                s.addEventListener('mouseenter', function () { pintarEstrellas(i + 1); });
+                s.addEventListener('mouseleave', function () { pintarEstrellas(nota); });
+                s.addEventListener('click', function () { nota = i + 1; pintarEstrellas(nota); });
+            });
+            function pintarEstrellas(n) { stars.forEach(function (s, i) { s.classList.toggle('on', i < n); }); }
+            send.addEventListener('click', function () {
+                if (nota === 0) { pop.textContent = 'Elige antes cuántas estrellas quieres poner.'; return; }
+                send.textContent = '✓ Reseña enviada (demo)'; send.disabled = true;
+                setTimeout(function () { fase('espera'); send.textContent = 'Publicar reseña'; send.disabled = false; nota = 0; pintarEstrellas(0); }, 1800);
+            });
+            // Simular respuesta de la gerencia
+            stage.querySelectorAll('.opinion [data-op="gerencia"]').forEach(function (b) {
                 b.addEventListener('click', function () {
-                    btns.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
-                    var t = texto[b.dataset.op];
-                    out.textContent = '';
-                    var s = document.createElement('strong'); s.textContent = t[0];
-                    out.appendChild(s); out.appendChild(document.createTextNode(t[1]));
+                    var r = document.getElementById('wa-reply'); r.textContent = 'Escribiendo…';
+                    setTimeout(function () { r.textContent = '¡Gracias por avisarnos! Cuéntame qué pasó y lo resolvemos ya mismo 🙏'; }, 1400);
                 });
             });
         })();
@@ -626,10 +832,10 @@
                 d: 'Soporte de metacrilato transparente con chip NFC NTAG216 integrado y QR grabado. Pensado para ir frente a la caja o en la barra sin ocupar espacio.',
                 l: ['Chip NFC NTAG216 de gran capacidad, con lectura a unos 2 cm.', 'Acrílico biselado de 3 mm resistente a golpes.', 'El enlace se puede actualizar en remoto sin coste.'],
                 w: 'Hola, Studio42. Quiero solicitar el Display Acrílico.' },
-            llavero: { t: 'Llavero smart de cuero', p: '24,90 € + IVA', img: 'img/llavero.webp',
-                d: 'Piel cosida y resistente al agua, con chip NFC NTAG216. Ideal para que cada camarero lleve su propio punto de contacto.',
-                l: ['Chip NTAG216 para uso intensivo.', 'Cada llavero puede apuntar a una mesa, a una persona o a una zona.', 'Se actualiza en remoto sin cambiar la pieza.'],
-                w: 'Hola, Studio42. Quiero pedir Llaveros Smart de cuero.' },
+            llavero: { t: 'Llavero Smart Drop · titanio', p: '19,90 € + IVA', img: 'img/llavero.svg',
+                d: 'Nuestro llavero propio en polímero técnico inyectado con acabado titanio pulido. Diseño en gota con zona NFC marcada y grabado láser para tu logo, tipografía o isotipo. Ligero (menos de 10 g), resistente a golpes y agua, y pensado para uso diario sin perder el acabado.',
+                l: ['Chip NTAG216 para uso intensivo.', 'Grabado láser personalizable: logo, isotipo o inicial.', 'A partir de 10 unidades, elegimos juntos tu color de referencia (titanio, negro o blanco mate).', 'El enlace se actualiza en remoto sin tener que cambiar la pieza.'],
+                w: 'Hola, Studio42. Quiero pedir Llaveros Smart Drop.' },
             tarjeta: { t: 'Tarjeta ejecutiva de madera', p: '39,90 € + IVA', img: 'img/tarjeta-madera.webp',
                 d: 'Madera natural grabada con chip NTAG216 integrado. Entrega tus datos de contacto directamente a la agenda del cliente.',
                 l: ['Tu vCard llega al móvil en un toque.', 'Sustituye a las tarjetas de papel.', 'Teléfono, web y redes se actualizan en remoto sin cambiar la madera.'],
