@@ -8,9 +8,18 @@
     "logo": "/la-sucursal/v2/logo.webp",
     "color": "#d9b45a",
     "piezas": [
-      ["Sede Centro", "https://studio42.es/la-sucursal/?sede=centro"],
-      ["Sede Los Lirios", "https://studio42.es/la-sucursal/?sede=lirios"],
-      ["Sede Villamediana", "https://studio42.es/la-sucursal/?sede=villamediana"]
+      [
+        "Sede Centro",
+        "https://studio42.es/la-sucursal/?sede=centro"
+      ],
+      [
+        "Sede Los Lirios",
+        "https://studio42.es/la-sucursal/?sede=lirios"
+      ],
+      [
+        "Sede Villamediana",
+        "https://studio42.es/la-sucursal/?sede=villamediana"
+      ]
     ]
   },
   {
@@ -20,6 +29,39 @@
     "url": "/c/copy-laser/",
     "logo": "/c/copy-laser/logo.png",
     "color": "#FACC15",
-    "piezas": [["Mostrador", "https://studio42.es/c/copy-laser/"]]
+    "piezas": [
+      [
+        "Mostrador",
+        "https://studio42.es/c/copy-laser/"
+      ]
+    ]
+  },
+  {
+    "slug": "spn",
+    "nombre": "SPN · Nutrition Planet",
+    "sub": "Nutrición deportiva · 3 tiendas · llaveros de socio",
+    "url": "/nutrition-planet/",
+    "previa": "/nutrition-planet/?demo=1",
+    "logo": "/nutrition-planet/logo.png",
+    "color": "#e60000",
+    "whatsapp": "34692202636",
+    "piezas": [
+      [
+        "Mostrador Murrieta 31",
+        "https://studio42.es/nutrition-planet/?sede=murrieta"
+      ],
+      [
+        "Mostrador Duquesa de la Victoria",
+        "https://studio42.es/nutrition-planet/?sede=duquesa"
+      ],
+      [
+        "Mostrador Burgos",
+        "https://studio42.es/nutrition-planet/?sede=burgos"
+      ],
+      [
+        "Alta de socio (nutricionista)",
+        "https://studio42.es/nutrition-planet/alta/"
+      ]
+    ]
   }
 ]

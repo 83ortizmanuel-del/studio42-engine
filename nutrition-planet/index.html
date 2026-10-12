@@ -160,7 +160,7 @@ footer a{color:var(--mut)}
 
 <div id="intro" aria-hidden="true"><div class="n" id="cuenta">3</div><button class="skip" id="saltar">Saltar</button></div>
 
-<div class="prop">Propuesta de <b>Studio 42</b> para Nutrition Planet · <a href="socio/" style="color:#fff">ver el llavero del socio →</a></div>
+<div class="prop" id="propBar" hidden>Propuesta de <b>Studio 42</b> para Nutrition Planet · <a href="socio/?demo=1" style="color:#fff">ver el llavero del socio →</a></div>
 <div class="ref" id="refBan" hidden>💪 Vienes de parte de <b id="refNom"></b>. Díselo al mostrador.</div>
 
 <header class="top w">
@@ -312,17 +312,20 @@ footer a{color:var(--mut)}
 <script>
 (function(){
   /* ---------- Datos (confirmar con la tienda) ---------- */
-  var WA = '34691145445'; // teléfono de la web; confirmar si es también WhatsApp
+  var WA = '34692202636'; // mismo número que su landing actual
   var SEDES = {
-    murrieta:{n:'C/ Murrieta 31, Logroño', tel:'691145445', mapa:'Nutrition Planet, Calle Murrieta 31, 26005 Logroño',
+    murrieta:{n:'C/ Murrieta 31, Logroño', tel:'692202636', resena:'https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38', mapa:'Nutrition Planet, Calle Murrieta 31, 26005 Logroño',
       h:{1:[[660,845],[1080,1240]],2:[[660,845],[1080,1240]],3:[[660,845],[1080,1240]],4:[[660,845],[1080,1240]],5:[[660,845],[1080,1240]],6:[[660,855]]}},
-    duquesa:{n:'Duquesa de la Victoria 23, Logroño', tel:'691145445', mapa:'Nutrition Planet, Duquesa de la Victoria 23, 26003 Logroño',
+    duquesa:{n:'Duquesa de la Victoria 23, Logroño', tel:'692202636', resena:'https://search.google.com/local/writereview?placeid=ChIJ7xPNJJ6rWg0RWllatpjaQ38', mapa:'Nutrition Planet, Duquesa de la Victoria 23, 26003 Logroño',
       h:{1:[[660,840],[1080,1230]],2:[[660,840],[1080,1230]],3:[[660,840],[1080,1230]],4:[[660,840],[1080,1230]],5:[[660,840],[1080,1230]],6:[[660,840]]}},
     burgos:{n:'C. Canónigo Isidoro Díaz Murugarren, Burgos', tel:'677095302', mapa:'Nutrition Planet, Calle Canónigo Isidoro Díaz Murugarren, 09007 Burgos',
       h:{1:[[660,840],[1080,1230]],2:[[660,840],[1080,1230]],3:[[660,840],[1080,1230]],4:[[660,840],[1080,1230]],5:[[660,840],[1080,1230]],6:[[660,840]]}}
   };
   var MARCAS = ['226ERS','AMIX','Biotech USA','BSN','Cellucor','GN Nutrition','Haya Labs','iO.GENIX','Life Extension','Mr. Popper\'s','Powerlabs','Scientiffic Nutrition','Scitec Nutrition','Stacker','Starlabs','Vit O Best','Wheyland','Zoomad Labs','Eleven Fit','El Granero Integral'];
-  var sede = 'murrieta';
+  var Q=new URLSearchParams(location.search);
+  if(Q.get('demo')==='1'||Q.get('preview'))document.getElementById('propBar').hidden=false;
+  var sede = SEDES[Q.get('sede')]?Q.get('sede'):'murrieta';
+  document.querySelectorAll('.sedes button').forEach(function(b){b.classList.toggle('on',b.dataset.sede===sede)});
   var $ = function(id){return document.getElementById(id)};
   var REF=(new URLSearchParams(location.search).get('ref')||'').replace(/[^A-Za-z0-9]/g,'').slice(0,20).toUpperCase();
   if(REF){$('refNom').textContent=REF;$('refBan').hidden=false}
@@ -349,7 +352,7 @@ footer a{color:var(--mut)}
     $('aWa').href=wa('Hola SPN, tengo una consulta para la tienda de '+s.n+'.');
     $('btnBio').href=wa('Hola SPN, quiero pedir cita de bioimpedancia en '+s.n+'.');
     $('btnGer').href=wa('Hola, quería comentar mi experiencia en la tienda de '+s.n+'.');
-    $('btnResena').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.mapa);
+    $('btnResena').href=s.resena||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.mapa));
     $('btnSocio').href=wa('Hola SPN, quiero mi llavero del club. Mi tienda es '+s.n+'.');
     pintarRepo();pintarProto()}
   document.querySelectorAll('.sedes button').forEach(function(b){b.onclick=function(){
@@ -396,5 +399,6 @@ footer a{color:var(--mut)}
   pintarSede();
 })();
 </script>
+<script src="../js/s42-medida.js" data-slug="spn" data-nombre="Nutrition Planet" data-contar="1" defer></script>
 </body>
 </html>

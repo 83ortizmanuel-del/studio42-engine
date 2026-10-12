@@ -334,7 +334,7 @@ function cargarMedida(){
   return fetch('../clientes/a-medida.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():[]}).then(function(l){
     MEDIDA=Array.isArray(l)?l.filter(function(x){return x&&/^[a-z0-9-]{2,40}$/.test(x.slug)}):[];
     return Promise.all(MEDIDA.map(function(x){
-      fichas[x.slug]={nombre:x.nombre,subtitulo:x.sub||'Diseño a medida',logo:x.logo?'..'+x.logo:'',colorAcento:x.color||'',_medida:true};
+      fichas[x.slug]={nombre:x.nombre,subtitulo:x.sub||'Diseño a medida',logo:x.logo?'..'+x.logo:'',colorAcento:x.color||'',whatsapp:x.whatsapp||'',_medida:true};
       return fetch('../estado/'+x.slug+'.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){x.pausada=!!(j&&j.pausada)}).catch(function(){});
     }));
   }).catch(function(){MEDIDA=[]});
@@ -445,6 +445,22 @@ function pintarClientes(){
 }
 function logoDe(f,s){if(!f.logo)return'';if(f._medida)return f.logo;return/^https:\/\//.test(f.logo)?f.logo:'../c/'+String(f.logo).replace(/^(\.\/|\/|c\/)/,'')}
 function urlCliente(s){var m=medida(s);return(D&&D.dominio||'https://studio42.es')+(m?m.url:'/c/?cod='+s)}
+/* Informe para el comercio: texto listo para WhatsApp con los números de los últimos 30 días */
+function telDe(w){var n=String(w||'').replace(/\D/g,'');if(n.length===9)n='34'+n;return n.length>=11?n:''}
+function informe(s){var f=fichas[s]||{},e=est(s),hoy=new Date();
+  var fecha=hoy.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+  var wa=(e.whatsapp||0)+(e.gerencia||0),top=Object.keys(e.piezas||{}).sort(function(a,b){return e.piezas[b]-e.piezas[a]}).slice(0,3);
+  var l=['📊 *Informe Studio 42 · '+(f.nombre||s)+'*','Últimos 30 días · hasta el '+fecha,'',
+    '👀 Personas que abrieron tu landing: *'+(e.vista||0)+'*',
+    '⭐ Toques en «Dejar opinión en Google»: *'+(e.resena||0)+'*',
+    '💬 WhatsApp recibidos: *'+wa+'*'+(e.gerencia?' (de ellos '+e.gerencia+' a gerencia)':''),
+    '📞 Llamadas: *'+(e.llamada||0)+'* · 📍 Cómo llegar: *'+(e.ruta||0)+'*'];
+  if(top.length)l.push('🏷️ Piezas con más toques: '+top.map(function(k){return k+' ('+e.piezas[k]+')'}).join(', '));
+  l.push('');
+  if(e.vista>0){var conv=Math.round(((e.resena||0)+wa+(e.llamada||0)+(e.ruta||0))/e.vista*100);l.push('➡️ '+conv+' de cada 100 personas que tocaron tu pieza hicieron algo: opinar, escribirte, llamarte o venir.')}
+  else l.push('➡️ Aún no hay toques este mes. Si quieres, revisamos juntos dónde están colocadas las piezas.');
+  l.push('','Cualquier cambio en tu landing, me lo dices por aquí.','— Studio 42 · studio42.es');
+  return l.join('\n')}
 function abrirCliente(s){
   cur=s;propuesta=null;var f=fichas[s]||{};
   $('#cNombre').textContent=f.nombre||s;$('#flag').hidden=true;
@@ -460,6 +476,7 @@ function abrirCliente(s){
   h+='<div class="sec" style="margin-top:12px">Últimos 30 días</div><div class="stats"><div><b>'+e.vista+'</b><span>Visitas</span></div><div><b>'+e.resena+'</b><span>Reseñas</span></div><div><b>'+(e.whatsapp+e.gerencia)+'</b><span>WhatsApp</span></div><div><b>'+(e.llamada+e.ruta)+'</b><span>Llamadas</span></div></div>';
   var top=Object.keys(e.piezas||{}).sort(function(a,b){return e.piezas[b]-e.piezas[a]}).slice(0,3);
   if(top.length)h+='<div class="mini" style="margin-top:8px">Piezas con más toques: '+top.map(function(k){return esc(k)+' ('+e.piezas[k]+')'}).join(' · ')+'</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px"><button type="button" class="cta" id="bInforme" style="margin:0">📊 Enviar informe al comercio</button><button type="button" class="ghost" id="bInfCopiar" style="margin:0">Copiar</button></div>';
   h+='<button type="button" class="ghost" id="bPausa" style="width:100%;margin-top:12px'+(pausada?'':';color:#fca5a5;border-color:rgba(239,68,68,.35)')+'">'+(pausada?'▶ Reactivar la landing':'⏸ Pausar la landing (impago)')+'</button></div>';
   if(ps.length){h+='<div class="sec" style="margin-top:22px">Pedidos de este cliente</div>';ps.forEach(function(p){var i=ESTADOS.indexOf(p.estado);h+='<button type="button" class="card" data-p="'+esc(p.id)+'" style="margin-top:8px"><span class="mid"><b>'+esc(p.pack)+'</b><small>'+esc(p.id)+' · '+esc(fechaCorta(p.fecha))+'</small></span><span class="rt"><b>'+euro(p.calc?p.calc.total:p.total)+'</b><span class="pill st-'+(i<0?0:i)+'">'+esc(p.estado)+'</span></span></button>'});
     var piezas=[];ps.filter(function(p){return p.estado!=='Cancelado'}).forEach(function(p){piezas=piezas.concat(enlacesNFC(p))});
@@ -479,6 +496,8 @@ function abrirCliente(s){
     }).catch(function(){toast('Sin conexión');abrirCliente(s)});
   };
   $$('#cPedidos .nfc button').forEach(function(b){b.onclick=function(){copiar(b.dataset.u,b)}});
+  $('#bInforme').onclick=function(){var t=informe(s),tel=telDe(f.whatsapp);window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(t),'_blank','noopener')};
+  $('#bInfCopiar').onclick=function(){copiar(informe(s),$('#bInfCopiar'))};
   $('#vCliente').classList.add('on');$('#vCliente').scrollTop=0;document.body.style.overflow='hidden';
 }
 $('#bBack').onclick=function(){if(propuesta&&!confirm('Tienes una propuesta sin publicar. ¿Salir y descartarla?'))return;$('#vCliente').classList.remove('on');document.body.style.overflow='';propuesta=null};
