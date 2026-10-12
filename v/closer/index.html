@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Studio 42 | Diagnóstico Closer</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#050507">
+    <link rel="apple-touch-icon" href="../../img/app-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Closer 42">
     <style>
         :root {
             --color-accent: #c4c4c4;
@@ -19,6 +26,9 @@
             --btn-text-color: #07080B;
         }
 
+        .btn-instalar{display:block;margin:14px auto 0;padding:.6rem 1.1rem;border-radius:99px;border:1px solid var(--color-accent);background:transparent;color:#f4f6f9;font:600 .85rem system-ui,sans-serif;cursor:pointer}
+        .ayuda-instalar{margin:10px auto 0;max-width:340px;font-size:.82rem;line-height:1.45;color:#c9ced6;text-align:center}
+        .btn-instalar[hidden],.ayuda-instalar[hidden]{display:none}
         body.theme-melina {
             --color-accent: #FF2E9B;
             --color-glow: rgba(255, 46, 155, 0.5);
@@ -381,6 +391,8 @@
                     <span class="dot-pulse"></span>
                     <span id="badge-closer-text">Acceso Exclusivo Closer</span>
                 </div>
+                <button type="button" id="btn-instalar" class="btn-instalar" hidden>📲 Instalar como app en este móvil</button>
+                <p id="ayuda-instalar" class="ayuda-instalar" hidden></p>
             </header>
 
             <form id="form-diagnostico" autocomplete="off" novalidate>
@@ -612,9 +624,33 @@
         const cuestionarioContainer = $('cuestionario-sector-container'), chipsContainer = $('chips-fricciones');
         const form = $('form-diagnostico'), btnEnviar = $('btn-enviar'), panel = $('panel-progreso');
 
+        // ---------- Instalar como app (icono en la pantalla de inicio) ----------
+        let avisoInstalar = null;
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); avisoInstalar = e; const b = $('btn-instalar'); if (b && !esApp()) b.hidden = false; });
+        window.addEventListener('appinstalled', () => { $('btn-instalar').hidden = true; $('ayuda-instalar').hidden = false; $('ayuda-instalar').textContent = '✅ Instalada. Ya la tienes en la pantalla de inicio.'; });
+        function esApp() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
+        function prepararInstalacion() {
+            const b = $('btn-instalar'), ayuda = $('ayuda-instalar');
+            if (esApp()) return;
+            b.hidden = false;
+            b.addEventListener('click', async () => {
+                if (avisoInstalar) { avisoInstalar.prompt(); try { await avisoInstalar.userChoice; } catch (e) {} avisoInstalar = null; return; }
+                const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+                ayuda.hidden = false;
+                ayuda.textContent = ios
+                    ? 'En iPhone: abre esta página en Safari, pulsa el botón Compartir (cuadrado con flecha ↑) y elige «Añadir a pantalla de inicio».'
+                    : 'Pulsa el menú ⋮ de Chrome (arriba a la derecha) y elige «Añadir a pantalla de inicio» o «Instalar aplicación».';
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const closerCod = (urlParams.get('cod') || urlParams.get('closer') || 'MO001').toUpperCase().trim().replace(/[^A-Z0-9_-]/g, '').slice(0, 20) || 'MO001';
+            // El código llega en la URL de la tarjeta NFC; se recuerda para cuando se abra como app instalada
+            let guardado = '';
+            try { guardado = localStorage.getItem('s42_closer') || ''; } catch (e) {}
+            const closerCod = (urlParams.get('cod') || urlParams.get('closer') || guardado || 'MO001').toUpperCase().trim().replace(/[^A-Z0-9_-]/g, '').slice(0, 20) || 'MO001';
+            try { localStorage.setItem('s42_closer', closerCod); } catch (e) {}
+            prepararInstalacion();
             $('closer_id').value = closerCod;
             // Melina en rosa; el resto de closers en titanio/plata
             if (closerCod.includes('MEL')) {
