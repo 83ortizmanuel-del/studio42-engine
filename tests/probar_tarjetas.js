@@ -1,0 +1,66 @@
+/* Pruebas: tarjetas digitales (crear, editar, foto, pausar, borrar con supresión real). */
+const vm = require('vm');
+const { entorno } = require('./_simulador.js');
+let ok = 0;
+const check = (cond, msg) => { if (!cond) { console.error('✘ ' + msg); process.exit(1); } ok++; console.log('✓ ' + msg); };
+
+const repo = { files: {}, commits: [] };
+const { ctx } = entorno({ GITHUB_TOKEN: 'ghp_FAKE', ANTHROPIC_API_KEY: 'x', PANEL_CLAVE: 'clave-segura' }, repo, () => ({ code: 500, body: '' }));
+const hojas = {};
+const nueva = () => { const filas = []; return { filas, getLastRow: () => filas.length, appendRow: (r) => filas.push(r.slice()), setFrozenRows() {},
+  getDataRange: () => ({ getValues: () => filas.map((r) => r.slice()) }), deleteRow: (n) => filas.splice(n - 1, 1),
+  getRange: (f, c) => ({ setValue: (v) => { while (filas[f - 1].length < c) filas[f - 1].push(''); filas[f - 1][c - 1] = v; } }) }; };
+ctx.SpreadsheetApp = { getActive: () => ({ getSheetByName: (n) => hojas[n] || null, insertSheet: (n) => (hojas[n] = nueva()) }) };
+const mem = {};
+ctx.CacheService = { getScriptCache: () => ({ get: (k) => mem[k] || null, put: (k, v) => { mem[k] = String(v); }, remove: (k) => { delete mem[k]; } }) };
+const post = (d) => JSON.parse(vm.runInContext('doPost', ctx)({ postData: { contents: JSON.stringify(d) }, parameter: {} }).s);
+
+const tk = post({ accion: 'panel_login', clave: 'clave-segura' }).token;
+check(!post({ accion: 'panel_tarjeta_guardar', id: 'ana-lopez', nueva: true, tarjeta: { nombre: 'Ana' } }).ok, 'sin sesión del panel no se puede crear nada');
+
+let r = post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'ana-lopez', nueva: true, tarjeta: { nombre: 'Ana López' } });
+check(!r.ok && /aceptado/.test(r.error), 'exige el consentimiento de la persona para publicar');
+
+r = post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'ana-lopez', nueva: true, consentimiento: true, paga: 'Iberlax',
+  foto: 'data:image/jpeg;base64,' + Buffer.from('JPEGFAKE').toString('base64'),
+  tarjeta: { nombre: 'Ana López <b>', cargo: 'Directora comercial', empresa: 'Iberlax', telefono: '600 11 22 33', whatsapp: '600112233',
+    email: 'ana@iberlax.es', web: 'iberlax.es', linkedin: 'javascript:alert(1)', instagram: '@ana.iberlax', estilo: 'hackeo', color: 'red', espia: 'x' } });
+check(r.ok && r.url.endsWith('/t/?id=ana-lopez'), 'crea la tarjeta y devuelve su enlace');
+const j = JSON.parse(repo.files['t/ana-lopez.json']);
+check(j.nombre === 'Ana López' && j.whatsapp === '34600112233' && j.web === 'https://iberlax.es' && j.instagram === 'https://www.instagram.com/ana.iberlax', 'limpia los datos: sin HTML, WhatsApp con prefijo, web e Instagram como enlaces');
+check(j.linkedin === '' && j.estilo === 'titanio' && j.color === '' && !('espia' in j), 'descarta enlaces peligrosos, estilos y campos inventados');
+check(/^fotos\/ana-lopez\.jpg\?v=/.test(j.foto) && repo.files['t/fotos/ana-lopez.jpg'] === 'JPEGFAKE', 'sube la foto junto a la tarjeta');
+const fila = hojas.Tarjetas.filas[1];
+check(hojas.Tarjetas.filas[0].join() === 'ID,Nombre,Empresa,Estado,Alta,Actualizada,Paga,Consentimiento' && fila[0] === 'ana-lopez' && fila[3] === 'activa' && fila[6] === 'Iberlax' && fila[7], 'la hoja solo guarda lo mínimo (sin teléfono ni email) y la fecha del consentimiento');
+check(!JSON.stringify(hojas.Tarjetas.filas).includes('600112233') && !JSON.stringify(hojas.Tarjetas.filas).includes('@iberlax'), 'ningún dato de contacto en la hoja');
+
+check(!post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'ana-lopez', nueva: true, consentimiento: true, tarjeta: { nombre: 'Otra' } }).ok, 'no pisa una tarjeta existente al crear otra con el mismo identificador');
+check(!post({ accion: 'panel_tarjeta_guardar', token: tk, id: '../x', consentimiento: true, tarjeta: { nombre: 'X' } }).ok, 'rechaza identificadores raros');
+
+r = post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'ana-lopez', tarjeta: { nombre: 'Ana López', cargo: 'CEO', empresa: 'Iberlax', estilo: 'oro' } });
+const j2 = JSON.parse(repo.files['t/ana-lopez.json']);
+check(r.ok && j2.cargo === 'CEO' && j2.estilo === 'oro' && j2.foto === j.foto, 'editar conserva la foto y el consentimiento');
+check(hojas.Tarjetas.filas.length === 2, 'editar no duplica la fila');
+
+check(post({ accion: 'panel_tarjeta_estado', token: tk, id: 'ana-lopez', pausar: true }).ok && JSON.parse(repo.files['t/ana-lopez.json']).pausada === true && hojas.Tarjetas.filas[1][3] === 'pausada', 'pausar la tarjeta');
+post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'ana-lopez', tarjeta: { nombre: 'Ana López' } });
+check(JSON.parse(repo.files['t/ana-lopez.json']).pausada === true, 'editar no reactiva una tarjeta pausada');
+post({ accion: 'panel_tarjeta_estado', token: tk, id: 'ana-lopez', pausar: false });
+check(JSON.parse(repo.files['t/ana-lopez.json']).pausada === false, 'reactivar');
+
+const datos = post({ accion: 'panel_datos', token: tk });
+check(datos.ok && datos.tarjetas.length === 1 && datos.tarjetas[0].id === 'ana-lopez' && datos.tarjetas[0].estado === 'activa', 'el panel recibe la lista de tarjetas');
+
+check(post({ accion: 'panel_tarjeta_borrar', token: tk, id: 'ana-lopez' }).ok, 'borrar la tarjeta');
+check(!repo.files['t/ana-lopez.json'] && !repo.files['t/fotos/ana-lopez.jpg'] && hojas.Tarjetas.filas.length === 1, 'borrar elimina el archivo, la foto y la fila (supresión real)');
+
+repo.files['t/alejo.json'] = JSON.stringify({ version: 1, id: 'alejo', nombre: 'Alejo', foto: 'fotos/alejo.jpg' });
+let ds = post({ accion: 'panel_datos', token: tk });
+check(ds.tarjetas.some((x) => x.id === 'alejo' && x.sinRegistro), 'una tarjeta hecha a mano aparece en el panel para poder registrarla');
+r = post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'alejo', tarjeta: { nombre: 'Alejandro Silva' } });
+let fa = hojas.Tarjetas.filas.find((x) => x[0] === 'alejo');
+check(r.ok && fa && !fa[7] && JSON.parse(repo.files['t/alejo.json']).foto === 'fotos/alejo.jpg', 'al registrarla sin marcar el consentimiento queda sin fecha (no se inventa) y conserva su foto');
+post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'alejo', consentimiento: true, tarjeta: { nombre: 'Alejandro Silva' } });
+fa = hojas.Tarjetas.filas.find((x) => x[0] === 'alejo');
+check(!!fa[7], 'al marcar el consentimiento se guarda la fecha');
+console.log('\n' + ok + ' comprobaciones correctas');

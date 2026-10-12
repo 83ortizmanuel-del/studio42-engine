@@ -25,10 +25,19 @@ function entorno(props, repo, ia, maps) {
           const ruta = decodeURIComponent(url.split('/contents/')[1].split('?')[0]);
           if (repo.__token_malo) return resp(403, { message: 'Resource not accessible' });
           if ((o.method || 'get') === 'get') {
-            if (!(ruta in repo.files)) return resp(404, { message: 'Not Found' });
+            if (!(ruta in repo.files)) {
+              const hijos = Object.keys(repo.files).filter((k) => k.startsWith(ruta + '/') && !k.slice(ruta.length + 1).includes('/'));
+              if (hijos.length) return resp(200, hijos.map((k) => ({ name: k.slice(ruta.length + 1), type: 'file' })));
+              return resp(404, { message: 'Not Found' });
+            }
             return resp(200, { sha: 'sha-' + repo.files[ruta].length, content: Buffer.from(repo.files[ruta]).toString('base64') });
           }
           const b = JSON.parse(o.payload);
+          if (o.method === 'delete') {
+            if (!(ruta in repo.files)) return resp(404, { message: 'Not Found' });
+            delete repo.files[ruta]; repo.commits.push({ ruta, mensaje: b.message, rama: b.branch, borrado: true });
+            return resp(200, { ok: true });
+          }
           repo.files[ruta] = Buffer.from(b.content, 'base64').toString('utf8');
           repo.commits.push({ ruta, mensaje: b.message, rama: b.branch });
           return resp(201, { ok: true });
