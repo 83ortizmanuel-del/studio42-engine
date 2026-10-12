@@ -138,3 +138,14 @@ Para ver errores técnicos: Apps Script → icono **Ejecuciones** (a la izquierd
 - **Si Anthropic retira el modelo**, aparecerá "paquete base" siempre. Crea la propiedad `CLAUDE_MODELO` con el nombre del modelo actual (por defecto `claude-sonnet-5-5`).
 - **Cambiar el estilo de la IA** (por ejemplo "usa siempre tono más formal"): propiedad `PROMPT_EXTRA`. Más en `docs/CLAUDE-PROMPT.md`.
 - **Hosting:** la web se sirve con **GitHub Pages** (no Netlify). Todo lo que hay en el repositorio es público mientras el repo lo sea (ver `docs/RESENAS-Y-CUMPLIMIENTO.md`).
+
+## Pet Pass (chapas para mascotas)
+
+1. Pega el `Code.gs` nuevo y publica **Nueva versión** (Paso 4). Usa el mismo `GITHUB_TOKEN`.
+2. En Apps Script elige **`CREAR_CHAPAS_PET`**, cambia `CANTIDAD` y `ENTREGADA_POR` (por ejemplo el nombre de la clínica) y pulsa ▶.
+3. Abre la pestaña **PetPass** del Sheet: cada fila es una chapa con su URL. Grábala en la chapa con la app NFC Tools (Escribir → URL).
+4. Entrega las chapas. Al escanear una chapa nueva sale «Activar ahora»: se rellena la ficha, se elige un PIN y queda bloqueada.
+5. ¿Alguien olvidó el PIN? Usa **`RESETEAR_PIN_PET`** con el código de la chapa.
+
+Más detalles en `pets/README.md`.
+

@@ -157,7 +157,8 @@ function doPost(e) {
     tuvoLock = lock.tryLock(25000);
     if (!tuvoLock) return json_({ ok: false, error: 'Hay otro diagnóstico en curso. Espera 20 segundos y vuelve a enviarlo.' });
     var datos = leerPeticion_(e);
-    var r = datos.accion === 'buscar' ? buscar_(datos) : procesar_(datos);
+    var acc = String(datos.accion || '');
+    var r = acc.indexOf('pet_') === 0 ? petRouter_(datos) : (acc === 'buscar' ? buscar_(datos) : procesar_(datos));
     return json_(r);
   } catch (err) {
     console.error('doPost: ' + (err && err.stack || err));
@@ -1006,4 +1007,178 @@ function PROBAR_CONFIGURACION() {
   }
   console.log(salida.join('\n'));
   return salida.join('\n');
+}
+
+/* ===================================== PET PASS =====================================
+ * Chapas NFC para mascotas. Cada chapa tiene un código (slug) que Studio 42 crea antes
+ * de grabarla (función CREAR_CHAPAS_PET). La chapa nace "libre" (en blanco); el
+ * veterinario o el dueño la activa rellenando la ficha y eligiendo un PIN. Desde ese
+ * momento la ficha es pública solo para LEER, y para editarla hace falta el PIN.
+ *
+ *  - La ficha pública se guarda en GitHub: pets/<slug>.json (sin PIN).
+ *  - El PIN nunca se publica: se guarda cifrado (hash con sal) en la pestaña "PetPass".
+ *  - 5 intentos de PIN fallidos bloquean esa chapa 15 minutos.
+ * ==================================================================================== */
+
+var PET_HOJA = 'PetPass';
+var PET_COLS = ['Slug', 'Estado', 'Entregada por', 'URL', 'Creada', 'Activada', 'Última edición', 'PIN (hash)'];
+
+function petRouter_(d) {
+  var slug = String(d.slug || '').toLowerCase().trim();
+  if (!/^[a-z0-9-]{4,40}$/.test(slug)) return { ok: false, error: 'Chapa no válida.' };
+  if (!permitirPeticion_(400, 'pet_')) return { ok: false, error: 'Demasiadas peticiones. Prueba en unos minutos.' };
+  var fila = petFila_(slug);
+  if (d.accion === 'pet_estado') {
+    if (!fila) return { ok: true, estado: 'desconocida' };
+    return { ok: true, estado: fila.estado, entregadoPor: fila.entregadaPor };
+  }
+  if (!fila) return { ok: false, error: 'Esta chapa no está registrada en Studio 42. Escríbenos por WhatsApp al +34 672 294 962.' };
+  var pin = String(d.pin || '');
+  if (!/^[0-9]{4,6}$/.test(pin)) return { ok: false, error: 'El PIN debe tener de 4 a 6 números.' };
+
+  if (fila.estado === 'activa') {
+    var bloqueo = petIntentos_(slug, false);
+    if (bloqueo >= 5) return { ok: false, error: 'Demasiados intentos. Espera 15 minutos.' };
+    if (petHash_(slug, pin) !== fila.hash) { petIntentos_(slug, true); return { ok: false, error: 'PIN incorrecto.' }; }
+  }
+  if (d.accion === 'pet_verificar') {
+    return { ok: true, libre: fila.estado !== 'activa' };
+  }
+  if (d.accion !== 'pet_guardar') return { ok: false, error: 'Acción desconocida.' };
+
+  var c = cfg_();
+  if (!c.githubToken) return { ok: false, error: 'El servidor no tiene GITHUB_TOKEN configurado.' };
+  var ficha = petLimpiar_(d.ficha || {});
+  if (!ficha.nombre) return { ok: false, error: 'Falta el nombre de la mascota.' };
+  if (!ficha.contactoTelefono && !ficha.contactoWhatsapp) return { ok: false, error: 'Falta un teléfono de contacto.' };
+  ficha.entregadoPor = fila.entregadaPor ? { nombre: fila.entregadaPor } : {};
+  ficha.actualizado = new Date().toISOString();
+  ficha.schema = 's42-pet-pass-v3';
+
+  var ruta = 'pets/' + slug + '.json';
+  var prev = githubLeer_(c, ruta);
+  if (prev.error) return { ok: false, error: 'GitHub: ' + prev.error };
+  var w = githubEscribir_(c, ruta, JSON.stringify(ficha, null, 2) + '\n', prev.existe ? prev.sha : null,
+    (fila.estado === 'activa' ? 'Pet Pass: actualizar ' : 'Pet Pass: activar ') + slug);
+  if (w.error) return { ok: false, error: 'GitHub: ' + w.error };
+
+  var hoja = fila.hoja, ahora = new Date();
+  if (fila.estado !== 'activa') {
+    hoja.getRange(fila.fila, 2).setValue('activa');
+    hoja.getRange(fila.fila, 6).setValue(ahora);
+    hoja.getRange(fila.fila, 8).setValue(petHash_(slug, pin));
+  }
+  hoja.getRange(fila.fila, 7).setValue(ahora);
+  return { ok: true, ficha: ficha };
+}
+
+function petHoja_() {
+  var libro = SpreadsheetApp.getActive();
+  var hoja = libro.getSheetByName(PET_HOJA) || libro.insertSheet(PET_HOJA);
+  if (hoja.getLastRow() === 0) { hoja.appendRow(PET_COLS); hoja.setFrozenRows(1); }
+  return hoja;
+}
+
+function petFila_(slug) {
+  var hoja = petHoja_();
+  var datos = hoja.getDataRange().getValues();
+  for (var i = 1; i < datos.length; i++) {
+    if (String(datos[i][0]).toLowerCase() === slug) {
+      return { hoja: hoja, fila: i + 1, estado: String(datos[i][1] || 'libre'), entregadaPor: String(datos[i][2] || ''), hash: String(datos[i][7] || '') };
+    }
+  }
+  return null;
+}
+
+function petSal_() {
+  var p = PropertiesService.getScriptProperties();
+  var s = p.getProperty('PET_SAL');
+  if (!s) { s = Utilities.getUuid() + Utilities.getUuid(); p.setProperty('PET_SAL', s); }
+  return s;
+}
+
+function petHash_(slug, pin) {
+  var b = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, petSal_() + '|' + slug + '|' + pin, Utilities.Charset.UTF_8);
+  return b.map(function (x) { return ('0' + (x & 255).toString(16)).slice(-2); }).join('');
+}
+
+function petIntentos_(slug, sumar) {
+  try {
+    var cache = CacheService.getScriptCache(), k = 'petfail_' + slug;
+    var n = Number(cache.get(k) || '0');
+    if (sumar) { n++; cache.put(k, String(n), 900); }
+    return n;
+  } catch (e) { return 0; }
+}
+
+/** Solo deja pasar los campos conocidos, con límites de tamaño. */
+function petLimpiar_(x) {
+  var t = function (v, max) { return limpiar_(sinEtiquetas_(v), max); };
+  var obj = function (v) { return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; };
+  var lista = function (v, max, fn) { return (Array.isArray(v) ? v : []).slice(0, max).map(fn).filter(function (o) { return Object.keys(o).some(function (k) { return o[k]; }); }); };
+  var num = function (v) { var n = parseFloat(String(v).replace(',', '.')); return isFinite(n) && n > 0 && n < 500 ? Math.round(n * 10) / 10 : null; };
+  var fecha = function (v) { var s = t(v, 10); return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : ''; };
+  var tel = function (v) { return t(v, 20).replace(/[^0-9+ ]/g, ''); };
+  var foto = String(x.foto || '');
+  if (!/^data:image\/(jpeg|webp|png);base64,[A-Za-z0-9+\/=]+$/.test(foto) || foto.length > 250000) foto = '';
+  var tipos = ['perro', 'gato', 'conejo', 'huron', 'ave', 'otro'];
+  var vet = obj(x.vet), pel = obj(x.peluqueria), seg = obj(x.seguro), pc = obj(x.proximaCita), mp = obj(x.modoPerdida);
+  return {
+    tipo: tipos.indexOf(String(x.tipo)) >= 0 ? String(x.tipo) : 'perro',
+    nombre: t(x.nombre, 40), raza: t(x.raza, 60), color: t(x.color, 40),
+    sexo: ['Macho', 'Hembra'].indexOf(String(x.sexo)) >= 0 ? String(x.sexo) : '',
+    fechaNac: t(x.fechaNac, 30), peso: num(x.peso),
+    castrado: x.castrado === true ? true : (x.castrado === false ? false : null),
+    microchip: t(x.microchip, 20).replace(/[^0-9A-Za-z]/g, ''), pasaporteEuropeo: t(x.pasaporteEuropeo, 30),
+    foto: foto,
+    contactoNombre: t(x.contactoNombre, 60), contactoTelefono: tel(x.contactoTelefono), contactoWhatsapp: tel(x.contactoWhatsapp),
+    contactoRespaldoNombre: t(x.contactoRespaldoNombre, 60), contactoRespaldoTelefono: tel(x.contactoRespaldoTelefono),
+    alimentacion: t(x.alimentacion, 200), caracter: t(x.caracter, 400),
+    alertas: (Array.isArray(x.alertas) ? x.alertas : []).slice(0, 10).map(function (a) { return t(a, 120); }).filter(Boolean),
+    medicacion: lista(x.medicacion, 10, function (m) { m = obj(m); return { nombre: t(m.nombre, 80), dosis: t(m.dosis, 60), horario: t(m.horario, 60) }; }),
+    vacunas: lista(x.vacunas, 20, function (v) { v = obj(v); return { nombre: t(v.nombre, 80), fecha: t(v.fecha, 30) }; }),
+    visitas: lista(x.visitas, 100, function (v) { v = obj(v); return { fecha: fecha(v.fecha), motivo: t(v.motivo, 80), nota: t(v.nota, 300) }; }),
+    pesos: lista(x.pesos, 50, function (p) { p = obj(p); return { fecha: fecha(p.fecha), peso: num(p.peso) }; }),
+    proximaCita: { fecha: fecha(pc.fecha), motivo: t(pc.motivo, 80), clinica: t(pc.clinica, 80) },
+    vet: { clinica: t(vet.clinica, 80), doctor: t(vet.doctor, 60), telefono: tel(vet.telefono), direccion: t(vet.direccion, 120) },
+    peluqueria: { nombre: t(pel.nombre, 80), telefono: tel(pel.telefono), ultimoCorte: fecha(pel.ultimoCorte) },
+    seguro: { compania: t(seg.compania, 60), poliza: t(seg.poliza, 40), telefono: tel(seg.telefono) },
+    modoPerdida: { activo: mp.activo === true, mensaje: t(mp.mensaje, 200), recompensa: t(mp.recompensa, 60) }
+  };
+}
+
+/**
+ * HERRAMIENTA DE STUDIO 42: crea chapas nuevas en blanco.
+ * 1) Cambia CANTIDAD y ENTREGADA_POR (nombre de la clínica o peluquería; vacío si no hay).
+ * 2) Elige CREAR_CHAPAS_PET en el desplegable y pulsa ▶ Ejecutar.
+ * 3) En la pestaña "PetPass" aparecen las URL: grábalas en las chapas NFC.
+ */
+function CREAR_CHAPAS_PET() {
+  var CANTIDAD = 10;
+  var ENTREGADA_POR = '';
+  var c = cfg_(), hoja = petHoja_(), alfabeto = 'abcdefghjkmnpqrstuvwxyz23456789';
+  var existentes = hoja.getDataRange().getValues().map(function (r) { return String(r[0]); });
+  for (var i = 0; i < CANTIDAD; i++) {
+    var slug;
+    do {
+      slug = 'p';
+      for (var j = 0; j < 7; j++) slug += alfabeto.charAt(Math.floor(Math.random() * alfabeto.length));
+    } while (existentes.indexOf(slug) >= 0);
+    existentes.push(slug);
+    var url = c.dominio + '/pets/?id=' + slug;
+    hoja.appendRow([slug, 'libre', ENTREGADA_POR, url, new Date(), '', '', '']);
+    console.log(url);
+  }
+  console.log('✔ ' + CANTIDAD + ' chapas creadas. Copia las URL de la pestaña "' + PET_HOJA + '" y grábalas en las chapas.');
+}
+
+/** Si un dueño olvida el PIN: pon el código de la chapa y ejecuta. La chapa vuelve a "libre"
+ *  conservando la ficha publicada; el siguiente que la abra podrá elegir un PIN nuevo. */
+function RESETEAR_PIN_PET() {
+  var SLUG = 'pxxxxxxx';
+  var f = petFila_(SLUG.toLowerCase());
+  if (!f) { console.log('✘ No existe la chapa ' + SLUG); return; }
+  f.hoja.getRange(f.fila, 2).setValue('libre');
+  f.hoja.getRange(f.fila, 8).setValue('');
+  console.log('✔ PIN borrado. La chapa ' + SLUG + ' se puede volver a configurar.');
 }

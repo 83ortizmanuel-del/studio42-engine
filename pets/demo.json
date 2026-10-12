@@ -1,82 +1,47 @@
 {
-  "schema": "s42-pet-pass-v2",
+  "schema": "s42-pet-pass-v3",
   "tipo": "perro",
   "nombre": "Toby",
   "raza": "Golden Retriever",
   "color": "Dorado",
   "sexo": "Macho",
-  "fechaNac": "Mayo 2021",
+  "fechaNac": "2021-05",
   "peso": 28.5,
   "castrado": true,
-  "microchip": "981098108472911",
-  "pasaporteEuropeo": "ES123456789",
-  "fotoUrl": "",
-  "modoPerdida": {
-    "activo": false,
-    "mensaje": "¡Toby se ha perdido! Por favor contacta ahora mismo.",
-    "recompensa": ""
-  },
-  "contactoNombre": "Manuel",
+  "microchip": "941000000000000",
+  "pasaporteEuropeo": "ES-000000",
+  "foto": "",
+  "contactoNombre": "Laura (ejemplo)",
   "contactoTelefono": "+34672294962",
   "contactoWhatsapp": "+34672294962",
-  "contactoRespaldoNombre": "Melina",
-  "contactoRespaldoTelefono": "+34600000000",
-  "alimentacion": "Pienso hipoalergénico (sin pollo ni cereales), 2 tomas al día",
-  "caracter": "Muy sociable con personas y niños. Miedo intenso a petardos y tormentas. Pasea tranquilo.",
-  "alertas": [
-    "Alérgico estricto al pollo y a los cereales",
-    "Toma condroprotector a diario con el desayuno",
-    "Microchip homologado 981098108472911"
+  "contactoRespaldoNombre": "Contacto de respaldo (ejemplo)",
+  "contactoRespaldoTelefono": "+34672294962",
+  "alimentacion": "Pienso hipoalergénico sin pollo ni cereales, 2 tomas al día",
+  "caracter": "Muy sociable con personas y niños. Miedo a petardos y tormentas.",
+  "alertas": ["Alergia alimentaria", "Alérgico al pollo", "Miedo a ruidos"],
+  "medicacion": [{ "nombre": "Condroprotector articular", "dosis": "1 comprimido", "horario": "Con el desayuno" }],
+  "vacunas": [
+    { "nombre": "Rabia", "fecha": "2026-06-02" },
+    { "nombre": "Polivalente", "fecha": "2026-06-02" },
+    { "nombre": "Leishmaniosis", "fecha": "2026-04-10" },
+    { "nombre": "Desparasitación interna", "fecha": "2026-09-10" }
   ],
-  "medicacion": [
-    { "nombre": "Condroprotector articular", "dosis": "1 comprimido", "horario": "Con el desayuno", "hasta": "Permanente" }
+  "visitas": [
+    { "fecha": "2026-03-15", "motivo": "Revisión anual", "nota": "Peso 27,8 kg. Analítica correcta." },
+    { "fecha": "2026-06-02", "motivo": "Vacunas", "nota": "Rabia y polivalente." },
+    { "fecha": "2026-09-10", "motivo": "Dermatitis leve", "nota": "Cambio de pienso y crema 7 días." }
   ],
-  "proximaCita": {
-    "fecha": "2026-12-01",
-    "motivo": "Revisión y vacuna anual",
-    "clinica": "Hospital Veterinario Rioja 24h"
-  },
   "pesos": [
     { "fecha": "2026-03-15", "peso": 27.8 },
     { "fecha": "2026-06-02", "peso": 28.1 },
     { "fecha": "2026-09-10", "peso": 28.5 }
   ],
-  "vet": {
-    "clinica": "Hospital Veterinario Rioja 24h",
-    "doctor": "Dra. Elena Pérez",
-    "telefono": "+34941000000",
-    "direccion": "Logroño",
-    "web": ""
-  },
-  "peluqueria": {
-    "nombre": "Peluquería Canina Bichón",
-    "telefono": "+34941111111",
-    "ultimoCorte": "2026-09-20",
-    "frecuencia": "Cada 8 semanas"
-  },
-  "seguro": {
-    "compania": "SegurosMascota",
-    "poliza": "SM-9988123",
-    "telefono": "+34900100100"
-  },
-  "vacunas": [
-    { "nombre": "Rabia (anual)", "fecha": "Vigente" },
-    { "nombre": "Polivalente DHPPiL", "fecha": "Vigente" },
-    { "nombre": "Tos de las perreras (Bordetella)", "fecha": "Vigente" },
-    { "nombre": "Desparasitación interna", "fecha": "Trimestral" },
-    { "nombre": "Collar leishmaniosis", "fecha": "Continuo" }
-  ],
-  "visitas": [
-    { "fecha": "2026-03-15", "motivo": "Revisión anual", "nota": "Peso 27,8 kg. Analítica correcta." },
-    { "fecha": "2026-06-02", "motivo": "Vacuna rabia", "nota": "Dosis anual puesta." },
-    { "fecha": "2026-09-10", "motivo": "Dermatitis leve", "nota": "Cambio de pienso + crema 7 días." }
-  ],
-  "entregadoPor": {
-    "nombre": "Hospital Veterinario Rioja 24h",
-    "tipo": "Clínica veterinaria",
-    "logoUrl": "",
-    "mensaje": "Esta chapa Pet Pass es un obsequio de tu clínica."
-  },
+  "proximaCita": { "fecha": "2026-12-01", "motivo": "Revisión y vacuna anual", "clinica": "Clínica Veterinaria (ejemplo)" },
+  "vet": { "clinica": "Clínica Veterinaria (ejemplo)", "doctor": "", "telefono": "+34672294962", "direccion": "Logroño" },
+  "peluqueria": { "nombre": "Peluquería canina (ejemplo)", "telefono": "", "ultimoCorte": "2026-09-20" },
+  "seguro": { "compania": "", "poliza": "", "telefono": "" },
+  "modoPerdida": { "activo": false, "mensaje": "", "recompensa": "" },
+  "entregadoPor": { "nombre": "Clínica Veterinaria (ejemplo)" },
   "pinHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
-  "_notas": "El PIN por defecto de esta demo es 1234. Para cada mascota real se genera un hash propio."
+  "_notas": "Solo para la demo (funciona en el propio navegador). PIN 1234. Las fichas reales guardan el PIN cifrado en el servidor, nunca aquí."
 }
