@@ -127,7 +127,7 @@ body.manga .galeria .gal{border:2.5px solid var(--tinta);border-radius:10px;box-
 body.manga .galeria .gal:nth-child(odd){transform:rotate(-1deg)}body.manga .galeria .gal:nth-child(even){transform:rotate(1deg)}
 .visor{width:100%;border-radius:14px;display:block;max-height:70dvh;object-fit:contain;background:#000}
 .equipo .item{flex-basis:42%;max-width:170px;text-align:center}
-.equipo .foto{aspect-ratio:1;border-radius:50%;margin:14px auto 0;width:76%}
+.equipo .foto{aspect-ratio:1;border-radius:50%;margin:14px auto 0;width:76%;overflow:hidden}
 .equipo .foto .ic{font-size:1.8rem}
 .equipo .foto em{display:none}
 
@@ -421,10 +421,10 @@ const GALERIA = [1, 9, 2, 3, 4, 5, 6, 7, 8].map((n) => "fotos/galeria-" + n + ".
 const SERVICIOS = SERVICIOS_BASE.filter((x) => x.foto).concat(SERVICIOS_BASE.filter((x) => !x.foto));
 /* Barberos de la agenda online (lasucursalstoreart.com/appointment.php) */
 const EQUIPO = [
-  { nombre: "Fernando", rol: "Fundador · Sede Centro", sede: "centro", tecnica: "Fade relámpago", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
-  { nombre: "Alejandro", rol: "Barbero · Sede Centro", sede: "centro", tecnica: "Barba de acero", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
-  { nombre: "Mikel", rol: "Barbero · Los Lirios", sede: "lirios", tecnica: "Corte sombra", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
-  { nombre: "Santiago", rol: "Barbero · Villamediana", sede: "villamediana", tecnica: "Diseño libre", insta: "https://www.instagram.com/la_sucursal_the_barber/" }
+  { nombre: "Fernando", foto: "fotos/barbero-fernando.webp", rol: "Fundador · Sede Centro", sede: "centro", tecnica: "Fade relámpago", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
+  { nombre: "Alejandro", foto: "fotos/barbero-alejandro.webp", rol: "Barbero · Sede Centro", sede: "centro", tecnica: "Barba de acero", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
+  { nombre: "Mikel", foto: "fotos/barbero-mike.webp", rol: "Barbero · Los Lirios", sede: "lirios", tecnica: "Corte sombra", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
+  { nombre: "Santiago", foto: "fotos/barbero-santiago.webp", rol: "Barbero · Villamediana", sede: "villamediana", tecnica: "Diseño libre", insta: "https://www.instagram.com/la_sucursal_the_barber/" }
 ];
 const TIENDA = [
   { nombre: "Camiseta personalizada", desc: "Ropa de autor La Sucursal", precio: "15 €", etiqueta: "NUEVO DROP" },
