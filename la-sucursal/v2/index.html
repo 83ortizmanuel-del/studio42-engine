@@ -292,8 +292,8 @@ body.manga .poste::before{background:repeating-linear-gradient(-45deg,var(--pape
   <section class="sec aparece">
     <div class="card prox">
       <div class="cal"><small id="calMes">mes</small><b id="calDia">--</b></div>
-      <div class="txt"><b>Tu próximo corte</b><small id="proxTxt">Te recordamos en 3 semanas para que no se te pase</small></div>
-      <button type="button" class="mini" id="bRecordar">Recordar</button>
+      <div class="txt"><b id="proxT">Tu próximo corte</b><small id="proxTxt">¿Te has cortado hoy? Pulsa y te ponemos la alarma</small></div>
+      <button type="button" class="mini" id="bRecordar">Ya me corté</button>
     </div>
   </section>
 
@@ -354,7 +354,8 @@ const CONFIG = {
   slug: "la-sucursal",              // para el contador anónimo de Studio 42
   estadisticas: "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec",
   sedePorDefecto: "centro",
-  semanasProximoCorte: 3
+  semanasProximoCorte: 2,           // aviso a las 2 semanas del último corte
+  horaAviso: 9                      // 9:00 de la mañana
 };
 
 /* Horario: 0 = domingo … 6 = sábado. Cada día, lista de tramos [abre, cierra]. */
@@ -549,22 +550,39 @@ $("bBizum").addEventListener("click", async () => {
     '<div class="acciones"><button type="button" class="btn oro" id="hOk">Entendido</button></div>', (h) => h.querySelector("#hOk").onclick = cerrarHoja);
 });
 
-/* ---------- Próximo corte (archivo de calendario) ---------- */
-function fechaProxima() { const d = new Date(); d.setDate(d.getDate() + CONFIG.semanasProximoCorte * 7); d.setHours(10, 0, 0, 0); return d; }
+/* ---------- Próximo corte: «Ya me corté» guarda el día y pone la alarma a las 2 semanas ----------
+   Todo se queda en el móvil del cliente (ls_ultimo). Android → Google Calendar (solo pulsar Guardar);
+   iPhone y resto → archivo de calendario con alarma (solo pulsar Añadir). */
+function fechaProxima(base) { const d = new Date(base || Date.now()); d.setDate(d.getDate() + CONFIG.semanasProximoCorte * 7); d.setHours(CONFIG.horaAviso, 0, 0, 0); return d; }
+function ultimoCorte() { const v = almacen.get("ls_ultimo"); const d = v ? new Date(v) : null; return d && !isNaN(d) ? d : null; }
+const largo = (d) => d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
 function pintarProximo() {
-  const d = fechaProxima();
+  const u = ultimoCorte(), d = fechaProxima(u);
   $("calMes").textContent = d.toLocaleDateString("es-ES", { month: "short" }).replace(".", "");
   $("calDia").textContent = d.getDate();
-  $("proxTxt").textContent = "Te avisamos el " + d.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+  if (u) {
+    $("proxT").textContent = "Te toca el " + largo(d);
+    $("proxTxt").textContent = "Último corte: " + u.toLocaleDateString("es-ES", { day: "numeric", month: "long" }) + " · alarma a las " + CONFIG.horaAviso + ":00";
+  } else {
+    $("proxT").textContent = "Tu próximo corte";
+    $("proxTxt").textContent = "¿Te has cortado hoy? Pulsa y te ponemos la alarma para dentro de " + CONFIG.semanasProximoCorte + " semanas";
+  }
 }
 $("bRecordar").addEventListener("click", () => {
-  const s = SEDES[sede], d = fechaProxima(), f = (x) => x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-  const fin = new Date(d.getTime() + 30 * 60000);
-  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Studio 42//La Sucursal//ES", "BEGIN:VEVENT", "UID:" + Date.now() + "@lasucursal", "DTSTAMP:" + f(new Date()),
-    "DTSTART:" + f(d), "DTEND:" + f(fin), "SUMMARY:Toca corte en La Sucursal ✂️", "DESCRIPTION:Reserva tu cita: " + s.reserva, "LOCATION:" + s.direccion.replace(/,/g, "\\,"),
-    "BEGIN:VALARM", "TRIGGER:-PT0M", "ACTION:DISPLAY", "DESCRIPTION:Toca corte en La Sucursal", "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+  const s = SEDES[sede], hoy = new Date(); almacen.set("ls_ultimo", hoy.toISOString());
+  const d = fechaProxima(hoy), fin = new Date(d.getTime() + 30 * 60000), f = (x) => x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const titulo = "Toca corte en La Sucursal ✂️", texto = "Reserva tu cita: " + s.reserva;
+  pintarProximo(); contar("enlace");
+  if (/Android/i.test(navigator.userAgent)) {
+    window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(titulo) + "&dates=" + f(d) + "/" + f(fin) + "&details=" + encodeURIComponent(texto) + "&location=" + encodeURIComponent(s.direccion), "_blank", "noopener");
+    toast("📅 Pulsa «Guardar» y listo");
+    return;
+  }
+  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Studio 42//La Sucursal//ES", "METHOD:PUBLISH", "BEGIN:VEVENT", "UID:" + Date.now() + "@lasucursal", "DTSTAMP:" + f(new Date()),
+    "DTSTART:" + f(d), "DTEND:" + f(fin), "SUMMARY:" + titulo, "DESCRIPTION:" + texto, "LOCATION:" + s.direccion.replace(/,/g, "\\,"),
+    "BEGIN:VALARM", "TRIGGER:-PT0M", "ACTION:DISPLAY", "DESCRIPTION:" + titulo, "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
   descargar(ics, "proximo-corte-la-sucursal.ics", "text/calendar");
-  toast("📅 Ábrelo para añadirlo a tu calendario");
+  toast("📅 Pulsa «Añadir» y listo");
 });
 function descargar(texto, nombre, tipo) {
   const url = URL.createObjectURL(new Blob([texto], { type: tipo + ";charset=utf-8" }));
