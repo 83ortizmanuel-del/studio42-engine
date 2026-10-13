@@ -350,7 +350,7 @@ body.manga .poste::before{background:repeating-linear-gradient(-45deg,var(--pape
    Lo que lleve  ejemplo: true  se marca con * hasta que Fernando lo confirme.
    ===================================================================== */
 const CONFIG = {
-  previa: true,                     // false cuando esté todo confirmado (quita la franja y los *)
+  previa: false,                    // false cuando esté todo confirmado (quita la franja y los *)
   slug: "la-sucursal",              // para el contador anónimo de Studio 42
   estadisticas: "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec",
   sedePorDefecto: "centro",
@@ -381,7 +381,7 @@ const SEDES = {
   lirios: {
     nombre: "Sede Los Lirios", zona: "Parque Los Lirios · Logroño",
     direccion: "Parque de los Lirios, 4, 26006 Logroño",
-    telefono: "+34664418156", whatsapp: "34643023681", bizum: "640745248", telefonoDudoso: true,
+    telefono: "+34643023681", whatsapp: "34643023681", bizum: "640745248",
     reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJz6zuGwCrWg0RMmghwkrmcoc",
     mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Los+Lirios+Logro%C3%B1o&query_place_id=ChIJz6zuGwCrWg0RMmghwkrmcoc",
@@ -392,7 +392,7 @@ const SEDES = {
   villamediana: {
     nombre: "Sede Villamediana", zona: "Villamediana de Iregua",
     direccion: "C. Anastasio Mateo, 10, 26142 Villamediana de Iregua", direccionDudosa: true,
-    telefono: "+34643618452", whatsapp: "34643618452", bizum: "643519678",
+    telefono: "+34643023681", whatsapp: "34643618452", bizum: "643519678",
     reserva: "https://lasucursalstoreart.com/appointment.php",
     resena: "https://search.google.com/local/writereview?placeid=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
     mapa: "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Villamediana+de+Iregua&query_place_id=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
@@ -403,7 +403,7 @@ const SEDES = {
 };
 const INSTA_TIENDA = "https://www.instagram.com/la_sucursal_store/";
 const WEB = "https://lasucursalstoreart.com/";
-const EMAIL = "barberia@lasucursalstoreart.com";
+const EMAIL = "lasucursalthebarber@gmail.com";
 
 /* Servicios y precios de lasucursalstoreart.com. Fotos: pon el archivo en esta carpeta y  foto: "corte.webp" */
 const SERVICIOS_BASE = [
@@ -421,9 +421,9 @@ const SERVICIOS = SERVICIOS_BASE.filter((x) => x.foto).concat(SERVICIOS_BASE.fil
 /* Barberos de la agenda online (lasucursalstoreart.com/appointment.php) */
 const EQUIPO = [
   { nombre: "Fernando", rol: "Fundador · Sede Centro", sede: "centro", tecnica: "Fade relámpago", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
-  { nombre: "Alejandro", rol: "Barbero · Sede Centro", sede: "centro", tecnica: "Barba de acero", insta: "https://www.instagram.com/_alejandro_silvaa" },
-  { nombre: "Mikel", rol: "Barbero · Los Lirios", sede: "lirios", tecnica: "Corte sombra", insta: "https://www.instagram.com/la_sucursal_barber_loslirios/" },
-  { nombre: "Santiago", rol: "Barbero · Villamediana", sede: "villamediana", tecnica: "Diseño libre", insta: "https://www.instagram.com/sucursal_barber_villamediana/" }
+  { nombre: "Alejandro", rol: "Barbero · Sede Centro", sede: "centro", tecnica: "Barba de acero", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
+  { nombre: "Mikel", rol: "Barbero · Los Lirios", sede: "lirios", tecnica: "Corte sombra", insta: "https://www.instagram.com/la_sucursal_the_barber/" },
+  { nombre: "Santiago", rol: "Barbero · Villamediana", sede: "villamediana", tecnica: "Diseño libre", insta: "https://www.instagram.com/la_sucursal_the_barber/" }
 ];
 const TIENDA = [
   { nombre: "Camiseta personalizada", desc: "Ropa de autor La Sucursal", precio: "15 €", etiqueta: "NUEVO DROP" },
@@ -478,7 +478,16 @@ function elegirSede(primeraVez) {
   abrirHoja('<h3>' + (primeraVez ? "¿En qué sede estás?" : "Cambiar de sede") + '</h3><p>Lo recordaremos para la próxima vez.</p><div class="lista">' +
     Object.keys(SEDES).map((k) => { const s = SEDES[k], ab = estadoAhora(s);
       return '<button type="button" class="fila-a' + (k === sede ? " activo" : "") + '" data-s="' + k + '"><span class="ico">' + icono("ruta") + '</span><span class="t"><b>' + esc(s.nombre) + '</b><small>' + esc(s.zona) + ' · ' + (ab.abierto ? "abierta ahora" : "cerrada ahora") + '</small></span>' + icono("flecha") + '</button>'; }).join("") + '</div>',
-    (h) => h.querySelectorAll("[data-s]").forEach((b) => b.addEventListener("click", () => { aplicarSede(b.dataset.s, true); cerrarHoja(); })));
+    (h) => h.querySelectorAll("[data-s]").forEach((b) => b.addEventListener("click", () => { aplicarSede(b.dataset.s, true); efectoSede(); cerrarHoja(); })));
+}
+/* Efecto manga al cambiar de sede: onomatopeya y sacudida del cartel */
+function efectoSede() {
+  if (!document.body.classList.contains("manga") || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const t = document.createElement("span"); t.className = "pum"; t.textContent = "¡ZAS!";
+  t.style.left = "50%"; t.style.top = "38%";
+  document.body.appendChild(t); setTimeout(() => t.remove(), 800);
+  const h = $("hero"); h.animate([{ transform: "rotate(-.6deg)" }, { transform: "rotate(1.2deg) translateX(6px)" }, { transform: "rotate(-1deg) translateX(-4px)" }, { transform: "rotate(-.6deg)" }], { duration: 380, easing: "ease-out" });
+  if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
 }
 $("bSede").addEventListener("click", () => elegirSede(false));
 
