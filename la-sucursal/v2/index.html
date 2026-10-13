@@ -427,7 +427,7 @@ const EQUIPO = [
   { nombre: "Santiago", foto: "fotos/barbero-santiago.webp", rol: "Barbero · Villamediana", sede: "villamediana", tecnica: "Diseño libre", insta: "https://www.instagram.com/la_sucursal_the_barber/" }
 ];
 const TIENDA = [
-  { nombre: "Camiseta personalizada", desc: "Ropa de autor La Sucursal", precio: "15 €", etiqueta: "NUEVO DROP" },
+  { nombre: "Camiseta Rosas & Espinas", desc: "Ropa de autor La Sucursal · toca la foto para ver el diseño", precio: "15 €", etiqueta: "NUEVO DROP", foto: "fotos/camiseta-rosas.webp", completa: "fotos/camiseta-rosas-completa.webp" },
   { nombre: "Cera Bravo", desc: "Fijación para tu peinado", precio: "12 €", etiqueta: "TOP VENTAS" },
   { nombre: "Polvos de volumen", desc: "Textura y volumen al instante", precio: "11 €", etiqueta: "FAVORITO" }
 ];
@@ -632,6 +632,8 @@ function pintarCarruseles() {
   const eq = EQUIPO.slice().sort((a, b) => (b.sede === sede) - (a.sede === sede));
   $("equipo").innerHTML = eq.map((p) => tarjeta(p, "persona", (p.tecnica ? '<span class="tecnica">Técnica especial<br><b>' + esc(p.tecnica) + '</b></span>' : "") + (p.insta ? '<div class="fila" style="justify-content:center"><a class="mini" href="' + esc(p.insta) + '" target="_blank" rel="noopener">Ver sus cortes</a></div>' : ""))).join("");
   $("tienda").innerHTML = TIENDA.map((p) => tarjeta(p, "camiseta", '<div class="fila"><span class="precio">' + esc(p.precio) + '</span><a class="mini" target="_blank" rel="noopener" href="https://wa.me/' + SEDES[sede].whatsapp + "?text=" + encodeURIComponent("Hola, me interesa «" + p.nombre + "» de la tienda de La Sucursal. ¿Está disponible?") + '">Lo quiero</a></div>')).join("");
+  $("tienda").querySelectorAll(".item").forEach((el, i) => { const p = TIENDA.at(i); if (!p || !p.completa) return; const f = el.querySelector(".foto"); f.style.cursor = "zoom-in";
+    f.addEventListener("click", () => abrirHoja('<img class="visor" src="' + esc(p.completa) + '" alt="' + esc(p.nombre) + ', delantera, espalda y detalles"><div class="acciones" style="margin-top:12px"><a class="btn oro" target="_blank" rel="noopener" href="https://wa.me/' + SEDES[sede].whatsapp + "?text=" + encodeURIComponent("Hola, me interesa «" + p.nombre + "» de la tienda de La Sucursal. ¿Está disponible?") + '">Lo quiero</a><button type="button" class="btn" id="hCerrar">Cerrar</button></div>', (h) => h.querySelector("#hCerrar").onclick = cerrarHoja)); });
   $("galeria").innerHTML = GALERIA.map((f, i) => '<button type="button" class="gal" data-i="' + i + '" aria-label="Ver foto ' + (i + 1) + '"><img src="' + f + '" alt="Corte en La Sucursal" loading="lazy"></button>').join("");
   $("galeria").querySelectorAll(".gal").forEach((b) => b.addEventListener("click", () => abrirHoja('<img class="visor" src="' + GALERIA[+b.dataset.i] + '" alt="Corte en La Sucursal"><div class="acciones" style="margin-top:12px"><a class="btn oro" href="' + esc(SEDES[sede].reserva) + '" target="_blank" rel="noopener">Quiero este corte · Reservar</a><button type="button" class="btn" id="hCerrar">Cerrar</button></div>', (h) => h.querySelector("#hCerrar").onclick = cerrarHoja)));
   const algunEjemplo = (l) => CONFIG.previa && l.some((x) => x.ejemplo) ? "* ejemplo" : "";
