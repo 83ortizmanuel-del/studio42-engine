@@ -290,6 +290,7 @@
         .piece .photo img { width: 100%; height: 100%; object-fit: contain; transition: transform .5s cubic-bezier(.16,1,.3,1); }
         .piece:hover .photo img { transform: scale(1.04) rotate(-1deg); }
         .piece .photo.framed img { border-radius: 22px; object-fit: cover; }
+        .piece .photo img.recorte { width: 76%; height: 76%; border-radius: 50%; }
         .piece .row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: .9rem; }
         .piece h3 { font-size: 1.3rem; font-weight: 600; }
         .piece .price { font: 600 1.15rem var(--f-display); white-space: nowrap; }
@@ -456,7 +457,8 @@
         @keyframes breathe { 0%, 100% { box-shadow: 0 0 0 1px rgba(235,240,247,.45), 0 24px 70px -25px rgba(200,208,222,.45); } 50% { box-shadow: 0 0 0 1px rgba(255,255,255,.8), 0 24px 80px -20px rgba(220,228,240,.8); } }
         @media (prefers-reduced-motion: reduce) { .btn-brass::after, .closing::after, .screen::after { animation: none; display: none; } .pack.rec { animation: none; } .rv { opacity: 1; transform: none; transition: none; } }
         @media (prefers-reduced-motion: reduce) { .ring { animation: none; opacity: .25; transform: scale(1); } .ring:nth-child(n+2) { display: none; } html { scroll-behavior: auto; } * { transition-duration: .01ms !important; } }
-    </style>
+            #m-img.recorte { width: 74%; height: auto; margin: 9% auto; display: block; border-radius: 50%; filter: drop-shadow(0 22px 22px rgba(0,0,0,.35)); object-fit: contain; }
+</style>
 </head>
 
 <body>
@@ -732,10 +734,10 @@
                         <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="expositor">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20solicitar%20el%20Display%20Acrílico.">Pedir por WhatsApp</a></div>
                     </article>
                     <article class="rv piece big">
-                        <div class="photo"><img src="img/llavero.svg" width="1000" height="1000" alt="Llavero Studio 42 Smart Drop en acabado titanio pulido con el isotipo del cohete grabado y zona NFC" loading="lazy"></div>
-                        <div class="row"><h3>Llavero Smart Drop · titanio</h3><span class="price">19,90 €<small> + IVA</small></span></div>
-                        <p>Nuestro llavero propio inyectado en polímero técnico con acabado titanio. Ligero, resistente a golpes y agua, con zona NFC marcada y grabado láser de tu marca.</p>
-                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="llavero">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20Llaveros%20Smart%20Drop.">Pedir por WhatsApp</a></div>
+                        <div class="photo"><img class="recorte" src="img/llavero-studio42.webp" width="520" height="520" alt="Llavero Studio 42 impreso en 3D: disco gris grafito con borde blanco, cohete y planeta en relieve cobre y chip NFC" loading="lazy"></div>
+                        <div class="row"><h3>Llavero Studio 42 · impresión 3D</h3><span class="price">19,90 €<small> + IVA</small></span></div>
+                        <p>Nuestro llavero propio impreso en 3D: disco gris grafito con textura en líneas, borde blanco y el cohete de Studio 42 en relieve cobre. Ligero, resistente y con el chip NFC dentro.</p>
+                        <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="llavero">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20pedir%20Llaveros%20Studio%2042.">Pedir por WhatsApp</a></div>
                     </article>
                     <article class="rv piece">
                         <div class="photo"><img src="img/tarjeta-madera.webp" width="1000" height="1000" alt="Tarjeta ejecutiva de madera con chip NFC" loading="lazy"></div>
@@ -750,9 +752,9 @@
                         <div class="acts"><button type="button" class="btn btn-ink btn-sm" data-ficha="camiseta">Ver ficha</button><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20información%20y%20precio%20de%20las%20camisetas%20NFC.">Pedir precio</a></div>
                     </article>
                     <article class="rv piece big">
-                        <div class="photo"><img src="img/pets-llavero-foto.webp" width="1000" height="1000" alt="PETS Id Smart: chapa NFC para el collar con la ficha completa de la mascota" loading="lazy"></div>
+                        <div class="photo"><img class="recorte" src="img/llavero-pets.webp" width="520" height="520" alt="Chapa PETS Id Smart impresa en 3D: disco blanco con huella y anillos en terracota, texto PETS Id Smart en verde y chip NFC" loading="lazy"></div>
                         <div class="row"><h3>PETS Id Smart · chapa NFC</h3><span class="price">14,90 €<small> + IVA</small></span></div>
-                        <p>Chapa phygital para el collar: ficha completa de la mascota, modo "perdida", vacunas y agenda. Perfecta como regalo de clínicas y peluquerías. <a href="/pets/clinicas/" style="color:#101010;text-decoration:underline">Pack B2B</a></p>
+                        <p>Chapa impresa en 3D para el collar, con chip NFC: ficha completa de la mascota, modo "perdida", vacunas y agenda. Perfecta como regalo de clínicas y peluquerías. <a href="/pets/clinicas/" style="color:#101010;text-decoration:underline">Pack B2B</a></p>
                         <div class="acts"><a class="btn btn-ink btn-sm" href="/pets/?id=demo" target="_blank" rel="noopener">Ver demo</a><a class="btn btn-line btn-sm" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20información%20del%20Pet%20Pass.">Pedir</a></div>
                     </article>
                 </div>
@@ -791,7 +793,7 @@
                         <ul>
                             <li><span><b>Landing a medida</b> con reseña directa y canal privado.</span></li>
                             <li><span><b>1 display acrílico</b> biselado para tu mostrador.</span></li>
-                            <li><span><b>3 llaveros Smart Drop</b> de titanio para el equipo.</span></li>
+                            <li><span><b>3 llaveros Studio 42</b> con chip NFC para el equipo.</span></li>
                             <li><span><b>Cambios ilimitados</b> en 24 h e informe mensual con tus números.</span></li>
                             <li><span><b>1 llavero de reposición</b> cada 6 meses (desgaste o pérdida).</span></li>
                             <li><span><b>Soporte prioritario</b> por WhatsApp.</span></li>
@@ -809,7 +811,7 @@
                         <ul>
                             <li><span><b>Landing esencial</b> con reseña directa y canal privado.</span></li>
                             <li><span><b>1 display acrílico</b> biselado con chip NFC y QR.</span></li>
-                            <li><span><b>1 llavero Smart Drop</b> para el equipo.</span></li>
+                            <li><span><b>1 llavero Studio 42</b> para el equipo.</span></li>
                             <li><span><b>Instalación y prueba</b> en tu local.</span></li>
                             <li><span><b>Garantía 30 días:</b> si no suben las interacciones, te devolvemos el 100 %.</span></li>
                         </ul>
@@ -824,7 +826,7 @@
                         <ul>
                             <li><span><b>Landing a medida</b> con reservas, carta/servicios y canal privado.</span></li>
                             <li><span><b>1 display acrílico</b> para la caja o el mostrador.</span></li>
-                            <li><span><b>5 llaveros Smart Drop</b> con chip NFC, uno por empleado.</span></li>
+                            <li><span><b>5 llaveros Studio 42</b> con chip NFC, uno por empleado.</span></li>
                             <li><span><b>Tarjeta de madera</b> para gerencia, con tu contacto vCard.</span></li>
                             <li><span><b>Instalación llave en mano</b> y garantía 30 días.</span></li>
                         </ul>
@@ -839,7 +841,7 @@
                             <li><span><b>Micro-tour con dron</b> (piloto AESA) de interior y fachada, listo para Google Maps e Instagram.</span></li>
                             <li><span><b>Caja de bienvenida</b> imantada con tarjeta de madera grabada con el nombre del director.</span></li>
                             <li><span><b>2 displays acrílicos</b> para la puerta y la caja.</span></li>
-                            <li><span><b>15 llaveros Smart Drop</b> con chip NFC.</span></li>
+                            <li><span><b>15 llaveros Studio 42</b> con chip NFC.</span></li>
                             <li><span><b>Centro de mando</b> personalizado conectado a la nube.</span></li>
                         </ul>
                         <a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola,%20Studio42.%20Quiero%20el%20pack%20Barrio.">Quiero este pack</a>
@@ -1124,10 +1126,10 @@
                 d: 'Soporte de metacrilato transparente con chip NFC NTAG216 integrado y QR grabado. Pensado para ir frente a la caja o en la barra sin ocupar espacio.',
                 l: ['Chip NFC NTAG216 de gran capacidad, con lectura a unos 2 cm.', 'Acrílico biselado de 3 mm resistente a golpes.', 'El enlace se puede actualizar en remoto sin coste.'],
                 w: 'Hola, Studio42. Quiero solicitar el Display Acrílico.' },
-            llavero: { t: 'Llavero Smart Drop · titanio', p: '19,90 € + IVA', img: 'img/llavero.svg',
-                d: 'Nuestro llavero propio en polímero técnico inyectado con acabado titanio pulido. Diseño en gota con zona NFC marcada y grabado láser para tu logo, tipografía o isotipo.',
-                l: ['Chip NTAG216 para uso intensivo.', 'Grabado láser personalizable: logo, isotipo o inicial.', 'A partir de 10 unidades, elegimos juntos tu color de referencia (titanio, negro o blanco mate).', 'El enlace se actualiza en remoto sin tener que cambiar la pieza.'],
-                w: 'Hola, Studio42. Quiero pedir Llaveros Smart Drop.' },
+            llavero: { t: 'Llavero Studio 42 · impresión 3D', p: '19,90 € + IVA', img: 'img/llavero-studio42.webp',
+                d: 'Nuestro llavero propio impreso en 3D: disco gris grafito con textura en líneas, borde blanco y el isotipo del cohete en relieve cobre, con anilla y cadena negras. Lleva el chip NFC dentro.',
+                l: ['Chip NTAG216 para uso intensivo.', 'Impresión 3D multicolor: tu logo en relieve, sin pegatinas que se despeguen.', 'A partir de 10 unidades, elegimos juntos los colores de tu marca.', 'El enlace se actualiza en remoto sin tener que cambiar la pieza.'],
+                w: 'Hola, Studio42. Quiero pedir Llaveros Studio 42.' },
             tarjeta: { t: 'Tarjeta ejecutiva de madera', p: '39,90 € + IVA', img: 'img/tarjeta-madera.webp',
                 d: 'Madera natural grabada con chip NTAG216 integrado. Entrega tus datos de contacto directamente a la agenda del cliente.',
                 l: ['Tu vCard llega al móvil en un toque.', 'Sustituye a las tarjetas de papel.', 'Teléfono, web y redes se actualizan en remoto sin cambiar la madera.'],
@@ -1143,7 +1145,7 @@
             document.getElementById('m-title').textContent = d.t;
             document.getElementById('m-price').textContent = d.p;
             document.getElementById('m-desc').textContent = d.d;
-            var im = document.getElementById('m-img'); im.src = d.img; im.alt = d.t;
+            var im = document.getElementById('m-img'); im.src = d.img; im.alt = d.t; im.classList.toggle('recorte', /llavero-studio42/.test(d.img));
             document.getElementById('m-wa').href = WA + encodeURIComponent(d.w);
             var ul = document.getElementById('m-list'); ul.textContent = '';
             d.l.forEach(function (x) { var li = document.createElement('li'); li.textContent = x; ul.appendChild(li); });

@@ -1300,7 +1300,7 @@ var IVA = 0.21;
 var CATALOGO = {
   piezas: {
     display:  { nombre: 'Display acrílico NFC',       precio: 49 },
-    llavero:  { nombre: 'Llavero Smart Drop',         precio: 19.9 },
+    llavero:  { nombre: 'Llavero Studio 42',         precio: 19.9 },
     tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
     welcome:  { nombre: 'Welcome Pack directivos',    precio: 89 },
     petpass:  { nombre: 'Chapa Pet Pass',             precio: 14.9 },
