@@ -1424,22 +1424,61 @@ function avisarPedido_(c, datos, detalle, notas) {
  * la propiedad PANEL_CLAVE. La sesión dura 6 horas.
  * ==================================================================================== */
 
+/* Accesos: el CEO entra con PANEL_CLAVE (todo). El equipo entra con su contraseña propia,
+ * creada por el CEO desde el panel (pestaña Equipo) y guardada cifrada en PANEL_EQUIPO.
+ * El equipo solo puede ver datos y crear, editar o pausar tarjetas. */
+var PERMISOS_EQUIPO = ['panel_datos', 'panel_tarjeta_guardar', 'panel_tarjeta_estado'];
+
+function equipoLista_() {
+  try { var l = JSON.parse(PropertiesService.getScriptProperties().getProperty('PANEL_EQUIPO') || '[]'); return Array.isArray(l) ? l : []; } catch (e) { return []; }
+}
+function equipoGuardar_(l) { PropertiesService.getScriptProperties().setProperty('PANEL_EQUIPO', JSON.stringify(l)); }
+function equipoHash_(sal, clave) {
+  return Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, sal + '|' + clave, Utilities.Charset.UTF_8));
+}
+function equipoClaveNueva_() {
+  var alf = 'abcdefghjkmnpqrstuvwxyz23456789', hex = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, ''), out = '';
+  for (var i = 0; i < 10; i++) out += alf.charAt(parseInt(hex.substr(i * 2, 2), 16) % alf.length);
+  return out;
+}
+
 function panelRouter_(d) {
   var props = PropertiesService.getScriptProperties();
   var clave = String(props.getProperty('PANEL_CLAVE') || '');
   var cache = CacheService.getScriptCache();
   if (d.accion === 'panel_login') {
-    if (clave.length < 6) return { ok: false, error: 'Falta crear la propiedad PANEL_CLAVE (mínimo 6 caracteres) en Apps Script.' };
+    var equipo = equipoLista_();
+    if (clave.length < 6 && !equipo.length) return { ok: false, error: 'Falta crear la propiedad PANEL_CLAVE (mínimo 6 caracteres) en Apps Script.' };
     var fallos = Number(cache.get('panelfail') || '0');
     if (fallos >= 10) return { ok: false, error: 'Demasiados intentos. Espera 15 minutos.' };
-    if (String(d.clave || '') !== clave) { cache.put('panelfail', String(fallos + 1), 900); return { ok: false, error: 'Contraseña incorrecta.' }; }
+    var intro = String(d.clave || ''), ses = null;
+    if (clave.length >= 6 && intro === clave) ses = { rol: 'ceo', n: 'CEO' };
+    else equipo.forEach(function (m) { if (!ses && intro && m.h === equipoHash_(m.s, intro)) ses = { rol: 'equipo', n: m.n, id: m.id }; });
+    if (!ses) { cache.put('panelfail', String(fallos + 1), 900); return { ok: false, error: 'Contraseña incorrecta.' }; }
     var token = Utilities.getUuid() + Utilities.getUuid();
-    cache.put('ptok_' + token, '1', 21600);
-    return { ok: true, token: token };
+    cache.put('ptok_' + token, JSON.stringify(ses), 21600);
+    return { ok: true, token: token, rol: ses.rol, nombre: ses.n };
   }
-  if (!d.token || !cache.get('ptok_' + d.token)) return { ok: false, sesion: false, error: 'La sesión ha caducado. Vuelve a entrar.' };
+  var guardado = d.token ? cache.get('ptok_' + d.token) : null;
+  if (!guardado) return { ok: false, sesion: false, error: 'La sesión ha caducado. Vuelve a entrar.' };
+  var sesion = null;
+  try { sesion = JSON.parse(guardado); } catch (e) { sesion = null; }
+  if (!sesion || typeof sesion !== 'object') sesion = { rol: 'ceo', n: 'CEO' }; // sesiones antiguas
+  if (sesion.rol === 'equipo') {
+    if (!equipoLista_().some(function (m) { return m.id === sesion.id; })) {
+      cache.remove('ptok_' + d.token);
+      return { ok: false, sesion: false, error: 'Tu acceso al panel ha sido retirado.' };
+    }
+    if (PERMISOS_EQUIPO.indexOf(d.accion) < 0) return { ok: false, error: 'Tu acceso no permite esta acción.' };
+  }
   var c = cfg_();
-  if (d.accion === 'panel_datos') return panelDatos_(c);
+  if (d.accion === 'panel_datos') {
+    var datos = panelDatos_(c);
+    datos.rol = sesion.rol; datos.nombre = sesion.n;
+    if (sesion.rol === 'ceo') datos.equipo = equipoLista_().map(function (m) { return { id: m.id, nombre: m.n, creado: m.creado || '' }; });
+    else datos.chapas = [];
+    return datos;
+  }
   if (d.accion === 'panel_pedido_estado') return panelPedidoEstado_(d);
   if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
   if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
@@ -1454,7 +1493,48 @@ function panelRouter_(d) {
     suscripcionGuardar_(sl, { landing: d.pausar === true ? 'pausada' : 'activa' });
     return { ok: true };
   }
+  if (d.accion === 'panel_baja') return panelBaja_(c, d);
+  if (d.accion === 'panel_chapas_crear') {
+    var n = parseInt(d.cantidad, 10);
+    if (!(n >= 1 && n <= 100)) return { ok: false, error: 'La cantidad debe estar entre 1 y 100.' };
+    crearChapas_(n, limpiar_(d.entregadaPor, 60));
+    return { ok: true, creadas: n };
+  }
+  if (d.accion === 'panel_equipo_crear') {
+    var nom = limpiar_(d.nombre, 40);
+    if (nom.length < 2) return { ok: false, error: 'Escribe el nombre de la persona.' };
+    var l = equipoLista_();
+    if (l.length >= 20) return { ok: false, error: 'Máximo 20 personas en el equipo.' };
+    var cl = equipoClaveNueva_(), sal = Utilities.getUuid(), id = 'e' + Date.now().toString(36);
+    l.push({ id: id, n: nom, s: sal, h: equipoHash_(sal, cl), creado: new Date().toISOString() });
+    equipoGuardar_(l);
+    return { ok: true, id: id, nombre: nom, clave: cl };
+  }
+  if (d.accion === 'panel_equipo_borrar') {
+    var antes = equipoLista_(), despues = antes.filter(function (m) { return m.id !== d.id; });
+    if (despues.length === antes.length) return { ok: false, error: 'Esa persona ya no está en el equipo.' };
+    equipoGuardar_(despues);
+    return { ok: true };
+  }
   return { ok: false, error: 'Acción desconocida.' };
+}
+
+/* Baja completa de una landing del motor: se guarda una copia en archivo/ y se borra de c/.
+ * Las piezas NFC de ese cliente dejan de abrir su landing. */
+function panelBaja_(c, d) {
+  var sl = String(d.slug || '').toLowerCase();
+  if (!/^[a-z0-9-]{2,40}$/.test(sl)) return { ok: false, error: 'Cliente no válido.' };
+  if (String(d.confirmar || '').toLowerCase() !== sl) return { ok: false, error: 'La confirmación no coincide.' };
+  var ruta = c.carpeta + '/' + sl + '.json', a = githubLeer_(c, ruta);
+  if (a.error) return { ok: false, error: a.error };
+  if (!a.existe || !a.json) return { ok: false, error: 'Esta landing no está en el motor. Las landings a medida se dan de baja por el chat con Claude.' };
+  var fecha = Utilities.formatDate(new Date(), 'Europe/Madrid', 'yyyyMMdd-HHmm');
+  var w = githubEscribir_(c, 'archivo/' + c.carpeta + '/' + sl + '-' + fecha + '.json', JSON.stringify(a.json, null, 2), null, 'Copia de ' + sl + ' antes de la baja');
+  if (w.error) return { ok: false, error: w.error };
+  var b = githubBorrar_(c, ruta, 'Baja completa de ' + sl);
+  if (b.error) return { ok: false, error: b.error };
+  suscripcionGuardar_(sl, { landing: 'baja', estado: 'baja' });
+  return { ok: true };
 }
 
 function githubListar_(c, carpeta) {
