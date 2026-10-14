@@ -1223,9 +1223,13 @@ function petLimpiar_(x) {
 function CREAR_CHAPAS_PET() {
   var CANTIDAD = 10;
   var ENTREGADA_POR = '';
+  crearChapas_(CANTIDAD, ENTREGADA_POR);
+}
+
+function crearChapas_(cantidad, entregadaPor) {
   var c = cfg_(), hoja = petHoja_(), alfabeto = 'abcdefghjkmnpqrstuvwxyz23456789';
   var existentes = hoja.getDataRange().getValues().map(function (r) { return String(r[0]); });
-  for (var i = 0; i < CANTIDAD; i++) {
+  for (var i = 0; i < cantidad; i++) {
     var slug;
     do {
       slug = 'p';
@@ -1233,10 +1237,46 @@ function CREAR_CHAPAS_PET() {
     } while (existentes.indexOf(slug) >= 0);
     existentes.push(slug);
     var url = c.dominio + '/pets/?id=' + slug;
-    hoja.appendRow([slug, 'libre', ENTREGADA_POR, url, new Date(), '', '', '']);
+    hoja.appendRow([slug, 'libre', entregadaPor, url, new Date(), '', '', '']);
     console.log(url);
   }
-  console.log('✔ ' + CANTIDAD + ' chapas creadas. Copia las URL de la pestaña "' + PET_HOJA + '" y grábalas en las chapas.');
+  console.log('✔ ' + cantidad + ' chapas creadas. Copia las URL de la pestaña "' + PET_HOJA + '" y grábalas en las chapas.');
+  return cantidad;
+}
+
+/* ===================== MENÚ «Studio 42» EN LA HOJA DE GOOGLE =====================
+ * Aparece al abrir la hoja. Permite crear chapas y resetear un PIN sin tocar el código. */
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('Studio 42')
+    .addItem('🐾 Crear chapas PETS Id Smart', 'menuCrearChapas_')
+    .addItem('🔑 Resetear el PIN de una chapa', 'menuResetPin_')
+    .addToUi();
+}
+
+function menuCrearChapas_() {
+  var ui = SpreadsheetApp.getUi();
+  var r1 = ui.prompt('Crear chapas PETS Id Smart', '¿Cuántas chapas quieres crear? (de 1 a 100)', ui.ButtonSet.OK_CANCEL);
+  if (r1.getSelectedButton() !== ui.Button.OK) return;
+  var n = parseInt(r1.getResponseText(), 10);
+  if (!(n >= 1 && n <= 100)) { ui.alert('Escribe un número entre 1 y 100.'); return; }
+  var r2 = ui.prompt('Crear chapas PETS Id Smart', '¿Para qué clínica o peluquería son?\n(Déjalo vacío si son para venta directa)', ui.ButtonSet.OK_CANCEL);
+  if (r2.getSelectedButton() !== ui.Button.OK) return;
+  var quien = limpiar_(r2.getResponseText(), 60);
+  crearChapas_(n, quien);
+  SpreadsheetApp.getActiveSpreadsheet().setActiveSheet(petHoja_());
+  ui.alert('✔ ' + n + ' chapas creadas' + (quien ? ' para ' + quien : '') + '.\n\nEstán al final de la pestaña «' + PET_HOJA + '». Copia cada dirección y grábala en una chapa con NFC Tools.');
+}
+
+function menuResetPin_() {
+  var ui = SpreadsheetApp.getUi();
+  var r = ui.prompt('Resetear PIN', 'Escribe el código de la chapa (por ejemplo pk7m2xq9).\nComprueba antes que quien lo pide es el dueño.', ui.ButtonSet.OK_CANCEL);
+  if (r.getSelectedButton() !== ui.Button.OK) return;
+  var slug = String(r.getResponseText() || '').trim().toLowerCase();
+  var f = petFila_(slug);
+  if (!f) { ui.alert('No existe ninguna chapa con el código «' + slug + '».'); return; }
+  f.hoja.getRange(f.fila, 2).setValue('libre');
+  f.hoja.getRange(f.fila, 8).setValue('');
+  ui.alert('✔ PIN borrado. La ficha se conserva y el dueño elegirá un PIN nuevo la próxima vez que pulse «Editar ficha».');
 }
 
 /** Si un dueño olvida el PIN: pon el código de la chapa y ejecuta. La chapa vuelve a "libre"

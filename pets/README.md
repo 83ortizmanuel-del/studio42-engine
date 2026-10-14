@@ -11,12 +11,12 @@ Chapa NFC para el collar con la ficha de la mascota. **Nace en blanco**: el vete
 Las dos demos guardan los datos solo en el navegador. Las chapas reales guardan en el servidor.
 
 ## Cómo crear chapas (Studio 42)
-1. En el Google Sheet → Extensiones → Apps Script, abre `CREAR_CHAPAS_PET`.
-2. Cambia `CANTIDAD` y `ENTREGADA_POR` (nombre de la clínica, o vacío).
-3. Ejecuta ▶. En la pestaña **PetPass** aparecen los códigos y sus URL.
+1. Abre la hoja de Google «Studio42-diagnostico». Arriba aparece el menú **Studio 42** (si no sale, recarga la página).
+2. **Studio 42 → Crear chapas PETS Id Smart**: escribe cuántas y para qué clínica (o vacío si es venta directa).
+3. En la pestaña **PetPass** aparecen los códigos y sus URL. También en el panel, pestaña PETS Id Smart.
 4. Graba cada URL en una chapa NFC (app NFC Tools, «Escribir → URL»).
 
-Si un dueño olvida el PIN: comprueba que es el dueño, pon el código en `RESETEAR_PIN_PET` y ejecuta. La ficha se conserva y la próxima persona que pulse «Editar ficha» elige un PIN nuevo.
+Si un dueño olvida el PIN: comprueba que es el dueño y usa en la hoja el menú **Studio 42 → Resetear el PIN de una chapa**. La ficha se conserva y la próxima persona que pulse «Editar ficha» elige un PIN nuevo.
 
 ## Seguridad
 - El PIN nunca se publica: se guarda cifrado (con sal) en la pestaña PetPass.
