@@ -1,4 +1,4 @@
-# Studio 42 · Pet Pass
+# Studio 42 · PETS Id Smart
 
 Chapa NFC para el collar con la ficha de la mascota. **Nace en blanco**: el veterinario (o la familia) la activa al escanearla, rellena la ficha en 2 minutos y elige un PIN. A partir de ahí queda **bloqueada**: cualquiera que la escanee la lee y puede llamar a la familia, pero solo con el PIN se edita.
 

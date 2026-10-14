@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pet Pass · Studio 42</title>
-<meta name="description" content="Pet Pass de Studio 42: la chapa NFC phygital con la ficha de tu mascota. Contacto del dueño en un toque, salud, agenda veterinaria y modo mascota perdida.">
+<title>PETS Id Smart · Studio 42</title>
+<meta name="description" content="PETS Id Smart de Studio 42: la chapa NFC phygital con la ficha de tu mascota. Contacto del dueño en un toque, salud, agenda veterinaria y modo mascota perdida.">
 <meta name="theme-color" content="#07080b">
 <meta name="robots" content="noindex">
 <link rel="icon" href="../img/logo.webp" type="image/webp">
@@ -240,17 +240,17 @@ details.more[open] summary::after{content:"–"}
 </style>
 </head>
 <body>
-<div class="splash" id="splash" aria-hidden="true"><div><div class="disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3.5 12a8.5 8.5 0 0 1 17 0"/><path d="M6.5 12a5.5 5.5 0 0 1 11 0"/><path d="M9.5 12a2.5 2.5 0 0 1 5 0"/></svg></div><p>Leyendo Pet Pass</p></div></div>
+<div class="splash" id="splash" aria-hidden="true"><div><div class="disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3.5 12a8.5 8.5 0 0 1 17 0"/><path d="M6.5 12a5.5 5.5 0 0 1 11 0"/><path d="M9.5 12a2.5 2.5 0 0 1 5 0"/></svg></div><p>Leyendo PETS Id Smart</p></div></div>
 
 <main class="app">
-  <header class="top"><img src="../img/logo.webp" alt=""><b>Studio 42</b><span>Pet Pass</span></header>
+  <header class="top"><img src="../img/logo.webp" alt=""><b>Studio 42</b><span>PETS Id Smart</span></header>
   <div id="view"></div>
 </main>
 
 <button class="fab" id="fab" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Editar ficha</button>
 
 <!-- Asistente -->
-<section class="wiz" id="wiz" aria-modal="true" role="dialog" aria-label="Configurar Pet Pass">
+<section class="wiz" id="wiz" aria-modal="true" role="dialog" aria-label="Configurar PETS Id Smart">
   <div class="in">
     <div class="wbar"><button type="button" id="wClose" aria-label="Cerrar">✕</button><div class="prog"><i id="wProg"></i></div><small id="wCount"></small></div>
     <div class="wtabs" id="wTabs" hidden></div>
@@ -270,7 +270,7 @@ details.more[open] summary::after{content:"–"}
 
 <div class="done" id="done"><div>
   <div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-  <h2 id="doneT">¡Pet Pass activado!</h2>
+  <h2 id="doneT">¡PETS Id Smart activado!</h2>
   <p id="doneP">La ficha ya está bloqueada. Quien escanee la chapa solo puede leerla.</p>
   <button class="cta" id="doneBtn" type="button">Ver la ficha</button>
 </div></div>
@@ -327,7 +327,7 @@ function cargar(){
 /* ---------- Vista pública (solo lectura) ---------- */
 function verFicha(){
   var f=ficha, h='';
-  document.title=(f.nombre||'Pet Pass')+' · Pet Pass Studio 42';
+  document.title=(f.nombre||'PETS Id Smart')+' · PETS Id Smart Studio 42';
   if(id==='demo')h+='<span class="demo-tag">Ficha de ejemplo · los botones contactan con Studio 42 · PIN 1234</span>';
   if(id==='nueva')h+='<span class="demo-tag">Demostración · esta ficha se guarda solo en este navegador</span>';
   if(f.modoPerdida.activo)h+='<div class="lost"><h2>🚨 '+esc(f.nombre)+' se ha perdido</h2><p>'+esc(f.modoPerdida.mensaje||'Si la ves o la tienes contigo, avisa ahora mismo a su familia.')+'</p>'+(f.modoPerdida.recompensa?'<span class="rw">Recompensa: '+esc(f.modoPerdida.recompensa)+'</span>':'')+'</div>';
@@ -337,7 +337,7 @@ function verFicha(){
   if(f.castrado===true)chips.push(f.sexo==='Hembra'?'Esterilizada':'Castrado');
   if(f.microchip)chips.push('Microchip ✓');
   if(f.pasaporteEuropeo)chips.push('Pasaporte UE ✓');
-  h+='<section class="pass"><span class="badge-top">Pet Pass · NFC</span><span class="badge-ok">● Verificado</span>'+
+  h+='<section class="pass"><span class="badge-top">PETS Id Smart · NFC</span><span class="badge-ok">● Verificado</span>'+
      '<div class="avatar"><div class="ring"></div><div class="pic">'+(f.foto?'<img src="'+esc(f.foto)+'" alt="">':(ESPECIES[f.tipo]||'🐾'))+'</div></div>'+
      '<h1>'+esc(f.nombre)+'</h1>'+(sub?'<div class="sub">'+esc(sub)+'</div>':'')+
      (chips.length?'<div class="chips">'+chips.map(function(c){return'<span class="chip">'+esc(c)+'</span>'}).join('')+'</div>':'')+'</section>';
@@ -381,7 +381,7 @@ function verFicha(){
   if(!c)c='<div class="box empty">Sin contactos adicionales.</div>';
   h+='<div class="pane on">'+s+'</div><div class="pane">'+a+'</div><div class="pane">'+c+'</div>';
   var ep=(f.entregadoPor&&f.entregadoPor.nombre)||partner;
-  h+='<div class="foot">'+(ep?'Chapa entregada por <b>'+esc(ep)+'</b><br>':'')+'Pet Pass · tecnología phygital de <a href="https://studio42.es">Studio 42</a>'+(DEMO?'<br><br><a href="#" id="resetDemo">Reiniciar la demo</a>':'')+'</div>';
+  h+='<div class="foot">'+(ep?'Chapa entregada por <b>'+esc(ep)+'</b><br>':'')+'PETS Id Smart · tecnología phygital de <a href="https://studio42.es">Studio 42</a>'+(DEMO?'<br><br><a href="#" id="resetDemo">Reiniciar la demo</a>':'')+'</div>';
   $('#view').innerHTML=h;
   $('#fab').hidden=false;
   $$('.seg button').forEach(function(b){b.onclick=function(){var p=+b.dataset.p;$$('.seg button').forEach(function(o){o.classList.toggle('on',o===b)});$$('.pane').forEach(function(x,i){x.classList.toggle('on',i===p)});$('#ind').style.transform='translateX('+(p*100)+'%)'}});
@@ -403,12 +403,12 @@ function compartirGPS(){
 function verBlanca(){
   $('#fab').hidden=true;
   if(estado==='desconocida'){
-    $('#view').innerHTML='<div class="blank"><div class="disc">'+ICO.nfc+'</div><h1>Chapa no reconocida</h1><p>Este código no está registrado en Studio 42. Si acabas de recibir la chapa, escríbenos y lo resolvemos en minutos.</p><div style="margin-top:24px"><a class="cta" href="https://wa.me/34672294962?text='+encodeURIComponent('Hola Studio 42, mi chapa Pet Pass ('+id+') no aparece registrada.')+'">Escribir a Studio 42</a></div></div>';
+    $('#view').innerHTML='<div class="blank"><div class="disc">'+ICO.nfc+'</div><h1>Chapa no reconocida</h1><p>Este código no está registrado en Studio 42. Si acabas de recibir la chapa, escríbenos y lo resolvemos en minutos.</p><div style="margin-top:24px"><a class="cta" href="https://wa.me/34672294962?text='+encodeURIComponent('Hola Studio 42, mi chapa PETS Id Smart ('+id+') no aparece registrada.')+'">Escribir a Studio 42</a></div></div>';
     return;
   }
   $('#view').innerHTML='<div class="blank">'+(DEMO?'<span class="demo-tag">Demostración · así se ve una chapa nueva al escanearla</span>':'')+
    '<div class="disc"><span></span><span></span>'+ICO.nfc+'</div>'+
-   '<h1>Pet Pass listo para activar</h1><p>Esta chapa todavía no tiene datos. El veterinario o la familia la configuran en 2 minutos.</p>'+
+   '<h1>PETS Id Smart listo para activar</h1><p>Esta chapa todavía no tiene datos. El veterinario o la familia la configuran en 2 minutos.</p>'+
    (partner?'<span class="by">Un regalo de '+esc(partner)+'</span>':'')+
    '<div class="steps3"><div><b>1</b>Datos de la mascota y foto</div><div><b>2</b>Contacto de la familia y salud</div><div><b>3</b>Elige un PIN y queda bloqueada</div></div>'+
    '<button class="cta" id="goAct" type="button">Activar ahora</button>'+
@@ -547,7 +547,7 @@ function guardar(pin){
   var btn=$('#wNext');btn.disabled=true;btn.innerHTML='<span class="spin"></span>&nbsp;Guardando en la nube…';
   var fin=function(ok,err){btn.disabled=false;ir(paso);if(!ok){toast(err||'No se pudo guardar');return}
     ficha=borr;estado='activa';lsSet(KC,ficha);cerrarWizard();
-    $('#doneT').textContent=modo==='activar'?'¡Pet Pass activado!':'Cambios guardados';
+    $('#doneT').textContent=modo==='activar'?'¡PETS Id Smart activado!':'Cambios guardados';
     $('#doneP').textContent=modo==='activar'?'La ficha de '+ficha.nombre+' ya está bloqueada. Quien escanee la chapa solo puede leerla.':'La ficha vuelve a estar bloqueada en modo lectura.';
     $('#done').classList.add('on');pinOK='';};
   borr.actualizado=new Date().toISOString();

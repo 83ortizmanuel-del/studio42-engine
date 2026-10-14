@@ -224,7 +224,7 @@ textarea.inp{min-height:110px;resize:vertical}
   <nav class="nav"><div class="in">
     <button type="button" data-tab="Pedidos" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2h12l2 5H4z"/><path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 11h6"/></svg>Pedidos<span class="badge" id="badge" hidden></span></button>
     <button type="button" data-tab="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Clientes</button>
-    <button type="button" data-tab="Pets"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="10" r="2.2"/><circle cx="9.5" cy="5.5" r="2.2"/><circle cx="14.5" cy="5.5" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M12 11c-3 0-6.5 4.6-6.5 7.2C5.5 20 7 21 8.6 21c1.5 0 2.2-.8 3.4-.8s1.9.8 3.4.8c1.6 0 3.1-1 3.1-2.8C18.5 15.6 15 11 12 11z"/></svg>Pet Pass</button>
+    <button type="button" data-tab="Pets"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="10" r="2.2"/><circle cx="9.5" cy="5.5" r="2.2"/><circle cx="14.5" cy="5.5" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M12 11c-3 0-6.5 4.6-6.5 7.2C5.5 20 7 21 8.6 21c1.5 0 2.2-.8 3.4-.8s1.9.8 3.4.8c1.6 0 3.1-1 3.1-2.8C18.5 15.6 15 11 12 11z"/></svg>PETS Id Smart</button>
     <button type="button" data-tab="Tarjetas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="8.5" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 1.6-2.4 3-2.4s2.4.8 3 2.4M14.5 10h4M14.5 13.5h3"/></svg>Tarjetas</button>
     <a href="../v/closer/?cod=MO001" class="new" id="lNuevo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nuevo</a>
   </div></nav>
@@ -549,10 +549,10 @@ function publicar(){
   }).catch(function(){b.disabled=false;b.textContent='Publicar en la web';toast('Sin conexión')});
 }
 
-/* ---------- Pet Pass ---------- */
+/* ---------- PETS Id Smart ---------- */
 function pintarPets(){
   var g={};D.chapas.forEach(function(c){var k=c.entregadaPor||'Venta directa';(g[k]=g[k]||[]).push(c)});
-  var h='<div class="h2"><h2>Pet Pass</h2><small>'+D.chapas.length+' chapas</small></div>';
+  var h='<div class="h2"><h2>PETS Id Smart</h2><small>'+D.chapas.length+' chapas</small></div>';
   if(!D.chapas.length)h+='<div class="empty">Aún no hay chapas. Créalas en Apps Script con <b>CREAR_CHAPAS_PET</b>.</div>';
   Object.keys(g).forEach(function(k){
     var act=g[k].filter(function(c){return c.estado==='activa'}).length;
@@ -695,7 +695,7 @@ function demoApi(b){
         {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-7C2D',fecha:h(1,17),closer:'MEL042',cliente:'Zombie Tattoo',slug:'zombie-tattoo',url:url('zombie-tattoo'),pack:'Prueba Logroño',estado:'Grabado',notas:'',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:1,incluidas:1,extra:0,importe:0}],base:89,iva:18.69,total:107.69}},
         {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-93BE',fecha:h(3,10),closer:'MO001',cliente:'Clínica Dental Mazo Ruiz',slug:'clinica-dental-mazo-ruiz',url:url('clinica-dental-mazo-ruiz'),pack:'Efecto multiplicador',estado:'Cobrado',notas:'',calc:{lineas:[{concepto:'Pack Efecto multiplicador',unidades:1,importe:349},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:10,incluidas:10,extra:0,importe:0},{pieza:'tarjeta',concepto:'Tarjeta de madera NFC',unidades:1,incluidas:1,extra:0,importe:0}],base:349,iva:73.29,total:422.29}}
       ],
-      catalogo:{planes:{esencial:{nombre:'Esencial',mensual:19},pro:{nombre:'Pro',mensual:39},multisede:{nombre:'Multi-sede',mensual:79},clinica:{nombre:'Pet Pass Clínica',mensual:29}}},
+      catalogo:{planes:{esencial:{nombre:'Esencial',mensual:19},pro:{nombre:'Pro',mensual:39},multisede:{nombre:'Multi-sede',mensual:79},clinica:{nombre:'PETS Id Smart Clínica',mensual:29}}},
       suscripciones:[
         {slug:'ankara-kebab',cliente:'Ankara Kebab',plan:'pro',periodo:'mensual',estado:'prueba',email:'ankara@ejemplo.es',proximo:h(-58,9),landing:'activa'},
         {slug:'clinica-dental-mazo-ruiz',cliente:'Clínica Dental Mazo Ruiz',plan:'pro',periodo:'anual',estado:'activa',email:'clinica@ejemplo.es',proximo:h(-300,9),landing:'activa'},

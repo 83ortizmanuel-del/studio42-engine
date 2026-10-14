@@ -988,7 +988,7 @@
                 llavero:  { nombre: 'Llavero Smart Drop', precio: 19.9 },
                 tarjeta:  { nombre: 'Tarjeta de madera NFC', precio: 39.9 },
                 welcome:  { nombre: 'Welcome Pack directivos', precio: 89 },
-                petpass:  { nombre: 'Chapa Pet Pass', precio: 14.9 },
+                petpass:  { nombre: 'Chapa PETS Id Smart', precio: 14.9 },
                 camiseta: { nombre: 'Camiseta del equipo NFC', precio: null }
             },
             packs: {
@@ -1002,13 +1002,13 @@
                 esencial:  { nombre: 'Esencial', mensual: 19 },
                 pro:       { nombre: 'Pro', mensual: 39 },
                 multisede: { nombre: 'Multi-sede', mensual: 79 },
-                clinica:   { nombre: 'Pet Pass Clínica', mensual: 29 }
+                clinica:   { nombre: 'PETS Id Smart Clínica', mensual: 29 }
             }
         };
         const PERIODOS = { mensual: 'Mensual', trimestral: 'Trimestral −5 %', anual: 'Anual · 2 meses gratis' };
         const precioPlan = (plan, per) => { const m = CATALOGO.planes[plan].mensual; return per === 'trimestral' ? Math.round(m * 3 * 0.95 * 100) / 100 : per === 'anual' ? m * 10 : m; };
         const sufijo = { mensual: '/mes', trimestral: '/trimestre', anual: '/año' };
-        const DESC_PLAN = { esencial: 'Landing activa, 2 cambios al mes, informe mensual', pro: 'Cambios ilimitados en 24 h, informe por pieza, campañas', multisede: 'Varias sedes en una landing hub, informe comparado', clinica: 'Para veterinarias: chapas Pet Pass a precio de coste' };
+        const DESC_PLAN = { esencial: 'Landing activa, 2 cambios al mes, informe mensual', pro: 'Cambios ilimitados en 24 h, informe por pieza, campañas', multisede: 'Varias sedes en una landing hub, informe comparado', clinica: 'Para veterinarias: chapas PETS Id Smart a precio de coste' };
         const euro = (n) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         let ped = null;
 
