@@ -156,7 +156,7 @@ Para ver errores técnicos: Apps Script → icono **Ejecuciones** (a la izquierd
 - **Cambiar el estilo de la IA** (por ejemplo "usa siempre tono más formal"): propiedad `PROMPT_EXTRA`. Más en `docs/CLAUDE-PROMPT.md`.
 - **Hosting:** la web se sirve con **GitHub Pages** (no Netlify). Todo lo que hay en el repositorio es público mientras el repo lo sea (ver `docs/RESENAS-Y-CUMPLIMIENTO.md`).
 
-## Pet Pass (chapas para mascotas)
+## PETS Id Smart (chapas para mascotas)
 
 1. Pega el `Code.gs` nuevo y publica **Nueva versión** (Paso 4). Usa el mismo `GITHUB_TOKEN`.
 2. En Apps Script elige **`CREAR_CHAPAS_PET`**, cambia `CANTIDAD` y `ENTREGADA_POR` (por ejemplo el nombre de la clínica) y pulsa ▶.
@@ -175,14 +175,14 @@ Más detalles en `pets/README.md`.
 **Panel (`studio42.es/panel/`):** entra con tu `PANEL_CLAVE` desde el móvil (puedes añadirlo a la pantalla de inicio). Tienes:
 - **Pedidos**: los pendientes arriba; tócalos para ver el detalle, copiar los enlaces NFC y cambiar el estado (Por despachar → Grabado → Entregado → Cobrado).
 - **Clientes**: todas las landings con vista previa en un móvil. **✨ Pedir un cambio a Claude**: escríbelo con tus palabras, Claude prepara la propuesta, la ves en la vista previa (marcada «sin publicar») y solo cuando pulsas **Publicar en la web** se guarda. Si algo no encaja, **Descartar**.
-- **Pet Pass**: las chapas de cada clínica y cuáles están activadas.
+- **PETS Id Smart**: las chapas de cada clínica y cuáles están activadas.
 - **Nuevo**: abre el formulario del Closer (con tu código) para dar de alta un cliente.
 
 Para verlo sin configurar nada: `studio42.es/panel/?demo=1` (datos de ejemplo, no guarda nada).
 
 ## Suscripciones (Ecosistema Activo) y cobro con Stripe
 
-**Precios:** Esencial 19 €, Pro 39 €, Multi-sede 79 € (+29 €/sede), Pet Pass Clínica 29 € al mes + IVA. Trimestral −5 %, anual = 10 meses. Cada pack incluye meses gratis: Prueba 1, Imán 2, Multiplicador 3, Dominio 6. Se cambian en `Code.gs` (bloque `CATALOGO`) y en el formulario del Closer (una prueba avisa si no coinciden).
+**Precios:** Esencial 19 €, Pro 39 €, Multi-sede 79 € (+29 €/sede), PETS Id Smart Clínica 29 € al mes + IVA. Trimestral −5 %, anual = 10 meses. Cada pack incluye meses gratis: Prueba 1, Imán 2, Multiplicador 3, Dominio 6. Se cambian en `Code.gs` (bloque `CATALOGO`) y en el formulario del Closer (una prueba avisa si no coinciden).
 
 **Antes de cobrar de verdad:** alta de autónomo (Hacienda 036 + Seguridad Social con tarifa plana) y cuenta de Stripe activada como autónomo. Mientras tanto se puede montar y probar todo en **modo prueba** de Stripe.
 

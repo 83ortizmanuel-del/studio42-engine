@@ -25,7 +25,7 @@ Al migrar los 9 clientes se conservó todo lo que funcionaba. Lo que no estaba c
 - **Ankara Kebab:** alérgenos (opción «sin gluten», lácteos de la salsa blanca). Lleva ya el aviso «si tienes una alergia grave díselo al personal».
 - **Sport Planet Nutrition:** dosis de creatina y factores de proteína (1.5 / 1.8 / 2.2 g/kg) — llevan aviso «orientativo».
 - **Dra. Lisbeth:** signos de alarma y maleta del parto: que los revise ella.
-- **Pet Pass (Toby):** es una **demostración** (foto de Unsplash, microchip de ejemplo). Para un cliente real, cambiar foto y datos.
+- **PETS Id Smart (Toby):** es una **demostración** (foto de Unsplash, microchip de ejemplo). Para un cliente real, cambiar foto y datos.
 
 ## Botones que no funcionaban y quedaron anotados
 - **Zombie:** «Guía de curación (PDF)» tenía el enlace de relleno `AQUI_TU_LINK_DE_DRIVE_AL_PDF`. Cuando tengan el PDF en Drive: añadir un botón `enlace`.
