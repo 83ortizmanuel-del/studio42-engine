@@ -111,9 +111,7 @@ section{padding:34px 0 0}
 /* Club del llavero */
 .club{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--bg2)}
 .club-top{padding:20px 18px;background:linear-gradient(135deg,#2a0000,#0b0c10 70%);display:flex;gap:16px;align-items:center}
-.key{width:64px;height:84px;flex:none;border-radius:32px 32px 32px 32px/40px 40px 44px 44px;background:linear-gradient(145deg,#f4f5f7,#9a9fa8 50%,#2b2e34);position:relative;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 30px rgba(230,0,0,.35);animation:flota 4s ease-in-out infinite}
-.key::before{content:"";position:absolute;top:8px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#08090c}
-.key::after{content:"SPN";position:absolute;bottom:18px;left:0;right:0;text-align:center;font:800 13px Disp;color:var(--red);font-style:italic}
+.key{width:92px;height:92px;flex:none;border-radius:50%;box-shadow:0 12px 30px rgba(0,0,0,.65),0 0 34px rgba(230,0,0,.35);animation:flota 4s ease-in-out infinite}
 @keyframes flota{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-6px) rotate(4deg)}}
 .club-top h3{font-size:19px}
 .club-top p{font-size:13px;color:#cfd2d8;margin-top:4px}
@@ -215,7 +213,7 @@ footer a{color:var(--mut)}
     <p class="sub">El llavero SPN va con tus llaves, no en un cajón. Y trabaja para ti cada día.</p>
     <div class="club">
       <div class="club-top">
-        <div class="key" aria-hidden="true"></div>
+        <img class="key" src="llavero-spn.webp" width="92" height="92" alt="Llavero SPN con chip NFC">
         <div><h3>Un toque. Tres superpoderes.</h3><p>Sin app, sin tarjetas de sellos, sin contraseñas.</p></div>
       </div>
       <div class="tabs" role="tablist">
