@@ -1452,18 +1452,18 @@ function panelRouter_(d) {
     var fallos = Number(cache.get('panelfail') || '0');
     if (fallos >= 10) return { ok: false, error: 'Demasiados intentos. Espera 15 minutos.' };
     var intro = String(d.clave || ''), ses = null;
-    if (clave.length >= 6 && intro === clave) ses = { rol: 'ceo', n: 'CEO' };
-    else equipo.forEach(function (m) { if (!ses && intro && m.h === equipoHash_(m.s, intro)) ses = { rol: 'equipo', n: m.n, id: m.id }; });
+    if (clave.length >= 6 && intro === clave) ses = { rol: 'ceo', n: 'CEO · Founder' };
+    else equipo.forEach(function (m) { if (!ses && intro && m.h === equipoHash_(m.s, intro)) ses = { rol: 'equipo', n: m.n, cargo: m.c || 'Equipo', id: m.id }; });
     if (!ses) { cache.put('panelfail', String(fallos + 1), 900); return { ok: false, error: 'Contraseña incorrecta.' }; }
     var token = Utilities.getUuid() + Utilities.getUuid();
     cache.put('ptok_' + token, JSON.stringify(ses), 21600);
-    return { ok: true, token: token, rol: ses.rol, nombre: ses.n };
+    return { ok: true, token: token, rol: ses.rol, nombre: ses.n, cargo: ses.cargo || '' };
   }
   var guardado = d.token ? cache.get('ptok_' + d.token) : null;
   if (!guardado) return { ok: false, sesion: false, error: 'La sesión ha caducado. Vuelve a entrar.' };
   var sesion = null;
   try { sesion = JSON.parse(guardado); } catch (e) { sesion = null; }
-  if (!sesion || typeof sesion !== 'object') sesion = { rol: 'ceo', n: 'CEO' }; // sesiones antiguas
+  if (!sesion || typeof sesion !== 'object') sesion = { rol: 'ceo', n: 'CEO · Founder' }; // sesiones antiguas
   if (sesion.rol === 'equipo') {
     if (!equipoLista_().some(function (m) { return m.id === sesion.id; })) {
       cache.remove('ptok_' + d.token);
@@ -1474,8 +1474,8 @@ function panelRouter_(d) {
   var c = cfg_();
   if (d.accion === 'panel_datos') {
     var datos = panelDatos_(c);
-    datos.rol = sesion.rol; datos.nombre = sesion.n;
-    if (sesion.rol === 'ceo') datos.equipo = equipoLista_().map(function (m) { return { id: m.id, nombre: m.n, creado: m.creado || '' }; });
+    datos.rol = sesion.rol; datos.nombre = sesion.n; datos.cargo = sesion.cargo || '';
+    if (sesion.rol === 'ceo') datos.equipo = equipoLista_().map(function (m) { return { id: m.id, nombre: m.n, cargo: m.c || 'Equipo', creado: m.creado || '' }; });
     else datos.chapas = [];
     return datos;
   }
@@ -1505,10 +1505,11 @@ function panelRouter_(d) {
     if (nom.length < 2) return { ok: false, error: 'Escribe el nombre de la persona.' };
     var l = equipoLista_();
     if (l.length >= 20) return { ok: false, error: 'Máximo 20 personas en el equipo.' };
+    var cargo = limpiar_(d.cargo, 40) || 'Equipo';
     var cl = equipoClaveNueva_(), sal = Utilities.getUuid(), id = 'e' + Date.now().toString(36);
-    l.push({ id: id, n: nom, s: sal, h: equipoHash_(sal, cl), creado: new Date().toISOString() });
+    l.push({ id: id, n: nom, c: cargo, s: sal, h: equipoHash_(sal, cl), creado: new Date().toISOString() });
     equipoGuardar_(l);
-    return { ok: true, id: id, nombre: nom, clave: cl };
+    return { ok: true, id: id, nombre: nom, cargo: cargo, clave: cl };
   }
   if (d.accion === 'panel_equipo_borrar') {
     var antes = equipoLista_(), despues = antes.filter(function (m) { return m.id !== d.id; });

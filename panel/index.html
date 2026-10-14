@@ -50,6 +50,10 @@ a{color:inherit;text-decoration:none}
 .top img{width:36px;height:36px;filter:drop-shadow(0 0 8px rgba(217,160,45,.4))}
 .top b{font:800 1.1rem var(--fd)}
 .top .tag{font:700 .62rem var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:.2rem .5rem;border-radius:99px}
+.top .tag{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}.top>b{white-space:nowrap}
+.top .sp{flex:1 1 0;min-width:0}
+@media(max-width:430px){.top>b{display:none}.top .tag{letter-spacing:.06em;font-size:.6rem}}
+@media(max-width:380px){.top{gap:6px}.top .ib{width:36px;height:36px}.top .tag{letter-spacing:.03em;padding:.2rem .4rem}}
 .top .sp{flex:1}
 .ib{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center}
 .ib svg{width:18px;height:18px}
@@ -705,7 +709,7 @@ $('#tjBack').onclick=cerrarTarjeta;
 function aplicarRol(r){
   ROL=r.rol==='equipo'?'equipo':'ceo';
   document.body.classList.toggle('rol-equipo',ROL==='equipo');
-  $('#tagRol').textContent=ROL==='equipo'?(r.nombre||'Equipo'):'CEO';
+  $('#tagRol').textContent=ROL==='equipo'?(r.nombre||'Equipo')+(r.cargo?' · '+r.cargo:''):'CEO · Founder';
   if(ROL==='equipo'&&!$('#tabPets').hidden){$$('.nav button[data-tab]')[0].click()}
 }
 function pintarEquipo(nueva){
@@ -713,8 +717,8 @@ function pintarEquipo(nueva){
   var h='<div class="grip"></div><h3>👥 Equipo y accesos</h3><div class="sub">Cada persona entra al panel con su propia contraseña. Puede ver pedidos y clientes, y crear, editar o pausar tarjetas. No puede dar de baja, cambiar pedidos ni tocar PETS Id Smart.</div>';
   if(nueva)h+='<div class="clave-nueva"><b>Contraseña de '+esc(nueva.nombre)+'</b><code>'+esc(nueva.clave)+'</code><div class="mini">Apúntala y dásela en persona. <b>No se vuelve a mostrar.</b> Si la pierde, quítale el acceso y créale uno nuevo.</div><button type="button" class="ghost" id="eqCopiar" style="margin-top:8px">Copiar</button></div>';
   if(!L.length)h+='<div class="empty">Todavía no has dado acceso a nadie.</div>';
-  L.forEach(function(m){h+='<div class="persona"><b>'+esc(m.nombre)+'<small>Equipo · desde '+esc(m.creado?fechaCorta(m.creado).split(' · ')[0]:'—')+'</small></b><button type="button" class="ghost" data-q="'+esc(m.id)+'" style="min-height:36px;color:#fca5a5;border-color:rgba(239,68,68,.35)">Quitar acceso</button></div>'});
-  h+='<div class="sec" style="margin-top:18px">Dar acceso a alguien</div><input class="inp" id="eqNombre" placeholder="Nombre (ej.: Melina)" maxlength="40"><button type="button" class="cta" id="eqCrear" style="margin-top:8px">＋ Crear su contraseña</button>';
+  L.forEach(function(m){h+='<div class="persona"><b>'+esc(m.nombre)+'<small>'+esc(m.cargo||'Equipo')+' · desde '+esc(m.creado?fechaCorta(m.creado).split(' · ')[0]:'—')+'</small></b><button type="button" class="ghost" data-q="'+esc(m.id)+'" style="min-height:36px;color:#fca5a5;border-color:rgba(239,68,68,.35)">Quitar acceso</button></div>'});
+  h+='<div class="sec" style="margin-top:18px">Dar acceso a alguien</div><input class="inp" id="eqNombre" placeholder="Nombre (ej.: Melina)" maxlength="40"><input class="inp" id="eqCargo" placeholder="Cargo (ej.: CEO · Co-Founder)" maxlength="40" style="margin-top:8px"><button type="button" class="cta" id="eqCrear" style="margin-top:8px">＋ Crear su contraseña</button>';
   h+='<button type="button" class="ghost" id="eqCerrar" style="width:100%;margin-top:10px">Cerrar</button>';
   $('#shEquipoIn').innerHTML=h;
   if($('#eqCopiar'))$('#eqCopiar').onclick=function(){copiar(nueva.clave,$('#eqCopiar'))};
@@ -722,9 +726,9 @@ function pintarEquipo(nueva){
   $('#eqCrear').onclick=function(){
     var n=$('#eqNombre').value.trim();if(n.length<2){toast('Escribe su nombre');return}
     var b=this;b.disabled=true;b.textContent='Creando…';
-    api({accion:'panel_equipo_crear',nombre:n}).then(function(r){
+    api({accion:'panel_equipo_crear',nombre:n,cargo:$('#eqCargo').value.trim()}).then(function(r){
       if(!r.ok){toast(r.error||'No se pudo');b.disabled=false;b.textContent='＋ Crear su contraseña';return}
-      (D.equipo=D.equipo||[]).push({id:r.id,nombre:r.nombre,creado:new Date().toISOString()});pintarEquipo({nombre:r.nombre,clave:r.clave});
+      (D.equipo=D.equipo||[]).push({id:r.id,nombre:r.nombre,cargo:r.cargo,creado:new Date().toISOString()});pintarEquipo({nombre:r.nombre,clave:r.clave});
     }).catch(function(){toast('Sin conexión');b.disabled=false});
   };
   $$('#shEquipoIn [data-q]').forEach(function(b){b.onclick=function(){
@@ -750,12 +754,12 @@ function demoApi(b){
   var demoRol=new URLSearchParams(location.search).get('rol')==='equipo'?'equipo':'ceo';
   if(b.accion==='panel_login')return esperar(400,{ok:true,token:'demo',rol:demoRol});
   if(demoRol==='equipo'&&['panel_datos','panel_tarjeta_guardar','panel_tarjeta_estado'].indexOf(b.accion)<0)return esperar(300,{ok:false,error:'Tu acceso no permite esta acción.'});
-  if(b.accion==='panel_equipo_crear')return esperar(500,{ok:true,id:'e'+Date.now(),nombre:b.nombre,clave:'k7m2xq9pta'});
+  if(b.accion==='panel_equipo_crear')return esperar(500,{ok:true,id:'e'+Date.now(),nombre:b.nombre,cargo:b.cargo||'Equipo',clave:'k7m2xq9pta'});
   if(b.accion==='panel_equipo_borrar'||b.accion==='panel_chapas_crear'||b.accion==='panel_baja')return esperar(500,{ok:true});
   if(b.accion==='panel_datos'){
     var hoy=new Date(),h=function(d,hh){var x=new Date(hoy);x.setDate(x.getDate()-d);x.setHours(hh,15);return x.toISOString()};
     var url=function(s){return'https://studio42.es/c/?cod='+s};
-    var R={ok:true,dominio:'https://studio42.es',estados:ESTADOS,rol:demoRol,nombre:demoRol==='equipo'?'Melina':'CEO',equipo:demoRol==='ceo'?[{id:'e1',nombre:'Melina',creado:new Date().toISOString()}]:undefined,
+    var R={ok:true,dominio:'https://studio42.es',estados:ESTADOS,rol:demoRol,nombre:demoRol==='equipo'?'Melina':'CEO · Founder',cargo:demoRol==='equipo'?'CEO · Co-Founder':'',equipo:demoRol==='ceo'?[{id:'e1',nombre:'Melina',cargo:'CEO · Co-Founder',creado:new Date().toISOString()}]:undefined,
       clientes:['ankara-kebab','clinica-dental-mazo-ruiz','iberlax','nutrition-planet','unas-latinas-carolina','zombie-tattoo','dra-lisbeth-carolina-rangel-sanchez','spn-pacientes','pet-pass'],
       pedidos:[
         {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-A1F3',fecha:h(0,11),closer:'MO001',cliente:'Ankara Kebab',slug:'ankara-kebab',url:url('ankara-kebab'),pack:'Imán de mostrador',estado:'Por despachar',notas:'Llaveros para los 3 turnos',calc:{lineas:[{concepto:'Pack Imán de mostrador',unidades:1,importe:149},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Smart Drop',unidades:5,incluidas:2,extra:3,importe:59.7}],base:208.7,iva:43.83,total:252.53}},
