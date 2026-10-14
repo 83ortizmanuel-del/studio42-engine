@@ -50,6 +50,8 @@
         .chapa-mock .glow { position: absolute; inset: 20% 20%; background: radial-gradient(circle, rgba(220,228,240,.3), transparent 70%); filter: blur(40px); }
         .chapa-mock .chapa { width: 240px; height: 240px; border-radius: 50%; background: var(--ti-grad); position: relative; display: grid; place-items: center; box-shadow: 0 40px 80px -20px rgba(0,0,0,.9), 0 0 60px -10px rgba(190,198,212,.4); }
         .chapa-mock .chapa::after { content: ""; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); width: 36px; height: 46px; border: 10px solid #cfd4dc; border-radius: 50%; }
+        .chapa-mock .chapa-foto { width: min(280px, 70vw); height: auto; border-radius: 50%; position: relative; box-shadow: 0 40px 80px -20px rgba(0,0,0,.9), 0 0 60px -10px rgba(240,140,90,.35); animation: chapaFlota 5s ease-in-out infinite; }
+        @keyframes chapaFlota { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
         .chapa-mock .chapa-inner { text-align: center; color: #0b0c0f; }
         .chapa-mock .chapa-inner .nfc { font: 800 .72rem var(--f-b); letter-spacing: .3em; margin-bottom: .3rem; }
         .chapa-mock .chapa-inner .nombre { font: 800 1.5rem var(--f-d); line-height: 1; }
@@ -145,7 +147,7 @@
                 <div class="chapa-mock" aria-hidden="true">
                     <span class="ring-sos"></span><span class="ring-sos"></span><span class="ring-sos"></span>
                     <div class="glow"></div>
-                    <div class="chapa"><div class="chapa-inner"><div class="nfc">PET PASS</div><div class="nombre">Toby</div><div class="brand-chapa">TU CLÍNICA</div></div></div>
+                    <img class="chapa-foto" src="../../img/llavero-pets.webp" width="520" height="520" alt="Chapa Pet Pass con chip NFC para el collar">
                 </div>
             </div>
         </header>
