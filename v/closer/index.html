@@ -985,7 +985,7 @@
         const CATALOGO = {
             piezas: {
                 display:  { nombre: 'Display acrílico NFC', precio: 49 },
-                llavero:  { nombre: 'Llavero Smart Drop', precio: 19.9 },
+                llavero:  { nombre: 'Llavero Studio 42', precio: 19.9 },
                 tarjeta:  { nombre: 'Tarjeta de madera NFC', precio: 39.9 },
                 welcome:  { nombre: 'Welcome Pack directivos', precio: 89 },
                 petpass:  { nombre: 'Chapa PETS Id Smart', precio: 14.9 },
@@ -1122,7 +1122,7 @@
             const fila = (a, b, cls) => { const d = h('div', 'resumen-l' + (cls ? ' ' + cls : '')); d.append(h('span', null, a), h('span', null, b)); z.appendChild(d); };
             const P = CATALOGO.packs[ped.pack];
             Object.entries(ped.cant).forEach(([k, n]) => { if (n) fila(`${n} × ${CATALOGO.piezas[k].nombre}`, (P.incluye[k] || 0) >= n ? 'incluido' : ''); });
-            if (ped.promo) fila('2 × Llavero Smart Drop (promo)', 'regalo');
+            if (ped.promo) fila('2 × Llavero Studio 42 (promo)', 'regalo');
             z.append(h('div', 'ped-tit', 'Importe'));
             c.lineas.forEach(([a, b]) => fila(a, b === null ? 'a consultar' : euro(b)));
             fila('Base imponible', euro(c.base)); fila('IVA 21 %', euro(c.iva)); fila('Total', euro(c.total) + (c.consultar ? ' + piezas a consultar' : ''), 'tot');
