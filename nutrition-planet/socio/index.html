@@ -86,9 +86,7 @@ section{padding:24px 0 0}
 
 /* Vista pública */
 .v-hero{text-align:center}
-.key{width:76px;height:98px;margin:6px auto 14px;border-radius:38px 38px 38px 38px/46px 46px 52px 52px;background:linear-gradient(145deg,#f4f5f7,#9a9fa8 50%,#2b2e34);position:relative;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 34px rgba(230,0,0,.45);animation:flota 4s ease-in-out infinite}
-.key::before{content:"";position:absolute;top:9px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#08090c}
-.key::after{content:"SPN";position:absolute;bottom:22px;left:0;right:0;text-align:center;font:800 15px Disp;color:var(--red);font-style:italic}
+.key{display:block;width:120px;height:120px;margin:6px auto 14px;border-radius:50%;box-shadow:0 12px 32px rgba(0,0,0,.65),0 0 36px rgba(230,0,0,.4);animation:flota 4s ease-in-out infinite}
 @keyframes flota{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-6px) rotate(4deg)}}
 .v-hero h1{font-size:28px;line-height:1.05}
 .v-hero p{color:var(--mut);margin-top:8px;font-size:15px}
@@ -187,7 +185,7 @@ footer a{color:var(--mut)}
 <div id="vOtro" class="oculto">
   <header class="top w v-hero">
     <img class="logo" src="../logo.png" width="283" height="178" alt="SPN">
-    <div class="key" aria-hidden="true"></div>
+    <img class="key" src="../llavero-spn.webp" width="120" height="120" alt="Llavero SPN con chip NFC">
     <h1 id="tituloOtro">Este llavero es de <span class="it" id="nom2"></span></h1>
     <p>Entrena con SPN Nutrition Planet. ¿Qué te trae por aquí?</p>
     <div class="vivo" id="vivo"><i></i><span id="vivoTxt">Mostrador conectado ahora</span></div>
