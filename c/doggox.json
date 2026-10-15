@@ -1,0 +1,282 @@
+{
+  "version": 2,
+  "nombre": "DOGGOX",
+  "subtitulo": "Comida rápida en Logroño, siempre al día",
+  "textoBadge": "CARTA Y PEDIDOS",
+  "colorPrincipal": "#19140f",
+  "colorAcento": "#d38301",
+  "whatsapp": "https://wa.me/34642521542",
+  "secciones": [
+    {
+      "titulo": "Pide, reserva y consulta",
+      "botones": [
+        {
+          "tipo": "asistente",
+          "nombre": "Carta actualizada",
+          "descripcion": "¿La carta QR no carga o está anticuada? Pídenos la versión al día.",
+          "icono": "utensils",
+          "titulo": "Pide la carta al día",
+          "intro": "Dinos qué quieres consultar y te la enviamos por WhatsApp.",
+          "botonTexto": "Pedir por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Qué necesitas",
+              "opciones": [
+                "Carta completa",
+                "Menús o combos",
+                "Bebidas",
+                "Postres",
+                "Novedades"
+              ]
+            },
+            {
+              "titulo": "Dónde estás",
+              "opciones": [
+                "Ahora mismo en el local",
+                "En casa",
+                "De camino"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, la carta QR no me carga o no está actualizada.\n- Quiero ver: {Qué necesitas}\n- Estoy: {Dónde estás}\n¿Me la podéis pasar actualizada? Gracias.",
+          "destacado": true
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Pedido para llevar",
+          "descripcion": "Prepara tu pedido y avisa al local antes de pasar a recogerlo.",
+          "icono": "truck",
+          "titulo": "Pedido para llevar",
+          "intro": "Elige cuándo y para cuántos. El pedido lo concretas en el chat.",
+          "botonTexto": "Enviar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Cuándo lo quieres",
+              "opciones": [
+                "Lo antes posible",
+                "En 30 minutos",
+                "En 1 hora",
+                "Más tarde hoy"
+              ]
+            },
+            {
+              "titulo": "Para cuántas personas",
+              "opciones": [
+                "1 persona",
+                "2 personas",
+                "3-4 personas",
+                "5 o más"
+              ]
+            },
+            {
+              "titulo": "Cómo lo recibes",
+              "opciones": [
+                "Recojo en el local",
+                "Quiero consultar envío"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, quiero hacer un pedido para llevar:\n- Cuándo: {Cuándo lo quieres}\n- Personas: {Para cuántas personas}\n- Entrega: {Cómo lo recibes}\nAhora os dicto lo que quiero. ¿Me confirmáis plazo?"
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Reservas, grupos y celebraciones",
+          "descripcion": "Pide mesa para ti, tu cuadrilla o una celebración.",
+          "icono": "calendar",
+          "titulo": "Solicitar reserva",
+          "intro": "Cuéntanos lo básico y el local te confirma disponibilidad.",
+          "botonTexto": "Solicitar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Tipo de reserva",
+              "opciones": [
+                "Mesa normal",
+                "Grupo",
+                "Cumpleaños o celebración"
+              ]
+            },
+            {
+              "titulo": "Personas",
+              "opciones": [
+                "1-2",
+                "3-4",
+                "5-8",
+                "9-15",
+                "Más de 15"
+              ]
+            },
+            {
+              "titulo": "Día",
+              "opciones": [
+                "Hoy",
+                "Mañana",
+                "Este fin de semana",
+                "Otro día"
+              ]
+            },
+            {
+              "titulo": "Momento",
+              "opciones": [
+                "Comida",
+                "Cena"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, quiero reservar:\n- Tipo: {Tipo de reserva}\n- Personas: {Personas}\n- Día: {Día}\n- Momento: {Momento}\n¿Tenéis hueco? Gracias."
+        },
+        {
+          "tipo": "info",
+          "nombre": "Alérgenos e intolerancias",
+          "descripcion": "Antes de pedir, consulta con el equipo del local.",
+          "icono": "shield",
+          "titulo": "Alérgenos e intolerancias",
+          "intro": "Tu seguridad es lo primero. Esta información solo la puede confirmar el local.",
+          "tarjetas": [
+            {
+              "nivel": "alerta",
+              "titulo": "Pregunta siempre al equipo",
+              "texto": "Si tienes alguna alergia o intolerancia, díselo al personal antes de pedir. Ellos te confirmarán los ingredientes de cada plato."
+            },
+            {
+              "nivel": "info",
+              "titulo": "Si pides para llevar",
+              "texto": "Indica tu alergia o intolerancia al hacer el pedido para que el local pueda revisarlo contigo."
+            },
+            {
+              "nivel": "aviso",
+              "titulo": "La carta puede cambiar",
+              "texto": "Los productos y recetas pueden variar. Confirma siempre con el local, aunque ya hayas consultado la carta."
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Consultar por WhatsApp",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, tengo una alergia o intolerancia y quiero consultar qué platos puedo pedir. ¿Me ayudáis?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Contacto & Redes",
+      "botones": [
+        {
+          "tipo": "whatsapp",
+          "nombre": "Escríbenos por WhatsApp",
+          "descripcion": "Respuesta directa del equipo",
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "mensaje": "Hola {negocio}, quisiera más información."
+        },
+        {
+          "tipo": "enlace",
+          "nombre": "Llamar ahora",
+          "descripcion": "Teléfono del negocio",
+          "icono": "phone",
+          "colorIcono": "#34d399",
+          "url": "tel:+34941547325"
+        },
+        {
+          "tipo": "enlace",
+          "nombre": "Cómo llegar",
+          "descripcion": "C. de Juan XXIII, 26003 Logroño, La Rioja, España",
+          "icono": "nav",
+          "colorIcono": "#4285F4",
+          "url": "https://maps.google.com/?cid=7996938501169405734&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA"
+        },
+        {
+          "tipo": "info",
+          "nombre": "Horario",
+          "descripcion": "Días y horas de apertura",
+          "icono": "clock",
+          "titulo": "Horario de apertura",
+          "intro": "Según la ficha de Google Maps. Puede variar en festivos.",
+          "tarjetas": [
+            {
+              "nivel": "info",
+              "titulo": "Semana",
+              "items": [
+                {
+                  "etiqueta": "lunes",
+                  "valor": "Cerrado"
+                },
+                {
+                  "etiqueta": "martes",
+                  "valor": "20:00–23:30"
+                },
+                {
+                  "etiqueta": "miércoles",
+                  "valor": "20:00–23:30"
+                },
+                {
+                  "etiqueta": "jueves",
+                  "valor": "20:00–23:30"
+                },
+                {
+                  "etiqueta": "viernes",
+                  "valor": "20:00–24:00"
+                },
+                {
+                  "etiqueta": "sábado",
+                  "valor": "20:00–24:00"
+                },
+                {
+                  "etiqueta": "domingo",
+                  "valor": "20:00–24:00"
+                }
+              ]
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Preguntar por WhatsApp",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, quisiera confirmar el horario."
+            }
+          ]
+        },
+        {
+          "tipo": "vcard",
+          "nombre": "Guardar contacto en la agenda",
+          "descripcion": "Descarga nuestro teléfono directo al móvil",
+          "icono": "contact",
+          "colorIcono": "#ffffff"
+        }
+      ]
+    },
+    {
+      "titulo": "Servicios del llavero",
+      "botones": [
+        {
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Avisa al local para coordinar la devolución segura"
+        },
+        {
+          "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
+          "descripcion": "Guarda la posición GPS de tu coche para volver",
+          "icono": "locate",
+          "colorIcono": "#94A3B8"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "botones": [
+        {
+          "tipo": "opinion",
+          "whatsappGerencia": "https://wa.me/34642521542?text=Hola%2C%20quisiera%20enviar%20un%20comentario%20privado%20sobre%20mi%20visita%20a%20DOGGOX.",
+          "urlGoogle": "https://search.google.com/local/writereview?placeid=ChIJSbMPTbCrWg0RJt_YfDLV-m4"
+        }
+      ]
+    }
+  ],
+  "_generado": true,
+  "_peticion": "61c589afbe995338",
+  "_closer": "FERCHO",
+  "_fecha": "2026-10-15T20:55:50.215Z"
+}
