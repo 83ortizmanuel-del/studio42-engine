@@ -2045,9 +2045,10 @@ function estadisticas_(desde, hasta) {
   hoja.getDataRange().getValues().slice(1).forEach(function (r) {
     var f = r[0] instanceof Date ? r[0] : new Date(r[0]);
     if (f < desde || f >= hasta) return;
-    var s = out[r[1]] = out[r[1]] || { vista: 0, resena: 0, gerencia: 0, whatsapp: 0, llamada: 0, ruta: 0, enlace: 0, piezas: {} };
+    var s = out[r[1]] = out[r[1]] || { vista: 0, resena: 0, gerencia: 0, whatsapp: 0, llamada: 0, ruta: 0, enlace: 0, piezas: {}, resenasPieza: {} };
     s[r[3]] = (s[r[3]] || 0) + 1;
     if (r[3] === 'vista') s.piezas[r[2]] = (s.piezas[r[2]] || 0) + 1;
+    if (r[3] === 'resena') s.resenasPieza[r[2]] = (s.resenasPieza[r[2]] || 0) + 1;
   });
   return out;
 }
@@ -2069,6 +2070,7 @@ function INFORME_MENSUAL() {
       '<table style="width:100%;border-spacing:8px"><tr>' + cifra(e.vista, 'personas lo abrieron') + cifra(e.resena, 'fueron a dejar reseña') + '</tr><tr>' +
       cifra(e.whatsapp + e.gerencia, 'te escribieron') + cifra(e.llamada + e.ruta, 'llamadas y rutas') + '</tr></table>' +
       (top ? '<p style="color:#c9ced6">La pieza con más toques: <b>' + top + '</b> (' + e.piezas[top] + ').</p>' : '') +
+      (function () { var rp = e.resenasPieza || {}, k = Object.keys(rp).sort(function (a, b) { return rp[b] - rp[a]; })[0]; return k ? '<p style="color:#c9ced6">La pieza que más reseñas trajo: <b>' + k + '</b> (' + rp[k] + ').</p>' : ''; })() +
       '<p style="color:#9aa0a9;font-size:13px">¿Quieres cambiar algo de tu landing? Responde a este correo o escríbenos por WhatsApp al +34 672 294 962.</p>' +
       '<p style="margin-top:22px"><a href="' + c.dominio + '/c/?cod=' + s.slug + '" style="background:#e6eaf0;color:#0b0c0f;padding:12px 18px;border-radius:99px;text-decoration:none;font-weight:bold">Ver mi landing</a></p></div></div>';
     try { MailApp.sendEmail({ to: s.email, subject: 'Tu ecosistema Studio 42 en ' + mes + ': ' + e.vista + ' visitas', htmlBody: html, name: 'Studio 42' }); enviados++; }

@@ -467,6 +467,8 @@ function informe(s){var f=fichas[s]||{},e=est(s),hoy=new Date();
     '💬 WhatsApp recibidos: *'+wa+'*'+(e.gerencia?' (de ellos '+e.gerencia+' a gerencia)':''),
     '📞 Llamadas: *'+(e.llamada||0)+'* · 📍 Cómo llegar: *'+(e.ruta||0)+'*'];
   if(top.length)l.push('🏷️ Piezas con más toques: '+top.map(function(k){return k+' ('+e.piezas[k]+')'}).join(', '));
+  var rp=e.resenasPieza||{},topR=Object.keys(rp).sort(function(a,b){return rp[b]-rp[a]}).slice(0,3);
+  if(topR.length)l.push('⭐ Reseñas por pieza: '+topR.map(function(k){return k+' ('+rp[k]+')'}).join(', '));
   l.push('');
   if(e.vista>0){var conv=Math.round(((e.resena||0)+wa+(e.llamada||0)+(e.ruta||0))/e.vista*100);l.push('➡️ '+conv+' de cada 100 personas que tocaron tu pieza hicieron algo: opinar, escribirte, llamarte o venir.')}
   else l.push('➡️ Aún no hay toques este mes. Si quieres, revisamos juntos dónde están colocadas las piezas.');
@@ -487,6 +489,8 @@ function abrirCliente(s){
   h+='<div class="sec" style="margin-top:12px">Últimos 30 días</div><div class="stats"><div><b>'+e.vista+'</b><span>Visitas</span></div><div><b>'+e.resena+'</b><span>Reseñas</span></div><div><b>'+(e.whatsapp+e.gerencia)+'</b><span>WhatsApp</span></div><div><b>'+(e.llamada+e.ruta)+'</b><span>Llamadas</span></div></div>';
   var top=Object.keys(e.piezas||{}).sort(function(a,b){return e.piezas[b]-e.piezas[a]}).slice(0,3);
   if(top.length)h+='<div class="mini" style="margin-top:8px">Piezas con más toques: '+top.map(function(k){return esc(k)+' ('+e.piezas[k]+')'}).join(' · ')+'</div>';
+  var rp=e.resenasPieza||{},topR=Object.keys(rp).sort(function(a,b){return rp[b]-rp[a]}).slice(0,3);
+  if(topR.length)h+='<div class="mini">Reseñas por pieza: '+topR.map(function(k){return esc(k)+' ('+rp[k]+')'}).join(' · ')+'</div>';
   h+='<div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px"><button type="button" class="cta" id="bInforme" style="margin:0">📊 Enviar informe al comercio</button><button type="button" class="ghost" id="bInfCopiar" style="margin:0">Copiar</button></div>';
   h+='<button type="button" class="ghost solo-ceo" id="bPausa" style="width:100%;margin-top:12px'+(pausada?'':';color:#fca5a5;border-color:rgba(239,68,68,.35)')+'">'+(pausada?'▶ Reactivar la landing':'⏸ Pausar la landing (impago)')+'</button>'+(m?'':'<button type="button" class="ghost solo-ceo" id="bBaja" style="width:100%;margin-top:8px;color:#fca5a5;border-color:rgba(239,68,68,.35)">🗑 Dar de baja completa</button>')+'</div>';
   if(ps.length){h+='<div class="sec" style="margin-top:22px">Pedidos de este cliente</div>';ps.forEach(function(p){var i=ESTADOS.indexOf(p.estado);h+='<button type="button" class="card" data-p="'+esc(p.id)+'" style="margin-top:8px"><span class="mid"><b>'+esc(p.pack)+'</b><small>'+esc(p.id)+' · '+esc(fechaCorta(p.fecha))+'</small></span><span class="rt"><b>'+euro(p.calc?p.calc.total:p.total)+'</b><span class="pill st-'+(i<0?0:i)+'">'+esc(p.estado)+'</span></span></button>'});
@@ -773,7 +777,7 @@ function demoApi(b){
         {slug:'iberlax',cliente:'Iberlax',plan:'esencial',periodo:'mensual',estado:'activa',email:'',proximo:h(-12,9),landing:'activa'},
         {slug:'zombie-tattoo',cliente:'Zombie Tattoo',plan:'esencial',periodo:'trimestral',estado:'impagada',email:'',proximo:h(3,9),landing:'activa'},
         {slug:'unas-latinas-carolina',cliente:'Uñas Latinas Carolina',plan:'pro',periodo:'mensual',estado:'activa',email:'',proximo:h(-20,9),landing:'activa'}],
-      estadisticas:{'ankara-kebab':{vista:412,resena:37,gerencia:4,whatsapp:58,llamada:9,ruta:21,piezas:{MOSTRADOR:198,L01:92,L02:71,L03:51}},'clinica-dental-mazo-ruiz':{vista:233,resena:19,gerencia:2,whatsapp:31,llamada:24,ruta:12,piezas:{MOSTRADOR:233}},'iberlax':{vista:96,resena:6,gerencia:1,whatsapp:14,llamada:3,ruta:8,piezas:{MOSTRADOR:96}},'zombie-tattoo':{vista:141,resena:11,gerencia:0,whatsapp:22,llamada:2,ruta:5,piezas:{MOSTRADOR:88,L01:53}},'unas-latinas-carolina':{vista:187,resena:15,gerencia:3,whatsapp:40,llamada:6,ruta:9,piezas:{MOSTRADOR:187}}},
+      estadisticas:{'ankara-kebab':{vista:412,resena:37,gerencia:4,whatsapp:58,llamada:9,ruta:21,piezas:{MOSTRADOR:198,L01:92,L02:71,L03:51},resenasPieza:{MOSTRADOR:15,L01:12,L02:7,L03:3}},'clinica-dental-mazo-ruiz':{vista:233,resena:19,gerencia:2,whatsapp:31,llamada:24,ruta:12,piezas:{MOSTRADOR:233}},'iberlax':{vista:96,resena:6,gerencia:1,whatsapp:14,llamada:3,ruta:8,piezas:{MOSTRADOR:96}},'zombie-tattoo':{vista:141,resena:11,gerencia:0,whatsapp:22,llamada:2,ruta:5,piezas:{MOSTRADOR:88,L01:53}},'unas-latinas-carolina':{vista:187,resena:15,gerencia:3,whatsapp:40,llamada:6,ruta:9,piezas:{MOSTRADOR:187}}},
       chapas:[{slug:'pk7m2xq9',estado:'activa',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=demo'},{slug:'pd3h8wna',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'},{slug:'pt9r4ceu',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'}],
       tarjetas:[{id:'alejandro-silva',nombre:'Alejandro Silva',empresa:'La Sucursal Barbería',estado:'activa',paga:'La Sucursal'}]};
     demoN=(demoN||0)+1;
