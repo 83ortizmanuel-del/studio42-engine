@@ -645,10 +645,16 @@
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); avisoInstalar = e; const b = $('btn-instalar'); if (b && !esApp()) b.hidden = false; });
         window.addEventListener('appinstalled', () => { $('btn-instalar').hidden = true; $('ayuda-instalar').hidden = false; $('ayuda-instalar').textContent = '✅ Instalada. Ya la tienes en la pantalla de inicio.'; });
         function esApp() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+        function navegadorInterno() { return /FBAN|FBAV|Instagram|WhatsApp|Line\/|TikTok|; wv\)/i.test(navigator.userAgent); }
         function prepararInstalacion() {
             const b = $('btn-instalar'), ayuda = $('ayuda-instalar');
             if (esApp()) return;
             b.hidden = false;
+            if (navegadorInterno()) {
+                ayuda.hidden = false;
+                ayuda.textContent = '⚠️ Has abierto el enlace dentro de WhatsApp o Instagram, y desde ahí no se puede instalar. Pulsa los tres puntos ⋮ (o el icono de compartir) y elige «Abrir en Chrome» o «Abrir en Safari». Después pulsa este botón.';
+            }
             b.addEventListener('click', async () => {
                 if (avisoInstalar) { avisoInstalar.prompt(); try { await avisoInstalar.userChoice; } catch (e) {} avisoInstalar = null; return; }
                 const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
