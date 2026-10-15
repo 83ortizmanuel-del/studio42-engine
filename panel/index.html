@@ -166,6 +166,10 @@ a{color:inherit;text-decoration:none}
 .phone iframe{display:block;width:100%;height:560px;border:0;border-radius:31px;background:#0b0c10}
 .phone .flag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font:800 .66rem var(--fb);letter-spacing:.08em;padding:.3rem .7rem;border-radius:99px;background:var(--amber);color:#111;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.5)}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.barProp{position:sticky;bottom:0;z-index:5;margin:12px -4px 0;padding:12px;border-radius:18px;background:rgba(20,22,28,.96);border:1px solid rgba(245,180,60,.55);box-shadow:0 -10px 30px rgba(0,0,0,.6);backdrop-filter:blur(10px)}
+.barProp p{margin:0 0 10px;font-size:.84rem;color:#f5d38a;text-align:center}
+.barProp .acts{grid-template-columns:1fr 1fr 1fr}
+.barProp .acts button{min-height:44px;font-size:.85rem}
 .acts .cta{grid-column:1/-1}
 
 /* Claude */
@@ -245,6 +249,7 @@ textarea.inp{min-height:110px;resize:vertical}
   <div class="wrap">
     <header class="top"><button class="ib" id="bBack" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><b id="cNombre"></b><span class="sp"></span></header>
     <div class="phone"><span class="flag" id="flag" hidden>VISTA PREVIA · SIN PUBLICAR</span><iframe id="frame" title="Vista de la landing"></iframe></div>
+    <div class="barProp" id="barProp" hidden><p>Estás viendo la propuesta de Claude. Aún no está publicada.</p><div class="acts"><button class="cta" type="button" id="bpPub" style="grid-column:auto">Publicar</button><button class="ghost" type="button" id="bpSeguir">Seguir editando</button><button class="ghost" type="button" id="bpDesc" style="color:#fca5a5">Descartar</button></div></div>
     <div class="acts">
       <button class="cta solo-ceo" id="bCambio" type="button">✨ Pedir un cambio a Claude</button>
       <a class="ghost" id="bAbrir" target="_blank" rel="noopener">Abrir landing</a>
@@ -437,7 +442,7 @@ function abrirPedido(id){
   $('#pVer').onclick=function(){cerrarSheet('#shPedido');abrirCliente(p.slug)};
 }
 function abrirSheet(s){$(s).classList.add('on');document.body.style.overflow='hidden'}
-function cerrarSheet(s){$(s).classList.remove('on');if(!$('#vCliente').classList.contains('on'))document.body.style.overflow=''}
+function cerrarSheet(s){$(s).classList.remove('on');if(!$('#vCliente').classList.contains('on'))document.body.style.overflow='';if(s==='#shCambio'&&typeof propuesta!=='undefined'&&propuesta&&$('#barProp'))$('#barProp').hidden=false}
 $$('.sheet-bg').forEach(function(bg){bg.addEventListener('click',function(e){if(e.target===bg)cerrarSheet('#'+bg.id)})});
 
 /* ---------- Clientes ---------- */
@@ -524,9 +529,14 @@ function abrirCliente(s){
   $('#bInfCopiar').onclick=function(){copiar(informe(s),$('#bInfCopiar'))};
   $('#vCliente').classList.add('on');$('#vCliente').scrollTop=0;document.body.style.overflow='hidden';
 }
-$('#bBack').onclick=function(){if(propuesta&&!confirm('Tienes una propuesta sin publicar. ¿Salir y descartarla?'))return;$('#vCliente').classList.remove('on');document.body.style.overflow='';propuesta=null};
+$('#bBack').onclick=function(){if(propuesta&&!confirm('Tienes una propuesta sin publicar. ¿Salir y descartarla?'))return;$('#vCliente').classList.remove('on');document.body.style.overflow='';propuesta=null;barra(false);$('#flag').hidden=true;$('#shCambioIn').innerHTML=''};
 $('#bCopiar').onclick=function(){copiar(urlCliente(cur),$('#bCopiar'))};
-$('#bCambio').onclick=function(){pantallaCambio()};
+$('#bCambio').onclick=function(){if(propuesta&&$('#bPub')){abrirSheet('#shCambio');return}pantallaCambio()};
+function barra(on){$('#barProp').hidden=!on}
+function descartar(){propuesta=null;$('#flag').hidden=true;barra(false);$('#frame').src=$('#frame').src;cerrarSheet('#shCambio');$('#shCambioIn').innerHTML='';toast('Propuesta descartada')}
+$('#bpPub').onclick=function(){publicar(this)};
+$('#bpSeguir').onclick=function(){barra(false);abrirSheet('#shCambio')};
+$('#bpDesc').onclick=function(){if(confirm('¿Descartar la propuesta? La web se queda como estaba.'))descartar()};
 
 /* ---------- Cambios con Claude ---------- */
 var SUG=['Cambia el número de WhatsApp a …','Añade un botón para reservar mesa','Pon el horario de lunes a sábado de 10:00 a 20:00','Cambia el color de acento a dorado','Quita el botón de …','Haz los textos más cortos y directos'];
@@ -557,20 +567,20 @@ function enviarCambio(){
     $('#flag').hidden=false;
     $('#resC').innerHTML='<div class="bubble"><b>✨ Claude · '+r.operaciones+' cambio'+(r.operaciones===1?'':'s')+'</b>'+esc(r.resumen)+'</div>'+
       '<div class="acts"><button class="cta" type="button" id="bPub">Publicar en la web</button><button class="ghost" type="button" id="bVer">Ver vista previa</button><button class="ghost" type="button" id="bMas">Otro ajuste</button><button class="ghost" type="button" id="bDesc" style="grid-column:1/-1;color:#fca5a5">Descartar</button></div>';
-    $('#bVer').onclick=function(){cerrarSheet('#shCambio');$('#vCliente').scrollTop=0;toast('Vista previa sin publicar')};
+    $('#bVer').onclick=function(){cerrarSheet('#shCambio');barra(true);$('#vCliente').scrollTop=0;toast('Vista previa · abajo tienes Publicar, Seguir editando o Descartar')};
     $('#bMas').onclick=function(){$('#tCambio').value='';$('#tCambio').focus();$('#resC').innerHTML='';pg.hidden=true};
-    $('#bDesc').onclick=function(){propuesta=null;$('#flag').hidden=true;$('#frame').src=$('#frame').src;cerrarSheet('#shCambio');toast('Propuesta descartada')};
-    $('#bPub').onclick=publicar;
+    $('#bDesc').onclick=descartar;
+    $('#bPub').onclick=function(){publicar(this)};
   }).catch(function(e){tempos.forEach(clearTimeout);b.disabled=false;b.textContent='Enviar a Claude';if(e.message!=='sesion'){marca(1,'ko');$('#resC').innerHTML='<div class="bubble"><b>Sin conexión</b>No se pudo hablar con el servidor. No se ha cambiado nada.</div>'}});
 }
-function publicar(){
-  var b=$('#bPub');b.disabled=true;b.textContent='Publicando…';
+function publicar(btn){
+  var b=btn||$('#bPub'),txt=b.textContent;b.disabled=true;b.textContent='Publicando…';
   api({accion:'panel_publicar',slug:cur}).then(function(r){
-    if(!r.ok){b.disabled=false;b.textContent='Publicar en la web';toast(r.error||'No se pudo publicar');return}
-    fichas[cur]=propuesta;propuesta=null;$('#flag').hidden=true;cerrarSheet('#shCambio');pintarClientes();
+    if(!r.ok){b.disabled=false;b.textContent=txt;toast(r.error||'No se pudo publicar');return}
+    fichas[cur]=propuesta;propuesta=null;$('#flag').hidden=true;barra(false);$('#shCambioIn').innerHTML='';cerrarSheet('#shCambio');pintarClientes();
     $('#cNombre').textContent=fichas[cur].nombre||cur;
     toast('✓ Publicado. Se verá en la web en 1 minuto');
-  }).catch(function(){b.disabled=false;b.textContent='Publicar en la web';toast('Sin conexión')});
+  }).catch(function(){b.disabled=false;b.textContent=txt;toast('Sin conexión')});
 }
 
 /* ---------- PETS Id Smart ---------- */
