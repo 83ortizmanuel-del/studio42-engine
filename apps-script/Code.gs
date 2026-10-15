@@ -1427,7 +1427,7 @@ function avisarPedido_(c, datos, detalle, notas) {
 /* Accesos: el CEO entra con PANEL_CLAVE (todo). El equipo entra con su contraseña propia,
  * creada por el CEO desde el panel (pestaña Equipo) y guardada cifrada en PANEL_EQUIPO.
  * El equipo solo puede ver datos y crear, editar o pausar tarjetas. */
-var PERMISOS_EQUIPO = ['panel_datos', 'panel_tarjeta_guardar', 'panel_tarjeta_estado'];
+var PERMISOS_EQUIPO = ['panel_datos', 'panel_tarjeta_guardar', 'panel_tarjeta_estado', 'panel_cambio', 'panel_publicar'];
 
 function equipoLista_() {
   try { var l = JSON.parse(PropertiesService.getScriptProperties().getProperty('PANEL_EQUIPO') || '[]'); return Array.isArray(l) ? l : []; } catch (e) { return []; }

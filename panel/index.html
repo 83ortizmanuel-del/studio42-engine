@@ -251,7 +251,7 @@ textarea.inp{min-height:110px;resize:vertical}
     <div class="phone"><span class="flag" id="flag" hidden>VISTA PREVIA · SIN PUBLICAR</span><iframe id="frame" title="Vista de la landing"></iframe></div>
     <div class="barProp" id="barProp" hidden><p>Estás viendo la propuesta de Claude. Aún no está publicada.</p><div class="acts"><button class="cta" type="button" id="bpPub" style="grid-column:auto">Publicar</button><button class="ghost" type="button" id="bpSeguir">Seguir editando</button><button class="ghost" type="button" id="bpDesc" style="color:#fca5a5">Descartar</button></div></div>
     <div class="acts">
-      <button class="cta solo-ceo" id="bCambio" type="button">✨ Pedir un cambio a Claude</button>
+      <button class="cta" id="bCambio" type="button">✨ Pedir un cambio a Claude</button>
       <a class="ghost" id="bAbrir" target="_blank" rel="noopener">Abrir landing</a>
       <button class="ghost" id="bCopiar" type="button">Copiar enlace</button>
     </div>
@@ -767,7 +767,7 @@ function demoApi(b){
   var esperar=function(ms,v){return new Promise(function(r){setTimeout(function(){r(v)},ms)})};
   var demoRol=new URLSearchParams(location.search).get('rol')==='equipo'?'equipo':'ceo';
   if(b.accion==='panel_login')return esperar(400,{ok:true,token:'demo',rol:demoRol});
-  if(demoRol==='equipo'&&['panel_datos','panel_tarjeta_guardar','panel_tarjeta_estado'].indexOf(b.accion)<0)return esperar(300,{ok:false,error:'Tu acceso no permite esta acción.'});
+  if(demoRol==='equipo'&&['panel_datos','panel_tarjeta_guardar','panel_tarjeta_estado','panel_cambio','panel_publicar'].indexOf(b.accion)<0)return esperar(300,{ok:false,error:'Tu acceso no permite esta acción.'});
   if(b.accion==='panel_equipo_crear')return esperar(500,{ok:true,id:'e'+Date.now(),nombre:b.nombre,cargo:b.cargo||'Equipo',clave:'k7m2xq9pta'});
   if(b.accion==='panel_equipo_borrar'||b.accion==='panel_chapas_crear'||b.accion==='panel_baja')return esperar(500,{ok:true});
   if(b.accion==='panel_datos'){
@@ -812,6 +812,7 @@ function demoApi(b){
 /* ---------- Arranque ---------- */
 if(DEMO||lsGet(KT))arrancar();else mostrarLogin();
 })();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
 </script>
 </body>
 </html>
