@@ -1,685 +1,388 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPXJ4FNYBS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CPXJ4FNYBS');
-    </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio 42 Talent | Programa de Closers de Ventas Phygital en Logroño</title>
-    <meta name="description" content="Únete al equipo comercial de Studio 42 en Logroño. Altas comisiones en el mismo día, horario libre, polo con NFC integrado y venta directa de tecnología phygital de alto impacto.">
-    
-    <!-- Tipografías e Iconos -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Studio 42 Talent · Closers de ventas en Logroño</title>
+    <meta name="description" content="Buscamos dos closers en Logroño para vender llaveros, displays y chapas NFC a comercios locales. Comisión por venta, bono por cliente que se queda, pago cada viernes, horario libre y formación de 5 días.">
+    <meta property="og:title" content="Studio 42 Talent · Closers en Logroño">
+    <meta property="og:description" content="Vende tecnología que se entiende en 30 segundos. Comisión por venta, pago cada viernes y formación incluida.">
+    <meta property="og:image" content="https://studio42.es/img/llavero-studio42.webp">
+    <link rel="canonical" href="https://studio42.es/talent/">
+    <link rel="icon" href="../img/app-192.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPXJ4FNYBS"></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-CPXJ4FNYBS');</script>
     <style>
+        @font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("../fonts/Inter-Regular.woff") format("woff"); }
+        @font-face { font-family: "Inter"; font-weight: 600; font-display: swap; src: url("../fonts/Inter-SemiBold.woff") format("woff"); }
+        @font-face { font-family: "Inter Display"; font-weight: 600; font-display: swap; src: url("../fonts/InterDisplay-SemiBold.woff") format("woff"); }
+        @font-face { font-family: "Inter Display"; font-weight: 800; font-display: swap; src: url("../fonts/InterDisplay-ExtraBold.woff") format("woff"); }
         :root {
-            --color-silver: #c4c4c4;
-            --color-silver-light: #ffffff;
-            --color-silver-dark: #8e8e93;
-            --color-silver-glow: rgba(196, 196, 196, 0.4);
-            --bg-dark: #07080b;
-            --bg-card: #0d0f14;
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-silver: rgba(196, 196, 196, 0.4);
+            --ink: #07080b; --ink-2: #101216; --ink-3: #161920;
+            --line: rgba(196, 196, 196, .18);
+            --ti-grad: linear-gradient(135deg, #ffffff 0%, #e6eaf0 22%, #c4c4c4 48%, #8e8e93 74%, #d9dde3 100%);
+            --stone: #c4c4c4; --bone: #f4f6f9; --muted: #9ea3ab; --accent: #e8c87a; --wa: #25d366;
+            --radius: 18px; --wrap: 1080px;
+            --f-display: "Inter Display", "Inter", system-ui, sans-serif;
+            --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
         }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-text-size-adjust: 100%; }
+        body { margin: 0; background: var(--ink); color: var(--bone); font: 400 1.0625rem/1.6 var(--f-body); overflow-x: hidden; }
+        img { max-width: 100%; display: block; height: auto; }
+        a { color: inherit; }
+        h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; }
+        p { margin: 0; }
+        .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 16px; }
+        section { padding: 72px 0; border-top: 1px solid var(--line); }
+        .eyebrow { font: 600 .75rem/1 var(--f-body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+        h2 { font-size: clamp(1.7rem, 4.4vw, 2.6rem); font-weight: 800; line-height: 1.12; margin-bottom: 12px; }
+        .lead { color: #c9ced6; max-width: 640px; }
+        .grad { background: var(--ti-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden !important;
-            position: relative;
-            background-color: var(--bg-dark);
-            color: #E2E8F0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+        /* Botones */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 24px; border-radius: 99px; font: 600 1rem/1 var(--f-body); text-decoration: none; border: 0; cursor: pointer; transition: transform .2s, filter .2s; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+        .btn-ti { background: var(--ti-grad); color: #07080b; box-shadow: 0 8px 26px rgba(196,196,196,.25); }
+        .btn-line { background: transparent; color: var(--bone); border: 1px solid rgba(255,255,255,.28); }
+        .btn-wa { background: var(--wa); color: #06210f; }
 
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
-        }
+        /* Cabecera */
+        nav { position: sticky; top: 0; z-index: 20; background: rgba(7,8,11,.86); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+        nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; }
+        nav .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 800 1.05rem/1 var(--f-display); }
+        nav .logo img { width: 38px; height: 38px; }
+        nav .logo small { font: 600 .7rem/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-left: 4px; }
+        nav .links { display: none; gap: 22px; font-size: .9rem; color: var(--muted); }
+        nav .links a { text-decoration: none; }
+        nav .links a:hover { color: var(--bone); }
+        nav .btn { padding: 10px 16px; font-size: .9rem; }
+        @media (min-width: 860px) { nav .links { display: flex; } }
 
-        .bg-grid-tech {
-            background-image: radial-gradient(rgba(196, 196, 196, 0.12) 1px, transparent 1px);
-            background-size: 28px 28px;
-        }
+        /* Hero */
+        .hero { padding: 64px 0 56px; border: 0; position: relative; overflow: hidden; }
+        .hero::before { content: ""; position: absolute; inset: -20% -10% auto; height: 420px; background: radial-gradient(closest-side, rgba(196,196,196,.16), transparent); pointer-events: none; }
+        .hero .grid { display: grid; gap: 36px; align-items: center; position: relative; }
+        @media (min-width: 900px) { .hero .grid { grid-template-columns: 1.15fr .85fr; } }
+        .pill { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: rgba(255,255,255,.04); padding: 7px 13px; border-radius: 99px; font-size: .8rem; color: #d6dae0; margin-bottom: 20px; }
+        .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--wa); box-shadow: 0 0 0 4px rgba(37,211,102,.18); }
+        .hero h1 { font-size: clamp(2.2rem, 7vw, 4rem); font-weight: 800; line-height: 1.04; letter-spacing: -.02em; margin-bottom: 18px; }
+        .hero .lead { font-size: 1.12rem; margin-bottom: 26px; }
+        .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+        .datos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 30px; }
+        @media (min-width: 640px) { .datos { grid-template-columns: repeat(4, 1fr); } }
+        .dato { background: var(--ink-2); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+        .dato b { display: block; font: 800 1.35rem/1.1 var(--f-display); }
+        .dato span { font-size: .82rem; color: var(--muted); }
+        .escena { position: relative; aspect-ratio: 1; max-width: 260px; margin: 0 auto; width: 100%; }
+        @media (min-width: 900px) { .escena { max-width: 420px; } }
+        .escena img { position: absolute; border-radius: 50%; filter: drop-shadow(0 24px 40px rgba(0,0,0,.7)); }
+        .escena .a { width: 62%; left: 4%; top: 6%; animation: flota 6s ease-in-out infinite; }
+        .escena .b { width: 46%; right: 2%; bottom: 6%; animation: flota 7s ease-in-out -2s infinite; }
+        @keyframes flota { 50% { transform: translateY(-10px) rotate(-2deg); } }
+        @media (prefers-reduced-motion: reduce) { .escena img { animation: none; } }
 
-        .text-silver-gradient {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 40%, #E2E8F0 70%, #CBD5E1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 14px rgba(255, 255, 255, 0.25));
-        }
+        /* Tarjetas */
+        .cards { display: grid; gap: 14px; margin-top: 30px; }
+        @media (min-width: 720px) { .cards.c3 { grid-template-columns: repeat(3, 1fr); } .cards.c2 { grid-template-columns: repeat(2, 1fr); } .cards.c4 { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1000px) { .cards.c4 { grid-template-columns: repeat(4, 1fr); } }
+        .card { background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+        .card h3 { font-size: 1.15rem; margin-bottom: 6px; }
+        .card p { color: #c2c7cf; font-size: .96rem; }
+        .card .ph { aspect-ratio: 4/3; border-radius: 12px; background: radial-gradient(circle at 50% 40%, #1d212a, #0c0e12); margin-bottom: 16px; display: grid; place-items: center; overflow: hidden; }
+        .card .ph img { width: 70%; }
+        .card .ph img.full { width: 100%; height: 100%; object-fit: cover; }
+        .num { width: 34px; height: 34px; border-radius: 50%; background: var(--ti-grad); color: #07080b; display: grid; place-items: center; font: 800 .95rem/1 var(--f-display); margin-bottom: 14px; }
 
-        .card-silver-premium {
-            background: linear-gradient(180deg, rgba(22, 25, 34, 0.95) 0%, rgba(11, 13, 18, 0.98) 100%);
-            border: 1px solid rgba(196, 196, 196, 0.45);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(196, 196, 196, 0.22);
-            border-radius: 24px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        /* Tabla comisiones */
+        .tabla { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 28px; background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+        .tabla th, .tabla td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+        .tabla tr:last-child td { border-bottom: 0; }
+        .tabla th { font: 600 .78rem/1.2 var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--ink-3); }
+        .tabla td b { font: 800 1.2rem/1.2 var(--f-display); }
+        .tabla small { display: block; color: var(--muted); font-size: .85rem; }
+        .tabla .c { white-space: nowrap; text-align: right; }
+        @media (max-width: 560px) { .tabla .hide-s { display: none; } .tabla th, .tabla td { padding: 12px; } }
+        .extras { display: grid; gap: 12px; margin-top: 14px; }
+        @media (min-width: 720px) { .extras { grid-template-columns: repeat(3, 1fr); } }
+        .extra { border: 1px dashed rgba(232,200,122,.45); border-radius: 14px; padding: 16px; background: rgba(232,200,122,.05); }
+        .extra b { color: var(--accent); font: 800 1.15rem/1.2 var(--f-display); display: block; margin-bottom: 4px; }
+        .extra span { font-size: .92rem; color: #d2d6dc; }
 
-        .card-silver-premium:hover {
-            border-color: rgba(255, 255, 255, 0.85);
-            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.98), 0 0 45px 0px rgba(196, 196, 196, 0.4);
-        }
+        /* Simulador */
+        .sim { margin-top: 28px; background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+        .sim label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 12px; gap: 12px; }
+        .sim input[type=range] { width: 100%; accent-color: #d9dde3; height: 32px; }
+        .res { display: grid; gap: 10px; margin-top: 18px; }
+        @media (min-width: 640px) { .res { grid-template-columns: repeat(3, 1fr); } }
+        .res div { background: var(--ink-3); border-radius: 12px; padding: 14px; }
+        .res b { display: block; font: 800 1.6rem/1.1 var(--f-display); }
+        .res span { font-size: .82rem; color: var(--muted); }
+        .res .top b { background: var(--ti-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .nota { font-size: .85rem; color: var(--muted); margin-top: 14px; }
 
-        .card-base {
-            background: rgba(13, 15, 21, 0.85);
-            border: 1px solid var(--border-subtle);
-            border-radius: 22px;
-            transition: all 0.3s ease;
-        }
+        /* Listas */
+        .check { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 10px; }
+        .check li { padding-left: 30px; position: relative; color: #d2d6dc; }
+        .check li::before { content: "✓"; position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; background: rgba(37,211,102,.14); color: var(--wa); font-size: .78rem; display: grid; place-items: center; margin-top: 3px; }
+        .check.no li::before { content: "✕"; background: rgba(255,90,90,.12); color: #ff7a7a; }
 
-        .card-base:hover {
-            border-color: rgba(196, 196, 196, 0.4);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-        }
+        /* FAQ */
+        details { background: var(--ink-2); border: 1px solid var(--line); border-radius: 14px; padding: 0 18px; margin-top: 10px; }
+        summary { cursor: pointer; padding: 16px 0; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: "+"; color: var(--muted); font-size: 1.3rem; line-height: 1; }
+        details[open] summary::after { content: "−"; }
+        details p { padding: 0 0 16px; color: #c2c7cf; }
 
-        .btn-silver {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 25%, #CBD5E1 60%, #94A3B8 100%);
-            color: #07080B;
-            font-weight: 800;
-            letter-spacing: 0.9px;
-            box-shadow: 0 6px 22px rgba(196, 196, 196, 0.35);
-            transition: all 0.25s ease;
-        }
-
-        .btn-silver:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(241, 245, 249, 0.55);
-            filter: brightness(1.08);
-        }
-
-        .btn-vcard-cyber {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(196, 196, 196, 0.04) 100%);
-            border: 1px solid rgba(196, 196, 196, 0.5);
-            box-shadow: 0 0 20px rgba(196, 196, 196, 0.15), inset 0 0 12px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .btn-vcard-cyber:hover {
-            border-color: #FFFFFF;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.35), inset 0 0 18px rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        details summary::-webkit-details-marker { display: none; }
-        details summary { list-style: none; }
-        details[open] summary .faq-chevron { transform: rotate(180deg); color: #FFFFFF; }
-        details[open] { border-color: rgba(196, 196, 196, 0.5); background-color: rgba(18, 21, 29, 0.95); }
+        .cierre { text-align: center; }
+        .cierre .lead { margin: 0 auto 24px; }
+        .cierre .ctas { justify-content: center; }
+        footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: .88rem; }
+        footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: space-between; }
+        footer a { text-decoration: none; }
+        .sticky { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 30; display: none; }
+        .sticky .btn { width: 100%; }
+        @media (max-width: 720px) { .sticky.on { display: block; } body { padding-bottom: 70px; } }
     </style>
 </head>
+<body>
 
-<body class="bg-grid-tech selection:bg-[#C4C4C4] selection:text-black">
+<nav>
+    <div class="wrap">
+        <a class="logo" href="/" aria-label="Studio 42, web principal"><img src="../img/logo.webp" alt="" width="38" height="38"><span>Studio 42 <small>Talent</small></span></a>
+        <div class="links">
+            <a href="#producto">Qué vendes</a>
+            <a href="#comisiones">Comisiones</a>
+            <a href="#simulador">Cuánto ganas</a>
+            <a href="#formacion">Formación</a>
+            <a href="#dudas">Dudas</a>
+        </div>
+        <a class="btn btn-ti" href="test.html">Postularme</a>
+    </div>
+</nav>
 
-    <!-- NAVEGACIÓN BOUTIQUE -->
-    <nav class="bg-[#07080B]/95 backdrop-blur-2xl fixed w-full z-40 top-0 border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.95)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex justify-between items-center min-h-[85px] sm:min-h-[95px] md:min-h-[110px]">
-            
-            <a href="/" class="flex items-center shrink-0 group py-1">
-                <img src="../studio42-logo.png" 
-                     alt="Studio 42 - Identidad Inteligente" 
-                     class="h-16 sm:h-20 md:h-24 lg:h-28 w-auto max-w-[210px] sm:max-w-[290px] md:max-w-none object-contain drop-shadow-[0_8px_22px_rgba(0,0,0,0.95)] scale-110 sm:scale-105 origin-left group-hover:scale-115 transition-all duration-300"/>
-            </a>
-            
-            <div class="hidden xl:flex space-x-7 font-semibold text-xs tracking-widest text-zinc-400 uppercase items-center mr-8">
-                <a href="#mision" class="hover:text-white transition duration-300">La Misión</a>
-                <a href="#comisiones" class="hover:text-white transition duration-300">Comisiones</a>
-                <a href="#simulador" class="text-zinc-200 hover:text-white transition duration-300 flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                    <span>Simulador Ingresos</span>
-                </a>
-                <a href="#regla-oro" class="hover:text-white transition duration-300">Cobro en el Día</a>
-                <a href="#kit" class="hover:text-white transition duration-300">Kit Closer</a>
-                <a href="#faq" class="hover:text-white transition duration-300">Dudas</a>
+<header class="hero" id="top">
+    <div class="wrap grid">
+        <div>
+            <div class="pill"><i></i> Buscamos 2 closers en Logroño</div>
+            <h1>Vende tecnología que se entiende en <span class="grad">30 segundos.</span></h1>
+            <p class="lead">El dueño de un bar, una barbería o una clínica acerca su móvil a un llavero y ve su propio negocio en la pantalla. Tú haces esa demo, cierras y nosotros instalamos. Comisión en cada venta, horario libre y formación desde el primer día.</p>
+            <div class="ctas">
+                <a class="btn btn-ti" href="test.html">Hacer la prueba de 30 segundos</a>
+                <a class="btn btn-line" href="#simulador">¿Cuánto puedo ganar?</a>
             </div>
-
-            <div class="flex items-center gap-3 sm:gap-4 shrink-0">
-                <a href="/" class="btn-vcard-cyber hidden sm:flex items-center gap-2 text-white text-xs font-bold uppercase tracking-wider py-2 sm:py-2.5 px-3.5 sm:px-4 rounded-full">
-                    <i class="fa-solid fa-arrow-left text-cyan-300 text-xs"></i>
-                    <span>Web Principal</span>
-                </a>
-                <a href="test.html" class="btn-silver px-4 sm:px-5 py-2 sm:py-2.5 text-xs uppercase tracking-wider rounded-full flex items-center gap-1.5 sm:gap-2">
-                    <i class="fa-solid fa-bolt text-sm"></i>
-                    <span>Postularme</span>
-                </a>
+            <div class="datos">
+                <div class="dato"><b>20–110 €</b><span>por cada venta</span></div>
+                <div class="dato"><b>+10 €</b><span>por cliente que se queda</span></div>
+                <div class="dato"><b>Viernes</b><span>pago semanal</span></div>
+                <div class="dato"><b>5 días</b><span>de formación con nosotros</span></div>
             </div>
         </div>
-    </nav>
-
-    <!-- HERO SECTION TALENT -->
-    <header class="relative pt-36 sm:pt-44 md:pt-52 pb-16 px-4 sm:px-6 text-center overflow-hidden">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[550px] h-[250px] bg-[#C4C4C4]/15 blur-[100px] rounded-full pointer-events-none"></div>
-
-        <div class="max-w-5xl mx-auto relative z-10">
-            <div class="inline-flex items-center gap-2 bg-white/5 border border-[#C4C4C4]/40 px-3.5 py-1.5 rounded-full mb-5 sm:mb-8 backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                <span class="text-zinc-200 font-bold text-[10px] sm:text-xs uppercase tracking-widest">Convocatoria Activa // Closers B2B en Logroño</span>
-            </div>
-
-            <h1 class="font-display text-3xl sm:text-5xl md:text-7xl font-black mb-5 sm:mb-8 leading-[1.14] tracking-tight text-white">
-                Buscamos un Closer de Ventas: <br class="hidden md:block">
-                <span class="text-silver-gradient block sm:inline mt-1">Comisiones Altas + Horario Libre.</span>
-            </h1>
-
-            <p class="text-sm sm:text-lg md:text-xl text-zinc-300 mb-8 sm:mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-                Olvídate de la puerta fría aburrida y de vender seguros o tarifas de luz. En <strong>Studio 42</strong> creamos tecnología phygital con hardware de lujo que deja con la boca abierta a cualquier dueño de negocio en 10 segundos. Tú plantas la muestra en la barra, haces la demo táctil y cierras.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full max-w-md mx-auto sm:max-w-none">
-                <a href="test.html" class="btn-silver px-8 sm:px-10 py-4 rounded-full text-xs font-black uppercase tracking-widest w-full sm:w-auto shadow-xl text-center flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-bolt text-base"></i>
-                    <span>Hacer la Prueba de los 30 Segundos</span>
-                </a>
-                <a href="#simulador" class="bg-white/5 hover:bg-white/10 text-white border border-white/20 px-6 sm:px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest w-full sm:w-auto transition duration-300 flex items-center justify-center gap-2 text-center">
-                    <i class="fa-solid fa-calculator text-[#C4C4C4] text-xs"></i>
-                    <span>Calcular Cuánto Vas a Ganar</span>
-                </a>
-            </div>
-
-            <!-- TICKER DE BENEFICIOS -->
-            <div class="mt-12 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-white">40 € - 150 €</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Comisión Limpia / Cierre</div>
-                </div>
-                <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-[#C4C4C4]">Mismo Día</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Cobro Inmediato por Bizum</div>
-                </div>
-                <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-cyan-400">100% Libre</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Sin Jefes ni Horarios Fijos</div>
-                </div>
-                <div>
-                    <div class="font-display text-2xl sm:text-3xl font-black text-white">+50 € Extra</div>
-                    <div class="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold mt-0.5">Bono Semanal por 5 Ventas</div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- LA MISIÓN -->
-    <section id="mision" class="py-20 px-4 sm:px-6 bg-[#0B0D13] border-t border-white/5">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-14">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">La Operativa Diaria</span>
-                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-3">Tu Misión en las Calles de Logroño</h2>
-                <p class="text-zinc-400 text-xs sm:text-sm font-light">Un producto tangible que se vende con los ojos. Cero rollo teórico.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card-base p-6 sm:p-7 text-center flex flex-col items-center">
-                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white text-xl mb-5 border border-white/20">
-                        1
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Entras con el Expositor</h3>
-                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
-                        Visitas restaurantes, clínicas, barberías y veterinarias en zonas como San Antón, Gran Vía o Portales. Plantas el soporte físico en el mostrador.
-                    </p>
-                </div>
-
-                <div class="card-silver-premium p-6 sm:p-7 text-center flex flex-col items-center">
-                    <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white text-xl mb-5 border border-white/40">
-                        2
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">La Demo de 10 Segundos</h3>
-                    <p class="text-zinc-200 text-xs font-light leading-relaxed">
-                        Le pides al gerente que acerque su móvil al metacrilato. Ve cómo se abre la landing en 1 segundo y cómo el Escudo intercepta quejas. El producto se vende solo.
-                    </p>
-                </div>
-
-                <div class="card-base p-6 sm:p-7 text-center flex flex-col items-center">
-                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white text-xl mb-5 border border-white/20">
-                        3
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Cierre y Cobro Inmediato</h3>
-                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
-                        El cliente abona el 70% de señal allí mismo. Ese mismo día recibes tu transferencia íntegra. Sin esperar a fin de mes.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- COMISIONES TRANSPARENTES -->
-    <section id="comisiones" class="py-24 px-4 sm:px-6 bg-[#07080B] border-t border-white/5 relative">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16 sm:mb-20">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Sin Techo de Ganancias</span>
-                <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white mt-2 mb-4 tracking-tight">¿Cuánto Ganas Exactamente?</h2>
-                <p class="text-zinc-400 max-w-2xl mx-auto text-xs sm:text-sm md:text-base font-light">Tú te llevas una parte gigante del pastel. Sin trampa ni letra pequeña.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
-                <!-- PACK IMÁN -->
-                <div class="card-base p-6 sm:p-8 flex flex-col justify-between">
-                    <div>
-                        <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full inline-block mb-4 border border-white/10">Pack Entrada (149 €)</span>
-                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Pack Imán</h3>
-                        <p class="text-zinc-400 text-xs font-light mb-6">El producto más fácil de colocar. 1 display de mostrador + 2 llaveros.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/10">
-                            <span class="text-[11px] text-zinc-500 block mb-1">Tu comisión neta:</span>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-white font-black text-4xl sm:text-5xl">40,00 €</span>
-                                <span class="text-zinc-400 text-xs font-semibold">limpios</span>
-                            </div>
-                        </div>
-
-                        <ul class="space-y-3 text-zinc-300 text-xs font-light mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Ideal para comercios con un solo mostrador.</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Cierre rápido en menos de 10 minutos.</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Pagado en tu cuenta en el mismo día.</li>
-                        </ul>
-                    </div>
-                    <div class="text-center p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-zinc-300 font-semibold">
-                        2 cierres al día = 80 € diarios
-                    </div>
-                </div>
-
-                <!-- PACK MULTIPLICADOR -->
-                <div class="card-silver-premium p-6 sm:p-8 flex flex-col justify-between transform lg:-translate-y-4 shadow-2xl relative">
-                    <div>
-                        <div class="flex items-center justify-between gap-2 mb-4">
-                            <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-full border border-white/20">
-                                Pack Más Vendido (349 €)
-                            </span>
-                            <span class="bg-gradient-to-r from-zinc-100 to-[#C4C4C4] text-black text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md shrink-0">
-                                ★ TOP VENTAS
-                            </span>
-                        </div>
-
-                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Efecto Multiplicador</h3>
-                        <p class="text-zinc-400 text-xs font-light mb-6">Para restaurantes, clínicas y salones con equipo de sala y camareros.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/10">
-                            <span class="text-[11px] text-zinc-300 block mb-1">Tu comisión neta:</span>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-white font-black text-4xl sm:text-5xl">100,00 €</span>
-                                <span class="text-zinc-300 text-xs font-semibold">limpios</span>
-                            </div>
-                        </div>
-
-                        <ul class="space-y-3 text-zinc-200 text-xs font-light mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Incluye 1 display + 10 llaveros + tarjeta madera noble.</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Alto valor percibido que el dueño ve amortizado ya.</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> 1 solo cierre al día = 500 € semanales.</li>
-                        </ul>
-                    </div>
-                    <div class="text-center p-3.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white font-bold">
-                        1 venta al día = 2.000 € / mes
-                    </div>
-                </div>
-
-                <!-- PACK DOMINIO -->
-                <div class="card-base p-6 sm:p-8 flex flex-col justify-between">
-                    <div>
-                        <span class="text-zinc-200 text-[10px] font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full inline-block mb-4 border border-white/10">Pack VIP Boutique (549 €)</span>
-                        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">Dominio Total</h3>
-                        <p class="text-zinc-400 text-xs font-light mb-6">Despliegue completo de 25 llaveros, 2 displays, caja ejecutiva y dron.</p>
-                        
-                        <div class="mb-6 pb-6 border-b border-white/10">
-                            <span class="text-[11px] text-zinc-500 block mb-1">Tu comisión neta:</span>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-white font-black text-4xl sm:text-5xl">150,00 €</span>
-                                <span class="text-zinc-400 text-xs font-semibold">limpios</span>
-                            </div>
-                        </div>
-
-                        <ul class="space-y-3 text-zinc-300 text-xs font-light mb-8">
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Grabación cinematográfica con dron AESA incluida.</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> Para los negocios más potentes y de alta facturación.</li>
-                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-check text-cyan-300 text-xs"></i> 2 cierres de este pack cubren 300 € limpios.</li>
-                        </ul>
-                    </div>
-                    <div class="text-center p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-zinc-300 font-semibold">
-                        Bono extra semanal activable fácilmente
-                    </div>
-                </div>
-            </div>
-
-            <!-- BONO EXTRA DESTACADO -->
-            <div class="mt-12 max-w-3xl mx-auto p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-zinc-900 to-black border border-[#C4C4C4]/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-cyan-400/20 text-cyan-300 flex items-center justify-center text-2xl shrink-0">
-                        <i class="fa-solid fa-gift"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-bold text-base">Bono Semanal de Rendimiento (+50 € Extra)</h4>
-                        <p class="text-zinc-400 text-xs">Si cierras 5 ventas cualquiera en una sola semana, sumas 50 € directos adicionales a tus comisiones.</p>
-                    </div>
-                </div>
-                <div class="text-white font-black text-xl shrink-0">
-                    +50 € / semana
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SIMULADOR INTERACTIVO -->
-    <section id="simulador" class="py-20 px-4 sm:px-6 bg-gradient-to-b from-[#080A0F] to-[#0D1017] border-t border-white/5">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/20 px-3 py-1 rounded-full mb-4">
-                <i class="fa-solid fa-calculator text-[#C4C4C4] text-xs"></i>
-                <span class="text-zinc-200 font-bold text-xs uppercase tracking-widest">Simulador de Ingresos</span>
-            </div>
-            <h2 class="font-display text-2xl sm:text-4xl font-black text-white mb-4 tracking-tight">¿Cuánto Dinero Puedes Generar al Mes?</h2>
-            <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto mb-8 sm:mb-10 font-light">Ajusta el control según las ventas que te propongas cerrar cada semana.</p>
-
-            <div class="bg-[#10131B] border border-[#C4C4C4]/35 p-6 sm:p-8 rounded-3xl shadow-2xl text-left">
-                <div class="mb-6 sm:mb-8">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-3 gap-1">
-                        <label class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Ventas cerradas por semana:</label>
-                        <span id="label-ventas" class="text-lg sm:text-xl font-black text-zinc-100">4 ventas / semana</span>
-                    </div>
-                    <input id="slider-ventas" type="range" min="1" max="15" step="1" value="4" class="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-[#C4C4C4]">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-6 border-t border-white/10 text-center">
-                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Comisiones Semanales</span>
-                        <span id="calc-semana" class="text-2xl sm:text-3xl font-black text-white">400 €</span>
-                        <span class="text-[10px] text-zinc-400 block mt-1">Directo a tu cuenta</span>
-                    </div>
-                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Bono por Rendimiento</span>
-                        <span id="calc-bono" class="text-2xl sm:text-3xl font-black text-cyan-300">0 €</span>
-                        <span class="text-[10px] text-zinc-400 block mt-1">Se activa con 5 ventas/sem</span>
-                    </div>
-                    <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                        <span class="text-[11px] text-zinc-500 font-bold uppercase block mb-1">Ingreso Mensual Estimado</span>
-                        <span id="calc-total" class="text-2xl sm:text-3xl font-black text-emerald-400">1.600 €</span>
-                        <span class="text-[10px] text-zinc-400 block mt-1">Limpio sin deducciones</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- LA REGLA DE ORO -->
-    <section id="regla-oro" class="py-20 px-4 sm:px-6 bg-[#07080B] border-t border-white/5">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-14">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Transparencia Implacable</span>
-                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-3">La Regla de Oro: Cobras en el Mismo Día</h2>
-                <p class="text-zinc-400 text-xs sm:text-sm font-light">En ventas, la recompensa debe ser inmediata. No esperamos a fin de mes.</p>
-            </div>
-
-            <div class="card-silver-premium p-6 sm:p-10 relative overflow-hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <div class="inline-flex items-center gap-2 bg-white/10 text-cyan-300 px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 border border-white/20">
-                            <i class="fa-solid fa-bolt"></i> Sistema Same-Day Pay
-                        </div>
-                        <h3 class="text-xl sm:text-2xl font-black text-white mb-4">Tú cierras el trato hoy, tú cobras hoy. Fin de la historia.</h3>
-                        <p class="text-zinc-300 text-xs sm:text-sm font-light leading-relaxed mb-4">
-                            El cliente acepta la propuesta y abona en ese instante el 70% de señal en efectivo, tarjeta o Bizum para iniciar su pedido. En cuanto nos notificas el justificante, nosotros te transferimos tu comisión completa por Bizum o transferencia inmediata.
-                        </p>
-                        <p class="text-zinc-400 text-xs font-light">
-                            Sin papeleos eternos, sin retenciones ocultas y sin sorpresas.
-                        </p>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="bg-black/50 p-4 rounded-2xl border border-white/10 flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0">✓</div>
-                            <div class="text-xs">
-                                <strong class="text-white block">Libertad Total de Horarios</strong>
-                                <span class="text-zinc-400">Sin jefes vigilándote. Tú eliges tus rutas y compaginas con tus estudios u otros trabajos.</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-black/50 p-4 rounded-2xl border border-white/10 flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0">✓</div>
-                            <div class="text-xs">
-                                <strong class="text-white block">Cero Riesgo Financiero</strong>
-                                <span class="text-zinc-400">Empiezas a comisión directa para probar tu talento sin contratos abusivos.</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-black/50 p-4 rounded-2xl border border-white/10 flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0">✓</div>
-                            <div class="text-xs">
-                                <strong class="text-white block">Formación Personal de Cierre</strong>
-                                <span class="text-zinc-400">Te enseñamos el argumento exacto y las respuestas a las objeciones más comunes en Logroño.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- EL KIT DE AGENCIA -->
-    <section id="kit" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#0A0C12] border-t border-white/5">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 bg-white/5 border border-white/20 px-3 py-1 rounded-full mb-4">
-                <i class="fa-solid fa-shirt text-[#C4C4C4] text-xs"></i>
-                <span class="text-zinc-200 font-bold text-xs uppercase tracking-widest">Herramientas Profesionales</span>
-            </div>
-            <h2 class="font-display text-2xl sm:text-4xl font-black text-white mb-3">Tu Kit de Agencia Oficial</h2>
-            <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto mb-12 font-light">No vas a salir a la calle con las manos vacías. Te equipamos como a un profesional.</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 hover:border-[#C4C4C4]/40 transition">
-                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-300 text-lg mb-4">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <h4 class="text-white font-bold text-sm mb-2">Polo con NFC en la Manga</h4>
-                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
-                        Polo corporativo prémium con un microchip NFC cosido en el puño. Haces la demo tocando el móvil del cliente con tu propio brazo. Impacto psicológico demoledor.
-                    </p>
-                </div>
-
-                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 hover:border-[#C4C4C4]/40 transition">
-                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-300 text-lg mb-4">
-                        <i class="fa-solid fa-gem"></i>
-                    </div>
-                    <h4 class="text-white font-bold text-sm mb-2">Muestras Reales en Mano</h4>
-                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
-                        Te entregamos el expositor de metacrilato biselado de 3 mm y los llaveros de cuero para que el dueño toque la calidad física antes de decidir.
-                    </p>
-                </div>
-
-                <div class="bg-[#10131B] border border-white/10 rounded-2xl p-6 hover:border-[#C4C4C4]/40 transition">
-                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-300 text-lg mb-4">
-                        <i class="fa-solid fa-id-card"></i>
-                    </div>
-                    <h4 class="text-white font-bold text-sm mb-2">Tu Tarjeta vCard Digital</h4>
-                    <p class="text-zinc-400 text-xs font-light leading-relaxed">
-                        Tu propia tarjeta inteligente de closer. Con un toque dejas tu contacto y tu catálogo guardados en el WhatsApp de los encargados.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PREGUNTAS FRECUENTES -->
-    <section id="faq" class="py-20 sm:py-24 px-4 sm:px-6 bg-[#080A0F] border-t border-white/5">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-14">
-                <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Claridad Total</span>
-                <h2 class="font-display text-2xl sm:text-4xl font-black text-white mt-2 mb-3">Preguntas Frecuentes de Postulantes</h2>
-                <p class="text-zinc-400 text-xs sm:text-sm font-light">Todo lo que necesitas saber antes de dar el paso.</p>
-            </div>
-
-            <div class="space-y-4 text-left">
-                <!-- ENCUADRE LEGAL CLARO -->
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span>¿Necesito estar dado de alta como autónomo para empezar?</span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        No para tu primera etapa. Si ya eres agente comercial o autónomo activo, operamos con contrato mercantil y liquidación por factura con IVA e IRPF en el mismo día. Si eres estudiante o estás probando tus habilidades comerciales, puedes iniciar una fase inicial a prueba como captador por comisión puntual (mediante recibo de liquidación legal con retención de IRPF sin cuota fija). En cuanto alcances un ritmo constante de ventas, te guiamos para activar la tarifa plana de autónomo con ingresos ya garantizados.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span>¿Necesito experiencia previa en ventas B2B?</span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        No es obligatoria. Buscamos personas con actitud, don de gentes, soltura para hablar en persona y ganas de ganar dinero. Nosotros te enseñamos el guion de 30 segundos y cómo rebatir objeciones en el café de bienvenida.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span>¿Tengo un horario obligatorio o una zona fija asignada?</span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        No. Trabajas a tu ritmo. Puedes salir 2 horas por la mañana antes de ir a clase o dedicarle tardes completas. Puedes prospectar tu propio barrio o las calles que prefieras de Logroño coordinándote con el equipo.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span>¿Cómo y cuándo recibo el pago de mis comisiones?</span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        El mismo día que el cliente abona la señal. Si cierras un Pack Efecto Multiplicador a las 12:00 del mediodía y el cliente abona su 70%, a las pocas horas tienes tus 100 € limpios transferidos a tu cuenta o Bizum.
-                    </p>
-                </details>
-
-                <details class="bg-[#10131B] p-5 sm:p-6 rounded-2xl border border-white/5 transition-all duration-300 cursor-pointer group">
-                    <summary class="flex justify-between items-center text-sm sm:text-base font-bold text-white">
-                        <span>¿En qué consiste exactamente la "Prueba de los 30 Segundos"?</span>
-                        <i class="fa-solid fa-chevron-down faq-chevron text-zinc-500 text-xs transition-transform duration-300 ml-4 shrink-0"></i>
-                    </summary>
-                    <p class="text-zinc-400 text-xs leading-relaxed font-light mt-4 pt-4 border-t border-white/5">
-                        Es un test interactivo directo de 8 preguntas clave en tu móvil. Te toma exactamente 30 segundos responderlo. Si tu perfil encaja con la visión comercial de Studio 42, el sistema te da acceso prioritario para agendar un café de 15 minutos en Logroño y entregarte tu kit oficial de closer.
-                    </p>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- LLAMADA FINAL A LA ACCIÓN -->
-    <section id="contacto" class="py-20 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-[#07080B] to-[#11141C] text-center border-t border-white/5">
-        <div class="max-w-3xl mx-auto">
-            <span class="text-[#C4C4C4] font-bold tracking-widest uppercase text-xs">Paso Definitivo</span>
-            <h2 class="font-display text-3xl sm:text-5xl font-black text-white mt-2 mb-6">¿Te Atreves con la "Prueba de los 30 Segundos"?</h2>
-            <p class="text-zinc-400 mb-8 sm:mb-10 text-xs sm:text-base font-light leading-relaxed">
-                Si tienes soltura, ganas de generar ingresos reales y quieres probarte en la calle con nosotros: supera el test de validación ahora mismo y coordinamos tu entrega de kit.
-            </p>
-            
-            <a href="test.html" class="btn-silver inline-flex items-center justify-center gap-2.5 sm:gap-3 px-8 sm:px-10 py-4 rounded-full text-xs font-black uppercase tracking-widest shadow-2xl w-full sm:w-auto">
-                <i class="fa-solid fa-bolt text-lg"></i>
-                <span>Comenzar Prueba de 30 Segundos</span>
-            </a>
-
-            <p class="text-zinc-500 text-[11px] mt-6">
-                Manuel & Melina · Dirección Studio 42
-            </p>
-        </div>
-    </section>
-
-    <!-- FOOTER BOUTIQUE -->
-    <footer id="footer-site" class="bg-[#050608] text-zinc-500 py-12 sm:py-16 text-xs border-t border-white/5">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-center md:text-left">
-                <p class="text-white font-bold tracking-widest uppercase text-xs mb-1">Studio 42 | Programa Talent</p>
-                <p class="text-zinc-500">Calle Carmen Medrano 5 · Logroño, La Rioja</p>
-                <p class="text-zinc-600 mt-1">Estaciones Phygital · Red Comercial B2B · Hardware NFC</p>
-            </div>
-
-            <div class="text-center md:text-right">
-                <p class="text-zinc-500 mb-2">&copy; 2026 Studio 42. Todos los derechos reservados.</p>
-                <div class="flex gap-4 justify-center md:justify-end text-zinc-400">
-                    <a href="/" class="hover:text-white transition">Web Principal</a>
-                    <span>·</span>
-                    <a href="../privacidad.html" class="hover:text-white transition">Privacidad</a>
-                    <span>·</span>
-                    <a href="../cookies.html" class="hover:text-white transition">Cookies</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- BARRA FLOTANTE COMERCIAL -->
-    <div id="sticky-cta" class="fixed bottom-3 sm:bottom-5 left-3 sm:left-6 right-3 sm:right-6 z-40 transition-all duration-300 transform translate-y-28 opacity-0 pointer-events-none max-w-2xl mx-auto">
-        <div class="bg-[#0A0C12]/95 border border-[#C4C4C4]/40 backdrop-blur-xl p-3 sm:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.95)] flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping hidden sm:block"></div>
-                <div class="text-left">
-                    <span class="text-white font-bold text-xs sm:text-sm block">¿Listo para salir a la calle?</span>
-                    <span class="text-zinc-400 text-[10px] sm:text-xs">Comisiones en el mismo día en Logroño</span>
-                </div>
-            </div>
-            <a href="test.html" class="btn-silver px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-xs font-black uppercase tracking-wider shrink-0 flex items-center gap-2">
-                <i class="fa-solid fa-bolt text-sm"></i>
-                <span>Prueba 30s</span>
-            </a>
+        <div class="escena" aria-hidden="true">
+            <img class="a" src="../img/llavero-studio42.webp" alt="" width="600" height="600">
+            <img class="b" src="../img/llavero-pets.webp" alt="" width="600" height="600">
         </div>
     </div>
+</header>
 
-    <!-- SCRIPT DE SIMULADOR Y BARRA FLOTANTE -->
-    <script>
-        const stickyCta = document.getElementById('sticky-cta');
-        const footerSite = document.getElementById('footer-site');
+<section id="producto">
+    <div class="wrap">
+        <p class="eyebrow">Qué vendes</p>
+        <h2>Un objeto que el cliente toca y una web que trabaja para el negocio</h2>
+        <p class="lead">No vendes una tarjeta suelta. Vendes un sistema: la pieza NFC, la web del negocio con reseñas, WhatsApp y reservas, y un informe cada mes con los resultados. Desde 0 € de entrada.</p>
+        <div class="cards c3">
+            <article class="card">
+                <div class="ph"><img class="full" src="../img/expositor.webp" alt="Display NFC de mostrador" loading="lazy"></div>
+                <h3>Display de mostrador</h3>
+                <p>En la barra o la caja. El cliente lo toca y deja la reseña en Google en 10 segundos.</p>
+            </article>
+            <article class="card">
+                <div class="ph"><img src="../img/llavero-studio42.webp" alt="Llavero Studio 42 impreso en 3D" loading="lazy"></div>
+                <h3>Llaveros para equipo y clientes</h3>
+                <p>Uno por camarero o por cliente fiel. Cada llavero tiene su código y medimos cuál trae más visitas.</p>
+            </article>
+            <article class="card">
+                <div class="ph"><img src="../img/llavero-pets.webp" alt="Chapa PETS Id Smart para mascotas" loading="lazy"></div>
+                <h3>PETS Id Smart</h3>
+                <p>Chapa para el collar de la mascota. La regalan las clínicas veterinarias y peluquerías caninas.</p>
+            </article>
+        </div>
+    </div>
+</section>
 
-        window.addEventListener('scroll', () => {
-            const footerRect = footerSite.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
+<section id="dia">
+    <div class="wrap">
+        <p class="eyebrow">Tu día a día</p>
+        <h2>Así es una visita</h2>
+        <div class="cards c4">
+            <article class="card"><div class="num">1</div><h3>Preparas la demo</h3><p>Con nuestra herramienta buscas el negocio en Google Maps y generas su web de prueba. Llegas con su nombre en la pantalla.</p></article>
+            <article class="card"><div class="num">2</div><h3>Entras en hora tranquila</h3><p>Bares de 10 a 12 o de 16 a 18; barberías entre cliente y cliente. Un barrio y un sector por semana.</p></article>
+            <article class="card"><div class="num">3</div><h3>Demo de 30 segundos</h3><p>Le pides que acerque su móvil al llavero. Ve su negocio, sus botones y cómo funciona la reseña.</p></article>
+            <article class="card"><div class="num">4</div><h3>Cierras y lo pasas</h3><p>Das de alta el pedido desde el móvil. Nosotros grabamos las piezas y las instalamos en 48 horas.</p></article>
+        </div>
+    </div>
+</section>
 
-            if (window.scrollY > 300 && footerRect.top > (viewportHeight - 20)) {
-                stickyCta.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
-            } else {
-                stickyCta.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
-            }
-        });
+<section id="comisiones">
+    <div class="wrap">
+        <p class="eyebrow">Comisiones</p>
+        <h2>Una sola tabla, sin letra pequeña</h2>
+        <p class="lead">Cobras por cada venta que el cliente paga, y además te premiamos cuando el cliente se queda. Precios sin IVA.</p>
+        <table class="tabla">
+            <thead><tr><th>Lo que vendes</th><th class="hide-s">Lo que paga el cliente</th><th class="c">Tu comisión</th></tr></thead>
+            <tbody>
+                <tr><td>Studio 42 Zero<small>Entrada sin inversión. La venta más fácil.</small></td><td class="hide-s">0 € de entrada + 59 €/mes</td><td class="c"><b>40 €</b><small>al cobrar la 2.ª cuota</small></td></tr>
+                <tr><td>Pack Catador<small>Para probar, con garantía de 30 días.</small></td><td class="hide-s">89 €</td><td class="c"><b>20 €</b></td></tr>
+                <tr><td>Pack Equipo<small>Para locales con equipo de sala.</small></td><td class="hide-s">229 €</td><td class="c"><b>50 €</b></td></tr>
+                <tr><td>Pack Barrio<small>El sistema completo.</small></td><td class="hide-s">549 €</td><td class="c"><b>110 €</b></td></tr>
+            </tbody>
+        </table>
+        <div class="extras">
+            <div class="extra"><b>+10 € por cliente que se queda</b><span>Cuando tu cliente pasa a pagar la cuota mensual.</span></div>
+            <div class="extra"><b>+50 € a la semana</b><span>Si cierras 5 ventas o más en la misma semana.</span></div>
+            <div class="extra"><b>Pago cada viernes</b><span>Por transferencia o Bizum, de las ventas cobradas esa semana, con su recibo.</span></div>
+        </div>
+    </div>
+</section>
 
-        const sliderVentas = document.getElementById('slider-ventas');
-        const labelVentas = document.getElementById('label-ventas');
-        const calcSemana = document.getElementById('calc-semana');
-        const calcBono = document.getElementById('calc-bono');
-        const calcTotal = document.getElementById('calc-total');
+<section id="simulador">
+    <div class="wrap">
+        <p class="eyebrow">Cuánto ganas</p>
+        <h2>Calcula tu mes</h2>
+        <p class="lead">Mueve la barra según las ventas que te veas cerrando cada semana. Calculamos con una comisión media de 45 € por venta, que es lo que sale con la mezcla habitual de packs.</p>
+        <div class="sim">
+            <label for="ventas"><span>Ventas por semana</span><span id="vTxt">3 ventas</span></label>
+            <input type="range" id="ventas" min="1" max="8" step="1" value="3">
+            <div class="res">
+                <div><b id="rSem">135 €</b><span>comisiones a la semana</span></div>
+                <div><b id="rBono">0 €</b><span>bono semanal (desde 5 ventas)</span></div>
+                <div class="top"><b id="rMes">580 €</b><span>al mes, aproximado</span></div>
+            </div>
+            <p class="nota">Es una estimación orientativa, antes de impuestos. Lo normal al empezar es 1 venta por cada 3 demos; con práctica, más. No prometemos ingresos: dependen de ti y de las horas que dediques.</p>
+        </div>
+    </div>
+</section>
 
-        if (sliderVentas) {
-            sliderVentas.addEventListener('input', (e) => {
-                const ventas = parseInt(e.target.value);
-                labelVentas.innerText = `${ventas} ${ventas === 1 ? 'venta' : 'ventas'} / semana`;
+<section id="formacion">
+    <div class="wrap">
+        <p class="eyebrow">Te formamos y te equipamos</p>
+        <h2>Cinco días y sales preparado</h2>
+        <div class="cards c2">
+            <article class="card">
+                <h3>Formación con Manuel</h3>
+                <ul class="check">
+                    <li><b>Día 1 · El producto.</b> Qué es Studio 42, los packs y cómo grabar una pieza.</li>
+                    <li><b>Día 2 · El cliente.</b> Sectores, casos reales y cómo leer una ficha de Google.</li>
+                    <li><b>Día 3 · El guion.</b> La demo de 30 segundos y las objeciones, hasta que salga solo.</li>
+                    <li><b>Días 4 y 5 · En la calle.</b> Primero miras cómo vendo yo; luego vendes tú conmigo al lado.</li>
+                    <li><b>Después:</b> 15 minutos al día para revisar visitas, demos y cierres.</li>
+                </ul>
+            </article>
+            <article class="card">
+                <h3>Tu kit</h3>
+                <ul class="check">
+                    <li>Muestras reales: display, llavero Studio 42 y chapa PETS.</li>
+                    <li>Tu propia tarjeta digital de closer para dejar tu contacto con un toque.</li>
+                    <li>Acceso a la herramienta para preparar demos y dar de alta pedidos.</li>
+                    <li>Casos reales para enseñar, como la barbería La Sucursal o la tienda SPN.</li>
+                    <li>Un grupo de WhatsApp con el equipo para dudas al momento.</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
 
-                // Promedio ponderado: ~100 € por venta
-                const comisionSemanal = ventas * 100;
-                calcSemana.innerText = `${comisionSemanal.toLocaleString('es-ES')} €`;
+<section id="perfil">
+    <div class="wrap">
+        <p class="eyebrow">A quién buscamos</p>
+        <h2>No hace falta experiencia. Hace falta soltura.</h2>
+        <div class="cards c2">
+            <article class="card">
+                <h3>Encajas si…</h3>
+                <ul class="check">
+                    <li>Hablas con desconocidos sin problema y te gusta el trato en persona.</li>
+                    <li>Conoces Logroño y sus barrios.</li>
+                    <li>Puedes dedicar al menos 10 horas a la semana.</li>
+                    <li>Tienes un móvil con NFC (casi todos los actuales).</li>
+                    <li>Eres o has sido camarero, dependiente, comercial, estudiante… o simplemente tienes labia.</li>
+                </ul>
+            </article>
+            <article class="card">
+                <h3>Nuestras reglas</h3>
+                <ul class="check no">
+                    <li>Nunca prometemos un número concreto de reseñas.</li>
+                    <li>Nunca filtramos reseñas por estrellas: Google lo prohíbe.</li>
+                    <li>Nunca cobramos en efectivo sin recibo o factura.</li>
+                    <li>Nunca presionamos: si no es para ese negocio, se dice.</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
 
-                // Bono semanal si hace 5 o más ventas
-                const bonoSemanal = ventas >= 5 ? 50 : 0;
-                calcBono.innerText = `${bonoSemanal} € / sem`;
+<section id="proceso">
+    <div class="wrap">
+        <p class="eyebrow">Cómo entrar</p>
+        <h2>Cuatro pasos, en una semana</h2>
+        <div class="cards c4">
+            <article class="card"><div class="num">1</div><h3>La prueba</h3><p>8 preguntas rápidas en el móvil. Tarda menos de dos minutos.</p></article>
+            <article class="card"><div class="num">2</div><h3>Un café</h3><p>Charla de 20 minutos para conocernos y resolver dudas.</p></article>
+            <article class="card"><div class="num">3</div><h3>Una demo real</h3><p>Haces una demo delante de nosotros. Vemos cómo te mueves.</p></article>
+            <article class="card"><div class="num">4</div><h3>Empiezas</h3><p>Cinco días de formación y a la calle con tu kit.</p></article>
+        </div>
+    </div>
+</section>
 
-                // Total al mes (4 semanas)
-                const ingresoMensual = (comisionSemanal + bonoSemanal) * 4;
-                calcTotal.innerText = `${ingresoMensual.toLocaleString('es-ES')} €`;
-            });
-        }
-    </script>
+<section id="dudas">
+    <div class="wrap">
+        <p class="eyebrow">Dudas</p>
+        <h2>Preguntas frecuentes</h2>
+        <details><summary>¿Tengo que ser autónomo?</summary><p>Para empezar a probar, no: puedes cobrar como colaborador ocasional con recibo y la retención de IRPF que corresponda. Si la actividad pasa a ser habitual, tendrás que darte de alta como autónomo o agente comercial, y te orientamos en el paso. Cada caso lo revisamos contigo antes del primer pago.</p></details>
+        <details><summary>¿Necesito experiencia en ventas?</summary><p>No. Te damos el guion, las respuestas a las objeciones y te acompañamos en la calle los primeros días. Buscamos actitud y soltura.</p></details>
+        <details><summary>¿Hay horario o zona fija?</summary><p>No hay horario. Recomendamos un mínimo de 10 horas a la semana. Las zonas se reparten entre el equipo para que no visitéis los mismos negocios.</p></details>
+        <details><summary>¿Cuándo cobro?</summary><p>Cada viernes, de las ventas que el cliente ya ha pagado esa semana. En Studio 42 Zero la comisión se paga al cobrar la segunda cuota, porque el cliente no paga entrada.</p></details>
+        <details><summary>¿Hay un sueldo fijo?</summary><p>No. Es una colaboración a comisión: cobras por lo que vendes, sin cuotas ni costes para ti. El kit de muestras lo ponemos nosotros.</p></details>
+        <details><summary>¿Qué pasa si el cliente se echa atrás?</summary><p>Si el cliente no paga, no hay comisión. Por eso preferimos ventas bien explicadas a ventas rápidas: un cliente contento se queda y te da el bono de +10 €.</p></details>
+    </div>
+</section>
+
+<section class="cierre">
+    <div class="wrap">
+        <h2>¿Te ves haciendo la demo?</h2>
+        <p class="lead">Haz la prueba ahora. Si encajas, te escribimos en 48 horas para quedar a tomar un café.</p>
+        <div class="ctas">
+            <a class="btn btn-ti" href="test.html">Hacer la prueba de 30 segundos</a>
+            <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/34672294962?text=Hola%2C%20Studio%2042.%20Me%20interesa%20ser%20closer%20y%20tengo%20una%20duda.">Preguntar por WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="wrap">
+        <span>&copy; 2026 Studio 42 · La agencia phygital de Logroño</span>
+        <span><a href="/">Web principal</a> · <a href="../privacidad.html">Privacidad</a> · <a href="../condiciones.html">Condiciones</a></span>
+    </div>
+</footer>
+
+<div class="sticky" id="sticky"><a class="btn btn-ti" href="test.html">Postularme · prueba de 30 segundos</a></div>
+
+<script>
+(function () {
+    var MEDIA = 45, BONO = 50, SEMANAS = 4.33;
+    var r = document.getElementById('ventas');
+    var eur = function (n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' €'; };
+    function calc() {
+        var v = Number(r.value), sem = v * MEDIA, bono = v >= 5 ? BONO : 0;
+        document.getElementById('vTxt').textContent = v + (v === 1 ? ' venta' : ' ventas');
+        document.getElementById('rSem').textContent = eur(sem);
+        document.getElementById('rBono').textContent = eur(bono);
+        document.getElementById('rMes').textContent = eur((sem + bono) * SEMANAS);
+    }
+    r.addEventListener('input', calc); calc();
+    var s = document.getElementById('sticky'), hero = document.getElementById('top');
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { s.classList.toggle('on', !e[0].isIntersecting); }).observe(hero);
+})();
+</script>
 </body>
 </html>
