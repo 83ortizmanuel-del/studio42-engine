@@ -267,6 +267,13 @@ textarea.inp{min-height:110px;resize:vertical}
 </section>
 
 <!-- ============ DETALLE CLIENTE ============ -->
+<section class="full" id="vFicha" aria-modal="true" role="dialog">
+  <div class="wrap">
+    <header class="top"><button class="ib" id="bFichaBack" aria-label="Volver a la lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><span id="fNombre" style="font:800 1rem var(--fd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">Ficha de Google</span><span class="sp"></span></header>
+    <div id="fPasos" style="display:flex;gap:6px;margin:0 0 12px"></div>
+    <div id="opti"></div>
+  </div>
+</section>
 <section class="full" id="vCliente" aria-modal="true" role="dialog">
   <div class="wrap">
     <header class="top"><button class="ib" id="bBack" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><b id="cNombre"></b><span class="sp"></span></header>
@@ -360,7 +367,7 @@ function cargar(){
 $('#bSync').onclick=function(){cargar().then(function(){toast('Actualizado')})};
 /* Tiempo real: se actualiza solo cada 45 s (y al volver a la app), salvo si estás dentro de una ficha */
 var vistos=null,recientes={},ultimaCarga=null;
-function libre(){return!$('#vApp').hidden&&!document.hidden&&!document.querySelector('.sheet-bg.on')&&!$('#vCliente').classList.contains('on')}
+function libre(){return!$('#vApp').hidden&&!document.hidden&&!document.querySelector('.sheet-bg.on')&&!$('#vCliente').classList.contains('on')&&!$('#vFicha').classList.contains('on')}
 setInterval(function(){if(libre())cargar()},DEMO?15000:45000);
 document.addEventListener('visibilitychange',function(){if(libre()&&ultimaCarga&&Date.now()-ultimaCarga>15000)cargar()});
 /* Clientes con landing hecha a medida (fuera del motor c/): clientes/a-medida.json */
@@ -651,24 +658,33 @@ function pintarFichas(){
        '<div class="aud-rt">'+(a.mapsUrl?'<a class="ghost" href="'+esc(a.mapsUrl)+'" target="_blank" rel="noopener" style="display:block;min-height:0;padding:5px 10px;font-size:.72rem;margin-bottom:4px;text-decoration:none;text-align:center">Ver ficha</a>':'')+'<button type="button" data-pid="'+esc(a.placeId||'')+'" data-nom="'+esc(a.negocio||'')+'" class="cta" style="min-height:0;padding:6px 12px;font-size:.78rem;background:var(--amber);color:#111">Ver informe</button></div>'+
        '</div>';
   });
-  h+='<div id="opti" hidden></div>';
   $('#tabFichas').innerHTML=h;
   $$('#tabFichas .sug button').forEach(function(b){b.onclick=function(){$('#askTxt').value=b.dataset.q}});
   $('#askBtn').onclick=auditarDesdePanel;
-  $$('#tabFichas .aud-card [data-pid]').forEach(function(b){b.onclick=function(e){e.preventDefault();e.stopPropagation();prepararOptim(b.dataset.pid,b.dataset.nom)}});
+  $$('#tabFichas .aud-card [data-pid]').forEach(function(b){b.onclick=function(e){e.preventDefault();e.stopPropagation();verInforme(b.dataset.pid,b.dataset.nom)}});
 }
+function abrirFicha(nombre,paso){
+  $('#fNombre').textContent=nombre||'Ficha de Google';
+  var P=['1 · Informe','2 · Optimización'];
+  $('#fPasos').innerHTML=P.map(function(t,i){var on=i+1===paso;return'<span style="flex:1;text-align:center;padding:7px 4px;border-radius:99px;font:700 .74rem var(--fb);'+(on?'background:var(--amber);color:#111':'background:#16181e;color:var(--muted)')+'">'+t+'</span>'}).join('');
+  var v=$('#vFicha');if(!v.classList.contains('on')){v.classList.add('on');document.body.style.overflow='hidden'}v.scrollTop=0;
+}
+function cerrarFicha(){$('#vFicha').classList.remove('on');document.body.style.overflow='';$('#opti').innerHTML='';if(D)pintarFichas()}
+$('#bFichaBack').onclick=cerrarFicha;
 function colorNota(n){return n>=75?'#34d399':n>=50?'#f59e0b':'#ef4444'}
 function verInforme(placeId,nombre){
   if(!placeId){toast('Falta el Place ID. Vuelve a auditar.');return}
-  var z=$('#opti');z.hidden=false;z.innerHTML='<div class="mini">Cargando el informe de <b>'+esc(nombre)+'</b>…</div>';z.scrollIntoView({behavior:'smooth'});
+  abrirFicha(nombre,1);var z=$('#opti');z.innerHTML='<div class="mini">Cargando el informe de <b>'+esc(nombre)+'</b>…</div>';
   api({accion:'panel_informe_ficha',place_id:placeId}).then(function(r){
     if(!r.ok){z.innerHTML='<div class="mini" style="color:#fca5a5">⚠️ '+esc(r.error||'No se pudo cargar.')+'</div>';return}
-    mostrarInforme(r.auditoria);
+    mostrarInforme(r.auditoria,placeId);
   }).catch(function(){z.innerHTML='<div class="mini" style="color:#fca5a5">Sin conexión.</div>'});
 }
-function mostrarInforme(a){
+function mostrarInforme(a,pid){
+  pid=pid||a.id||(a.negocio&&a.negocio.placeId)||window._audPid||'';window._audPid=pid;
   var inf=a.informe||{},col=colorNota(a.nota);
-  var z=$('#opti');z.hidden=false;
+  window._audUlt=a;abrirFicha(a.negocio.nombre,1);
+  var z=$('#opti');
   var h='<h3>'+esc(a.negocio.nombre)+' <span style="color:var(--muted);font-weight:400;font-size:.85rem">· informe de ficha</span></h3>';
   h+='<div style="display:flex;gap:14px;align-items:center;margin:10px 0 14px">';
   h+='<div style="width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:conic-gradient('+col+' '+(a.nota*3.6)+'deg,#1d2027 0deg);position:relative;flex-shrink:0"><i style="position:absolute;inset:5px;border-radius:50%;background:#0f1116"></i><div style="position:relative;z-index:1;text-align:center;line-height:1"><b style="font-size:1.3rem">'+a.nota+'</b><br><small style="font-size:.6rem;color:var(--muted)">de 100</small></div></div>';
@@ -678,12 +694,10 @@ function mostrarInforme(a){
   if(a.competidores&&a.competidores.length){h+='<div class="bloque"><div class="top"><b>Tu competencia</b></div><p>';h+='Tú: '+(a.negocio.rating||'—')+' ★ · '+(a.negocio.resenas||0)+' reseñas\n';a.competidores.forEach(function(x){h+='· '+esc(x.nombre)+': '+(x.rating||'—')+' ★ · '+x.resenas+' reseñas\n'});h+='</p></div>'}
   if(inf.dolores&&inf.dolores.length){h+='<div class="bloque"><div class="top"><b>Lo que le está costando clientes</b></div>';inf.dolores.forEach(function(d){h+='<div style="padding:10px 12px;border-left:4px solid '+(d.impacto==='alto'?'#ef4444':d.impacto==='bajo'?'#60a5fa':'#f59e0b')+';background:#14161c;border-radius:10px;margin:8px 0"><b style="display:block;margin-bottom:3px">'+esc(d.titulo)+'</b><p style="margin:0;color:#d1d5db;font-size:.9rem">'+esc(d.explicacion)+'</p></div>'});h+='</div>'}
   if(inf.plan&&inf.plan.length){h+='<div class="bloque"><div class="top"><b>Qué incluye la puesta a punto</b></div><ul>'+inf.plan.map(function(x){return'<li>'+esc(x)+'</li>'}).join('')+'</ul><p style="margin-top:8px;color:var(--muted);font-size:.82rem">Puesta a punto: '+(a.precios&&a.precios.puestaPunto||89)+' € + IVA · Gestión mensual: '+(a.precios&&a.precios.mensual||29)+' €/mes</p></div>'}
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px"><button type="button" class="cta" id="optiPrep" style="background:var(--amber);color:#111;min-height:48px;font-weight:800">✨ Preparar optimización</button><button type="button" class="ghost" id="optiCerrar" style="min-height:48px">Cerrar</button></div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px"><button type="button" class="cta" id="optiPrep" style="background:var(--amber);color:#111;min-height:48px;font-weight:800">✨ Preparar optimización</button><button type="button" class="ghost" id="optiCerrar" style="min-height:48px">← Volver a la lista</button></div>';
   z.innerHTML=h;
-  $('#optiPrep').onclick=function(){prepararOptim(a.negocio.placeId||a.id||a.negocio.id||(window._audPid||''),a.negocio.nombre,a)};
-  // Guardamos el pid por si acaso
-  window._audPid=a.id||a.negocio.id||'';
-  $('#optiCerrar').onclick=function(){z.hidden=true;z.innerHTML=''};
+  $('#optiPrep').onclick=function(){prepararOptim(pid,a.negocio.nombre,a)};
+  $('#optiCerrar').onclick=cerrarFicha;
 }
 function auditarDesdePanel(){
   var q=$('#askTxt').value.trim();if(q.length<3){$('#askMsg').textContent='Escribe el nombre del negocio.';return}
@@ -696,19 +710,18 @@ function auditarDesdePanel(){
     if(!z.aud.ok)throw new Error(z.aud.error||'No se pudo auditar.');
     b.disabled=false;b.textContent=prev;$('#askMsg').textContent='✓ Auditoría guardada.';
     D.auditorias=D.auditorias||[];D.auditorias.unshift({fecha:new Date().toISOString(),closer:'CEO',negocio:z.aud.auditoria.negocio.nombre,placeId:z.place.id,nota:z.aud.auditoria.nota,rating:z.aud.auditoria.negocio.rating,resenas:z.aud.auditoria.negocio.resenas,puesto:z.aud.auditoria.posicion&&z.aud.auditoria.posicion.puesto,mapsUrl:z.aud.auditoria.negocio.mapsUrl||''});
-    pintarFichas();mostrarInforme(z.aud.auditoria);
+    pintarFichas();mostrarInforme(z.aud.auditoria,z.place.id);
   }).catch(function(e){b.disabled=false;b.textContent=prev;$('#askMsg').textContent='⚠️ '+(e.message||e)});
 }
 function copiarTxt(t,b){try{navigator.clipboard.writeText(t);var p=b.textContent;b.textContent='✓ copiado';setTimeout(function(){b.textContent=p},1500)}catch(e){toast('No se pudo copiar')}}
 function prepararOptim(placeId,nombre,audData){
   placeId = placeId || (audData && (audData.id || (audData.negocio && audData.negocio.placeId))) || window._audPid || '';
   if(!placeId){toast('Falta el Place ID. Vuelve a auditar.');return}
-  var z=$('#opti');z.hidden=false;
+  abrirFicha(nombre,2);var z=$('#opti');
   var PAS=['Leyendo la ficha de Google','Claude está escribiendo el paquete','Revisando los textos'];
   z.innerHTML='<h3>Preparando optimización · '+esc(nombre)+'</h3><div class="sub">Suele tardar 15–25 segundos.</div><div id="optiProg" style="margin-top:14px"></div>';
   var pg=$('#optiProg');PAS.forEach(function(x){var d=document.createElement('div');d.textContent='○ '+x;d.style.cssText='padding:6px 0;color:var(--muted);font-size:.9rem';pg.appendChild(d)});
   var filas=Array.from(pg.children),i=0;var marca=function(){filas.forEach(function(f,j){f.style.color=j<i?'#34d399':j===i?'#fff':'';f.textContent=(j<i?'✓ ':j===i?'⏳ ':'○ ')+PAS[j]})};marca();var ivl=setInterval(function(){if(i<filas.length-1){i++;marca()}},5000);
-  z.scrollIntoView({behavior:'smooth'});
   api({accion:'panel_optimizar_ficha',place_id:placeId}).then(function(r){
     clearInterval(ivl);if(!r.ok){z.innerHTML='<div class="mini" style="color:#fca5a5">⚠️ '+esc(r.error||'No se pudo preparar.')+'</div>';return}
     var P=r.paquete,A=r.auditoria||audData||{};
@@ -721,10 +734,10 @@ function prepararOptim(placeId,nombre,audData){
     (P.respuestas_resenas||[]).forEach(function(x,i){h+=bloque('Respuesta a reseña '+(i+1)+' ('+(x.estrellas||'?')+'★) · '+(x.a||'').slice(0,60),x.respuesta)});
     h+='<div class="bloque"><div class="top"><b>Fotos que pedir al cliente</b></div><ul>'+P.fotos_pedir.map(function(x){return'<li>'+esc(x)+'</li>'}).join('')+'</ul></div>';
     h+=bloque('Mensaje para el cliente (WhatsApp)',P.whatsapp);
-    h+='<button type="button" class="ghost" id="cerrarOpti" style="margin-top:10px">Cerrar</button>';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px"><button type="button" class="ghost" id="volverInf" style="min-height:48px">← Ver el informe</button><button type="button" class="ghost" id="cerrarOpti" style="min-height:48px">Volver a la lista</button></div>';
     z.innerHTML=h;
     $$('#opti button[data-cp]').forEach(function(b){b.onclick=function(e){e.stopPropagation();copiarTxt(b.dataset.cp,b)}});
-    $('#cerrarOpti').onclick=function(){z.hidden=true;z.innerHTML=''};
+    $('#cerrarOpti').onclick=cerrarFicha;$('#volverInf').onclick=function(){if(window._audUlt)mostrarInforme(window._audUlt,window._audPid);else cerrarFicha()};
   }).catch(function(){clearInterval(ivl);z.innerHTML='<div class="mini" style="color:#fca5a5">Sin conexión.</div>'});
 }
 
