@@ -1485,6 +1485,7 @@ function panelRouter_(d) {
   }
   if (d.accion === 'panel_pedido_estado') return panelPedidoEstado_(d);
   if (d.accion === 'panel_auditorias') return panelAuditorias_();
+  if (d.accion === 'panel_buscar') return panelBuscar_(c, d);
   if (d.accion === 'panel_auditar_slug') return panelAuditarSlug_(c, d);
   if (d.accion === 'panel_optimizar_ficha') return panelOptimizarFicha_(c, d);
   if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
@@ -2096,9 +2097,9 @@ function INFORME_MENSUAL() {
 var AUDIT_HOJA = 'Auditorias';
 var PRECIO_PUESTA_PUNTO = 89, PRECIO_FICHA_MES = 29;
 
-function auditar_(raw) {
+function auditar_(raw, quienPanel) {
   var c = cfg_();
-  var au = autorizarCloser_(c, raw);
+  var au = quienPanel ? { closer: quienPanel } : autorizarCloser_(c, raw);
   if (au.error) return { ok: false, error: au.error };
   if (!c.mapsKey) return { ok: false, error: 'Falta la clave de Google Maps (GOOGLE_MAPS_API_KEY) para auditar.' };
   var id = idLugar_(raw.place_id);
@@ -2306,7 +2307,7 @@ function panelAuditarSlug_(c, d) {
   var pid = idLugar_(d.place_id);
   if (!pid) return { ok: false, error: 'Falta el Place ID del negocio.' };
   // reutilizamos auditar_ con un closer_id virtual del CEO
-  return auditar_({ closer_id: 'CEO', place_id: pid });
+  return auditar_({ place_id: pid }, 'PANEL');
 }
 
 function panelOptimizarFicha_(c, d) {
@@ -2318,7 +2319,7 @@ function panelOptimizarFicha_(c, d) {
   var guardada = null; try { guardada = cache && cache.get('aud_' + pid); } catch (e) {}
   var a = guardada ? JSON.parse(guardada) : null;
   if (!a) {
-    var fresh = auditar_({ closer_id: 'CEO', place_id: pid });
+    var fresh = auditar_({ place_id: pid }, 'PANEL');
     if (!fresh.ok) return fresh;
     a = fresh.auditoria;
   }
@@ -2360,4 +2361,19 @@ function panelOptimizarFicha_(c, d) {
     };
     return { ok: true, paquete: paquete, auditoria: a };
   } catch (e) { return { ok: false, error: 'No se pudo preparar: ' + String(e).slice(0, 160) }; }
+}
+
+/** Buscador de Google Maps para el panel: la sesión del panel ya está validada, no usa la lista de closers. */
+function panelBuscar_(c, d) {
+  if (!c.mapsKey) return { ok: false, error: 'Falta GOOGLE_MAPS_API_KEY en las propiedades del script.' };
+  var q = limpiar_(d.consulta, 120);
+  if (q.length < 3) return { ok: false, error: 'Escribe al menos 3 letras.' };
+  var r = placesPost_(c, 'https://places.googleapis.com/v1/places:searchText', 'places.id,places.displayName,places.formattedAddress',
+    { textQuery: q, languageCode: 'es', pageSize: 5 });
+  if (r.code !== 200) return { ok: false, error: 'Google Maps no respondió (' + r.code + '). Revisa que «Places API (New)» esté activada para tu clave.' };
+  var lista = ((r.j && r.j.places) || []).map(function (p) {
+    var id = idLugar_(p.id); if (!id) return null;
+    return { id: id, nombre: cadena_(p.displayName && p.displayName.text, 80), direccion: cadena_(p.formattedAddress, 140) };
+  }).filter(Boolean);
+  return { ok: true, resultados: lista };
 }
