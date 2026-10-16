@@ -1181,40 +1181,49 @@ function mensajeInforme(a){
            Los precios se muestran aquí, pero el total que vale es el que calcula el servidor. */
         const IVA = 0.21;
         const CATALOGO = {
-            piezas: {
-                display:  { nombre: 'Display acrílico NFC', precio: 49 },
-                llavero:  { nombre: 'Llavero Studio 42', precio: 19.9 },
-                tarjeta:  { nombre: 'Tarjeta de madera NFC', precio: 39.9 },
-                welcome:  { nombre: 'Welcome Pack directivos', precio: 89 },
-                petpass:  { nombre: 'Chapa PETS Id Smart', precio: 14.9 },
-                camiseta: { nombre: 'Camiseta del equipo NFC', precio: null },
-                fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
-            },
-            packs: {
-                ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0, mesesPro: 0, incluye: {} },
-                prueba:        { nombre: 'Prueba Logroño', precio: 89, mesesPro: 1, incluye: { display: 1, llavero: 1 } },
-                iman:          { nombre: 'Imán de mostrador', precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 } },
-                multiplicador: { nombre: 'Efecto multiplicador', precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
-                dominio:       { nombre: 'Dominio local total', precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, welcome: 1 } }
-            },
-            planes: {
-                esencial:  { nombre: 'Esencial', mensual: 19 },
-                pro:       { nombre: 'Pro', mensual: 39 },
-                multisede: { nombre: 'Multi-sede', mensual: 79 },
-                clinica:   { nombre: 'PETS Id Smart Clínica', mensual: 29 }
-            }
+          piezas: {
+            display:  { nombre: 'Display acrílico NFC',       precio: 49 },
+            llavero:  { nombre: 'Llavero Studio 42',         precio: 19.9 },
+            tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
+            welcome:  { nombre: 'Welcome Pack directivos',    precio: 89 },
+            petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
+            camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
+            fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
+          },
+          /* Packs de la web (studio42.es/#packs). Los marcados «retirado» ya no se venden:
+             solo se conservan para que los pedidos antiguos se sigan leyendo bien. */
+          packs: {
+            ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0,   mesesPro: 0, incluye: {} },
+            zero:          { nombre: 'Studio 42 Zero',         precio: 0,   mesesPro: 0, incluye: { display: 1, llavero: 3 }, planFijo: 'zero' },
+            catador:       { nombre: 'Catador',                precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 } },
+            equipo:        { nombre: 'Equipo',                 precio: 229, mesesPro: 2, incluye: { display: 1, llavero: 5, tarjeta: 1 } },
+            barrio:        { nombre: 'Barrio',                 precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 15, welcome: 1 } },
+            prueba:        { nombre: 'Prueba Logroño',         precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 }, retirado: true },
+            iman:          { nombre: 'Imán de mostrador',      precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 }, retirado: true },
+            multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 }, retirado: true },
+            dominio:       { nombre: 'Dominio local total',    precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, welcome: 1 }, retirado: true }
+          },
+          /* Suscripción «Ecosistema Activo»: precio mensual sin IVA. Trimestral −5 %, anual = 10 meses (2 gratis). */
+          planes: {
+            esencial:  { nombre: 'Esencial',          mensual: 19 },
+            pro:       { nombre: 'Pro',               mensual: 39 },
+            multisede: { nombre: 'Multi-sede',        mensual: 79 },
+            clinica:   { nombre: 'PETS Id Smart Clínica', mensual: 29 },
+            /* Studio 42 Zero: 0 € de apertura, 59 €/mes todo incluido, solo mensual y 12 meses de permanencia */
+            zero:      { nombre: 'Studio 42 Zero',    mensual: 59, soloMensual: true, permanencia: 12, soloPack: 'zero' }
+          }
         };
         const PERIODOS = { mensual: 'Mensual', trimestral: 'Trimestral −5 %', anual: 'Anual · 2 meses gratis' };
         const precioPlan = (plan, per) => { const m = CATALOGO.planes[plan].mensual; return per === 'trimestral' ? Math.round(m * 3 * 0.95 * 100) / 100 : per === 'anual' ? m * 10 : m; };
         const sufijo = { mensual: '/mes', trimestral: '/trimestre', anual: '/año' };
-        const DESC_PLAN = { esencial: 'Landing activa, 2 cambios al mes, informe mensual', pro: 'Cambios ilimitados en 24 h, informe por pieza, campañas', multisede: 'Varias sedes en una landing hub, informe comparado', clinica: 'Para veterinarias: chapas PETS Id Smart a precio de coste' };
+        const DESC_PLAN = { esencial: 'Landing activa, 2 cambios al mes, informe mensual', pro: 'Cambios ilimitados en 24 h, informe por pieza, campañas', multisede: 'Varias sedes en una landing hub, informe comparado', clinica: 'Para veterinarias: chapas PETS Id Smart a precio de coste', zero: 'Todo incluido: landing, piezas, cambios ilimitados, informe y reposición' };
         const euro = (n) => n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         let ped = null;
 
         function abrirPedido(url) {
             const slug = (new URL(url)).searchParams.get('cod');
-            ped = { url, slug, cliente: $('nombre_comercio').value.trim() || slug, pack: 'iman', cant: {}, promo: false, notas: '', plan: 'pro', periodo: 'mensual', email: '' };
-            aplicarPack('iman');
+            ped = { url, slug, cliente: $('nombre_comercio').value.trim() || slug, pack: 'equipo', cant: {}, promo: false, notas: '', plan: 'pro', periodo: 'mensual', email: '' };
+            aplicarPack('equipo');
             if (AUD.quiere) ped.cant.fichagoogle = 1;
             panel.classList.add('hidden-element'); form.classList.add('hidden-element');
             $('pedido').classList.remove('hidden-element');
@@ -1226,6 +1235,9 @@ function mensajeInforme(a){
             ped.pack = id;
             Object.keys(CATALOGO.piezas).forEach((k) => { ped.cant[k] = Math.max(inc[k] || 0, id === ped._packPrevio ? ped.cant[k] || 0 : (inc[k] || 0)); });
             ped._packPrevio = id;
+            const fijo = CATALOGO.packs[id].planFijo;
+            if (fijo) { ped.plan = fijo; ped.periodo = 'mensual'; }
+            else if (ped.plan && CATALOGO.planes[ped.plan] && CATALOGO.planes[ped.plan].soloPack) ped.plan = 'pro';
             if (AUD.quiere) ped.cant.fichagoogle = Math.max(1, ped.cant.fichagoogle || 0);
         }
         function calcular() {
@@ -1246,13 +1258,15 @@ function mensajeInforme(a){
             z.append(h('h2', null, 'Pedido · ' + ped.cliente), h('div', 'sub', 'Elige el pack y ajusta las piezas con + y −. El total se calcula solo.'));
             z.append(h('div', 'ped-tit', '① Pack'));
             const lp = h('div', 'packs-ped');
-            Object.entries(CATALOGO.packs).forEach(([id, p]) => {
+            Object.entries(CATALOGO.packs).filter(([, p]) => !p.retirado).forEach(([id, p]) => {
                 const b = h('button', 'pack-op' + (ped.pack === id ? ' on' : '')); b.type = 'button';
                 const izq = h('div'); izq.append(h('b', null, p.nombre));
                 const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta de madera', 'tarjetas de madera'], welcome: ['Welcome Pack', 'Welcome Packs'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'] };
                 const inc = Object.entries(p.incluye).map(([k, n]) => n + ' ' + CORTO[k][n === 1 ? 0 : 1]).join(' · ');
-                izq.append(h('small', null, inc || 'Solo las piezas que elijas'));
-                b.append(izq, h('span', 'pr', p.precio ? euro(p.precio) : '—'));
+                const extraTxt = p.planFijo ? ' · 0 € hoy, ' + euro(CATALOGO.planes[p.planFijo].mensual) + '/mes · ' + CATALOGO.planes[p.planFijo].permanencia + ' meses'
+                    : p.mesesPro ? ' · 🎁 ' + p.mesesPro + (p.mesesPro === 1 ? ' mes' : ' meses') + ' de Pro' : '';
+                izq.append(h('small', null, (inc || 'Solo las piezas que elijas') + extraTxt));
+                b.append(izq, h('span', 'pr', p.precio ? euro(p.precio) : p.planFijo ? '0 €' : '—'));
                 b.addEventListener('click', () => { aplicarPack(id); pintarPedido(); });
                 lp.appendChild(b);
             });
@@ -1279,7 +1293,10 @@ function mensajeInforme(a){
             z.append(h('div', 'ped-tit', '③ Suscripción · Ecosistema Activo'));
             const meses = CATALOGO.packs[ped.pack].mesesPro;
             const lpl = h('div', 'packs-ped');
-            [['', { nombre: 'Sin suscripción', mensual: 0 }]].concat(Object.entries(CATALOGO.planes)).forEach(([id, p]) => {
+            const fijo = CATALOGO.packs[ped.pack].planFijo;
+            const opciones = fijo ? [[fijo, CATALOGO.planes[fijo]]]
+                : [['', { nombre: 'Sin suscripción', mensual: 0 }]].concat(Object.entries(CATALOGO.planes).filter(([, p]) => !p.soloPack));
+            opciones.forEach(([id, p]) => {
                 const b = h('button', 'pack-op' + (ped.plan === id ? ' on' : '')); b.type = 'button';
                 const izq = h('div'); izq.append(h('b', null, p.nombre));
                 izq.append(h('small', null, id ? (DESC_PLAN[id] || '') : 'Solo apertura. Sin cambios ni informe mensual.'));
@@ -1288,11 +1305,16 @@ function mensajeInforme(a){
                 lpl.appendChild(b);
             });
             z.appendChild(lpl);
-            if (ped.plan) {
+            if (ped.plan && !CATALOGO.planes[ped.plan].soloMensual) {
                 const per = h('div', 'packs-ped'); per.style.cssText = 'grid-template-columns:repeat(3,1fr);margin-top:8px';
                 Object.entries(PERIODOS).forEach(([id, n]) => { const b = h('button', 'pack-op' + (ped.periodo === id ? ' on' : ''), n); b.type = 'button'; b.style.cssText = 'justify-content:center;font-size:11px;font-weight:800;text-align:center;padding:10px 6px'; b.addEventListener('click', () => { ped.periodo = id; pintarPedido(); }); per.appendChild(b); });
                 z.appendChild(per);
-                z.append(h('div', 'guia-nfc', (meses ? `🎁 El pack incluye ${meses} ${meses === 1 ? 'mes' : 'meses'} gratis. ` : '') + `Después: ${euro(precioPlan(ped.plan, ped.periodo) * 1.21)} ${sufijo[ped.periodo]} IVA incluido, sin permanencia.`));
+            }
+            if (ped.plan) {
+                const pl = CATALOGO.planes[ped.plan];
+                z.append(h('div', 'guia-nfc', pl.permanencia
+                    ? `Cuota ${euro(precioPlan(ped.plan, 'mensual') * 1.21)}/mes IVA incluido desde hoy. ${pl.permanencia} meses de permanencia; después sigue en cuota normal o pasa a propiedad.`
+                    : (meses ? `🎁 El pack incluye ${meses} ${meses === 1 ? 'mes' : 'meses'} gratis. ` : '') + `Después: ${euro(precioPlan(ped.plan, ped.periodo) * 1.21)} ${sufijo[ped.periodo]} IVA incluido, sin permanencia.`));
                 const em = h('input', 'input-cyber'); em.type = 'email'; em.placeholder = 'Email del cliente (factura e informe mensual)'; em.value = ped.email; em.style.marginTop = '10px';
                 em.addEventListener('input', () => { ped.email = em.value.trim(); });
                 z.appendChild(em);
@@ -1307,7 +1329,7 @@ function mensajeInforme(a){
             const c = calcular();
             const bar = h('div', 'total-bar'), t = h('div');
             t.append(h('small', null, 'Hoy · IVA incluido'), h('strong', null, euro(c.total) + (c.consultar ? ' +' : '')));
-            if (ped.plan) t.append(h('small', null, 'Después ' + euro(precioPlan(ped.plan, ped.periodo) * 1.21) + sufijo[ped.periodo]));
+            if (ped.plan) t.append(h('small', null, (CATALOGO.planes[ped.plan].permanencia ? 'Cuota desde hoy ' : 'Después ') + euro(precioPlan(ped.plan, ped.periodo) * 1.21) + sufijo[ped.periodo]));
             const rev = h('button', 'btn-fin principal', 'Revisar pedido'); rev.type = 'button';
             rev.disabled = !c.base && !c.consultar && !ped.plan;
             rev.addEventListener('click', revisarPedido);
@@ -1332,6 +1354,7 @@ function mensajeInforme(a){
                 z.append(h('div', 'ped-tit', 'Suscripción'));
                 fila('Plan ' + CATALOGO.planes[ped.plan].nombre + ' · ' + PERIODOS[ped.periodo], euro(precioPlan(ped.plan, ped.periodo) * 1.21) + sufijo[ped.periodo]);
                 fila('Primer cobro de la cuota', meses ? 'en ' + meses + (meses === 1 ? ' mes' : ' meses') : 'hoy');
+                if (CATALOGO.planes[ped.plan].permanencia) fila('Permanencia', CATALOGO.planes[ped.plan].permanencia + ' meses');
             }
             if (ped.notas.trim()) z.append(h('div', 'guia-nfc', 'Notas: ' + ped.notas.trim()));
             const acc = h('div', 'acciones-fin');
