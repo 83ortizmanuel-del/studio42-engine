@@ -157,6 +157,9 @@ function doPost(e) {
   try {
     var pe = leerPeticion_(e);
     if (pe.accion === 'ev') return json_(registrarEvento_(pe));
+    if (pe.accion === 'auditar') {   // sin cerrojo: tarda ~20 s y no escribe nada compartido
+      try { return json_(auditar_(pe)); } catch (ae) { console.error('auditar: ' + (ae && ae.stack || ae)); return json_({ ok: false, error: 'No se pudo completar la auditoría. Inténtalo de nuevo.' }); }
+    }
   } catch (x) { /* sigue el flujo normal */ }
   var lock = LockService.getScriptLock();
   var tuvoLock = false;
@@ -1304,7 +1307,8 @@ var CATALOGO = {
     tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
     welcome:  { nombre: 'Welcome Pack directivos',    precio: 89 },
     petpass:  { nombre: 'Chapa Pet Pass',             precio: 14.9 },
-    camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null }   // a consultar: no suma
+    camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
+    fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
   },
   packs: {
     ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0,   mesesPro: 0, incluye: {} },
@@ -2077,4 +2081,206 @@ function INFORME_MENSUAL() {
     catch (err) { console.warn('No se pudo enviar a ' + s.email + ': ' + err); }
   });
   console.log('Informes enviados: ' + enviados);
+}
+
+/* ================================================================================
+ * AUDITORÍA DE LA FICHA DE GOOGLE (desde el diagnóstico del Closer)
+ * Lee la ficha pública, la compara con los 3 competidores más cercanos, mira en qué
+ * puesto sale en la búsqueda local y revisa su web. Claude escribe el informe en
+ * lenguaje de dueño de negocio. Se guarda en la hoja «Auditorias».
+ * ================================================================================ */
+
+var AUDIT_HOJA = 'Auditorias';
+var PRECIO_PUESTA_PUNTO = 89, PRECIO_FICHA_MES = 29;
+
+function auditar_(raw) {
+  var c = cfg_();
+  var au = autorizarCloser_(c, raw);
+  if (au.error) return { ok: false, error: au.error };
+  if (!c.mapsKey) return { ok: false, error: 'Falta la clave de Google Maps (GOOGLE_MAPS_API_KEY) para auditar.' };
+  var id = idLugar_(raw.place_id);
+  if (!id) return { ok: false, error: 'Elige primero el negocio en el buscador de Google Maps.' };
+  var cache = null;
+  try { cache = CacheService.getScriptCache(); var guardada = cache.get('aud_' + id); if (guardada) return { ok: true, auditoria: JSON.parse(guardada), deCache: true }; } catch (e) { cache = null; }
+  if (!permitirPeticion_(Math.max(10, Math.round(c.maxBusquedas / 4)), 'a_')) return { ok: false, error: 'Demasiadas auditorías esta hora. Inténtalo en un rato.' };
+
+  var p = auditLugar_(c, id);
+  if (p.error) return { ok: false, error: p.error };
+  var comp = auditCompetidores_(c, p);
+  var pos = auditPosicion_(c, p);
+  var web = auditWeb_(p.web, p.tel);
+  var a = auditPuntuar_(p, comp, pos, web);
+  a.informe = auditInforme_(c, a) || auditInformeBasico_(a);
+  a.precios = { puestaPunto: PRECIO_PUESTA_PUNTO, mensual: PRECIO_FICHA_MES };
+  a.fecha = new Date().toISOString();
+
+  try {
+    var libro = SpreadsheetApp.getActive(), h = libro.getSheetByName(AUDIT_HOJA) || libro.insertSheet(AUDIT_HOJA);
+    if (h.getLastRow() === 0) { h.appendRow(['Fecha', 'Closer', 'Negocio', 'Place ID', 'Nota', 'Valoración', 'Reseñas', 'Puesto', 'Datos']); h.setFrozenRows(1); }
+    h.appendRow([new Date(), au.closer, a.negocio.nombre, id, a.nota, a.negocio.rating, a.negocio.resenas, a.posicion.puesto || '—', JSON.stringify(a).slice(0, 45000)]);
+  } catch (e) { console.warn('No se pudo guardar la auditoría: ' + e); }
+  try { if (cache) cache.put('aud_' + id, JSON.stringify(a), 21600); } catch (e) {}
+  return { ok: true, auditoria: a };
+}
+
+function placesGet_(c, url, mask) {
+  var r = UrlFetchApp.fetch(url, { method: 'get', muteHttpExceptions: true, headers: { 'X-Goog-Api-Key': c.mapsKey, 'X-Goog-FieldMask': mask } });
+  return { code: r.getResponseCode(), j: r.getResponseCode() === 200 ? JSON.parse(r.getContentText()) : null, txt: r.getContentText().slice(0, 200) };
+}
+function placesPost_(c, url, mask, body) {
+  var r = UrlFetchApp.fetch(url, { method: 'post', contentType: 'application/json', muteHttpExceptions: true, headers: { 'X-Goog-Api-Key': c.mapsKey, 'X-Goog-FieldMask': mask }, payload: JSON.stringify(body) });
+  return { code: r.getResponseCode(), j: r.getResponseCode() === 200 ? JSON.parse(r.getContentText()) : null, txt: r.getContentText().slice(0, 200) };
+}
+
+/** Ficha pública completa. */
+function auditLugar_(c, id) {
+  var r = placesGet_(c, 'https://places.googleapis.com/v1/places/' + encodeURIComponent(id) + '?languageCode=es',
+    'id,displayName,formattedAddress,addressComponents,location,rating,userRatingCount,regularOpeningHours.weekdayDescriptions,websiteUri,internationalPhoneNumber,primaryType,primaryTypeDisplayName,types,photos.name,reviews,businessStatus,googleMapsUri,editorialSummary');
+  if (r.code !== 200) return { error: 'No se pudo leer la ficha en Google Maps (' + r.code + ').' };
+  var p = r.j, ciudad = '';
+  (p.addressComponents || []).forEach(function (x) { if (!ciudad && (x.types || []).indexOf('locality') >= 0) ciudad = x.longText || x.shortText || ''; });
+  var ahora = Date.now();
+  var resenas = (p.reviews || []).slice(0, 5).map(function (v) {
+    var t = v.publishTime ? Date.parse(v.publishTime) : NaN;
+    return { estrellas: v.rating || null, texto: cadena_((v.text && v.text.text) || (v.originalText && v.originalText.text) || '', 400),
+      hace: cadena_(v.relativePublishTimeDescription, 40), dias: isNaN(t) ? null : Math.round((ahora - t) / 86400000) };
+  });
+  var tel = String(p.internationalPhoneNumber || '').replace(/[^\d+]/g, '');
+  return {
+    id: id, nombre: cadena_(p.displayName && p.displayName.text, 80), direccion: cadena_(p.formattedAddress, 140), ciudad: cadena_(ciudad, 60),
+    location: p.location || null, rating: typeof p.rating === 'number' ? Math.round(p.rating * 10) / 10 : null,
+    resenas: typeof p.userRatingCount === 'number' ? p.userRatingCount : 0,
+    horario: ((p.regularOpeningHours && p.regularOpeningHours.weekdayDescriptions) || []).length > 0,
+    web: String(p.websiteUri || '').slice(0, 300), tel: /^\+\d{8,15}$/.test(tel) ? tel : '',
+    tipo: cadena_(p.primaryType || (p.types || [])[0] || '', 50), tipoNombre: cadena_(p.primaryTypeDisplayName && p.primaryTypeDisplayName.text, 60),
+    fotos: (p.photos || []).length, ultimas: resenas, estado: p.businessStatus || '', mapsUrl: urlHttps_(p.googleMapsUri),
+    resumenGoogle: cadena_(p.editorialSummary && p.editorialSummary.text, 300)
+  };
+}
+
+/** Los 3 competidores del mismo tipo con más reseñas en 1,5 km. */
+function auditCompetidores_(c, p) {
+  if (!p.location || !p.tipo) return [];
+  var mask = 'places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress';
+  var body = { maxResultCount: 15, languageCode: 'es', rankPreference: 'POPULARITY',
+    locationRestriction: { circle: { center: p.location, radius: 1500 } } };
+  body.includedPrimaryTypes = [p.tipo];
+  var r = placesPost_(c, 'https://places.googleapis.com/v1/places:searchNearby', mask, body);
+  if (r.code !== 200) { delete body.includedPrimaryTypes; body.includedTypes = [p.tipo]; r = placesPost_(c, 'https://places.googleapis.com/v1/places:searchNearby', mask, body); }
+  if (r.code !== 200) { console.warn('searchNearby ' + r.code + ' ' + r.txt); return []; }
+  return ((r.j && r.j.places) || []).filter(function (x) { return x.id !== p.id && typeof x.userRatingCount === 'number'; })
+    .sort(function (a, b) { return b.userRatingCount - a.userRatingCount; }).slice(0, 3)
+    .map(function (x) { return { nombre: cadena_(x.displayName && x.displayName.text, 60), rating: typeof x.rating === 'number' ? Math.round(x.rating * 10) / 10 : null, resenas: x.userRatingCount }; });
+}
+
+/** Puesto en la búsqueda «<tipo> en <ciudad>» (los 20 primeros). */
+function auditPosicion_(c, p) {
+  var que = (p.tipoNombre || p.tipo.replace(/_/g, ' ')).toLowerCase();
+  var consulta = que + (p.ciudad ? ' en ' + p.ciudad : '');
+  if (!que) return { consulta: '', puesto: null };
+  var body = { textQuery: consulta, pageSize: 20, languageCode: 'es' };
+  if (p.location) body.locationBias = { circle: { center: p.location, radius: 5000 } };
+  var r = placesPost_(c, 'https://places.googleapis.com/v1/places:searchText', 'places.id', body);
+  if (r.code !== 200) return { consulta: consulta, puesto: null, error: true };
+  var lista = (r.j && r.j.places) || [], puesto = null;
+  for (var i = 0; i < lista.length; i++) if (lista[i].id === p.id) { puesto = i + 1; break; }
+  return { consulta: consulta, puesto: puesto, total: lista.length };
+}
+
+/** ¿La web funciona, es segura, se ve en el móvil y tiene el mismo teléfono? */
+function auditWeb_(url, tel) {
+  var w = { url: url, tipo: 'ninguna', funciona: false, https: false, movil: false, mismoTel: null, titulo: '' };
+  if (!url) return w;
+  if (/facebook\.com|instagram\.com|linktr\.ee|tiktok\.com|wa\.me|whatsapp/i.test(url)) w.tipo = 'red social';
+  else w.tipo = 'web';
+  w.https = /^https:/i.test(url);
+  try {
+    var r = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true, validateHttpsCertificates: false, headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 14) Studio42Audit' } });
+    var code = r.getResponseCode(), html = code < 400 ? r.getContentText().slice(0, 300000) : '';
+    w.codigo = code; w.funciona = code < 400 && html.length > 200;
+    w.movil = /<meta[^>]+name=["']viewport/i.test(html);
+    var t = /<title[^>]*>([^<]{1,120})/i.exec(html); w.titulo = t ? cadena_(t[1], 100) : '';
+    if (tel && html) { var d = tel.replace(/\D/g, '').slice(-9); w.mismoTel = html.replace(/\D/g, '').indexOf(d) >= 0; }
+  } catch (e) { w.funciona = false; w.codigo = 0; }
+  return w;
+}
+
+/** Nota de 0 a 100 y lista de hallazgos con lo que cuesta cada uno. */
+function auditPuntuar_(p, comp, pos, web) {
+  var lider = comp.reduce(function (m, x) { return x.resenas > m ? x.resenas : m; }, 0);
+  var mediaComp = comp.length ? Math.round(comp.reduce(function (s, x) { return s + (x.rating || 0); }, 0) / comp.length * 10) / 10 : null;
+  var recientes = p.ultimas.filter(function (r) { return r.dias !== null; }).map(function (r) { return r.dias; });
+  var diasUltima = recientes.length ? Math.min.apply(null, recientes) : null;
+  var negativas = p.ultimas.filter(function (r) { return r.estrellas && r.estrellas <= 3; }).length;
+  var d = [];
+  var add = function (clave, nombre, pts, max, ok, dato) { d.push({ clave: clave, nombre: nombre, puntos: pts, max: max, ok: ok, dato: dato }); };
+  var r = p.rating;
+  add('valoracion', 'Valoración media', r === null ? 0 : r >= 4.7 ? 25 : r >= 4.5 ? 20 : r >= 4.2 ? 14 : r >= 4 ? 9 : 4, 25, r !== null && r >= 4.5,
+    r === null ? 'Sin valoraciones' : r + ' ★' + (mediaComp ? ' (competencia: ' + mediaComp + ' ★)' : ''));
+  var ratio = lider ? p.resenas / lider : (p.resenas >= 50 ? 1 : p.resenas / 50);
+  add('volumen', 'Número de reseñas', ratio >= 1 ? 20 : ratio >= 0.6 ? 15 : ratio >= 0.3 ? 9 : p.resenas > 0 ? 4 : 0, 20, ratio >= 0.6,
+    p.resenas + ' reseñas' + (lider ? ' (el líder de la zona tiene ' + lider + ')' : ''));
+  add('actividad', 'Reseñas recientes', diasUltima === null ? 0 : diasUltima <= 30 ? 10 : diasUltima <= 90 ? 6 : diasUltima <= 180 ? 3 : 0, 10, diasUltima !== null && diasUltima <= 60,
+    diasUltima === null ? 'No hay reseñas visibles' : 'La más reciente de las visibles: hace ' + diasUltima + ' días');
+  add('posicion', 'Puesto en la búsqueda local', pos.puesto === null ? 0 : pos.puesto <= 3 ? 10 : pos.puesto <= 5 ? 7 : pos.puesto <= 10 ? 4 : 2, 10, pos.puesto !== null && pos.puesto <= 5,
+    pos.consulta ? ('«' + pos.consulta + '»: ' + (pos.puesto ? 'puesto ' + pos.puesto : 'fuera de los 20 primeros')) : 'Sin datos');
+  add('horario', 'Horario publicado', p.horario ? 10 : 0, 10, p.horario, p.horario ? 'Sí' : 'No tiene horario');
+  add('web', 'Web', web.tipo === 'web' && web.funciona && web.https ? (web.movil ? 10 : 6) : web.tipo === 'red social' ? 5 : web.tipo === 'web' ? 2 : 0, 10, web.tipo === 'web' && web.funciona,
+    web.tipo === 'ninguna' ? 'No tiene web' : web.tipo === 'red social' ? 'Lleva a una red social' : web.funciona ? (web.movil ? 'Funciona y se adapta al móvil' : 'Funciona, pero no está adaptada al móvil') : 'La web no carga');
+  add('telefono', 'Teléfono', p.tel ? 5 : 0, 5, !!p.tel, p.tel ? p.tel + (web.mismoTel === false ? ' (no coincide con el de la web)' : '') : 'Sin teléfono');
+  add('fotos', 'Fotos', p.fotos >= 10 ? 10 : p.fotos >= 5 ? 6 : p.fotos > 0 ? 3 : 0, 10, p.fotos >= 10, p.fotos >= 10 ? '10 o más' : p.fotos + ' fotos');
+  var nota = d.reduce(function (s, x) { return s + x.puntos; }, 0);
+  return {
+    negocio: { nombre: p.nombre, direccion: p.direccion, ciudad: p.ciudad, rating: p.rating, resenas: p.resenas, mapsUrl: p.mapsUrl, tipo: p.tipoNombre || p.tipo },
+    nota: nota, desglose: d, competidores: comp, posicion: pos, web: web,
+    resenasVisibles: p.ultimas, negativasVisibles: negativas, faltanParaLider: lider > p.resenas ? lider - p.resenas : 0
+  };
+}
+
+/** Claude convierte los datos en dolores comprensibles y un plan. */
+function auditInforme_(c, a) {
+  if (!c.anthropicKey) return null;
+  var sistema = [
+    'Eres el consultor SEO local de Studio 42, una agencia de Logroño. Escribes para el dueño de un pequeño negocio, sin tecnicismos, en español de España, tuteando.',
+    'Recibes la auditoría de su ficha de Google en JSON. Usa SOLO esos datos: no inventes cifras, competidores ni reseñas.',
+    'Explica cada problema como un dolor de negocio (clientes que no le encuentran, confianza que pierde, competidores que se llevan su clientela), con el dato concreto.',
+    'Nunca prometas posiciones ni número de reseñas. Nunca sugieras reseñas falsas, compradas, a cambio de regalos ni filtrar reseñas por estrellas.',
+    'Responde SOLO con JSON válido: {"titular": "frase de 12-18 palabras con el dato más llamativo", "resumen": "2 frases", "dolores": [{"titulo": "max 8 palabras", "explicacion": "1-2 frases con el dato", "impacto": "alto|medio|bajo"}], "plan": ["acción concreta de la puesta a punto"], "whatsapp": "mensaje de 5-7 líneas para enviar al dueño con los 3 datos clave y la propuesta"}',
+    'Entre 3 y 5 dolores ordenados por impacto. Entre 4 y 6 acciones en el plan. Si algo está bien, puedes reconocerlo en el resumen.'
+  ].join('\n');
+  var datos = { negocio: a.negocio, nota: a.nota, desglose: a.desglose, competidores: a.competidores, posicion: a.posicion,
+    web: { tipo: a.web.tipo, funciona: a.web.funciona, movil: a.web.movil, mismoTel: a.web.mismoTel },
+    resenasVisibles: a.resenasVisibles, faltanParaLider: a.faltanParaLider,
+    oferta: 'Puesta a punto de la ficha: ' + PRECIO_PUESTA_PUNTO + ' € + IVA (una vez). Gestión mensual opcional: ' + PRECIO_FICHA_MES + ' €/mes.' };
+  try {
+    var resp = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { 'x-api-key': c.anthropicKey, 'anthropic-version': '2023-06-01' },
+      payload: JSON.stringify({ model: c.modelo, max_tokens: 1800, system: sistema, messages: [{ role: 'user', content: JSON.stringify(datos) }] })
+    });
+    if (resp.getResponseCode() !== 200) { console.warn('Auditoría IA ' + resp.getResponseCode() + ' ' + resp.getContentText().slice(0, 160)); return null; }
+    var j = JSON.parse(resp.getContentText());
+    var t = (j.content || []).filter(function (x) { return x && x.type === 'text'; }).map(function (x) { return x.text || ''; }).join('').trim();
+    var i0 = t.indexOf('{'), i1 = t.lastIndexOf('}'); if (i0 < 0 || i1 < i0) return null;
+    var o = JSON.parse(t.slice(i0, i1 + 1));
+    var nivel = function (s) { return /^(alto|medio|bajo)$/.test(s) ? s : 'medio'; };
+    var dol = (Array.isArray(o.dolores) ? o.dolores : []).slice(0, 5).map(function (x) { return { titulo: cadena_(x && x.titulo, 70), explicacion: cadena_(x && x.explicacion, 320), impacto: nivel(x && x.impacto) }; }).filter(function (x) { return x.titulo; });
+    if (!dol.length) return null;
+    return { titular: cadena_(o.titular, 160), resumen: cadena_(o.resumen, 400), dolores: dol,
+      plan: (Array.isArray(o.plan) ? o.plan : []).slice(0, 6).map(function (x) { return cadena_(x, 160); }).filter(Boolean),
+      whatsapp: String(o.whatsapp || '').replace(/[<>]/g, '').slice(0, 900), porIA: true };
+  } catch (e) { console.warn('Auditoría IA: ' + e); return null; }
+}
+
+/** Si Claude no responde, un informe sencillo con los mismos datos. */
+function auditInformeBasico_(a) {
+  var mal = a.desglose.filter(function (x) { return !x.ok; }).sort(function (x, y) { return (y.max - y.puntos) - (x.max - x.puntos); }).slice(0, 5);
+  return {
+    titular: a.negocio.nombre + ': tu ficha de Google saca ' + a.nota + ' sobre 100.',
+    resumen: 'Hemos revisado tu ficha, tus reseñas, tu web y a tus competidores más cercanos.',
+    dolores: mal.map(function (x) { return { titulo: x.nombre, explicacion: x.dato, impacto: x.max - x.puntos >= 10 ? 'alto' : 'medio' }; }),
+    plan: ['Optimizar categorías, descripción y servicios', 'Responder todas las reseñas', 'Publicar novedades cada semana', 'Completar horario, web y fotos'],
+    whatsapp: 'Hola, te paso el resumen de la auditoría de tu ficha de Google: nota ' + a.nota + '/100. ' + (mal[0] ? 'Lo más urgente: ' + mal[0].nombre.toLowerCase() + ' (' + mal[0].dato + ').' : ''),
+    porIA: false
+  };
 }
