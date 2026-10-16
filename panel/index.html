@@ -658,7 +658,7 @@ function pintarFichas(){
 function auditarDesdePanel(){
   var q=$('#askTxt').value.trim();if(q.length<3){$('#askMsg').textContent='Escribe el nombre del negocio.';return}
   var b=$('#askBtn'),prev=b.textContent;b.disabled=true;b.textContent='Buscando y auditando…';$('#askMsg').textContent='Puede tardar unos 20 segundos.';
-  api({accion:'buscar',closer_id:'CEO',consulta:q}).then(function(r){
+  api({accion:'panel_buscar',consulta:q}).then(function(r){
     if(!r.ok||!r.resultados||!r.resultados.length)throw new Error(r.error||'No he encontrado ese negocio.');
     var l=r.resultados[0];$('#askMsg').textContent='Encontrado: '+l.nombre+'. Auditando…';
     return api({accion:'panel_auditar_slug',place_id:l.id,nombre:l.nombre}).then(function(x){return{aud:x,place:l}});
@@ -874,7 +874,7 @@ function demoApi(b){
     if(demoRol==='equipo')R.chapas=[];
     return esperar(500,R);
   }
-    if(b.accion==='buscar')return esperar(600,{ok:true,resultados:[{id:'ChIJdemoPlaceId00000000000'+(b.consulta||'').replace(/[^a-z0-9]/gi,'').slice(0,6).toUpperCase().padEnd(6,'X'),nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim(),direccion:'Logroño (demo)',telefono:'',web:'',sector:'',whatsapp:''}]});
+    if(b.accion==='panel_buscar')return esperar(600,{ok:true,resultados:[{id:'ChIJdemoPlaceId00000000000'+(b.consulta||'').replace(/[^a-z0-9]/gi,'').slice(0,6).toUpperCase().padEnd(6,'X'),nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim(),direccion:'Logroño (demo)',telefono:'',web:'',sector:'',whatsapp:''}]});
   if(b.accion==='panel_auditorias')return esperar(300,{ok:true,auditorias:(demoAud||[])});
   if(b.accion==='panel_auditar_slug'){var aud={fecha:new Date().toISOString(),closer:'CEO',negocio:{nombre:b.nombre||'Negocio demo',direccion:'',rating:4.2,resenas:46,mapsUrl:'',tipo:'Negocio'},nota:58,desglose:[{clave:'valoracion',nombre:'Valoración media',puntos:14,max:25,ok:false,dato:'4.2 ★'},{clave:'volumen',nombre:'Número de reseñas',puntos:9,max:20,ok:false,dato:'46 reseñas (líder: 180)'},{clave:'actividad',nombre:'Reseñas recientes',puntos:6,max:10,ok:false,dato:'Hace 35 días'},{clave:'posicion',nombre:'Puesto en la búsqueda local',puntos:4,max:10,ok:false,dato:'Puesto 8'},{clave:'horario',nombre:'Horario publicado',puntos:10,max:10,ok:true,dato:'Sí'},{clave:'web',nombre:'Web',puntos:10,max:10,ok:true,dato:'Funciona'},{clave:'telefono',nombre:'Teléfono',puntos:5,max:5,ok:true,dato:'OK'},{clave:'fotos',nombre:'Fotos',puntos:0,max:10,ok:false,dato:'0 fotos'}],competidores:[{nombre:'Competidor A',rating:4.6,resenas:180},{nombre:'Competidor B',rating:4.4,resenas:95}],posicion:{consulta:'barbería en Logroño',puesto:8,total:20},precios:{puestaPunto:89,mensual:29},informe:{titular:'(demo) Nota 58/100',resumen:'(demo) Faltan fotos y hay que subir reseñas.',dolores:[{titulo:'Sin fotos',explicacion:'Los competidores tienen docenas; tú ninguna.',impacto:'alto'}],plan:['Subir 15 fotos','Responder reseñas','4 publicaciones','Ajustar categorías'],whatsapp:'Hola, resumen de tu ficha…'}};
     (demoAud=demoAud||[]).unshift({fecha:aud.fecha,closer:'CEO',negocio:aud.negocio.nombre,placeId:b.place_id,nota:58,rating:4.2,resenas:46,puesto:8});
