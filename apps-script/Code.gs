@@ -1489,6 +1489,7 @@ function panelRouter_(d) {
   if (d.accion === 'panel_auditar_slug') return panelAuditarSlug_(c, d);
   if (d.accion === 'panel_optimizar_ficha') return panelOptimizarFicha_(c, d);
   if (d.accion === 'panel_informe_ficha') return panelInformeFicha_(c, d);
+  if (d.accion === 'panel_auditoria_borrar') return panelAuditoriaBorrar_(d);
   if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
   if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
   if (d.accion === 'panel_tarjeta_guardar') return tarjetaGuardar_(c, d);
@@ -2395,4 +2396,18 @@ function panelInformeFicha_(c, d) {
   var fresh = auditar_({ place_id: pid }, 'PANEL');
   if (!fresh.ok) return fresh;
   return { ok: true, auditoria: fresh.auditoria };
+}
+
+/* Borra de la hoja «Auditorias» todas las auditorías de un negocio (Place ID) y su caché. */
+function panelAuditoriaBorrar_(d) {
+  var pid = idLugar_(d.place_id);
+  if (!pid) return { ok: false, error: 'Falta el Place ID.' };
+  var h = SpreadsheetApp.getActive().getSheetByName(AUDIT_HOJA);
+  if (!h || h.getLastRow() < 2) return { ok: true, borradas: 0 };
+  var datos = h.getDataRange().getValues(), n = 0;
+  for (var i = datos.length - 1; i >= 1; i--) {
+    if (String(datos[i][3]) === pid) { h.deleteRow(i + 1); n++; }
+  }
+  try { CacheService.getScriptCache().remove('aud_' + pid); } catch (e) {}
+  return { ok: true, borradas: n };
 }
