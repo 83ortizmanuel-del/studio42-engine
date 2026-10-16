@@ -1488,6 +1488,7 @@ function panelRouter_(d) {
   if (d.accion === 'panel_buscar') return panelBuscar_(c, d);
   if (d.accion === 'panel_auditar_slug') return panelAuditarSlug_(c, d);
   if (d.accion === 'panel_optimizar_ficha') return panelOptimizarFicha_(c, d);
+  if (d.accion === 'panel_informe_ficha') return panelInformeFicha_(c, d);
   if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
   if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
   if (d.accion === 'panel_tarjeta_guardar') return tarjetaGuardar_(c, d);
@@ -2235,7 +2236,8 @@ function auditPuntuar_(p, comp, pos, web) {
   add('fotos', 'Fotos', p.fotos >= 10 ? 10 : p.fotos >= 5 ? 6 : p.fotos > 0 ? 3 : 0, 10, p.fotos >= 10, p.fotos >= 10 ? '10 o más' : p.fotos + ' fotos');
   var nota = d.reduce(function (s, x) { return s + x.puntos; }, 0);
   return {
-    negocio: { nombre: p.nombre, direccion: p.direccion, ciudad: p.ciudad, rating: p.rating, resenas: p.resenas, mapsUrl: p.mapsUrl, tipo: p.tipoNombre || p.tipo },
+    id: p.id,
+    negocio: { nombre: p.nombre, direccion: p.direccion, ciudad: p.ciudad, rating: p.rating, resenas: p.resenas, mapsUrl: p.mapsUrl, tipo: p.tipoNombre || p.tipo, placeId: p.id },
     nota: nota, desglose: d, competidores: comp, posicion: pos, web: web,
     resenasVisibles: p.ultimas, negativasVisibles: negativas, faltanParaLider: lider > p.resenas ? lider - p.resenas : 0
   };
@@ -2342,14 +2344,19 @@ function panelOptimizarFicha_(c, d) {
     var resp = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
       method: 'post', contentType: 'application/json', muteHttpExceptions: true,
       headers: { 'x-api-key': c.anthropicKey, 'anthropic-version': '2023-06-01' },
-      payload: JSON.stringify({ model: c.modelo, max_tokens: 3500, system: sistema, messages: [{ role: 'user', content: JSON.stringify(entrada) }] })
+      payload: JSON.stringify({ model: c.modelo, max_tokens: 6000, system: sistema, messages: [{ role: 'user', content: JSON.stringify(entrada) }] })
     });
     if (resp.getResponseCode() !== 200) return { ok: false, error: 'Claude ' + resp.getResponseCode() + ': ' + resp.getContentText().slice(0, 160) };
     var j = JSON.parse(resp.getContentText());
     var t = (j.content || []).filter(function (x) { return x && x.type === 'text'; }).map(function (x) { return x.text || ''; }).join('').trim();
     var i0 = t.indexOf('{'), i1 = t.lastIndexOf('}');
     if (i0 < 0 || i1 < i0) return { ok: false, error: 'La IA no devolvió JSON válido.' };
-    var o = JSON.parse(t.slice(i0, i1 + 1));
+    var crudo = t.slice(i0, i1 + 1);
+    var o = null;
+    try { o = JSON.parse(crudo); } catch (eJ) {
+      try { o = JSON.parse(crudo.replace(/,\s*([}\]])/g, '$1')); } catch (e2) {}
+      if (!o) return { ok: false, error: 'La IA devolvió una respuesta cortada. Vuelve a pulsar «Preparar optimización».' };
+    }
     var paquete = {
       descripcion: cadena_(o.descripcion, 320),
       categorias: { principal: cadena_(o.categorias && o.categorias.principal, 80), extra: (Array.isArray(o.categorias && o.categorias.extra) ? o.categorias.extra : []).slice(0, 5).map(function (x) { return cadena_(x, 80); }).filter(Boolean) },
@@ -2376,4 +2383,16 @@ function panelBuscar_(c, d) {
     return { id: id, nombre: cadena_(p.displayName && p.displayName.text, 80), direccion: cadena_(p.formattedAddress, 140) };
   }).filter(Boolean);
   return { ok: true, resultados: lista };
+}
+
+/* Devuelve el informe de una auditoría ya hecha (del cache o re-auditando) sin llamar a Claude. */
+function panelInformeFicha_(c, d) {
+  var pid = idLugar_(d.place_id);
+  if (!pid) return { ok: false, error: 'Falta el Place ID.' };
+  var cache = null; try { cache = CacheService.getScriptCache(); } catch (e) {}
+  var guardada = null; try { guardada = cache && cache.get('aud_' + pid); } catch (e) {}
+  if (guardada) return { ok: true, auditoria: JSON.parse(guardada), deCache: true };
+  var fresh = auditar_({ place_id: pid }, 'PANEL');
+  if (!fresh.ok) return fresh;
+  return { ok: true, auditoria: fresh.auditoria };
 }

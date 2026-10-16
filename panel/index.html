@@ -646,7 +646,7 @@ function pintarFichas(){
     h+='<div class="aud-card">'+
        '<div class="aud-nota" style="--g:'+g+';--p:'+p+'deg"><i></i><b>'+a.nota+'</b></div>'+
        '<div class="aud-mid"><b>'+esc(a.negocio||'—')+'</b><small>'+(a.rating?a.rating+' ★ · ':'')+(a.resenas||0)+' reseñas · puesto '+(a.puesto||'—')+'</small><small style="color:var(--muted)">'+new Date(a.fecha).toLocaleDateString('es-ES')+'</small></div>'+
-       '<div class="aud-rt">'+(a.mapsUrl?'<a class="ghost" href="'+esc(a.mapsUrl)+'" target="_blank" rel="noopener" style="display:block;min-height:0;padding:5px 10px;font-size:.72rem;margin-bottom:4px;text-decoration:none;text-align:center">Ver ficha</a>':'')+'<button type="button" data-pid="'+esc(a.placeId||'')+'" data-nom="'+esc(a.negocio||'')+'" class="cta" style="min-height:0;padding:6px 12px;font-size:.78rem;background:var(--amber);color:#111">Optimizar</button></div>'+
+       '<div class="aud-rt">'+(a.mapsUrl?'<a class="ghost" href="'+esc(a.mapsUrl)+'" target="_blank" rel="noopener" style="display:block;min-height:0;padding:5px 10px;font-size:.72rem;margin-bottom:4px;text-decoration:none;text-align:center">Ver ficha</a>':'')+'<button type="button" data-pid="'+esc(a.placeId||'')+'" data-nom="'+esc(a.negocio||'')+'" class="cta" style="min-height:0;padding:6px 12px;font-size:.78rem;background:var(--amber);color:#111">Ver informe</button></div>'+
        '</div>';
   });
   h+='<div id="opti" hidden></div>';
@@ -654,6 +654,33 @@ function pintarFichas(){
   $$('#tabFichas .sug button').forEach(function(b){b.onclick=function(){$('#askTxt').value=b.dataset.q}});
   $('#askBtn').onclick=auditarDesdePanel;
   $$('#tabFichas .aud-card [data-pid]').forEach(function(b){b.onclick=function(e){e.preventDefault();e.stopPropagation();prepararOptim(b.dataset.pid,b.dataset.nom)}});
+}
+function colorNota(n){return n>=75?'#34d399':n>=50?'#f59e0b':'#ef4444'}
+function verInforme(placeId,nombre){
+  if(!placeId){toast('Falta el Place ID. Vuelve a auditar.');return}
+  var z=$('#opti');z.hidden=false;z.innerHTML='<div class="mini">Cargando el informe de <b>'+esc(nombre)+'</b>…</div>';z.scrollIntoView({behavior:'smooth'});
+  api({accion:'panel_informe_ficha',place_id:placeId}).then(function(r){
+    if(!r.ok){z.innerHTML='<div class="mini" style="color:#fca5a5">⚠️ '+esc(r.error||'No se pudo cargar.')+'</div>';return}
+    mostrarInforme(r.auditoria);
+  }).catch(function(){z.innerHTML='<div class="mini" style="color:#fca5a5">Sin conexión.</div>'});
+}
+function mostrarInforme(a){
+  var inf=a.informe||{},col=colorNota(a.nota);
+  var z=$('#opti');z.hidden=false;
+  var h='<h3>'+esc(a.negocio.nombre)+' <span style="color:var(--muted);font-weight:400;font-size:.85rem">· informe de ficha</span></h3>';
+  h+='<div style="display:flex;gap:14px;align-items:center;margin:10px 0 14px">';
+  h+='<div style="width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:conic-gradient('+col+' '+(a.nota*3.6)+'deg,#1d2027 0deg);position:relative;flex-shrink:0"><i style="position:absolute;inset:5px;border-radius:50%;background:#0f1116"></i><b style="position:relative;z-index:1;font-size:1.3rem">'+a.nota+'</b></div>';
+  h+='<div style="min-width:0"><b style="display:block">'+esc(inf.titular||('Nota '+a.nota+'/100'))+'</b><small style="color:#c9ced6">'+esc(inf.resumen||'')+'</small></div></div>';
+  if(a.posicion&&a.posicion.consulta)h+='<div class="bloque"><div class="top"><b>En la búsqueda</b></div><p>«'+esc(a.posicion.consulta)+'» · '+(a.posicion.puesto?'puesto '+a.posicion.puesto:'fuera del top 20')+'</p></div>';
+  if(a.competidores&&a.competidores.length){h+='<div class="bloque"><div class="top"><b>Tu competencia</b></div><p>';h+='Tú: '+(a.negocio.rating||'—')+' ★ · '+(a.negocio.resenas||0)+' reseñas\n';a.competidores.forEach(function(x){h+='· '+esc(x.nombre)+': '+(x.rating||'—')+' ★ · '+x.resenas+' reseñas\n'});h+='</p></div>'}
+  if(inf.dolores&&inf.dolores.length){h+='<div class="bloque"><div class="top"><b>Lo que le está costando clientes</b></div>';inf.dolores.forEach(function(d){h+='<div style="padding:10px 12px;border-left:4px solid '+(d.impacto==='alto'?'#ef4444':d.impacto==='bajo'?'#60a5fa':'#f59e0b')+';background:#14161c;border-radius:10px;margin:8px 0"><b style="display:block;margin-bottom:3px">'+esc(d.titulo)+'</b><p style="margin:0;color:#d1d5db;font-size:.9rem">'+esc(d.explicacion)+'</p></div>'});h+='</div>'}
+  if(inf.plan&&inf.plan.length){h+='<div class="bloque"><div class="top"><b>Qué incluye la puesta a punto</b></div><ul>'+inf.plan.map(function(x){return'<li>'+esc(x)+'</li>'}).join('')+'</ul><p style="margin-top:8px;color:var(--muted);font-size:.82rem">Puesta a punto: '+(a.precios&&a.precios.puestaPunto||89)+' € + IVA · Gestión mensual: '+(a.precios&&a.precios.mensual||29)+' €/mes</p></div>'}
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px"><button type="button" class="cta" id="optiPrep" style="background:var(--amber);color:#111;min-height:48px;font-weight:800">✨ Preparar optimización</button><button type="button" class="ghost" id="optiCerrar" style="min-height:48px">Cerrar</button></div>';
+  z.innerHTML=h;
+  $('#optiPrep').onclick=function(){prepararOptim(a.negocio.placeId||a.id||a.negocio.id||(window._audPid||''),a.negocio.nombre,a)};
+  // Guardamos el pid por si acaso
+  window._audPid=a.id||a.negocio.id||'';
+  $('#optiCerrar').onclick=function(){z.hidden=true;z.innerHTML=''};
 }
 function auditarDesdePanel(){
   var q=$('#askTxt').value.trim();if(q.length<3){$('#askMsg').textContent='Escribe el nombre del negocio.';return}
@@ -666,11 +693,12 @@ function auditarDesdePanel(){
     if(!z.aud.ok)throw new Error(z.aud.error||'No se pudo auditar.');
     b.disabled=false;b.textContent=prev;$('#askMsg').textContent='✓ Auditoría guardada.';
     D.auditorias=D.auditorias||[];D.auditorias.unshift({fecha:new Date().toISOString(),closer:'CEO',negocio:z.aud.auditoria.negocio.nombre,placeId:z.place.id,nota:z.aud.auditoria.nota,rating:z.aud.auditoria.negocio.rating,resenas:z.aud.auditoria.negocio.resenas,puesto:z.aud.auditoria.posicion&&z.aud.auditoria.posicion.puesto,mapsUrl:z.aud.auditoria.negocio.mapsUrl||''});
-    pintarFichas();prepararOptim(z.place.id,z.aud.auditoria.negocio.nombre,z.aud.auditoria);
+    pintarFichas();mostrarInforme(z.aud.auditoria);
   }).catch(function(e){b.disabled=false;b.textContent=prev;$('#askMsg').textContent='⚠️ '+(e.message||e)});
 }
 function copiarTxt(t,b){try{navigator.clipboard.writeText(t);var p=b.textContent;b.textContent='✓ copiado';setTimeout(function(){b.textContent=p},1500)}catch(e){toast('No se pudo copiar')}}
 function prepararOptim(placeId,nombre,audData){
+  placeId = placeId || (audData && (audData.id || (audData.negocio && audData.negocio.placeId))) || window._audPid || '';
   if(!placeId){toast('Falta el Place ID. Vuelve a auditar.');return}
   var z=$('#opti');z.hidden=false;
   var PAS=['Leyendo la ficha de Google','Claude está escribiendo el paquete','Revisando los textos'];
@@ -881,6 +909,7 @@ function demoApi(b){
   }
     if(b.accion==='panel_buscar')return esperar(600,{ok:true,resultados:[{id:'ChIJdemoPlaceId00000000000'+(b.consulta||'').replace(/[^a-z0-9]/gi,'').slice(0,6).toUpperCase().padEnd(6,'X'),nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim(),direccion:'Logroño (demo)',telefono:'',web:'',sector:'',whatsapp:''}]});
   if(b.accion==='panel_auditorias')return esperar(300,{ok:true,auditorias:(demoAud||[])});
+  if(b.accion==='panel_informe_ficha')return esperar(400,{ok:true,auditoria:{id:b.place_id,negocio:{nombre:'Negocio demo',rating:4.3,resenas:46,placeId:b.place_id,tipo:'Negocio'},nota:58,competidores:[{nombre:'Competidor A',rating:4.6,resenas:180}],posicion:{consulta:'barbería en Logroño',puesto:8},precios:{puestaPunto:89,mensual:29},informe:{titular:'(demo) Nota 58/100',resumen:'(demo) Faltan fotos y responder reseñas.',dolores:[{titulo:'Sin fotos',explicacion:'Los competidores tienen docenas.',impacto:'alto'}],plan:['Subir 15 fotos','Responder reseñas','4 publicaciones','Ajustar categorías']}}});
   if(b.accion==='panel_auditar_slug'){var aud={fecha:new Date().toISOString(),closer:'CEO',negocio:{nombre:b.nombre||'Negocio demo',direccion:'',rating:4.2,resenas:46,mapsUrl:'',tipo:'Negocio'},nota:58,desglose:[{clave:'valoracion',nombre:'Valoración media',puntos:14,max:25,ok:false,dato:'4.2 ★'},{clave:'volumen',nombre:'Número de reseñas',puntos:9,max:20,ok:false,dato:'46 reseñas (líder: 180)'},{clave:'actividad',nombre:'Reseñas recientes',puntos:6,max:10,ok:false,dato:'Hace 35 días'},{clave:'posicion',nombre:'Puesto en la búsqueda local',puntos:4,max:10,ok:false,dato:'Puesto 8'},{clave:'horario',nombre:'Horario publicado',puntos:10,max:10,ok:true,dato:'Sí'},{clave:'web',nombre:'Web',puntos:10,max:10,ok:true,dato:'Funciona'},{clave:'telefono',nombre:'Teléfono',puntos:5,max:5,ok:true,dato:'OK'},{clave:'fotos',nombre:'Fotos',puntos:0,max:10,ok:false,dato:'0 fotos'}],competidores:[{nombre:'Competidor A',rating:4.6,resenas:180},{nombre:'Competidor B',rating:4.4,resenas:95}],posicion:{consulta:'barbería en Logroño',puesto:8,total:20},precios:{puestaPunto:89,mensual:29},informe:{titular:'(demo) Nota 58/100',resumen:'(demo) Faltan fotos y hay que subir reseñas.',dolores:[{titulo:'Sin fotos',explicacion:'Los competidores tienen docenas; tú ninguna.',impacto:'alto'}],plan:['Subir 15 fotos','Responder reseñas','4 publicaciones','Ajustar categorías'],whatsapp:'Hola, resumen de tu ficha…'}};
     (demoAud=demoAud||[]).unshift({fecha:aud.fecha,closer:'CEO',negocio:aud.negocio.nombre,placeId:b.place_id,nota:58,rating:4.2,resenas:46,puesto:8});
     return esperar(900,{ok:true,auditoria:aud});
