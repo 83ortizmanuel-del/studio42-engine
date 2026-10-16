@@ -157,7 +157,6 @@ function doPost(e) {
   try {
     var pe = leerPeticion_(e);
     if (pe.accion === 'ev') return json_(registrarEvento_(pe));
-    if (pe.accion === 'ficha') { try { return json_(fichaPublica_(pe)); } catch (fe) { return json_({ ok: false }); } }
     if (pe.accion === 'auditar') {   // sin cerrojo: tarda ~20 s y no escribe nada compartido
       try { return json_(auditar_(pe)); } catch (ae) { console.error('auditar: ' + (ae && ae.stack || ae)); return json_({ ok: false, error: 'No se pudo completar la auditoría. Inténtalo de nuevo.' }); }
     }
@@ -2048,87 +2047,6 @@ function registrarEvento_(d) {
   if (hoja.getLastRow() === 0) { hoja.appendRow(['Fecha', 'Cliente', 'Pieza', 'Tipo']); hoja.setFrozenRows(1); }
   hoja.appendRow([new Date(), slug, k, tipo]);
   return { ok: true };
-}
-
-/* ======================= NOTA DE GOOGLE EN LA LANDING =======================
-   La landing pide { accion:'ficha', c:slug }. Leemos el Place ID del JSON público del
-   cliente (campo placeId o el enlace de reseñas); si no lo hay, lo buscamos una vez por
-   nombre y guardamos solo el Place ID (Google permite guardar el ID). La valoración y el
-   horario se piden a Google en directo, con una memoria corta para no disparar el coste. */
-function fichaPublica_(d) {
-  var slug = String(d.c || '').toLowerCase();
-  if (!/^[a-z0-9-]{2,40}$/.test(slug)) return { ok: false };
-  var c = cfg_();
-  if (!c.mapsKey) return { ok: false };
-  var cache = CacheService.getScriptCache();
-  var cupo = 'fcupo_' + slug + '_' + Utilities.formatDate(new Date(), 'UTC', 'yyyyMMdd');
-  var n = Number(cache.get(cupo) || '0');
-  if (n >= 1500) return { ok: false };
-  cache.put(cupo, String(n + 1), 90000);
-  var pid = pidDeCliente_(c, slug);
-  if (!pid) return { ok: false };
-  var clave = 'ficha_' + pid, hit = cache.get(clave);
-  if (hit) return JSON.parse(hit);
-  var r = placesGet_(c, 'https://places.googleapis.com/v1/places/' + encodeURIComponent(pid),
-    'rating,userRatingCount,regularOpeningHours.periods,utcOffsetMinutes,businessStatus,googleMapsUri');
-  if (r.code !== 200 || !r.j) return { ok: false };
-  var p = r.j;
-  var periodos = ((p.regularOpeningHours && p.regularOpeningHours.periods) || []).slice(0, 21).map(function (x) {
-    var a = x.open || {}, z = x.close || null;
-    return { a: [a.day | 0, a.hour | 0, a.minute | 0], c: z ? [z.day | 0, z.hour | 0, z.minute | 0] : null };
-  });
-  var out = {
-    ok: true,
-    rating: typeof p.rating === 'number' ? Math.round(p.rating * 10) / 10 : null,
-    resenas: typeof p.userRatingCount === 'number' ? p.userRatingCount : 0,
-    periodos: periodos,
-    offset: typeof p.utcOffsetMinutes === 'number' ? p.utcOffsetMinutes : null,
-    estado: /^(OPERATIONAL|CLOSED_TEMPORARILY|CLOSED_PERMANENTLY)$/.test(p.businessStatus || '') ? p.businessStatus : '',
-    maps: /^https:\/\/(www\.)?(maps\.google\.[a-z.]+|google\.[a-z.]+\/maps)/i.test(p.googleMapsUri || '') ? p.googleMapsUri : ''
-  };
-  cache.put(clave, JSON.stringify(out), 1800);
-  return out;
-}
-
-function pidDeCliente_(c, slug) {
-  var props = PropertiesService.getScriptProperties(), k = 'PID_' + slug, guardado = props.getProperty(k) || '';
-  if (idLugar_(guardado)) return guardado;
-  if (/^-\d+$/.test(guardado) && Date.now() - Number(guardado.slice(1)) < 7 * 864e5) return ''; // no encontrado hace poco
-  var j = null;
-  try {
-    var r = UrlFetchApp.fetch(c.dominio + '/c/' + slug + '.json', { muteHttpExceptions: true });
-    if (r.getResponseCode() === 200) j = JSON.parse(r.getContentText());
-  } catch (e) {}
-  if (!j) return '';
-  var pid = idLugar_(j.placeId);
-  if (!pid) {
-    (j.secciones || []).forEach(function (s) { (s.botones || []).forEach(function (b) {
-      var m = /placeid=([\w-]{10,})/i.exec(String(b && b.urlGoogle || ''));
-      if (m && !pid) pid = idLugar_(m[1]);
-    }); });
-  }
-  if (!pid && j.nombre) pid = buscarPidPorNombre_(c, String(j.nombre), String(j.direccion || ''));
-  props.setProperty(k, pid || ('-' + Date.now()));
-  return pid || '';
-}
-
-function normalizarNombre_(s) {
-  return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]+/g, ' ')
-    .split(/\s+/).filter(function (w) { return w.length > 2 && ['the', 'los', 'las', 'del', 'clinica', 'centro'].indexOf(w) < 0; });
-}
-function buscarPidPorNombre_(c, nombre, direccion) {
-  var body = { textQuery: nombre + (direccion ? ' ' + direccion : ''), pageSize: 3, languageCode: 'es', regionCode: 'ES',
-    locationBias: { circle: { center: { latitude: 42.4627, longitude: -2.4449 }, radius: 50000 } } };
-  var r = placesPost_(c, 'https://places.googleapis.com/v1/places:searchText', 'places.id,places.displayName', body);
-  if (r.code !== 200 || !r.j || !r.j.places || !r.j.places.length) return '';
-  var buscado = normalizarNombre_(nombre);
-  if (!buscado.length) return '';
-  for (var i = 0; i < r.j.places.length; i++) {
-    var cand = normalizarNombre_(r.j.places[i].displayName && r.j.places[i].displayName.text);
-    var comunes = buscado.filter(function (w) { return cand.indexOf(w) >= 0; }).length;
-    if (comunes / buscado.length >= 0.6) return idLugar_(r.j.places[i].id);
-  }
-  return '';
 }
 
 /** Suma los eventos entre dos fechas: { slug: { vista: n, resena: n, …, piezas: { L01: n } } } */
