@@ -712,6 +712,29 @@
             } catch (e) { clearInterval(t); inn.appendChild(audEl('p', 'sub', '⚠️ Sin conexión. Inténtalo de nuevo.')); }
             finally { $('btn-auditar').disabled = false; }
         }
+function mensajeInforme(a){
+          var n=a.negocio||{},inf=a.informe||{},L=[];
+          L.push('Hola 👋');
+          L.push('');
+          L.push('Te escribo de Studio 42. Como hablamos, he hecho un primer análisis de la ficha de Google de *'+(n.nombre||'tu negocio')+'* con los datos públicos de Google Maps. Te dejo el resumen:');
+          L.push('');
+          L.push('⭐ Nota orientativa de la ficha: '+a.nota+'/100');
+          if(n.rating)L.push('📊 Valoración: '+n.rating+' ★ con '+(n.resenas||0)+' reseñas');
+          if(a.posicion&&a.posicion.consulta)L.push('🔎 Al buscar «'+a.posicion.consulta+'»: '+(a.posicion.puesto?'apareces en el puesto '+a.posicion.puesto:'no apareces entre los 20 primeros'));
+          var bien=(a.desglose||[]).filter(function(d){return d.ok}).slice(0,3);
+          if(bien.length){L.push('');L.push('*Lo que ya tienes bien:*');bien.forEach(function(d){L.push('✅ '+d.nombre)})}
+          var mal=(inf.dolores||[]).slice(0,3);
+          if(!mal.length)mal=(a.desglose||[]).filter(function(d){return!d.ok}).slice(0,3).map(function(d){return{titulo:d.nombre}});
+          if(mal.length){L.push('');L.push('*Dónde hay margen de mejora:*');mal.forEach(function(d){L.push('➡️ '+d.titulo)})}
+          L.push('');
+          L.push('Ten en cuenta que es un análisis orientativo: Google solo deja ver una parte de las fotos y de las reseñas, y el puesto en las búsquedas cambia según desde dónde y quién busque. La nota es un criterio nuestro basado en lo que Google valora, no una puntuación oficial de Google.');
+          L.push('');
+          L.push('Si te interesa, el siguiente paso es la optimización: con acceso a tu ficha la revisamos a fondo y a medida (descripción, categorías, servicios, fotos, publicaciones y respuestas a reseñas). Es un trabajo más técnico y completo que este primer vistazo.');
+          L.push('');
+          L.push('Sin ningún compromiso. Si tienes cualquier duda, me dices 🙂');
+          L.push('Studio 42 · studio42.es');
+          return L.join('\n');
+        }
         function colorNota(n) { return n >= 75 ? '#34d399' : n >= 50 ? '#f59e0b' : '#ef4444'; }
         function pintarAuditoria(a) {
             const v = $('aud'); v.textContent = ''; const inn = audEl('div', 'in'); v.appendChild(inn);
@@ -750,6 +773,18 @@
                 k.appendChild(audEl('p', 'nota-pie', 'Puesta a punto: ' + a.precios.puestaPunto + ' € + IVA, una vez. Gestión mensual opcional: ' + a.precios.mensual + ' €/mes. Lo aplicamos en 48 h cuando nos des acceso de administrador a tu ficha.')); inn.appendChild(k);
             }
             inn.appendChild(audEl('p', 'nota-pie', 'Datos públicos de Google Maps del ' + new Date(a.fecha).toLocaleDateString('es-ES') + '. Las reseñas visibles son una muestra que elige Google. No prometemos posiciones ni número de reseñas: mejoramos lo que Google valora.'));
+            // Mensaje para el cliente
+            const km = audEl('div', 'card'); km.appendChild(audEl('h3', null, 'Mensaje para enviarle'));
+            km.appendChild(audEl('p', 'nota-pie', 'Revísalo y cámbialo si quieres. Envíalo solo si el cliente ha aceptado recibirlo.'));
+            const ta = document.createElement('textarea'); ta.id = 'aud-msg'; ta.rows = 14; ta.value = mensajeInforme(a);
+            ta.style.cssText = 'width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #2a2d35;background:#050507;color:#f4f6f9;font:inherit;font-size:.9rem;line-height:1.45;resize:vertical';
+            const fil = audEl('div'); fil.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px';
+            const bm = audEl('button', null, '✉️ Email'); bm.type = 'button';
+            const bc = audEl('button', null, '📋 Copiar'); bc.type = 'button';
+            [bm, bc].forEach((b) => { b.style.cssText = 'padding:12px;border-radius:12px;border:1px solid #2a2d35;background:#16181e;color:#fff;font-weight:700'; });
+            bm.onclick = () => { location.href = 'mailto:?subject=' + encodeURIComponent('Análisis de tu ficha de Google · Studio 42') + '&body=' + encodeURIComponent(ta.value.replace(/\*/g, '')); };
+            bc.onclick = () => { try { navigator.clipboard.writeText(ta.value); bc.textContent = '✓ Copiado'; setTimeout(() => { bc.textContent = '📋 Copiar'; }, 1500); } catch (e) {} };
+            fil.append(bm, bc); km.append(ta, fil); inn.appendChild(km);
             // Botón de salir grande
             const salir = audEl('button', 'cerrar-grande', '✕ Cerrar informe y volver al diagnóstico'); salir.type = 'button'; salir.onclick = audCerrar; inn.appendChild(salir);
             // Botones
@@ -761,7 +796,7 @@
                 si.textContent = '✓ Lo quiere'; pedidoSoloFicha(inn, a);
             };
             const wa = audEl('button', 'wa', '📲 Enviarle el informe por WhatsApp'); wa.type = 'button';
-            wa.onclick = () => { const tel = ($('whatsapp').value || '').replace(/\D/g, ''); const txt = (inf.whatsapp || inf.titular || '') + '\n\nNota de tu ficha: ' + a.nota + '/100 · Studio 42'; window.open('https://wa.me/' + (tel ? (tel.length === 9 ? '34' + tel : tel) : '') + '?text=' + encodeURIComponent(txt), '_blank', 'noopener'); };
+            wa.onclick = () => { const tel = ($('whatsapp').value || '').replace(/\D/g, ''); const txt = ($('aud-msg') && $('aud-msg').value) || mensajeInforme(a); window.open('https://wa.me/' + (tel ? (tel.length === 9 ? '34' + tel : tel) : '') + '?text=' + encodeURIComponent(txt), '_blank', 'noopener'); };
             i2.append(si, wa); cta.appendChild(i2); inn.appendChild(cta);
         }
         /* Cliente que ya tiene landing (o que solo quiere la ficha): pedido directo de la puesta a punto */
