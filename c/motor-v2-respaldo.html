@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="es" data-motor="2.0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#030712">
+<title id="page-title">Studio 42 | Terminal Phygital</title>
+<style>
+    :root {
+        --color-principal: #0b0c10;
+        --color-acento: #00E5FF;
+        --acento-rgb: 0, 229, 255;
+        --color-fondo: #030712;
+        --color-tarjeta: rgba(15, 23, 42, 0.93);
+        --color-boton: rgba(30, 41, 59, 0.72);
+        --color-texto: #f8fafc;
+        --color-gris: #a3b0c2;
+        --titanium-light: #f1f5f9;
+        --titanium-glow: rgba(226, 232, 240, 0.4);
+        --fondo-logo: #0b0c10;
+        --fuente: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    [hidden] { display: none !important; }
+    html { background: var(--color-fondo); }
+    body {
+        font-family: var(--fuente);
+        background: radial-gradient(circle at 50% 10%, var(--color-principal) 0%, var(--color-fondo) 85%);
+        color: var(--color-texto);
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 15px 15px 35px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+    }
+    body.modal-abierto { overflow: hidden; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--color-acento); outline-offset: 3px; }
+
+    .ic { width: 1em; height: 1em; display: block; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* HALO + TARJETA PRINCIPAL */
+    .halo-wrapper {
+        position: relative; width: 100%; max-width: 412px; border-radius: 34px; padding: 2px; margin: auto 0;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 30px rgba(var(--acento-rgb), 0.5);
+    }
+    .halo-wrapper::before {
+        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: conic-gradient(transparent 0%, transparent 40%, var(--color-acento) 50%, #fff 52%, var(--color-acento) 54%, transparent 65%, transparent 100%);
+        animation: haloRotate 8s linear infinite; will-change: transform; z-index: 0;
+    }
+    @keyframes haloRotate { to { transform: rotate(360deg); } }
+    .hub-container {
+        background: var(--color-tarjeta); width: 100%; border-radius: 32px; padding: 22px 18px; text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+        position: relative; z-index: 1;
+    }
+
+    .status-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(241, 245, 249, 0.06); border: 1px solid rgba(226, 232, 240, 0.2);
+        padding: 6px 14px; border-radius: 50px; font-size: 0.65rem; font-weight: 800;
+        letter-spacing: 1px; color: var(--titanium-light); margin-bottom: 14px; text-transform: uppercase;
+    }
+    .ping-light { position: relative; width: 7px; height: 7px; background: var(--color-acento); border-radius: 50%; box-shadow: 0 0 8px var(--color-acento); flex-shrink: 0; }
+    .ping-light::after {
+        content: ''; position: absolute; top: -3px; left: -3px; width: 13px; height: 13px; border-radius: 50%;
+        background: var(--titanium-glow); animation: radar 2s infinite cubic-bezier(0, 0, 0.2, 1);
+    }
+    @keyframes radar { 0% { transform: scale(0.6); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
+
+    .logo-container {
+        width: 100%; max-width: var(--logo-max, 270px); height: var(--logo-alto, 84px);
+        margin: 0 auto 16px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.12);
+        overflow: hidden; background: var(--fondo-logo);
+        display: flex; justify-content: center; align-items: center; padding: var(--logo-pad, 4px 10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(var(--acento-rgb), 0.5);
+    }
+    .logo-container img { width: 100%; height: 100%; object-fit: contain; display: block; filter: drop-shadow(0 0 10px rgba(var(--acento-rgb), 0.5)); }
+    .logo-texto { color: #fff; font-weight: 900; letter-spacing: 1px; font-size: 1.1rem; }
+
+    h1 { font-size: 1.3rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: #fff; word-break: break-word; }
+    .subtitulo { color: var(--color-acento); font-size: 0.78rem; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.8px; word-break: break-word; text-transform: uppercase; }
+    .section-title { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.3px; color: var(--color-gris); margin: 18px 0 10px 6px; font-weight: 800; }
+
+    /* BOTONES */
+    .apps-menu { display: flex; flex-direction: column; gap: 11px; width: 100%; }
+    .app-btn {
+        display: flex; align-items: center; width: 100%; padding: 13px 16px; border-radius: 20px;
+        background: var(--color-boton); border: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left; text-decoration: none; color: inherit; cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .app-btn:hover { border-color: rgba(var(--acento-rgb), 0.45); }
+    .app-btn:active { transform: scale(0.97); border-color: var(--color-acento); }
+    .app-btn.destacado {
+        border: 1px solid var(--color-acento);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(15, 23, 42, 0.85));
+        box-shadow: 0 0 20px rgba(var(--acento-rgb), 0.4);
+    }
+    .app-icon {
+        width: 44px; height: 44px; border-radius: 14px; display: flex; justify-content: center; align-items: center;
+        margin-right: 14px; font-size: 1.3rem; flex-shrink: 0;
+        background: rgba(var(--ic-rgb, 255, 255, 255), 0.18); color: rgb(var(--ic-rgb, 255, 255, 255));
+    }
+    .app-info { flex-grow: 1; min-width: 0; }
+    .app-name { font-size: 0.9rem; font-weight: 800; color: var(--color-texto); margin-bottom: 2px; display: flex; align-items: center; flex-wrap: wrap; }
+    .app-desc { font-size: 0.74rem; color: var(--color-gris); }
+    .app-arrow { color: var(--color-gris); opacity: 0.5; font-size: 0.85rem; margin-left: 8px; }
+    .app-btn:hover .app-arrow { opacity: 1; color: var(--color-acento); }
+
+    .par-opinion { min-height: 92px; }
+    .btn-sos { border: 1px solid #f59e0b !important; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(15, 23, 42, 0.9)) !important; box-shadow: 0 0 18px rgba(245, 158, 11, 0.25) !important; }
+    .badge-sos { font-size: 9px; font-weight: 900; background: #f59e0b; color: #020617; padding: 2px 7px; border-radius: 20px; margin-left: 6px; text-transform: uppercase; }
+    .btn-sos .app-icon .ic { animation: rebote 1.6s ease-in-out infinite; }
+    @keyframes rebote { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+    /* MODALES */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.96); display: flex; overflow-y: auto; z-index: 10001; padding: 20px; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-box {
+        margin: auto; position: relative; width: 100%; max-width: 380px; background: #0f172a;
+        border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 28px; padding: 26px 20px 20px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9); text-align: left; outline: none;
+    }
+    .modal-close-btn {
+        position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+        color: var(--color-gris); display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .modal-icon { font-size: 2rem; color: var(--color-acento); margin-bottom: 6px; }
+    .modal-titulo { font-size: 1.02rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; padding-right: 34px; }
+    .modal-texto { font-size: 0.8rem; line-height: 1.55; color: #cbd5e1; margin-bottom: 12px; }
+    .modal-ok { font-size: 0.78rem; font-weight: 700; color: #34d399; margin: 8px 0; text-align: center; }
+    .modal-aviso { font-size: 0.7rem; line-height: 1.5; color: #fbbf24; margin-top: 10px; }
+    .modal-actions { display: flex; flex-direction: column; gap: 9px; margin-top: 16px; }
+
+    .btn-oro, .btn-wa, .btn-peligro {
+        display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; text-decoration: none;
+        font-weight: 800; font-size: 0.85rem; padding: 13px 18px; border-radius: 50px; border: 0; cursor: pointer; width: 100%;
+    }
+    .btn-oro { background: linear-gradient(135deg, var(--color-acento), #fff); color: #020617; }
+    .btn-wa { background: linear-gradient(135deg, #25D366, #128c7e); color: #fff; }
+    .btn-peligro { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+    .btn-sec { display: block; text-align: center; text-decoration: none; color: var(--color-gris); border: 1px solid rgba(255, 255, 255, 0.15); padding: 10px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; width: 100%; }
+    .deshabilitado { opacity: 0.45; pointer-events: none; cursor: not-allowed; }
+
+    /* FORMULARIOS DENTRO DE MODALES */
+    .campo { margin-bottom: 12px; }
+    .campo-label { display: block; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--color-acento); margin-bottom: 6px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill { background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 9px 12px; font-size: 0.78rem; color: #fff; text-align: center; flex: 1 1 auto; }
+    .pill[aria-pressed="true"] { background: linear-gradient(135deg, var(--color-acento), #fff); color: #020617; font-weight: 800; border-color: #fff; }
+    .input { width: 100%; background: #020617; border: 1px solid #334155; border-radius: 12px; padding: 11px; color: #fff; font-size: 16px; font-family: inherit; }
+    .input:focus { border-color: var(--color-acento); outline: none; }
+
+    .resultado { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.25); border-radius: 16px; padding: 12px; margin: 12px 0; }
+    .resultado-etiqueta { font-size: 0.72rem; color: var(--color-acento); font-weight: 800; text-transform: uppercase; }
+    .resultado-titulo { font-size: 0.95rem; font-weight: 900; margin-top: 2px; }
+    .resultado-grande { font-size: 1.7rem; font-weight: 900; margin: 4px 0; }
+    .resultado-texto { font-size: 0.76rem; color: #cbd5e1; margin-top: 4px; line-height: 1.5; }
+
+    .tarjeta { border: 1px solid rgba(var(--nv), 0.5); background: rgba(0, 0, 0, 0.35); border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; }
+    .n-info { --nv: 56, 189, 248; } .n-alerta { --nv: 244, 63, 94; } .n-ok { --nv: 52, 211, 153; } .n-aviso { --nv: 251, 191, 36; }
+    .tarjeta-titulo { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: rgb(var(--nv)); margin-bottom: 4px; }
+    .tarjeta-texto { font-size: 0.8rem; color: #e2e8f0; line-height: 1.5; white-space: pre-line; }
+    .fila { display: flex; justify-content: space-between; gap: 10px; font-size: 0.78rem; margin-top: 4px; }
+    .fila-et { color: var(--color-gris); }
+    .fila-val { color: #fff; font-weight: 700; text-align: right; }
+
+    .numero-grande { font-size: 1.6rem; font-weight: 900; letter-spacing: 3px; text-align: center; background: #020617; border: 1px solid rgba(var(--acento-rgb), 0.4); padding: 12px; border-radius: 16px; margin-bottom: 4px; user-select: all; -webkit-user-select: all; }
+    .fila-bizum { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #020617; border: 1px solid #1e293b; border-radius: 14px; padding: 10px 12px; margin-bottom: 12px; }
+    .fila-bizum .mini { display: block; font-size: 0.65rem; color: var(--color-gris); text-transform: uppercase; font-weight: 800; }
+    .fila-bizum .numero-medio { font-size: 0.95rem; font-weight: 900; font-family: ui-monospace, Menlo, monospace; letter-spacing: 1px; }
+    .btn-copiar { background: rgba(var(--acento-rgb), 0.15); color: var(--color-acento); border: 1px solid rgba(var(--acento-rgb), 0.4); font-size: 0.7rem; font-weight: 800; padding: 7px 10px; border-radius: 10px; display: inline-flex; align-items: center; gap: 5px; }
+
+    /* ESTADOS */
+    .cargando { padding: 40px 0; color: var(--color-gris); font-size: 0.82rem; }
+    .spinner { width: 28px; height: 28px; border: 3px solid rgba(255, 255, 255, 0.15); border-top-color: var(--color-acento); border-radius: 50%; margin: 0 auto 10px; animation: giro 1s linear infinite; }
+    @keyframes giro { to { transform: rotate(360deg); } }
+    .error-box { padding: 28px 10px; color: #fca5a5; }
+    .error-box .ic { font-size: 2.2rem; margin: 0 auto 10px; }
+    .error-box p { font-size: 0.9rem; margin-bottom: 14px; line-height: 1.5; }
+    .debug { width: 100%; max-width: 412px; margin-top: 14px; background: #020617; border: 1px solid #334155; border-radius: 14px; padding: 12px; font: 11px/1.5 ui-monospace, Menlo, monospace; color: #cbd5e1; }
+    .debug b { color: #fbbf24; }
+
+    .footer-brand { margin-top: 26px; font-size: 0.7rem; color: var(--color-gris); letter-spacing: 1.1px; }
+    .footer-brand span { color: var(--titanium-light); font-weight: 800; }
+
+    /* TEMA INDUSTRIAL (titanio cepillado con tornillos) */
+    .tema-industrial {
+        background:
+            radial-gradient(circle at 24px 24px, #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+            radial-gradient(circle at calc(100% - 24px) 24px, #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+            radial-gradient(circle at 24px calc(100% - 24px), #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+            radial-gradient(circle at calc(100% - 24px) calc(100% - 24px), #e2e8f0 1px, #64748b 3px, #0f172a 4px, transparent 5px),
+            repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 3px),
+            linear-gradient(135deg, #2A2D34 0%, #131519 100%) !important;
+        border: 2px solid #475569 !important;
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 25px 60px rgba(0, 0, 0, 0.95) !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+</style>
+</head>
+<body>
+
+<main class="halo-wrapper">
+    <div class="hub-container" id="hub">
+        <div class="status-badge"><span class="ping-light"></span><span id="badge-text">PUNTO DE CONEXIÓN ACTIVO</span></div>
+
+        <div class="logo-container" id="hub-logo-box" hidden>
+            <img id="hub-logo" alt="" width="270" height="84" decoding="async">
+        </div>
+
+        <h1 id="client-name">STUDIO 42</h1>
+        <div class="subtitulo" id="client-subtitle">Ecosistema Phygital</div>
+
+        <div id="dynamic-menu" aria-live="polite">
+            <div class="cargando"><div class="spinner"></div>Cargando menú interactivo…</div>
+        </div>
+        <noscript><p style="color:#fca5a5;font-size:.85rem;padding:20px 0;">Esta página necesita JavaScript para funcionar.</p></noscript>
+
+        <div class="footer-brand">Desarrollado por <span>Studio 42</span></div>
+    </div>
+</main>
+
+<div id="debug-panel" class="debug" hidden></div>
+
+<script>
+"use strict";
+(function () {
+
+/* ==========================================================================
+   STUDIO 42 ENGINE v2.0
+   - Un solo HTML para todos los clientes. Todo el contenido vive en el JSON.
+   - Los botones se resuelven SOLO por "tipo" (nunca por el texto del nombre).
+   - Nada que venga del JSON se inserta como HTML: se construye con el DOM.
+   - Sin números de teléfono por defecto: si falta un dato, el botón se omite.
+   - Añade ?debug=1 a la URL para ver los avisos de configuración.
+   ========================================================================== */
+
+/* ========================= CONFIGURACIÓN DEL MOTOR ========================= */
+const CONFIG = {
+    // Rutas donde buscar el JSON del cliente. Deja solo las que uses de verdad
+    // (cada ruta que falla cuesta una petición).
+    rutasJSON: ["./{cod}.json", "../c/{cod}.json"],
+    // Respaldo si el hosting principal falla. Pon "" para desactivarlo.
+    respaldoGitHub: "https://raw.githubusercontent.com/83ortizmanuel-del/studio42-engine/main/c/{cod}.json",
+    tiempoLimiteMs: 6000,
+    // Contador anónimo de Studio 42 (sin cookies ni datos personales). Pon "" para desactivarlo.
+    estadisticas: "https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec"
+};
+
+/* ============================== ESTADO GLOBAL ============================== */
+const estado = {
+    cod: "demo", llavero: "MOSTRADOR", mesa: "Barra",
+    data: null, negocio: "", waNegocio: "", acento: "#00E5FF",
+    avisos: [], debug: false
+};
+
+const $ = (id) => document.getElementById(id);
+function aviso(msg) { estado.avisos.push(msg); if (window.console) console.warn("[Studio42 v2] " + msg); }
+function falta(msg) { throw new Error(msg); }
+function vibrar(ms) { try { if ("vibrate" in navigator) navigator.vibrate(ms); } catch (e) {} }
+
+const almacen = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, String(v)); return true; } catch (e) { return false; } },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+
+/* ============================ VALIDACIÓN Y UTILIDADES ============================ */
+function soloSlug(s, def) {
+    const t = String(s === null || s === undefined ? "" : s).toLowerCase().trim();
+    return /^[a-z0-9_-]{1,40}$/.test(t) ? t : def;
+}
+function limpiarParam(s, def) {
+    const t = String(s === null || s === undefined ? "" : s).trim();
+    return /^[\w\- ]{1,30}$/.test(t) ? t : def;
+}
+function urlSegura(u) {
+    const t = String(u === null || u === undefined ? "" : u).trim();
+    return /^(https:\/\/|tel:|mailto:)\S+$/i.test(t) ? t : null;
+}
+function hexValido(c, def) { return /^#[0-9a-f]{6}$/i.test(String(c || "")) ? c : def; }
+// Color CSS permitido para el fondo del logo: #hex, transparent o rgb()/rgba() estricto (sin nada más).
+function colorCss(c, def) {
+    const t = String(c === null || c === undefined ? "" : c).trim();
+    if (/^#[0-9a-f]{6}$/i.test(t) || /^transparent$/i.test(t)) return t;
+    if (/^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*(0|1|0?\.\d+)\s*)?\)$/i.test(t)) return t;
+    return def;
+}
+function rgbDeHex(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+// Devuelve solo dígitos en formato internacional, o "" si no es un número válido.
+function waNumero(s) {
+    if (s === null || s === undefined) return "";
+    const t = String(s).trim();
+    let d = "";
+    const m = /^https:\/\/wa\.me\/\+?(\d{9,15})(?:[/?#].*)?$/i.exec(t);
+    if (m) d = m[1];
+    else if (/^[+\d\s().-]+$/.test(t)) d = t.replace(/\D/g, "");
+    if (d.length === 9) d = "34" + d; // móvil español sin prefijo
+    return d.length >= 11 && d.length <= 15 ? d : "";
+}
+function urlWA(numero, texto) {
+    const n = waNumero(numero);
+    if (!n) return null;
+    return "https://wa.me/" + n + (texto ? "?text=" + encodeURIComponent(texto) : "");
+}
+function plantilla(texto, vars) {
+    let out = String(texto === null || texto === undefined ? "" : texto);
+    Object.keys(vars).forEach((k) => { out = out.split("{" + k + "}").join(String(vars[k])); });
+    return out;
+}
+function vars(extra) {
+    return Object.assign({ negocio: estado.negocio, mesa: estado.mesa, llavero: estado.llavero }, extra || {});
+}
+
+/* ================================== ICONOS ================================== */
+const ICONOS = {
+    utensils: '<path d="M7 3v7M4 3v5a3 3 0 0 0 6 0V3M7 10v11M17 3c-2 1.5-3 4-3 7 0 2 1 3 3 3v8"/>',
+    alert: '<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v5M12 18h.01"/>',
+    key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M16 7l3 3M14 9l2 2"/>',
+    chat: '<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.2A8.4 8.4 0 1 1 21 11.5z"/>',
+    locate: '<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+    contact: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="11" r="2.5"/><path d="M5 17c.7-2 2.1-3 4-3s3.3 1 4 3M15 9.5h3M15 13h3"/>',
+    calculator: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
+    bottle: '<path d="M9 2h6M10 2v4l-2 3v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V9l-2-3V2M8 13h8"/>',
+    shield: '<path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/>',
+    clipboard: '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v2H9zM9 11h6M9 15h6"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+    bed: '<path d="M3 18v-8M3 14h18v4M21 18v-3a3 3 0 0 0-3-3h-7v2"/><circle cx="7" cy="11" r="1.5"/>',
+    truck: '<path d="M2 6h11v10H2zM13 9h4l3 3v4h-7"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+    cross: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    pin: '<path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    check: '<path d="m5 12 5 5 9-10"/>',
+    close: '<path d="M6 6l12 12M18 6 6 18"/>',
+    copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/>',
+    phone: '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
+    instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>',
+    star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.5 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+    chevron: '<path d="m9 6 6 6-6 6"/>',
+    nav: '<path d="M3 11l18-8-8 18-2-8z"/>',
+    gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8M8 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4-5a2.5 2.5 0 0 1 0 5"/>',
+    dumbbell: '<path d="M6.5 6.5v11M17.5 6.5v11M3 9v6M21 9v6M6.5 12h11"/>',
+    file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+    facebook: '<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+    flame: '<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-6 1-9z"/>',
+    heart: '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+    scale: '<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8a4 4 0 0 1 8 0M12 8l1.5-1.5"/>'
+};
+// Nombres antiguos (Font Awesome) que aún pueden venir en JSON de la v1.
+const ALIAS_FA = {
+    "wheat-awn-circle-exclamation": "alert", "triangle-exclamation": "alert", "location-crosshairs": "locate",
+    "address-card": "contact", "bottle-droplet": "bottle", "shield-dog": "shield", "clipboard-list": "clipboard",
+    "notes-medical": "clipboard", "microscope": "search", "bed-pulse": "bed", "truck-ramp-box": "truck",
+    "calendar-check": "calendar", "mobile-screen-button": "phone", "whatsapp": "chat", "hospital": "cross",
+    "user-doctor": "cross", "person-walking": "nav", "location-dot": "pin", "circle-info": "info",
+    "file-pdf": "file", "fire-flame-curved": "flame", "hand-sparkles": "heart", "weight-scale": "scale", "phone-volume": "phone",
+    "hand-holding-droplet": "heart", "tooth": "heart", "paw": "heart"
+};
+function nombreIcono(raw, def) {
+    const s = String(raw === null || raw === undefined ? "" : raw).toLowerCase().trim();
+    if (ICONOS[s]) return s;
+    const partes = s.split(/\s+/).filter((p) => p.indexOf("fa-") === 0 && ["fa-solid", "fa-brands", "fa-regular"].indexOf(p) < 0).map((p) => p.slice(3));
+    for (let i = 0; i < partes.length; i++) {
+        if (ICONOS[partes[i]]) return partes[i];
+        if (ALIAS_FA[partes[i]]) return ALIAS_FA[partes[i]];
+    }
+    return def;
+}
+function montarSprite() {
+    const simbolos = Object.keys(ICONOS).map((k) => '<symbol id="i-' + k + '" viewBox="0 0 24 24">' + ICONOS[k] + "</symbol>").join("");
+    document.body.insertAdjacentHTML("afterbegin", '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>' + simbolos + "</defs></svg>");
+}
+const SVG_NS = "http://www.w3.org/2000/svg";
+function ico(nombre, clase) {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("class", "ic" + (clase ? " " + clase : ""));
+    svg.setAttribute("aria-hidden", "true");
+    const use = document.createElementNS(SVG_NS, "use");
+    use.setAttribute("href", "#i-" + (ICONOS[nombre] ? nombre : "link"));
+    svg.appendChild(use);
+    return svg;
+}
+
+/* ============================ CONSTRUCTOR DE DOM ============================ */
+// h("div", {class:"x", text:"hola"}, hijo1, [hijo2, hijo3]) -> <div class="x">hola…</div>
+// Todo texto se inserta con textContent: no existe inyección de HTML posible.
+function h(tag, attrs) {
+    const hijos = Array.prototype.slice.call(arguments, 2);
+    const el = document.createElement(tag);
+    if (attrs) {
+        Object.keys(attrs).forEach((k) => {
+            const v = attrs[k];
+            if (v === null || v === undefined || v === false) return;
+            if (k === "class") el.className = v;
+            else if (k === "text") el.textContent = v;
+            else if (k.slice(0, 2) === "on" && typeof v === "function") el.addEventListener(k.slice(2), v);
+            else el.setAttribute(k, v === true ? "" : String(v));
+        });
+    }
+    return poner(el, hijos);
+}
+// Añade hijos a un elemento ignorando null/undefined/false y aplanando arrays.
+// (element.append(null) escribiría el texto "null": usa siempre poner()).
+function poner(el) {
+    Array.prototype.slice.call(arguments, 1).flat(Infinity).forEach((c) => {
+        if (c === null || c === undefined || c === false) return;
+        el.append(c.nodeType ? c : String(c));
+    });
+    return el;
+}
+
+/* ================================== MODAL ================================== */
+let ultimoFoco = null;
+function cerrarModal(sinFoco) {
+    const o = $("modal-overlay");
+    if (o) o.remove();
+    document.body.classList.remove("modal-abierto");
+    if (!sinFoco && ultimoFoco && ultimoFoco.focus) { try { ultimoFoco.focus(); } catch (e) {} }
+}
+function abrirModal(o) {
+    cerrarModal(true);
+    ultimoFoco = document.activeElement;
+    const box = h("div", { class: "modal-box", role: "dialog", "aria-modal": "true", "aria-labelledby": "modal-titulo", tabindex: "-1" },
+        h("button", { class: "modal-close-btn", type: "button", "aria-label": "Cerrar", onclick: () => cerrarModal() }, ico("close")),
+        o.icono ? h("div", { class: "modal-icon" }, ico(o.icono)) : null,
+        h("h3", { class: "modal-titulo", id: "modal-titulo", text: o.titulo || "" }),
+        o.cuerpo || null,
+        h("div", { class: "modal-actions" },
+            o.acciones || [],
+            h("button", { class: "btn-sec", type: "button", onclick: () => cerrarModal() }, o.cerrarTexto || "Cerrar"))
+    );
+    const overlay = h("div", { class: "modal-overlay", id: "modal-overlay" }, box);
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) cerrarModal(); });
+    overlay.addEventListener("keydown", (e) => {
+        if (e.key !== "Tab") return;
+        const f = Array.prototype.slice.call(box.querySelectorAll('a[href],button,input,select,textarea'))
+            .filter((x) => !x.hidden && !x.disabled && x.getAttribute("aria-disabled") !== "true");
+        if (!f.length) return;
+        const primero = f[0], ultimo = f[f.length - 1];
+        if (e.shiftKey && (document.activeElement === primero || document.activeElement === box)) { e.preventDefault(); ultimo.focus(); }
+        else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primero.focus(); }
+    });
+    document.body.append(overlay);
+    document.body.classList.add("modal-abierto");
+    try { box.focus({ preventScroll: true }); } catch (e) { box.focus(); }
+}
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarModal(); });
+
+/* ================================ PORTAPAPELES ================================ */
+async function copiarTexto(t) {
+    try {
+        if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(t); return true; }
+    } catch (e) {}
+    try {
+        const ta = document.createElement("textarea");
+        ta.value = t; ta.setAttribute("readonly", "");
+        ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;";
+        document.body.appendChild(ta);
+        ta.select(); ta.setSelectionRange(0, t.length);
+        const ok = document.execCommand("copy");
+        ta.remove();
+        return ok;
+    } catch (e) { return false; }
+}
+
+/* ============================== BOTÓN GENÉRICO ============================== */
+function colorIcono(btn, def) {
+    let c = btn.colorIcono;
+    if (!c && typeof btn.estiloIcono === "string") { // compatibilidad con JSON de la v1
+        const m = /(?:^|[;\s])color:\s*(#[0-9a-f]{6})/i.exec(btn.estiloIcono);
+        if (m) c = m[1];
+    }
+    return rgbDeHex(hexValido(c, def || estado.acento));
+}
+// o = { nombre, descripcion, icono, color, href, externo, descarga, abrir, clase }
+function botonApp(btn, o) {
+    const nombre = String(btn.nombre || o.nombre || "").trim();
+    if (!nombre) falta("falta 'nombre'");
+    const descripcion = btn.descripcion || o.descripcion || "";
+    const caja = h("div", { class: "app-icon" }, ico(nombreIcono(btn.icono, o.icono || "link")));
+    caja.style.setProperty("--ic-rgb", colorIcono(btn, o.color).join(","));
+    const info = h("div", { class: "app-info" },
+        h("div", { class: "app-name", text: nombre }),
+        descripcion ? h("div", { class: "app-desc", text: descripcion }) : null);
+    const clase = "app-btn" + (btn.destacado ? " destacado" : "") + (o.clase ? " " + o.clase : "");
+    if (o.href) {
+        return h("a", {
+            class: clase, href: o.href,
+            target: o.externo ? "_blank" : null, rel: o.externo ? "noopener noreferrer" : null,
+            download: o.descarga !== undefined && o.descarga !== null ? o.descarga : null
+        }, caja, info, ico("chevron", "app-arrow"));
+    }
+    const el = h("button", { class: clase, type: "button" }, caja, info, ico("chevron", "app-arrow"));
+    if (o.abrir) el.addEventListener("click", o.abrir);
+    return el;
+}
+
+/* ============================================================================
+   REGISTRO DE MÓDULOS (se elige SOLO por "tipo")
+   Cada módulo recibe el botón del JSON y devuelve un nodo del DOM.
+   Si falta algo imprescindible lanza un error y el botón se omite.
+   ============================================================================ */
+const MODULOS = {};
+
+/* ---- enlace: cualquier https:, tel: o mailto: ---- */
+MODULOS.enlace = (btn) => {
+    const url = urlSegura(btn.url) || falta("falta una 'url' https, tel: o mailto:");
+    return botonApp(btn, { icono: "link", href: url, externo: /^https:/i.test(url) });
+};
+
+/* ---- whatsapp: abre un chat con mensaje predefinido ---- */
+MODULOS.whatsapp = (btn) => {
+    const href = urlWA(btn.numeroWhatsapp || estado.waNegocio, plantilla(btn.mensaje || "Hola {negocio}", vars()))
+        || falta("no hay número de WhatsApp válido ('whatsapp' del negocio o 'numeroWhatsapp')");
+    return botonApp(btn, { icono: "chat", color: "#25D366", href: href, externo: true });
+};
+
+/* ---- vcard: guarda el contacto en la agenda ---- */
+function descargarVCard(tel) {
+    const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+    const lineas = ["BEGIN:VCARD", "VERSION:3.0", "FN:" + esc(estado.negocio), "ORG:" + esc(estado.negocio),
+        "TEL;TYPE=WORK,VOICE:+" + tel, "NOTE:" + esc("Contacto inteligente Studio 42"), "END:VCARD"];
+    const blob = new Blob([lineas.join("\r\n") + "\r\n"], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = h("a", { href: url, download: estado.cod + ".vcf" });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+MODULOS.vcard = (btn) => {
+    const u = String(btn.url || "").trim();
+    if (u && (/^[\w\-./]+\.vcf$/i.test(u) || urlSegura(u))) {
+        return botonApp(btn, { nombre: "Guardar contacto", descripcion: "Descarga nuestro teléfono directo al móvil", icono: "contact", href: u, descarga: "" });
+    }
+    const tel = waNumero(btn.telefono || estado.data.telefono) || estado.waNegocio
+        || falta("falta 'telefono' o 'whatsapp' para generar el contacto");
+    return botonApp(btn, { nombre: "Guardar contacto", descripcion: "Descarga nuestro teléfono directo al móvil", icono: "contact", abrir: () => { vibrar(30); descargarVCard(tel); } });
+};
+
+/* ---- llaves: aviso SOS al encontrar unas llaves ---- */
+MODULOS.llaves = (btn) => {
+    const msg = plantilla(btn.mensaje || "¡Hola {negocio}! He encontrado unas llaves con vuestro llavero inteligente.\n🔑 CÓDIGO: [ {llavero} ]", vars());
+    const href = urlWA(btn.numeroWhatsapp || estado.waNegocio, msg) || falta("no hay número de WhatsApp válido");
+    const el = botonApp(btn, {
+        nombre: "¿Encontraste estas llaves?", descripcion: "Avisa al local para coordinar la devolución segura",
+        icono: "key", color: "#f59e0b", href: href, externo: true, clase: "btn-sos"
+    });
+    el.querySelector(".app-name").append(h("span", { class: "badge-sos", text: "SOS" }));
+    return el;
+};
+
+/* ---- bizum ---- */
+function numeroBizum(btn) {
+    const crudo = btn.numeroBizum || (estado.data.datosPago && estado.data.datosPago.bizum) || "";
+    let d = String(crudo).replace(/\D/g, "");
+    if (d.length === 11 && d.indexOf("34") === 0) d = d.slice(2);
+    return d.length === 9 ? d : "";
+}
+MODULOS.bizum = (btn) => {
+    const numero = numeroBizum(btn) || falta("falta el número de Bizum ('numeroBizum' o 'datosPago.bizum')");
+    const concepto = btn.concepto || (estado.data.datosPago && estado.data.datosPago.concepto) || estado.negocio;
+    return botonApp(btn, {
+        nombre: "Pagar por Bizum", descripcion: "Copia el número y paga desde tu banco", icono: "phone", color: "#00c3ff",
+        abrir: () => {
+            vibrar(45);
+            const copia = h("p", { class: "modal-ok", text: "Copiando número…" });
+            const wa = urlWA(estado.waNegocio, plantilla("Hola {negocio}, acabo de emitir un Bizum al {numero} para abonar mi compra.", vars({ numero: numero })));
+            abrirModal({
+                titulo: "Pago rápido con Bizum", icono: "phone",
+                cuerpo: [
+                    h("p", { class: "modal-texto", text: "Número oficial:" }),
+                    h("div", { class: "numero-grande", text: numero }),
+                    copia,
+                    h("p", { class: "modal-texto" }, "Abre tu app bancaria, pulsa ", h("b", { text: "Pegar" }), " en destinatario y pon en concepto: ", h("b", { text: concepto }), ".")
+                ],
+                acciones: wa ? [h("a", { class: "btn-wa", href: wa, target: "_blank", rel: "noopener noreferrer" }, ico("chat"), "Notificar pago por WhatsApp")] : []
+            });
+            copiarTexto(numero).then((ok) => { copia.textContent = ok ? "✔ ¡Número copiado al portapapeles!" : "Mantén pulsado el número para copiarlo."; });
+        }
+    });
+};
+
+/* ---- reserva_cita: con Bizum (si hay número) o solo formulario ---- */
+MODULOS.reserva_cita = (btn) => {
+    const destino = btn.numeroWhatsapp || estado.waNegocio;
+    if (!waNumero(destino)) falta("no hay número de WhatsApp válido");
+    const bizum = numeroBizum(btn);
+    return botonApp(btn, {
+        nombre: "Reservar cita", descripcion: bizum ? "Confirma tu hueco con un Bizum" : "Pide tu hueco por WhatsApp", icono: "calendar", color: "#f59e0b",
+        abrir: () => {
+            vibrar(40);
+            const inpNombre = h("input", { class: "input", type: "text", maxlength: "60", autocomplete: "name", placeholder: "Ej: María Gómez", "aria-label": "Tu nombre completo" });
+            const inpRef = bizum ? h("input", { class: "input", type: "text", maxlength: "40", placeholder: "Ej: Ref. 482910 o tu móvil emisor", "aria-label": "Referencia del Bizum" }) : null;
+            const enviar = h("a", { class: "btn-wa deshabilitado", href: "#", role: "button", "aria-disabled": "true" }, ico("chat"), "Confirmar y agendar por WhatsApp");
+            const refrescar = () => {
+                const nombre = inpNombre.value.trim() || "Cliente";
+                const ref = inpRef ? inpRef.value.trim() : "";
+                const valido = !bizum || ref.length >= 3;
+                const base = btn.mensaje || (bizum
+                    ? "¡Hola {negocio}! He emitido el pago para mi cita/consulta:\n👤 Nombre: {nombre}\n💳 Ref. / Justificante: {referencia}\n🔑 Terminal: [ {llavero} ]\n\n¿Qué huecos tenéis disponibles para agendar?"
+                    : "¡Hola {negocio}! Quisiera pedir cita:\n👤 Nombre: {nombre}\n🔑 Terminal: [ {llavero} ]\n\n¿Qué huecos tenéis disponibles?");
+                enviar.classList.toggle("deshabilitado", !valido);
+                enviar.setAttribute("aria-disabled", String(!valido));
+                if (valido) {
+                    enviar.href = urlWA(destino, plantilla(base, vars({ nombre: nombre, referencia: ref })));
+                    enviar.target = "_blank"; enviar.rel = "noopener noreferrer";
+                } else { enviar.href = "#"; enviar.removeAttribute("target"); }
+            };
+            [inpNombre, inpRef].forEach((i) => { if (i) i.addEventListener("input", refrescar); });
+            enviar.addEventListener("click", (e) => {
+                if (enviar.getAttribute("aria-disabled") === "true") e.preventDefault();
+                else { vibrar(50); setTimeout(() => cerrarModal(true), 300); }
+            });
+            let filaBizum = null;
+            if (bizum) {
+                const copiar = h("button", { class: "btn-copiar", type: "button" }, ico("copy"), "Copiar");
+                copiar.addEventListener("click", async () => {
+                    const ok = await copiarTexto(bizum);
+                    copiar.textContent = ok ? "¡Copiado!" : "Mantén pulsado";
+                });
+                filaBizum = h("div", { class: "fila-bizum" }, h("div", null, h("span", { class: "mini", text: "Número de Bizum:" }), h("span", { class: "numero-medio", text: bizum })), copiar);
+            }
+            abrirModal({
+                titulo: btn.titulo || "Reserva de cita", icono: "calendar",
+                cuerpo: [
+                    h("p", { class: "modal-texto", text: btn.intro || (bizum ? "Para confirmar tu hueco, realiza el Bizum e introduce la referencia:" : "Indícanos tu nombre y te contestamos por WhatsApp para agendar:") }),
+                    filaBizum,
+                    h("div", { class: "campo" }, h("span", { class: "campo-label", text: "Tu nombre completo" }), inpNombre),
+                    inpRef ? h("div", { class: "campo" }, h("span", { class: "campo-label", text: "Referencia Bizum / teléfono emisor" }), inpRef) : null,
+                    btn.aviso ? h("p", { class: "modal-aviso", text: btn.aviso }) : null
+                ],
+                acciones: [enviar], cerrarTexto: "Volver"
+            });
+            refrescar();
+        }
+    });
+};
+
+/* ---- parking: guarda la posición del coche (solo en este móvil) ---- */
+const LS_LAT = "parking_lat", LS_LNG = "parking_lng";
+MODULOS.parking = (btn) => {
+    const iconoBase = nombreIcono(btn.icono, "locate");
+    const nombreBase = btn.nombre || "¿Dónde aparqué?";
+    const descBase = btn.descripcion || "Guarda la posición GPS de tu coche para volver";
+    const el = botonApp(Object.assign({}, btn, { nombre: nombreBase, descripcion: descBase }), { icono: "locate", color: "#94A3B8", abrir: () => gestionar() });
+    const usoIcono = el.querySelector(".app-icon use");
+    const nombreEl = el.querySelector(".app-name");
+    const descEl = el.querySelector(".app-desc");
+    const coords = () => {
+        const lat = parseFloat(almacen.get(LS_LAT)), lng = parseFloat(almacen.get(LS_LNG));
+        return isFinite(lat) && isFinite(lng) ? { lat: lat, lng: lng } : null;
+    };
+    const refrescar = () => {
+        const g = !!coords();
+        nombreEl.textContent = g ? "Ir a mi coche (a pie)" : nombreBase;
+        descEl.textContent = g ? "Toca para abrir la ruta en el mapa" : descBase;
+        usoIcono.setAttribute("href", "#i-" + (g ? "nav" : iconoBase));
+        el.classList.toggle("destacado", g || !!btn.destacado);
+    };
+    function gestionar() {
+        vibrar(40);
+        const c = coords();
+        if (c) {
+            window.open("https://www.google.com/maps/dir/?api=1&destination=" + c.lat + "," + c.lng + "&travelmode=walking", "_blank", "noopener");
+            setTimeout(() => abrirModal({
+                titulo: "Ruta abierta", icono: "nav",
+                cuerpo: h("p", { class: "modal-texto", text: "Hemos abierto la ruta a pie en Google Maps. ¿Ya has llegado a tu coche? Si quieres, borramos la ubicación guardada." }),
+                acciones: [h("button", { class: "btn-oro", type: "button", onclick: () => { almacen.del(LS_LAT); almacen.del(LS_LNG); cerrarModal(); refrescar(); } }, "Borrar ubicación")],
+                cerrarTexto: "Mantenerla guardada"
+            }), 800);
+            return;
+        }
+        if (!navigator.geolocation) {
+            abrirModal({ titulo: "Sin GPS", icono: "alert", cuerpo: h("p", { class: "modal-texto", text: "Tu navegador no permite obtener la ubicación." }) });
+            return;
+        }
+        descEl.textContent = "Obteniendo señal GPS…";
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const ok = almacen.set(LS_LAT, pos.coords.latitude) && almacen.set(LS_LNG, pos.coords.longitude);
+                refrescar();
+                abrirModal({
+                    titulo: ok ? "Ubicación guardada" : "No se pudo guardar", icono: ok ? "pin" : "alert",
+                    cuerpo: h("p", { class: "modal-texto", text: ok
+                        ? "Tu coche queda guardado solo en este móvil. Cuando salgas, vuelve a pulsar este botón para regresar a pie."
+                        : "Tu navegador no permite guardar datos (¿modo privado?). Prueba desde una ventana normal." })
+                });
+            },
+            () => {
+                refrescar();
+                abrirModal({ titulo: "No hemos podido ubicarte", icono: "alert", cuerpo: h("p", { class: "modal-texto", text: "Activa el GPS del móvil, permite el acceso a la ubicación para esta página y vuelve a intentarlo." }) });
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+    }
+    refrescar();
+    return el;
+};
+
+/* ---- asistente: pasos con opciones + resultado por reglas + mensaje a WhatsApp ----
+   Sustituye al configurador de menú, test ergonómico, tasador de entrega, etc. */
+function evaluarResultado(res, sel) {
+    if (!res) return null;
+    const reglas = Array.isArray(res.reglas) ? res.reglas : [];
+    for (let i = 0; i < reglas.length; i++) {
+        const cond = reglas[i] && reglas[i].si ? reglas[i].si : {};
+        const ok = Object.keys(cond).every((k) => [].concat(cond[k]).map(String).indexOf(String(sel[k])) >= 0);
+        if (ok) return reglas[i];
+    }
+    return res.porDefecto || null;
+}
+MODULOS.asistente = (btn) => {
+    const pasos = (Array.isArray(btn.pasos) ? btn.pasos : [])
+        .filter((p) => p && p.titulo && Array.isArray(p.opciones))
+        .map((p) => ({
+            titulo: String(p.titulo),
+            opciones: p.opciones.map((o) => typeof o === "string" ? o : String((o && o.texto) || "")).filter(Boolean),
+            defecto: p.defecto
+        }))
+        .filter((p) => p.opciones.length);
+    if (!pasos.length) falta("'asistente' necesita 'pasos' con 'titulo' y 'opciones'");
+    return botonApp(btn, { nombre: "Asistente", icono: "clipboard", abrir: () => abrirAsistente(btn, pasos) });
+};
+function abrirAsistente(btn, pasos) {
+    vibrar(40);
+    const destino = btn.numeroWhatsapp || estado.waNegocio;
+    const sel = {};
+    pasos.forEach((p) => { sel[p.titulo] = p.opciones.indexOf(p.defecto) >= 0 ? p.defecto : p.opciones[0]; });
+    const tarjeta = btn.resultado ? h("div", { class: "resultado", "aria-live": "polite" }) : null;
+    const enviar = waNumero(destino) ? h("a", { class: "btn-wa", href: "#", target: "_blank", rel: "noopener noreferrer" }, ico("chat"), btn.botonTexto || "Enviar por WhatsApp") : null;
+    const refrescar = () => {
+        const r = evaluarResultado(btn.resultado, sel);
+        if (tarjeta) {
+            tarjeta.textContent = "";
+            if (r) {
+                poner(tarjeta,
+                    h("div", { class: "resultado-etiqueta", text: btn.resultado.etiqueta || "Recomendación" }),
+                    h("div", { class: "resultado-titulo", text: r.titulo || "" }),
+                    r.texto ? h("div", { class: "resultado-texto", text: r.texto }) : null);
+            }
+            tarjeta.hidden = !r;
+        }
+        if (enviar) {
+            const base = btn.mensaje || ("Hola {negocio}:\n" + pasos.map((p) => "- " + p.titulo + ": {" + p.titulo + "}").join("\n"));
+            enviar.href = urlWA(destino, plantilla(base, vars(Object.assign({}, sel, { resultado: r && r.titulo || "", detalle: r && r.texto || "" })))) || "#";
+        }
+    };
+    const grupos = pasos.map((p, idx) => {
+        const pills = p.opciones.map((op) => {
+            const b = h("button", { class: "pill", type: "button", "aria-pressed": String(sel[p.titulo] === op) }, op);
+            b.addEventListener("click", () => {
+                sel[p.titulo] = op;
+                pills.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+                vibrar(20);
+                refrescar();
+            });
+            return b;
+        });
+        return h("div", { class: "campo" },
+            h("span", { class: "campo-label", text: (pasos.length > 1 ? (idx + 1) + ". " : "") + p.titulo }),
+            h("div", { class: "pills", role: "group", "aria-label": p.titulo }, pills));
+    });
+    abrirModal({
+        titulo: btn.titulo || btn.nombre, icono: nombreIcono(btn.icono, "clipboard"),
+        cuerpo: [btn.intro ? h("p", { class: "modal-texto", text: btn.intro }) : null, grupos, tarjeta, btn.aviso ? h("p", { class: "modal-aviso", text: btn.aviso }) : null],
+        acciones: enviar ? [enviar] : []
+    });
+    refrescar();
+}
+
+/* ---- calculadora: valor × factor (proteína, dosis, presupuesto…) ---- */
+MODULOS.calculadora = (btn) => {
+    const c = btn.campo;
+    const ops = (Array.isArray(btn.opciones) ? btn.opciones : []).filter((o) => o && o.texto && Number(o.factor) > 0);
+    if (!c || !c.etiqueta) falta("'calculadora' necesita 'campo.etiqueta'");
+    if (!ops.length) falta("'calculadora' necesita 'opciones' con 'texto' y 'factor' mayor que 0");
+    if (!btn.resultado) falta("'calculadora' necesita 'resultado'");
+    return botonApp(btn, { nombre: "Calculadora", icono: "calculator", abrir: () => abrirCalculadora(btn, c, ops) });
+};
+function abrirCalculadora(btn, c, ops) {
+    vibrar(40);
+    const min = Number(c.min) || 0, max = Number(c.max) || 10000;
+    const input = h("input", { class: "input", type: "number", inputmode: "decimal", step: "any", min: String(min), max: String(max), placeholder: c.placeholder || "", "aria-label": c.etiqueta });
+    const select = ops.length > 1 ? h("select", { class: "input", "aria-label": "Opción" }, ops.map((o, i) => h("option", { value: String(i), text: o.texto }))) : null;
+    const salida = h("div", { class: "resultado", "aria-live": "polite", hidden: true });
+    const calcular = () => {
+        const valor = parseFloat(String(input.value).replace(",", "."));
+        salida.hidden = false; salida.textContent = "";
+        if (!(valor > min && valor <= max)) {
+            salida.append(h("div", { class: "resultado-texto", text: "Introduce un valor válido (entre " + min + " y " + max + (c.unidad ? " " + c.unidad : "") + ")." }));
+            return;
+        }
+        const op = ops[select ? Number(select.value) : 0];
+        const dec = Math.min(Math.max(Number(btn.resultado.decimales) || 0, 0), 3);
+        const res = valor * Number(op.factor);
+        poner(salida,
+            h("div", { class: "resultado-etiqueta", text: btn.resultado.texto || "Resultado" }),
+            h("div", { class: "resultado-grande", text: res.toLocaleString("es-ES", { minimumFractionDigits: dec, maximumFractionDigits: dec }) + (btn.resultado.unidad ? " " + btn.resultado.unidad : "") }),
+            btn.resultado.nota ? h("div", { class: "resultado-texto", text: btn.resultado.nota }) : null);
+        vibrar(30);
+    };
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); calcular(); } });
+    abrirModal({
+        titulo: btn.titulo || btn.nombre, icono: nombreIcono(btn.icono, "calculator"),
+        cuerpo: [
+            btn.intro ? h("p", { class: "modal-texto", text: btn.intro }) : null,
+            h("div", { class: "campo" }, h("span", { class: "campo-label", text: c.etiqueta }), input),
+            select ? h("div", { class: "campo" }, h("span", { class: "campo-label", text: btn.etiquetaOpciones || "Objetivo" }), select) : null,
+            h("button", { class: "btn-oro", type: "button", onclick: calcular }, btn.botonTexto || "Calcular"),
+            salida,
+            btn.aviso ? h("p", { class: "modal-aviso", text: btn.aviso }) : null
+        ]
+    });
+}
+
+/* ---- info: tarjetas de texto (alérgenos, ficha médica, guías, FAQ…) ---- */
+function accionDeInfo(a) {
+    if (!a || !a.texto) return null;
+    let href = null;
+    if (a.maps) href = "https://www.google.com/maps/search/" + encodeURIComponent(a.maps) + "/";
+    else if (a.whatsapp) href = urlWA(estado.waNegocio, plantilla(a.mensaje || "Hola {negocio}", vars()));
+    else href = urlSegura(a.url);
+    if (!href) return null;
+    const clase = a.estilo === "peligro" ? "btn-peligro" : a.estilo === "whatsapp" ? "btn-wa" : "btn-oro";
+    return h("a", { class: clase, href: href, target: /^https:/i.test(href) ? "_blank" : null, rel: "noopener noreferrer" }, a.texto);
+}
+MODULOS.info = (btn) => {
+    const tarjetas = (Array.isArray(btn.tarjetas) ? btn.tarjetas : []).filter((t) => t && (t.titulo || t.texto || t.items));
+    if (!tarjetas.length) falta("'info' necesita 'tarjetas'");
+    return botonApp(btn, {
+        nombre: "Información", icono: "info",
+        abrir: () => {
+            vibrar(40);
+            const nodos = [];
+            if (btn.intro) nodos.push(h("p", { class: "modal-texto", text: btn.intro }));
+            tarjetas.forEach((t) => {
+                const nivel = ["info", "alerta", "ok", "aviso"].indexOf(t.nivel) >= 0 ? t.nivel : "info";
+                const items = Array.isArray(t.items) ? t.items.filter((i) => i && i.etiqueta) : [];
+                nodos.push(h("div", { class: "tarjeta n-" + nivel },
+                    t.titulo ? h("div", { class: "tarjeta-titulo", text: t.titulo }) : null,
+                    t.texto ? h("p", { class: "tarjeta-texto", text: t.texto }) : null,
+                    items.map((i) => h("div", { class: "fila" }, h("span", { class: "fila-et", text: i.etiqueta }), h("span", { class: "fila-val", text: i.valor === null || i.valor === undefined ? "" : String(i.valor) })))));
+            });
+            if (btn.aviso) nodos.push(h("p", { class: "modal-aviso", text: btn.aviso }));
+            abrirModal({
+                titulo: btn.titulo || btn.nombre, icono: nombreIcono(btn.icono, "info"), cuerpo: nodos,
+                acciones: (Array.isArray(btn.acciones) ? btn.acciones : []).map(accionDeInfo).filter(Boolean)
+            });
+        }
+    });
+};
+
+/* ---- asistencia_ruta: buscar ayuda cercana en Maps + enviar mi posición GPS ---- */
+MODULOS.asistencia_ruta = (btn) => {
+    const busqueda = String(btn.busquedaMaps || "").trim() || falta("falta 'busquedaMaps'");
+    return botonApp(btn, {
+        nombre: "Ayuda cerca de ti", icono: "locate",
+        abrir: () => {
+            vibrar(40);
+            const destino = btn.numeroWhatsapp || estado.waNegocio;
+            const acciones = [h("a", { class: "btn-oro", href: "https://www.google.com/maps/search/" + encodeURIComponent(busqueda) + "/", target: "_blank", rel: "noopener noreferrer" }, ico("search"), btn.textoMapas || "Buscar en Google Maps")];
+            if (waNumero(destino) && navigator.geolocation) {
+                const zona = h("div", { "aria-live": "polite" });
+                const gps = h("button", { class: "btn-wa", type: "button" }, ico("chat"), btn.textoGPS || "Enviar mi posición GPS por WhatsApp");
+                gps.addEventListener("click", () => {
+                    gps.disabled = true;
+                    zona.textContent = "Obteniendo tu ubicación…";
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            const ubic = "https://maps.google.com/?q=" + pos.coords.latitude + "," + pos.coords.longitude;
+                            const href = urlWA(destino, plantilla(btn.mensajeGPS || "¡Hola {negocio}! Esta es mi ubicación GPS exacta: {ubicacion}", vars({ ubicacion: ubic })));
+                            zona.textContent = "";
+                            zona.append(h("a", { class: "btn-wa", href: href, target: "_blank", rel: "noopener noreferrer" }, ico("chat"), "Abrir WhatsApp con mi ubicación"));
+                        },
+                        () => {
+                            gps.disabled = false;
+                            const href = urlWA(destino, plantilla(btn.mensajeSinGPS || "¡Hola {negocio}! Necesito ayuda, ¿podéis contactar conmigo?", vars()));
+                            zona.textContent = "";
+                            zona.append(
+                                h("p", { class: "modal-texto", text: "No pudimos obtener tu ubicación. Activa el GPS y vuelve a intentarlo, o escribe sin ella:" }),
+                                h("a", { class: "btn-sec", href: href, target: "_blank", rel: "noopener noreferrer" }, "Enviar mensaje sin ubicación"));
+                        },
+                        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+                    );
+                });
+                acciones.push(gps, zona);
+            }
+            abrirModal({
+                titulo: btn.titulo || btn.nombre, icono: nombreIcono(btn.icono, "locate"),
+                cuerpo: [btn.intro ? h("p", { class: "modal-texto", text: btn.intro }) : null, btn.aviso ? h("p", { class: "modal-aviso", text: btn.aviso }) : null],
+                acciones: acciones
+            });
+        }
+    });
+};
+
+/* ---- opinion: DOS vías iguales para todos (Google o comentario privado) ----
+   Sin estrellas, sin filtro por nota, mismo tamaño y peso visual. */
+function urlGerencia(valor) {
+    const n = waNumero(valor) || estado.waNegocio;
+    if (!n) return null;
+    let texto = "";
+    const m = /[?&]text=([^&#]*)/.exec(String(valor || ""));
+    if (m) { try { texto = decodeURIComponent(m[1].replace(/\+/g, " ")); } catch (e) { texto = ""; } }
+    return urlWA(n, texto || plantilla("Hola {negocio}, quería enviar un comentario sobre mi visita.", vars()));
+}
+MODULOS.opinion = (btn) => {
+    let google = urlSegura(btn.urlGoogle);
+    if (google && /^https:\/\/(www\.)?(maps\.google\.[a-z.]+|google\.[a-z.]+\/maps)\/?$/i.test(google)) {
+        aviso("'urlGoogle' apunta a la portada de Google Maps, no a la ficha del negocio: se oculta el botón de Google hasta poner el enlace de reseñas real");
+        google = null;
+    }
+    const gerencia = urlGerencia(btn.whatsappGerencia);
+    if (!google && !gerencia) falta("'opinion' necesita 'urlGoogle' y/o 'whatsappGerencia'");
+    const frag = document.createDocumentFragment();
+    if (google) {
+        frag.append(botonApp({ nombre: btn.textoGoogle || "Dejar mi opinión en Google", descripcion: btn.descGoogle || "Cuéntanos qué tal fue", icono: "star" },
+            { icono: "star", color: "#ffb400", href: google, externo: true, clase: "par-opinion" }));
+    }
+    if (gerencia) {
+        frag.append(botonApp({ nombre: btn.textoGerencia || "Enviar un comentario privado a la gerencia", descripcion: btn.descGerencia || "Te respondemos directamente por WhatsApp", icono: "chat" },
+            { icono: "chat", color: "#25D366", href: gerencia, externo: true, clase: "par-opinion" }));
+    }
+    return frag;
+};
+
+/* =========================== COMPATIBILIDAD CON LA v1 =========================== */
+// Tipos antiguos cuyo contenido estaba escrito dentro del motor: ahora se definen en el JSON.
+const LEGACY = {
+    configurador_kebab: "asistente", test_ergonomico: "asistente", ergonomia: "asistente", test_desgaste: "asistente",
+    tasador_retirada: "asistente", logistica: "asistente", calc_proteina: "calculadora",
+    guia_alergenos_kebab: "info", guia_creatina: "info", carnet_vacunacion: "info", checklist_parto: "info",
+    checklist: "info", triaje_urgencias: "info"
+};
+function normalizar(data) {
+    let d;
+    try { d = JSON.parse(JSON.stringify(data)); } catch (e) { return null; }
+    if (!d || typeof d !== "object" || !Array.isArray(d.secciones)) return d;
+    d.secciones.forEach((sec) => {
+        if (!sec || typeof sec !== "object") return;
+        if (!Array.isArray(sec.botones)) sec.botones = [];
+        // Bloque de reseñas v1 (estrellas con filtro) -> bloque v2 de dos botones iguales
+        if (sec.escudoResenas || sec.urlGoogleResenas) {
+            if (!sec.botones.some((b) => b && b.tipo === "opinion")) {
+                sec.botones.push({ tipo: "opinion", urlGoogle: sec.urlGoogleResenas, whatsappGerencia: sec.whatsappGerencia });
+            }
+        }
+        sec.botones.forEach((b) => {
+            if (!b || typeof b !== "object") return;
+            if (b.tipo === "recuperar_llaves") b.tipo = "llaves";
+            if (!b.tipo) b.tipo = b.url && /\.vcf$/i.test(b.url) ? "vcard" : (b.url ? "enlace" : "");
+            if (b.tipo === "vcard" && b.url && /contacto\.vcf$/i.test(b.url)) delete b.url; // marcador de la v1: se genera al vuelo
+        });
+    });
+    return d;
+}
+function validarRaiz(d) {
+    if (!d || typeof d !== "object" || Array.isArray(d)) return "El JSON no es un objeto";
+    if (!d.nombre || typeof d.nombre !== "string") return "Falta 'nombre'";
+    if (!Array.isArray(d.secciones)) return "Falta 'secciones'";
+    return null;
+}
+function resolverWANegocio(d) {
+    let n = waNumero(d.whatsapp);
+    if (n) return n;
+    for (let i = 0; i < d.secciones.length; i++) {
+        const sec = d.secciones[i];
+        if (!sec) continue;
+        n = waNumero(sec.whatsappGerencia); if (n) return n;
+        const bs = Array.isArray(sec.botones) ? sec.botones : [];
+        for (let j = 0; j < bs.length; j++) {
+            const b = bs[j];
+            if (!b) continue;
+            if (typeof b.whatsappGerencia === "string") { n = waNumero(b.whatsappGerencia); if (n) return n; }
+            if (typeof b.url === "string" && /^https:\/\/wa\.me\//i.test(b.url)) { n = waNumero(b.url); if (n) return n; }
+        }
+    }
+    return "";
+}
+
+/* =============================== RENDER DEL MENÚ =============================== */
+function renderMenu(d) {
+    const menu = $("dynamic-menu");
+    menu.textContent = "";
+    d.secciones.forEach((sec, si) => {
+        if (!sec || typeof sec !== "object") { aviso("Sección " + (si + 1) + ": no es un objeto"); return; }
+        const bloque = h("div", { class: "apps-menu" });
+        let pintados = 0;
+        sec.botones.forEach((btn, bi) => {
+            const donde = "Sección " + (si + 1) + ", botón " + (bi + 1) + " (" + ((btn && btn.nombre) || "sin nombre") + ")";
+            try {
+                if (!btn || typeof btn !== "object") falta("no es un objeto");
+                const tipo = String(btn.tipo || "").toLowerCase();
+                const modulo = MODULOS[tipo];
+                if (!modulo) {
+                    falta(LEGACY[tipo]
+                        ? 'tipo antiguo "' + tipo + '": define el contenido en el JSON con el tipo "' + LEGACY[tipo] + '"'
+                        : 'falta "tipo" o es desconocido ("' + tipo + '")');
+                }
+                bloque.append(modulo(btn));
+                pintados++;
+            } catch (e) { aviso(donde + ": " + e.message); }
+        });
+        if (pintados) {
+            if (sec.titulo) menu.append(h("div", { class: "section-title", text: sec.titulo }));
+            menu.append(bloque);
+        }
+    });
+    if (!menu.children.length) menu.append(h("div", { class: "error-box" }, ico("info"), h("p", { text: "Esta terminal aún no tiene acciones configuradas." })));
+}
+
+/* ================================ IDENTIDAD ================================ */
+function cargarLogo(d) {
+    const img = $("hub-logo"), caja = $("hub-logo-box");
+    const textoLogo = () => { caja.textContent = ""; caja.append(h("span", { class: "logo-texto", text: d.nombre })); caja.hidden = false; };
+    const crudo = String(d.logo || "");
+    if (!/^(https:\/\/[^\s"'<>]+|[\w\-./]+)$/.test(crudo)) { textoLogo(); return; }
+    const archivo = crudo.replace(/^(\.\/|\/|\.\.\/|c\/)+/, "");
+    let rutas = [crudo];
+    if (!/^https:/i.test(crudo)) {
+        rutas.push("./" + archivo, "../" + archivo, "./c/" + archivo);
+        if (CONFIG.respaldoGitHub) {
+            const base = CONFIG.respaldoGitHub.replace("{cod}.json", "");
+            rutas.push(base + archivo, base.replace(/c\/$/, "") + archivo);
+        }
+    }
+    rutas = rutas.filter((r, i) => rutas.indexOf(r) === i);
+    let intento = 0;
+    img.alt = d.nombre;
+    img.onload = () => { caja.hidden = false; };
+    img.onerror = () => {
+        intento++;
+        if (intento < rutas.length) img.src = rutas[intento];
+        else { img.remove(); textoLogo(); }
+    };
+    img.src = rutas[0];
+}
+function aplicarIdentidad(d) {
+    const acento = hexValido(d.colorAcento, "#00E5FF");
+    const principal = hexValido(d.colorPrincipal, "#0B0C10");
+    const fondoLogo = colorCss(d.fondoLogo, "#0B0C10");
+    estado.acento = acento;
+    const root = document.documentElement.style;
+    root.setProperty("--color-acento", acento);
+    root.setProperty("--acento-rgb", rgbDeHex(acento).join(","));
+    root.setProperty("--color-principal", principal);
+    root.setProperty("--fondo-logo", fondoLogo);
+    if (/^(\d{2,3}px|100%)$/.test(d.logoAnchoMax || "")) root.setProperty("--logo-max", d.logoAnchoMax);
+    if (/^\d{2,3}px$/.test(d.logoAlto || "")) root.setProperty("--logo-alto", d.logoAlto);
+    if (/^\d{1,2}px( \d{1,2}px)?$/.test(d.paddingLogo || "")) root.setProperty("--logo-pad", d.paddingLogo);
+    $("hub").classList.toggle("tema-industrial", d.tema === "industrial");
+    document.title = d.nombre + " | Studio 42";
+    $("client-name").textContent = d.nombre;
+    $("client-subtitle").textContent = d.subtitulo || "Ecosistema Phygital";
+    $("badge-text").textContent = d.textoBadge || "PUNTO DE CONEXIÓN ACTIVO";
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", principal);
+    cargarLogo(d);
+}
+
+/* ================================== CARGA ================================== */
+async function pedirJSON(url) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), CONFIG.tiempoLimiteMs);
+    try {
+        const r = await fetch(url, { cache: "no-cache", signal: ctrl.signal });
+        if (r.status === 404) return { noEncontrado: true };
+        if (!r.ok) return { error: true };
+        const texto = await r.text();
+        try { return { data: JSON.parse(texto) }; } catch (e) { return { noEncontrado: true }; } // p. ej. una página HTML de "no encontrado"
+    } catch (e) { return { error: true }; }
+    finally { clearTimeout(t); }
+}
+async function cargarConfig(cod) {
+    const urls = CONFIG.rutasJSON.map((r) => r.replace("{cod}", cod));
+    if (CONFIG.respaldoGitHub) urls.push(CONFIG.respaldoGitHub.replace("{cod}", cod));
+    let huboError = false;
+    for (let i = 0; i < urls.length; i++) {
+        const r = await pedirJSON(urls[i]);
+        if (r.data) return { data: r.data };
+        if (r.error) huboError = true;
+    }
+    return { error: huboError ? "red" : "noencontrado" };
+}
+
+function mostrarError(tipo) {
+    const menu = $("dynamic-menu");
+    menu.textContent = "";
+    const msg = tipo === "red" ? "No pudimos cargar esta terminal. Comprueba tu conexión e inténtalo de nuevo."
+        : tipo === "config" ? "Esta terminal tiene la configuración incompleta."
+        : "Terminal no encontrada.";
+    menu.append(h("div", { class: "error-box" },
+        ico("alert"), h("p", { text: msg }),
+        tipo === "red" ? h("button", { class: "btn-oro", type: "button", onclick: () => location.reload() }, "Reintentar") : null));
+    if (estado.debug) mostrarDebug();
+}
+function mostrarDebug() {
+    const p = $("debug-panel");
+    p.hidden = false;
+    p.textContent = "";
+    poner(p,
+        h("div", null, h("b", { text: "Motor v2.0" }), " · cod=" + estado.cod + " · llavero=" + estado.llavero + " · mesa=" + estado.mesa),
+        h("div", null, "WhatsApp del negocio: " + (estado.waNegocio ? "sí" : "NO")),
+        h("div", null, h("b", { text: "Avisos (" + estado.avisos.length + "):" })),
+        estado.avisos.length ? estado.avisos.map((a) => h("div", { text: "• " + a })) : h("div", { text: "Sin avisos. Configuración correcta." }));
+}
+
+async function iniciar() {
+    montarSprite();
+    const p = new URLSearchParams(window.location.search);
+    estado.debug = p.get("debug") === "1";
+    estado.llavero = limpiarParam(p.get("k") || p.get("key"), "MOSTRADOR");
+    estado.mesa = limpiarParam(p.get("mesa"), "Barra");
+    const cod = soloSlug(p.get("cod") || p.get("id") || "demo", null);
+    if (!cod) { mostrarError("noencontrado"); return; }
+    estado.cod = cod;
+
+    const r = await cargarConfig(cod);
+    if (r.error) { mostrarError(r.error); return; }
+
+    /* Redirección a una landing a medida (los soportes ya grabados siguen funcionando).
+       Solo rutas del propio sitio. Se conserva el código de pieza (?k=). Con ?debug=1 no redirige. */
+    const destino = r.data && r.data.redirigir;
+    if (typeof destino === "string" && /^\/(?!\/)[\w\-\/.?=&%]*$/.test(destino) && !estado.debug) {
+        const u = new URL(destino, location.origin);
+        const k = p.get("k") || p.get("key");
+        if (k && !u.searchParams.has("k")) u.searchParams.set("k", limpiarParam(k, "MOSTRADOR"));
+        if (p.get("preview")) u.searchParams.set("preview", "1");
+        location.replace(u.pathname + u.search);
+        return;
+    }
+
+    const d = normalizar(r.data);
+    const problema = validarRaiz(d);
+    if (problema) { aviso(problema); mostrarError("config"); return; }
+
+    estado.data = d;
+    estado.negocio = String(d.nombre).trim();
+    estado.waNegocio = resolverWANegocio(d);
+    if (Number(d.version) > 2) aviso("El JSON es de una versión posterior (" + d.version + "); puede que algunas funciones no se muestren.");
+
+    aplicarIdentidad(d);
+    if (d.pausada === true) { mostrarPausa(d); return; }
+    renderMenu(d);
+    if (estado.debug) mostrarDebug();
+    contar("vista");
+    document.addEventListener("click", clasificarClic, true);
+}
+
+/* Servicio en pausa (lo activa Studio 42 si la suscripción no está al día). */
+function mostrarPausa(d) {
+    const menu = $("dynamic-menu");
+    menu.textContent = "";
+    menu.append(h("div", { class: "error-box" }, ico("clock"),
+        h("p", { text: "Este espacio digital de " + String(d.nombre).trim() + " está en pausa temporalmente." }),
+        h("p", { text: "Disculpa las molestias. Vuelve a intentarlo más tarde." })));
+}
+
+/* ---------- Contador anónimo: solo cliente, pieza (k) y tipo de acción ---------- */
+function contar(tipo) {
+    if (!CONFIG.estadisticas || estado.debug || /[?&]preview=1/.test(location.search)) return;
+    try {
+        const cuerpo = JSON.stringify({ accion: "ev", c: estado.cod, k: estado.llavero, t: tipo });
+        const blob = new Blob([cuerpo], { type: "text/plain" });
+        if (!(navigator.sendBeacon && navigator.sendBeacon(CONFIG.estadisticas, blob))) {
+            fetch(CONFIG.estadisticas, { method: "POST", body: cuerpo, mode: "no-cors", keepalive: true }).catch(() => {});
+        }
+    } catch (e) { /* nunca debe romper la landing */ }
+}
+function clasificarClic(e) {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    const u = a.getAttribute("href") || "";
+    const t = /writereview|g\.page\/r|search\.google\.com\/local/.test(u) ? "resena"
+        : /wa\.me|whatsapp/.test(u) ? (a.classList.contains("par-opinion") || /gerencia/i.test(a.textContent) ? "gerencia" : "whatsapp")
+        : /^tel:/.test(u) ? "llamada"
+        : /google\.[a-z.]+\/maps|maps\.app|maps\.google/.test(u) ? "ruta"
+        : /^https?:/.test(u) ? "enlace" : "";
+    if (t) contar(t);
+}
+
+/* Vista previa desde el panel de Studio 42 (?preview=1 dentro de un iframe del mismo dominio):
+   el panel envía un JSON sin publicar y se pinta aquí sin tocar GitHub. */
+function pintarPrevia(raw) {
+    const d = normalizar(raw);
+    const problema = validarRaiz(d);
+    if (problema) { aviso(problema); mostrarError("config"); return; }
+    estado.avisos = [];
+    estado.data = d;
+    estado.negocio = String(d.nombre).trim();
+    estado.waNegocio = resolverWANegocio(d);
+    aplicarIdentidad(d);
+    renderMenu(d);
+}
+if (new URLSearchParams(location.search).get("preview") === "1" && window.parent !== window) {
+    window.addEventListener("message", (e) => {
+        if (e.origin !== location.origin || !e.data || e.data.tipo !== "s42-preview" || !e.data.json) return;
+        try { pintarPrevia(e.data.json); } catch (err) { console.warn(err); }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", iniciar);
+
+})();
+</script>
+</body>
+</html>
