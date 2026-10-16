@@ -645,7 +645,7 @@ function slugTj(t){return String(t||'').toLowerCase().normalize('NFD').replace(/
 var demoAud=[];
 function auditColor(n){return n>=75?'#34d399':n>=50?'#f59e0b':'#ef4444'}
 function pintarFichas(){
-  var A=(D&&D.auditorias)||[];
+  var visto={},A=((D&&D.auditorias)||[]).filter(function(a){var k=a.placeId||a.negocio;if(visto[k])return false;visto[k]=1;return true});
   var h='<div class="h2"><h2>Fichas de Google</h2><small>'+A.length+' auditoría'+(A.length===1?'':'s')+'</small></div>';
   h+='<div class="ask"><b>Auditar una ficha</b><div class="sub">Escribe el nombre del negocio y la ciudad. Claude lo busca en Google Maps, lo audita y te prepara el informe.</div><input id="askTxt" placeholder="Ej.: La Sucursal Logroño" autocomplete="off"><div class="sug"><button type="button" data-q="Studio 42 Logroño">Studio 42</button><button type="button" data-q="La Sucursal Logroño barbería">La Sucursal</button><button type="button" data-q="SPN Nutrition Planet Logroño">SPN</button></div><button type="button" class="cta" id="askBtn" style="margin-top:12px">🔍 Buscar y auditar</button><div id="askMsg" class="mini" style="margin-top:8px;color:var(--muted)"></div></div>';
   if(A.length)h+='<div class="mini" style="margin:0 0 10px;color:var(--muted);line-height:1.45">El número del círculo es la <b>nota de su ficha de Google, de 0 a 100</b>. 🟢 75 o más: bien · 🟠 50–74: mejorable · 🔴 menos de 50: le está costando clientes.</div>';
@@ -655,12 +655,13 @@ function pintarFichas(){
     h+='<div class="aud-card">'+
        '<div class="aud-nota" style="--g:'+g+';--p:'+p+'deg"><i></i><b>'+a.nota+'</b></div>'+
        '<div class="aud-mid"><b>'+esc(a.negocio||'—')+'</b><small>'+(a.rating?a.rating+' ★ · ':'')+(a.resenas||0)+' reseñas · puesto '+(a.puesto||'—')+'</small><small style="color:var(--muted)">'+new Date(a.fecha).toLocaleDateString('es-ES')+'</small></div>'+
-       '<div class="aud-rt">'+(a.mapsUrl?'<a class="ghost" href="'+esc(a.mapsUrl)+'" target="_blank" rel="noopener" style="display:block;min-height:0;padding:5px 10px;font-size:.72rem;margin-bottom:4px;text-decoration:none;text-align:center">Ver ficha</a>':'')+'<button type="button" data-pid="'+esc(a.placeId||'')+'" data-nom="'+esc(a.negocio||'')+'" class="cta" style="min-height:0;padding:6px 12px;font-size:.78rem;background:var(--amber);color:#111">Ver informe</button></div>'+
+       '<div class="aud-rt">'+(a.mapsUrl?'<a class="ghost" href="'+esc(a.mapsUrl)+'" target="_blank" rel="noopener" style="display:block;min-height:0;padding:5px 10px;font-size:.72rem;margin-bottom:4px;text-decoration:none;text-align:center">Ver ficha</a>':'')+'<button type="button" data-pid="'+esc(a.placeId||'')+'" data-nom="'+esc(a.negocio||'')+'" class="cta" style="min-height:0;padding:6px 12px;font-size:.78rem;background:var(--amber);color:#111">Ver informe</button><button type="button" data-del="'+esc(a.placeId||'')+'" data-nom="'+esc(a.negocio||'')+'" aria-label="Borrar informe" style="display:block;margin:6px 0 0 auto;padding:4px 10px;border-radius:99px;border:1px solid rgba(239,68,68,.35);background:none;color:#fca5a5;font-size:.72rem;cursor:pointer">🗑 Borrar</button></div>'+
        '</div>';
   });
   $('#tabFichas').innerHTML=h;
   $$('#tabFichas .sug button').forEach(function(b){b.onclick=function(){$('#askTxt').value=b.dataset.q}});
   $('#askBtn').onclick=auditarDesdePanel;
+  $$('#tabFichas [data-del]').forEach(function(b){b.onclick=function(e){e.stopPropagation();borrarAuditoria(b.dataset.del,b.dataset.nom,b)}});
   $$('#tabFichas .aud-card [data-pid]').forEach(function(b){b.onclick=function(e){e.preventDefault();e.stopPropagation();verInforme(b.dataset.pid,b.dataset.nom)}});
 }
 function abrirFicha(nombre,paso){
@@ -672,6 +673,15 @@ function abrirFicha(nombre,paso){
 function cerrarFicha(){$('#vFicha').classList.remove('on');document.body.style.overflow='';$('#opti').innerHTML='';if(D)pintarFichas()}
 $('#bFichaBack').onclick=cerrarFicha;
 function colorNota(n){return n>=75?'#34d399':n>=50?'#f59e0b':'#ef4444'}
+function borrarAuditoria(pid,nombre,btn){
+  if(!pid){toast('Este informe no tiene Place ID');return}
+  if(!confirm('¿Borrar el informe de «'+nombre+'»?\n\nSe quita de la lista y de tu hoja. No afecta a su ficha de Google ni a sus pedidos.'))return;
+  btn.disabled=true;btn.textContent='Borrando…';
+  api({accion:'panel_auditoria_borrar',place_id:pid}).then(function(r){
+    if(!r.ok){btn.disabled=false;btn.textContent='🗑 Borrar';toast(r.error||'No se pudo borrar');return}
+    D.auditorias=(D.auditorias||[]).filter(function(a){return a.placeId!==pid});pintarFichas();toast('Informe borrado');
+  }).catch(function(){btn.disabled=false;btn.textContent='🗑 Borrar';toast('Sin conexión')});
+}
 function verInforme(placeId,nombre){
   if(!placeId){toast('Falta el Place ID. Vuelve a auditar.');return}
   abrirFicha(nombre,1);var z=$('#opti');z.innerHTML='<div class="mini">Cargando el informe de <b>'+esc(nombre)+'</b>…</div>';
@@ -925,6 +935,7 @@ function demoApi(b){
   }
     if(b.accion==='panel_buscar')return esperar(600,{ok:true,resultados:[{id:'ChIJdemoPlaceId00000000000'+(b.consulta||'').replace(/[^a-z0-9]/gi,'').slice(0,6).toUpperCase().padEnd(6,'X'),nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim(),direccion:'Logroño (demo)',telefono:'',web:'',sector:'',whatsapp:''}]});
   if(b.accion==='panel_auditorias')return esperar(300,{ok:true,auditorias:(demoAud||[])});
+  if(b.accion==='panel_auditoria_borrar'){demoAud=(demoAud||[]).filter(function(a){return a.placeId!==b.place_id});return esperar(400,{ok:true,borradas:1})}
   if(b.accion==='panel_informe_ficha')return esperar(400,{ok:true,auditoria:{id:b.place_id,negocio:{nombre:'Negocio demo',rating:4.3,resenas:46,placeId:b.place_id,tipo:'Negocio'},nota:58,desglose:[{nombre:'Valoración media',puntos:14,max:25,ok:false,dato:'4.3 ★'},{nombre:'Número de reseñas',puntos:9,max:20,ok:false,dato:'46 (líder: 180)'},{nombre:'Reseñas recientes',puntos:6,max:10,ok:false,dato:'hace 35 días'},{nombre:'Puesto en Google',puntos:4,max:10,ok:false,dato:'puesto 8'},{nombre:'Horario',puntos:10,max:10,ok:true,dato:'Sí'},{nombre:'Web',puntos:10,max:10,ok:true,dato:'Funciona'},{nombre:'Teléfono',puntos:5,max:5,ok:true,dato:'Sí'},{nombre:'Fotos',puntos:0,max:10,ok:false,dato:'0 fotos'}],competidores:[{nombre:'Competidor A',rating:4.6,resenas:180}],posicion:{consulta:'barbería en Logroño',puesto:8},precios:{puestaPunto:89,mensual:29},informe:{titular:'(demo) Nota 58/100',resumen:'(demo) Faltan fotos y responder reseñas.',dolores:[{titulo:'Sin fotos',explicacion:'Los competidores tienen docenas.',impacto:'alto'}],plan:['Subir 15 fotos','Responder reseñas','4 publicaciones','Ajustar categorías']}}});
   if(b.accion==='panel_auditar_slug'){var aud={fecha:new Date().toISOString(),closer:'CEO',negocio:{nombre:b.nombre||'Negocio demo',direccion:'',rating:4.2,resenas:46,mapsUrl:'',tipo:'Negocio'},nota:58,desglose:[{clave:'valoracion',nombre:'Valoración media',puntos:14,max:25,ok:false,dato:'4.2 ★'},{clave:'volumen',nombre:'Número de reseñas',puntos:9,max:20,ok:false,dato:'46 reseñas (líder: 180)'},{clave:'actividad',nombre:'Reseñas recientes',puntos:6,max:10,ok:false,dato:'Hace 35 días'},{clave:'posicion',nombre:'Puesto en la búsqueda local',puntos:4,max:10,ok:false,dato:'Puesto 8'},{clave:'horario',nombre:'Horario publicado',puntos:10,max:10,ok:true,dato:'Sí'},{clave:'web',nombre:'Web',puntos:10,max:10,ok:true,dato:'Funciona'},{clave:'telefono',nombre:'Teléfono',puntos:5,max:5,ok:true,dato:'OK'},{clave:'fotos',nombre:'Fotos',puntos:0,max:10,ok:false,dato:'0 fotos'}],competidores:[{nombre:'Competidor A',rating:4.6,resenas:180},{nombre:'Competidor B',rating:4.4,resenas:95}],posicion:{consulta:'barbería en Logroño',puesto:8,total:20},precios:{puestaPunto:89,mensual:29},informe:{titular:'(demo) Nota 58/100',resumen:'(demo) Faltan fotos y hay que subir reseñas.',dolores:[{titulo:'Sin fotos',explicacion:'Los competidores tienen docenas; tú ninguna.',impacto:'alto'}],plan:['Subir 15 fotos','Responder reseñas','4 publicaciones','Ajustar categorías'],whatsapp:'Hola, resumen de tu ficha…'}};
     (demoAud=demoAud||[]).unshift({fecha:aud.fecha,closer:'CEO',negocio:aud.negocio.nombre,placeId:b.place_id,nota:58,rating:4.2,resenas:46,puesto:8});
