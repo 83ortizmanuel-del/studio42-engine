@@ -1185,7 +1185,7 @@ function mensajeInforme(a){
             display:  { nombre: 'Display acrílico NFC',       precio: 49 },
             llavero:  { nombre: 'Llavero Studio 42',         precio: 19.9 },
             tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
-            welcome:  { nombre: 'Welcome Pack directivos',    precio: 89 },
+            welcome:  { nombre: 'Caja de bienvenida negro mate', precio: 89 },
             petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
             camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
             fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
@@ -1197,7 +1197,7 @@ function mensajeInforme(a){
             zero:          { nombre: 'Studio 42 Zero',         precio: 0,   mesesPro: 0, incluye: { display: 1, llavero: 3 }, planFijo: 'zero' },
             catador:       { nombre: 'Catador',                precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 } },
             equipo:        { nombre: 'Equipo',                 precio: 229, mesesPro: 2, incluye: { display: 1, llavero: 5, tarjeta: 1 } },
-            barrio:        { nombre: 'Barrio',                 precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 15, welcome: 1 } },
+            referente:     { nombre: 'Referente',              precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, tarjeta: 4, welcome: 1 } },
             prueba:        { nombre: 'Prueba Logroño',         precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 }, retirado: true },
             iman:          { nombre: 'Imán de mostrador',      precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 }, retirado: true },
             multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 }, retirado: true },
@@ -1261,7 +1261,7 @@ function mensajeInforme(a){
             Object.entries(CATALOGO.packs).filter(([, p]) => !p.retirado).forEach(([id, p]) => {
                 const b = h('button', 'pack-op' + (ped.pack === id ? ' on' : '')); b.type = 'button';
                 const izq = h('div'); izq.append(h('b', null, p.nombre));
-                const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta de madera', 'tarjetas de madera'], welcome: ['Welcome Pack', 'Welcome Packs'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'] };
+                const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta vCard de madera', 'tarjetas vCard de madera'], welcome: ['caja de bienvenida', 'cajas de bienvenida'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'] };
                 const inc = Object.entries(p.incluye).map(([k, n]) => n + ' ' + CORTO[k][n === 1 ? 0 : 1]).join(' · ');
                 const extraTxt = p.planFijo ? ' · 0 € hoy, ' + euro(CATALOGO.planes[p.planFijo].mensual) + '/mes · ' + CATALOGO.planes[p.planFijo].permanencia + ' meses'
                     : p.mesesPro ? ' · 🎁 ' + p.mesesPro + (p.mesesPro === 1 ? ' mes' : ' meses') + ' de Pro' : '';

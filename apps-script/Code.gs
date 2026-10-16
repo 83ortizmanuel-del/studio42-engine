@@ -1306,7 +1306,7 @@ var CATALOGO = {
     display:  { nombre: 'Display acrílico NFC',       precio: 49 },
     llavero:  { nombre: 'Llavero Studio 42',         precio: 19.9 },
     tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
-    welcome:  { nombre: 'Welcome Pack directivos',    precio: 89 },
+    welcome:  { nombre: 'Caja de bienvenida negro mate', precio: 89 },
     petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
     camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
     fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
@@ -1318,7 +1318,7 @@ var CATALOGO = {
     zero:          { nombre: 'Studio 42 Zero',         precio: 0,   mesesPro: 0, incluye: { display: 1, llavero: 3 }, planFijo: 'zero' },
     catador:       { nombre: 'Catador',                precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 } },
     equipo:        { nombre: 'Equipo',                 precio: 229, mesesPro: 2, incluye: { display: 1, llavero: 5, tarjeta: 1 } },
-    barrio:        { nombre: 'Barrio',                 precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 15, welcome: 1 } },
+    referente:     { nombre: 'Referente',              precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, tarjeta: 4, welcome: 1 } },
     prueba:        { nombre: 'Prueba Logroño',         precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 }, retirado: true },
     iman:          { nombre: 'Imán de mostrador',      precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 }, retirado: true },
     multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 }, retirado: true },
