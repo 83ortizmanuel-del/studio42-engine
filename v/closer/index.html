@@ -31,10 +31,10 @@
         .btn-auditar{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:12px 0 4px;padding:14px 16px;border:0;border-radius:14px;background:linear-gradient(135deg,#fde68a,#f59e0b);color:#1a1205;font:800 .98rem system-ui,sans-serif;cursor:pointer;box-shadow:0 10px 26px rgba(245,158,11,.25)}
         .btn-auditar:disabled{opacity:.6}
         .aud-nota-btn{font-size:.78rem;color:#c9ced6;text-align:center;margin:4px 0 0}
-        .aud{position:fixed;inset:0;z-index:200;background:#050507;overflow-y:auto;-webkit-overflow-scrolling:touch;color:#f4f6f9;font-family:system-ui,-apple-system,sans-serif}
+        .aud{position:fixed;inset:0;z-index:200;background:#050507;overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;color:#f4f6f9;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column}
         .aud[hidden]{display:none}
-        .aud .in{max-width:560px;margin:0 auto;padding:18px 16px 120px}
-        .aud .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+        .aud .in{max-width:560px;margin:0 auto;padding:14px 16px 24px;width:100%;flex:1 0 auto}
+        .aud .top{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;margin:0 -16px 14px;padding:12px 16px;background:rgba(5,5,7,.92);backdrop-filter:blur(8px);border-bottom:1px solid #1b1e25}
         .aud .top small{letter-spacing:.14em;text-transform:uppercase;color:#9ca3af;font-size:.68rem;font-weight:700}
         .aud .x{background:#16181e;border:1px solid #2a2d35;color:#fff;border-radius:99px;padding:8px 14px;font-weight:700}
         .aud h2{font-size:1.45rem;line-height:1.2;margin:0 0 6px}
@@ -57,12 +57,14 @@
         .aud .det{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:.88rem}
         .aud .det span{color:#c9ced6}.aud .det em{font-style:normal;font-weight:700}
         .aud ol{margin:6px 0 0;padding-left:20px;color:#d1d5db;line-height:1.55}
-        .aud .cta{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(5,5,7,0),#050507 30%);padding:26px 16px 16px}
-        .aud .cta .in2{max-width:560px;margin:0 auto;display:grid;gap:8px}
-        .aud .cta button{border:0;border-radius:14px;padding:15px;font:800 1rem system-ui,sans-serif;cursor:pointer}
+        .aud .cta{position:sticky;bottom:0;left:0;right:0;margin-top:16px;background:rgba(5,5,7,.95);backdrop-filter:blur(10px);border-top:1px solid #1b1e25;padding:14px 16px calc(14px + env(safe-area-inset-bottom));z-index:2}
+        .aud .cta .in2{max-width:528px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.aud .cta .in2 .si{grid-column:1/-1}
+        .aud .cta button{border:0;border-radius:14px;padding:14px;font:800 .96rem system-ui,sans-serif;cursor:pointer;min-height:48px}
         .aud .cta .si{background:linear-gradient(135deg,#fde68a,#f59e0b);color:#1a1205}
         .aud .cta .wa{background:#25d366;color:#06210f;font-size:.9rem;padding:12px}
         .aud .nota-pie{color:#9ca3af;font-size:.78rem;line-height:1.4;margin-top:14px}
+.aud .cerrar-grande{display:block;width:100%;margin:18px 0 4px;padding:14px;border:1px solid #2a2d35;border-radius:14px;background:#101217;color:#f4f6f9;font:700 .95rem system-ui,sans-serif;cursor:pointer}
         .aud .prog div{padding:8px 0;color:#9ca3af}.aud .prog div.ok{color:#34d399}.aud .prog div.act{color:#fff;font-weight:700}
         .btn-instalar{display:block;margin:14px auto 0;padding:.6rem 1.1rem;border-radius:99px;border:1px solid var(--color-accent);background:transparent;color:#f4f6f9;font:600 .85rem system-ui,sans-serif;cursor:pointer}
         .ayuda-instalar{margin:10px auto 0;max-width:340px;font-size:.82rem;line-height:1.45;color:#c9ced6;text-align:center}
@@ -687,12 +689,12 @@
         const PASOS_AUD = ['Leyendo su ficha de Google', 'Buscando a sus competidores más cercanos', 'Comprobando en qué puesto sale', 'Revisando su web', 'Claude está escribiendo el informe'];
         function audEl(tag, cls, txt) { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
         function audAbrir() { const v = $('aud'); v.hidden = false; document.body.style.overflow = 'hidden'; v.scrollTop = 0; }
-        function audCerrar() { $('aud').hidden = true; document.body.style.overflow = ''; }
+        function audCerrar() { var v = $('aud'); v.hidden = true; v.scrollTop = 0; document.body.style.overflow = ''; document.documentElement.style.overflow = ''; }
         async function auditar() {
             const id = $('place_id').value; if (!id) return;
             const v = $('aud'); v.textContent = ''; audAbrir();
             const inn = audEl('div', 'in'); v.appendChild(inn);
-            const top = audEl('div', 'top'); top.append(audEl('small', null, 'Studio 42 · Auditoría Google')); const x = audEl('button', 'x', 'Cerrar'); x.type = 'button'; x.onclick = audCerrar; top.appendChild(x); inn.appendChild(top);
+            const top = audEl('div', 'top'); top.append(audEl('small', null, 'Studio 42 · Auditoría Google')); const x = audEl('button', 'x', '✕ Salir'); x.type = 'button'; x.onclick = audCerrar; top.appendChild(x); inn.appendChild(top);
             inn.append(audEl('h2', null, 'Analizando ' + ($('nombre_comercio').value || 'el negocio') + '…'), audEl('p', 'sub', 'Tarda unos 20 segundos. Mientras, pregúntale cuántos clientes nuevos le llegan por Google.'));
             const pg = audEl('div', 'prog'); PASOS_AUD.forEach((p) => pg.appendChild(audEl('div', null, '○ ' + p))); inn.appendChild(pg);
             const filas = Array.from(pg.children); let i = 0;
@@ -713,7 +715,7 @@
         function colorNota(n) { return n >= 75 ? '#34d399' : n >= 50 ? '#f59e0b' : '#ef4444'; }
         function pintarAuditoria(a) {
             const v = $('aud'); v.textContent = ''; const inn = audEl('div', 'in'); v.appendChild(inn);
-            const top = audEl('div', 'top'); top.append(audEl('small', null, 'Studio 42 · Auditoría Google')); const x = audEl('button', 'x', 'Cerrar'); x.type = 'button'; x.onclick = audCerrar; top.appendChild(x); inn.appendChild(top);
+            const top = audEl('div', 'top'); top.append(audEl('small', null, 'Studio 42 · Auditoría Google')); const x = audEl('button', 'x', '✕ Salir'); x.type = 'button'; x.onclick = audCerrar; top.appendChild(x); inn.appendChild(top);
             const inf = a.informe || {};
             inn.append(audEl('h2', null, inf.titular || a.negocio.nombre), audEl('p', 'sub', inf.resumen || ''));
             const an = audEl('div', 'anillo'); const col = colorNota(a.nota);
@@ -748,6 +750,8 @@
                 k.appendChild(audEl('p', 'nota-pie', 'Puesta a punto: ' + a.precios.puestaPunto + ' € + IVA, una vez. Gestión mensual opcional: ' + a.precios.mensual + ' €/mes. Lo aplicamos en 48 h cuando nos des acceso de administrador a tu ficha.')); inn.appendChild(k);
             }
             inn.appendChild(audEl('p', 'nota-pie', 'Datos públicos de Google Maps del ' + new Date(a.fecha).toLocaleDateString('es-ES') + '. Las reseñas visibles son una muestra que elige Google. No prometemos posiciones ni número de reseñas: mejoramos lo que Google valora.'));
+            // Botón de salir grande
+            const salir = audEl('button', 'cerrar-grande', '✕ Cerrar informe y volver al diagnóstico'); salir.type = 'button'; salir.onclick = audCerrar; inn.appendChild(salir);
             // Botones
             const cta = audEl('div', 'cta'); const i2 = audEl('div', 'in2');
             const si = audEl('button', 'si', AUD.quiere ? '✓ Añadido al pedido' : '✨ Quiero corregirlo · ' + a.precios.puestaPunto + ' €'); si.type = 'button';
@@ -758,7 +762,7 @@
             };
             const wa = audEl('button', 'wa', '📲 Enviarle el informe por WhatsApp'); wa.type = 'button';
             wa.onclick = () => { const tel = ($('whatsapp').value || '').replace(/\D/g, ''); const txt = (inf.whatsapp || inf.titular || '') + '\n\nNota de tu ficha: ' + a.nota + '/100 · Studio 42'; window.open('https://wa.me/' + (tel ? (tel.length === 9 ? '34' + tel : tel) : '') + '?text=' + encodeURIComponent(txt), '_blank', 'noopener'); };
-            i2.append(si, wa); cta.appendChild(i2); v.appendChild(cta);
+            i2.append(si, wa); cta.appendChild(i2); inn.appendChild(cta);
         }
         /* Cliente que ya tiene landing (o que solo quiere la ficha): pedido directo de la puesta a punto */
         function slugAud(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40); }
