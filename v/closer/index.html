@@ -765,19 +765,19 @@
         function pedidoSoloFicha(inn, a) {
             if ($('aud-ped')) { $('aud-ped').scrollIntoView({ behavior: 'smooth' }); return; }
             const k = audEl('div', 'card'); k.id = 'aud-ped';
-            k.append(audEl('h3', null, 'Pedido de la puesta a punto'), audEl('p', 'nota-pie', 'Para clientes que ya tienen su landing, o que solo quieren la ficha. Si es un cliente nuevo, sigue con el diagnóstico y se añadirá al pedido normal.'));
+            k.append(audEl('h3', null, 'Pedido de la puesta a punto'), audEl('p', 'nota-pie', 'Se crea el pedido con el nombre del negocio y te llega al panel. Si además es un cliente nuevo de landing, sigue con el diagnóstico y se añadirá a su pedido.'));
             const lab = (t) => { const l = audEl('label', null, t); l.style.cssText = 'display:block;font-size:.82rem;color:#c9ced6;margin:12px 0 4px'; return l; };
             const inp = (v, ph) => { const i = document.createElement('input'); i.value = v || ''; i.placeholder = ph || ''; i.style.cssText = 'width:100%;padding:12px;border-radius:10px;border:1px solid #2a2d35;background:#050507;color:#fff;font-size:1rem'; return i; };
-            const iSlug = inp(slugAud(a.negocio.nombre), 'ej: la-sucursal'), iMail = inp('', 'email del cliente (opcional)');
+            const iMail = inp('', 'ej: info@sunegocio.es');
             const chk = document.createElement('label'); chk.style.cssText = 'display:flex;gap:8px;align-items:center;margin:12px 0 0;font-size:.9rem';
             const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = true; chk.append(cb, document.createTextNode('Añadir gestión mensual de la ficha (' + a.precios.mensual + ' €/mes)'));
             const ok = audEl('button', null, 'Crear pedido · ' + a.precios.puestaPunto + ' € + IVA'); ok.type = 'button';
             ok.style.cssText = 'width:100%;margin-top:14px;padding:14px;border:0;border-radius:12px;background:#f4f6f9;color:#07080b;font-weight:800;font-size:1rem';
             const msg = audEl('p', 'nota-pie');
-            k.append(lab('Código de su landing (lo que va después de cod= en su enlace)'), iSlug, lab('Email'), iMail, chk, ok, msg);
+            k.append(lab('Email del cliente, para mandarle la factura (opcional)'), iMail, chk, ok, msg);
             inn.appendChild(k); k.scrollIntoView({ behavior: 'smooth' });
             ok.onclick = async () => {
-                const slug = slugAud(iSlug.value); if (slug.length < 2) { msg.textContent = 'Escribe el código de su landing.'; return; }
+                const slug = slugAud(a.negocio.nombre) || 'cliente';
                 ok.disabled = true; ok.textContent = 'Creando…';
                 try {
                     const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
