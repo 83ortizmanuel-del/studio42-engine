@@ -2030,7 +2030,7 @@ function INSTALAR_AUTOMATIZACIONES() {
  * ================================================================================ */
 
 var EV_HOJA = 'Eventos';
-var EV_TIPOS = ['vista', 'resena', 'gerencia', 'whatsapp', 'llamada', 'ruta', 'enlace'];
+var EV_TIPOS = ['vista', 'resena', 'gerencia', 'whatsapp', 'llamada', 'ruta', 'enlace', 'herramienta'];
 
 function registrarEvento_(d) {
   var slug = String(d.c || '').toLowerCase(), tipo = String(d.t || ''), k = String(d.k || 'MOSTRADOR').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 20) || 'MOSTRADOR';
@@ -2055,7 +2055,7 @@ function estadisticas_(desde, hasta) {
   hoja.getDataRange().getValues().slice(1).forEach(function (r) {
     var f = r[0] instanceof Date ? r[0] : new Date(r[0]);
     if (f < desde || f >= hasta) return;
-    var s = out[r[1]] = out[r[1]] || { vista: 0, resena: 0, gerencia: 0, whatsapp: 0, llamada: 0, ruta: 0, enlace: 0, piezas: {}, resenasPieza: {} };
+    var s = out[r[1]] = out[r[1]] || { vista: 0, resena: 0, gerencia: 0, whatsapp: 0, llamada: 0, ruta: 0, enlace: 0, herramienta: 0, piezas: {}, resenasPieza: {} };
     s[r[3]] = (s[r[3]] || 0) + 1;
     if (r[3] === 'vista') s.piezas[r[2]] = (s.piezas[r[2]] || 0) + 1;
     if (r[3] === 'resena') s.resenasPieza[r[2]] = (s.resenasPieza[r[2]] || 0) + 1;
