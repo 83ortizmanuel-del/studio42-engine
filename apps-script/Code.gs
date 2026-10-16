@@ -1484,6 +1484,9 @@ function panelRouter_(d) {
     return datos;
   }
   if (d.accion === 'panel_pedido_estado') return panelPedidoEstado_(d);
+  if (d.accion === 'panel_auditorias') return panelAuditorias_();
+  if (d.accion === 'panel_auditar_slug') return panelAuditarSlug_(c, d);
+  if (d.accion === 'panel_optimizar_ficha') return panelOptimizarFicha_(c, d);
   if (d.accion === 'panel_cambio') return panelCambio_(c, d, cache);
   if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
   if (d.accion === 'panel_tarjeta_guardar') return tarjetaGuardar_(c, d);
@@ -1566,7 +1569,7 @@ function panelDatos_(c) {
   for (var j = 1; j < hc.length; j++) chapas.push({ slug: hc[j][0], estado: hc[j][1], entregadaPor: hc[j][2], url: hc[j][3] });
   var hasta = new Date(Date.now() + 60000), desde = new Date(hasta.getTime() - 30 * 86400000 - 60000);
   return { ok: true, clientes: clientes, pedidos: pedidos.reverse(), chapas: chapas, estados: ESTADOS_PEDIDO, catalogo: CATALOGO, dominio: c.dominio,
-    suscripciones: suscripciones_(), estadisticas: estadisticas_(desde, hasta), stripe: !!stripeClave_(), tarjetas: tarjetasLista_(c) };
+    suscripciones: suscripciones_(), estadisticas: estadisticas_(desde, hasta), stripe: !!stripeClave_(), tarjetas: tarjetasLista_(c), auditorias: panelAuditoriasLista_() };
 }
 
 function panelPedidoEstado_(d) {
@@ -2283,4 +2286,78 @@ function auditInformeBasico_(a) {
     whatsapp: 'Hola, te paso el resumen de la auditoría de tu ficha de Google: nota ' + a.nota + '/100. ' + (mal[0] ? 'Lo más urgente: ' + mal[0].nombre.toLowerCase() + ' (' + mal[0].dato + ').' : ''),
     porIA: false
   };
+}
+
+/* ============================ PANEL · FICHAS DE GOOGLE (solo CEO) ============================ */
+
+function panelAuditoriasLista_() {
+  var libro = SpreadsheetApp.getActive(), h = libro.getSheetByName(AUDIT_HOJA);
+  if (!h || h.getLastRow() < 2) return [];
+  var out = [], datos = h.getDataRange().getValues();
+  for (var i = 1; i < datos.length; i++) {
+    out.push({ fecha: datos[i][0] instanceof Date ? datos[i][0].toISOString() : String(datos[i][0]), closer: datos[i][1], negocio: datos[i][2], placeId: datos[i][3], nota: Number(datos[i][4]) || 0, rating: Number(datos[i][5]) || null, resenas: Number(datos[i][6]) || 0, puesto: datos[i][7] });
+  }
+  return out.slice(-200).reverse();
+}
+
+function panelAuditorias_() { return { ok: true, auditorias: panelAuditoriasLista_() }; }
+
+function panelAuditarSlug_(c, d) {
+  var pid = idLugar_(d.place_id);
+  if (!pid) return { ok: false, error: 'Falta el Place ID del negocio.' };
+  // reutilizamos auditar_ con un closer_id virtual del CEO
+  return auditar_({ closer_id: 'CEO', place_id: pid });
+}
+
+function panelOptimizarFicha_(c, d) {
+  if (!c.anthropicKey) return { ok: false, error: 'Falta ANTHROPIC_API_KEY.' };
+  var pid = idLugar_(d.place_id);
+  if (!pid) return { ok: false, error: 'Falta el Place ID.' };
+  var cache = null;
+  try { cache = CacheService.getScriptCache(); } catch (e) {}
+  var guardada = null; try { guardada = cache && cache.get('aud_' + pid); } catch (e) {}
+  var a = guardada ? JSON.parse(guardada) : null;
+  if (!a) {
+    var fresh = auditar_({ closer_id: 'CEO', place_id: pid });
+    if (!fresh.ok) return fresh;
+    a = fresh.auditoria;
+  }
+  var sistema = [
+    'Eres el redactor SEO de Studio 42. Preparas el paquete de optimización de una ficha de Google (Perfil de Empresa) para que Manuel o Melina lo copien y peguen en la ficha del cliente.',
+    'En español de España, sin tecnicismos, en el tono amable y profesional del negocio. Nada inventado: usa los datos que recibes. No prometas posiciones ni número de reseñas.',
+    'Prohibido: reseñas falsas, compradas, a cambio de regalos; filtros por estrellas.',
+    'Responde SOLO JSON válido con esta forma: {',
+    ' "descripcion": "160-240 caracteres, con 2-3 palabras clave locales (ciudad + servicio) de forma natural",',
+    ' "categorias": {"principal": "nombre de la categoría exacta de Google", "extra": ["cat1","cat2"]},',
+    ' "servicios": ["servicio 1","servicio 2","hasta 10, muy concretos"],',
+    ' "publicaciones": [{"titulo":"max 6 palabras","texto":"80-120 caracteres","cta":"Reservar|Llamar|Más información|Comprar"}],  // 4 publicaciones del mes',
+    ' "respuestas_resenas": [{"a":"a quién responde (nombre/texto corto citando)","estrellas":5,"respuesta":"30-70 palabras, agradecida o resolutiva"}],  // tantas como reseñas recibas',
+    ' "fotos_pedir": ["lista de 6-10 tipos de foto que debe hacer el cliente"],',
+    ' "whatsapp": "mensaje corto para enviar al cliente explicándole qué le vamos a aplicar y qué necesitamos de él (acceso de administrador)"',
+    '}'
+  ].join('\n');
+  var entrada = { negocio: a.negocio, nota: a.nota, posicion: a.posicion, competidores: a.competidores, resenas: a.resenasVisibles || [] };
+  try {
+    var resp = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { 'x-api-key': c.anthropicKey, 'anthropic-version': '2023-06-01' },
+      payload: JSON.stringify({ model: c.modelo, max_tokens: 3500, system: sistema, messages: [{ role: 'user', content: JSON.stringify(entrada) }] })
+    });
+    if (resp.getResponseCode() !== 200) return { ok: false, error: 'Claude ' + resp.getResponseCode() + ': ' + resp.getContentText().slice(0, 160) };
+    var j = JSON.parse(resp.getContentText());
+    var t = (j.content || []).filter(function (x) { return x && x.type === 'text'; }).map(function (x) { return x.text || ''; }).join('').trim();
+    var i0 = t.indexOf('{'), i1 = t.lastIndexOf('}');
+    if (i0 < 0 || i1 < i0) return { ok: false, error: 'La IA no devolvió JSON válido.' };
+    var o = JSON.parse(t.slice(i0, i1 + 1));
+    var paquete = {
+      descripcion: cadena_(o.descripcion, 320),
+      categorias: { principal: cadena_(o.categorias && o.categorias.principal, 80), extra: (Array.isArray(o.categorias && o.categorias.extra) ? o.categorias.extra : []).slice(0, 5).map(function (x) { return cadena_(x, 80); }).filter(Boolean) },
+      servicios: (Array.isArray(o.servicios) ? o.servicios : []).slice(0, 10).map(function (x) { return cadena_(x, 80); }).filter(Boolean),
+      publicaciones: (Array.isArray(o.publicaciones) ? o.publicaciones : []).slice(0, 4).map(function (x) { return { titulo: cadena_(x && x.titulo, 60), texto: cadena_(x && x.texto, 200), cta: cadena_(x && x.cta, 30) }; }),
+      respuestas_resenas: (Array.isArray(o.respuestas_resenas) ? o.respuestas_resenas : []).slice(0, 8).map(function (x) { return { a: cadena_(x && x.a, 140), estrellas: Number(x && x.estrellas) || null, respuesta: cadena_(x && x.respuesta, 500) }; }),
+      fotos_pedir: (Array.isArray(o.fotos_pedir) ? o.fotos_pedir : []).slice(0, 10).map(function (x) { return cadena_(x, 100); }).filter(Boolean),
+      whatsapp: cadena_(o.whatsapp, 700)
+    };
+    return { ok: true, paquete: paquete, auditoria: a };
+  } catch (e) { return { ok: false, error: 'No se pudo preparar: ' + String(e).slice(0, 160) }; }
 }
