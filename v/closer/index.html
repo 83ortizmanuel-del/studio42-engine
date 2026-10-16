@@ -751,10 +751,44 @@
             // Botones
             const cta = audEl('div', 'cta'); const i2 = audEl('div', 'in2');
             const si = audEl('button', 'si', AUD.quiere ? '✓ Añadido al pedido' : '✨ Quiero corregirlo · ' + a.precios.puestaPunto + ' €'); si.type = 'button';
-            si.onclick = () => { AUD.quiere = true; si.textContent = '✓ Añadido al pedido'; if (ped && ped.cant) { ped.cant.fichagoogle = 1; pintarPedido(); } };
+            si.onclick = () => {
+                AUD.quiere = true;
+                if (ped && ped.cant) { ped.cant.fichagoogle = 1; pintarPedido(); si.textContent = '✓ Añadido al pedido'; return; }
+                si.textContent = '✓ Lo quiere'; pedidoSoloFicha(inn, a);
+            };
             const wa = audEl('button', 'wa', '📲 Enviarle el informe por WhatsApp'); wa.type = 'button';
             wa.onclick = () => { const tel = ($('whatsapp').value || '').replace(/\D/g, ''); const txt = (inf.whatsapp || inf.titular || '') + '\n\nNota de tu ficha: ' + a.nota + '/100 · Studio 42'; window.open('https://wa.me/' + (tel ? (tel.length === 9 ? '34' + tel : tel) : '') + '?text=' + encodeURIComponent(txt), '_blank', 'noopener'); };
             i2.append(si, wa); cta.appendChild(i2); v.appendChild(cta);
+        }
+        /* Cliente que ya tiene landing (o que solo quiere la ficha): pedido directo de la puesta a punto */
+        function slugAud(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40); }
+        function pedidoSoloFicha(inn, a) {
+            if ($('aud-ped')) { $('aud-ped').scrollIntoView({ behavior: 'smooth' }); return; }
+            const k = audEl('div', 'card'); k.id = 'aud-ped';
+            k.append(audEl('h3', null, 'Pedido de la puesta a punto'), audEl('p', 'nota-pie', 'Para clientes que ya tienen su landing, o que solo quieren la ficha. Si es un cliente nuevo, sigue con el diagnóstico y se añadirá al pedido normal.'));
+            const lab = (t) => { const l = audEl('label', null, t); l.style.cssText = 'display:block;font-size:.82rem;color:#c9ced6;margin:12px 0 4px'; return l; };
+            const inp = (v, ph) => { const i = document.createElement('input'); i.value = v || ''; i.placeholder = ph || ''; i.style.cssText = 'width:100%;padding:12px;border-radius:10px;border:1px solid #2a2d35;background:#050507;color:#fff;font-size:1rem'; return i; };
+            const iSlug = inp(slugAud(a.negocio.nombre), 'ej: la-sucursal'), iMail = inp('', 'email del cliente (opcional)');
+            const chk = document.createElement('label'); chk.style.cssText = 'display:flex;gap:8px;align-items:center;margin:12px 0 0;font-size:.9rem';
+            const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = true; chk.append(cb, document.createTextNode('Añadir gestión mensual de la ficha (' + a.precios.mensual + ' €/mes)'));
+            const ok = audEl('button', null, 'Crear pedido · ' + a.precios.puestaPunto + ' € + IVA'); ok.type = 'button';
+            ok.style.cssText = 'width:100%;margin-top:14px;padding:14px;border:0;border-radius:12px;background:#f4f6f9;color:#07080b;font-weight:800;font-size:1rem';
+            const msg = audEl('p', 'nota-pie');
+            k.append(lab('Código de su landing (lo que va después de cod= en su enlace)'), iSlug, lab('Email'), iMail, chk, ok, msg);
+            inn.appendChild(k); k.scrollIntoView({ behavior: 'smooth' });
+            ok.onclick = async () => {
+                const slug = slugAud(iSlug.value); if (slug.length < 2) { msg.textContent = 'Escribe el código de su landing.'; return; }
+                ok.disabled = true; ok.textContent = 'Creando…';
+                try {
+                    const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+                        body: JSON.stringify({ accion: 'pedido_guardar', closer_id: $('closer_id').value, slug, cliente: a.negocio.nombre, pack: 'ninguno', cantidades: { fichagoogle: 1 }, promo: false,
+                            notas: 'Auditoría Google: nota ' + a.nota + '/100.' + (cb.checked ? ' Quiere gestión mensual de la ficha (' + a.precios.mensual + ' €/mes).' : '') + (iMail.value ? ' Email: ' + iMail.value.trim().slice(0, 100) : '') }) });
+                    const r = await resp.json();
+                    if (!r.ok) { msg.textContent = '⚠️ ' + (r.error || 'No se pudo crear.'); ok.disabled = false; ok.textContent = 'Crear pedido'; return; }
+                    ok.textContent = '✓ Pedido ' + r.pedido.id + ' creado';
+                    msg.textContent = 'Te llegará al panel. Siguiente paso: que te añada como administrador de su ficha de Google (Perfil de empresa → Personas y acceso → ceo@studio42.es).';
+                } catch (e) { msg.textContent = '⚠️ Sin conexión.'; ok.disabled = false; ok.textContent = 'Crear pedido'; }
+            };
         }
         document.addEventListener('DOMContentLoaded', () => { const b = $('btn-auditar'); if (b) b.addEventListener('click', auditar); });
 
