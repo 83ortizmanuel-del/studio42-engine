@@ -101,6 +101,33 @@
     .app-name { font-size: 0.95rem; font-weight: 700; line-height: 1.25; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
     .app-desc { font-size: 0.8rem; color: var(--suave); line-height: 1.35; margin-top: 2px; }
     .app-arrow { color: var(--tenue); font-size: 0.9rem; }
+
+    /* Acción principal: la tarjeta grande de arriba */
+    #dynamic-menu .app-btn.principal {
+        margin-top: 4px; padding: 18px; min-height: 92px; gap: 15px; border-radius: var(--r-grande);
+        background: var(--acento); color: #0b0c10; box-shadow: 0 14px 34px rgba(var(--acento-rgb), 0.28);
+    }
+    #dynamic-menu .app-btn.principal .app-icon { width: 52px; height: 52px; border-radius: 16px; font-size: 1.45rem; background: rgba(11, 12, 16, 0.14); color: #0b0c10; }
+    #dynamic-menu .app-btn.principal .app-name { font-family: var(--display); font-size: 1.15rem; }
+    #dynamic-menu .app-btn.principal .app-desc { color: rgba(11, 12, 16, 0.72); font-size: 0.85rem; }
+    #dynamic-menu .app-btn.principal .app-arrow { color: #0b0c10; }
+    #dynamic-menu .app-btn.principal:active { background: var(--acento); filter: brightness(0.92); }
+    /* Atajos: iconos con su nombre, como en la pantalla de inicio del móvil */
+    .atajos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0 4px; }
+    #dynamic-menu .app-btn.atajo {
+        flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; gap: 8px;
+        padding: 12px 4px 10px; min-height: 0; background: transparent; box-shadow: none; border-radius: var(--r-medio);
+    }
+    #dynamic-menu .app-btn.atajo:active { background: var(--superficie); }
+    #dynamic-menu .app-btn.atajo .app-icon { width: 56px; height: 56px; border-radius: 18px; font-size: 1.35rem; box-shadow: 0 0 0 1px var(--borde); }
+    #dynamic-menu .app-btn.atajo .app-name { justify-content: center; font-size: 0.74rem; font-weight: 600; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    #dynamic-menu .app-btn.atajo .app-desc, #dynamic-menu .app-btn.atajo .app-arrow { display: none; }
+    .apps-menu:not(.grid) .app-desc { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    /* Aviso de llaves: discreto, al final */
+    #dynamic-menu .app-btn.llaves-discreto { margin-top: 22px; min-height: 0; padding: 12px 14px; background: transparent; box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35); }
+    #dynamic-menu .app-btn.llaves-discreto .app-icon { width: 34px; height: 34px; border-radius: 10px; font-size: 1rem; }
+    #dynamic-menu .app-btn.llaves-discreto .app-name { font-size: 0.86rem; }
+    #dynamic-menu .app-btn.llaves-discreto .app-desc { font-size: 0.76rem; }
     /* En cuadrícula: icono arriba, texto debajo */
     .apps-menu.grid .app-btn { flex-direction: column; align-items: flex-start; gap: 12px; min-height: 128px; padding: 15px 14px; }
     .apps-menu.grid .app-arrow { display: none; }
@@ -996,34 +1023,82 @@ function resolverWANegocio(d) {
 }
 
 /* =============================== RENDER DEL MENÚ =============================== */
+/* Distribución tipo app:
+   1) acción principal grande  2) atajos en iconos  3) resto en lista por secciones
+   4) opinión  5) aviso de llaves discreto al final. ?vista=clasica muestra la anterior. */
+const TIPOS_ATAJO = ["info", "parking", "vcard", "calculadora"];
+const TIPOS_PRINCIPAL = ["asistente", "reserva_cita", "whatsapp", "bizum", "asistencia_ruta"];
+function pintarBoton(btn, si, bi) {
+    const donde = "Sección " + (si + 1) + ", botón " + (bi + 1) + " (" + ((btn && btn.nombre) || "sin nombre") + ")";
+    try {
+        if (!btn || typeof btn !== "object") falta("no es un objeto");
+        const tipo = String(btn.tipo || "").toLowerCase();
+        const modulo = MODULOS[tipo];
+        if (!modulo) {
+            falta(LEGACY[tipo]
+                ? 'tipo antiguo "' + tipo + '": define el contenido en el JSON con el tipo "' + LEGACY[tipo] + '"'
+                : 'falta "tipo" o es desconocido ("' + tipo + '")');
+        }
+        return modulo(btn);
+    } catch (e) { aviso(donde + ": " + e.message); return null; }
+}
+function acortarNombre(el, btn) {
+    const n = el.querySelector(".app-name"); if (!n) return;
+    const largo = n.textContent.trim();
+    let corto = String(btn.nombreCorto || "").trim();
+    if (!corto && largo.length > 16) {
+        const m = /^(.{6,}?)\s(?:&|en|para|con|del?|y)\s/i.exec(largo.replace(/^¿|\?$/g, "") );
+        corto = m ? m[1] : "";
+        if (/^¿/.test(largo) && corto) corto = "¿" + corto + "?";
+    }
+    if (corto && corto !== largo) { n.textContent = corto; el.setAttribute("aria-label", largo); el.title = largo; }
+}
 function renderMenu(d) {
     const menu = $("dynamic-menu");
     menu.textContent = "";
+    const clasica = new URLSearchParams(location.search).get("vista") === "clasica";
+    const todos = [];
     d.secciones.forEach((sec, si) => {
         if (!sec || typeof sec !== "object") { aviso("Sección " + (si + 1) + ": no es un objeto"); return; }
-        const normales = sec.botones.filter((b) => b && b.tipo !== "opinion" && b.tipo !== "parking").length;
-        const bloque = h("div", { class: "apps-menu" + (normales >= 2 && !sec.botones.some((b) => b && b.tipo === "opinion") ? " grid" : "") });
-        let pintados = 0;
-        sec.botones.forEach((btn, bi) => {
-            const donde = "Sección " + (si + 1) + ", botón " + (bi + 1) + " (" + ((btn && btn.nombre) || "sin nombre") + ")";
-            try {
-                if (!btn || typeof btn !== "object") falta("no es un objeto");
-                const tipo = String(btn.tipo || "").toLowerCase();
-                const modulo = MODULOS[tipo];
-                if (!modulo) {
-                    falta(LEGACY[tipo]
-                        ? 'tipo antiguo "' + tipo + '": define el contenido en el JSON con el tipo "' + LEGACY[tipo] + '"'
-                        : 'falta "tipo" o es desconocido ("' + tipo + '")');
-                }
-                bloque.append(modulo(btn));
-                pintados++;
-            } catch (e) { aviso(donde + ": " + e.message); }
-        });
-        if (pintados) {
+        sec.botones.forEach((btn, bi) => todos.push({ btn: btn, si: si, bi: bi, tipo: String((btn && btn.tipo) || "").toLowerCase() }));
+    });
+    const usados = new Set();
+    let principal = null, atajos = [];
+    if (!clasica) {
+        const enMesa = new URLSearchParams(location.search).has("mesa");
+        principal = (enMesa && todos.find((x) => x.tipo === "asistente"))
+            || todos.find((x) => x.btn && x.btn.destacado)
+            || TIPOS_PRINCIPAL.map((t) => todos.find((x) => x.tipo === t)).find(Boolean) || null;
+        if (principal) usados.add(principal);
+        atajos = todos.filter((x) => !usados.has(x) && TIPOS_ATAJO.indexOf(x.tipo) >= 0).slice(0, 8);
+        if (atajos.length < 2) atajos = [];
+        atajos.forEach((x) => usados.add(x));
+    }
+    const llaves = clasica ? [] : todos.filter((x) => x.tipo === "llaves");
+    llaves.forEach((x) => usados.add(x));
+
+    if (principal) {
+        const el = pintarBoton(principal.btn, principal.si, principal.bi);
+        if (el) { el.classList.add("principal"); menu.append(el); }
+    }
+    if (atajos.length) {
+        const fila = h("div", { class: "atajos", role: "list" });
+        atajos.forEach((x) => { const el = pintarBoton(x.btn, x.si, x.bi); if (el) { el.classList.add("atajo"); acortarNombre(el, x.btn); el.setAttribute("role", "listitem"); fila.append(el); } });
+        if (fila.children.length) menu.append(fila);
+    }
+    d.secciones.forEach((sec, si) => {
+        if (!sec || typeof sec !== "object") return;
+        const resto = todos.filter((x) => x.si === si && !usados.has(x));
+        if (!resto.length) return;
+        const normales = resto.filter((x) => x.tipo !== "opinion" && x.tipo !== "parking").length;
+        const bloque = h("div", { class: "apps-menu" + (clasica && normales >= 2 && !resto.some((x) => x.tipo === "opinion") ? " grid" : "") });
+        resto.forEach((x) => { const el = pintarBoton(x.btn, x.si, x.bi); if (el) bloque.append(el); });
+        if (bloque.children.length) {
             if (sec.titulo) menu.append(h("div", { class: "section-title", text: sec.titulo }));
             menu.append(bloque);
         }
     });
+    llaves.forEach((x) => { const el = pintarBoton(x.btn, x.si, x.bi); if (el) { el.classList.add("llaves-discreto"); menu.append(el); } });
     if (!menu.children.length) menu.append(h("div", { class: "error-box" }, ico("info"), h("p", { text: "Esta terminal aún no tiene acciones configuradas." })));
 }
 
