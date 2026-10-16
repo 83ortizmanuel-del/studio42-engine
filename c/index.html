@@ -68,6 +68,17 @@
     .portada.con-logotipo h1 { font-size: 1.3rem; font-weight: 700; color: var(--suave); letter-spacing: 0; }
     .subtitulo { color: var(--suave); font-size: 0.98rem; line-height: 1.4; margin-top: 8px; max-width: 32ch; text-wrap: balance; word-break: break-word; }
     .portada.con-logotipo .subtitulo { color: var(--texto); margin-top: 4px; }
+    .google-info { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; animation: aparece 0.4s ease both; }
+    .gchip {
+        display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 99px; font-size: 0.8rem; line-height: 1;
+        background: var(--superficie); box-shadow: 0 0 0 1px var(--borde); color: var(--suave); text-decoration: none; white-space: nowrap;
+    }
+    .gchip b { color: var(--texto); font-weight: 800; }
+    .gchip .estrella { color: #fbbf24; font-size: 0.95rem; }
+    .gchip.horario i { width: 8px; height: 8px; border-radius: 50%; background: #6b7280; }
+    .gchip.horario.abierto { color: var(--texto); } .gchip.horario.abierto i { background: #34d399; box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2); }
+    .gchip.horario.pronto { color: var(--texto); } .gchip.horario.pronto i { background: #f59e0b; }
+    @keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
     .status-badge {
         display: inline-flex; align-items: center; gap: 7px; margin-top: 14px;
         font-size: 0.78rem; font-weight: 600; color: var(--texto);
@@ -245,6 +256,7 @@
         </div>
         <h1 id="client-name">Cargando…</h1>
         <div class="subtitulo" id="client-subtitle"></div>
+        <div class="google-info" id="google-info" hidden></div>
         <div class="status-badge" id="badge" hidden><span class="ping-light"></span><span id="badge-text"></span></div>
     </header>
 
@@ -1317,6 +1329,7 @@ async function iniciar() {
     renderMenu(d);
     montarDock(d);
     montarCompartir();
+    pedirFichaGoogle();
     if (estado.debug) mostrarDebug();
     contar("vista");
     document.addEventListener("click", clasificarClic, true);
@@ -1376,6 +1389,65 @@ function mostrarPausa(d) {
     menu.append(h("div", { class: "error-box" }, ico("clock"),
         h("p", { text: "Este espacio digital de " + String(d.nombre).trim() + " está en pausa temporalmente." }),
         h("p", { text: "Disculpa las molestias. Vuelve a intentarlo más tarde." })));
+}
+
+/* ---------- Nota de Google y horario (datos en directo de la ficha de Google) ---------- */
+const DIAS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+function horaTxt(min) { const h = Math.floor(min / 60) % 24, m = min % 60; return h + ":" + String(m).padStart(2, "0"); }
+function estadoHorario(f) {
+    if (f.estado === "CLOSED_TEMPORARILY") return { clase: "cerrado", texto: "Cerrado temporalmente" };
+    if (f.estado === "CLOSED_PERMANENTLY") return null;
+    const P = Array.isArray(f.periodos) ? f.periodos : [];
+    if (!P.length || typeof f.offset !== "number") return null;
+    if (P.length === 1 && !P[0].c) return { clase: "abierto", texto: "Abierto 24 horas" };
+    const local = new Date(Date.now() + f.offset * 60000);
+    const SEM = 10080, ahora = local.getUTCDay() * 1440 + local.getUTCHours() * 60 + local.getUTCMinutes();
+    const tramos = P.filter((p) => p && p.a && p.c).map((p) => {
+        const o = p.a[0] * 1440 + p.a[1] * 60 + p.a[2];
+        let c = p.c[0] * 1440 + p.c[1] * 60 + p.c[2];
+        if (c <= o) c += SEM;
+        return { o: o, c: c };
+    });
+    for (const t of tramos) {
+        for (const n of [ahora, ahora + SEM]) {
+            if (n >= t.o && n < t.c) {
+                const falta = t.c - n;
+                return falta <= 60
+                    ? { clase: "pronto", texto: "Cierra pronto · " + horaTxt(t.c % SEM % 1440) }
+                    : { clase: "abierto", texto: "Abierto · cierra a las " + horaTxt(t.c % SEM % 1440) };
+            }
+        }
+    }
+    let mejor = null;
+    tramos.forEach((t) => { const d = (t.o - ahora + SEM) % SEM; if (mejor === null || d < mejor.d) mejor = { d: d, o: t.o }; });
+    if (!mejor) return null;
+    const diaAbre = Math.floor(mejor.o / 1440), hoy = local.getUTCDay();
+    const cuando = diaAbre === hoy && mejor.d < 1440 ? "" : diaAbre === (hoy + 1) % 7 ? "mañana " : "el " + DIAS[diaAbre] + " ";
+    return { clase: "cerrado", texto: "Cerrado · abre " + cuando + "a las " + horaTxt(mejor.o % 1440) };
+}
+function pintarFichaGoogle(f) {
+    const caja = $("google-info");
+    caja.textContent = "";
+    if (f.rating && f.rating >= 4 && f.resenas >= 5) {
+        const nota = String(f.rating.toFixed(1)).replace(".", ",");
+        const attrs = { class: "gchip", "aria-label": "Valoración " + nota + " de 5 en Google con " + f.resenas + " reseñas" };
+        const el = f.maps ? h("a", Object.assign(attrs, { href: f.maps, target: "_blank", rel: "noopener noreferrer" })) : h("span", attrs);
+        el.append(h("span", { class: "estrella", text: "★" }), h("b", { text: nota }),
+            h("span", { text: f.resenas.toLocaleString("es-ES") + " reseñas en Google" }));
+        caja.append(el);
+    }
+    const ho = estadoHorario(f);
+    if (ho) caja.append(h("span", { class: "gchip horario " + ho.clase }, h("i"), h("span", { text: ho.texto })));
+    caja.hidden = !caja.children.length;
+    if (!caja.hidden) $("badge").hidden = true; /* con datos reales de Google sobra la etiqueta genérica */
+}
+function pedirFichaGoogle() {
+    if (!CONFIG.estadisticas || /[?&]preview=1/.test(location.search)) return;
+    fetch(CONFIG.estadisticas, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, redirect: "follow",
+        body: JSON.stringify({ accion: "ficha", c: estado.cod }) })
+        .then((r) => r.json())
+        .then((f) => { if (f && f.ok) pintarFichaGoogle(f); })
+        .catch(() => { /* sin datos de Google: la landing sigue igual */ });
 }
 
 /* ---------- Contador anónimo: solo cliente, pieza (k) y tipo de acción ---------- */
