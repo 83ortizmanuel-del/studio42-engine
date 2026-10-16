@@ -1307,23 +1307,31 @@ var CATALOGO = {
     llavero:  { nombre: 'Llavero Studio 42',         precio: 19.9 },
     tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
     welcome:  { nombre: 'Welcome Pack directivos',    precio: 89 },
-    petpass:  { nombre: 'Chapa Pet Pass',             precio: 14.9 },
+    petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
     camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
     fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
   },
+  /* Packs de la web (studio42.es/#packs). Los marcados «retirado» ya no se venden:
+     solo se conservan para que los pedidos antiguos se sigan leyendo bien. */
   packs: {
     ninguno:       { nombre: 'Sin pack (solo piezas)', precio: 0,   mesesPro: 0, incluye: {} },
-    prueba:        { nombre: 'Prueba Logroño',         precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 } },
-    iman:          { nombre: 'Imán de mostrador',      precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 } },
-    multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 } },
-    dominio:       { nombre: 'Dominio local total',    precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, welcome: 1 } }
+    zero:          { nombre: 'Studio 42 Zero',         precio: 0,   mesesPro: 0, incluye: { display: 1, llavero: 3 }, planFijo: 'zero' },
+    catador:       { nombre: 'Catador',                precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 } },
+    equipo:        { nombre: 'Equipo',                 precio: 229, mesesPro: 2, incluye: { display: 1, llavero: 5, tarjeta: 1 } },
+    barrio:        { nombre: 'Barrio',                 precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 15, welcome: 1 } },
+    prueba:        { nombre: 'Prueba Logroño',         precio: 89,  mesesPro: 1, incluye: { display: 1, llavero: 1 }, retirado: true },
+    iman:          { nombre: 'Imán de mostrador',      precio: 149, mesesPro: 2, incluye: { display: 1, llavero: 2 }, retirado: true },
+    multiplicador: { nombre: 'Efecto multiplicador',   precio: 349, mesesPro: 3, incluye: { display: 1, llavero: 10, tarjeta: 1 }, retirado: true },
+    dominio:       { nombre: 'Dominio local total',    precio: 549, mesesPro: 6, incluye: { display: 2, llavero: 25, welcome: 1 }, retirado: true }
   },
   /* Suscripción «Ecosistema Activo»: precio mensual sin IVA. Trimestral −5 %, anual = 10 meses (2 gratis). */
   planes: {
     esencial:  { nombre: 'Esencial',          mensual: 19 },
     pro:       { nombre: 'Pro',               mensual: 39 },
     multisede: { nombre: 'Multi-sede',        mensual: 79 },
-    clinica:   { nombre: 'Pet Pass Clínica',  mensual: 29 }
+    clinica:   { nombre: 'PETS Id Smart Clínica', mensual: 29 },
+    /* Studio 42 Zero: 0 € de apertura, 59 €/mes todo incluido, solo mensual y 12 meses de permanencia */
+    zero:      { nombre: 'Studio 42 Zero',    mensual: 59, soloMensual: true, permanencia: 12, soloPack: 'zero' }
   }
 };
 var PERIODOS = { mensual: { nombre: 'Mensual', intervalo: 'month', cada: 1 }, trimestral: { nombre: 'Trimestral', intervalo: 'month', cada: 3 }, anual: { nombre: 'Anual', intervalo: 'year', cada: 1 } };
@@ -1345,7 +1353,7 @@ function redondear_(n) { return Math.round(n * 100) / 100; }
 
 /** cantidades = unidades TOTALES que se lleva el cliente de cada pieza (incluidas las del pack). */
 function pedidoCalcular_(packId, cantidades, promo) {
-  var pack = CATALOGO.packs[packId] ? packId : 'ninguno';
+  var pack = CATALOGO.packs[packId] && !CATALOGO.packs[packId].retirado ? packId : 'ninguno';
   var P = CATALOGO.packs[pack], lineas = [], base = P.precio, aConsultar = false;
   if (P.precio) lineas.push({ concepto: 'Pack ' + P.nombre, unidades: 1, importe: P.precio });
   Object.keys(CATALOGO.piezas).forEach(function (k) {
@@ -1381,7 +1389,7 @@ function pedidoGuardar_(raw) {
   if (!/^[a-z0-9-]{2,40}$/.test(slug)) return { ok: false, error: 'Falta la landing del cliente.' };
   var cliente = limpiar_(sinEtiquetas_(raw.cliente), 60) || slug;
   var calc = pedidoCalcular_(String(raw.pack || ''), raw.cantidades || {}, raw.promo === true);
-  if (!calc.lineas.length && !CATALOGO.planes[raw.plan]) return { ok: false, error: 'El pedido está vacío.' };
+  if (!calc.lineas.length && !CATALOGO.planes[raw.plan] && !CATALOGO.packs[calc.pack].planFijo) return { ok: false, error: 'El pedido está vacío.' };
   var id = 'P' + Utilities.formatDate(new Date(), 'Europe/Madrid', 'yyMMdd') + '-' + Utilities.getUuid().slice(0, 4).toUpperCase();
   var url = c.dominio + '/c/?cod=' + slug;
   var detalle = calc.lineas.map(function (l) { return l.unidades + ' × ' + l.concepto + (l.extra ? ' (' + l.extra + ' extra)' : ''); }).join(' | ');
@@ -1389,6 +1397,11 @@ function pedidoGuardar_(raw) {
   var datos = { id: id, cliente: cliente, slug: slug, url: url, closer: au.closer, calc: calc };
   var plan = CATALOGO.planes[raw.plan] ? String(raw.plan) : '';
   var periodo = PERIODOS[raw.periodo] ? String(raw.periodo) : 'mensual';
+  var packFijo = CATALOGO.packs[calc.pack].planFijo;
+  if (packFijo) plan = packFijo;                                   // Zero lleva siempre su cuota
+  else if (plan && CATALOGO.planes[plan].soloPack) plan = '';       // la cuota Zero no se vende suelta
+  if (plan && CATALOGO.planes[plan].soloMensual) periodo = 'mensual';
+  if (plan && CATALOGO.planes[plan].permanencia) notas = (notas ? notas + ' · ' : '') + 'Permanencia ' + CATALOGO.planes[plan].permanencia + ' meses (Studio 42 Zero).';
   if (plan) datos.suscripcion = { plan: plan, periodo: periodo, precio: precioPlan_(plan, periodo), mesesGratis: CATALOGO.packs[calc.pack].mesesPro || 0 };
   pedidosHoja_().appendRow([id, new Date(), au.closer, cliente, slug, url, calc.packNombre, detalle, calc.aConsultar ? calc.total + ' + piezas a consultar' : calc.total, 'Por despachar', notas, JSON.stringify(datos)]);
   var pago = null;
@@ -1793,10 +1806,11 @@ function CREAR_PRODUCTOS_STRIPE() {
   var props = PropertiesService.getScriptProperties(), precios = preciosStripe_();
   Object.keys(CATALOGO.planes).forEach(function (plan) {
     var pl = CATALOGO.planes[plan];
-    if (Object.keys(PERIODOS).every(function (per) { return precios[plan + '_' + per]; })) return;
+    var pers = pl.soloMensual ? ['mensual'] : Object.keys(PERIODOS);
+    if (pers.every(function (per) { return precios[plan + '_' + per]; })) return;
     var prod = stripe_('post', 'products', { name: 'Studio 42 · Ecosistema Activo ' + pl.nombre, metadata: { plan: plan } });
     if (prod.error) { console.log('✘ ' + prod.error); return; }
-    Object.keys(PERIODOS).forEach(function (per) {
+    pers.forEach(function (per) {
       if (precios[plan + '_' + per]) return;
       var base = precioPlan_(plan, per), P = PERIODOS[per];
       var pr = stripe_('post', 'prices', { product: prod.id, currency: 'eur', unit_amount: Math.round(base * (1 + IVA) * 100), nickname: pl.nombre + ' ' + P.nombre,

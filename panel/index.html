@@ -220,6 +220,7 @@ textarea.inp{min-height:110px;resize:vertical}
 .toast.on{transform:translate(-50%,0);opacity:1}
 @media (max-width:380px){.kpis{grid-template-columns:repeat(2,1fr)}.phone iframe{height:500px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.ask-res{display:grid;gap:8px;margin-top:10px}.ask-item{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;width:100%;padding:12px 14px;border-radius:12px;background:#14161c;border:1px solid #2a2d35;color:inherit;font:inherit;cursor:pointer}.ask-item b{font-size:.95rem}.ask-item span{font-size:.8rem;color:var(--muted);line-height:1.35}.ask-item:active{background:#1b1e25}.ask-ok{padding:14px;border-radius:12px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.35);display:flex;flex-direction:column;gap:4px}.ask-ok span{font-size:.84rem;color:#c9ced6}.ask-acc{display:grid;grid-template-columns:1.4fr 1fr;gap:8px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -647,7 +648,7 @@ function auditColor(n){return n>=75?'#34d399':n>=50?'#f59e0b':'#ef4444'}
 function pintarFichas(){
   var visto={},A=((D&&D.auditorias)||[]).filter(function(a){var k=a.placeId||a.negocio;if(visto[k])return false;visto[k]=1;return true});
   var h='<div class="h2"><h2>Fichas de Google</h2><small>'+A.length+' auditoría'+(A.length===1?'':'s')+'</small></div>';
-  h+='<div class="ask"><b>Auditar una ficha</b><div class="sub">Escribe el nombre del negocio y la ciudad. Claude lo busca en Google Maps, lo audita y te prepara el informe.</div><input id="askTxt" placeholder="Ej.: La Sucursal Logroño" autocomplete="off"><div class="sug"><button type="button" data-q="Studio 42 Logroño">Studio 42</button><button type="button" data-q="La Sucursal Logroño barbería">La Sucursal</button><button type="button" data-q="SPN Nutrition Planet Logroño">SPN</button></div><button type="button" class="cta" id="askBtn" style="margin-top:12px">🔍 Buscar y auditar</button><div id="askMsg" class="mini" style="margin-top:8px;color:var(--muted)"></div></div>';
+  h+='<div class="ask"><b>Auditar una ficha</b><div class="sub">Escribe el nombre del negocio y la ciudad. Te enseño lo que encuentra Google Maps con su dirección y eliges el local correcto antes de auditar.</div><input id="askTxt" placeholder="Ej.: La Sucursal Logroño" autocomplete="off"><div class="sug"><button type="button" data-q="Studio 42 Logroño">Studio 42</button><button type="button" data-q="La Sucursal Logroño barbería">La Sucursal</button><button type="button" data-q="SPN Nutrition Planet Logroño">SPN</button></div><button type="button" class="cta" id="askBtn" style="margin-top:12px">🔍 Buscar en Google Maps</button><div id="askMsg" class="mini" style="margin-top:8px;color:var(--muted)"></div><div id="askRes" class="ask-res"></div></div>';
   if(A.length)h+='<div class="mini" style="margin:0 0 10px;color:var(--muted);line-height:1.45">El número del círculo es la <b>nota de su ficha de Google, de 0 a 100</b>. 🟢 75 o más: bien · 🟠 50–74: mejorable · 🔴 menos de 50: le está costando clientes.</div>';
   if(!A.length)h+='<div class="empty">Aún no hay auditorías. Haz la primera arriba o pídele al closer que audite en una visita.</div>';
   A.forEach(function(a){
@@ -660,7 +661,8 @@ function pintarFichas(){
   });
   $('#tabFichas').innerHTML=h;
   $$('#tabFichas .sug button').forEach(function(b){b.onclick=function(){$('#askTxt').value=b.dataset.q}});
-  $('#askBtn').onclick=auditarDesdePanel;
+  $('#askBtn').onclick=buscarParaAuditar;
+  $('#askTxt').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();buscarParaAuditar()}};
   $$('#tabFichas [data-del]').forEach(function(b){b.onclick=function(e){e.stopPropagation();borrarAuditoria(b.dataset.del,b.dataset.nom,b)}});
   $$('#tabFichas .aud-card [data-pid]').forEach(function(b){b.onclick=function(e){e.preventDefault();e.stopPropagation();verInforme(b.dataset.pid,b.dataset.nom)}});
 }
@@ -741,19 +743,36 @@ function mostrarInforme(a,pid){
   $('#optiPrep').onclick=function(){prepararOptim(pid,a.negocio.nombre,a)};
   $('#optiCerrar').onclick=cerrarFicha;
 }
-function auditarDesdePanel(){
-  var q=$('#askTxt').value.trim();if(q.length<3){$('#askMsg').textContent='Escribe el nombre del negocio.';return}
-  var b=$('#askBtn'),prev=b.textContent;b.disabled=true;b.textContent='Buscando y auditando…';$('#askMsg').textContent='Puede tardar unos 20 segundos.';
+function buscarParaAuditar(){
+  var q=$('#askTxt').value.trim(),res=$('#askRes');res.innerHTML='';
+  if(q.length<3){$('#askMsg').textContent='Escribe el nombre del negocio y la ciudad.';return}
+  var b=$('#askBtn'),prev=b.textContent;b.disabled=true;b.textContent='Buscando…';$('#askMsg').textContent='';
   api({accion:'panel_buscar',consulta:q}).then(function(r){
-    if(!r.ok||!r.resultados||!r.resultados.length)throw new Error(r.error||'No he encontrado ese negocio.');
-    var l=r.resultados[0];$('#askMsg').textContent='Encontrado: '+l.nombre+'. Auditando…';
-    return api({accion:'panel_auditar_slug',place_id:l.id,nombre:l.nombre}).then(function(x){return{aud:x,place:l}});
-  }).then(function(z){
-    if(!z.aud.ok)throw new Error(z.aud.error||'No se pudo auditar.');
-    b.disabled=false;b.textContent=prev;$('#askMsg').textContent='✓ Auditoría guardada.';
-    D.auditorias=D.auditorias||[];D.auditorias.unshift({fecha:new Date().toISOString(),closer:'CEO',negocio:z.aud.auditoria.negocio.nombre,placeId:z.place.id,nota:z.aud.auditoria.nota,rating:z.aud.auditoria.negocio.rating,resenas:z.aud.auditoria.negocio.resenas,puesto:z.aud.auditoria.posicion&&z.aud.auditoria.posicion.puesto,mapsUrl:z.aud.auditoria.negocio.mapsUrl||''});
-    pintarFichas();mostrarInforme(z.aud.auditoria,z.place.id);
-  }).catch(function(e){b.disabled=false;b.textContent=prev;$('#askMsg').textContent='⚠️ '+(e.message||e)});
+    b.disabled=false;b.textContent=prev;
+    if(!r.ok){$('#askMsg').textContent='⚠️ '+(r.error||'No se pudo buscar.');return}
+    if(!r.resultados||!r.resultados.length){$('#askMsg').textContent='Sin resultados. Prueba con el nombre y la ciudad, o con la calle.';return}
+    $('#askMsg').textContent='Toca el local correcto (fíjate en la dirección):';
+    r.resultados.forEach(function(x){
+      var it=document.createElement('button');it.type='button';it.className='ask-item';
+      it.innerHTML='<b>'+esc(x.nombre)+'</b><span>'+esc(x.direccion||'Sin dirección')+'</span>';
+      it.onclick=function(){elegirParaAuditar(x)};res.appendChild(it);
+    });
+  }).catch(function(){b.disabled=false;b.textContent=prev;$('#askMsg').textContent='Sin conexión.'});
+}
+function elegirParaAuditar(x){
+  var res=$('#askRes');$('#askMsg').textContent='';
+  res.innerHTML='<div class="ask-ok"><b>✓ '+esc(x.nombre)+'</b><span>'+esc(x.direccion||'')+'</span><div class="ask-acc"><button type="button" class="cta" id="askGo">Auditar este local</button><button type="button" class="ghost" id="askOtro">Elegir otro</button></div></div>';
+  $('#askOtro').onclick=buscarParaAuditar;
+  $('#askGo').onclick=function(){auditarLugar(x)};
+}
+function auditarLugar(l){
+  var go=$('#askGo');if(go){go.disabled=true;go.textContent='Auditando… (unos 20 s)'}
+  api({accion:'panel_auditar_slug',place_id:l.id,nombre:l.nombre}).then(function(x){
+    if(!x.ok)throw new Error(x.error||'No se pudo auditar.');
+    $('#askRes').innerHTML='';$('#askMsg').textContent='✓ Auditoría guardada.';
+    D.auditorias=D.auditorias||[];D.auditorias.unshift({fecha:new Date().toISOString(),closer:'CEO',negocio:x.auditoria.negocio.nombre,placeId:l.id,nota:x.auditoria.nota,rating:x.auditoria.negocio.rating,resenas:x.auditoria.negocio.resenas,puesto:x.auditoria.posicion&&x.auditoria.posicion.puesto,mapsUrl:x.auditoria.negocio.mapsUrl||''});
+    pintarFichas();mostrarInforme(x.auditoria,l.id);
+  }).catch(function(e){if(go){go.disabled=false;go.textContent='Auditar este local'}$('#askMsg').textContent='⚠️ '+(e.message||e)});
 }
 function copiarTxt(t,b){try{navigator.clipboard.writeText(t);var p=b.textContent;b.textContent='✓ copiado';setTimeout(function(){b.textContent=p},1500)}catch(e){toast('No se pudo copiar')}}
 function prepararOptim(placeId,nombre,audData){
@@ -946,11 +965,11 @@ function demoApi(b){
     var R={ok:true,dominio:'https://studio42.es',estados:ESTADOS,rol:demoRol,nombre:demoRol==='equipo'?'Melina':'CEO · Founder',cargo:demoRol==='equipo'?'CEO · Co-Founder':'',equipo:demoRol==='ceo'?[{id:'e1',nombre:'Melina',cargo:'CEO · Co-Founder',creado:new Date().toISOString()}]:undefined,
       clientes:['ankara-kebab','clinica-dental-mazo-ruiz','iberlax','nutrition-planet','unas-latinas-carolina','zombie-tattoo','dra-lisbeth-carolina-rangel-sanchez','spn-pacientes','pet-pass'],
       pedidos:[
-        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-A1F3',fecha:h(0,11),closer:'MO001',cliente:'Ankara Kebab',slug:'ankara-kebab',url:url('ankara-kebab'),pack:'Imán de mostrador',estado:'Por despachar',notas:'Llaveros para los 3 turnos',calc:{lineas:[{concepto:'Pack Imán de mostrador',unidades:1,importe:149},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Studio 42',unidades:5,incluidas:2,extra:3,importe:59.7}],base:208.7,iva:43.83,total:252.53}},
-        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-7C2D',fecha:h(1,17),closer:'MEL042',cliente:'Zombie Tattoo',slug:'zombie-tattoo',url:url('zombie-tattoo'),pack:'Prueba Logroño',estado:'Grabado',notas:'',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Studio 42',unidades:1,incluidas:1,extra:0,importe:0}],base:89,iva:18.69,total:107.69}},
-        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-93BE',fecha:h(3,10),closer:'MO001',cliente:'Clínica Dental Mazo Ruiz',slug:'clinica-dental-mazo-ruiz',url:url('clinica-dental-mazo-ruiz'),pack:'Efecto multiplicador',estado:'Cobrado',notas:'',calc:{lineas:[{concepto:'Pack Efecto multiplicador',unidades:1,importe:349},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Studio 42',unidades:10,incluidas:10,extra:0,importe:0},{pieza:'tarjeta',concepto:'Tarjeta de madera NFC',unidades:1,incluidas:1,extra:0,importe:0}],base:349,iva:73.29,total:422.29}}
+        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-A1F3',fecha:h(0,11),closer:'MO001',cliente:'Ankara Kebab',slug:'ankara-kebab',url:url('ankara-kebab'),pack:'Equipo',estado:'Por despachar',notas:'Llaveros para los 3 turnos',calc:{lineas:[{concepto:'Pack Equipo',unidades:1,importe:229},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Studio 42',unidades:8,incluidas:5,extra:3,importe:59.7},{pieza:'tarjeta',concepto:'Tarjeta de madera NFC',unidades:1,incluidas:1,extra:0,importe:0}],base:288.7,iva:60.63,total:349.33}},
+        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-7C2D',fecha:h(1,17),closer:'MEL042',cliente:'Zombie Tattoo',slug:'zombie-tattoo',url:url('zombie-tattoo'),pack:'Catador',estado:'Grabado',notas:'',calc:{lineas:[{concepto:'Pack Catador',unidades:1,importe:89},{pieza:'display',concepto:'Display acrílico NFC',unidades:1,incluidas:1,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Studio 42',unidades:1,incluidas:1,extra:0,importe:0}],base:89,iva:18.69,total:107.69}},
+        {id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-93BE',fecha:h(3,10),closer:'MO001',cliente:'Clínica Dental Mazo Ruiz',slug:'clinica-dental-mazo-ruiz',url:url('clinica-dental-mazo-ruiz'),pack:'Barrio',estado:'Cobrado',notas:'',calc:{lineas:[{concepto:'Pack Barrio',unidades:1,importe:549},{pieza:'display',concepto:'Display acrílico NFC',unidades:2,incluidas:2,extra:0,importe:0},{pieza:'llavero',concepto:'Llavero Studio 42',unidades:15,incluidas:15,extra:0,importe:0},{pieza:'welcome',concepto:'Welcome Pack directivos',unidades:1,incluidas:1,extra:0,importe:0}],base:549,iva:115.29,total:664.29}}
       ],
-      catalogo:{planes:{esencial:{nombre:'Esencial',mensual:19},pro:{nombre:'Pro',mensual:39},multisede:{nombre:'Multi-sede',mensual:79},clinica:{nombre:'PETS Id Smart Clínica',mensual:29}}},
+      catalogo:{planes:{esencial:{nombre:'Esencial',mensual:19},pro:{nombre:'Pro',mensual:39},multisede:{nombre:'Multi-sede',mensual:79},clinica:{nombre:'PETS Id Smart Clínica',mensual:29},zero:{nombre:'Studio 42 Zero',mensual:59}}},
       suscripciones:[
         {slug:'ankara-kebab',cliente:'Ankara Kebab',plan:'pro',periodo:'mensual',estado:'prueba',email:'ankara@ejemplo.es',proximo:h(-58,9),landing:'activa'},
         {slug:'clinica-dental-mazo-ruiz',cliente:'Clínica Dental Mazo Ruiz',plan:'pro',periodo:'anual',estado:'activa',email:'clinica@ejemplo.es',proximo:h(-300,9),landing:'activa'},
@@ -961,11 +980,11 @@ function demoApi(b){
       chapas:[{slug:'pk7m2xq9',estado:'activa',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=demo'},{slug:'pd3h8wna',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'},{slug:'pt9r4ceu',estado:'libre',entregadaPor:'Clínica Veterinaria (ejemplo)',url:'https://studio42.es/pets/?id=nueva'}],
       tarjetas:[{id:'alejandro-silva',nombre:'Alejandro Silva',empresa:'La Sucursal Barbería',estado:'activa',paga:'La Sucursal'}]};
     demoN=(demoN||0)+1;
-    if(demoN>1)R.pedidos.unshift({id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-N3W1',fecha:new Date().toISOString(),closer:'MEL042',cliente:'Bar La Laurel (ejemplo)',slug:'iberlax',url:url('iberlax'),pack:'Prueba Logroño',estado:'Por despachar',notas:'Pedido de ejemplo que llega en directo',calc:{lineas:[{concepto:'Pack Prueba Logroño',unidades:1,importe:89}],total:89,pack:'prueba',packNombre:'Prueba Logroño'}});
+    if(demoN>1)R.pedidos.unshift({id:'P'+hoy.toISOString().slice(2,10).replace(/-/g,'')+'-N3W1',fecha:new Date().toISOString(),closer:'MEL042',cliente:'Bar La Laurel (ejemplo)',slug:'iberlax',url:url('iberlax'),pack:'Catador',estado:'Por despachar',notas:'Pedido de ejemplo que llega en directo',calc:{lineas:[{concepto:'Pack Catador',unidades:1,importe:89}],total:107.69,pack:'catador',packNombre:'Catador'}});
     if(demoRol==='equipo')R.chapas=[];
     return esperar(500,R);
   }
-    if(b.accion==='panel_buscar')return esperar(600,{ok:true,resultados:[{id:'ChIJdemoPlaceId00000000000'+(b.consulta||'').replace(/[^a-z0-9]/gi,'').slice(0,6).toUpperCase().padEnd(6,'X'),nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim(),direccion:'Logroño (demo)',telefono:'',web:'',sector:'',whatsapp:''}]});
+    if(b.accion==='panel_buscar')return esperar(600,{ok:true,resultados:[{id:'ChIJdemoPlaceId00000000000'+(b.consulta||'').replace(/[^a-z0-9]/gi,'').slice(0,6).toUpperCase().padEnd(6,'X'),nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim(),direccion:'Calle Portales 12, Logroño (demo)',telefono:'',web:'',sector:'',whatsapp:''},{id:'ChIJdemoPlaceId00000000000OTRO01',nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim().split(' ')[0]+' Agencia',direccion:'Av. de la Paz 30, Logroño (demo: otro local con nombre parecido)'},{id:'ChIJdemoPlaceId00000000000OTRO02',nombre:(b.consulta||'Negocio demo').replace(/\s+/g,' ').trim().split(' ')[0]+' Studio',direccion:'Calle Mayor 5, Madrid (demo)'}]});
   if(b.accion==='panel_auditorias')return esperar(300,{ok:true,auditorias:(demoAud||[])});
   if(b.accion==='panel_auditoria_borrar'){demoAud=(demoAud||[]).filter(function(a){return a.placeId!==b.place_id});return esperar(400,{ok:true,borradas:1})}
   if(b.accion==='panel_informe_ficha')return esperar(400,{ok:true,auditoria:{id:b.place_id,negocio:{nombre:'Negocio demo',rating:4.3,resenas:46,placeId:b.place_id,tipo:'Negocio'},nota:58,desglose:[{nombre:'Valoración media',puntos:14,max:25,ok:false,dato:'4.3 ★'},{nombre:'Número de reseñas',puntos:9,max:20,ok:false,dato:'46 (líder: 180)'},{nombre:'Reseñas recientes',puntos:6,max:10,ok:false,dato:'hace 35 días'},{nombre:'Puesto en Google',puntos:4,max:10,ok:false,dato:'puesto 8'},{nombre:'Horario',puntos:10,max:10,ok:true,dato:'Sí'},{nombre:'Web',puntos:10,max:10,ok:true,dato:'Funciona'},{nombre:'Teléfono',puntos:5,max:5,ok:true,dato:'Sí'},{nombre:'Fotos',puntos:0,max:10,ok:false,dato:'0 fotos'}],competidores:[{nombre:'Competidor A',rating:4.6,resenas:180}],posicion:{consulta:'barbería en Logroño',puesto:8},precios:{puestaPunto:89,mensual:29},informe:{titular:'(demo) Nota 58/100',resumen:'(demo) Faltan fotos y responder reseñas.',dolores:[{titulo:'Sin fotos',explicacion:'Los competidores tienen docenas.',impacto:'alto'}],plan:['Subir 15 fotos','Responder reseñas','4 publicaciones','Ajustar categorías']}}});

@@ -31,18 +31,22 @@ const PROPS = { GITHUB_TOKEN: 'ghp_FAKE', ANTHROPIC_API_KEY: 'sk-ant-FAKE', CLOS
 /* ---- Cálculo de pedidos ---- */
 const t = montar(PROPS);
 const calc = (p, c, promo) => vm.runInContext('pedidoCalcular_', t.ctx)(p, c, promo);
-let r = calc('iman', { display: 1, llavero: 5 });
-check(r.base === 208.7 && r.total === 252.53, 'Imán + 3 llaveros extra = 208,70 € + IVA = 252,53 €');
-r = calc('dominio', { llavero: 30 });
-check(r.lineas.find((l) => l.pieza === 'llavero').extra === 5 && r.base === 648.5, 'Dominio con 30 llaveros: cobra solo los 5 de más');
-r = calc('multiplicador', { llavero: 3 });
-check(r.lineas.find((l) => l.pieza === 'llavero').unidades === 10 && r.base === 349, 'no se puede bajar de lo incluido en el pack');
+let r = calc('equipo', { display: 1, llavero: 8 });
+check(r.base === 288.7 && r.total === 349.33, 'Equipo + 3 llaveros extra = 288,70 € + IVA = 349,33 €');
+r = calc('barrio', { llavero: 20 });
+check(r.lineas.find((l) => l.pieza === 'llavero').extra === 5 && r.base === 648.5, 'Barrio con 20 llaveros: cobra solo los 5 de más');
+r = calc('equipo', { llavero: 3 });
+check(r.lineas.find((l) => l.pieza === 'llavero').unidades === 5 && r.base === 229, 'no se puede bajar de lo incluido en el pack');
 r = calc('ninguno', { camiseta: 4, display: 1 });
 check(r.aConsultar && r.base === 49, 'camisetas a consultar no suman y lo avisan');
 r = calc('hackeado', { llavero: 2 });
 check(r.pack === 'ninguno' && r.base === 39.8, 'pack desconocido → solo piezas');
-r = calc('prueba', { llavero: 1 }, true);
+r = calc('iman', { llavero: 2 });
+check(r.pack === 'ninguno' && r.base === 39.8, 'pack retirado (Imán) ya no se vende → solo piezas');
+r = calc('catador', { llavero: 1 }, true);
 check(r.llaverosRegalo === 2 && r.base === 89, 'promo lanzamiento: 2 llaveros de regalo sin coste');
+r = calc('zero', {});
+check(r.base === 0 && r.lineas.find((l) => l.pieza === 'llavero').unidades === 3, 'Zero: 0 € de apertura con 1 display y 3 llaveros');
 
 /* ---- El catálogo del formulario coincide con el del servidor ---- */
 const html = fs.readFileSync(path.join(__dirname, '..', 'v', 'closer', 'index.html'), 'utf8');
@@ -51,12 +55,12 @@ const catServer = vm.runInContext('CATALOGO', t.ctx);
 check(JSON.stringify(catCloser) === JSON.stringify(catServer), 'precios y packs del formulario = los del servidor');
 
 /* ---- Guardar pedido ---- */
-r = t.post({ accion: 'pedido_guardar', closer_id: 'XX9', slug: 'ankara-kebab', pack: 'iman', cantidades: {} });
+r = t.post({ accion: 'pedido_guardar', closer_id: 'XX9', slug: 'ankara-kebab', pack: 'equipo', cantidades: {} });
 check(!r.ok && /no autorizado/.test(r.error), 'pedido de un Closer no autorizado → rechazado');
-r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', cliente: 'Ankara <b>Kebab</b>', pack: 'iman', cantidades: { display: 1, llavero: 5 }, notas: 'turnos' });
+r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', cliente: 'Ankara <b>Kebab</b>', pack: 'equipo', cantidades: { display: 1, llavero: 8 }, notas: 'turnos' });
 check(r.ok && /^P\d+-[0-9A-F]{4}$/.test(r.pedido.id), 'pedido guardado con ID ' + (r.pedido && r.pedido.id));
 const fila = t.hojas.Pedidos.filas[1];
-check(fila[3] === 'Ankara Kebab' && fila[8] === 252.53 && fila[9] === 'Por despachar', 'hoja Pedidos: cliente limpio, total y estado «Por despachar»');
+check(fila[3] === 'Ankara Kebab' && fila[8] === 349.33 && fila[9] === 'Por despachar', 'hoja Pedidos: cliente limpio, total y estado «Por despachar»');
 r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', pack: 'ninguno', cantidades: {} });
 check(!r.ok && /vacío/.test(r.error), 'pedido vacío → rechazado');
 
@@ -75,7 +79,7 @@ check(/Demasiados/.test(t3.post({ accion: 'panel_login', clave: 'clave-segura' }
 
 /* ---- Panel: datos y estados ---- */
 r = t.post({ accion: 'panel_datos', token });
-check(r.ok && r.clientes.includes('ankara-kebab') && r.pedidos.length === 1 && r.pedidos[0].calc.total === 252.53, 'panel ve clientes y pedidos con su importe');
+check(r.ok && r.clientes.includes('ankara-kebab') && r.pedidos.length === 1 && r.pedidos[0].calc.total === 349.33, 'panel ve clientes y pedidos con su importe');
 r = t.post({ accion: 'panel_pedido_estado', token, id: r.pedidos[0].id, estado: 'Grabado' });
 check(r.ok && t.hojas.Pedidos.filas[1][9] === 'Grabado', 'cambiar estado a «Grabado» se guarda en la hoja');
 check(!t.post({ accion: 'panel_pedido_estado', token, id: 'x', estado: 'Robado' }).ok, 'estado inventado → rechazado');

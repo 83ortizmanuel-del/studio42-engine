@@ -46,9 +46,9 @@ const web = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 check(/data-m="19"/.test(web) && /data-m="39"/.test(web) && /data-m="79"/.test(web) && !/Pago único/.test(web), 'la portada muestra los planes y ya no promete «pago único»');
 
 /* ---- Pedido con plan, sin Stripe ---- */
-let r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', cliente: 'Ankara', pack: 'iman', cantidades: { llavero: 2 }, plan: 'pro', periodo: 'mensual', email: 'a@b.es' });
+let r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', cliente: 'Ankara', pack: 'equipo', cantidades: { llavero: 5 }, plan: 'pro', periodo: 'mensual', email: 'a@b.es' });
 check(r.ok && r.pago && r.pago.sinStripe && /aún no está activado/.test(r.pago.error), 'sin Stripe: el pedido se guarda y avisa de cobro manual');
-check(t.hojas.Suscripciones.filas[1][0] === 'ankara-kebab' && t.hojas.Suscripciones.filas[1][4] === 'pendiente de pago' && r.pedido.suscripcion.mesesGratis === 2, 'queda la suscripción «pendiente de pago» con 2 meses gratis (Imán)');
+check(t.hojas.Suscripciones.filas[1][0] === 'ankara-kebab' && t.hojas.Suscripciones.filas[1][4] === 'pendiente de pago' && r.pedido.suscripcion.mesesGratis === 2, 'queda la suscripción «pendiente de pago» con 2 meses gratis (Equipo)');
 
 /* ---- Crear productos en Stripe ---- */
 let n = 0;
@@ -59,13 +59,13 @@ t = montar(Object.assign({ STRIPE_SECRET_KEY: 'sk_test_x' }, PROPS), (ruta, o) =
 });
 vm.runInContext('CREAR_PRODUCTOS_STRIPE', t.ctx)();
 const precios = JSON.parse(t.store.STRIPE_PRECIOS);
-check(Object.keys(precios).length === 12, 'crea 12 precios en Stripe (4 planes × 3 periodos)');
+check(Object.keys(precios).length === 13 && precios.zero_mensual && !precios.zero_anual, 'crea 13 precios en Stripe (4 planes × 3 periodos + Zero solo mensual)');
 const proAnual = t.llamadas.find((x) => /prices/.test(x.url) && /metadata%5Bplan%5D=pro&metadata%5Bperiodo%5D=anual/.test(x.o.payload));
 check(proAnual && dec(proAnual.o.payload).unit_amount === '47190' && dec(proAnual.o.payload)['recurring[interval]'] === 'year', 'Pro anual = 471,90 € IVA incl., cobro anual');
 const proTri = t.llamadas.find((x) => /metadata%5Bplan%5D=pro&metadata%5Bperiodo%5D=trimestral/.test(x.o.payload || ''));
 check(dec(proTri.o.payload)['recurring[interval_count]'] === '3', 'trimestral = cada 3 meses');
 vm.runInContext('CREAR_PRODUCTOS_STRIPE', t.ctx)();
-check(t.llamadas.filter((x) => /prices/.test(x.url)).length === 12 && t.llamadas.filter((x) => /products/.test(x.url)).length === 4, 'si se ejecuta dos veces no duplica productos ni precios');
+check(t.llamadas.filter((x) => /prices/.test(x.url)).length === 13 && t.llamadas.filter((x) => /products/.test(x.url)).length === 5, 'si se ejecuta dos veces no duplica productos ni precios');
 
 /* ---- Enlace de pago ---- */
 let sesion = null;
@@ -73,15 +73,20 @@ t = montar(Object.assign({ STRIPE_SECRET_KEY: 'sk_test_x', STRIPE_PRECIOS: JSON.
   if (ruta === 'checkout/sessions') { sesion = dec(o.payload); return { body: { id: 'cs_1', url: 'https://checkout.stripe.com/c/pay/cs_1' } }; }
   return { code: 404, body: {} };
 });
-r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', cliente: 'Ankara', pack: 'iman', cantidades: { display: 1, llavero: 5 }, plan: 'pro', periodo: 'mensual', email: 'no-es-un-email' });
+r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', cliente: 'Ankara', pack: 'equipo', cantidades: { display: 1, llavero: 8 }, plan: 'pro', periodo: 'mensual', email: 'no-es-un-email' });
 check(r.ok && r.pago.url === 'https://checkout.stripe.com/c/pay/cs_1', 'devuelve el enlace de pago de Stripe');
 check(sesion.mode === 'subscription' && sesion['line_items[0][price]'] === 'price_pro_mensual', 'la suscripción es Pro mensual');
-check(sesion['line_items[1][price_data][unit_amount]'] === '25253', 'cobra hoy la apertura: 252,53 € (IVA incl.)');
+check(sesion['line_items[1][price_data][unit_amount]'] === '34933', 'cobra hoy la apertura: 349,33 € (IVA incl.)');
 check(sesion['subscription_data[trial_period_days]'] === '60', 'la cuota empieza tras los 2 meses gratis del pack');
 check(sesion['subscription_data[metadata][slug]'] === 'ankara-kebab' && sesion.client_reference_id === 'ankara-kebab', 'el pago queda ligado al cliente');
 check(!('customer_email' in sesion), 'un email no válido no se envía a Stripe');
 r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', pack: 'ninguno', cantidades: {}, plan: 'esencial', periodo: 'anual', email: 'bien@ejemplo.es' });
 check(r.ok && sesion['line_items[0][price]'] === 'price_esencial_anual' && !sesion['line_items[1][price_data][unit_amount]'] && !sesion['subscription_data[trial_period_days]'] && sesion.customer_email === 'bien@ejemplo.es', 'solo suscripción: sin apertura ni meses gratis, con email');
+r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', pack: 'zero', cantidades: {}, plan: 'pro', periodo: 'anual', email: 'zero@ejemplo.es' });
+check(r.ok && r.pedido.suscripcion.plan === 'zero' && r.pedido.suscripcion.periodo === 'mensual' && sesion['line_items[0][price]'] === 'price_zero_mensual' && !sesion['line_items[1][price_data][unit_amount]'] && !sesion['subscription_data[trial_period_days]'], 'Zero: siempre cuota Zero mensual, sin apertura y cobrando desde hoy');
+check(/Permanencia 12 meses/.test(t.hojas.Pedidos.filas[t.hojas.Pedidos.filas.length - 1][10]), 'Zero: la permanencia de 12 meses queda en las notas del pedido');
+r = t.post({ accion: 'pedido_guardar', closer_id: 'MO001', slug: 'ankara-kebab', pack: 'equipo', cantidades: {}, plan: 'zero', periodo: 'mensual' });
+check(r.ok && r.pedido.suscripcion === undefined, 'la cuota Zero no se puede vender suelta con otro pack');
 
 /* ---- Sincronización y pausa automática ---- */
 let estadoStripe = 'past_due';
