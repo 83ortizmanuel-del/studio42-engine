@@ -1,0 +1,82 @@
+name: Páginas de clientes para Google
+
+# Cada vez que cambia un c/*.json en main, regenera studio42.es/<slug>/
+# (página estática con schema LocalBusiness) y el bloque de clientes del sitemap.
+# Solo sale página para los clientes con bloque "ficha" (ver docs/FICHAS-GOOGLE.md).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "c/*.json"
+      - "schema.json"
+      - "tools/generar-fichas.js"
+  pull_request:
+    paths:
+      - "c/*.json"
+      - "tools/generar-fichas.js"
+      - "tests/probar_fichas.js"
+  workflow_dispatch:
+
+concurrency:
+  group: fichas-google
+  cancel-in-progress: false
+
+jobs:
+  probar:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Probar el generador
+        run: node tests/probar_fichas.js
+      - name: Qué páginas saldrían con este cambio
+        run: node tools/generar-fichas.js
+
+  publicar:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # para poner en el sitemap la fecha real de cada JSON
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Probar el generador
+        run: node tests/probar_fichas.js
+      - name: Generar páginas y sitemap
+        run: node tools/generar-fichas.js
+      - name: Guardar cambios en main
+        id: guardar
+        run: |
+          git add -A -- sitemap.xml
+          git ls-files --others --exclude-standard -- '*/index.html' | xargs -r grep -l "generado por tools/generar-fichas.js" | xargs -r git add --
+          git add -u -- .
+          if git diff --cached --quiet; then
+            echo "Sin cambios."
+            echo "subido=no" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "studio42-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Fichas de Google: regenerar páginas de clientes y sitemap"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && break
+            sleep $((i * 5))
+          done
+          echo "subido=si" >> "$GITHUB_OUTPUT"
+      # Las subidas hechas con el token de Actions no siempre lanzan GitHub Pages: lo pedimos a mano.
+      - name: Pedir a GitHub Pages que publique
+        if: steps.guardar.outputs.subido == 'si'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"

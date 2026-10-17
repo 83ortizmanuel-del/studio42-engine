@@ -85,6 +85,102 @@
     "pausada": {
       "type": "boolean",
       "description": "Lo pone Studio 42 cuando la suscripción no está al día: la landing muestra «en pausa»."
+    },
+    "ficha": {
+      "type": "object",
+      "description": "Datos públicos del negocio para Google. Si existe, tools/generar-fichas.js crea studio42.es/<slug>/ con schema LocalBusiness y la añade al sitemap.",
+      "required": [
+        "direccion",
+        "cp",
+        "ciudad"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "tipo": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z]{2,40}$",
+          "description": "Tipo de schema.org: Restaurant, Dentist, BarberShop, BeautySalon, VeterinaryCare… Por defecto LocalBusiness."
+        },
+        "categoria": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "Texto visible, p. ej. «Kebab» o «Clínica dental»."
+        },
+        "descripcion": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 300
+        },
+        "direccion": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120,
+          "description": "Calle y número, sin CP ni ciudad."
+        },
+        "cp": {
+          "type": "string",
+          "pattern": "^[0-9]{5}$"
+        },
+        "ciudad": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "provincia": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "telefono": {
+          "$ref": "#/definitions/telefono"
+        },
+        "email": {
+          "type": "string",
+          "pattern": "^[^\\s@<>\"]+@[^\\s@<>\"]+\\.[a-zA-Z]{2,}$"
+        },
+        "web": {
+          "type": "string",
+          "pattern": "^https://\\S+$"
+        },
+        "mapsUrl": {
+          "type": "string",
+          "pattern": "^https://(www\\.google\\.[a-z.]+/maps|maps\\.google\\.[a-z.]+|maps\\.app\\.goo\\.gl|goo\\.gl/maps)\\S*$"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lng": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "horario": {
+          "type": "array",
+          "maxItems": 14,
+          "items": {
+            "type": "string",
+            "pattern": "^(Mo|Tu|We|Th|Fr|Sa|Su)(-(Mo|Tu|We|Th|Fr|Sa|Su))?(,(Mo|Tu|We|Th|Fr|Sa|Su)(-(Mo|Tu|We|Th|Fr|Sa|Su))?)* [0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]$"
+          },
+          "description": "Formato schema.org, p. ej. «Mo-Fr 09:00-14:00»."
+        },
+        "precio": {
+          "type": "string",
+          "pattern": "^€{1,4}$"
+        },
+        "redes": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {
+            "type": "string",
+            "pattern": "^https://\\S+$"
+          }
+        },
+        "indexar": {
+          "type": "boolean",
+          "description": "Pon false para no generar la página aunque haya ficha."
+        }
+      }
     }
   },
   "definitions": {
