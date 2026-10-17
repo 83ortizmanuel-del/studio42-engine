@@ -1306,7 +1306,7 @@ var CATALOGO = {
   piezas: {
     display:  { nombre: 'Display acrílico NFC',       precio: 49 },
     llavero:  { nombre: 'Llavero Studio 42',         precio: 19.9 },
-    tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
+    tarjeta:  { nombre: 'Tarjeta NFC vCard',          precio: 39.9 },
     welcome:  { nombre: 'Caja de bienvenida negro mate', precio: 89 },
     petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
     camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
@@ -1991,7 +1991,7 @@ function tarjetaGuardar_(c, d) {
 
 /* ===================== VENTA DE UNA TARJETA vCARD DESDE EL CLOSER =====================
    El Closer crea una tarjeta digital nueva (no puede editar ni borrar las que ya existen)
-   y se genera un pedido con las tarjetas de madera NFC que se lleva el cliente. */
+   y se genera un pedido con las tarjetas NFC vCard que se lleva el cliente. */
 function closerTarjeta_(raw) {
   var c = cfg_();
   var au = autorizarCloser_(c, raw);
