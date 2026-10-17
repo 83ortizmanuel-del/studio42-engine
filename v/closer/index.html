@@ -5,7 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Studio 42 | Diagnóstico Closer</title>
-    <link rel="manifest" href="manifest.webmanifest">
+    <script>
+    /* Manifest con el código del Closer dentro: al instalar la app se abre siempre con SU código
+       (en iPhone la app instalada no comparte la memoria del navegador). */
+    (function () {
+        var q = new URLSearchParams(location.search), g = '';
+        try { g = localStorage.getItem('s42_closer') || ''; } catch (e) {}
+        var cod = String(q.get('cod') || q.get('closer') || g || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 20);
+        if (cod && !q.get('cod')) { q.set('cod', cod); history.replaceState(null, '', location.pathname + '?' + q.toString() + location.hash); }
+        var base = location.origin + location.pathname.replace(/[^/]*$/, '');
+        var m = { name: 'Diagnóstico Phygital · Studio 42', short_name: cod ? 'Closer ' + cod : 'Closer 42', start_url: base + (cod ? '?cod=' + encodeURIComponent(cod) : ''), scope: base,
+            display: 'standalone', background_color: '#050507', theme_color: '#050507', lang: 'es',
+            icons: [{ src: location.origin + '/img/app-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' }, { src: location.origin + '/img/app-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }] };
+        var l = document.createElement('link'); l.rel = 'manifest';
+        l.href = cod ? 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(m)) : 'manifest.webmanifest';
+        document.head.appendChild(l);
+    })();
+    </script>
     <meta name="theme-color" content="#050507">
     <link rel="apple-touch-icon" href="../../img/app-192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -488,7 +504,7 @@
                 <div class="form-group">
                     <label for="closer_id" style="color: var(--color-accent);">ID Responsable (Closer)</label>
                     <div class="relative-box">
-                        <input type="text" id="closer_id" value="MO001" class="input-cyber input-locked" readonly required>
+                        <input type="text" id="closer_id" value="" class="input-cyber input-locked" readonly required>
                         <span class="candado" aria-hidden="true">🔒</span>
                     </div>
                 </div>
@@ -900,16 +916,21 @@ function mensajeInforme(a){
             // El código llega en la URL de la tarjeta NFC; se recuerda para cuando se abra como app instalada
             let guardado = '';
             try { guardado = localStorage.getItem('s42_closer') || ''; } catch (e) {}
-            const closerCod = (urlParams.get('cod') || urlParams.get('closer') || guardado || 'MO001').toUpperCase().trim().replace(/[^A-Z0-9_-]/g, '').slice(0, 20) || 'MO001';
-            try { localStorage.setItem('s42_closer', closerCod); } catch (e) {}
+            const closerCod = (urlParams.get('cod') || urlParams.get('closer') || guardado || '').toUpperCase().trim().replace(/[^A-Z0-9_-]/g, '').slice(0, 20);
+            if (closerCod) { try { localStorage.setItem('s42_closer', closerCod); } catch (e) {} }
+            else {
+                // Sin código: que el Closer escriba el suyo (antes se ponía MO001 por defecto, que es el del CEO)
+                const ci = $('closer_id'); ci.readOnly = false; ci.classList.remove('input-locked'); ci.value = ''; ci.placeholder = 'Escribe tu código de Closer';
+                ci.addEventListener('change', () => { const v = ci.value.toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 20); ci.value = v; if (v) { try { localStorage.setItem('s42_closer', v); } catch (e) {} location.replace(location.pathname + '?cod=' + encodeURIComponent(v)); } });
+            }
             prepararInstalacion();
-            $('closer_id').value = closerCod;
+            if (closerCod) $('closer_id').value = closerCod;
             // Melina en rosa; el resto de closers en titanio/plata
             if (closerCod.includes('MEL')) {
                 document.body.classList.add('theme-melina');
                 $('badge-closer-text').textContent = "Acceso Exclusivo Melina";
             } else {
-                $('badge-closer-text').textContent = "Acceso Exclusivo Closer: " + closerCod;
+                $('badge-closer-text').textContent = closerCod ? "Acceso Exclusivo Closer: " + closerCod : "Escribe tu código de Closer";
             }
         });
 
@@ -1237,19 +1258,20 @@ function mensajeInforme(a){
             });
         }
         function vcCerrar() { $('vc').hidden = true; document.body.style.overflow = ''; VC = null; }
-        function vcAbrir() {
-            VC = { datos: { estilo: 'titanio', color: '#d9b45a' }, foto: '', uds: 1, idTocado: false };
+        function vcAbrir(ed) {
+            const edit = ed && ed.id ? ed : null;
+            VC = { datos: edit ? Object.assign({}, edit.datos) : { estilo: 'titanio', color: '#d9b45a' }, foto: edit ? (edit.foto || '') : '', uds: 1, idTocado: !!edit, edit: edit };
             const v = $('vc'); if (v.parentNode !== document.body) document.body.appendChild(v); /* fuera de la tarjeta: ocupa toda la pantalla */
             v.textContent = ''; v.hidden = false; document.body.style.overflow = 'hidden'; v.scrollTop = 0;
             const inn = vcEl('div', 'in'); v.appendChild(inn);
             const top = vcEl('div', 'top'); top.append(vcEl('small', null, 'Studio 42 · Tarjeta vCard'));
             const x = vcEl('button', 'x', '✕ Salir'); x.type = 'button'; x.onclick = vcCerrar; top.appendChild(x); inn.appendChild(top);
-            inn.append(vcEl('h2', null, 'Vender una tarjeta vCard'), vcEl('p', 'sub', 'Rellena sus datos: la vista previa cambia mientras escribes. Al crearla se publica su tarjeta y te llega el pedido al panel.'));
+            inn.append(vcEl('h2', null, edit ? 'Corregir la tarjeta' : 'Vender una tarjeta vCard'), vcEl('p', 'sub', edit ? 'Cambia la foto o los datos y guarda. Su enlace y sus tarjetas NFC no cambian.' : 'Rellena sus datos: la vista previa cambia mientras escribes. Al crearla se publica su tarjeta y te llega el pedido al panel.'));
             const pv = vcEl('div', 'vc-prev'); const fr = document.createElement('iframe'); fr.id = 'vc-frame'; fr.title = 'Vista previa de la tarjeta'; fr.src = '../../t/?preview=1';
             pv.append(fr, vcEl('span', null, 'VISTA PREVIA')); inn.appendChild(pv);
             const f = vcEl('div', 'vc-f'); inn.appendChild(f);
             // Foto
-            const fo = vcEl('div', 'vc-foto'); const vista = vcEl('span', 'vista', 'Sin foto');
+            const fo = vcEl('div', 'vc-foto'); const vista = vcEl('span', 'vista', VC.foto ? '' : 'Sin foto'); if (VC.foto) vista.style.backgroundImage = 'url(' + VC.foto + ')';
             const lf = vcEl('label', null, '📷 Subir foto'); const inf = document.createElement('input'); inf.type = 'file'; inf.accept = 'image/*'; inf.hidden = true; lf.appendChild(inf);
             inf.onchange = () => { const file = inf.files && inf.files[0]; if (!file) return; vcReducir(file).then((u) => { VC.foto = u; vista.style.backgroundImage = 'url(' + u + ')'; vista.textContent = ''; vcPrevia(); }); };
             fo.append(vista, lf); f.appendChild(fo);
@@ -1259,7 +1281,7 @@ function mensajeInforme(a){
             const mas = document.createElement('details'); mas.className = 'vc-mas'; mas.appendChild(vcEl('summary', null, '＋ Más datos (web, redes, dirección…) · opcional'));
             const fm = vcEl('div', 'vc-f'); mas.appendChild(fm);
             VC_CAMPOS.forEach(([k, et, tipo]) => {
-                const l = vcEl('label', null, et); const i = document.createElement('input'); i.type = tipo; if (k === 'bio') i.maxLength = 200;
+                const l = vcEl('label', null, et); const i = document.createElement('input'); i.type = tipo; if (k === 'bio') i.maxLength = 200; i.value = VC.datos[k] || '';
                 if (tipo === 'tel') i.inputMode = 'tel'; if (tipo === 'email') i.inputMode = 'email';
                 i.oninput = () => { VC.datos[k] = i.value; if (k === 'nombre' && idInp && !VC.idTocado) idInp.value = slugVc(i.value); vcPrevia(); };
                 l.appendChild(i); (BASICOS.indexOf(k) >= 0 ? f : fm).appendChild(l);
@@ -1269,12 +1291,14 @@ function mensajeInforme(a){
             const le = vcEl('label', null, 'Estilo'); const es = vcEl('div', 'vc-estilos');
             const lc = vcEl('label', null, 'Color de su marca'); const ic = document.createElement('input'); ic.type = 'color'; ic.value = '#d9b45a'; ic.style.cssText = 'width:100%;min-height:46px;border-radius:10px;border:1px solid #2a2d35;background:#0b0c10'; lc.appendChild(ic); lc.hidden = true;
             ic.oninput = () => { VC.datos.color = ic.value; vcPrevia(); };
-            VC_ESTILOS.forEach(([k, n, g]) => { const b = vcEl('button', k === 'titanio' ? 'on' : null); b.type = 'button'; const dot = vcEl('i'); dot.style.background = g; b.append(dot, document.createTextNode(n));
+            if (VC.datos.color) ic.value = VC.datos.color; lc.hidden = VC.datos.estilo !== 'marca';
+            VC_ESTILOS.forEach(([k, n, g]) => { const b = vcEl('button', k === (VC.datos.estilo || 'titanio') ? 'on' : null); b.type = 'button'; const dot = vcEl('i'); dot.style.background = g; b.append(dot, document.createTextNode(n));
                 b.onclick = () => { VC.datos.estilo = k; es.querySelectorAll('button').forEach((o) => o.classList.toggle('on', o === b)); lc.hidden = k !== 'marca'; vcPrevia(); }; es.appendChild(b); });
             le.appendChild(es); f.append(le, lc);
             // Identificador y quién paga
             const li = vcEl('label', null, 'Enlace de la tarjeta (studio42.es/t/?id=…)'); idInp = document.createElement('input'); idInp.type = 'text'; idInp.placeholder = 'nombre-apellido';
             idInp.oninput = () => { VC.idTocado = true; idInp.value = slugVc(idInp.value); }; li.appendChild(idInp); f.appendChild(li);
+            if (edit) { idInp.value = edit.id; idInp.disabled = true; }
             const lp = vcEl('label', null, 'Quién paga (empresa o persona)'); const ip = document.createElement('input'); ip.type = 'text'; lp.appendChild(ip); f.appendChild(lp);
             // Unidades
             const ud = vcEl('div', 'vc-uds'); const txt = vcEl('div'); const pz = CATALOGO.piezas.tarjeta;
@@ -1285,27 +1309,31 @@ function mensajeInforme(a){
             const ln = vcEl('label', null, 'Notas (opcional)'); const tn = document.createElement('textarea'); tn.rows = 2; tn.placeholder = 'Ej.: grabar el nombre en la madera, fecha de entrega…'; ln.appendChild(tn); f.appendChild(ln);
             const ok = vcEl('label', 'vc-ok'); const cb = document.createElement('input'); cb.type = 'checkbox';
             ok.append(cb, vcEl('span', null, 'La persona ha aceptado que estos datos se publiquen en su tarjeta digital. Se guarda la fecha como prueba de su consentimiento.')); f.appendChild(ok);
-            const msg = vcEl('p', 'nota-pie'); const go = vcEl('button', 'vc-go', 'Crear tarjeta y pedido'); go.type = 'button'; f.append(go, msg);
+            if (edit) { lp.remove(); ud.remove(); ln.remove(); ok.remove(); }
+            const msg = vcEl('p', 'nota-pie'); const go = vcEl('button', 'vc-go', edit ? 'Guardar cambios' : 'Crear tarjeta y pedido'); go.type = 'button'; f.append(go, msg);
             go.onclick = async () => {
                 msg.textContent = '';
                 const nombre = String(VC.datos.nombre || '').trim(); const id = slugVc(idInp.value || nombre);
                 if (nombre.length < 2) { msg.textContent = 'Falta el nombre.'; return; }
                 if (id.length < 3) { msg.textContent = 'El enlace es demasiado corto.'; return; }
-                if (!cb.checked) { msg.textContent = 'Marca el consentimiento de la persona.'; return; }
+                if (!edit && !cb.checked) { msg.textContent = 'Marca el consentimiento de la persona.'; return; }
                 const t = {}; VC_CAMPOS.forEach(([k]) => { t[k] = VC.datos[k] || ''; }); t.estilo = VC.datos.estilo || 'titanio'; t.color = VC.datos.color || '';
                 go.disabled = true; go.textContent = 'Publicando…';
                 try {
                     const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
-                        body: JSON.stringify({ accion: 'closer_tarjeta', closer_id: $('closer_id').value, id, tarjeta: t, foto: VC.foto || '', paga: ip.value.trim(), unidades: VC.uds, notas: tn.value.trim(), consentimiento: true }) });
+                        body: JSON.stringify(edit
+                            ? { accion: 'closer_tarjeta', editar: true, closer_id: $('closer_id').value, id: edit.id, tarjeta: t, foto: (VC.foto && VC.foto !== edit.fotoEnviada) ? VC.foto : '' }
+                            : { accion: 'closer_tarjeta', closer_id: $('closer_id').value, id, tarjeta: t, foto: VC.foto || '', paga: ip.value.trim(), unidades: VC.uds, notas: tn.value.trim(), consentimiento: true }) });
                     const r = await resp.json();
-                    if (!r.ok) { go.disabled = false; go.textContent = 'Crear tarjeta y pedido'; msg.textContent = '⚠️ ' + (r.error || 'No se pudo crear.'); return; }
-                    vcHecha(inn, r, nombre, t.telefono || t.whatsapp);
+                    if (!r.ok) { go.disabled = false; go.textContent = edit ? 'Guardar cambios' : 'Crear tarjeta y pedido'; msg.textContent = '⚠️ ' + (r.error || 'No se pudo guardar.'); return; }
+                    const ult = { id: r.id || edit.id, datos: Object.assign({}, VC.datos), foto: VC.foto, fotoEnviada: VC.foto, pedido: edit ? edit.pedido : r.pedido, url: r.url };
+                    vcHecha(inn, Object.assign({}, r, { pedido: ult.pedido }), nombre, t.telefono || t.whatsapp, ult, !!edit);
                 } catch (e) { go.disabled = false; go.textContent = 'Crear tarjeta y pedido'; msg.textContent = '⚠️ Sin conexión. Inténtalo de nuevo.'; }
             };
         }
-        function vcHecha(inn, r, nombre, tel) {
+        function vcHecha(inn, r, nombre, tel, ult, editada) {
             inn.querySelectorAll('.vc-f, .vc-prev, .sub').forEach((e) => e.remove());
-            inn.querySelector('h2').textContent = '✅ Tarjeta de ' + nombre + ' creada';
+            inn.querySelector('h2').textContent = '✅ Tarjeta de ' + nombre + (editada ? ' actualizada' : ' creada');
             const k = vcEl('div', 'card');
             k.append(vcEl('h3', null, 'Su enlace'), vcEl('p', 'nota-pie', 'En 1 minuto ya se puede abrir. Es el enlace que se graba en sus tarjetas NFC vCard con NFC Tools.'));
             const lk = vcEl('div', 'vc-link'); const cd = vcEl('code', null, r.url.replace('https://', '')); const cp = vcEl('button', null, 'Copiar'); cp.type = 'button';
@@ -1316,11 +1344,13 @@ function mensajeInforme(a){
             const wa = vcEl('a', null, '📲 Enviársela'); const num = String(tel || '').replace(/\D/g, ''); wa.href = 'https://wa.me/' + (num.length === 9 ? '34' + num : num) + '?text=' + encodeURIComponent('¡Hola ' + nombre.split(' ')[0] + '! Ya tienes tu tarjeta digital de Studio 42: ' + r.url + '\nGuárdala y compártela con un toque.'); wa.target = '_blank'; wa.rel = 'noopener';
             acc.append(ab, wa); k.appendChild(acc); inn.appendChild(k);
             const k2 = vcEl('div', 'card'); k2.append(vcEl('h3', null, 'Pedido ' + r.pedido.id), vcEl('p', 'nota-pie', r.pedido.calc.lineas.map((l) => l.unidades + ' × ' + l.concepto).join(' · ') + ' · Total ' + euro(r.pedido.calc.total) + ' IVA incl. Ya está en el panel como «Por despachar».')); inn.appendChild(k2);
-            const otra = vcEl('button', 'vc-go', 'Vender otra tarjeta'); otra.type = 'button'; otra.onclick = vcAbrir;
+            const cor = vcEl('button', 'cerrar-grande', '✏️ Cambiar foto o datos'); cor.type = 'button'; cor.onclick = () => vcAbrir(ult);
+            inn.append(cor, vcEl('p', 'nota-pie', 'Puedes corregirla durante 48 h. Después, el cambio lo hace Studio 42 desde el panel.'));
+            const otra = vcEl('button', 'vc-go', 'Vender otra tarjeta'); otra.type = 'button'; otra.onclick = () => vcAbrir();
             const sal = vcEl('button', 'cerrar-grande', '✕ Volver al diagnóstico'); sal.type = 'button'; sal.onclick = vcCerrar;
             inn.append(otra, sal); $('vc').scrollTop = 0;
         }
-        $('btn-vcard').addEventListener('click', vcAbrir);
+        $('btn-vcard').addEventListener('click', () => vcAbrir());
 
         /* ================================ PEDIDO ================================
            Los precios se muestran aquí, pero el total que vale es el que calcula el servidor. */

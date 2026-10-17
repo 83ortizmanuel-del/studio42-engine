@@ -1996,6 +1996,17 @@ function closerTarjeta_(raw) {
   var c = cfg_();
   var au = autorizarCloser_(c, raw);
   if (au.error) return { ok: false, error: au.error };
+  // Corrección en el momento (otra foto, un dato más): solo la tarjeta que vendió ese Closer y durante 48 h
+  if (raw.editar === true) {
+    var idE = tarjetaId_(raw.id), filaE = idE ? tarjetaFila_(idE) : null;
+    if (!filaE) return { ok: false, error: 'No encuentro esa tarjeta.' };
+    var alta = filaE.v[4] instanceof Date ? filaE.v[4].getTime() : Date.parse(filaE.v[4]);
+    if (String(filaE.v[6]).indexOf('Closer ' + au.closer) < 0) return { ok: false, error: 'Solo puedes corregir las tarjetas que has vendido tú.' };
+    if (!(Date.now() - alta < 48 * 3600 * 1000)) return { ok: false, error: 'Han pasado más de 48 h: pide el cambio a Studio 42 desde el panel.' };
+    var rE = tarjetaGuardar_(c, { id: idE, tarjeta: raw.tarjeta, foto: raw.foto, quitarFoto: raw.quitarFoto === true, nueva: false, paga: String(filaE.v[6]) });
+    if (!rE.ok) return rE;
+    return { ok: true, id: rE.id, url: rE.url, editada: true };
+  }
   if (raw.consentimiento !== true) return { ok: false, error: 'Marca que la persona ha aceptado publicar sus datos en la tarjeta.' };
   var paga = limpiar_(sinEtiquetas_(raw.paga), 60);
   var r = tarjetaGuardar_(c, { id: raw.id, tarjeta: raw.tarjeta, foto: raw.foto, nueva: true, consentimiento: true, paga: (paga || 'Cliente') + ' · Closer ' + au.closer });
