@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "id": "melinatrainer",
+  "nombre": "Melina",
+  "cargo": "CEO",
+  "empresa": "PLAYON TRAINERS",
+  "bio": "",
+  "estilo": "marca",
+  "color": "#e800c8",
+  "telefono": "617472814",
+  "whatsapp": "34617472814",
+  "email": "melinagarcia1106@gmail.com",
+  "web": "",
+  "linkedin": "",
+  "instagram": "https://www.instagram.com/melinarte1?srtk=MXMza2NxMzdoZGsxcw==",
+  "tiktok": "",
+  "direccion": "",
+  "reserva": "",
+  "resena": "",
+  "pausada": false,
+  "foto": "fotos/melinatrainer.jpg?v=1792239770271"
+}
