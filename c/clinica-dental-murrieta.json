@@ -1,0 +1,313 @@
+{
+  "version": 2,
+  "nombre": "CLÍNICA DENTAL MURRIETA",
+  "subtitulo": "Tu clínica dental de confianza en Logroño",
+  "textoBadge": "CLÍNICA DENTAL · LOGROÑO",
+  "colorPrincipal": "#1c1d21",
+  "colorAcento": "#ffffff",
+  "whatsapp": "https://wa.me/34941212891",
+  "secciones": [
+    {
+      "titulo": "¿En qué podemos ayudarte?",
+      "botones": [
+        {
+          "tipo": "asistente",
+          "nombre": "Pedir cita",
+          "descripcion": "Primera visita o revisión: dinos qué necesitas y te proponemos hueco.",
+          "icono": "calendar",
+          "titulo": "Solicitar cita",
+          "intro": "Elige tus preferencias y las enviamos a la clínica por WhatsApp.",
+          "botonTexto": "Enviar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Motivo",
+              "opciones": [
+                "Primera visita",
+                "Revisión periódica",
+                "Limpieza",
+                "Tengo una molestia",
+                "Otro motivo"
+              ]
+            },
+            {
+              "titulo": "Cuándo",
+              "opciones": [
+                "Cuanto antes",
+                "Esta semana",
+                "La próxima semana"
+              ]
+            },
+            {
+              "titulo": "Franja",
+              "opciones": [
+                "Mañana",
+                "Tarde",
+                "Me da igual"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, quisiera pedir cita:\n- Motivo: {Motivo}\n- Cuándo: {Cuándo}\n- Franja: {Franja}\n¿Qué huecos tenéis disponibles?",
+          "destacado": true
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Garantía de mi tratamiento",
+          "descripcion": "Consulta a la clínica la garantía de tu tratamiento y qué cubre.",
+          "icono": "shield",
+          "titulo": "Garantía de tratamientos",
+          "intro": "Cada caso es distinto. Dinos tu tratamiento y la clínica te informará.",
+          "botonTexto": "Consultar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Tratamiento",
+              "opciones": [
+                "Empaste",
+                "Endodoncia",
+                "Corona o funda",
+                "Implante",
+                "Ortodoncia",
+                "Prótesis",
+                "Otro"
+              ]
+            },
+            {
+              "titulo": "Qué quieres saber",
+              "opciones": [
+                "Plazo de garantía",
+                "Qué cubre la garantía",
+                "Cómo reclamar",
+                "Condiciones y revisiones"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, quisiera información sobre la garantía de mi tratamiento:\n- Tratamiento: {Tratamiento}\n- Consulta: {Qué quieres saber}\nGracias."
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Tomo antibióticos: avisar a la clínica",
+          "descripcion": "Comunica tu situación al equipo antes o después de tu visita.",
+          "icono": "clipboard",
+          "titulo": "Aviso de tratamiento con antibióticos",
+          "intro": "Esta herramienta no da consejo clínico: solo avisa al equipo para que te responda.",
+          "botonTexto": "Avisar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Situación",
+              "opciones": [
+                "Voy a pedir cita y tomo antibióticos",
+                "Ya tengo cita y tomo antibióticos",
+                "Me los recetaron tras un tratamiento aquí",
+                "Me los recetó otro profesional"
+              ]
+            },
+            {
+              "titulo": "Qué necesitas",
+              "opciones": [
+                "Avisar antes de mi cita",
+                "Cambiar mi cita",
+                "Que me llame el equipo",
+                "Resolver una duda"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, os aviso de mi situación:\n- Situación: {Situación}\n- Necesito: {Qué necesitas}\nPor favor, ¿podéis contactar conmigo para indicarme cómo proceder?"
+        },
+        {
+          "tipo": "info",
+          "nombre": "Urgencia dental",
+          "descripcion": "Qué hacer si tienes una urgencia y cómo avisar a la clínica.",
+          "icono": "alert",
+          "titulo": "Urgencia dental",
+          "intro": "Actúa rápido y avisa a la clínica cuanto antes.",
+          "tarjetas": [
+            {
+              "nivel": "alerta",
+              "titulo": "Emergencia grave",
+              "texto": "Si es una emergencia médica o te sientes en peligro, llama al 112."
+            },
+            {
+              "nivel": "info",
+              "titulo": "Avisa a la clínica",
+              "texto": "Escríbenos por WhatsApp o llama al centro para contarnos qué te ocurre y que el equipo te indique cómo proceder."
+            },
+            {
+              "nivel": "ok",
+              "titulo": "Ten a mano",
+              "texto": "Tu nombre, si ya eres paciente y, si la tomas, la medicación que estés siguiendo."
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Avisar por WhatsApp",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, tengo una urgencia dental y necesito que me atendáis lo antes posible. ¿Cómo procedemos?"
+            }
+          ]
+        },
+        {
+          "tipo": "asistente",
+          "nombre": "Presupuesto y financiación",
+          "descripcion": "Pide información de presupuesto o financiación sin compromiso.",
+          "icono": "file",
+          "titulo": "Presupuesto y financiación",
+          "intro": "La clínica te responderá con la información personalizada para tu caso.",
+          "botonTexto": "Enviar por WhatsApp",
+          "pasos": [
+            {
+              "titulo": "Tratamiento",
+              "opciones": [
+                "Revisión y diagnóstico",
+                "Implantes",
+                "Ortodoncia",
+                "Estética dental",
+                "Prótesis",
+                "Otro"
+              ]
+            },
+            {
+              "titulo": "Qué necesitas",
+              "opciones": [
+                "Solo presupuesto",
+                "Opciones de financiación",
+                "Presupuesto y financiación"
+              ]
+            }
+          ],
+          "mensaje": "Hola {negocio}, me gustaría información:\n- Tratamiento: {Tratamiento}\n- Necesito: {Qué necesitas}\n¿Podéis indicarme cómo proceder?"
+        }
+      ]
+    },
+    {
+      "titulo": "Contacto & Redes",
+      "botones": [
+        {
+          "tipo": "whatsapp",
+          "nombre": "Escríbenos por WhatsApp",
+          "descripcion": "Respuesta directa del equipo",
+          "icono": "chat",
+          "colorIcono": "#25D366",
+          "mensaje": "Hola {negocio}, quisiera más información."
+        },
+        {
+          "tipo": "enlace",
+          "nombre": "Llamar ahora",
+          "descripcion": "Teléfono del negocio",
+          "icono": "phone",
+          "colorIcono": "#34d399",
+          "url": "tel:+34941212891"
+        },
+        {
+          "tipo": "enlace",
+          "nombre": "Cómo llegar",
+          "descripcion": "C. Beratúa, 2, Entreplanta Izda, 26005 Logroño, La Rioja, España",
+          "icono": "nav",
+          "colorIcono": "#4285F4",
+          "url": "https://maps.google.com/?cid=4021574797033824579&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA"
+        },
+        {
+          "tipo": "info",
+          "nombre": "Horario",
+          "descripcion": "Días y horas de apertura",
+          "icono": "clock",
+          "titulo": "Horario de apertura",
+          "intro": "Según la ficha de Google Maps. Puede variar en festivos.",
+          "tarjetas": [
+            {
+              "nivel": "info",
+              "titulo": "Semana",
+              "items": [
+                {
+                  "etiqueta": "lunes",
+                  "valor": "9:00–14:00, 16:00–20:00"
+                },
+                {
+                  "etiqueta": "martes",
+                  "valor": "9:00–17:30"
+                },
+                {
+                  "etiqueta": "miércoles",
+                  "valor": "9:00–14:00, 16:00–20:00"
+                },
+                {
+                  "etiqueta": "jueves",
+                  "valor": "9:30–14:00, 16:00–20:00"
+                },
+                {
+                  "etiqueta": "viernes",
+                  "valor": "9:30–14:30"
+                },
+                {
+                  "etiqueta": "sábado",
+                  "valor": "Cerrado"
+                },
+                {
+                  "etiqueta": "domingo",
+                  "valor": "Cerrado"
+                }
+              ]
+            }
+          ],
+          "acciones": [
+            {
+              "texto": "Preguntar por WhatsApp",
+              "whatsapp": true,
+              "estilo": "whatsapp",
+              "mensaje": "Hola {negocio}, quisiera confirmar el horario."
+            }
+          ]
+        },
+        {
+          "tipo": "vcard",
+          "nombre": "Guardar contacto en la agenda",
+          "descripcion": "Descarga nuestro teléfono directo al móvil",
+          "icono": "contact",
+          "colorIcono": "#ffffff"
+        }
+      ]
+    },
+    {
+      "titulo": "Servicios del llavero",
+      "botones": [
+        {
+          "tipo": "llaves",
+          "nombre": "¿Encontraste estas llaves?",
+          "descripcion": "Avisa al local para coordinar la devolución segura"
+        },
+        {
+          "tipo": "bizum",
+          "nombre": "Pagar por Bizum",
+          "descripcion": "Copia el número y paga desde tu banco",
+          "icono": "phone",
+          "colorIcono": "#00c3ff"
+        },
+        {
+          "tipo": "parking",
+          "nombre": "¿Dónde aparqué?",
+          "descripcion": "Guarda la posición GPS de tu coche para volver",
+          "icono": "locate",
+          "colorIcono": "#94A3B8"
+        }
+      ]
+    },
+    {
+      "titulo": "Tu Opinión Nos Importa",
+      "botones": [
+        {
+          "tipo": "opinion",
+          "whatsappGerencia": "https://wa.me/34941212891?text=Hola%2C%20quisiera%20enviar%20un%20comentario%20privado%20sobre%20mi%20visita%20a%20Cl%C3%ADnica%20Dental%20Murrieta.",
+          "urlGoogle": "https://search.google.com/local/writereview?placeid=ChIJ8SzxXUqrWg0RQ2HdfviAzzc"
+        }
+      ]
+    }
+  ],
+  "placeId": "ChIJ8SzxXUqrWg0RQ2HdfviAzzc",
+  "_generado": true,
+  "_peticion": "09064e75e81d79ed",
+  "_closer": "MEL042",
+  "_fecha": "2026-10-17T12:54:25.231Z",
+  "datosPago": {
+    "bizum": "941212891",
+    "concepto": "Clínica Dental Murrieta"
+  }
+}
