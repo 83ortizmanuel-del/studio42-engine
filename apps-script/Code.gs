@@ -172,6 +172,7 @@ function doPost(e) {
       : acc.indexOf('panel_') === 0 ? panelRouter_(datos)
       : acc === 'pedido_guardar' ? pedidoGuardar_(datos)
       : acc === 'closer_tarjeta' ? closerTarjeta_(datos)
+      : acc === 'tarjeta_editar' ? tarjetaEditarCliente_(datos)
       : acc === 'buscar' ? buscar_(datos) : acc === 'ficha' ? ficha_(datos) : procesar_(datos);
     return json_(r);
   } catch (err) {
@@ -1446,7 +1447,7 @@ function avisarPedido_(c, datos, detalle, notas) {
 /* Accesos: el CEO entra con PANEL_CLAVE (todo). El equipo entra con su contraseña propia,
  * creada por el CEO desde el panel (pestaña Equipo) y guardada cifrada en PANEL_EQUIPO.
  * El equipo solo puede ver datos y crear, editar o pausar tarjetas. */
-var PERMISOS_EQUIPO = ['panel_datos', 'panel_tarjeta_guardar', 'panel_tarjeta_estado', 'panel_cambio', 'panel_publicar'];
+var PERMISOS_EQUIPO = ['panel_datos', 'panel_tarjeta_guardar', 'panel_tarjeta_estado', 'panel_tarjeta_pin', 'panel_cambio', 'panel_publicar'];
 
 function equipoLista_() {
   try { var l = JSON.parse(PropertiesService.getScriptProperties().getProperty('PANEL_EQUIPO') || '[]'); return Array.isArray(l) ? l : []; } catch (e) { return []; }
@@ -1509,6 +1510,7 @@ function panelRouter_(d) {
   if (d.accion === 'panel_publicar') return panelPublicar_(c, d, cache);
   if (d.accion === 'panel_tarjeta_guardar') return tarjetaGuardar_(c, d);
   if (d.accion === 'panel_tarjeta_estado') return tarjetaEstado_(c, d);
+  if (d.accion === 'panel_tarjeta_pin') { var idp = tarjetaId_(d.id); if (!idp || !tarjetaFila_(idp)) return { ok: false, error: 'Esa tarjeta no está en la Hoja: guárdala primero desde el panel.' }; return { ok: true, pin: tarjetaPonerPin_(idp), editar: c.dominio + '/t/editar/?id=' + idp }; }
   if (d.accion === 'panel_tarjeta_borrar') return tarjetaBorrar_(c, d);
   if (d.accion === 'panel_pausar') {
     var sl = String(d.slug || '').toLowerCase();
@@ -1895,7 +1897,7 @@ function medidaPausar_(c, slug, pausar) {
  * Borrar elimina el archivo, la foto y la fila (derecho de supresión).
  * ==================================================================================== */
 var TARJETAS_HOJA = 'Tarjetas';
-var TARJETAS_COLS = ['ID', 'Nombre', 'Empresa', 'Estado', 'Alta', 'Actualizada', 'Paga', 'Consentimiento'];
+var TARJETAS_COLS = ['ID', 'Nombre', 'Empresa', 'Estado', 'Alta', 'Actualizada', 'Paga', 'Consentimiento', 'PIN (cifrado)'];
 var TARJETA_ESTILOS = ['titanio', 'oro', 'minimal', 'marca'];
 
 function tarjetasHoja_() {
@@ -1914,7 +1916,7 @@ function tarjetasLista_(c) {
   try {
     var f = function (x) { return x instanceof Date ? x.toISOString() : String(x || ''); };
     lista = tarjetasHoja_().getDataRange().getValues().slice(1).filter(function (r) { return r[0]; }).map(function (r) {
-      return { id: String(r[0]), nombre: String(r[1]), empresa: String(r[2]), estado: String(r[3] || 'activa'), alta: f(r[4]), actualizada: f(r[5]), paga: String(r[6] || ''), consentimiento: f(r[7]) };
+      return { id: String(r[0]), nombre: String(r[1]), empresa: String(r[2]), estado: String(r[3] || 'activa'), alta: f(r[4]), actualizada: f(r[5]), paga: String(r[6] || ''), consentimiento: f(r[7]), tienePin: !!r[8] };
     });
   } catch (e) { lista = []; }
   // Tarjetas que existen en la web pero aún no están en la Hoja (creadas a mano): se muestran para poder gestionarlas
@@ -1986,7 +1988,10 @@ function tarjetaGuardar_(c, d) {
   var consentida = fila && fila.v[7] ? fila.v[7] : (d.consentimiento === true || !prev.existe ? ahora : '');
   var datos = [id, t.nombre, t.empresa, t.pausada ? 'pausada' : 'activa', fila ? fila.v[4] : ahora, ahora, cadena_(d.paga, 60) || (fila ? fila.v[6] : ''), consentida];
   if (fila) datos.forEach(function (x, i) { hoja.getRange(fila.n, i + 1).setValue(x); }); else hoja.appendRow(datos);
-  return { ok: true, id: id, url: c.dominio + '/t/?id=' + id, tarjeta: t };
+  var out = { ok: true, id: id, url: c.dominio + '/t/?id=' + id, tarjeta: t };
+  // Tarjeta nueva: PIN para que su titular cambie él mismo la foto y sus datos
+  if (!prev.existe) { out.pin = tarjetaPonerPin_(id); out.editar = c.dominio + '/t/editar/?id=' + id; }
+  return out;
 }
 
 /* ===================== VENTA DE UNA TARJETA vCARD DESDE EL CLOSER =====================
@@ -2021,7 +2026,67 @@ function closerTarjeta_(raw) {
   var datos = { id: id, cliente: cliente, slug: 't-' + r.id, url: r.url, closer: au.closer, calc: calc, tarjeta: r.id };
   pedidosHoja_().appendRow([id, new Date(), au.closer, cliente, 't-' + r.id, r.url, 'Tarjeta vCard', detalle, calc.total, 'Por despachar', notas, JSON.stringify(datos)]);
   avisarPedido_(c, datos, detalle, notas);
-  return { ok: true, id: r.id, url: r.url, pedido: datos };
+  return { ok: true, id: r.id, url: r.url, pedido: datos, pin: r.pin, editar: r.editar };
+}
+
+/* ================= EDICIÓN DE LA TARJETA POR SU TITULAR (enlace privado + PIN) =================
+   El titular cambia su foto y sus datos sin pasar por Studio 42. No puede tocar el estilo, el
+   enlace ni pausar o borrar la tarjeta. El PIN se guarda cifrado; nunca en claro. */
+function pinHash_(id, pin) {
+  var p = PropertiesService.getScriptProperties(), sal = p.getProperty('PIN_SAL');
+  if (!sal) { sal = Utilities.getUuid() + Utilities.getUuid(); p.setProperty('PIN_SAL', sal); }
+  var b = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, sal + '|' + id + '|' + pin, Utilities.Charset.UTF_8);
+  return b.map(function (x) { return ('0' + (x & 255).toString(16)).slice(-2); }).join('');
+}
+function tarjetaPonerPin_(id) {
+  var fila = tarjetaFila_(id); if (!fila) return '';
+  var pin = ''; for (var i = 0; i < 6; i++) pin += Math.floor(Math.random() * 10);
+  var hoja = tarjetasHoja_();
+  hoja.getRange(1, 9).setValue('PIN (cifrado)');
+  hoja.getRange(fila.n, 9).setValue(pinHash_(id, pin));
+  try { CacheService.getScriptCache().remove('pinf_' + id); } catch (e) {}
+  return pin;
+}
+function pinComprobar_(id, pin) {
+  var cache = CacheService.getScriptCache(), k = 'pinf_' + id, fallos = Number(cache.get(k) || '0');
+  if (fallos >= 5) return { error: 'Demasiados intentos. Espera 30 minutos o pide un PIN nuevo a Studio 42.' };
+  var fila = tarjetaFila_(id);
+  if (!fila || !fila.v[8]) return { error: 'Esta tarjeta aún no tiene PIN de edición. Pídeselo a Studio 42.' };
+  if (!/^\d{6}$/.test(String(pin || '')) || pinHash_(id, String(pin)) !== String(fila.v[8])) {
+    cache.put(k, String(fallos + 1), 1800);
+    return { error: 'PIN incorrecto.' + (fallos >= 3 ? ' Te queda ' + (4 - fallos) + ' intento.' : '') };
+  }
+  return { ok: true, fila: fila };
+}
+var TARJETA_CAMPOS_TITULAR = ['nombre', 'cargo', 'empresa', 'bio', 'telefono', 'whatsapp', 'email', 'web', 'linkedin', 'instagram', 'tiktok', 'direccion', 'reserva', 'resena'];
+function tarjetaEditarCliente_(d) {
+  var c = cfg_();
+  var id = tarjetaId_(d.id); if (!id) return { ok: false, error: 'Tarjeta no válida.' };
+  var chk = pinComprobar_(id, d.pin);
+  if (chk.error) return { ok: false, error: chk.error };
+  if (d.comprobar === true) return { ok: true };
+  var a = githubLeer_(c, 't/' + id + '.json');
+  if (a.error) return { ok: false, error: a.error };
+  if (!a.existe || !a.json) return { ok: false, error: 'No existe la tarjeta.' };
+  if (a.json.pausada === true) return { ok: false, error: 'La tarjeta está en pausa. Habla con Studio 42.' };
+  var nueva = {}, entrada = d.tarjeta || {};
+  TARJETA_CAMPOS_TITULAR.forEach(function (k) { nueva[k] = Object.prototype.hasOwnProperty.call(entrada, k) ? entrada[k] : (a.json[k] || ''); });
+  nueva.estilo = a.json.estilo; nueva.color = a.json.color;   // el diseño lo decide Studio 42
+  var r = tarjetaGuardar_(c, { id: id, tarjeta: nueva, foto: d.foto, quitarFoto: d.quitarFoto === true, nueva: false });
+  if (!r.ok) return r;
+  avisarCambioTarjeta_(c, id, r.tarjeta, !!d.foto || d.quitarFoto === true);
+  return { ok: true, url: r.url, tarjeta: r.tarjeta };
+}
+function avisarCambioTarjeta_(c, id, t, foto) {
+  try {
+    var dest = String(PropertiesService.getScriptProperties().getProperty('AVISO_EMAIL') || '').trim();
+    if (dest === '0') return;
+    if (!dest) dest = Session.getEffectiveUser().getEmail();
+    if (!dest) return;
+    var url = c.dominio + '/t/?id=' + id;
+    MailApp.sendEmail({ to: dest, subject: '✏️ ' + t.nombre + ' ha editado su tarjeta' + (foto ? ' (foto nueva)' : ''), name: 'Studio 42 Tarjetas',
+      htmlBody: '<div style="font-family:Arial,sans-serif"><p><b>' + t.nombre + '</b> ha cambiado su tarjeta digital' + (foto ? ', incluida la foto' : '') + '.</p><p><a href="' + url + '">Ver la tarjeta</a> · <a href="' + c.dominio + '/panel/">Corregir desde el panel</a></p></div>' });
+  } catch (e) {}
 }
 
 function tarjetaEstado_(c, d) {

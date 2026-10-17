@@ -13,6 +13,13 @@ const nueva = () => { const filas = []; return { filas, getLastRow: () => filas.
 ctx.SpreadsheetApp = { getActive: () => ({ getSheetByName: (n) => hojas[n] || null, insertSheet: (n) => (hojas[n] = nueva()) }) };
 const mem = {};
 ctx.CacheService = { getScriptCache: () => ({ get: (k) => mem[k] || null, put: (k, v) => { mem[k] = String(v); }, remove: (k) => { delete mem[k]; } }) };
+const crypto = require('crypto');
+const propsBase = ctx.PropertiesService.getScriptProperties(), propsExtra = {};
+ctx.PropertiesService = { getScriptProperties: () => ({ getProperty: (k) => (k in propsExtra ? propsExtra[k] : propsBase.getProperty(k)), setProperty: (k, v) => { propsExtra[k] = String(v); } }) };
+ctx.Utilities.computeDigest = (alg, txt) => [...crypto.createHash('sha256').update(txt, 'utf8').digest()].map((b) => (b > 127 ? b - 256 : b));
+ctx.Utilities.DigestAlgorithm = { SHA_256: 'sha256' }; ctx.Utilities.Charset = { UTF_8: 'utf8' };
+ctx.MailApp = { enviados: [], sendEmail(o) { this.enviados.push(o); } };
+ctx.Session = { getEffectiveUser: () => ({ getEmail: () => 'ceo@studio42.es' }) };
 const post = (d) => JSON.parse(vm.runInContext('doPost', ctx)({ postData: { contents: JSON.stringify(d) }, parameter: {} }).s);
 
 const tk = post({ accion: 'panel_login', clave: 'clave-segura' }).token;
@@ -31,7 +38,7 @@ check(j.nombre === 'Ana López' && j.whatsapp === '34600112233' && j.web === 'ht
 check(j.linkedin === '' && j.estilo === 'titanio' && j.color === '' && !('espia' in j), 'descarta enlaces peligrosos, estilos y campos inventados');
 check(/^fotos\/ana-lopez\.jpg\?v=/.test(j.foto) && repo.files['t/fotos/ana-lopez.jpg'] === 'JPEGFAKE', 'sube la foto junto a la tarjeta');
 const fila = hojas.Tarjetas.filas[1];
-check(hojas.Tarjetas.filas[0].join() === 'ID,Nombre,Empresa,Estado,Alta,Actualizada,Paga,Consentimiento' && fila[0] === 'ana-lopez' && fila[3] === 'activa' && fila[6] === 'Iberlax' && fila[7], 'la hoja solo guarda lo mínimo (sin teléfono ni email) y la fecha del consentimiento');
+check(hojas.Tarjetas.filas[0].join() === 'ID,Nombre,Empresa,Estado,Alta,Actualizada,Paga,Consentimiento,PIN (cifrado)' && fila[0] === 'ana-lopez' && fila[3] === 'activa' && fila[6] === 'Iberlax' && fila[7], 'la hoja solo guarda lo mínimo (sin teléfono ni email) y la fecha del consentimiento');
 check(!JSON.stringify(hojas.Tarjetas.filas).includes('600112233') && !JSON.stringify(hojas.Tarjetas.filas).includes('@iberlax'), 'ningún dato de contacto en la hoja');
 
 check(!post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'ana-lopez', nueva: true, consentimiento: true, tarjeta: { nombre: 'Otra' } }).ok, 'no pisa una tarjeta existente al crear otra con el mismo identificador');
@@ -80,4 +87,23 @@ check(hojas.Pedidos.filas.length === nPed, 'corregir no crea otro pedido');
 check(!post({ accion: 'closer_tarjeta', editar: true, closer_id: 'MO001', id: 'pepe-ruiz', tarjeta: { nombre: 'X' } }).ok, 'otro Closer no puede corregir esa tarjeta');
 hojas.Tarjetas.filas.find((x) => x[0] === 'pepe-ruiz')[4] = new Date(Date.now() - 3 * 864e5);
 check(/48 h/.test(post({ accion: 'closer_tarjeta', editar: true, closer_id: 'LUCIA01', id: 'pepe-ruiz', tarjeta: { nombre: 'Pepe Ruiz' } }).error || ''), 'pasadas 48 h la corrección la hace Studio 42 desde el panel');
+
+/* ---- El titular edita su tarjeta con su PIN ---- */
+r = post({ accion: 'closer_tarjeta', closer_id: 'LUCIA01', id: 'marta-sanz', consentimiento: true, tarjeta: { nombre: 'Marta Sanz', cargo: 'Arquitecta', estilo: 'oro', telefono: '622334455' } });
+check(r.ok && /^\d{6}$/.test(r.pin) && r.editar.endsWith('/t/editar/?id=marta-sanz'), 'al crear la tarjeta se genera un PIN de 6 cifras y el enlace de edición');
+const filaM = hojas.Tarjetas.filas.find((x) => x[0] === 'marta-sanz');
+check(filaM[8] && filaM[8] !== r.pin && !JSON.stringify(hojas.Tarjetas.filas).includes(r.pin), 'el PIN se guarda cifrado, nunca en claro');
+const PIN = r.pin, malo = PIN === '000000' ? '111111' : '000000';
+check(!post({ accion: 'tarjeta_editar', id: 'marta-sanz', pin: malo, tarjeta: { cargo: 'X' } }).ok, 'con un PIN incorrecto no se puede editar');
+check(post({ accion: 'tarjeta_editar', id: 'marta-sanz', pin: PIN, comprobar: true }).ok, 'con el PIN correcto se desbloquea');
+r = post({ accion: 'tarjeta_editar', id: 'marta-sanz', pin: PIN, foto: 'data:image/jpeg;base64,' + Buffer.from('FOTOMARTA').toString('base64'), tarjeta: { nombre: 'Marta Sanz', cargo: 'Arquitecta jefa', estilo: 'minimal', color: '#ff0000', instagram: '@martasanz' } });
+const jm = JSON.parse(repo.files['t/marta-sanz.json']);
+check(r.ok && jm.cargo === 'Arquitecta jefa' && jm.instagram === 'https://www.instagram.com/martasanz' && repo.files['t/fotos/marta-sanz.jpg'] === 'FOTOMARTA', 'el titular cambia su cargo, sus redes y su foto');
+check(jm.estilo === 'oro' && jm.telefono === '622334455', 'no puede cambiar el estilo y lo que no envía se conserva');
+check(ctx.MailApp.enviados.some((m) => /Marta Sanz ha editado su tarjeta \(foto nueva\)/.test(m.subject)), 'a Studio 42 le llega un aviso del cambio');
+for (let i = 0; i < 5; i++) post({ accion: 'tarjeta_editar', id: 'marta-sanz', pin: malo, comprobar: true });
+check(/Demasiados intentos/.test(post({ accion: 'tarjeta_editar', id: 'marta-sanz', pin: PIN, comprobar: true }).error || ''), 'tras 5 PIN erróneos se bloquea 30 minutos');
+r = post({ accion: 'panel_tarjeta_pin', token: tk, id: 'marta-sanz' });
+check(r.ok && /^\d{6}$/.test(r.pin) && post({ accion: 'tarjeta_editar', id: 'marta-sanz', pin: r.pin, comprobar: true }).ok, 'desde el panel se genera un PIN nuevo y desbloquea al momento');
+check(!post({ accion: 'tarjeta_editar', id: 'marta-sanz', pin: PIN, comprobar: true }).ok, 'el PIN antiguo deja de valer');
 console.log('\n' + ok + ' comprobaciones correctas');

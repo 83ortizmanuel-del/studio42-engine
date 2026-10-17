@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0a0b0e">
+<title>Editar mi tarjeta · Studio 42</title>
+<style>
+@font-face{font-family:"Inter";font-weight:400;font-display:swap;src:url("../../fonts/Inter-Regular.woff") format("woff")}
+@font-face{font-family:"Inter";font-weight:600;font-display:swap;src:url("../../fonts/Inter-SemiBold.woff") format("woff")}
+@font-face{font-family:"Inter Display";font-weight:800;font-display:swap;src:url("../../fonts/InterDisplay-ExtraBold.woff") format("woff")}
+:root{--fondo:#0a0b0e;--caja:#12141a;--linea:rgba(220,228,240,.14);--texto:#f4f6f9;--suave:#a3a9b3;--ok:#34d399;--mal:#fca5a5}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--fondo)}
+body{font:400 16px/1.5 "Inter",system-ui,-apple-system,sans-serif;color:var(--texto);min-height:100dvh;padding:max(20px,env(safe-area-inset-top)) 16px 40px}
+.w{max-width:480px;margin:0 auto}
+h1{font:800 1.55rem/1.15 "Inter Display","Inter",system-ui;letter-spacing:-.02em;margin:10px 0 6px}
+.sub{color:var(--suave);font-size:.95rem;margin-bottom:18px}
+.yo{display:flex;align-items:center;gap:12px;margin-top:6px}
+.av{width:56px;height:56px;border-radius:50%;background:#1b1e25 center/cover;border:1.5px solid var(--linea);display:grid;place-items:center;font-weight:800;color:var(--suave);flex:none}
+.caja{background:var(--caja);border:1px solid var(--linea);border-radius:16px;padding:16px;margin-top:14px}
+label{display:grid;gap:6px;font-size:.84rem;font-weight:600;color:#c9ced6;margin-top:12px}
+label:first-child{margin-top:0}
+input[type=text],input[type=tel],input[type=email],input[type=url]{width:100%;padding:13px;border-radius:12px;border:1px solid var(--linea);background:#0b0c10;color:var(--texto);font:inherit}
+input:focus{outline:2px solid #cfd4dc;border-color:transparent}
+.pin{font:800 1.8rem "Inter Display",system-ui;letter-spacing:.4em;text-align:center;padding:14px 10px}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;padding:15px;border-radius:14px;border:0;background:#f4f6f9;color:#0a0b0e;font:700 1rem "Inter",system-ui;cursor:pointer;margin-top:16px;text-decoration:none}
+.btn:disabled{opacity:.5}
+.btn.l{background:transparent;color:var(--texto);border:1.5px solid var(--linea)}
+.msg{font-size:.9rem;margin-top:10px;min-height:1.2em}
+.msg.mal{color:var(--mal)}.msg.ok{color:var(--ok)}
+.prev{position:relative;width:min(100%,300px);height:520px;margin:6px auto 0;border-radius:28px;overflow:hidden;border:1.5px solid var(--linea);background:#000}
+.prev iframe{width:100%;height:100%;border:0}
+.prev span{position:absolute;top:8px;left:50%;transform:translateX(-50%);font:700 .6rem system-ui;letter-spacing:.12em;color:#9ca3af;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:99px}
+.foto{display:flex;align-items:center;gap:12px}
+.foto .av{width:72px;height:72px}
+.foto .bts{display:grid;gap:8px;flex:1}
+.foto .bts label,.foto .bts button{margin:0;display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:12px;border:1px solid var(--linea);background:#181b22;color:var(--texto);font:600 .9rem "Inter",system-ui;cursor:pointer}
+details{margin-top:14px;border:1px solid var(--linea);border-radius:12px;padding:4px 12px;background:#0f1116}
+summary{cursor:pointer;padding:10px 0;font-weight:700}
+details[open]{padding-bottom:12px}
+.nota{font-size:.82rem;color:var(--suave);margin-top:12px;line-height:1.45}
+.pie{text-align:center;color:var(--suave);font-size:.8rem;margin-top:26px}
+</style>
+</head>
+<body>
+<main class="w">
+  <div class="yo"><span class="av" id="av"></span><div><b id="quien">Tu tarjeta</b><div class="sub" style="margin:0">Studio 42 · tarjeta digital</div></div></div>
+
+  <section id="vPin">
+    <h1>Editar mi tarjeta</h1>
+    <p class="sub">Escribe el PIN de 6 cifras que te dieron al entregarte la tarjeta.</p>
+    <div class="caja">
+      <label>PIN<input type="tel" id="pin" class="pin" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="••••••"></label>
+      <button class="btn" id="bEntrar" type="button">Entrar</button>
+      <p class="msg" id="mPin" role="alert"></p>
+    </div>
+    <p class="nota">¿No tienes el PIN? Pídeselo a Studio 42 o a la persona que te entregó la tarjeta.</p>
+  </section>
+
+  <section id="vEdit" hidden>
+    <h1>Tus datos</h1>
+    <p class="sub">Cambia lo que quieras: la vista previa se actualiza mientras escribes. Tu enlace y tus tarjetas NFC no cambian.</p>
+    <div class="prev"><iframe id="fr" title="Vista previa de tu tarjeta"></iframe><span>VISTA PREVIA</span></div>
+    <div class="caja">
+      <div class="foto"><span class="av" id="fv"></span><div class="bts"><label>📷 Cambiar foto<input type="file" id="ff" accept="image/*" hidden></label><button type="button" id="fq">Quitar foto</button></div></div>
+      <p class="nota">La foto la subes tú y la puedes cambiar o quitar cuando quieras. Solo se usa para mostrarla en tu tarjeta.</p>
+      <div id="campos"></div>
+      <details><summary>＋ Web, redes y más</summary><div id="campos2"></div></details>
+      <button class="btn" id="bGuardar" type="button">Guardar cambios</button>
+      <p class="msg" id="mEdit" role="alert"></p>
+      <a class="btn l" id="bVer" href="#" target="_blank" rel="noopener">Ver mi tarjeta</a>
+    </div>
+  </section>
+  <p class="pie">Tarjeta phygital · <b>Studio 42</b></p>
+</main>
+<script>
+(function(){
+  var API="https://script.google.com/macros/s/AKfycbyBX3u7pctH4FdbpHzyH11eXv0sbzMm1Xs6-aO9vMVE-QeCnz1CkuPFHBN7RobM9NPw/exec";
+  var $=function(i){return document.getElementById(i)};
+  var q=new URLSearchParams(location.search);
+  var ID=(q.get("id")||"").toLowerCase().replace(/[^a-z0-9-]/g,"").slice(0,40);
+  var BASICOS=[["nombre","Nombre y apellidos","text"],["cargo","Cargo","text"],["empresa","Empresa","text"],["telefono","Teléfono","tel"],["whatsapp","WhatsApp (si es otro número)","tel"],["email","Email","email"]];
+  var MAS=[["bio","Frase corta","text"],["web","Web","url"],["linkedin","LinkedIn (enlace)","url"],["instagram","Instagram (@usuario o enlace)","text"],["tiktok","TikTok (@usuario o enlace)","text"],["direccion","Dirección","text"],["reserva","Enlace para reservar cita","url"],["resena","Enlace de reseñas de Google","url"]];
+  var D={},PIN="",FOTO="",QUITAR=false;
+  var ruta=function(f){return !f?"":/^(https:|data:)/.test(f)?f:"../"+f};
+  function cara(el,f,nom){el.style.backgroundImage=f?"url('"+f+"')":"";el.textContent=f?"":String(nom||"?").trim().charAt(0).toUpperCase()}
+  if(!ID){$("mPin").textContent="Falta el enlace de la tarjeta.";$("bEntrar").disabled=true;return}
+  $("bVer").href="../?id="+encodeURIComponent(ID);
+  fetch("../"+ID+".json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){
+    if(!j){$("mPin").textContent="No encuentro esta tarjeta.";$("bEntrar").disabled=true;return}
+    D=j;$("quien").textContent=j.nombre||"Tu tarjeta";cara($("av"),ruta(j.foto),j.nombre);
+  }).catch(function(){});
+  try{PIN=sessionStorage.getItem("s42pin_"+ID)||""}catch(e){}
+  function api(b){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},redirect:"follow",body:JSON.stringify(b)}).then(function(r){return r.json()})}
+  function entrar(){
+    var p=$("pin").value.replace(/\D/g,"");if(p.length!==6){$("mPin").className="msg mal";$("mPin").textContent="El PIN tiene 6 cifras.";return}
+    var b=$("bEntrar");b.disabled=true;b.textContent="Comprobando…";$("mPin").textContent="";
+    api({accion:"tarjeta_editar",id:ID,pin:p,comprobar:true}).then(function(r){
+      b.disabled=false;b.textContent="Entrar";
+      if(!r.ok){$("mPin").className="msg mal";$("mPin").textContent=r.error||"No se pudo comprobar.";return}
+      PIN=p;try{sessionStorage.setItem("s42pin_"+ID,p)}catch(e){}abrirEdicion();
+    }).catch(function(){b.disabled=false;b.textContent="Entrar";$("mPin").className="msg mal";$("mPin").textContent="Sin conexión. Inténtalo de nuevo."});
+  }
+  $("bEntrar").onclick=entrar;$("pin").onkeydown=function(e){if(e.key==="Enter")entrar()};
+  function previa(){var d=JSON.parse(JSON.stringify(D));if(FOTO)d.foto=FOTO;else if(QUITAR)d.foto="";try{$("fr").contentWindow.postMessage({tipo:"s42-tarjeta",json:d},location.origin)}catch(e){}}
+  window.addEventListener("message",function(e){if(e.origin===location.origin&&e.data&&e.data.tipo==="s42-tarjeta-lista")previa()});
+  function campo(c,dest){var l=document.createElement("label");l.textContent=c[1];var i=document.createElement("input");i.type=c[2];i.value=D[c[0]]||"";if(c[2]==="tel")i.inputMode="tel";if(c[0]==="bio")i.maxLength=200;
+    i.oninput=function(){D[c[0]]=i.value;previa()};l.appendChild(i);dest.appendChild(l)}
+  function abrirEdicion(){
+    $("vPin").hidden=true;$("vEdit").hidden=false;scrollTo(0,0);
+    $("fr").src="../?preview=1&id="+encodeURIComponent(ID);
+    $("campos").textContent="";$("campos2").textContent="";
+    BASICOS.forEach(function(c){campo(c,$("campos"))});MAS.forEach(function(c){campo(c,$("campos2"))});
+    cara($("fv"),ruta(D.foto),D.nombre);
+  }
+  function reducir(file){return new Promise(function(res,rej){var img=new Image(),u=URL.createObjectURL(file);
+    img.onload=function(){var s=Math.min(img.width,img.height),c=document.createElement("canvas");c.width=c.height=480;
+      c.getContext("2d").drawImage(img,(img.width-s)/2,(img.height-s)*0.35,s,s,0,0,480,480);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",0.82))};
+    img.onerror=rej;img.src=u})}
+  $("ff").onchange=function(){var f=this.files&&this.files[0];if(!f)return;reducir(f).then(function(u){FOTO=u;QUITAR=false;cara($("fv"),u);previa()}).catch(function(){$("mEdit").className="msg mal";$("mEdit").textContent="No se pudo leer la foto."})};
+  $("fq").onclick=function(){FOTO="";QUITAR=true;cara($("fv"),"",D.nombre);previa()};
+  $("bGuardar").onclick=function(){
+    if(String(D.nombre||"").trim().length<2){$("mEdit").className="msg mal";$("mEdit").textContent="Falta el nombre.";return}
+    var t={};BASICOS.concat(MAS).forEach(function(c){t[c[0]]=D[c[0]]||""});
+    var b=this;b.disabled=true;b.textContent="Guardando…";$("mEdit").textContent="";
+    api({accion:"tarjeta_editar",id:ID,pin:PIN,tarjeta:t,foto:FOTO||"",quitarFoto:QUITAR}).then(function(r){
+      b.disabled=false;b.textContent="Guardar cambios";
+      if(!r.ok){$("mEdit").className="msg mal";$("mEdit").textContent=r.error||"No se pudo guardar.";if(/PIN|intentos/.test(r.error||"")){try{sessionStorage.removeItem("s42pin_"+ID)}catch(e){}}return}
+      if(r.tarjeta)D=r.tarjeta;FOTO="";QUITAR=false;$("quien").textContent=D.nombre;
+      $("mEdit").className="msg ok";$("mEdit").textContent="✅ Guardado. En un minuto lo verás en tu tarjeta.";
+    }).catch(function(){b.disabled=false;b.textContent="Guardar cambios";$("mEdit").className="msg mal";$("mEdit").textContent="Sin conexión. Inténtalo de nuevo."});
+  };
+  if(PIN){$("pin").value=PIN}
+})();
+</script>
+</body>
+</html>

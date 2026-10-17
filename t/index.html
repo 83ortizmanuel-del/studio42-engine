@@ -110,6 +110,7 @@ body.e-minimal .fila{background:#fff}
 .aviso{padding:60px 20px;text-align:center;color:var(--suave)}
 .aviso b{display:block;color:var(--texto);font:800 1.2rem var(--fd);margin-bottom:8px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.editar-mia{color:var(--suave);font-size:.78rem;text-decoration:none;border-bottom:1px dashed var(--linea);padding-bottom:1px}
 </style>
 </head>
 <body>
@@ -196,7 +197,8 @@ function pintar(d) {
       (ext.length ? '<div class="extra">' + ext.map((e) => '<a class="fila" href="' + esc(e[0]) + '" target="_blank" rel="noopener" data-t="' + e[4] + '"><span class="bola">' + ic(e[1]) + '</span><span class="t"><b>' + e[2] + '</b><small>' + e[3] + '</small></span>' + ic("flecha") + '</a>').join("") + '</div>' : "") +
       '<button type="button" class="compartir" id="bCompartir">' + ic("share") + 'Compartir mi tarjeta</button>' +
     '</article>' +
-    '<p class="pie">Tarjeta phygital · <b>Studio 42</b></p>';
+    '<p class="pie">Tarjeta phygital · <b>Studio 42</b></p>' +
+    (!PREVIA && ID ? '<p class="pie"><a class="editar-mia" href="editar/?id=' + encodeURIComponent(ID) + '">✏️ ¿Es tu tarjeta? Edítala</a></p>' : '');
 
   $("bGuardar").addEventListener("click", guardarContacto);
   $("bCompartir").addEventListener("click", compartir);
