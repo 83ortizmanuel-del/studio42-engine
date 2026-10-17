@@ -518,7 +518,7 @@ function abrirCliente(s){
   $('#bCambio').hidden=!!m;
   var ps=D.pedidos.filter(function(p){return p.slug===s});
   var h='',x=susc(s),e=est(s),pausada=m?!!m.pausada:(x&&x.landing&&x.landing!=='activa');
-  if(m)h+='<div class="mini" style="margin:0 0 12px">🎨 Diseño a medida'+(m.previa?' · la vista previa muestra la nueva versión':'')+'. Los cambios de diseño pídemelos a mí en el chat.'+(m.dominioPendiente?'<br>🌐 <b>Dominio propio pendiente</b>: de momento está en '+esc(String(m.url).replace(/^https?:\/\//,''))+'. Cuando pague el dominio, pídeme que lo conecte.':'')+'</div>';
+  if(m)h+='<div class="mini" style="margin:0 0 12px">🎨 Diseño a medida'+(m.previa?' · la vista previa muestra la nueva versión':'')+'. Los cambios de diseño pídemelos a mí en el chat.'+(m.dominioPendiente?'<br>🌐 <b>Dominio propio pendiente</b>: de momento está en '+esc(urlCliente(s).replace(/^https?:\/\//,''))+'. Cuando pague el dominio, pídeme que lo conecte.':'')+'</div>';
   h+='<div class="sus-box"><div class="top2"><h4>'+(x&&x.plan?'Plan '+esc(((D.catalogo.planes||{})[x.plan]||{}).nombre||x.plan)+' · '+esc(x.periodo||''):'Sin suscripción')+'</h4>'+pillSusc(x)+'</div>';
   if(x&&x.plan)h+='<div class="mini">'+euro(precioPlan(x.plan,x.periodo)*1.21)+' IVA incl. · '+(x.proximo?'próximo cobro '+esc(fechaCorta(x.proximo).split(' · ')[0]):'sin fecha de cobro')+(x.email?' · '+esc(x.email):'')+'</div>';
   h+='<div class="sec" style="margin-top:12px">Últimos 30 días</div><div class="stats"><div><b>'+e.vista+'</b><span>Visitas</span></div><div><b>'+e.resena+'</b><span>Reseñas</span></div><div><b>'+(e.whatsapp+e.gerencia)+'</b><span>WhatsApp</span></div><div><b>'+(e.llamada+e.ruta)+'</b><span>Llamadas</span></div></div>';
