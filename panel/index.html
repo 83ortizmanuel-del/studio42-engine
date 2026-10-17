@@ -819,7 +819,7 @@ function pintarTarjetas(){
   $$('#tabTarjetas .card').forEach(function(b){b.onclick=function(){abrirTarjeta(b.dataset.tj)}});
 }
 function abrirTarjeta(id){
-  TJ={id:id||'',nueva:!id,datos:{estilo:'titanio',color:'#d9b45a'},foto:'',quitarFoto:false};
+  TJ={id:id||'',nueva:!id,datos:{estilo:'titanio',color:'#d9b45a'},foto:'',quitarFoto:false,pinNuevo:null};
   $('#tjTitulo').textContent=id?'Editar tarjeta':'Nueva tarjeta';
   $('#tjFrame').src='../t/?preview=1'+(id?'&id='+encodeURIComponent(id):'');
   $('#tjCuerpo').innerHTML='<div class="empty">Cargando…</div>';
@@ -846,6 +846,10 @@ function formTarjeta(){
   if(!TJ.nueva){
     var url=(D.dominio||'https://studio42.es')+'/t/?id='+TJ.id;
     h+='<div class="nfc" style="margin-top:4px"><b>Enlace NFC</b><code>'+esc(url.replace('https://',''))+'</code><button type="button" id="tjCopiar" data-u="'+esc(url)+'">Copiar</button></div>';
+    var edUrl=(D.dominio||'https://studio42.es')+'/t/editar/?id='+TJ.id,pn=TJ.pinNuevo;
+    h+='<div class="nfc" style="margin-top:4px;flex-wrap:wrap"><b style="width:100%">🔑 Acceso del titular</b><small style="color:var(--muted);width:100%;margin:-2px 0 6px">Con su PIN cambia él mismo su foto y sus datos. Tiene el enlace al final de su tarjeta.'+(t.tienePin||pn?'':' <b style="color:#fbbf24">Aún no tiene PIN.</b>')+'</small>'+(pn?'<code style="font-size:1.05rem;font-weight:800;letter-spacing:.2em">PIN '+esc(pn.pin)+'</code><button type="button" id="tjPinCp">Copiar</button>':'<code>'+esc(edUrl.replace('https://',''))+'</code>')+'</div>';
+    h+='<div class="acts">'+(pn?'<a class="ghost" id="tjPinWa" target="_blank" rel="noopener">📲 Enviárselo</a>':'')+'<button type="button" class="ghost" id="tjPin">'+(t.tienePin||pn?'Generar PIN nuevo':'Generar su PIN')+'</button></div>';
+    if(pn)h+='<div class="mini">El PIN solo se ve ahora: se guarda cifrado. Si lo pierde, genera otro (el anterior deja de valer).</div>';
     h+='<div class="acts"><a class="ghost" href="'+esc(url)+'" target="_blank" rel="noopener">Abrir tarjeta</a><button type="button" class="ghost" id="tjPausa"'+(pausada?'':' style="color:#fca5a5;border-color:rgba(239,68,68,.35)"')+'>'+(pausada?'▶ Reactivar':'⏸ Pausar')+'</button></div>';
     var e=est('t-'+TJ.id);h+='<div class="mini">Últimos 30 días: '+e.vista+' visitas · '+(e.enlace||0)+' contactos guardados o enlaces · '+((e.whatsapp||0)+(e.llamada||0))+' WhatsApp/llamadas</div>';
     h+='<button type="button" class="ghost solo-ceo" id="tjBorrar" style="color:#fca5a5;border-color:rgba(239,68,68,.35);margin-top:6px">🗑 Borrar tarjeta y sus datos</button>';
@@ -861,6 +865,18 @@ function formTarjeta(){
   if($('#tjQuitar'))$('#tjQuitar').onclick=function(){TJ.foto='';TJ.quitarFoto=true;var v=$('#tjVista');v.style.backgroundImage='';v.textContent='Sin foto';previaTarjeta()};
   $('#tjGuardar').onclick=guardarTarjeta;
   if($('#tjCopiar'))$('#tjCopiar').onclick=function(){copiar(this.dataset.u,this)};
+  if($('#tjPinCp'))$('#tjPinCp').onclick=function(){copiar(TJ.pinNuevo.pin,this)};
+  if($('#tjPinWa')){var tel=String(TJ.datos.whatsapp||TJ.datos.telefono||'').replace(/\D/g,'');if(tel.length===9)tel='34'+tel;
+    $('#tjPinWa').href='https://wa.me/'+tel+'?text='+encodeURIComponent('Hola '+String(TJ.datos.nombre||'').split(' ')[0]+', para cambiar tu foto o tus datos de tu tarjeta digital cuando quieras: '+TJ.pinNuevo.editar+'\nTu PIN: '+TJ.pinNuevo.pin+' (no lo compartas). También tienes el enlace al final de tu tarjeta.')}
+  if($('#tjPin'))$('#tjPin').onclick=function(){
+    var tiene=((D.tarjetas||[]).filter(function(x){return x.id===TJ.id})[0]||{}).tienePin||TJ.pinNuevo;
+    if(tiene&&!confirm('¿Generar un PIN nuevo para '+(TJ.datos.nombre||TJ.id)+'? El anterior dejará de funcionar.'))return;
+    var b=this;b.disabled=true;b.textContent='Generando…';
+    api({accion:'panel_tarjeta_pin',id:TJ.id}).then(function(r){
+      if(!r.ok){toast(r.error||'No se pudo');b.disabled=false;b.textContent='Generar PIN nuevo';return}
+      TJ.pinNuevo={pin:r.pin,editar:r.editar};(D.tarjetas||[]).forEach(function(x){if(x.id===TJ.id)x.tienePin=true});formTarjeta();toast('PIN listo: envíaselo al titular');
+    }).catch(function(){toast('Sin conexión');b.disabled=false});
+  };
   if($('#tjPausa'))$('#tjPausa').onclick=function(){
     var pausar=!(TJ.datos.pausada===true);if(pausar&&!confirm('¿Pausar la tarjeta de '+(TJ.datos.nombre||TJ.id)+'? Quien la abra verá «tarjeta desactivada».'))return;
     var b=this;b.disabled=true;b.textContent='Guardando…';
@@ -901,7 +917,7 @@ function guardarTarjeta(){
     if(!r.ok){toast(r.error||'No se pudo guardar');return}
     var L=D.tarjetas=(D.tarjetas||[]),x=L.filter(function(y){return y.id===id})[0];
     if(x){x.nombre=t.nombre;x.empresa=t.empresa;x.paga=$('#tjPaga').value;x.sinRegistro=false;x.consentimiento=x.consentimiento||new Date().toISOString()}else L.unshift({id:id,nombre:t.nombre,empresa:t.empresa,estado:'activa',paga:$('#tjPaga').value});
-    TJ.id=id;TJ.nueva=false;TJ.datos=r.tarjeta||TJ.datos;TJ.foto='';TJ.quitarFoto=false;
+    TJ.id=id;TJ.nueva=false;TJ.datos=r.tarjeta||TJ.datos;TJ.foto='';TJ.quitarFoto=false;if(r.pin){TJ.pinNuevo={pin:r.pin,editar:r.editar};(D.tarjetas||[]).forEach(function(x){if(x.id===id)x.tienePin=true})}
     toast('✅ Tarjeta publicada · en 1 minuto está en su enlace');pintarTarjetas();$('#tjTitulo').textContent='Editar tarjeta';formTarjeta();
   }).catch(function(){b.disabled=false;b.textContent='Guardar';toast('Sin conexión')});
 }
@@ -956,7 +972,7 @@ function demoApi(b){
   var esperar=function(ms,v){return new Promise(function(r){setTimeout(function(){r(v)},ms)})};
   var demoRol=new URLSearchParams(location.search).get('rol')==='equipo'?'equipo':'ceo';window.demoAud=window.demoAud||[];
   if(b.accion==='panel_login')return esperar(400,{ok:true,token:'demo',rol:demoRol});
-  if(demoRol==='equipo'&&['panel_datos','panel_tarjeta_guardar','panel_tarjeta_estado','panel_cambio','panel_publicar'].indexOf(b.accion)<0)return esperar(300,{ok:false,error:'Tu acceso no permite esta acción.'});
+  if(demoRol==='equipo'&&['panel_datos','panel_tarjeta_guardar','panel_tarjeta_estado','panel_tarjeta_pin','panel_cambio','panel_publicar'].indexOf(b.accion)<0)return esperar(300,{ok:false,error:'Tu acceso no permite esta acción.'});
   if(b.accion==='panel_equipo_crear')return esperar(500,{ok:true,id:'e'+Date.now(),nombre:b.nombre,cargo:b.cargo||'Equipo',clave:'k7m2xq9pta'});
   if(b.accion==='panel_equipo_borrar'||b.accion==='panel_chapas_crear'||b.accion==='panel_baja')return esperar(500,{ok:true});
   if(b.accion==='panel_datos'){
@@ -994,7 +1010,8 @@ function demoApi(b){
   }
   if(b.accion==='panel_optimizar_ficha')return esperar(1500,{ok:true,paquete:{descripcion:'(demo) Barbería con 3 sedes en Logroño: Centro, Los Lirios y Villamediana. Reserva online, afeitado clásico y arreglo de barba.',categorias:{principal:'Peluquería de hombres',extra:['Barbería']},servicios:['Corte clásico','Afeitado a navaja','Arreglo de barba','Corte infantil'],publicaciones:[{titulo:'Nueva sede en Villamediana',texto:'Ya puedes reservar en nuestra tercera sede. ¡Te esperamos!',cta:'Reservar'},{titulo:'Afeitado tradicional',texto:'Técnica a navaja con toalla caliente. Un clásico que no falla.',cta:'Más información'}],respuestas_resenas:[{a:'5★ "Muy buen trato"',estrellas:5,respuesta:'Muchas gracias por la valoración. Nos alegra saber que te sentiste bien atendido. ¡Te esperamos pronto!'}],fotos_pedir:['Fachada','Interior del local','Equipo de barberos','Antes y después de un corte'],whatsapp:'Hola, te paso lo que te vamos a aplicar en tu ficha de Google…'}});
   if(b.accion==='panel_pedido_estado'||b.accion==='panel_pausar'||b.accion==='panel_tarjeta_estado'||b.accion==='panel_tarjeta_borrar')return esperar(400,{ok:true});
-  if(b.accion==='panel_tarjeta_guardar')return esperar(900,{ok:true,id:b.id,url:'https://studio42.es/t/?id='+b.id,tarjeta:Object.assign({},b.tarjeta,{id:b.id,foto:b.foto||'',pausada:false})});
+  if(b.accion==='panel_tarjeta_guardar')return esperar(900,Object.assign({ok:true,id:b.id,url:'https://studio42.es/t/?id='+b.id,tarjeta:Object.assign({},b.tarjeta,{id:b.id,foto:b.foto||'',pausada:false})},b.nueva?{pin:'482913',editar:'https://studio42.es/t/editar/?id='+b.id}:{}));
+  if(b.accion==='panel_tarjeta_pin')return esperar(500,{ok:true,pin:String(Math.floor(100000+Math.random()*899999)),editar:'https://studio42.es/t/editar/?id='+b.id});
   if(b.accion==='panel_cambio'){
     var base=JSON.parse(JSON.stringify(propuesta||fichas[b.slug]||{}));
     var t=b.instruccion.toLowerCase(),res;

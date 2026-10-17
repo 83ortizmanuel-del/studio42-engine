@@ -1242,7 +1242,7 @@ function mensajeInforme(a){
         const VC_CAMPOS = [['nombre','Nombre y apellidos *','text'],['cargo','Cargo','text'],['empresa','Empresa','text'],['bio','Frase corta (opcional)','text'],['telefono','Teléfono','tel'],['whatsapp','WhatsApp (si es otro número)','tel'],['email','Email','email'],['web','Web','url'],['linkedin','LinkedIn (enlace)','url'],['instagram','Instagram (@usuario o enlace)','text'],['tiktok','TikTok (@usuario o enlace)','text'],['direccion','Dirección (opcional)','text'],['reserva','Enlace para reservar cita (opcional)','url'],['resena','Enlace de reseñas de Google (opcional)','url']];
         const VC_ESTILOS = [['titanio','Titanio','linear-gradient(135deg,#fff,#8e8e93)'],['oro','Oro','linear-gradient(135deg,#f6e3a6,#a9832f)'],['minimal','Minimal','linear-gradient(135deg,#fff,#d8d4cc)'],['marca','Su color','conic-gradient(#e11d48,#f59e0b,#10b981,#3b82f6,#e11d48)']];
         const slugVc = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
-        let VC = null;
+        let VC = null; const VC_PIN = {};
         function vcEl(tag, cls, txt) { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
         function vcPrevia() {
             if (!VC) return; const d = Object.assign({}, VC.datos); if (VC.foto) d.foto = VC.foto;
@@ -1341,8 +1341,21 @@ function mensajeInforme(a){
             lk.append(cd, cp); k.appendChild(lk);
             const acc = vcEl('div', 'vc-acc'); acc.style.marginTop = '10px';
             const ab = vcEl('a', null, 'Abrir tarjeta'); ab.href = r.url; ab.target = '_blank'; ab.rel = 'noopener';
-            const wa = vcEl('a', null, '📲 Enviársela'); const num = String(tel || '').replace(/\D/g, ''); wa.href = 'https://wa.me/' + (num.length === 9 ? '34' + num : num) + '?text=' + encodeURIComponent('¡Hola ' + nombre.split(' ')[0] + '! Ya tienes tu tarjeta digital de Studio 42: ' + r.url + '\nGuárdala y compártela con un toque.'); wa.target = '_blank'; wa.rel = 'noopener';
+            if (r.pin) VC_PIN[ult.id] = { pin: r.pin, editar: r.editar };
+            const acceso = VC_PIN[ult.id];
+            const num = String(tel || '').replace(/\D/g, '');
+            const texto = '¡Hola ' + nombre.split(' ')[0] + '! Ya tienes tu tarjeta digital de Studio 42: ' + r.url + '\nGuárdala y compártela con un toque.' +
+                (acceso ? '\n\n✏️ Para cambiar tu foto o tus datos cuando quieras: ' + acceso.editar + '\nTu PIN: ' + acceso.pin + ' (no lo compartas). También tienes el enlace al final de tu tarjeta.' : '');
+            const wa = vcEl('a', null, '📲 Enviársela'); wa.href = 'https://wa.me/' + (num.length === 9 ? '34' + num : num) + '?text=' + encodeURIComponent(texto); wa.target = '_blank'; wa.rel = 'noopener';
             acc.append(ab, wa); k.appendChild(acc); inn.appendChild(k);
+            if (acceso) {
+                const kp = vcEl('div', 'card');
+                kp.append(vcEl('h3', null, '🔑 Su acceso para editarla'), vcEl('p', 'nota-pie', 'Con este PIN la persona cambia ella misma su foto y sus datos, sin pedírtelo. Va incluido en el WhatsApp de «Enviársela» y tiene el enlace al final de su tarjeta.'));
+                const pp = vcEl('div', 'vc-link'); pp.append(vcEl('code', null, 'PIN: ' + acceso.pin)); const cpp = vcEl('button', null, 'Copiar'); cpp.type = 'button';
+                cpp.onclick = () => { try { navigator.clipboard.writeText(acceso.pin); cpp.textContent = '✓'; setTimeout(() => { cpp.textContent = 'Copiar'; }, 1500); } catch (e) {} };
+                pp.appendChild(cpp); kp.appendChild(pp); kp.appendChild(vcEl('p', 'nota-pie', 'Solo se enseña ahora: Studio 42 lo guarda cifrado. Si lo pierde, se genera uno nuevo desde el panel.'));
+                inn.appendChild(kp);
+            }
             const k2 = vcEl('div', 'card'); k2.append(vcEl('h3', null, 'Pedido ' + r.pedido.id), vcEl('p', 'nota-pie', r.pedido.calc.lineas.map((l) => l.unidades + ' × ' + l.concepto).join(' · ') + ' · Total ' + euro(r.pedido.calc.total) + ' IVA incl. Ya está en el panel como «Por despachar».')); inn.appendChild(k2);
             const cor = vcEl('button', 'cerrar-grande', '✏️ Cambiar foto o datos'); cor.type = 'button'; cor.onclick = () => vcAbrir(ult);
             inn.append(cor, vcEl('p', 'nota-pie', 'Puedes corregirla durante 48 h. Después, el cambio lo hace Studio 42 desde el panel.'));
