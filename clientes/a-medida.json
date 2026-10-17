@@ -75,19 +75,19 @@
   {
     "slug": "messina-film",
     "nombre": "Messina Film",
-    "sub": "Web a medida · en GitHub Pages hasta que pague su dominio",
-    "url": "https://83ortizmanuel-del.github.io/messinafilm/",
-    "logo": "https://83ortizmanuel-del.github.io/messinafilm/img/logo.png",
+    "sub": "Web a medida · en studio42.es hasta que pague su dominio",
+    "url": "/messinafilm/",
+    "logo": "/messinafilm/img/logo.png",
     "color": "#e5161d",
     "dominioPendiente": true,
     "piezas": [
       [
         "Web",
-        "https://83ortizmanuel-del.github.io/messinafilm/"
+        "https://studio42.es/messinafilm/"
       ],
       [
         "EPK (dossier de prensa)",
-        "https://83ortizmanuel-del.github.io/messinafilm/epk.html"
+        "https://studio42.es/messinafilm/epk.html"
       ]
     ]
   }
