@@ -34,7 +34,12 @@
         .vc-prev iframe{width:100%;height:100%;border:0}
         .vc-prev span{position:absolute;top:8px;left:50%;transform:translateX(-50%);font:800 .6rem system-ui;letter-spacing:.12em;color:#9ca3af;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:99px}
         .vc-f{display:grid;gap:10px}
-        .vc-f label{display:grid;gap:5px;font-size:.8rem;color:#c9ced6}
+        .aud [hidden]{display:none!important}
+        .vc-f label{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:#c9ced6;text-transform:none;letter-spacing:0;margin:0}
+        .vc-mas{border:1px solid #23262e;border-radius:12px;background:#0f1116;padding:4px 12px}
+        .vc-mas summary{cursor:pointer;padding:10px 0;font-weight:700;color:#f4f6f9;font-size:.92rem}
+        .vc-mas[open]{padding-bottom:12px}
+        .vc-mas .vc-f{margin-top:4px}
         .vc-f input[type=text],.vc-f input[type=tel],.vc-f input[type=email],.vc-f input[type=url],.vc-f textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #2a2d35;background:#0b0c10;color:#fff;font-size:1rem;font-family:inherit}
         .vc-estilos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
         .vc-estilos button{padding:9px 2px;border-radius:12px;border:1.5px solid #2a2d35;background:#121419;color:#d6d9de;font:700 .74rem system-ui}
@@ -47,7 +52,7 @@
         .vc-uds .st{display:flex;align-items:center;gap:8px}
         .vc-uds .st button{width:40px;height:40px;border-radius:10px;border:1px solid #2a2d35;background:#16181e;color:#fff;font-size:1.2rem}
         .vc-uds .st b{min-width:24px;text-align:center;font-size:1.1rem}
-        .vc-ok{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:#d1d5db;padding:10px;border-radius:12px;background:#0f1116;border:1px solid #23262e}
+        .vc-f label.vc-ok,.vc-ok{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:#d1d5db;padding:10px;border-radius:12px;background:#0f1116;border:1px solid #23262e}
         .vc-ok input{width:20px;height:20px;flex:none;margin-top:2px}
         .vc-go{width:100%;padding:15px;border:0;border-radius:14px;background:#f4f6f9;color:#07080b;font-weight:800;font-size:1rem}
         .vc-go:disabled{opacity:.5}
@@ -1234,7 +1239,8 @@ function mensajeInforme(a){
         function vcCerrar() { $('vc').hidden = true; document.body.style.overflow = ''; VC = null; }
         function vcAbrir() {
             VC = { datos: { estilo: 'titanio', color: '#d9b45a' }, foto: '', uds: 1, idTocado: false };
-            const v = $('vc'); v.textContent = ''; v.hidden = false; document.body.style.overflow = 'hidden'; v.scrollTop = 0;
+            const v = $('vc'); if (v.parentNode !== document.body) document.body.appendChild(v); /* fuera de la tarjeta: ocupa toda la pantalla */
+            v.textContent = ''; v.hidden = false; document.body.style.overflow = 'hidden'; v.scrollTop = 0;
             const inn = vcEl('div', 'in'); v.appendChild(inn);
             const top = vcEl('div', 'top'); top.append(vcEl('small', null, 'Studio 42 · Tarjeta vCard'));
             const x = vcEl('button', 'x', '✕ Salir'); x.type = 'button'; x.onclick = vcCerrar; top.appendChild(x); inn.appendChild(top);
@@ -1249,11 +1255,16 @@ function mensajeInforme(a){
             fo.append(vista, lf); f.appendChild(fo);
             // Campos
             let idInp = null;
+            const BASICOS = ['nombre', 'cargo', 'empresa', 'telefono', 'whatsapp', 'email'];
+            const mas = document.createElement('details'); mas.className = 'vc-mas'; mas.appendChild(vcEl('summary', null, '＋ Más datos (web, redes, dirección…) · opcional'));
+            const fm = vcEl('div', 'vc-f'); mas.appendChild(fm);
             VC_CAMPOS.forEach(([k, et, tipo]) => {
                 const l = vcEl('label', null, et); const i = document.createElement('input'); i.type = tipo; if (k === 'bio') i.maxLength = 200;
+                if (tipo === 'tel') i.inputMode = 'tel'; if (tipo === 'email') i.inputMode = 'email';
                 i.oninput = () => { VC.datos[k] = i.value; if (k === 'nombre' && idInp && !VC.idTocado) idInp.value = slugVc(i.value); vcPrevia(); };
-                l.appendChild(i); f.appendChild(l);
+                l.appendChild(i); (BASICOS.indexOf(k) >= 0 ? f : fm).appendChild(l);
             });
+            f.appendChild(mas);
             // Estilo
             const le = vcEl('label', null, 'Estilo'); const es = vcEl('div', 'vc-estilos');
             const lc = vcEl('label', null, 'Color de su marca'); const ic = document.createElement('input'); ic.type = 'color'; ic.value = '#d9b45a'; ic.style.cssText = 'width:100%;min-height:46px;border-radius:10px;border:1px solid #2a2d35;background:#0b0c10'; lc.appendChild(ic); lc.hidden = true;
