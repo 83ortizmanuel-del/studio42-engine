@@ -1,0 +1,66 @@
+{
+  "_nota": "Página para Google de una sede de La Sucursal (web a medida en /la-sucursal/v2/). Datos copiados de esa página el 2026-10-17. Ver docs/FICHAS-GOOGLE.md.",
+  "nombre": "La Sucursal Centro",
+  "subtitulo": "Degradados, barba y ropa de autor",
+  "logo": "/la-sucursal/v2/logo.webp",
+  "fondoLogo": "#060608",
+  "colorAcento": "#D4AF37",
+  "whatsapp": "+34 643 023 681",
+  "app": "/la-sucursal/v2/?sede=centro",
+  "servicios": [
+    {
+      "nombre": "Corte degradado",
+      "descripcion": "El fade de la casa · 20 min · 15 €"
+    },
+    {
+      "nombre": "Corte + barba",
+      "descripcion": "El combo completo · 30 min · 20 €"
+    },
+    {
+      "nombre": "Corte de barba",
+      "descripcion": "Perfilado y arreglo · 20 min · 10 €"
+    },
+    {
+      "nombre": "Corte Free Style",
+      "descripcion": "Diseño a tu medida · 30 min · 50 €"
+    },
+    {
+      "nombre": "Mechas",
+      "descripcion": "Color con estilo · 30 min · 100 €"
+    },
+    {
+      "nombre": "Platinado",
+      "descripcion": "Rubio platino total · 30 min · 130 €"
+    },
+    {
+      "nombre": "Corte jubilados",
+      "descripcion": "Precio especial · 20 min · 10 €"
+    },
+    {
+      "nombre": "Ropa de autor La Sucursal",
+      "descripcion": "Camisetas y productos de peinado en la tienda"
+    }
+  ],
+  "ficha": {
+    "tipo": "HairSalon",
+    "categoria": "Barbería",
+    "descripcion": "Barbería La Sucursal en la Avenida Pérez Galdós de Logroño: degradados, barba y diseños a medida con Fernando y Alejandro. Reserva online o por WhatsApp.",
+    "direccion": "Av. Pérez Galdós, 78, Bajo 1",
+    "cp": "26005",
+    "ciudad": "Logroño",
+    "provincia": "La Rioja",
+    "telefono": "+34 643 023 681",
+    "email": "lasucursalthebarber@gmail.com",
+    "web": "https://lasucursalstoreart.com/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Barberia+Logro%C3%B1o&query_place_id=ChIJhW_KnUyrWg0R0BCbXMPUtnI",
+    "horario": [
+      "Mo 16:00-21:00",
+      "Tu-Sa 10:00-14:00",
+      "Tu-Sa 16:00-21:00"
+    ],
+    "redes": [
+      "https://www.instagram.com/la_sucursal_the_barber/",
+      "https://www.instagram.com/la_sucursal_store/"
+    ]
+  }
+}

@@ -18,6 +18,8 @@ Motor *phygital* de Studio 42: un llavero, stand o tarjeta NFC abre una mini-app
 | `c/index.html` | **El motor.** Un solo HTML para todos los clientes. Lee `c/<slug>.json` y pinta los botones. | Solo para mejorar el motor |
 | `c/<slug>.json` | Un archivo por cliente (todos los datos y botones). | Sí, para editar un cliente |
 | `c/motor-v1-respaldo.html` | Motor antiguo, por si hiciera falta volver atrás. | No |
+| `tools/generar-fichas.js` | Crea `studio42.es/<slug>/` (página para Google con schema LocalBusiness) y el sitemap, para los clientes con bloque `ficha`. Lo ejecuta GitHub solo. Ver [`docs/FICHAS-GOOGLE.md`](docs/FICHAS-GOOGLE.md). | Solo para mejorar las fichas |
+| `<slug>/` (en la raíz) | Páginas generadas por el script anterior. | No, se cambia el JSON |
 | `schema.json` | Reglas que debe cumplir cada JSON. GitHub las comprueba solo (`.github/workflows`). | No |
 | `v/closer/` | Formulario del Closer (`studio42.es/v/closer/?cod=MO001`). | Solo la URL del script |
 | `apps-script/Code.gs` | El "cerebro" automático (Claude + Google Maps + GitHub). Se copia a Google Apps Script. | Sí, si cambia el prompt |
@@ -48,6 +50,7 @@ python3 tests/validar_json.py            # ¿cumple cada c/*.json el esquema?
 python3 tests/probar_clientes.py         # abre cada cliente en un navegador real y pulsa todos los botones
 python3 tests/probar_reglas.py           # los asistentes de Iberlax dan los mismos resultados que el motor antiguo
 node    tests/probar_appsscript.js       # Code.gs con Google Maps/GitHub/Claude simulados (filtros de seguridad incluidos)
+node    tests/probar_fichas.js            # páginas de Google por cliente: generación, choques de nombre, sitemap
 python3 tests/probar_closer_e2e.py       # recorrido completo: formulario → script → JSON → interfaz
 ```
 
@@ -55,6 +58,7 @@ python3 tests/probar_closer_e2e.py       # recorrido completo: formulario → sc
 
 - [`docs/GUIA-PRIMEROS-PASOS.md`](docs/GUIA-PRIMEROS-PASOS.md) — puesta en marcha paso a paso y operación diaria del Closer
 - [`docs/CATALOGO-BOTONES.md`](docs/CATALOGO-BOTONES.md) — qué hace cada tipo de botón y cómo escribirlo
+- [`docs/FICHAS-GOOGLE.md`](docs/FICHAS-GOOGLE.md) — cómo hacer que cada cliente salga en Google (página por cliente, CP y schema)
 - [`docs/CLAUDE-PROMPT.md`](docs/CLAUDE-PROMPT.md) — cómo piensa la IA (Claude) y cómo ajustarla
 - [`docs/RESENAS-Y-CUMPLIMIENTO.md`](docs/RESENAS-Y-CUMPLIMIENTO.md) — reseñas, RGPD y límites
 - [`docs/AUDITORIA-REPO.md`](docs/AUDITORIA-REPO.md) — qué se encontró, qué se cambió y qué queda por decidir

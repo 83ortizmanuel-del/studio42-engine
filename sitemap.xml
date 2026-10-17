@@ -5,4 +5,9 @@
   <url><loc>https://studio42.es/condiciones.html</loc><lastmod>2026-10-12</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://studio42.es/privacidad.html</loc><lastmod>2026-10-12</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
   <url><loc>https://studio42.es/cookies.html</loc><lastmod>2026-10-12</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <!-- fichas:inicio (lo rellena tools/generar-fichas.js) -->
+  <url><loc>https://studio42.es/la-sucursal-centro/</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://studio42.es/la-sucursal-los-lirios/</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://studio42.es/la-sucursal-villamediana/</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <!-- fichas:fin -->
 </urlset>
