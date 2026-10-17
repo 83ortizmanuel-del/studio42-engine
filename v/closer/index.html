@@ -1278,7 +1278,7 @@ function mensajeInforme(a){
             const lp = vcEl('label', null, 'Quién paga (empresa o persona)'); const ip = document.createElement('input'); ip.type = 'text'; lp.appendChild(ip); f.appendChild(lp);
             // Unidades
             const ud = vcEl('div', 'vc-uds'); const txt = vcEl('div'); const pz = CATALOGO.piezas.tarjeta;
-            const pr = () => { txt.textContent = ''; txt.append(vcEl('b', null, 'Tarjetas de madera NFC'), document.createElement('br'), vcEl('small', null, euro(pz.precio) + ' + IVA cada una · Total ' + euro(Math.round(VC.uds * pz.precio * 1.21 * 100) / 100) + ' IVA incl.')); };
+            const pr = () => { txt.textContent = ''; txt.append(vcEl('b', null, 'Tarjetas NFC vCard'), document.createElement('br'), vcEl('small', null, euro(pz.precio) + ' + IVA cada una · Total ' + euro(Math.round(VC.uds * pz.precio * 1.21 * 100) / 100) + ' IVA incl.')); };
             const st = vcEl('div', 'st'); const me = vcEl('button', null, '−'), num = vcEl('b', null, '1'), ma = vcEl('button', null, '+'); me.type = ma.type = 'button';
             me.onclick = () => { VC.uds = Math.max(1, VC.uds - 1); num.textContent = VC.uds; pr(); }; ma.onclick = () => { VC.uds = Math.min(50, VC.uds + 1); num.textContent = VC.uds; pr(); };
             st.append(me, num, ma); ud.append(txt, st); pr(); f.appendChild(ud);
@@ -1307,7 +1307,7 @@ function mensajeInforme(a){
             inn.querySelectorAll('.vc-f, .vc-prev, .sub').forEach((e) => e.remove());
             inn.querySelector('h2').textContent = '✅ Tarjeta de ' + nombre + ' creada';
             const k = vcEl('div', 'card');
-            k.append(vcEl('h3', null, 'Su enlace'), vcEl('p', 'nota-pie', 'En 1 minuto ya se puede abrir. Es el enlace que se graba en sus tarjetas de madera con NFC Tools.'));
+            k.append(vcEl('h3', null, 'Su enlace'), vcEl('p', 'nota-pie', 'En 1 minuto ya se puede abrir. Es el enlace que se graba en sus tarjetas NFC vCard con NFC Tools.'));
             const lk = vcEl('div', 'vc-link'); const cd = vcEl('code', null, r.url.replace('https://', '')); const cp = vcEl('button', null, 'Copiar'); cp.type = 'button';
             cp.onclick = () => { try { navigator.clipboard.writeText(r.url); cp.textContent = '✓'; setTimeout(() => { cp.textContent = 'Copiar'; }, 1500); } catch (e) {} };
             lk.append(cd, cp); k.appendChild(lk);
@@ -1329,7 +1329,7 @@ function mensajeInforme(a){
           piezas: {
             display:  { nombre: 'Display acrílico NFC',       precio: 49 },
             llavero:  { nombre: 'Llavero Studio 42',         precio: 19.9 },
-            tarjeta:  { nombre: 'Tarjeta de madera NFC',      precio: 39.9 },
+            tarjeta:  { nombre: 'Tarjeta NFC vCard',          precio: 39.9 },
             welcome:  { nombre: 'Caja de bienvenida negro mate', precio: 89 },
             petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
             camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
@@ -1406,7 +1406,7 @@ function mensajeInforme(a){
             Object.entries(CATALOGO.packs).filter(([, p]) => !p.retirado).forEach(([id, p]) => {
                 const b = h('button', 'pack-op' + (ped.pack === id ? ' on' : '')); b.type = 'button';
                 const izq = h('div'); izq.append(h('b', null, p.nombre));
-                const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta vCard de madera', 'tarjetas vCard de madera'], welcome: ['caja de bienvenida', 'cajas de bienvenida'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'] };
+                const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta NFC vCard', 'tarjetas NFC vCard'], welcome: ['caja de bienvenida', 'cajas de bienvenida'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'] };
                 const inc = Object.entries(p.incluye).map(([k, n]) => n + ' ' + CORTO[k][n === 1 ? 0 : 1]).join(' · ');
                 const extraTxt = p.planFijo ? ' · 0 € hoy, ' + euro(CATALOGO.planes[p.planFijo].mensual) + '/mes · ' + CATALOGO.planes[p.planFijo].permanencia + ' meses'
                     : p.mesesPro ? ' · 🎁 ' + p.mesesPro + (p.mesesPro === 1 ? ' mes' : ' meses') + ' de Pro' : '';

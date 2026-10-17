@@ -70,7 +70,7 @@ check(!post({ accion: 'closer_tarjeta', closer_id: 'LUCIA01', id: 'pepe-ruiz', t
 r = post({ accion: 'closer_tarjeta', closer_id: 'LUCIA01', id: 'pepe-ruiz', consentimiento: true, unidades: 3, paga: 'Asesoría Ruiz', tarjeta: { nombre: 'Pepe Ruiz', cargo: 'Asesor', empresa: 'Asesoría Ruiz', telefono: '611223344' } });
 check(r.ok && repo.files['t/pepe-ruiz.json'] && r.url.endsWith('/t/?id=pepe-ruiz'), 'el Closer publica la tarjeta nueva');
 const pf = hojas.Pedidos.filas[hojas.Pedidos.filas.length - 1];
-check(pf[2] === 'LUCIA01' && pf[6] === 'Tarjeta vCard' && pf[4] === 't-pepe-ruiz' && pf[8] === 144.84, 'y crea el pedido: 3 tarjetas de madera = 144,84 € IVA incl., a nombre del Closer');
+check(pf[2] === 'LUCIA01' && pf[6] === 'Tarjeta vCard' && pf[4] === 't-pepe-ruiz' && pf[8] === 144.84, 'y crea el pedido: 3 tarjetas NFC vCard = 144,84 € IVA incl., a nombre del Closer');
 check(hojas.Tarjetas.filas.find((x) => x[0] === 'pepe-ruiz')[6] === 'Asesoría Ruiz · Closer LUCIA01', 'la hoja de tarjetas guarda quién paga y qué Closer la vendió');
 check(!post({ accion: 'closer_tarjeta', closer_id: 'LUCIA01', id: 'pepe-ruiz', consentimiento: true, tarjeta: { nombre: 'Otro' } }).ok, 'el Closer no puede pisar una tarjeta que ya existe');
 console.log('\n' + ok + ' comprobaciones correctas');
