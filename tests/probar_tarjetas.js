@@ -5,7 +5,7 @@ let ok = 0;
 const check = (cond, msg) => { if (!cond) { console.error('✘ ' + msg); process.exit(1); } ok++; console.log('✓ ' + msg); };
 
 const repo = { files: {}, commits: [] };
-const { ctx } = entorno({ GITHUB_TOKEN: 'ghp_FAKE', ANTHROPIC_API_KEY: 'x', PANEL_CLAVE: 'clave-segura' }, repo, () => ({ code: 500, body: '' }));
+const { ctx } = entorno({ GITHUB_TOKEN: 'ghp_FAKE', ANTHROPIC_API_KEY: 'x', PANEL_CLAVE: 'clave-segura', CLOSERS: 'MO001,LUCIA01' }, repo, () => ({ code: 500, body: '' }));
 const hojas = {};
 const nueva = () => { const filas = []; return { filas, getLastRow: () => filas.length, appendRow: (r) => filas.push(r.slice()), setFrozenRows() {},
   getDataRange: () => ({ getValues: () => filas.map((r) => r.slice()) }), deleteRow: (n) => filas.splice(n - 1, 1),
@@ -63,4 +63,14 @@ check(r.ok && fa && !fa[7] && JSON.parse(repo.files['t/alejo.json']).foto === 'f
 post({ accion: 'panel_tarjeta_guardar', token: tk, id: 'alejo', consentimiento: true, tarjeta: { nombre: 'Alejandro Silva' } });
 fa = hojas.Tarjetas.filas.find((x) => x[0] === 'alejo');
 check(!!fa[7], 'al marcar el consentimiento se guarda la fecha');
+
+/* ---- Venta de una tarjeta desde el Closer ---- */
+check(!post({ accion: 'closer_tarjeta', closer_id: 'NADIE9', id: 'pepe-ruiz', consentimiento: true, tarjeta: { nombre: 'Pepe Ruiz' } }).ok, 'Closer no autorizado → no puede crear tarjetas');
+check(!post({ accion: 'closer_tarjeta', closer_id: 'LUCIA01', id: 'pepe-ruiz', tarjeta: { nombre: 'Pepe Ruiz' } }).ok, 'el Closer también necesita el consentimiento');
+r = post({ accion: 'closer_tarjeta', closer_id: 'LUCIA01', id: 'pepe-ruiz', consentimiento: true, unidades: 3, paga: 'Asesoría Ruiz', tarjeta: { nombre: 'Pepe Ruiz', cargo: 'Asesor', empresa: 'Asesoría Ruiz', telefono: '611223344' } });
+check(r.ok && repo.files['t/pepe-ruiz.json'] && r.url.endsWith('/t/?id=pepe-ruiz'), 'el Closer publica la tarjeta nueva');
+const pf = hojas.Pedidos.filas[hojas.Pedidos.filas.length - 1];
+check(pf[2] === 'LUCIA01' && pf[6] === 'Tarjeta vCard' && pf[4] === 't-pepe-ruiz' && pf[8] === 144.84, 'y crea el pedido: 3 tarjetas de madera = 144,84 € IVA incl., a nombre del Closer');
+check(hojas.Tarjetas.filas.find((x) => x[0] === 'pepe-ruiz')[6] === 'Asesoría Ruiz · Closer LUCIA01', 'la hoja de tarjetas guarda quién paga y qué Closer la vendió');
+check(!post({ accion: 'closer_tarjeta', closer_id: 'LUCIA01', id: 'pepe-ruiz', consentimiento: true, tarjeta: { nombre: 'Otro' } }).ok, 'el Closer no puede pisar una tarjeta que ya existe');
 console.log('\n' + ok + ' comprobaciones correctas');

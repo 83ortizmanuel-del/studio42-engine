@@ -171,6 +171,7 @@ function doPost(e) {
     var r = acc.indexOf('pet_') === 0 ? petRouter_(datos)
       : acc.indexOf('panel_') === 0 ? panelRouter_(datos)
       : acc === 'pedido_guardar' ? pedidoGuardar_(datos)
+      : acc === 'closer_tarjeta' ? closerTarjeta_(datos)
       : acc === 'buscar' ? buscar_(datos) : acc === 'ficha' ? ficha_(datos) : procesar_(datos);
     return json_(r);
   } catch (err) {
@@ -1986,6 +1987,30 @@ function tarjetaGuardar_(c, d) {
   var datos = [id, t.nombre, t.empresa, t.pausada ? 'pausada' : 'activa', fila ? fila.v[4] : ahora, ahora, cadena_(d.paga, 60) || (fila ? fila.v[6] : ''), consentida];
   if (fila) datos.forEach(function (x, i) { hoja.getRange(fila.n, i + 1).setValue(x); }); else hoja.appendRow(datos);
   return { ok: true, id: id, url: c.dominio + '/t/?id=' + id, tarjeta: t };
+}
+
+/* ===================== VENTA DE UNA TARJETA vCARD DESDE EL CLOSER =====================
+   El Closer crea una tarjeta digital nueva (no puede editar ni borrar las que ya existen)
+   y se genera un pedido con las tarjetas de madera NFC que se lleva el cliente. */
+function closerTarjeta_(raw) {
+  var c = cfg_();
+  var au = autorizarCloser_(c, raw);
+  if (au.error) return { ok: false, error: au.error };
+  if (raw.consentimiento !== true) return { ok: false, error: 'Marca que la persona ha aceptado publicar sus datos en la tarjeta.' };
+  var paga = limpiar_(sinEtiquetas_(raw.paga), 60);
+  var r = tarjetaGuardar_(c, { id: raw.id, tarjeta: raw.tarjeta, foto: raw.foto, nueva: true, consentimiento: true, paga: (paga || 'Cliente') + ' · Closer ' + au.closer });
+  if (!r.ok) return r;
+  var unidades = Math.max(1, Math.min(50, Math.floor(Number(raw.unidades) || 1)));
+  var calc = pedidoCalcular_('ninguno', { tarjeta: unidades }, false);
+  var cliente = limpiar_(r.tarjeta.nombre + (r.tarjeta.empresa ? ' · ' + r.tarjeta.empresa : ''), 60);
+  var id = 'P' + Utilities.formatDate(new Date(), 'Europe/Madrid', 'yyMMdd') + '-' + Utilities.getUuid().slice(0, 4).toUpperCase();
+  var detalle = unidades + ' × ' + CATALOGO.piezas.tarjeta.nombre + ' (vCard ' + r.id + ')';
+  var notas = limpiar_(sinEtiquetas_(raw.notas), 300);
+  notas = 'Tarjeta digital ya publicada: ' + r.url + (paga ? ' · Paga: ' + paga : '') + (notas ? ' · ' + notas : '');
+  var datos = { id: id, cliente: cliente, slug: 't-' + r.id, url: r.url, closer: au.closer, calc: calc, tarjeta: r.id };
+  pedidosHoja_().appendRow([id, new Date(), au.closer, cliente, 't-' + r.id, r.url, 'Tarjeta vCard', detalle, calc.total, 'Por despachar', notas, JSON.stringify(datos)]);
+  avisarPedido_(c, datos, detalle, notas);
+  return { ok: true, id: r.id, url: r.url, pedido: datos };
 }
 
 function tarjetaEstado_(c, d) {
