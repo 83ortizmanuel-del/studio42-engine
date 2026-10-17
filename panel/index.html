@@ -380,7 +380,7 @@ function cargarMedida(){
   return fetch('../clientes/a-medida.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():[]}).then(function(l){
     MEDIDA=Array.isArray(l)?l.filter(function(x){return x&&/^[a-z0-9-]{2,40}$/.test(x.slug)}):[];
     return Promise.all(MEDIDA.map(function(x){
-      fichas[x.slug]={nombre:x.nombre,subtitulo:x.sub||'Diseño a medida',logo:x.logo?'..'+x.logo:'',colorAcento:x.color||'',whatsapp:x.whatsapp||'',_medida:true};
+      fichas[x.slug]={nombre:x.nombre,subtitulo:x.sub||'Diseño a medida',logo:x.logo?(/^https?:/.test(x.logo)?x.logo:'..'+x.logo):'',colorAcento:x.color||'',whatsapp:x.whatsapp||'',_medida:true};
       return fetch('../estado/'+x.slug+'.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){x.pausada=!!(j&&j.pausada)}).catch(function(){});
     }));
   }).catch(function(){MEDIDA=[]});
@@ -490,7 +490,7 @@ function pintarClientes(){
   $$('#tabClientes .card').forEach(function(b){b.onclick=function(){abrirCliente(b.dataset.s)}});
 }
 function logoDe(f,s){if(!f.logo)return'';if(f._medida)return f.logo;return/^https:\/\//.test(f.logo)?f.logo:'../c/'+String(f.logo).replace(/^(\.\/|\/|c\/)/,'')}
-function urlCliente(s){var m=medida(s);return(D&&D.dominio||'https://studio42.es')+(m?m.url:'/c/?cod='+s)}
+function urlCliente(s){var m=medida(s);if(m&&/^https?:/.test(m.url))return m.url;return(D&&D.dominio||'https://studio42.es')+(m?m.url:'/c/?cod='+s)}
 /* Informe para el comercio: texto listo para WhatsApp con los números de los últimos 30 días */
 function telDe(w){var n=String(w||'').replace(/\D/g,'');if(n.length===9)n='34'+n;return n.length>=11?n:''}
 function informe(s){var f=fichas[s]||{},e=est(s),hoy=new Date();
@@ -513,12 +513,12 @@ function abrirCliente(s){
   cur=s;propuesta=null;var f=fichas[s]||{};
   $('#cNombre').textContent=f.nombre||s;$('#flag').hidden=true;
   var m=medida(s);
-  $('#frame').src=m?'..'+(m.previa||m.url)+((m.previa||m.url).indexOf('?')>=0?'&':'?')+'preview=1':'../c/?cod='+encodeURIComponent(s)+'&preview=1';
+  var mu=m?(m.previa||m.url):'';$('#frame').src=m?(/^https?:/.test(mu)?mu:'..'+mu+(mu.indexOf('?')>=0?'&':'?')+'preview=1'):'../c/?cod='+encodeURIComponent(s)+'&preview=1';
   $('#bAbrir').href=urlCliente(s);
   $('#bCambio').hidden=!!m;
   var ps=D.pedidos.filter(function(p){return p.slug===s});
   var h='',x=susc(s),e=est(s),pausada=m?!!m.pausada:(x&&x.landing&&x.landing!=='activa');
-  if(m)h+='<div class="mini" style="margin:0 0 12px">🎨 Diseño a medida'+(m.previa?' · la vista previa muestra la nueva versión':'')+'. Los cambios de diseño pídemelos a mí en el chat.</div>';
+  if(m)h+='<div class="mini" style="margin:0 0 12px">🎨 Diseño a medida'+(m.previa?' · la vista previa muestra la nueva versión':'')+'. Los cambios de diseño pídemelos a mí en el chat.'+(m.dominioPendiente?'<br>🌐 <b>Dominio propio pendiente</b>: de momento está en '+esc(String(m.url).replace(/^https?:\/\//,''))+'. Cuando pague el dominio, pídeme que lo conecte.':'')+'</div>';
   h+='<div class="sus-box"><div class="top2"><h4>'+(x&&x.plan?'Plan '+esc(((D.catalogo.planes||{})[x.plan]||{}).nombre||x.plan)+' · '+esc(x.periodo||''):'Sin suscripción')+'</h4>'+pillSusc(x)+'</div>';
   if(x&&x.plan)h+='<div class="mini">'+euro(precioPlan(x.plan,x.periodo)*1.21)+' IVA incl. · '+(x.proximo?'próximo cobro '+esc(fechaCorta(x.proximo).split(' · ')[0]):'sin fecha de cobro')+(x.email?' · '+esc(x.email):'')+'</div>';
   h+='<div class="sec" style="margin-top:12px">Últimos 30 días</div><div class="stats"><div><b>'+e.vista+'</b><span>Visitas</span></div><div><b>'+e.resena+'</b><span>Reseñas</span></div><div><b>'+(e.whatsapp+e.gerencia)+'</b><span>WhatsApp</span></div><div><b>'+(e.llamada+e.ruta)+'</b><span>Llamadas</span></div></div>';
