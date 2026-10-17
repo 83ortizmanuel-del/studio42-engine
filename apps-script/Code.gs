@@ -1311,6 +1311,7 @@ var CATALOGO = {
     welcome:  { nombre: 'Caja de bienvenida negro mate', precio: 89 },
     petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
     camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
+    pegatina: { nombre: 'Pegatina de mesa QR',        precio: null },  // a consultar: precio por decidir
     fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
   },
   /* Packs de la web (studio42.es/#packs). Los marcados «retirado» ya no se venden:

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Arte para imprimir · Studio 42</title>
+<!--
+  Hoja de impresión de una pieza (expositor de mostrador o pegatina de mesa).
+  Uso: /v/expositor/?qr=<enlace de la pieza>&f=display|mesa
+  El enlace del QR solo puede apuntar a una landing de Studio 42 (/c/?cod=…).
+  Los datos (nombre, logo, colores) salen de c/<slug>.json.
+-->
+<style>
+  :root { --fondo: #0b0d14; --acento: #fa8405; --texto: #ffffff; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif; background: #e5e7eb; color: #111; }
+  .barra { font-family: system-ui, sans-serif; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 16px; background: #111; color: #fff; }
+  .barra b { margin-right: auto; font-size: 14px; }
+  .barra button { border: 0; border-radius: 99px; padding: 8px 14px; font: 700 13px system-ui, sans-serif; cursor: pointer; background: #333; color: #fff; }
+  .barra button.prin { background: var(--acento); color: #111; }
+  .barra button.on { outline: 2px solid var(--acento); }
+  .aviso { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 16px; background: #fff; border-radius: 12px; }
+  .lienzo { padding: 24px 16px; display: flex; justify-content: center; overflow-x: auto; }
+  .hoja { font-weight: 900; background: var(--fondo); color: var(--texto); position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.25); flex: none; }
+
+  /* Expositor de mostrador: 148 × 105 mm (A6 horizontal) */
+  .hoja.display { width: 148mm; height: 105mm; display: grid; grid-template-columns: 1fr 1fr; padding: 7mm 6mm 9mm; }
+  .display .izq, .display .der { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .display .logo { max-height: 20mm; max-width: 52mm; object-fit: contain; margin-bottom: 3mm; }
+  .display .nombre { font-size: 5mm; line-height: 1.05; margin-bottom: 3mm; letter-spacing: .02em; }
+  .display .marco { width: 44mm; }
+  .display .cta-qr { margin-top: 3mm; font-size: 4.4mm; color: var(--acento); }
+  .display .nfc { width: 20mm; height: 20mm; }
+  .display .cta-nfc { font-size: 5mm; margin-top: 2mm; }
+  .display .sep { width: 30mm; height: .5mm; background: var(--acento); opacity: .6; margin: 5mm 0; }
+  .display .valora { font-size: 4.2mm; color: var(--acento); }
+  .display .google { font: 700 9mm Arial, sans-serif; margin-top: 1mm; letter-spacing: -.02em; }
+  .display .estrellas { font-size: 6mm; color: #fbbc04; letter-spacing: 1mm; }
+  .pie { position: absolute; left: 0; right: 0; bottom: 2.6mm; text-align: center; font: 400 2.5mm Arial, sans-serif; opacity: .65; }
+
+  /* Pegatina de mesa: 80 × 80 mm */
+  .hoja.mesa { width: 80mm; height: 80mm; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4mm 4mm 7mm; text-align: center; border-radius: 4mm; }
+  .mesa .logo { max-height: 9mm; max-width: 40mm; object-fit: contain; margin-bottom: 1.5mm; }
+  .mesa .nombre { font-size: 3.6mm; margin-bottom: 1.5mm; }
+  .mesa .marco { width: 44mm; }
+  .mesa .cta-qr { margin-top: 2mm; font-size: 3.3mm; color: var(--acento); }
+  .mesa .num { font-size: 3mm; margin-top: .8mm; }
+
+  /* QR siempre oscuro sobre blanco dentro del marco del color de acento */
+  .marco { background: #fff; border: 1.6mm solid var(--acento); border-radius: 3.5mm; padding: 2.2mm; position: relative; }
+  .marco svg { display: block; width: 100%; height: auto; }
+  .marco .centro { position: absolute; left: 50%; top: 50%; width: 19%; height: 19%; transform: translate(-50%, -50%); background: #fff; border-radius: 1.2mm; padding: .7mm; display: flex; align-items: center; justify-content: center; }
+  .marco .centro img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+  @media print {
+    body { background: none; }
+    .barra, .aviso.pantalla { display: none !important; }
+    .lienzo { padding: 0; display: block; }
+    .hoja { box-shadow: none; border-radius: 0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+<style id="pagina"></style>
+</head>
+<body>
+<div class="barra" id="barra" hidden>
+  <b id="titulo">Arte para imprimir</b>
+  <button type="button" data-f="display">Expositor 148×105</button>
+  <button type="button" data-f="mesa">Pegatina mesa 80×80</button>
+  <button type="button" id="bSvg">Descargar QR (SVG)</button>
+  <button type="button" class="prin" id="bPdf">Imprimir / Guardar PDF</button>
+</div>
+<div class="lienzo" id="lienzo"></div>
+
+<script src="qrcode.js"></script><!-- qrcode-generator 1.4.4 (MIT, Kazuhiko Arase), copia local: sin dependencias externas al imprimir -->
+<script>
+(function () {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const p = new URLSearchParams(location.search);
+  const COLOR = /^#[0-9a-fA-F]{6}$/;
+
+  function aviso(txt) {
+    const d = document.createElement("div"); d.className = "aviso"; d.textContent = txt;
+    $("lienzo").replaceWith(d);
+  }
+
+  /* Solo se imprimen enlaces a una landing de Studio 42: así nadie puede usar esta página
+     para fabricar un expositor que lleve a otra web. */
+  function enlaceValido(txt) {
+    let u; try { u = new URL(txt); } catch (e) { return null; }
+    const hostOk = u.origin === location.origin || u.hostname === "studio42.es" || u.hostname === "www.studio42.es";
+    if (!hostOk || u.protocol !== (u.origin === location.origin ? location.protocol : "https:")) return null;
+    if (!/^\/c\/(index\.html)?$/.test(u.pathname)) return null;
+    const cod = u.searchParams.get("cod");
+    if (!cod || !/^[a-z0-9-]{1,60}$/.test(cod)) return null;
+    return { url: u.href, cod, k: u.searchParams.get("k") || "", mesa: u.searchParams.get("mesa") || "" };
+  }
+
+  function svgQR(texto) {
+    const q = qrcode(0, "H"); q.addData(texto); q.make();
+    return q.createSvgTag({ cellSize: 4, margin: 4, scalable: true });
+  }
+  const NFC = '<svg class="nfc" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" aria-hidden="true"><path d="M14 46V18l18 28V18"/><path d="M42 14c5 5 7 11 7 18s-2 13-7 18"/><path d="M51 8c7 7 10 15 10 24s-3 17-10 24"/></svg>';
+  const GOOGLE = '<span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc05">o</span><span style="color:#4285f4">g</span><span style="color:#34a853">l</span><span style="color:#ea4335">e</span>';
+
+  const pieza = enlaceValido(p.get("qr") || "");
+  if (!pieza) { aviso("Falta el enlace de la pieza o no es una landing de Studio 42. Abre esta página desde el botón «Arte» del pedido."); return; }
+  if (!window.qrcode) { aviso("No se pudo cargar el generador de QR. Revisa la conexión y recarga la página."); return; }
+
+  let formato = p.get("f") === "mesa" ? "mesa" : "display";
+  let datos = { nombre: pieza.cod };
+
+  function el(tag, cls, txt) { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+
+  function marcoQR() {
+    const m = el("div", "marco"); m.innerHTML = svgQR(pieza.url);
+    const logoCentro = datos.logo || "../../studio42-logo.png";
+    const c = el("div", "centro"); const i = new Image(); i.alt = ""; i.src = logoCentro; c.appendChild(i); m.appendChild(c);
+    return m;
+  }
+  function cabecera(cont) {
+    if (datos.logo) { const i = new Image(); i.className = "logo"; i.alt = datos.nombre; i.src = datos.logo; cont.appendChild(i); }
+    else cont.appendChild(el("div", "nombre", datos.nombre));
+  }
+  const textoCorto = () => pieza.url.replace(/^https?:\/\//, "").replace(/&k=[^&]*/, "");
+
+  function pintar() {
+    const hoja = el("div", "hoja " + formato);
+    if (formato === "display") {
+      const izq = el("div", "izq"), der = el("div", "der");
+      cabecera(izq); izq.appendChild(marcoQR()); izq.appendChild(el("div", "cta-qr", "ESCANEA AQUÍ"));
+      der.insertAdjacentHTML("beforeend", NFC); der.appendChild(el("div", "cta-nfc", "Acerca el móvil"));
+      der.appendChild(el("div", "sep")); der.appendChild(el("div", "valora", "MENÚ · RESERVAS")); der.appendChild(el("div", "valora", "VALÓRANOS EN"));
+      const g = el("div", "google"); g.innerHTML = GOOGLE; der.appendChild(g); der.appendChild(el("div", "estrellas", "★★★★★"));
+      hoja.append(izq, der);
+    } else {
+      cabecera(hoja); hoja.appendChild(marcoQR()); hoja.appendChild(el("div", "cta-qr", "ESCANEA: MENÚ, PEDIDOS Y OPINIÓN"));
+      if (pieza.mesa) hoja.appendChild(el("div", "num", "Mesa " + pieza.mesa));
+    }
+    hoja.appendChild(el("div", "pie", textoCorto() + " · Studio 42"));
+    $("lienzo").replaceChildren(hoja);
+    $("pagina").textContent = "@page { size: " + (formato === "display" ? "148mm 105mm" : "80mm 80mm") + "; margin: 0; }";
+    document.querySelectorAll(".barra [data-f]").forEach((b) => b.classList.toggle("on", b.dataset.f === formato));
+    document.title = "Arte " + datos.nombre + " · " + (pieza.k || formato);
+  }
+
+  document.querySelectorAll(".barra [data-f]").forEach((b) => b.addEventListener("click", () => { formato = b.dataset.f; pintar(); }));
+  $("bPdf").addEventListener("click", () => window.print());
+  $("bSvg").addEventListener("click", () => {
+    const blob = new Blob([svgQR(pieza.url)], { type: "image/svg+xml" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+    a.download = "qr-" + pieza.cod + "-" + (pieza.k || "pieza") + ".svg"; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+
+  fetch("../../c/" + pieza.cod + ".json", { cache: "no-store" })
+    .then((r) => r.ok ? r.json() : null)
+    .catch(() => null)
+    .then((j) => {
+      if (j) {
+        datos.nombre = String(j.nombre || pieza.cod).slice(0, 60);
+        if (typeof j.logo === "string" && /^[\w.-]+\.(png|jpe?g|webp|svg)$/i.test(j.logo)) datos.logo = "../../c/" + j.logo;
+        const raiz = document.documentElement.style;
+        if (COLOR.test(j.colorPrincipal || "")) raiz.setProperty("--fondo", j.colorPrincipal);
+        if (COLOR.test(j.colorAcento || "")) raiz.setProperty("--acento", j.colorAcento);
+      }
+      $("titulo").textContent = "Arte · " + datos.nombre + (pieza.k ? " · " + pieza.k : "");
+      $("barra").hidden = false;
+      pintar();
+    });
+})();
+</script>
+</body>
+</html>

@@ -472,6 +472,7 @@
         .resumen-l.tot { font-size: 17px; font-weight: 900; border-top: 1px solid rgba(255,255,255,.3); }
         .nfc-l { display: flex; align-items: center; gap: 8px; padding: 9px 10px; margin-top: 6px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); font-size: 11px; }
         .nfc-l b { flex: none; font-size: 12px; min-width: 76px; }
+        .nfc-l .arte { flex: none; border-radius: 99px; padding: 6px 10px; background: #fa8405; color: #0b0c0f; font-weight: 700; font-size: 11px; text-decoration: none; }
         .nfc-l code { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #cbd5e1; }
         .nfc-l button { flex: none; font-family: inherit; font-size: 10px; font-weight: 900; padding: 6px 10px; border-radius: 99px; border: none; background: var(--gradient-btn); color: var(--btn-text-color); cursor: pointer; }
         .ok-ped { text-align: center; padding: 8px 0 4px; }
@@ -1376,6 +1377,7 @@ function mensajeInforme(a){
             welcome:  { nombre: 'Caja de bienvenida negro mate', precio: 89 },
             petpass:  { nombre: 'Chapa PETS Id Smart',        precio: 14.9 },
             camiseta: { nombre: 'Camiseta del equipo NFC',    precio: null },  // a consultar: no suma
+            pegatina: { nombre: 'Pegatina de mesa QR',        precio: null },  // a consultar: precio por decidir
             fichagoogle: { nombre: 'Puesta a punto ficha Google', precio: 89 }
           },
           /* Packs de la web (studio42.es/#packs). Los marcados «retirado» ya no se venden:
@@ -1449,7 +1451,7 @@ function mensajeInforme(a){
             Object.entries(CATALOGO.packs).filter(([, p]) => !p.retirado).forEach(([id, p]) => {
                 const b = h('button', 'pack-op' + (ped.pack === id ? ' on' : '')); b.type = 'button';
                 const izq = h('div'); izq.append(h('b', null, p.nombre));
-                const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta NFC vCard', 'tarjetas NFC vCard'], welcome: ['caja de bienvenida', 'cajas de bienvenida'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'] };
+                const CORTO = { display: ['display', 'displays'], llavero: ['llavero', 'llaveros'], tarjeta: ['tarjeta NFC vCard', 'tarjetas NFC vCard'], welcome: ['caja de bienvenida', 'cajas de bienvenida'], petpass: ['chapa', 'chapas'], camiseta: ['camiseta', 'camisetas'], pegatina: ['pegatina de mesa', 'pegatinas de mesa'] };
                 const inc = Object.entries(p.incluye).map(([k, n]) => n + ' ' + CORTO[k][n === 1 ? 0 : 1]).join(' · ');
                 const extraTxt = p.planFijo ? ' · 0 € hoy, ' + euro(CATALOGO.planes[p.planFijo].mensual) + '/mes · ' + CATALOGO.planes[p.planFijo].permanencia + ' meses'
                     : p.mesesPro ? ' · 🎁 ' + p.mesesPro + (p.mesesPro === 1 ? ' mes' : ' meses') + ' de Pro' : '';
@@ -1568,7 +1570,9 @@ function mensajeInforme(a){
         }
         function enlacesNFC(url, cant, promo) {
             const l = [];
-            for (let i = 1; i <= (cant.display || 0); i++) l.push(['Display ' + i, url + '&k=' + (i === 1 ? 'MOSTRADOR' : 'DISPLAY' + i)]);
+            /* [nombre, enlace NFC, enlace del QR impreso, formato del arte] */
+            for (let i = 1; i <= (cant.display || 0); i++) { const k = i === 1 ? 'MOSTRADOR' : 'DISPLAY' + i; l.push(['Display ' + i, url + '&k=' + k, url + '&k=' + k + '-QR', 'display']); }
+            for (let i = 1; i <= (cant.pegatina || 0); i++) { const u = url + '&k=MESA' + String(i).padStart(2, '0') + '&mesa=' + i; l.push(['Mesa ' + i, u, u, 'mesa']); }
             const nll = (cant.llavero || 0) + (promo ? 2 : 0);
             for (let i = 1; i <= nll; i++) l.push(['Llavero ' + i, url + '&k=L' + String(i).padStart(2, '0')]);
             for (let i = 1; i <= (cant.tarjeta || 0); i++) l.push(['Tarjeta ' + i, url + '&k=TARJETA' + i]);
@@ -1576,6 +1580,7 @@ function mensajeInforme(a){
             for (let i = 1; i <= (cant.camiseta || 0); i++) l.push(['Camiseta ' + i, url + '&k=CAMISETA' + i]);
             return l;
         }
+        const enlaceArte = (uqr, fmt) => '/v/expositor/?f=' + fmt + '&qr=' + encodeURIComponent(uqr);
         function pintarQR(texto) {
             const pinta = () => { try { const q = qrcode(0, 'M'); q.addData(texto); q.make(); $('qr-pago').innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); } catch (e) { $('qr-pago').textContent = ''; } };
             if (window.qrcode) return pinta();
@@ -1603,15 +1608,17 @@ function mensajeInforme(a){
             }
             z.append(h('div', 'ped-tit', 'Enlaces para grabar con NFC Tools'));
             const lista = enlacesNFC(p.url, ped.cant, ped.promo);
-            lista.forEach(([nom, u]) => {
+            lista.forEach(([nom, u, uqr, fmt]) => {
                 const f = h('div', 'nfc-l'); const b = h('button', null, 'Copiar'); b.type = 'button';
                 b.addEventListener('click', async () => { try { await navigator.clipboard.writeText(u); b.textContent = '✓'; } catch (e) { b.textContent = '—'; } });
-                f.append(h('b', null, nom), h('code', null, u.replace('https://', '')), b); z.appendChild(f);
+                f.append(h('b', null, nom), h('code', null, u.replace('https://', '')), b);
+                if (uqr) { const a = h('a', 'arte', 'Arte'); a.href = enlaceArte(uqr, fmt); a.target = '_blank'; a.rel = 'noopener'; f.appendChild(a); }
+                z.appendChild(f);
             });
-            z.append(h('div', 'guia-nfc', 'Cada pieza lleva su propio código (k=…), así sabrás desde qué llavero o display llega cada cliente. En NFC Tools: Escribir → Añadir un registro → URL → pega el enlace → Escribir y acerca la pieza. Si una pieza no lleva chip (camiseta), usa el QR.'));
+            z.append(h('div', 'guia-nfc', 'Cada pieza lleva su propio código (k=…), así sabrás desde qué llavero o display llega cada cliente. En NFC Tools: Escribir → Añadir un registro → URL → pega el enlace → Escribir y acerca la pieza. Si una pieza no lleva chip (camiseta, pegatina de mesa), usa el QR. Con «Arte» abres el diseño listo para imprimir con su QR.'));
             const acc = h('div', 'acciones-fin');
             const todo = h('button', 'btn-fin principal', 'Copiar todos los enlaces'); todo.type = 'button';
-            todo.addEventListener('click', async () => { try { await navigator.clipboard.writeText(lista.map(([n, u]) => n + ': ' + u).join('\n')); todo.textContent = '¡Copiados!'; } catch (e) {} });
+            todo.addEventListener('click', async () => { try { await navigator.clipboard.writeText(lista.map(([n, u, uq]) => n + ': ' + u + (uq && uq !== u ? '\n' + n + ' (QR): ' + uq : '')).join('\n')); todo.textContent = '¡Copiados!'; } catch (e) {} });
             const nuevo = h('button', 'btn-fin', 'Nuevo diagnóstico'); nuevo.type = 'button';
             nuevo.addEventListener('click', () => location.reload());
             acc.append(todo, nuevo); z.appendChild(acc);

@@ -20,6 +20,7 @@ Motor *phygital* de Studio 42: un llavero, stand o tarjeta NFC abre una mini-app
 | `c/motor-v1-respaldo.html` | Motor antiguo, por si hiciera falta volver atrás. | No |
 | `schema.json` | Reglas que debe cumplir cada JSON. GitHub las comprueba solo (`.github/workflows`). | No |
 | `v/closer/` | Formulario del Closer (`studio42.es/v/closer/?cod=MO001`). | Solo la URL del script |
+| `v/expositor/` | Arte para imprimir de cada pieza (expositor 148×105 mm, pegatina de mesa 80×80 mm) con su QR. Se abre con el botón «Arte» del pedido. | Solo para cambiar el diseño |
 | `apps-script/Code.gs` | El "cerebro" automático (Claude + Google Maps + GitHub). Se copia a Google Apps Script. | Sí, si cambia el prompt |
 | `tests/` | Pruebas automáticas (ver abajo). | No |
 | `docs/` | Guías. Empieza por **`docs/GUIA-PRIMEROS-PASOS.md`**. | — |
@@ -28,7 +29,7 @@ Motor *phygital* de Studio 42: un llavero, stand o tarjeta NFC abre una mini-app
 ## La URL de un cliente
 
 `https://studio42.es/c/?cod=<slug>` — el `slug` es el nombre del archivo sin `.json`.
-Parámetros opcionales: `&k=<código-llavero>` (identifica el llavero), `&mesa=<n>`, `&debug=1` (muestra avisos de configuración).
+Parámetros opcionales: `&k=<código-llavero>` (identifica la pieza; el QR impreso de un expositor lleva `-QR` al final, p. ej. `MOSTRADOR-QR`, para medirlo aparte del chip), `&mesa=<n>`, `&debug=1` (muestra avisos de configuración).
 **Las URLs grabadas en llaveros NFC no cambian nunca.**
 
 ## Los botones (resumen)
@@ -49,6 +50,7 @@ python3 tests/probar_clientes.py         # abre cada cliente en un navegador rea
 python3 tests/probar_reglas.py           # los asistentes de Iberlax dan los mismos resultados que el motor antiguo
 node    tests/probar_appsscript.js       # Code.gs con Google Maps/GitHub/Claude simulados (filtros de seguridad incluidos)
 python3 tests/probar_closer_e2e.py       # recorrido completo: formulario → script → JSON → interfaz
+python3 tests/probar_expositor.py        # el QR del arte se lee con cámara y abre el enlace exacto de la pieza
 ```
 
 ## Más documentación
