@@ -8,11 +8,13 @@ on:
     branches: [main]
     paths:
       - "c/*.json"
+      - "fichas/*.json"
       - "schema.json"
       - "tools/generar-fichas.js"
   pull_request:
     paths:
       - "c/*.json"
+      - "fichas/*.json"
       - "tools/generar-fichas.js"
       - "tests/probar_fichas.js"
   workflow_dispatch:

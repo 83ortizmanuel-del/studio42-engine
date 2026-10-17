@@ -7,6 +7,9 @@
  * una página de Studio 42. Esta página lleva el nombre, la dirección, el código
  * postal y el schema LocalBusiness en el HTML, y un botón que abre la app de siempre.
  *
+ * También lee fichas/<slug>.json: clientes con web a medida (sin c/<slug>.json), como
+ * las sedes de La Sucursal. Llevan "app" (la ruta que abre el botón) y "servicios".
+ *
  * Uso:  node tools/generar-fichas.js            (escribe en la raíz del repo)
  *       node tools/generar-fichas.js --raiz DIR (otra carpeta, para pruebas)
  *       node tools/generar-fichas.js --comprobar (no escribe; sale con 1 si algo cambiaría)
@@ -44,6 +47,7 @@ const recorta = (s, n) => (s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*
 function urlLogo(logo) {
     if (!logo) return "";
     if (/^https:\/\//.test(logo)) return logo;
+    if (/^\/[\w\-./]+$/.test(logo) && !logo.includes("..")) return DOMINIO + logo;
     if (/^[\w\-./]+$/.test(logo) && !logo.includes("..")) return DOMINIO + "/c/" + logo.replace(/^\.?\//, "");
     return "";
 }
@@ -71,10 +75,18 @@ function telefonoVisible(e164) {
 }
 
 const DIAS = { Mo: "lunes", Tu: "martes", We: "miércoles", Th: "jueves", Fr: "viernes", Sa: "sábado", Su: "domingo" };
-function horarioLegible(linea) {
-    const [dias, horas] = linea.split(" ");
-    const txt = dias.split(",").map((t) => t.split("-").map((d) => DIAS[d]).join(" a ")).join(", ");
-    return txt.charAt(0).toUpperCase() + txt.slice(1) + ": " + horas.replace("-", " a ");
+/* ["Tu-Sa 10:00-14:00", "Tu-Sa 16:00-21:00"] → ["Martes a sábado: 10:00 a 14:00 y 16:00 a 21:00"] */
+function horarioLegible(lineas) {
+    const grupos = new Map();
+    for (const linea of lineas) {
+        const [dias, horas] = linea.split(" ");
+        if (!grupos.has(dias)) grupos.set(dias, []);
+        grupos.get(dias).push(horas.replace("-", " a "));
+    }
+    return [...grupos].map(([dias, horas]) => {
+        const txt = dias.split(",").map((t) => t.split("-").map((d) => DIAS[d]).join(" a ")).join(", ");
+        return txt.charAt(0).toUpperCase() + txt.slice(1) + ": " + horas.join(" y ");
+    });
 }
 
 function fechaGit(archivo) {
@@ -87,6 +99,10 @@ function fechaGit(archivo) {
 
 /* Lo que ofrece el negocio, sacado de sus botones (texto real para Google). */
 function servicios(d) {
+    if (Array.isArray(d.servicios)) {
+        return d.servicios.map((s) => ({ nombre: limpio(s && s.nombre), descripcion: limpio(s && s.descripcion) }))
+            .filter((s) => s.nombre).slice(0, 12);
+    }
     const vistos = new Set();
     const out = [];
     for (const s of d.secciones || []) {
@@ -111,13 +127,15 @@ function pagina(slug, d) {
     const cp = f.cp;
     const direccion = limpio(f.direccion);
     const url = DOMINIO + "/" + slug + "/";
-    const app = "/c/?cod=" + encodeURIComponent(slug);
+    const app = d.app || "/c/?cod=" + encodeURIComponent(slug);
     const logo = urlLogo(d.logo);
     const tel = telefonoE164(f, d);
     const wa = urlWhatsapp(d.whatsapp);
     const acento = hexOk(d.colorAcento, "#00E5FF");
     const fondoLogo = /^#[0-9a-fA-F]{6}$|^transparent$/.test(d.fondoLogo || "") ? d.fondoLogo : "#0b0c10";
     const lista = servicios(d);
+    const HORA = /^(Mo|Tu|We|Th|Fr|Sa|Su)(-(Mo|Tu|We|Th|Fr|Sa|Su))?(,(Mo|Tu|We|Th|Fr|Sa|Su)(-(Mo|Tu|We|Th|Fr|Sa|Su))?)* [0-2][0-9]:[0-5][0-9]-[0-2][0-9]:[0-5][0-9]$/;
+    f.horario = (Array.isArray(f.horario) ? f.horario : []).filter((h) => HORA.test(h));
 
     const titulo = recorta(nombre + (categoria ? " · " + categoria : "") + " en " + ciudad + " (" + cp + ")", 70);
     const descripcion = recorta(limpio(f.descripcion) ||
@@ -236,12 +254,12 @@ ${f.horario && f.horario.length ? `
   <section>
     <h2>Horario</h2>
     <ul>
-      ${f.horario.map((h) => `<li>${esc(horarioLegible(h))}</li>`).join("\n      ")}
+      ${horarioLegible(f.horario).map((h) => `<li>${esc(h)}</li>`).join("\n      ")}
     </ul>
   </section>
 ` : ""}${lista.length ? `
   <section>
-    <h2>Qué puedes hacer desde la app</h2>
+    <h2>${Array.isArray(d.servicios) ? "Servicios" : "Qué puedes hacer desde la app"}</h2>
     <ul>
       ${lista.map((s) => `<li>${esc(s.nombre)}${s.descripcion ? `<span>${esc(s.descripcion)}</span>` : ""}</li>`).join("\n      ")}
     </ul>
@@ -271,14 +289,24 @@ function principal() {
     };
 
     const generadas = [];
-    for (const nombre of fs.readdirSync(dirC).filter((n) => n.endsWith(".json")).sort()) {
-        const slug = nombre.slice(0, -5);
-        const archivo = path.join(dirC, nombre);
+    const fuentes = [];
+    for (const dir of [dirC, path.join(RAIZ, "fichas")]) {
+        if (!fs.existsSync(dir)) continue;
+        for (const n of fs.readdirSync(dir).filter((x) => x.endsWith(".json")).sort()) fuentes.push(path.join(dir, n));
+    }
+    const usados = new Set();
+    for (const archivo of fuentes) {
+        const nombre = path.relative(RAIZ, archivo);
+        const slug = path.basename(archivo, ".json");
+        if (usados.has(slug)) { avisos.push(nombre + ": ya hay otro cliente con el nombre " + slug + ", se salta"); continue; }
         let d;
         try { d = JSON.parse(fs.readFileSync(archivo, "utf8")); } catch (e) { avisos.push(nombre + ": JSON no válido, se salta"); continue; }
         const f = d.ficha;
         if (!f || typeof f !== "object") continue;
         if (f.indexar === false || d.pausada === true || d.redirigir) continue;
+        if (d.app !== undefined && !(typeof d.app === "string" && /^\/(?!\/)[\w\-\/.?=&%]*$/.test(d.app))) {
+            avisos.push(nombre + ": \"app\" debe ser una ruta del propio sitio (empieza por /), se salta"); continue;
+        }
         if (!SLUG_OK.test(slug)) { avisos.push(slug + ": el nombre del archivo no vale como dirección web, se salta"); continue; }
         if (!limpio(d.nombre) || !limpio(f.direccion) || !/^[0-9]{5}$/.test(f.cp || "") || !limpio(f.ciudad)) {
             avisos.push(slug + ": a la ficha le falta nombre, dirección, CP o ciudad, se salta"); continue;
@@ -288,6 +316,7 @@ function principal() {
             avisos.push(slug + ": ya existe la carpeta /" + slug + "/ y no la creó este script, no se toca"); continue;
         }
         escribir(path.join(destino, "index.html"), pagina(slug, d));
+        usados.add(slug);
         generadas.push({ slug, fecha: fechaGit(archivo) });
     }
 

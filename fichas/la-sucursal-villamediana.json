@@ -1,0 +1,66 @@
+{
+  "_nota": "Página para Google de una sede de La Sucursal (web a medida en /la-sucursal/v2/). Datos copiados de esa página el 2026-10-17. Ver docs/FICHAS-GOOGLE.md.",
+  "nombre": "La Sucursal Villamediana",
+  "subtitulo": "Degradados, barba y ropa de autor",
+  "logo": "/la-sucursal/v2/logo.webp",
+  "fondoLogo": "#060608",
+  "colorAcento": "#D4AF37",
+  "whatsapp": "+34 643 618 452",
+  "app": "/la-sucursal/v2/?sede=villamediana",
+  "servicios": [
+    {
+      "nombre": "Corte degradado",
+      "descripcion": "El fade de la casa · 20 min · 15 €"
+    },
+    {
+      "nombre": "Corte + barba",
+      "descripcion": "El combo completo · 30 min · 20 €"
+    },
+    {
+      "nombre": "Corte de barba",
+      "descripcion": "Perfilado y arreglo · 20 min · 10 €"
+    },
+    {
+      "nombre": "Corte Free Style",
+      "descripcion": "Diseño a tu medida · 30 min · 50 €"
+    },
+    {
+      "nombre": "Mechas",
+      "descripcion": "Color con estilo · 30 min · 100 €"
+    },
+    {
+      "nombre": "Platinado",
+      "descripcion": "Rubio platino total · 30 min · 130 €"
+    },
+    {
+      "nombre": "Corte jubilados",
+      "descripcion": "Precio especial · 20 min · 10 €"
+    },
+    {
+      "nombre": "Ropa de autor La Sucursal",
+      "descripcion": "Camisetas y productos de peinado en la tienda"
+    }
+  ],
+  "ficha": {
+    "tipo": "HairSalon",
+    "categoria": "Barbería",
+    "descripcion": "Barbería La Sucursal en Villamediana de Iregua: degradados, barba y diseños a medida con Santiago. Reserva online o por WhatsApp.",
+    "direccion": "C. Anastasio Mateo, 10",
+    "cp": "26142",
+    "ciudad": "Villamediana de Iregua",
+    "provincia": "La Rioja",
+    "telefono": "+34 643 023 681",
+    "email": "lasucursalthebarber@gmail.com",
+    "web": "https://lasucursalstoreart.com/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=La+Sucursal+Villamediana+de+Iregua&query_place_id=ChIJpyfKYQCrWg0RWqKa-uaku1Y",
+    "horario": [
+      "Mo-Fr 11:00-14:00",
+      "Mo-Fr 16:30-21:00",
+      "Sa 10:00-15:00"
+    ],
+    "redes": [
+      "https://www.instagram.com/sucursal_barber_villamediana/",
+      "https://www.instagram.com/la_sucursal_store/"
+    ]
+  }
+}

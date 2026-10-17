@@ -53,6 +53,19 @@ corre();
 ok(!existe("bar-prueba"), "al pausar el cliente se borra su página");
 ok(!lee("sitemap.xml").includes("bar-prueba"), "y sale del sitemap");
 
+// Clientes con web a medida: fichas/<slug>.json con "app" y "servicios".
+escribe("fichas/sede-norte.json", { nombre: "Sede Norte", app: "/sedes/v2/?sede=norte", logo: "/sedes/logo.webp", servicios: [{ nombre: "Corte", descripcion: "15 €" }], ficha: Object.assign({}, ficha, { horario: ["Tu-Sa 10:00-14:00", "Tu-Sa 16:00-21:00", "mal"] }) });
+escribe("fichas/sede-mala.json", { nombre: "Mala", app: "https://otro.com/", ficha });
+escribe("c/doble.json", Object.assign({}, base, { ficha }));
+escribe("fichas/doble.json", { nombre: "Duplicada", ficha });
+r = corre();
+const sede = lee("sede-norte/index.html");
+ok(sede.includes('href="/sedes/v2/?sede=norte"') && sede.includes("https://studio42.es/sedes/logo.webp"), "fichas/: botón a su web a medida y logo con ruta del sitio");
+ok(sede.includes("<h2>Servicios</h2>") && sede.includes("Corte<span>15 €</span>"), "fichas/: lista de servicios propia");
+ok(sede.includes("Martes a sábado: 10:00 a 14:00 y 16:00 a 21:00") && !sede.includes("<li>mal"), "horario partido en una línea y líneas mal escritas fuera");
+ok(!existe("sede-mala") && r.out.includes("sede-mala"), "fichas/: rechaza un \"app\" que no es del propio sitio");
+ok(!lee("doble/index.html").includes("Duplicada") && r.out.includes("ya hay otro cliente"), "nombre repetido entre c/ y fichas/: gana uno y avisa");
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(fallos ? fallos + " fallo(s)" : "Todo bien.");
 process.exit(fallos ? 1 : 0);
