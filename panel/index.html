@@ -178,6 +178,7 @@ a{color:inherit;text-decoration:none}
 .nfc{display:flex;align-items:center;gap:8px;padding:.55rem .7rem;margin-top:6px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:.8rem}
 .nfc b{flex:none;min-width:84px}
 .nfc code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#cbd5e1;font-size:.74rem}
+.nfc .arte{flex:none;border-radius:99px;padding:.35rem .7rem;background:#fa8405;color:#0b0c0f;font:700 .72rem var(--fb);text-decoration:none}
 .nfc button{flex:none;border:0;border-radius:99px;padding:.35rem .7rem;background:var(--ti);color:#0b0c0f;font:700 .72rem var(--fb)}
 .full{position:fixed;inset:0;z-index:40;background:var(--ink);overflow-y:auto;transform:translateX(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
 .full.on{transform:none}
@@ -312,7 +313,7 @@ var $=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){retur
 var KT='s42panel_token';
 var D=null, fichas={}, cur=null, propuesta=null;
 var ESTADOS=['Por despachar','Grabado','Entregado','Cobrado','Cancelado'];
-var PIEZAS={display:'Display',llavero:'Llavero',tarjeta:'Tarjeta',welcome:'Welcome',camiseta:'Camiseta',petpass:'Chapa'};
+var PIEZAS={display:'Display',llavero:'Llavero',tarjeta:'Tarjeta',welcome:'Welcome',camiseta:'Camiseta',pegatina:'Pegatina',petpass:'Chapa'};
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function euro(n){return typeof n==='number'?n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €':esc(n)}
 function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove('on')},2600)}
@@ -441,9 +442,14 @@ function pintarPedidos(){
   $$('#tabPedidos .card').forEach(function(b){b.onclick=function(){abrirPedido(b.dataset.p)}});
 }
 function unidades(p){var u={};(p.calc&&p.calc.lineas||[]).forEach(function(l){if(l.pieza)u[l.pieza]=(u[l.pieza]||0)+l.unidades});return u}
+/* Fila de una pieza: enlace NFC para copiar y, si lleva QR impreso, el botón «Arte» con el diseño listo para imprimir */
+function filaNFC(x){var arte=x[2]?'<a class="arte" href="/v/expositor/?f='+esc(x[3]||'display')+'&qr='+esc(encodeURIComponent(x[2]))+'" target="_blank" rel="noopener">Arte</a>':'';
+  return'<div class="nfc"><b>'+esc(x[0])+'</b><code>'+esc(x[1].replace('https://',''))+'</code><button type="button" data-u="'+esc(x[1])+'">Copiar</button>'+arte+'</div>'}
 function enlacesNFC(p){
   var u=unidades(p),l=[],url=p.url;
-  for(var i=1;i<=(u.display||0);i++)l.push(['Display '+i,url+'&k='+(i===1?'MOSTRADOR':'DISPLAY'+i)]);
+  /* [nombre, enlace NFC, enlace del QR impreso, formato del arte] */
+  for(var i=1;i<=(u.display||0);i++){var k=i===1?'MOSTRADOR':'DISPLAY'+i;l.push(['Display '+i,url+'&k='+k,url+'&k='+k+'-QR','display'])}
+  for(i=1;i<=(u.pegatina||0);i++){var um=url+'&k=MESA'+String(i).padStart(2,'0')+'&mesa='+i;l.push(['Mesa '+i,um,um,'mesa'])}
   for(i=1;i<=(u.llavero||0);i++)l.push(['Llavero '+i,url+'&k=L'+String(i).padStart(2,'0')]);
   for(i=1;i<=(u.tarjeta||0);i++)l.push(['Tarjeta '+i,url+'&k=TARJETA'+i]);
   for(i=1;i<=(u.welcome||0);i++)l.push(['Welcome '+i,url+'&k=WELCOME'+i]);
@@ -460,7 +466,7 @@ function abrirPedido(id){
   else h+='<div class="row"><span>'+esc(p.detalle)+'</span><b>'+euro(p.total)+'</b></div>';
   if(p.notas)h+='<div class="bubble"><b>Notas</b>'+esc(p.notas)+'</div>';
   var nfc=enlacesNFC(p);
-  if(nfc.length){h+='<div class="sec">Grabar con NFC Tools ('+nfc.length+' piezas)</div>';nfc.forEach(function(x){h+='<div class="nfc"><b>'+esc(x[0])+'</b><code>'+esc(x[1].replace('https://',''))+'</code><button type="button" data-u="'+esc(x[1])+'">Copiar</button></div>'});}
+  if(nfc.length){h+='<div class="sec">Grabar con NFC Tools ('+nfc.length+' piezas)</div>';nfc.forEach(function(x){h+=filaNFC(x)});}
   h+='<div class="acts" style="margin-top:16px"><button class="ghost" type="button" id="pVer">'+(/^t-/.test(p.slug||'')?'Ver tarjeta':'Ver landing')+'</button><button class="ghost" type="button" id="pCerrar">Cerrar</button></div>';
   $('#shPedidoIn').innerHTML=h;abrirSheet('#shPedido');
   $$('#shPedidoIn .nfc button').forEach(function(b){b.onclick=function(){copiar(b.dataset.u,b)}});
@@ -530,7 +536,7 @@ function abrirCliente(s){
   h+='<button type="button" class="ghost solo-ceo" id="bPausa" style="width:100%;margin-top:12px'+(pausada?'':';color:#fca5a5;border-color:rgba(239,68,68,.35)')+'">'+(pausada?'▶ Reactivar la landing':'⏸ Pausar la landing (impago)')+'</button>'+(m?'':'<button type="button" class="ghost solo-ceo" id="bBaja" style="width:100%;margin-top:8px;color:#fca5a5;border-color:rgba(239,68,68,.35)">🗑 Dar de baja completa</button>')+'</div>';
   if(ps.length){h+='<div class="sec" style="margin-top:22px">Pedidos de este cliente</div>';ps.forEach(function(p){var i=ESTADOS.indexOf(p.estado);h+='<button type="button" class="card" data-p="'+esc(p.id)+'" style="margin-top:8px"><span class="mid"><b>'+esc(p.pack)+'</b><small>'+esc(p.id)+' · '+esc(fechaCorta(p.fecha))+'</small></span><span class="rt"><b>'+euro(p.calc?p.calc.total:p.total)+'</b><span class="pill st-'+(i<0?0:i)+'">'+esc(p.estado)+'</span></span></button>'});
     var piezas=[];ps.filter(function(p){return p.estado!=='Cancelado'}).forEach(function(p){piezas=piezas.concat(enlacesNFC(p))});
-    if(piezas.length)h+='<div class="sec" style="margin-top:18px">Piezas NFC activas ('+piezas.length+')</div><div class="sub" style="margin:.3rem 0 0;color:var(--muted);font-size:.82rem">Cada llavero o display tiene su código. Así sabes por cuál entra cada cliente.</div>'+piezas.map(function(x){return'<div class="nfc"><b>'+esc(x[0])+'</b><code>'+esc(x[1].replace('https://',''))+'</code><button type="button" data-u="'+esc(x[1])+'">Copiar</button></div>'}).join('');}
+    if(piezas.length)h+='<div class="sec" style="margin-top:18px">Piezas NFC activas ('+piezas.length+')</div><div class="sub" style="margin:.3rem 0 0;color:var(--muted);font-size:.82rem">Cada llavero o display tiene su código. Así sabes por cuál entra cada cliente.</div>'+piezas.map(filaNFC).join('');}
   else if(m&&m.piezas&&m.piezas.length)h+='<div class="sec" style="margin-top:22px">Piezas NFC ('+m.piezas.length+')</div>'+m.piezas.map(function(p){return'<div class="nfc"><b>'+esc(p[0])+'</b><code>'+esc(String(p[1]).replace('https://',''))+'</code><button type="button" data-u="'+esc(p[1])+'">Copiar</button></div>'}).join('');
   else h+='<div class="empty" style="padding-top:22px">Este cliente aún no tiene pedidos registrados en el panel.</div>';
   $('#cPedidos').innerHTML=h;
