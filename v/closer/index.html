@@ -27,6 +27,34 @@
         }
 
 
+        /* ---------- Venta de tarjeta vCard ---------- */
+        .vc-zona{margin:4px 0 14px}
+        .btn-vcard{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 16px;border:1.5px solid rgba(255,255,255,.22);border-radius:14px;background:linear-gradient(135deg,#1f2229,#121419);color:#f4f6f9;font:800 .98rem system-ui,sans-serif;cursor:pointer}
+        .vc-prev{position:relative;margin:0 auto 14px;width:min(100%,300px);height:520px;border-radius:28px;overflow:hidden;border:1.5px solid #2a2d35;background:#000}
+        .vc-prev iframe{width:100%;height:100%;border:0}
+        .vc-prev span{position:absolute;top:8px;left:50%;transform:translateX(-50%);font:800 .6rem system-ui;letter-spacing:.12em;color:#9ca3af;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:99px}
+        .vc-f{display:grid;gap:10px}
+        .vc-f label{display:grid;gap:5px;font-size:.8rem;color:#c9ced6}
+        .vc-f input[type=text],.vc-f input[type=tel],.vc-f input[type=email],.vc-f input[type=url],.vc-f textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #2a2d35;background:#0b0c10;color:#fff;font-size:1rem;font-family:inherit}
+        .vc-estilos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+        .vc-estilos button{padding:9px 2px;border-radius:12px;border:1.5px solid #2a2d35;background:#121419;color:#d6d9de;font:700 .74rem system-ui}
+        .vc-estilos button.on{border-color:#cfd4dc;background:rgba(220,228,240,.12);color:#fff}
+        .vc-estilos i{display:block;width:18px;height:18px;border-radius:50%;margin:0 auto 4px}
+        .vc-foto{display:flex;align-items:center;gap:12px}
+        .vc-foto .vista{width:64px;height:64px;border-radius:50%;background:#121419 center/cover;border:1.5px solid #2a2d35;flex:none;display:grid;place-items:center;color:#9ca3af;font-size:.7rem}
+        .vc-foto label{flex:1;display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:12px;border:1px solid #2a2d35;background:#16181e;color:#fff;font-weight:700;cursor:pointer}
+        .vc-uds{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:12px;background:#0f1116;border:1px solid #23262e}
+        .vc-uds .st{display:flex;align-items:center;gap:8px}
+        .vc-uds .st button{width:40px;height:40px;border-radius:10px;border:1px solid #2a2d35;background:#16181e;color:#fff;font-size:1.2rem}
+        .vc-uds .st b{min-width:24px;text-align:center;font-size:1.1rem}
+        .vc-ok{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:#d1d5db;padding:10px;border-radius:12px;background:#0f1116;border:1px solid #23262e}
+        .vc-ok input{width:20px;height:20px;flex:none;margin-top:2px}
+        .vc-go{width:100%;padding:15px;border:0;border-radius:14px;background:#f4f6f9;color:#07080b;font-weight:800;font-size:1rem}
+        .vc-go:disabled{opacity:.5}
+        .vc-link{display:flex;gap:8px;align-items:center;padding:12px;border-radius:12px;background:#0f1116;border:1px solid #23262e;word-break:break-all;font-size:.85rem}
+        .vc-link code{flex:1;color:#c9ced6}
+        .vc-link button,.vc-acc a,.vc-acc button{padding:10px 12px;border-radius:10px;border:1px solid #2a2d35;background:#16181e;color:#fff;font-weight:700;text-decoration:none;text-align:center}
+        .vc-acc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
         /* ---------- Auditoría de la ficha de Google ---------- */
         .btn-auditar{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:12px 0 4px;padding:14px 16px;border:0;border-radius:14px;background:linear-gradient(135deg,#fde68a,#f59e0b);color:#1a1205;font:800 .98rem system-ui,sans-serif;cursor:pointer;box-shadow:0 10px 26px rgba(245,158,11,.25)}
         .btn-auditar:disabled{opacity:.6}
@@ -460,6 +488,11 @@
                     </div>
                 </div>
 
+                <div class="vc-zona">
+                    <button type="button" id="btn-vcard" class="btn-vcard">🪪 Vender solo una tarjeta vCard</button>
+                    <p class="aud-nota-btn">Para profesionales que quieren su tarjeta digital sin landing</p>
+                </div>
+
                 <div class="maps-box" id="maps-box">
                     <label for="maps_consulta">① Busca el negocio en Google Maps</label>
                     <div class="maps-fila">
@@ -575,6 +608,7 @@
 
             <section id="pedido" class="ped hidden-element" aria-live="polite"></section>
             <div id="aud" class="aud" hidden role="dialog" aria-modal="true" aria-label="Auditoría de la ficha de Google"></div>
+            <div id="vc" class="aud" hidden role="dialog" aria-modal="true" aria-label="Vender una tarjeta vCard"></div>
 
         </main>
     </div>
@@ -1176,6 +1210,106 @@ function mensajeInforme(a){
             if (respuesta && respuesta.ok) { const z = $('zona-final'); const a = document.createElement('div'); a.className = 'url-final'; a.textContent = `${BASE}/c/?cod=${slug}`; z.appendChild(a); }
         }
 
+
+        /* ===================== VENDER SOLO UNA TARJETA vCARD =====================
+           Mismo formulario que el panel. El servidor publica la tarjeta y crea el pedido. */
+        const VC_CAMPOS = [['nombre','Nombre y apellidos *','text'],['cargo','Cargo','text'],['empresa','Empresa','text'],['bio','Frase corta (opcional)','text'],['telefono','Teléfono','tel'],['whatsapp','WhatsApp (si es otro número)','tel'],['email','Email','email'],['web','Web','url'],['linkedin','LinkedIn (enlace)','url'],['instagram','Instagram (@usuario o enlace)','text'],['tiktok','TikTok (@usuario o enlace)','text'],['direccion','Dirección (opcional)','text'],['reserva','Enlace para reservar cita (opcional)','url'],['resena','Enlace de reseñas de Google (opcional)','url']];
+        const VC_ESTILOS = [['titanio','Titanio','linear-gradient(135deg,#fff,#8e8e93)'],['oro','Oro','linear-gradient(135deg,#f6e3a6,#a9832f)'],['minimal','Minimal','linear-gradient(135deg,#fff,#d8d4cc)'],['marca','Su color','conic-gradient(#e11d48,#f59e0b,#10b981,#3b82f6,#e11d48)']];
+        const slugVc = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+        let VC = null;
+        function vcEl(tag, cls, txt) { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+        function vcPrevia() {
+            if (!VC) return; const d = Object.assign({}, VC.datos); if (VC.foto) d.foto = VC.foto;
+            const f = $('vc-frame'); try { f.contentWindow.postMessage({ tipo: 's42-tarjeta', json: d }, location.origin); } catch (e) {}
+        }
+        window.addEventListener('message', (e) => { if (e.origin === location.origin && e.data && e.data.tipo === 's42-tarjeta-lista') vcPrevia(); });
+        function vcReducir(file) {
+            return new Promise((res, rej) => {
+                const img = new Image(), u = URL.createObjectURL(file);
+                img.onload = () => { const s = Math.min(img.width, img.height), c = document.createElement('canvas'); c.width = c.height = 480;
+                    c.getContext('2d').drawImage(img, (img.width - s) / 2, (img.height - s) * 0.35, s, s, 0, 0, 480, 480); URL.revokeObjectURL(u); res(c.toDataURL('image/jpeg', 0.82)); };
+                img.onerror = rej; img.src = u;
+            });
+        }
+        function vcCerrar() { $('vc').hidden = true; document.body.style.overflow = ''; VC = null; }
+        function vcAbrir() {
+            VC = { datos: { estilo: 'titanio', color: '#d9b45a' }, foto: '', uds: 1, idTocado: false };
+            const v = $('vc'); v.textContent = ''; v.hidden = false; document.body.style.overflow = 'hidden'; v.scrollTop = 0;
+            const inn = vcEl('div', 'in'); v.appendChild(inn);
+            const top = vcEl('div', 'top'); top.append(vcEl('small', null, 'Studio 42 · Tarjeta vCard'));
+            const x = vcEl('button', 'x', '✕ Salir'); x.type = 'button'; x.onclick = vcCerrar; top.appendChild(x); inn.appendChild(top);
+            inn.append(vcEl('h2', null, 'Vender una tarjeta vCard'), vcEl('p', 'sub', 'Rellena sus datos: la vista previa cambia mientras escribes. Al crearla se publica su tarjeta y te llega el pedido al panel.'));
+            const pv = vcEl('div', 'vc-prev'); const fr = document.createElement('iframe'); fr.id = 'vc-frame'; fr.title = 'Vista previa de la tarjeta'; fr.src = '../../t/?preview=1';
+            pv.append(fr, vcEl('span', null, 'VISTA PREVIA')); inn.appendChild(pv);
+            const f = vcEl('div', 'vc-f'); inn.appendChild(f);
+            // Foto
+            const fo = vcEl('div', 'vc-foto'); const vista = vcEl('span', 'vista', 'Sin foto');
+            const lf = vcEl('label', null, '📷 Subir foto'); const inf = document.createElement('input'); inf.type = 'file'; inf.accept = 'image/*'; inf.hidden = true; lf.appendChild(inf);
+            inf.onchange = () => { const file = inf.files && inf.files[0]; if (!file) return; vcReducir(file).then((u) => { VC.foto = u; vista.style.backgroundImage = 'url(' + u + ')'; vista.textContent = ''; vcPrevia(); }); };
+            fo.append(vista, lf); f.appendChild(fo);
+            // Campos
+            let idInp = null;
+            VC_CAMPOS.forEach(([k, et, tipo]) => {
+                const l = vcEl('label', null, et); const i = document.createElement('input'); i.type = tipo; if (k === 'bio') i.maxLength = 200;
+                i.oninput = () => { VC.datos[k] = i.value; if (k === 'nombre' && idInp && !VC.idTocado) idInp.value = slugVc(i.value); vcPrevia(); };
+                l.appendChild(i); f.appendChild(l);
+            });
+            // Estilo
+            const le = vcEl('label', null, 'Estilo'); const es = vcEl('div', 'vc-estilos');
+            const lc = vcEl('label', null, 'Color de su marca'); const ic = document.createElement('input'); ic.type = 'color'; ic.value = '#d9b45a'; ic.style.cssText = 'width:100%;min-height:46px;border-radius:10px;border:1px solid #2a2d35;background:#0b0c10'; lc.appendChild(ic); lc.hidden = true;
+            ic.oninput = () => { VC.datos.color = ic.value; vcPrevia(); };
+            VC_ESTILOS.forEach(([k, n, g]) => { const b = vcEl('button', k === 'titanio' ? 'on' : null); b.type = 'button'; const dot = vcEl('i'); dot.style.background = g; b.append(dot, document.createTextNode(n));
+                b.onclick = () => { VC.datos.estilo = k; es.querySelectorAll('button').forEach((o) => o.classList.toggle('on', o === b)); lc.hidden = k !== 'marca'; vcPrevia(); }; es.appendChild(b); });
+            le.appendChild(es); f.append(le, lc);
+            // Identificador y quién paga
+            const li = vcEl('label', null, 'Enlace de la tarjeta (studio42.es/t/?id=…)'); idInp = document.createElement('input'); idInp.type = 'text'; idInp.placeholder = 'nombre-apellido';
+            idInp.oninput = () => { VC.idTocado = true; idInp.value = slugVc(idInp.value); }; li.appendChild(idInp); f.appendChild(li);
+            const lp = vcEl('label', null, 'Quién paga (empresa o persona)'); const ip = document.createElement('input'); ip.type = 'text'; lp.appendChild(ip); f.appendChild(lp);
+            // Unidades
+            const ud = vcEl('div', 'vc-uds'); const txt = vcEl('div'); const pz = CATALOGO.piezas.tarjeta;
+            const pr = () => { txt.textContent = ''; txt.append(vcEl('b', null, 'Tarjetas de madera NFC'), document.createElement('br'), vcEl('small', null, euro(pz.precio) + ' + IVA cada una · Total ' + euro(Math.round(VC.uds * pz.precio * 1.21 * 100) / 100) + ' IVA incl.')); };
+            const st = vcEl('div', 'st'); const me = vcEl('button', null, '−'), num = vcEl('b', null, '1'), ma = vcEl('button', null, '+'); me.type = ma.type = 'button';
+            me.onclick = () => { VC.uds = Math.max(1, VC.uds - 1); num.textContent = VC.uds; pr(); }; ma.onclick = () => { VC.uds = Math.min(50, VC.uds + 1); num.textContent = VC.uds; pr(); };
+            st.append(me, num, ma); ud.append(txt, st); pr(); f.appendChild(ud);
+            const ln = vcEl('label', null, 'Notas (opcional)'); const tn = document.createElement('textarea'); tn.rows = 2; tn.placeholder = 'Ej.: grabar el nombre en la madera, fecha de entrega…'; ln.appendChild(tn); f.appendChild(ln);
+            const ok = vcEl('label', 'vc-ok'); const cb = document.createElement('input'); cb.type = 'checkbox';
+            ok.append(cb, vcEl('span', null, 'La persona ha aceptado que estos datos se publiquen en su tarjeta digital. Se guarda la fecha como prueba de su consentimiento.')); f.appendChild(ok);
+            const msg = vcEl('p', 'nota-pie'); const go = vcEl('button', 'vc-go', 'Crear tarjeta y pedido'); go.type = 'button'; f.append(go, msg);
+            go.onclick = async () => {
+                msg.textContent = '';
+                const nombre = String(VC.datos.nombre || '').trim(); const id = slugVc(idInp.value || nombre);
+                if (nombre.length < 2) { msg.textContent = 'Falta el nombre.'; return; }
+                if (id.length < 3) { msg.textContent = 'El enlace es demasiado corto.'; return; }
+                if (!cb.checked) { msg.textContent = 'Marca el consentimiento de la persona.'; return; }
+                const t = {}; VC_CAMPOS.forEach(([k]) => { t[k] = VC.datos[k] || ''; }); t.estilo = VC.datos.estilo || 'titanio'; t.color = VC.datos.color || '';
+                go.disabled = true; go.textContent = 'Publicando…';
+                try {
+                    const resp = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+                        body: JSON.stringify({ accion: 'closer_tarjeta', closer_id: $('closer_id').value, id, tarjeta: t, foto: VC.foto || '', paga: ip.value.trim(), unidades: VC.uds, notas: tn.value.trim(), consentimiento: true }) });
+                    const r = await resp.json();
+                    if (!r.ok) { go.disabled = false; go.textContent = 'Crear tarjeta y pedido'; msg.textContent = '⚠️ ' + (r.error || 'No se pudo crear.'); return; }
+                    vcHecha(inn, r, nombre, t.telefono || t.whatsapp);
+                } catch (e) { go.disabled = false; go.textContent = 'Crear tarjeta y pedido'; msg.textContent = '⚠️ Sin conexión. Inténtalo de nuevo.'; }
+            };
+        }
+        function vcHecha(inn, r, nombre, tel) {
+            inn.querySelectorAll('.vc-f, .vc-prev, .sub').forEach((e) => e.remove());
+            inn.querySelector('h2').textContent = '✅ Tarjeta de ' + nombre + ' creada';
+            const k = vcEl('div', 'card');
+            k.append(vcEl('h3', null, 'Su enlace'), vcEl('p', 'nota-pie', 'En 1 minuto ya se puede abrir. Es el enlace que se graba en sus tarjetas de madera con NFC Tools.'));
+            const lk = vcEl('div', 'vc-link'); const cd = vcEl('code', null, r.url.replace('https://', '')); const cp = vcEl('button', null, 'Copiar'); cp.type = 'button';
+            cp.onclick = () => { try { navigator.clipboard.writeText(r.url); cp.textContent = '✓'; setTimeout(() => { cp.textContent = 'Copiar'; }, 1500); } catch (e) {} };
+            lk.append(cd, cp); k.appendChild(lk);
+            const acc = vcEl('div', 'vc-acc'); acc.style.marginTop = '10px';
+            const ab = vcEl('a', null, 'Abrir tarjeta'); ab.href = r.url; ab.target = '_blank'; ab.rel = 'noopener';
+            const wa = vcEl('a', null, '📲 Enviársela'); const num = String(tel || '').replace(/\D/g, ''); wa.href = 'https://wa.me/' + (num.length === 9 ? '34' + num : num) + '?text=' + encodeURIComponent('¡Hola ' + nombre.split(' ')[0] + '! Ya tienes tu tarjeta digital de Studio 42: ' + r.url + '\nGuárdala y compártela con un toque.'); wa.target = '_blank'; wa.rel = 'noopener';
+            acc.append(ab, wa); k.appendChild(acc); inn.appendChild(k);
+            const k2 = vcEl('div', 'card'); k2.append(vcEl('h3', null, 'Pedido ' + r.pedido.id), vcEl('p', 'nota-pie', r.pedido.calc.lineas.map((l) => l.unidades + ' × ' + l.concepto).join(' · ') + ' · Total ' + euro(r.pedido.calc.total) + ' IVA incl. Ya está en el panel como «Por despachar».')); inn.appendChild(k2);
+            const otra = vcEl('button', 'vc-go', 'Vender otra tarjeta'); otra.type = 'button'; otra.onclick = vcAbrir;
+            const sal = vcEl('button', 'cerrar-grande', '✕ Volver al diagnóstico'); sal.type = 'button'; sal.onclick = vcCerrar;
+            inn.append(otra, sal); $('vc').scrollTop = 0;
+        }
+        $('btn-vcard').addEventListener('click', vcAbrir);
 
         /* ================================ PEDIDO ================================
            Los precios se muestran aquí, pero el total que vale es el que calcula el servidor. */

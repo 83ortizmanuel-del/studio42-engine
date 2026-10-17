@@ -461,7 +461,7 @@ function abrirPedido(id){
   if(p.notas)h+='<div class="bubble"><b>Notas</b>'+esc(p.notas)+'</div>';
   var nfc=enlacesNFC(p);
   if(nfc.length){h+='<div class="sec">Grabar con NFC Tools ('+nfc.length+' piezas)</div>';nfc.forEach(function(x){h+='<div class="nfc"><b>'+esc(x[0])+'</b><code>'+esc(x[1].replace('https://',''))+'</code><button type="button" data-u="'+esc(x[1])+'">Copiar</button></div>'});}
-  h+='<div class="acts" style="margin-top:16px"><button class="ghost" type="button" id="pVer">Ver landing</button><button class="ghost" type="button" id="pCerrar">Cerrar</button></div>';
+  h+='<div class="acts" style="margin-top:16px"><button class="ghost" type="button" id="pVer">'+(/^t-/.test(p.slug||'')?'Ver tarjeta':'Ver landing')+'</button><button class="ghost" type="button" id="pCerrar">Cerrar</button></div>';
   $('#shPedidoIn').innerHTML=h;abrirSheet('#shPedido');
   $$('#shPedidoIn .nfc button').forEach(function(b){b.onclick=function(){copiar(b.dataset.u,b)}});
   $$('#shPedidoIn .estados button').forEach(function(b){b.onclick=function(){
@@ -469,7 +469,7 @@ function abrirPedido(id){
     api({accion:'panel_pedido_estado',id:p.id,estado:e}).then(function(r){if(r.ok)toast('Pedido marcado como «'+e+'»');else{p.estado=prev;pintarPedidos();pintarKpis();toast(r.error||'No se pudo cambiar')}}).catch(function(){p.estado=prev;pintarPedidos();toast('Sin conexión')});
   }});
   $('#pCerrar').onclick=function(){cerrarSheet('#shPedido')};
-  $('#pVer').onclick=function(){cerrarSheet('#shPedido');abrirCliente(p.slug)};
+  $('#pVer').onclick=function(){cerrarSheet('#shPedido');if(/^t-/.test(p.slug||''))abrirTarjeta(p.slug.slice(2));else abrirCliente(p.slug)};
 }
 function abrirSheet(s){$(s).classList.add('on');document.body.style.overflow='hidden'}
 function cerrarSheet(s){$(s).classList.remove('on');if(!$('#vCliente').classList.contains('on'))document.body.style.overflow='';if(s==='#shCambio'&&typeof propuesta!=='undefined'&&propuesta&&$('#barProp'))$('#barProp').hidden=false}
